@@ -88,17 +88,18 @@ void enemy::finish_dying_class_specifics() {
         become_carriable(CARRY_DESTINATION_ONION);
         fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     }
+    float scale = clamp(
+        radius * ENEMY::SPIRIT_SIZE_MULT,
+        ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
+    );
     particle par(
         PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
-        clamp(
-            radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
-            ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
-        ),
-        2, PARTICLE_PRIORITY_MEDIUM
+        scale, 3, PARTICLE_PRIORITY_MEDIUM
     );
     par.bitmap = game.sys_assets.bmp_enemy_spirit;
+    par.size_grow_speed = scale / par.duration ;
     par.speed.x = 0;
-    par.speed.y = -50;
+    par.speed.y = -scale;
     par.friction = 0.5;
     par.gravity = 0;
     par.color = al_map_rgb(255, 192, 255);

@@ -109,13 +109,16 @@ void particle::draw() {
         break;
         
     } case PARTICLE_TYPE_ENEMY_SPIRIT: {
-        float s = sin((time / duration) * TAU / 2);
+        float ratio = time / duration;
+        float s = (1 - ratio) * sin(ratio * 2 * TAU / 2);
         draw_bitmap(
             bitmap,
-            point(pos.x + s * 16, pos.y),
-            point(size, -1), s * TAU / 2,
+            point(pos.x + s * 8, pos.y),
+            point(size, -1), 0,
             change_alpha(
-                color, fabs(s) * color.a * 255
+                color, fabs(
+                    sin(ratio * TAU / 2)
+                ) * color.a * 255
             )
         );
         break;
