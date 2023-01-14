@@ -48,6 +48,7 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     main_color(al_map_rgb(128, 128, 128)),
     show_health(true),
     casts_shadow(true),
+    blackout_radius(-1),
     move_speed(0),
     acceleration(MOB::DEF_ACCELERATION),
     rotation_speed(MOB::DEF_ROTATION_SPEED),
@@ -347,6 +348,7 @@ void load_mob_type_from_file(
     rs.set("acceleration", mt->acceleration);
     rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
+    rs.set("blackout_radius", mt->blackout_radius);
     rs.set("can_block_paths", mt->can_block_paths);
     rs.set("can_free_move", mt->can_free_move);
     rs.set(
