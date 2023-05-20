@@ -180,7 +180,7 @@ sprites{
 				height=24.0000
 				radius=8.0000
 				type=1
-				value=9.0000
+				value=8.0000
 			}
 			body{
 				coords=2.0000 0.0000 0.0000

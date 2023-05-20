@@ -62,8 +62,6 @@ sprites{
 				radius=28.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
@@ -71,8 +69,6 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -86,7 +82,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -95,8 +91,6 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -110,7 +104,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -133,7 +127,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -143,8 +137,6 @@ sprites{
 				type=0
 				value=1.0000
 				hazards=fire
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -158,7 +150,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -168,8 +160,6 @@ sprites{
 				type=0
 				value=1.0000
 				hazards=fire
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -183,7 +173,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=1.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -192,8 +182,6 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -208,8 +196,6 @@ sprites{
 				radius=24.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
@@ -217,8 +203,6 @@ sprites{
 				radius=24.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -227,3 +211,4 @@ body_parts{
 	fire
 	hit
 }
+engine_version=0.23.2

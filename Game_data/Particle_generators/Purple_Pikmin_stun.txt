@@ -1,0 +1,26 @@
+name = purple_pikmin_stun
+description = A cluster of yellow particles, signifying an enemy being stunned from a purple pikmin.
+
+emission_interval = 0.2
+number = 4
+number_deviation = 0
+base {
+    bitmap = Sparkle.png
+    duration = 1.5
+    friction = 1
+    gravity = 0
+    size_grow_speed = 0
+    size = 36
+    speed = 0 0
+    color = 255 196 128 255
+}
+duration_deviation = 0.3
+friction_deviation = 0
+gravity_deviation = 0
+size_deviation = 12
+pos_deviation = 48 48
+speed_deviation = 0 0
+angle = 0
+angle_deviation = 360
+total_speed = 40
+total_speed_deviation = 0

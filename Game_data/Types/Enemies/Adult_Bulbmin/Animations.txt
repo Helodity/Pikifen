@@ -283,7 +283,7 @@ sprites{
 				height=200.0000
 				radius=26.6000
 				type=1
-				value=30.0000
+				value=100.0000
 			}
 			stem{
 				coords=-14.0000 0.0000 90.0000
@@ -322,7 +322,7 @@ sprites{
 				height=200.0000
 				radius=26.6000
 				type=1
-				value=30.0000
+				value=100.0000
 			}
 			stem{
 				coords=-14.0000 -3.0000 90.0000
@@ -955,7 +955,7 @@ sprites{
 				height=192.0000
 				radius=42.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=3.0000
 				wither_chance=10
@@ -965,7 +965,7 @@ sprites{
 				height=192.0000
 				radius=44.8000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=3.0000
 				wither_chance=10
@@ -998,9 +998,8 @@ sprites{
 				height=192.0000
 				radius=42.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
-				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
 			}
@@ -1009,9 +1008,8 @@ sprites{
 				height=192.0000
 				radius=44.8000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
-				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
 			}
@@ -1038,3 +1036,4 @@ body_parts{
 	mouth
 	stem
 }
+engine_version=0.23.2
