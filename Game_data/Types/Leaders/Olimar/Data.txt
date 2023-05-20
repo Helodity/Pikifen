@@ -1,13 +1,13 @@
 name = Olimar
 description = A veteran freight worker from Hocotate. Works hard and has a knack for science.
 
-acceleration = 500
+acceleration = 800
 can_walk_on_others = true
 dismiss_sfx = Olimar_dismiss.ogg
 height = 46
 main_color = 221 17 17
 max_carriers = 5
-max_health = 2000
+max_health = 1000
 max_throw_height = 130
 move_speed = 130
 name_call_sfx = Olimar_name_call.ogg
@@ -17,7 +17,7 @@ rotation_speed = 360
 radius = 16
 vulnerabilities {
     poison = 0
-    water = 0
+    explosion = 37.5
 }
 weight = 1
 whistle_sfx = Olimar_whistle.ogg

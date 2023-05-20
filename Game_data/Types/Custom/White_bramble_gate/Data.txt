@@ -5,7 +5,7 @@ can_block_paths = true
 casts_shadow = false
 custom_category_name = Gate
 height = 0
-max_health = 2000
+max_health = 16000
 pushable = false
 pushes = true
 radius = 32
@@ -15,7 +15,7 @@ target_type = strong_plain_obstacle
 team = obstacle
 
 vulnerabilities {
-    explosion = 300
+    explosion = 1000
 }
 
 spawns {
