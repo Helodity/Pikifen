@@ -2250,3 +2250,95 @@ void whistle_struct::tick(
         }
     }
 }
+
+/* ----------------------------------------------------------------------------
+ * Create a script injection
+ */
+script_injection::script_injection()
+{
+    for (size_t e = 0; e < N_MOB_EVENTS; ++e) {
+        events[e] = new mob_event(MOB_EV_TYPES(e));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a pointer to an event of the given type if it exists.
+ * type:
+ *   The event's type.
+ */
+mob_event* script_injection::get_event(const MOB_EV_TYPES type) const {
+    return events[type];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the events off of a data node
+ * if it exists.
+ * node:
+ *   The data node.
+ */
+void script_injection::load_events(data_node* node) {
+    size_t n_events = node->get_nr_of_children();
+
+    if (n_events == 0) return;
+
+    //Read the events.
+    vector<mob_event*> new_events;
+    vector<bool> new_events_custom_actions_after;
+    for (size_t e = 0; e < n_events; ++e) {
+
+        data_node* event_node = node->get_child(e);
+        vector<mob_action_call*> actions;
+        bool custom_actions_after = false;
+
+        for (size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
+            data_node* action_node = event_node->get_child(a);
+            if (action_node->name == "custom_actions_after") {
+                //Pfft, that's not an action, that's a special property.
+                custom_actions_after = true;
+
+            }
+            else {
+                mob_action_call* new_a = new mob_action_call();
+                if (new_a->load_from_data_node(action_node, nullptr)) {
+                    actions.push_back(new_a);
+                }
+                else {
+                    delete new_a;
+                }
+
+            }
+        }
+
+        new_events.push_back(new mob_event(event_node, actions));
+        new_events_custom_actions_after.push_back(custom_actions_after);
+        assert_actions(actions, event_node);
+    }
+
+    //Connect all new events to the state.
+    for(size_t e = 0; e < new_events.size(); ++e) {
+        MOB_EV_TYPES ev_type = new_events[e]->type;
+        events[ev_type] = new_events[e];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads the events from memory
+ */
+void script_injection::unload_events() {
+    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+        mob_event* e_ptr = events[e];
+        if(!e_ptr) continue;
+
+        for(size_t a = 0; a < e_ptr->actions.size(); ++a) {
+            delete e_ptr->actions[a];
+        }
+
+        e_ptr->actions.clear();
+        delete e_ptr;
+
+    }
+    delete events;
+}

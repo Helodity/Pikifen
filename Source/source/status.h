@@ -18,7 +18,8 @@
 
 #include "animation.h"
 #include "particle.h"
-
+#include "mob_script.h"
+#include "misc_structs.h"
 
 using std::string;
 
@@ -137,6 +138,8 @@ struct status_type {
     animation_instance overlay_anim_instance;
     //Replace with this other status effect, when its time is over.
     status_type* replacement_on_timeout;
+    //Add this script to the mob.
+    script_injection* injection;
     
     status_type();
     

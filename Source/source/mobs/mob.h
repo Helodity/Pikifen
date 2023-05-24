@@ -410,6 +410,7 @@ public:
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const;
+    vector<script_injection*> get_script_injections() const;
     virtual void handle_status_effect_gain(status_type* sta_type);
     virtual void handle_status_effect_loss(status_type* sta_type);
     virtual void read_script_vars(const script_var_reader &svr);

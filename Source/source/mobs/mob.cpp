@@ -1866,6 +1866,21 @@ bool mob::get_fraction_numbers_info(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a list of this mob's script injections
+ */
+vector<script_injection*> mob::get_script_injections() const {
+    vector<script_injection*> injections;
+
+    for(size_t s = 0; s < statuses.size(); ++s) {
+        if(statuses[s].type->injection) {
+            injections.push_back(statuses[s].type->injection);
+        }
+    }
+    return injections;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns its group spot information.
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.

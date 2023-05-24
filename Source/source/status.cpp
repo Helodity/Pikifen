@@ -72,6 +72,6 @@ status_type::status_type() :
     particle_offset_z(0.0f),
     shaking_effect(0.0f),
     overlay_anim_mob_scale(1.0f),
-    replacement_on_timeout(nullptr) {
-    
+    replacement_on_timeout(nullptr),
+    injection(nullptr) {
 }

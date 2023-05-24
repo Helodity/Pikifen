@@ -24,6 +24,7 @@
 #include "controls.h"
 #include "mob_categories/mob_category.h"
 #include "mobs/mob_enums.h"
+#include "mob_script.h"
 #include "hazard.h"
 #include "particle.h"
 #include "libs/data_file.h"
@@ -1093,6 +1094,21 @@ struct whistle_struct {
     );
     
     whistle_struct();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Contains info about injected scripts a mob should run
+ */
+struct script_injection {
+    //List of events to inject
+    mob_event* events[N_MOB_EVENTS];
+
+    mob_event* get_event(const MOB_EV_TYPES type) const;
+    void load_events(data_node* node);
+    void unload_events();
+
+    script_injection();
 };
 
 

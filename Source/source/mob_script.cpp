@@ -330,7 +330,7 @@ mob_fsm::mob_fsm(mob* m) :
  *   The event's type.
  */
 mob_event* mob_fsm::get_event(const MOB_EV_TYPES type) const {
-    return cur_state->events[type];
+    return cur_state->get_event(type);;
 }
 
 
@@ -374,9 +374,16 @@ void mob_fsm::run_event(
              (this->cur_state ? this->cur_state->name : "[None]") <<
              endl;
 #endif
-             
-        return;
     }
+
+    vector<script_injection*> injections = m->get_script_injections();
+    for (size_t i = 0; i < injections.size(); ++i) {
+        e = injections[i]->get_event(type);
+        if(e){
+            e->run(m, custom_data_1, custom_data_2); 
+        }
+    }
+
 }
 
 
