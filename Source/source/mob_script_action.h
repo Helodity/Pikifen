@@ -280,6 +280,8 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_MOB_TYPE,
     //Get the other body part that triggered the event.
     MOB_ACTION_GET_INFO_OTHER_BODY_PART,
+    //Get name of the status that triggered the event.
+    MOB_ACTION_GET_INFO_STATUS,
     //Get X.
     MOB_ACTION_GET_INFO_X,
     //Get Y.

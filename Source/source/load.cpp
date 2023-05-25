@@ -1788,10 +1788,12 @@ void load_status_types(const bool load_resources) {
                     new_t->overlay_anim_instance.start();
                 }
             }
-            data_node* script_file = file.get_child_by_name("script");
-            if (script_file->get_nr_of_children() > 0) {
+
+            file.load_file(STATUSES_FOLDER_PATH + "/" + type_files[t], true, true);
+            data_node* script_node = file.get_child_by_name("script");
+            if(script_node->get_nr_of_children() > 0) {
                 new_t->injection = new script_injection();
-                new_t->injection->load_events(script_file);
+                new_t->injection->load_events(script_node);
             }
         }
         

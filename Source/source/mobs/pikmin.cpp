@@ -280,6 +280,8 @@ void pikmin::handle_status_effect_gain(status_type* sta_type) {
  *   Status effect to handle.
  */
 void pikmin::handle_status_effect_loss(status_type* sta_type) {
+    mob::handle_status_effect_loss(sta_type);
+
     bool still_has_flailing = false;
     bool still_has_helplessness = false;
     bool still_has_panic = false;

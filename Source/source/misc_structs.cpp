@@ -2257,7 +2257,7 @@ void whistle_struct::tick(
 script_injection::script_injection()
 {
     for (size_t e = 0; e < N_MOB_EVENTS; ++e) {
-        events[e] = new mob_event(MOB_EV_TYPES(e));
+        events[e] = nullptr;
     }
 }
 
@@ -2285,34 +2285,23 @@ void script_injection::load_events(data_node* node) {
 
     //Read the events.
     vector<mob_event*> new_events;
-    vector<bool> new_events_custom_actions_after;
     for (size_t e = 0; e < n_events; ++e) {
 
         data_node* event_node = node->get_child(e);
         vector<mob_action_call*> actions;
-        bool custom_actions_after = false;
 
         for (size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
             data_node* action_node = event_node->get_child(a);
-            if (action_node->name == "custom_actions_after") {
-                //Pfft, that's not an action, that's a special property.
-                custom_actions_after = true;
-
+            mob_action_call* new_a = new mob_action_call();
+            if (new_a->load_from_data_node(action_node, nullptr)) {
+                actions.push_back(new_a);
             }
             else {
-                mob_action_call* new_a = new mob_action_call();
-                if (new_a->load_from_data_node(action_node, nullptr)) {
-                    actions.push_back(new_a);
-                }
-                else {
-                    delete new_a;
-                }
-
+                delete new_a;
             }
         }
 
         new_events.push_back(new mob_event(event_node, actions));
-        new_events_custom_actions_after.push_back(custom_actions_after);
         assert_actions(actions, event_node);
     }
 

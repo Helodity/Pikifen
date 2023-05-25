@@ -340,6 +340,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
     } else if(call.args[1] == "other_body_part") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
+    } else if (call.args[1] == "status") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_STATUS);
     } else if(call.args[1] == "x") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_X);
     } else if(call.args[1] == "y") {
@@ -2314,6 +2316,22 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         }
         break;
         
+    } case MOB_ACTION_GET_INFO_STATUS: {
+        if (
+            data.call->parent_event == MOB_EV_STATUS_ADDED ||
+            data.call->parent_event == MOB_EV_STATUS_REMOVED
+        ) {
+            *var = ((status_type*)(data.custom_data_1))->name;
+        } else if (
+            data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
+            data.call->parent_event == MOB_EV_LEFT_HAZARD
+        ) {
+            log_error(
+                "\"get_info status\" does not work on this event!" 
+                "Did you mean \"get_info hazard\"?");
+        }
+        break;
+
     } case MOB_ACTION_GET_INFO_X: {
         *var = f2s(target_mob->pos.x);
         break;

@@ -92,6 +92,10 @@ enum MOB_EV_TYPES {
     MOB_EV_RIDER_REMOVED,
     //When it gets touched by a leader.
     MOB_EV_TOUCHED_ACTIVE_LEADER,
+    //When it gains a status.
+    MOB_EV_STATUS_ADDED,
+    //When it loses a status.
+    MOB_EV_STATUS_REMOVED,
     //When it touches a hazard (sector or hitbox).
     MOB_EV_TOUCHED_HAZARD,
     //When it touches a sprayed spray.

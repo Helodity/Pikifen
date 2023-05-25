@@ -177,6 +177,8 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_receive_message",             MOB_EV_RECEIVE_MESSAGE);
     r("on_released",                    MOB_EV_RELEASED);
     r("on_reach_destination",           MOB_EV_REACHED_DESTINATION);
+    r("on_status_added",                MOB_EV_STATUS_ADDED);
+    r("on_status_removed",              MOB_EV_STATUS_REMOVED);
     r("on_start_receiving_delivery",    MOB_EV_STARTED_RECEIVING_DELIVERY);
     r("on_timer",                       MOB_EV_TIMER);
     r("on_touch_hazard",                MOB_EV_TOUCHED_HAZARD);

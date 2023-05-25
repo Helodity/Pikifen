@@ -2345,6 +2345,7 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
  *   Status type to check.
  */
 void mob::handle_status_effect_gain(status_type* sta_type) {
+    fsm.run_event(MOB_EV_STATUS_ADDED, sta_type);
     if(sta_type->state_change_type == STATUS_STATE_CHANGE_CUSTOM) {
         size_t nr = fsm.get_state_nr(sta_type->state_change_name);
         if(nr != INVALID) {
@@ -2360,6 +2361,7 @@ void mob::handle_status_effect_gain(status_type* sta_type) {
  *   Status type to check.
  */
 void mob::handle_status_effect_loss(status_type* sta_type) {
+    fsm.run_event(MOB_EV_STATUS_REMOVED, sta_type);
 }
 
 
