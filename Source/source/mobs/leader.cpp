@@ -25,7 +25,7 @@ const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
 //Auto-throw cooldown lowers at this speed.
 const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
 //The minimum amount of time before the bored animation plays
-const float BORED_ANIM_MIN_DELAY = 8.0f;
+const float BORED_ANIM_MIN_DELAY = 5.0f;
 //The maximum amount of time before the bored animation plays
 const float BORED_ANIM_MAX_DELAY = 10.0f;
 //The whistle can't go past this radius, by default.
