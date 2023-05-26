@@ -22,6 +22,8 @@
 enum LEADER_STATES {
     //Idling.
     LEADER_STATE_IDLING,
+    //Bored.
+    LEADER_STATE_BORED,
     //Active.
     LEADER_STATE_ACTIVE,
     //Whistling.
@@ -99,6 +101,8 @@ enum LEADER_STATES {
 enum LEADER_ANIMATIONS {
     //Idling.
     LEADER_ANIM_IDLING,
+    //Idling.
+    LEADER_ANIM_BORED,
     //Walking.
     LEADER_ANIM_WALKING,
     //Plucking.

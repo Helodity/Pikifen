@@ -40,6 +40,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_TICK); {
             efc.run(leader_fsm::search_seed);
         }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.change_state("bored");
+        }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(leader_fsm::join_group);
             efc.change_state("in_group_chasing");
@@ -63,6 +66,41 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EV_GO_PLUCK); {
             efc.run(leader_fsm::go_pluck);
             efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
+        }
+    }
+
+    efc.new_state("bored", LEADER_STATE_BORED); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::enter_bored);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(leader_fsm::join_group);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(LEADER_EV_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EV_LANDED); {
+            efc.run(leader_fsm::stop);
+        }
+        efc.new_event(MOB_EV_DEATH); {
+            efc.change_state("dying");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -1546,6 +1584,20 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a leader enters the bored state
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::enter_bored(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_BORED);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a leader enters the idling state.
  * m:
  *   The mob.
@@ -1557,6 +1609,9 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
 void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
     m->set_animation(
         LEADER_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+    );
+    m->set_timer(
+        randomf(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }
 

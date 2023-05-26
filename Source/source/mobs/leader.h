@@ -26,6 +26,8 @@ namespace LEADER {
 extern const float AUTO_THROW_COOLDOWN_MAX_DURATION;
 extern const float AUTO_THROW_COOLDOWN_MIN_DURATION;
 extern const float AUTO_THROW_COOLDOWN_SPEED;
+extern const float BORED_ANIM_MIN_DELAY;
+extern const float BORED_ANIM_MAX_DELAY;
 extern const float DEF_WHISTLE_RANGE;
 extern const float DISMISS_ANGLE_RANGE;
 extern const float DISMISS_MEMBER_SIZE_MULTIPLIER;

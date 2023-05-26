@@ -34,6 +34,7 @@ void dismiss(                mob* m, void* info1, void* info2);
 void decide_pluck_action(    mob* m, void* info1, void* info2);
 void do_throw(               mob* m, void* info1, void* info2);
 void enter_active(           mob* m, void* info1, void* info2);
+void enter_bored(            mob* m, void* info1, void* info2);
 void enter_idle(             mob* m, void* info1, void* info2);
 void fall_asleep(            mob* m, void* info1, void* info2);
 void fall_down_pit(          mob* m, void* info1, void* info2);
