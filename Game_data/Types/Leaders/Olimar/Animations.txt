@@ -6,6 +6,13 @@ animations{
 			}
 		}
 	}
+	drinking{
+		frames{
+			ducking{
+				duration=1.0000
+			}
+		}
+	}
 	getting_up{
 		loop_frame=2
 		frames{
@@ -20,10 +27,49 @@ animations{
 			}
 		}
 	}
+	h_walking{
+		frames{
+			holding{
+				duration=0.1000
+			}
+			holding_walking1{
+				duration=0.1000
+			}
+			holding{
+				duration=0.1000
+			}
+			holding_walking2{
+				duration=0.1000
+			}
+		}
+	}
+	holding{
+		frames{
+			holding{
+				duration=0.1000
+			}
+		}
+	}
 	idling{
 		frames{
 			idling{
 				duration=0.0000
+			}
+		}
+	}
+	knocked_down{
+		frames{
+			half_lying{
+				duration=0.1000
+			}
+			lying{
+				duration=1.0000
+			}
+			half_lying{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
 			}
 		}
 	}
@@ -35,6 +81,22 @@ animations{
 			}
 			lying{
 				duration=0.1000
+			}
+		}
+	}
+	pain{
+		frames{
+			half_limbo{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			ducking{
+				duration=0.1000
+			}
+			idling{
+				duration=0.3000
 			}
 		}
 	}
@@ -58,11 +120,37 @@ animations{
 			}
 		}
 	}
+	punching{
+		frames{
+			wind-up{
+				duration=0.1000
+			}
+			punch{
+				duration=0.2000
+			}
+			ducking{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	spraying{
+		frames{
+			ducking{
+				duration=1.0000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
 	throwing{
 		loop_frame=1
 		frames{
-			ducking{
-				duration=0.2000
+			throwing{
+				duration=0.1000
 			}
 			idling{
 				duration=0.1000
@@ -92,71 +180,6 @@ animations{
 			}
 			ducking2{
 				duration=0.0800
-			}
-		}
-	}
-	pain{
-		frames{
-			half_limbo{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			ducking{
-				duration=0.1000
-			}
-			idling{
-				duration=0.3000
-			}
-		}
-	}
-	knocked_down{
-		frames{
-			half_lying{
-				duration=0.1000
-			}
-			lying{
-				duration=1.0000
-			}
-			half_lying{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	spraying{
-		frames{
-			ducking{
-				duration=1.0000
-			}
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	punching{
-		frames{
-			wind-up{
-				duration=0.1000
-			}
-			punch{
-				duration=0.2000
-			}
-			ducking{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	drinking{
-		frames{
-			ducking{
-				duration=1.0000
 			}
 		}
 	}
@@ -254,6 +277,72 @@ sprites{
 			}
 		}
 	}
+	holding{
+		file=Olimar.png
+		file_pos=314.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=-10.5634 7.1045 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	holding_walking1{
+		file=Olimar.png
+		file_pos=379.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=-10.5634 7.1045 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	holding_walking2{
+		file=Olimar.png
+		file_pos=444.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=-10.5634 7.1045 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	idling{
 		file=Olimar.png
 		file_pos=0.0000 0.0000
@@ -322,6 +411,52 @@ sprites{
 			}
 		}
 	}
+	punch{
+		file=Olimar.png
+		file_pos=333.0000 65.0000
+		file_size=82.0000 64.0000
+		offset=10.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=25.0000 0.0000 -20.0000
+				height=86.0000
+				radius=10.0000
+				type=1
+				value=8.0000
+			}
+			body{
+				coords=4.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	throwing{
+		file=Olimar.png
+		file_pos=333.0000 65.0000
+		file_size=82.0000 64.0000
+		offset=10.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=25.0000 0.0000 -20.0000
+				height=86.0000
+				radius=10.0000
+				type=2
+				value=8.0000
+			}
+			body{
+				coords=4.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	walking1{
 		file=Olimar.png
 		file_pos=65.0000 0.0000
@@ -366,29 +501,6 @@ sprites{
 			}
 		}
 	}
-	punch{
-		file=Olimar.png
-		file_pos=333.0000 65.0000
-		file_size=82.0000 64.0000
-		offset=10.0000 0.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			fist{
-				coords=25.0000 0.0000 -20.0000
-				height=86.0000
-				radius=10.0000
-				type=1
-				value=8.0000
-			}
-			body{
-				coords=4.0000 0.0000 0.0000
-				height=46.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
 	wind-up{
 		file=Olimar.png
 		file_pos=266.0000 65.0000
@@ -417,3 +529,4 @@ body_parts{
 	fist
 	body
 }
+engine_version=0.23.2

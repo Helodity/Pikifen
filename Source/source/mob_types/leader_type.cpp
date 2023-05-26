@@ -50,19 +50,21 @@ leader_type::leader_type() :
  */
 anim_conversion_vector leader_type::get_anim_conversions() const {
     anim_conversion_vector v;
-    v.push_back(std::make_pair(LEADER_ANIM_IDLING,       "idling"));
-    v.push_back(std::make_pair(LEADER_ANIM_WALKING,      "walking"));
-    v.push_back(std::make_pair(LEADER_ANIM_PLUCKING,     "plucking"));
-    v.push_back(std::make_pair(LEADER_ANIM_GETTING_UP,   "getting_up"));
-    v.push_back(std::make_pair(LEADER_ANIM_DISMISSING,   "dismissing"));
-    v.push_back(std::make_pair(LEADER_ANIM_THROWING,     "throwing"));
-    v.push_back(std::make_pair(LEADER_ANIM_WHISTLING,    "whistling"));
-    v.push_back(std::make_pair(LEADER_ANIM_PUNCHING,     "punching"));
-    v.push_back(std::make_pair(LEADER_ANIM_LYING,        "lying"));
-    v.push_back(std::make_pair(LEADER_ANIM_PAIN,         "pain"));
-    v.push_back(std::make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));
-    v.push_back(std::make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
-    v.push_back(std::make_pair(LEADER_ANIM_DRINKING,     "drinking"));
+    v.push_back(std::make_pair(LEADER_ANIM_IDLING,          "idling"));
+    v.push_back(std::make_pair(LEADER_ANIM_WALKING,         "walking"));
+    v.push_back(std::make_pair(LEADER_ANIM_PLUCKING,        "plucking"));
+    v.push_back(std::make_pair(LEADER_ANIM_GETTING_UP,      "getting_up"));
+    v.push_back(std::make_pair(LEADER_ANIM_DISMISSING,      "dismissing"));
+    v.push_back(std::make_pair(LEADER_ANIM_HOLDING,         "holding"));
+    v.push_back(std::make_pair(LEADER_ANIM_H_WALKING,       "h_walking"));
+    v.push_back(std::make_pair(LEADER_ANIM_THROWING,        "throwing"));
+    v.push_back(std::make_pair(LEADER_ANIM_WHISTLING,       "whistling"));
+    v.push_back(std::make_pair(LEADER_ANIM_PUNCHING,        "punching"));
+    v.push_back(std::make_pair(LEADER_ANIM_LYING,           "lying"));
+    v.push_back(std::make_pair(LEADER_ANIM_PAIN,            "pain"));
+    v.push_back(std::make_pair(LEADER_ANIM_KNOCKED_DOWN,    "knocked_down"));
+    v.push_back(std::make_pair(LEADER_ANIM_SPRAYING,        "spraying"));
+    v.push_back(std::make_pair(LEADER_ANIM_DRINKING,        "drinking"));
     return v;
 }
 

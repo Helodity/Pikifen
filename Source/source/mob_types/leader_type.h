@@ -30,6 +30,8 @@ enum LEADER_STATES {
     LEADER_STATE_PUNCHING,
     //Holding a Pikmin.
     LEADER_STATE_HOLDING,
+    //Throwing a Pikmin.
+    LEADER_STATE_THROWING,
     //Dismissing.
     LEADER_STATE_DISMISSING,
     //Spraying.
@@ -105,6 +107,10 @@ enum LEADER_ANIMATIONS {
     LEADER_ANIM_GETTING_UP,
     //Dismissing.
     LEADER_ANIM_DISMISSING,
+    //Holding.
+    LEADER_ANIM_HOLDING,
+    //Holding while walking.
+    LEADER_ANIM_H_WALKING,
     //Throwing.
     LEADER_ANIM_THROWING,
     //Whistling.
