@@ -56,6 +56,7 @@ void load_spike_damage_types();
 void load_spray_types(const bool load_resources);
 void load_statistics();
 void load_status_types(const bool load_resources);
+void load_special_status_types();
 void load_system_animations();
 void load_weather();
 

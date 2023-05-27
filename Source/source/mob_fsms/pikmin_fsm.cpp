@@ -130,6 +130,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot");
         }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
@@ -181,6 +184,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot");
         }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
@@ -228,6 +234,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_DISMISSED); {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot");
+        }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -299,6 +308,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot");
         }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
@@ -341,6 +353,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_RELEASED); {
             efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -1334,6 +1349,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot_h");
         }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
@@ -1382,6 +1400,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_DISMISSED); {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot_h");
+        }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -1439,6 +1460,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot_h");
         }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
@@ -1495,6 +1519,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_dismissed);
             efc.change_state("going_to_dismiss_spot_h");
         }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
@@ -1530,6 +1557,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_RELEASED); {
             efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(pikmin_fsm::handle_leader_death);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::check_incoming_attack);
@@ -2962,6 +2992,23 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
     m->set_timer(PIKMIN::DISMISS_TIMEOUT);
     
     m->set_animation(PIKMIN_ANIM_WALKING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a pikmin's leader dies
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::handle_leader_death(mob* m, void* info1, void* info2) {
+    status_type* panic_status = game.status_types["panicked"];
+    status new_sta = status(panic_status);
+    m->statuses.push_back(new_sta);
+    m->handle_status_effect_gain(panic_status);
 }
 
 

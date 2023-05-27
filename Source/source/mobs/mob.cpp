@@ -3089,10 +3089,7 @@ void mob::start_dying() {
     if(group) {
         while(!group->members.empty()) {
             mob* member = group->members[0];
-            member->fsm.run_event(
-                MOB_EV_DISMISSED,
-                (void*) & (member->pos)
-            );
+            member->fsm.run_event(MOB_EV_LEADER_DIED);
             if(type->category->id != MOB_CATEGORY_LEADERS) {
                 //The Pikmin were likely following an enemy.
                 //So they were likely invincible. Let's correct that.

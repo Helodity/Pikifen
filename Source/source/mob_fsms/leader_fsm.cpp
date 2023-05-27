@@ -439,6 +439,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_dismissed);
             efc.change_state("idling");
         }
+        efc.new_event(MOB_EV_LEADER_DIED); {
+            efc.run(leader_fsm::be_dismissed);
+            efc.change_state("idling");
+        }
         efc.new_event(MOB_EV_SPOT_IS_FAR); {
             efc.run(leader_fsm::update_in_group_chasing);
         }
@@ -490,6 +494,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_DISMISSED); {
+            efc.run(leader_fsm::be_dismissed);
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_LEADER_DIED); {
             efc.run(leader_fsm::be_dismissed);
             efc.change_state("idling");
         }
@@ -1420,7 +1428,11 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
     }
     
     leader_fsm::release(m, info1, info2);
-    leader_fsm::dismiss(m, info1, info2);
+    while(!m->group->members.empty()) {
+        mob* m_ptr = m->group->members[0];
+        m_ptr->fsm.run_event(MOB_EV_LEADER_DIED);
+        m_ptr->leave_group();
+    }
     m->stop_chasing();
     m->become_uncarriable();
     m->set_animation(LEADER_ANIM_LYING);

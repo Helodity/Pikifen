@@ -117,6 +117,8 @@ enum MOB_EV_TYPES {
     MOB_EV_GRABBED_BY_FRIEND,
     //When it is dismissed by its leader.
     MOB_EV_DISMISSED,
+    //When its leader dies.
+    MOB_EV_LEADER_DIED,
     //When it is thrown.
     MOB_EV_THROWN,
     //When it lands on the ground.

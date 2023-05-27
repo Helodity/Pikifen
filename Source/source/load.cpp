@@ -1818,11 +1818,24 @@ void load_status_types(const bool load_resources) {
         );
     }
     
+    load_special_status_types();
+
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
 }
 
+
+void load_special_status_types() {
+    status_type* panic_status = new status_type();
+    panic_status->name = "panicked";
+    panic_status->speed_multiplier = 1.5;
+    panic_status->state_change_type = STATUS_STATE_CHANGE_PANIC;
+    panic_status->removable_with_whistle = true;
+    panic_status->auto_remove_time = 30;
+    enable_flag(panic_status->affects, STATUS_AFFECTS_PIKMIN);
+    game.status_types[panic_status->name] = panic_status;
+}
 
 /* ----------------------------------------------------------------------------
  * Loads the animations that are used system-wide.
