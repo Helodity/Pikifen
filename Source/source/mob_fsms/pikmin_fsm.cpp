@@ -2073,11 +2073,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik_ptr->stop_circling();
     
     caller->add_to_group(pik_ptr);
-    
-    //The pikmin was spawned in a group, don't play the sound.
-    if(m->time_alive > 0.01f) {
-        game.sys_assets.sfx_pikmin_called.play(0.03, false);
-    }
+    game.sys_assets.sfx_pikmin_called.play(0.03, false);
 }
 
 

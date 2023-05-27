@@ -3046,6 +3046,22 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     if(info->link_spawn_to_object) {
         new_mob->links.push_back(this);
     }
+
+    if(type_ptr->category->id == MOB_CATEGORY_PIKMIN) {
+        pikmin* pik_ptr = (pikmin*)new_mob;
+        //Forcefully follow another mob as a leader.
+        if (pik_ptr->must_follow_link_as_leader) {
+            if (!links.empty() && links[0]) {
+                add_to_group(pik_ptr);
+                pik_ptr->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+            }
+            //Since this leader is likely an enemy, let's keep these Pikmin safe.
+            enable_flag(pik_ptr->flags, MOB_FLAG_NON_HUNTABLE);
+            enable_flag(pik_ptr->flags, MOB_FLAG_NON_HURTABLE);
+            pik_ptr->must_follow_link_as_leader = false;
+        }
+    }
+
     if(info->momentum != 0) {
         float a = randomf(0, TAU);
         new_mob->speed.x = cos(a) * info->momentum;
