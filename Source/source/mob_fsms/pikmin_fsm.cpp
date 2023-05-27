@@ -2044,7 +2044,10 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     
     caller->add_to_group(pik_ptr);
     
-    game.sys_assets.sfx_pikmin_called.play(0.03, false);
+    //The pikmin was spawned in a group, don't play the sound.
+    if(m->time_alive > 0.01f) {
+        game.sys_assets.sfx_pikmin_called.play(0.03, false);
+    }
 }
 
 
