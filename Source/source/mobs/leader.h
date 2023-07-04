@@ -141,6 +141,9 @@ public:
     
     leader(const point &pos, leader_type* type, float angle);
     bool check_throw_ok() const;
+    //Returns whether or not a leader can grab the specified mob.
+    bool can_grab_group_member(mob* m) const;
+    //Dismiss current group.
     void dismiss();
     bool order_pikmin_to_onion(
         const pikmin_type* type, pikmin_nest_t* n_ptr, size_t amount

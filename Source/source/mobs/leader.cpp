@@ -199,7 +199,45 @@ leader::leader(const point &pos, leader_type* type, float angle) :
 bool leader::can_receive_status(status_type* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_FLAG_LEADERS);
 }
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a leader can grab the specified mob.
+ */
+bool leader::can_grab_group_member(mob* m) const {
+    if (
+        ground_sector &&
+        !standing_on_mob &&
+        !ground_sector->hazards.empty()
+    ) {
+        if (
+            !m->
+            is_resistant_to_hazards(
+                ground_sector->hazards
+            )
+            ) {
+            //The leader is on a hazard that the member isn't resistent to.
+            //Don't let the leader grab it.
+            return false;
+        }
+    }
 
+    //Check if the mob within range.
+    if(
+        dist(m->pos,pos) > 
+        game.config.group_member_grab_range
+    ) {
+        return false;
+    }
+    //Check if there's anything in the way.
+    if(!has_clear_line(m)) {
+        return false;
+    }
+
+    //Check if the mob isn't too far under the leader.
+    if(z - (m->z + m->height) > GEOMETRY::STEP_HEIGHT) {
+        return false;
+    }
+    return true;
+}
 
 /**
  * @brief Returns whether or not a leader can throw.

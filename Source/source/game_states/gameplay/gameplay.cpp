@@ -530,20 +530,24 @@ long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
  * In the case all candidate members are out of reach,
  * this returns the closest. Otherwise, it returns the closest
  * and more mature one.
- *
- * @param type Type to search for.
- * @return The member, or nullptr if there is no member of that subgroup available.
+ * Returns NULL if there is no member of that subgroup available.
+ * type:
+ *   Type to search for.
+ * distant:
+ *   If all members are ungrabbable, this returns true.
  */
-mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
-    if(!cur_leader_ptr) return nullptr;
+mob* gameplay_state::get_closest_group_member(subgroup_type* type, bool* distant) {
+    if(!cur_leader_ptr) return NULL;
     
     mob* result = nullptr;
     
     //Closest members so far for each maturity.
     dist closest_dists[NR_MATURITIES];
     mob* closest_ptrs[NR_MATURITIES];
-    for(unsigned char m = 0; m < NR_MATURITIES; m++) {
-        closest_ptrs[m] = nullptr;
+    bool can_grab_closest[NR_MATURITIES];
+    for(unsigned char m = 0; m < NR_MATURITIES; ++m) {
+        closest_ptrs[m] = NULL;
+        can_grab_closest[m] = false;
     }
     
     //Fetch the closest, for each maturity.
@@ -560,9 +564,19 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
             maturity = ((pikmin*) member_ptr)->maturity;
         }
         
+        bool can_grab = cur_leader_ptr->can_grab_group_member(member_ptr);
+
+        //Replacing a grabbable pikmin with a non grabbable pikmin, skip it
+        if(!can_grab && can_grab_closest[maturity]) {
+            continue;
+        }
+
         dist d(cur_leader_ptr->pos, member_ptr->pos);
-        
-        if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
+
+        if(!closest_ptrs[maturity] || 
+            d < closest_dists[maturity] || 
+            (can_grab && !can_grab_closest[maturity])) {
+            can_grab_closest[maturity] = can_grab;
             closest_dists[maturity] = d;
             closest_ptrs[maturity] = member_ptr;
         }
@@ -572,12 +586,14 @@ mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     dist closest_dist;
     for(unsigned char m = 0; m < NR_MATURITIES; m++) {
         if(!closest_ptrs[2 - m]) continue;
-        if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
+        if(!can_grab_closest[2 - m]) continue;
         result = closest_ptrs[2 - m];
         closest_dist = closest_dists[2 - m];
         break;
     }
-    
+    if(distant) {
+        *distant = !result;
+    }
     if(!result) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
@@ -1300,7 +1316,8 @@ void gameplay_state::update_closest_group_members() {
     
     if(cur_leader_ptr->group->cur_standby_type) {
         closest_group_member[BUBBLE_RELATION_CURRENT] =
-            get_closest_group_member(cur_leader_ptr->group->cur_standby_type);
+            get_closest_group_member(cur_leader_ptr->group->cur_standby_type, 
+                &closest_group_member_distant);
     }
     
     subgroup_type* next_type;
@@ -1314,35 +1331,6 @@ void gameplay_state::update_closest_group_members() {
     //Update whether the current subgroup type's closest member is distant.
     if(!closest_group_member[BUBBLE_RELATION_CURRENT]) {
         return;
-    }
-    
-    //Figure out if it can be reached, or if it's too distant.
-    if(
-        cur_leader_ptr->ground_sector &&
-        !cur_leader_ptr->standing_on_mob &&
-        !cur_leader_ptr->ground_sector->hazards.empty()
-    ) {
-        if(
-            !closest_group_member[BUBBLE_RELATION_CURRENT]->
-            is_resistant_to_hazards(
-                cur_leader_ptr->ground_sector->hazards
-            )
-        ) {
-            //The leader is on a hazard that the member isn't resistent to.
-            //Don't let the leader grab it.
-            closest_group_member_distant = true;
-        }
-    }
-    
-    if(
-        dist(
-            closest_group_member[BUBBLE_RELATION_CURRENT]->pos,
-            cur_leader_ptr->pos
-        ) >
-        game.config.group_member_grab_range
-    ) {
-        //The group member is physically too far away.
-        closest_group_member_distant = true;
     }
     
     cur_leader_ptr->update_throw_variables();
