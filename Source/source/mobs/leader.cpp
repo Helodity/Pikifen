@@ -1118,7 +1118,17 @@ bool grab_closest_group_member() {
     ) {
         return false;
     }
-    
+
+    //Check if the pikmin isn't too far under or over the leader.
+    if(
+        game.states.gameplay->cur_leader_ptr->z - 
+        game.states.gameplay->closest_group_member[BUBBLE_CURRENT]->z 
+        > GEOMETRY::STEP_HEIGHT
+    ) {
+        return false;
+    }
+
+
     //Run the grabbing logic then.
     grabber_ev->run(
         game.states.gameplay->cur_leader_ptr,
