@@ -456,7 +456,7 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  * type:
  *   Type to search for.
  * distant:
- * 
+ *   If all members are ungrabbable, this returns true.
  */
 mob* gameplay_state::get_closest_group_member(subgroup_type* type, bool* distant) {
     if(!cur_leader_ptr) return NULL;
@@ -466,6 +466,7 @@ mob* gameplay_state::get_closest_group_member(subgroup_type* type, bool* distant
     //Closest members so far for each maturity.
     dist closest_dists[N_MATURITIES];
     mob* closest_ptrs[N_MATURITIES];
+    bool can_grab_closest[N_MATURITIES] = { false, false, false };
     for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         closest_ptrs[m] = NULL;
     }
@@ -484,9 +485,19 @@ mob* gameplay_state::get_closest_group_member(subgroup_type* type, bool* distant
             maturity = ((pikmin*) member_ptr)->maturity;
         }
         
+        bool can_grab = cur_leader_ptr->can_grab_group_member(member_ptr);
+
+        //Replacing a grabbable pikmin with a non grabbable pikmin, skip it
+        if(!can_grab && can_grab_closest[maturity]) {
+            continue;
+        }
+
         dist d(cur_leader_ptr->pos, member_ptr->pos);
-        
-        if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
+
+        if(!closest_ptrs[maturity] || 
+            d < closest_dists[maturity] || 
+            (can_grab && !can_grab_closest[maturity])) {
+            can_grab_closest[maturity] = can_grab;
             closest_dists[maturity] = d;
             closest_ptrs[maturity] = member_ptr;
         }
@@ -496,7 +507,7 @@ mob* gameplay_state::get_closest_group_member(subgroup_type* type, bool* distant
     dist closest_dist;
     for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         if(!closest_ptrs[2 - m]) continue;
-        if(!cur_leader_ptr->can_grab_group_member(closest_ptrs[2 - m])) continue;
+        if(!can_grab_closest[2 - m]) continue;
         result = closest_ptrs[2 - m];
         closest_dist = closest_dists[2 - m];
         break;
