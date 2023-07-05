@@ -494,7 +494,7 @@ mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
     dist closest_dist;
     for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         if(!closest_ptrs[2 - m]) continue;
-        if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
+        if(!cur_leader_ptr->can_grab_group_member(closest_ptrs[2 - m])) continue;
         result = closest_ptrs[2 - m];
         closest_dist = closest_dists[2 - m];
         break;
@@ -1287,35 +1287,9 @@ void gameplay_state::update_closest_group_members() {
     if(!closest_group_member[BUBBLE_CURRENT]) {
         return;
     }
-    
-    //Figure out if it can be reached, or if it's too distant.
-    if(
-        cur_leader_ptr->ground_sector &&
-        !cur_leader_ptr->standing_on_mob &&
-        !cur_leader_ptr->ground_sector->hazards.empty()
-    ) {
-        if(
-            !closest_group_member[BUBBLE_CURRENT]->
-            is_resistant_to_hazards(
-                cur_leader_ptr->ground_sector->hazards
-            )
-        ) {
-            //The leader is on a hazard that the member isn't resistent to.
-            //Don't let the leader grab it.
-            closest_group_member_distant = true;
-        }
-    }
-    
-    if(
-        dist(
-            closest_group_member[BUBBLE_CURRENT]->pos,
-            cur_leader_ptr->pos
-        ) >
-        game.config.group_member_grab_range
-    ) {
-        //The group member is physically too far away.
-        closest_group_member_distant = true;
-    }
+
+    closest_group_member_distant =
+        !cur_leader_ptr->can_grab_group_member(closest_group_member[BUBBLE_CURRENT]);
     
     cur_leader_ptr->update_throw_variables();
 }
