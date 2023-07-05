@@ -455,8 +455,10 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  * Returns NULL if there is no member of that subgroup available.
  * type:
  *   Type to search for.
+ * distant:
+ * 
  */
-mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
+mob* gameplay_state::get_closest_group_member(subgroup_type* type, bool* distant) {
     if(!cur_leader_ptr) return NULL;
     
     mob* result = NULL;
@@ -499,7 +501,9 @@ mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
         closest_dist = closest_dists[2 - m];
         break;
     }
-    
+    if(distant) {
+        *distant = !result;
+    }
     if(!result) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
@@ -1272,7 +1276,8 @@ void gameplay_state::update_closest_group_members() {
     
     if(cur_leader_ptr->group->cur_standby_type) {
         closest_group_member[BUBBLE_CURRENT] =
-            get_closest_group_member(cur_leader_ptr->group->cur_standby_type);
+            get_closest_group_member(cur_leader_ptr->group->cur_standby_type, 
+                &closest_group_member_distant);
     }
     
     subgroup_type* next_type;
@@ -1287,9 +1292,6 @@ void gameplay_state::update_closest_group_members() {
     if(!closest_group_member[BUBBLE_CURRENT]) {
         return;
     }
-
-    closest_group_member_distant =
-        !cur_leader_ptr->can_grab_group_member(closest_group_member[BUBBLE_CURRENT]);
     
     cur_leader_ptr->update_throw_variables();
 }
