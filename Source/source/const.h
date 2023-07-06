@@ -163,5 +163,8 @@ const string PERFORMANCE_LOG_FILE_PATH =
 //Relative path to the file with the lifetime statistics.
 const string STATISTICS_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Statistics.txt";
+//Name of the folder with area type folders inside.
+const string EXPORT_FOLDER_PATH = 
+    USER_DATA_FOLDER_PATH + "/Exports";
 
 #endif //ifndef CONST_INCLUDED

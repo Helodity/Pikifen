@@ -78,6 +78,8 @@ protected:
         ICON_SAVE_UNSAVED,
         //Load.
         ICON_LOAD,
+        //Export.
+        ICON_EXPORT,
         //Quit.
         ICON_QUIT,
         //Toggle hitboxes.

@@ -714,6 +714,682 @@ void area_editor::draw_canvas_imgui_callback(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns to a previously prepared area state.
+ * prepared_state:
+ *   Prepared state to return to.
+ */
+bool area_editor::export_area() {
+    string export_path = EXPORT_FOLDER_PATH + "/" + game.cur_area_data.folder_name + "_" + get_current_time(true);
+    //This will tell the user some pieces may be missing.
+    bool encountered_errors = false;
+
+    //Start by compiling lists of everything to export
+    vector<mob_type*> types_to_export;
+    vector<string> textures_to_export; //Filenames
+    vector<string> graphics_to_export; //Filenames
+    vector<string> audio_to_export; //Filenames
+    vector<string> animations_to_export;
+    vector<spray_type*> sprays_to_export;
+    vector<status_type*> statuses_to_export;
+    vector<hazard*> hazards_to_export;
+    vector<liquid*> liquids_to_export;
+    vector<spike_damage_type*> spike_damages_to_export;
+    vector<string> particles_to_export; //Particle name
+
+    //Fill these lists then export. 
+    //The order is important since objects can interact with other categories
+    
+    //Mobs
+    for (size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* gen_ptr = game.cur_area_data.mob_generators[m];
+        if (std::find(types_to_export.begin(), types_to_export.end(), gen_ptr->type) != types_to_export.end()) {
+            continue;
+        }
+        types_to_export.push_back(gen_ptr->type);
+
+        for (size_t s = 0; s < gen_ptr->type->spawns.size(); ++s) {
+            mob_type* type_ptr = game.mob_categories.find_mob_type(gen_ptr->type->spawns[s].mob_type_name);
+            if (std::find(types_to_export.begin(), types_to_export.end(), type_ptr) == types_to_export.end()) {
+                types_to_export.push_back(type_ptr);
+            }
+        }
+        if (gen_ptr->type->category->id == MOB_CATEGORY_PILES) {
+            pile_type* pile_ptr = (pile_type*)gen_ptr->type;
+            if (std::find(types_to_export.begin(), types_to_export.end(), pile_ptr->contents) == types_to_export.end()) {
+                types_to_export.push_back(pile_ptr->contents);
+            }
+        }
+        if (gen_ptr->type->category->id == MOB_CATEGORY_CONVERTERS) {
+            converter_type* converter_ptr = (converter_type*)gen_ptr->type;
+            for (size_t s = 0; s < converter_ptr->available_pikmin_types.size(); ++s) {
+                if (std::find(types_to_export.begin(), types_to_export.end(), converter_ptr->available_pikmin_types[s]) == types_to_export.end()) {
+                    types_to_export.push_back(converter_ptr->available_pikmin_types[s]);
+                }
+            }
+        }
+        if (gen_ptr->type->category->id == MOB_CATEGORY_ONIONS) {
+            onion_type* onion_ptr = (onion_type*)gen_ptr->type;
+            for (size_t s = 0; s < onion_ptr->nest->pik_types.size(); ++s) {
+                if (std::find(types_to_export.begin(), types_to_export.end(), onion_ptr->nest->pik_types[s]) == types_to_export.end()) {
+                    types_to_export.push_back(onion_ptr->nest->pik_types[s]);
+                }
+            }
+        }
+        if (gen_ptr->type->category->id == MOB_CATEGORY_PELLETS) {
+            pellet_type* pellet_ptr = (pellet_type*)gen_ptr->type;
+            if (std::find(types_to_export.begin(), types_to_export.end(), pellet_ptr->pik_type) == types_to_export.end()) {
+                types_to_export.push_back(pellet_ptr->pik_type);
+            }
+        }
+    }
+
+    //Everything the added mobs can interact with
+    for(size_t m = 0; m < types_to_export.size(); ++m) {
+        mob_type* type_ptr = types_to_export[m];
+        string data_dir = type_ptr->category->folder + "/" + type_ptr->folder_name;
+        string data_file_name = data_dir + "/Data.txt";
+        data_node d_node(data_file_name);
+
+        if(type_ptr->category->id == MOB_CATEGORY_PELLETS) {
+            string number_image = d_node.get_child_by_name("number_image")->value;
+            if (std::find(graphics_to_export.begin(), graphics_to_export.end(), number_image) == graphics_to_export.end()) {
+                graphics_to_export.push_back(number_image);
+            }
+        }
+        if(type_ptr->category->id == MOB_CATEGORY_TOOLS) {
+            tool_type* too_ptr = (tool_type*)type_ptr;
+            string icon = d_node.get_child_by_name("icon")->value;
+            if (std::find(graphics_to_export.begin(), graphics_to_export.end(), icon) == graphics_to_export.end()) {
+                graphics_to_export.push_back(icon);
+            }
+        }
+        if(type_ptr->category->id == MOB_CATEGORY_PIKMIN) {
+            pikmin_type* pik_ptr = (pikmin_type*)type_ptr;
+            vector<string> icons;
+            icons.push_back(d_node.get_child_by_name("icon")->value);
+            icons.push_back(d_node.get_child_by_name("icon_leaf")->value);
+            icons.push_back(d_node.get_child_by_name("icon_bud")->value);
+            icons.push_back(d_node.get_child_by_name("icon_flower")->value);
+            icons.push_back(d_node.get_child_by_name("icon_onion")->value);
+            icons.push_back(d_node.get_child_by_name("top_leaf")->value);
+            icons.push_back(d_node.get_child_by_name("top_bud")->value);
+            icons.push_back(d_node.get_child_by_name("top_flower")->value);
+            for(size_t i = 0; i < icons.size(); ++i) {
+                if(std::find(graphics_to_export.begin(), graphics_to_export.end(), icons[i]) == graphics_to_export.end()) {
+                    graphics_to_export.push_back(icons[i]);
+                }
+            }
+        }
+        if(type_ptr->category->id == MOB_CATEGORY_LEADERS) {
+            leader_type* lea_ptr = (leader_type*)type_ptr;
+            vector<string> audio;
+            audio.push_back(d_node.get_child_by_name("dismiss_sfx")->value);
+            audio.push_back(d_node.get_child_by_name("whistle_sfx")->value);
+            audio.push_back(d_node.get_child_by_name("name_call_sfx")->value);
+            for(size_t i = 0; i < audio.size(); ++i) {
+                if (std::find(audio_to_export.begin(), audio_to_export.end(), audio[i]) == audio_to_export.end()) {
+                    audio_to_export.push_back(audio[i]);
+                }
+            }
+            string icon = d_node.get_child_by_name("icon")->value;
+            if (std::find(graphics_to_export.begin(), graphics_to_export.end(), icon) == graphics_to_export.end()) {
+                graphics_to_export.push_back(icon);
+            }
+        }
+        if(type_ptr->category->id == MOB_CATEGORY_BRIDGES) {
+            bridge_type* bri_ptr = (bridge_type*)type_ptr;
+            vector<string> textures;
+            textures.push_back(d_node.get_child_by_name("main_texture")->value);
+            textures.push_back(d_node.get_child_by_name("left_rail_texture")->value);
+            textures.push_back(d_node.get_child_by_name("right_rail_texture")->value);
+
+            for (size_t i = 0; i < textures.size(); ++i) {
+                if (std::find(textures_to_export.begin(), textures_to_export.end(), textures[i]) == textures_to_export.end()) {
+                    textures_to_export.push_back(textures[i]);
+                }
+            }
+        }
+
+        //Add items to other categories based on usage
+        //Animations
+        data_node anim_file = load_data_file(data_dir + "/Animations.txt");
+        type_ptr->anims = load_animation_database_from_file(&anim_file);
+        type_ptr->anims.fix_body_part_pointers();
+        for (size_t s = 0; s < type_ptr->anims.sprites.size(); ++s) {
+            sprite* cur_sprite = type_ptr->anims.sprites[s];
+            //Add the sprite's bitmap to the file
+            if (std::find(graphics_to_export.begin(), graphics_to_export.end(), cur_sprite->file) == graphics_to_export.end()) {
+                graphics_to_export.push_back(cur_sprite->file);
+            }
+            //Add all hazards used by this sprite
+            for (size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
+                hitbox h_box = cur_sprite->hitboxes[h];
+                for (size_t i = 0; i < h_box.hazards.size(); ++i) {
+                    hazard* haz_ptr = h_box.hazards[i];
+                    if (std::find(hazards_to_export.begin(), hazards_to_export.end(), haz_ptr) == hazards_to_export.end()) {
+                        hazards_to_export.push_back(haz_ptr);
+                    }
+                }
+            }
+        }
+        type_ptr->anims.destroy();
+        data_node script_file(data_dir + "/Script.txt");
+        if(script_file.get_nr_of_children() != 0) {
+            //script_file = load_data_file(data_dir + "/Script.txt");
+            data_node* init_node = script_file.get_child_by_name("init");
+            for (size_t i = 0; i < init_node->get_nr_of_children(); ++i) {
+                data_node* action_node = init_node->get_child(i);
+                if (action_node->name == "custom_actions_after") {
+                    //Pfft, that's not an action, that's a special property.
+                }
+                else {
+                    vector<string> words = split(action_node->name);
+                    if(game.mob_actions[MOB_ACTION_START_PARTICLES].name == words[0]) {
+                        if (std::find(particles_to_export.begin(), particles_to_export.end(), words[1]) == particles_to_export.end()) {
+                            particles_to_export.push_back(words[1]);
+                        }
+                    }
+                }
+            }
+            data_node* script_node = script_file.get_child_by_name("script");
+            for (size_t s = 0; s < script_node->get_nr_of_children(); ++s) {
+                data_node* state_node = script_node->get_child(s);
+                for (size_t e = 0; e < state_node->get_nr_of_children(); e++) {
+                    data_node* event_node = state_node->get_child(e);
+                    for (size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
+                        data_node* action_node = event_node->get_child(a);
+                        if (action_node->name == "custom_actions_after") {
+                            //Pfft, that's not an action, that's a special property.
+                        }
+                        else {
+                            vector<string> words = split(action_node->name);
+                            if (game.mob_actions[MOB_ACTION_START_PARTICLES].name == words[0]) {
+                                if (std::find(particles_to_export.begin(), particles_to_export.end(), words[1]) == particles_to_export.end()) {
+                                    particles_to_export.push_back(words[1]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Spike damage
+        if(type_ptr->spike_damage) {
+            if (std::find(spike_damages_to_export.begin(), spike_damages_to_export.end(), type_ptr->spike_damage) == spike_damages_to_export.end()) {
+                spike_damages_to_export.push_back(type_ptr->spike_damage);
+            }
+        }
+        //Sprays
+        if (type_ptr->category->id == MOB_CATEGORY_RESOURCES) {
+            resource_type* res_ptr = (resource_type*)type_ptr;
+            if (res_ptr->spray_to_concoct != INVALID) {
+                if(std::find(sprays_to_export.begin(), sprays_to_export.end(), &game.spray_types[res_ptr->spray_to_concoct]) == sprays_to_export.end()) {
+                    sprays_to_export.push_back(&game.spray_types[res_ptr->spray_to_concoct]);
+                }
+            }
+        }
+        if (type_ptr->category->id == MOB_CATEGORY_DROPS) {
+            drop_type* drop_ptr = (drop_type*)type_ptr;
+            if(drop_ptr->spray_type_to_increase != INVALID) {
+                if (std::find(sprays_to_export.begin(), sprays_to_export.end(), &game.spray_types[drop_ptr->spray_type_to_increase]) == sprays_to_export.end()) {
+                    sprays_to_export.push_back(&game.spray_types[drop_ptr->spray_type_to_increase]);
+                }
+            }
+        }
+        //Vulnerabilities
+        for(auto i : type_ptr->hazard_vulnerabilities) {
+            hazard* haz_ptr = i.first;
+            if (std::find(hazards_to_export.begin(), hazards_to_export.end(), haz_ptr) == hazards_to_export.end()) {
+                hazards_to_export.push_back(haz_ptr);
+            }
+        }
+        for(auto i : type_ptr->status_vulnerabilities) {
+            status_type* sta_ptr = i.first;
+            if (std::find(statuses_to_export.begin(), statuses_to_export.end(), sta_ptr) == statuses_to_export.end()) {
+                statuses_to_export.push_back(sta_ptr);
+            }
+        }
+
+
+
+    }
+
+    //Sectors
+    for(size_t m = 0; m < game.cur_area_data.sectors.size(); ++m) {
+        sector* cur_sector = game.cur_area_data.sectors[m];
+        if (std::find(textures_to_export.begin(), textures_to_export.end(), cur_sector->texture_info.file_name) == textures_to_export.end()) {
+            textures_to_export.push_back(cur_sector->texture_info.file_name);
+        }
+        for(size_t i = 0; i < cur_sector->hazards.size(); ++i) {
+            if (std::find(hazards_to_export.begin(), hazards_to_export.end(), cur_sector->hazards[i]) == hazards_to_export.end()) {
+                hazards_to_export.push_back(cur_sector->hazards[i]);
+            }
+        }
+    }
+    //Area sprays
+    map<string, string> spray_strs =
+        get_var_map(game.cur_area_data.spray_amounts);
+    for (size_t s = 0; s < game.spray_types.size(); ++s) {
+        int amount = s2i(spray_strs[game.spray_types[s].name]);
+        if (amount == 0) continue;
+        if (std::find(sprays_to_export.begin(), sprays_to_export.end(), &game.spray_types[s]) == sprays_to_export.end()) {
+            sprays_to_export.push_back(&game.spray_types[s]);
+        }
+    }
+
+    //Hazard Statuses and liquids
+    for(size_t m = 0; m < hazards_to_export.size(); ++m) {
+        hazard* haz_ptr = hazards_to_export[m];
+        //Add each hazard's status
+        for(size_t j = 0; j < haz_ptr->effects.size(); ++j) {
+            if (std::find(statuses_to_export.begin(), statuses_to_export.end(), haz_ptr->effects[j]) == statuses_to_export.end()) {
+                statuses_to_export.push_back(haz_ptr->effects[j]);
+            }
+        }
+        if(haz_ptr->associated_liquid) {
+            //Add associated liquids
+            if (std::find(liquids_to_export.begin(), liquids_to_export.end(), haz_ptr->associated_liquid) == liquids_to_export.end()) {
+                liquids_to_export.push_back(haz_ptr->associated_liquid);
+            }
+        }
+    }
+    //Sprays
+    vector<string> spray_files =
+        folder_to_vector(SPRAYS_FOLDER_PATH, false);
+
+    for(size_t m = 0; m < sprays_to_export.size(); ++m) {
+        for(size_t i = 0; i < sprays_to_export[m]->effects.size(); ++i) {
+            if (std::find(statuses_to_export.begin(), statuses_to_export.end(), sprays_to_export[m]->effects[i]) == statuses_to_export.end()) {
+                statuses_to_export.push_back(sprays_to_export[m]->effects[i]);
+            }
+        }
+        spray_type* spray_ptr = sprays_to_export[m];
+        bool found_file = false;
+        for (size_t i = 0; i < spray_files.size(); ++i) {
+            data_node file =
+                load_data_file(SPRAYS_FOLDER_PATH + "/" + spray_files[i]);
+            if (file.get_child_by_name("name")->value == sprays_to_export[m]->name) {
+                string data_file_name = SPRAYS_FOLDER_PATH + "/" + spray_files[i];
+                string icon = file.get_child_by_name("icon")->value;
+                if (std::find(graphics_to_export.begin(), graphics_to_export.end(), icon) == graphics_to_export.end()) {
+                    graphics_to_export.push_back(icon);
+                }
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+        }
+    }
+
+    //Status reapply
+    for (size_t m = 0; m < statuses_to_export.size(); ++m) {
+        if(statuses_to_export[m]->replacement_on_timeout) {
+            if(std::find(statuses_to_export.begin(), statuses_to_export.end(), statuses_to_export[m]->replacement_on_timeout) == statuses_to_export.end()) {
+                statuses_to_export.push_back(statuses_to_export[m]->replacement_on_timeout);
+            }
+        }
+    }
+
+    //Status
+    for(size_t m = 0; m < statuses_to_export.size(); ++m) {
+        status_type* sta_ptr = statuses_to_export[m];
+        string anim_path = ANIMATIONS_FOLDER_PATH + "/" + sta_ptr->overlay_animation;
+
+        data_node anim_node(anim_path);
+        if (std::find(animations_to_export.begin(), animations_to_export.end(), sta_ptr->overlay_animation) == animations_to_export.end()) {
+            animations_to_export.push_back(sta_ptr->overlay_animation);
+        }
+
+        sta_ptr->overlay_anim_db = load_animation_database_from_file(&anim_node);
+        for (size_t s = 0; s < sta_ptr->overlay_anim_db.sprites.size(); ++s) {
+            sprite* cur_sprite = sta_ptr->overlay_anim_db.sprites[s];
+            //Add the sprite's bitmap to the file
+            if (std::find(graphics_to_export.begin(), graphics_to_export.end(), cur_sprite->file) == graphics_to_export.end()) {
+                graphics_to_export.push_back(cur_sprite->file);
+            }
+        }
+        sta_ptr->overlay_anim_db.destroy();
+
+        if (sta_ptr->particle_gen) {
+            for (auto i : game.custom_particle_generators) {
+                if (i.second.id == sta_ptr->particle_gen->id) {
+                    if (std::find(particles_to_export.begin(), particles_to_export.end(), i.first) == particles_to_export.end()) {
+                        particles_to_export.push_back(i.first);
+                    }
+                }
+            }
+        }
+    }
+
+    //Liquids
+    //Liquids don't actually store the animation name. We get to find the orignal file!
+    vector<string> liquid_files =
+        folder_to_vector(LIQUIDS_FOLDER_PATH, false);
+    for(size_t m = 0; m < liquids_to_export.size(); ++m) {
+        string data_file_name;
+        bool found_file = false;
+        for (size_t i = 0; i < liquid_files.size(); ++i) {
+            data_node file =
+                load_data_file(LIQUIDS_FOLDER_PATH + "/" + liquid_files[i]);
+            if (file.get_child_by_name("name")->value == liquids_to_export[m]->name) {
+                data_file_name = LIQUIDS_FOLDER_PATH + "/" + liquid_files[i];
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+            continue;
+        }
+        liquid* liq_ptr = liquids_to_export[m];
+        data_node d_node(data_file_name);
+        string animation = d_node.get_child_by_name("animation")->value;
+        if (std::find(animations_to_export.begin(), animations_to_export.end(), animation) == animations_to_export.end()) {
+            animations_to_export.push_back(animation);
+        }
+        string anim_path = ANIMATIONS_FOLDER_PATH + "/" + animation;
+        data_node anim_node(anim_path);
+        liq_ptr->anim_db = load_animation_database_from_file(&anim_node);
+        for(size_t s = 0; s < liq_ptr->anim_db.sprites.size(); ++s) {
+            sprite* cur_sprite = liq_ptr->anim_db.sprites[s];
+            //Add the sprite's bitmap to the file
+            if (std::find(graphics_to_export.begin(), graphics_to_export.end(), cur_sprite->file) == graphics_to_export.end()) {
+                graphics_to_export.push_back(cur_sprite->file);
+            }
+        }
+        liq_ptr->anim_db.destroy();
+    }
+
+    //We have compiled everything! Start exporting it all!
+    for (size_t m = 0; m < types_to_export.size(); ++m) {
+        mob_type* type_ptr = types_to_export[m];
+
+        string data_dir = type_ptr->category->folder + "/" + type_ptr->folder_name;
+        string export_location = export_path + "/" + data_dir;
+
+        string script_file_name = data_dir + "/Script.txt";
+        data_node script_node(script_file_name);
+        if (script_node.get_nr_of_children() != 0) {
+            script_node.save_file(export_location + "/Script.txt");
+        }
+
+        string animation_file_name = data_dir + "/Animations.txt";
+        data_node animation_node(animation_file_name);
+        if (animation_node.get_nr_of_children() != 0) {
+            animation_node.save_file(export_location + "/Animations.txt");
+        }
+
+        string data_file_name = data_dir + "/Data.txt";
+        data_node data_node(data_file_name);
+        if (data_node.get_nr_of_children() != 0) {
+            data_node.save_file(export_location + "/Data.txt");
+        }
+    }
+
+    for(size_t m = 0; m < animations_to_export.size(); ++m) {
+        string data_dir = ANIMATIONS_FOLDER_PATH + "/" + animations_to_export[m];
+        string export_location = export_path + "/" + data_dir;
+        data_node node(data_dir);
+        if(node.get_nr_of_children() != 0) {
+            node.save_file(export_location);
+        }
+    }
+
+
+    //Area
+    string data_dir = get_base_area_folder_path(game.cur_area_data.type, true) + "/" + game.cur_area_data.folder_name;
+    string export_location = export_path + "/" + data_dir;
+
+    string area_data_file_name = data_dir + "/Data.txt";
+    data_node area_data_node(area_data_file_name);
+    if (area_data_node.get_nr_of_children() != 0) {
+        area_data_node.save_file(export_location + "/Data.txt");
+    }
+
+    string area_geometry_file_name = data_dir + "/Geometry.txt";
+    data_node area_geometry_node(area_geometry_file_name);
+    if(area_geometry_node.get_nr_of_children() != 0) {
+        area_geometry_node.save_file(export_location + "/Geometry.txt");
+    }
+    if(game.cur_area_data.thumbnail) {
+        al_save_bitmap(
+            (export_location + "/Thumbnail.png").c_str(), game.cur_area_data.thumbnail.get()
+        );
+    }
+    if(game.cur_area_data.weather_name != NONE_OPTION) {
+        string weather_path = export_path + "/" + WEATHER_FOLDER_PATH + "/";
+        vector<string> weather_files =
+            folder_to_vector(WEATHER_FOLDER_PATH, false);
+        for (size_t i = 0; i < weather_files.size(); ++i) {
+            data_node file =
+                load_data_file(WEATHER_FOLDER_PATH + "/" + weather_files[i]);
+            if (file.get_child_by_name("name")->value == game.cur_area_data.weather_name) {
+                string data_file_name = WEATHER_FOLDER_PATH + "/" + weather_files[i];
+                file.save_file(weather_path + "/" + weather_files[i]);
+                break;
+            }
+
+            if(i == weather_files.size() - 1) {
+                //So we couldn't find our file, something isn't being exported right!
+                encountered_errors = true;
+            }
+        }
+    }
+
+    //Audio
+    string audio_path = export_path + "/" + AUDIO_FOLDER_PATH + "/";
+
+    size_t next_slash_pos = audio_path.find('/', 0);
+    while (next_slash_pos != string::npos) {
+        string path_so_far = audio_path.substr(0, next_slash_pos);
+        if (!al_make_directory(path_so_far.c_str())) {
+            encountered_errors = true;
+        }
+        next_slash_pos = audio_path.find('/', next_slash_pos + 1);
+    }
+
+    for (size_t i = 0; i < audio_to_export.size(); ++i) {
+        string path = audio_path + audio_to_export[i];
+        ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER_PATH + "/" + audio_to_export[i]).c_str());
+        if(!al_save_sample(path.c_str(), sample)) {
+            //encountered_errors = true; audio just kinda doesnt work (needs to be .wav)
+        }
+        al_destroy_sample(sample);
+    }
+
+    //Textures
+    string texture_path = export_path + "/" + TEXTURES_FOLDER_PATH + "/";
+    
+    next_slash_pos = texture_path.find('/', 0);
+    while (next_slash_pos != string::npos) {
+        string path_so_far = texture_path.substr(0, next_slash_pos);
+        if (!al_make_directory(path_so_far.c_str())) {
+            encountered_errors = true;
+        }
+        next_slash_pos = texture_path.find('/', next_slash_pos + 1);
+    }
+
+    for(size_t m = 0; m < textures_to_export.size(); ++m) {
+        string path = texture_path + textures_to_export[m];
+        al_save_bitmap(path.c_str(), game.textures.get(textures_to_export[m]));
+    }
+
+    //Graphics
+    string graphics_path = export_path + "/" + GRAPHICS_FOLDER_PATH + "/";
+
+    next_slash_pos = graphics_path.find('/', 0);
+    while (next_slash_pos != string::npos) {
+        string path_so_far = graphics_path.substr(0, next_slash_pos);
+        if (!al_make_directory(path_so_far.c_str())) {
+            encountered_errors = true;
+        }
+        next_slash_pos = graphics_path.find('/', next_slash_pos + 1);
+    }
+
+    for (size_t m = 0; m < graphics_to_export.size(); ++m) {
+        string path = graphics_path + graphics_to_export[m];
+        if (!al_save_bitmap(path.c_str(), game.bitmaps.get(graphics_to_export[m]))) {
+            encountered_errors = true;
+        }
+    }
+
+    //Hazards
+    string hazards_path = export_path + "/" + HAZARDS_FOLDER_PATH + "/";
+
+    vector<string> hazard_files =
+        folder_to_vector(HAZARDS_FOLDER_PATH, false);
+    for(size_t m = 0; m < hazards_to_export.size(); ++m) {
+        bool found_file = false;
+        for (size_t i = 0; i < hazard_files.size(); ++i) {
+            data_node file =
+                load_data_file(HAZARDS_FOLDER_PATH + "/" + hazard_files[i]);
+            if (file.get_child_by_name("name")->value == hazards_to_export[m]->name) {
+                string data_file_name = HAZARDS_FOLDER_PATH + "/" + hazard_files[i];
+                file.save_file(hazards_path + "/" + hazard_files[i]);
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+            continue;
+        }
+    }
+
+
+    //Statuses
+    string status_path = export_path + "/" + STATUSES_FOLDER_PATH + "/";
+
+    vector<string> status_files =
+        folder_to_vector(STATUSES_FOLDER_PATH, false);
+    for (size_t m = 0; m < statuses_to_export.size(); ++m) {
+        bool found_file = false;
+        for (size_t i = 0; i < status_files.size(); ++i) {
+            data_node file =
+                load_data_file(STATUSES_FOLDER_PATH + "/" + status_files[i]);
+            if (file.get_child_by_name("name")->value == statuses_to_export[m]->name) {
+                string data_file_name = STATUSES_FOLDER_PATH + "/" + status_files[i];
+                file.save_file(status_path + "/" + status_files[i]);
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+            continue;
+        }
+    }
+
+    //Sprays
+    string spray_path = export_path + "/" + SPRAYS_FOLDER_PATH + "/";
+
+    for (size_t m = 0; m < sprays_to_export.size(); ++m) {
+        bool found_file = false;
+        for (size_t i = 0; i < spray_files.size(); ++i) {
+            data_node file =
+                load_data_file(SPRAYS_FOLDER_PATH + "/" + spray_files[i]);
+            if (file.get_child_by_name("name")->value == sprays_to_export[m]->name) {
+                string data_file_name = SPRAYS_FOLDER_PATH + "/" + spray_files[i];
+                file.save_file(spray_path + "/" + spray_files[i]);
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+            continue;
+        }
+    }
+
+    //Spike Damage
+    string spike_damage_path = export_path + "/" + SPIKE_DAMAGES_FOLDER_PATH + "/";
+
+    vector<string> spike_damage_files =
+        folder_to_vector(SPIKE_DAMAGES_FOLDER_PATH, false);
+    for (size_t m = 0; m < spike_damages_to_export.size(); ++m) {
+        bool found_file = false;
+        for (size_t i = 0; i < spike_damage_files.size(); ++i) {
+            data_node file =
+                load_data_file(SPIKE_DAMAGES_FOLDER_PATH + "/" + spike_damage_files[i]);
+            if (file.get_child_by_name("name")->value == spike_damages_to_export[m]->name) {
+                string data_file_name = SPIKE_DAMAGES_FOLDER_PATH + "/" + spike_damage_files[i];
+                file.save_file(spike_damage_path + "/" + spike_damage_files[i]);
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+            continue;
+        }
+    }
+
+    //Liquid
+    string liquid_path = export_path + "/" + LIQUIDS_FOLDER_PATH + "/";
+
+    for (size_t m = 0; m < liquids_to_export.size(); ++m) {
+        bool found_file = false;
+        for (size_t i = 0; i < liquid_files.size(); ++i) {
+            data_node file =
+                load_data_file(LIQUIDS_FOLDER_PATH + "/" + liquid_files[i]);
+            if (file.get_child_by_name("name")->value == liquids_to_export[m]->name) {
+                string data_file_name = LIQUIDS_FOLDER_PATH + "/" + liquid_files[i];
+                file.save_file(liquid_path + "/" + liquid_files[i]);
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+            continue;
+        }
+    }
+
+    //Particles
+    string particle_path = export_path + "/" + PARTICLE_GENERATORS_FOLDER_PATH + "/";
+    vector<string> particle_files =
+        folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
+    for (size_t m = 0; m < particles_to_export.size(); ++m) {
+        bool found_file = false;
+        for (size_t i = 0; i < particle_files.size(); ++i) {
+            data_node file =
+                load_data_file(PARTICLE_GENERATORS_FOLDER_PATH + "/" + particle_files[i]);
+            if (file.get_child_by_name("name")->value == particles_to_export[m]) {
+                string data_file_name = PARTICLE_GENERATORS_FOLDER_PATH + "/" + particle_files[i];
+                file.save_file(particle_path + "/" + particle_files[i]);
+                found_file = true;
+                break;
+            }
+        }
+        if (!found_file) {
+            //So we couldn't find our file, something isn't being exported right!
+            encountered_errors = true;
+            continue;
+        }
+    }
+
+    //Wrap up
+    if(!encountered_errors) {
+        set_status("Exported area to '" + export_path + "' successfully.");
+    }
+    else {
+        set_status("Exported area to '" + export_path + "'. Some files were not properly exported!");
+    }
+    return encountered_errors;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Emits a message onto the status bar, based on the given triangulation error.
  * error:
  *   The triangulation error.
@@ -1951,6 +2627,15 @@ void area_editor::press_duplicate_mobs_button() {
         set_status("Use the canvas to place the duplicated objects.");
         sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the save button widget is pressed.
+ */
+void area_editor::press_export_button() {
+    if(!save_area(false)) return;
+    export_area();
 }
 
 

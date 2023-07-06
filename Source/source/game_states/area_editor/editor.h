@@ -597,6 +597,7 @@ private:
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
+    bool export_area();
     void find_problems();
     void finish_circle_sector();
     void finish_layout_moving();
@@ -748,6 +749,7 @@ private:
     void press_delete_button();
     void press_delete_area_button();
     void press_duplicate_mobs_button();
+    void press_export_button();
     void press_load_button();
     void press_grid_interval_decrease_button();
     void press_grid_interval_increase_button();

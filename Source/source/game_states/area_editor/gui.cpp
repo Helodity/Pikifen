@@ -5519,6 +5519,22 @@ void area_editor::process_gui_toolbar() {
         "Save the area into the files on disk.",
         "Ctrl + S"
     );
+
+    //Export button.
+    ImGui::SameLine();
+    if (
+        ImGui::ImageButton(
+            "exportButton",
+            editor_icons[ICON_EXPORT],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+        ) {
+        press_export_button();
+    }
+    set_tooltip(
+        "Save and export the area to User_Data.",
+        "Ctrl + E"
+    );
     
     //Play button.
     ImGui::SameLine();
