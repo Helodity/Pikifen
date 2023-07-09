@@ -1,0 +1,32 @@
+name=Turbulent Tundra
+subtitle
+description=Brave the icy cold to find the riches within.
+tags=Standard; Snow
+difficulty=3
+bg_bmp
+bg_color=0 0 0
+bg_dist=0.0000
+bg_zoom=0.0000
+weather=Snowstorm
+day_time_start=360
+day_time_speed=36
+maker=Helodity
+version=1.0.0
+engine_version=0.23.2
+notes=This map has been in the works since 2018!
+spray_amounts
+mission_goal=Collect treasures
+mission_goal_all_mobs=true
+mission_fail_conditions=131
+mission_fail_too_few_pik_amount=0
+mission_fail_time_limit=1200
+mission_fail_hud_primary_cond=0
+mission_grading_mode=0
+mission_points_per_sec_left=6
+mission_points_per_treasure_point=1
+mission_point_loss_data=4
+mission_point_hud_data=251
+mission_bronze_req=400
+mission_silver_req=1000
+mission_gold_req=1600
+mission_platinum_req=2200
