@@ -7,6 +7,8 @@
 	stunning_electricity
 		renamed to electricity_pikmin_3
 		shocked renamed to shocked_pikmin_3
+	Note: These were kept here for custom content usage	
+	
 	Electricity
 		New hazard with shocked status
 		Removable on whistle
@@ -14,21 +16,52 @@
 		stuns pikmin
 		All electricity now uses this hazard
 		
-	Purple pikmin
+	Purple Pikmin
 		Increased attack animation length (0.8 -> 1.2)
 		Increased attack damage (10 -> 20)
 		Note: purely for flavor, makes them slightly stronger than red pikmin
-	White pikmin
+		
+	White Pikmin
 		Decreased attack animation length (0.8 -> 0.6)
 		Decreased attack damage (8 -> 6)
 		Note: purely for flavor, they maintain the same dps
-		
+	
+	Firey Blowhog
+		Decreased weight (7 -> 5)
+		Decreased seed amount (8 -> 5)
+	
+	Munge Dweevil
+		Decreased weight (3 -> 2)
+		Decreased seed amount (5 -> 3)
+	
 	Red Bulborb
-		Now throws pikmin forward when missing an attack
+		Now throws pikmin forward when missing an attack (50% hit rate)
 		itch_time increased (5 -> 10)
 		
 	Dwarf Red Bulborb
-		Screeching now knocks pikmin backwards
+		Screeching now knocks pikmin backwards (50% hit rate)
+		Decreased seed amount (4 -> 3)
+		Increased rotation speed (114 -> 160)
+		Removed turning state
+	
+	Yellow Wollywog
+		Decreased weight (7 -> 5)
+		Decreased seed amount (8 -> 6)
+	
+	Water Dumple
+		Decreased weight (5 -> 4)
+		Decreased seed amount (5 -> 4)
+	
+	Electric Water Dumple
+		Increased weight (7 -> 8)
+		Increased seed amount (7 -> 9)
+	
+	Whiptongue Bulborb
+		Decreased weight (12 -> 10)
+		Decreased seed amount (15 -> 12)
+		TODO: add feet lick
+			When pikmin are right next to it, it can do a lick attack below it instead of ahead
+		
 		
 	Armored Cannon Beetle
 		Shell opening now knocks pikmin forward

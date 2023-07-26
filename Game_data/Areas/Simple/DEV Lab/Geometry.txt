@@ -424,7 +424,7 @@ vertexes{
 	v=256.0000 256.0000
 	v=192.0000 256.0000
 	v=192.0000 896.0000
-	v=1536.0000 896.0000
+	v=1696.0000 896.0000
 	v=2176.0000 128.0000
 	v=480.0000 192.0000
 	v=480.0000 256.0000
@@ -476,7 +476,7 @@ vertexes{
 	v=360.0000 698.7180
 	v=389.2820 728.0000
 	v=192.0000 576.0000
-	v=1536.0000 576.0000
+	v=1696.0000 576.0000
 	v=2176.0000 512.0000
 	v=192.0000 512.0000
 	v=480.0000 896.0000
@@ -489,40 +489,32 @@ vertexes{
 	v=672.0000 776.0000
 	v=576.0000 864.0000
 	v=672.0000 864.0000
-	v=736.0000 672.0000
-	v=736.0000 760.0000
-	v=832.0000 760.0000
-	v=832.0000 672.0000
-	v=672.0000 760.0000
-	v=576.0000 760.0000
-	v=736.0000 776.0000
-	v=832.0000 776.0000
-	v=832.0000 864.0000
-	v=736.0000 864.0000
-	v=896.0000 672.0000
-	v=992.0000 672.0000
-	v=992.0000 760.0000
-	v=896.0000 760.0000
 	v=1056.0000 672.0000
 	v=1056.0000 760.0000
 	v=1152.0000 760.0000
 	v=1152.0000 672.0000
-	v=1216.0000 760.0000
-	v=1216.0000 672.0000
-	v=1312.0000 672.0000
-	v=1312.0000 760.0000
-	v=1376.0000 760.0000
-	v=1376.0000 672.0000
-	v=1472.0000 672.0000
-	v=1472.0000 760.0000
-	v=896.0000 776.0000
-	v=992.0000 776.0000
-	v=992.0000 864.0000
-	v=896.0000 864.0000
+	v=672.0000 760.0000
+	v=576.0000 760.0000
 	v=1056.0000 776.0000
 	v=1152.0000 776.0000
 	v=1152.0000 864.0000
 	v=1056.0000 864.0000
+	v=1216.0000 672.0000
+	v=1312.0000 672.0000
+	v=1312.0000 760.0000
+	v=1216.0000 760.0000
+	v=1376.0000 672.0000
+	v=1376.0000 760.0000
+	v=1472.0000 760.0000
+	v=1472.0000 672.0000
+	v=736.0000 760.0000
+	v=736.0000 672.0000
+	v=832.0000 672.0000
+	v=832.0000 760.0000
+	v=1536.0000 760.0000
+	v=1536.0000 672.0000
+	v=1632.0000 672.0000
+	v=1632.0000 760.0000
 	v=1216.0000 776.0000
 	v=1312.0000 776.0000
 	v=1312.0000 864.0000
@@ -531,6 +523,14 @@ vertexes{
 	v=1472.0000 776.0000
 	v=1472.0000 864.0000
 	v=1376.0000 864.0000
+	v=736.0000 776.0000
+	v=832.0000 776.0000
+	v=832.0000 864.0000
+	v=736.0000 864.0000
+	v=1536.0000 776.0000
+	v=1632.0000 776.0000
+	v=1632.0000 864.0000
+	v=1536.0000 864.0000
 	v=960.0000 320.0000
 	v=947.1384 368.0000
 	v=912.0000 403.1384
@@ -1513,6 +1513,14 @@ vertexes{
 	v=-2240.0000 2368.0000
 	v=-2240.0000 2944.0000
 	v=-2112.0000 2944.0000
+	v=896.0000 672.0000
+	v=992.0000 672.0000
+	v=992.0000 760.0000
+	v=896.0000 760.0000
+	v=896.0000 776.0000
+	v=992.0000 776.0000
+	v=992.0000 864.0000
+	v=896.0000 864.0000
 }
 edges{
 	e{
@@ -8538,6 +8546,38 @@ edges{
 		s=385 1
 		v=1512 1513
 	}
+	e{
+		s=120 386
+		v=1517 1514
+	}
+	e{
+		s=120 386
+		v=1514 1515
+	}
+	e{
+		s=120 386
+		v=1515 1516
+	}
+	e{
+		s=120 386
+		v=1516 1517
+	}
+	e{
+		s=120 387
+		v=1521 1518
+	}
+	e{
+		s=120 387
+		v=1518 1519
+	}
+	e{
+		s=120 387
+		v=1519 1520
+	}
+	e{
+		s=120 387
+		v=1520 1521
+	}
 }
 sectors{
 	s{
@@ -9192,7 +9232,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=fatal_electricity
+		hazards=electricity
 		hazards_floor=true
 		texture=White.png
 		texture_scale=0.7500 0.7500
@@ -9200,7 +9240,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=fatal_electricity
+		hazards=electricity
 		hazards_floor=false
 		texture=White.png
 		texture_scale=0.7500 0.7500
@@ -9240,7 +9280,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=stunning_electricity
+		hazards=electricity_pikmin_2
 		hazards_floor=true
 		texture=White.png
 		texture_scale=0.7500 0.7500
@@ -9272,7 +9312,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=stunning_electricity
+		hazards=electricity_pikmin_2
 		hazards_floor=false
 		texture=White.png
 		texture_scale=0.7500 0.7500
@@ -10648,6 +10688,22 @@ sectors{
 		z=-100.0000
 		texture=Grass_light.jpg
 		texture_scale=0.7500 0.7500
+	}
+	s{
+		z=-100.0000
+		hazards=electricity_pikmin_3
+		hazards_floor=true
+		texture=White.png
+		texture_scale=0.7500 0.7500
+		texture_tint=255 238 109
+	}
+	s{
+		z=-100.0000
+		hazards=electricity_pikmin_3
+		hazards_floor=false
+		texture=White.png
+		texture_scale=0.7500 0.7500
+		texture_tint=255 237 108
 	}
 }
 mobs{
@@ -12372,6 +12428,150 @@ mobs{
 	Treasure{
 		type=Yo-yo
 		p=1280.0000 -2720.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -200.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -200.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -200.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -216.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -216.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -216.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -232.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -232.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -232.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -248.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -248.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -248.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -264.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -264.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -264.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -280.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -280.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -280.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -296.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -296.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -296.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -312.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -312.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -312.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -328.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -328.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -328.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -344.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -360.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -376.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -376.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=0.0000 -376.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -360.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -344.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-32.0000 -360.0000
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=32.0000 -344.0000
 	}
 }
 path_stops{

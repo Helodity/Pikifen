@@ -160,6 +160,7 @@ animations{
 		}
 	}
 	screeching{
+		hit_rate=50
 		frames{
 			shaking1{
 				duration=0.1500
@@ -827,6 +828,31 @@ sprites{
 			}
 		}
 	}
+	screeching1{
+		file=Red_Bulborb.png
+		file_pos=125.0000 252.0000
+		file_size=100.0000 103.0000
+		offset=-3.0000 0.0000
+		scale=0.3000 0.3000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=20.0000
+				type=1
+				value=20.0000
+				knockback_angle=3.1416
+				knockback=1.0000
+			}
+			mouth{
+				coords=12.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
 	shaking1{
 		file=Red_Bulborb.png
 		file_pos=0.0000 0.0000
@@ -908,4 +934,4 @@ body_parts{
 	body
 	mouth
 }
-engine_version=0.22.0
+engine_version=0.24.98
