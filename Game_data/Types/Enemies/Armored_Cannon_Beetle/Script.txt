@@ -162,7 +162,7 @@ script {
             move_to_relative $x $y
             calculate time_open $time_open + 1
             set_timer 1
-            if $time_open >= 5
+            if $time_open >= 3
                 set_state moving_cool
             end_if
         }
@@ -184,7 +184,7 @@ script {
             move_to_relative $x $y
             calculate time_open $time_open + 1
             set_timer 1
-            if $time_open >= 10
+            if $time_open >= 9
                 set_state closing
             end_if
         }

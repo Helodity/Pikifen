@@ -146,7 +146,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -156,7 +156,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -166,7 +166,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -176,7 +176,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -186,7 +186,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -211,7 +211,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -221,7 +221,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -231,7 +231,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -241,7 +241,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -251,7 +251,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -276,7 +276,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -286,7 +286,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -296,7 +296,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -306,7 +306,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000
@@ -316,7 +316,7 @@ sprites{
 				height=24.0000
 				radius=22.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fatal_electricity
 				knockback_outward=true
 				knockback=1.0000

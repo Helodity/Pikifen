@@ -1,0 +1,5 @@
+name = purple_stun
+description = A heavy pound from a purple pikmin landing on an enemy, slowing it down briefly.
+
+color = 255 255 255
+effects = purple_pikmin_stun

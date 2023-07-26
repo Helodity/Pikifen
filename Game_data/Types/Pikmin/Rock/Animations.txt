@@ -312,7 +312,7 @@ sprites{
 				height=24.0000
 				radius=10.0000
 				type=1
-				value=20.0000
+				value=40.0000
 				hazards=rock
 				knockback_outward=true
 				knockback=1.0000
