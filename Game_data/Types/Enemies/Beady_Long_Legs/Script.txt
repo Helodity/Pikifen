@@ -45,9 +45,11 @@ script {
         on_enter {
             set_gravity 0
             set_animation resting
+            get_random_decimal rest_time 2 3
+            set_timer $rest_time
         }
-        on_animation_end {
-            set_state deciding
+        on_timer {
+            set_state resting_end
         }
         on_tick {
             move_to_target linked_mob_average
@@ -58,6 +60,15 @@ script {
             set_var must_turn_home true
         }
     }
+	
+	resting_end {
+        on_enter {
+            set_animation resting_end
+        }
+        on_animation_end {
+            set_state deciding
+        }
+	}
     
     deciding {
         on_enter {

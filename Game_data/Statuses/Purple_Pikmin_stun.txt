@@ -1,0 +1,11 @@
+name = purple_pikmin_stun
+description = Stunned enemies are disoriented, slowing them down for a brief time.
+
+affects_enemies = true
+anim_speed_multiplier = 0.8
+auto_remove_time = 0.2
+color = 200 64 200
+particle_generator = purple_pikmin_stun
+particle_offset = 0 0 300
+speed_multiplier = 0.8
+reapply_rule = reset_time

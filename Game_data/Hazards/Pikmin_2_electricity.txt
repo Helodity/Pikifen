@@ -1,0 +1,5 @@
+name = electricity_pikmin_2
+description = Powerful eletrical current that eletrocutes the victim, killing them.
+
+color = 255 255 128
+effects = shocked_pikmin_2

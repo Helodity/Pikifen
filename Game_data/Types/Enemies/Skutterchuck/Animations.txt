@@ -739,7 +739,7 @@ sprites{
 				height=32.0000
 				radius=35.0000
 				type=1
-				value=10.0000
+				value=20.0000
 				knockback_angle=3.1416
 				knockback=5.0000
 				wither_chance=30
@@ -764,7 +764,7 @@ sprites{
 				height=32.0000
 				radius=38.0000
 				type=1
-				value=10.0000
+				value=20.0000
 				knockback_angle=3.1416
 				knockback=5.0000
 				wither_chance=30
@@ -919,3 +919,4 @@ body_parts{
 	body
 	nodule
 }
+engine_version=0.23.2

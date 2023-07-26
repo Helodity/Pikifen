@@ -1,0 +1,279 @@
+==== Iteration 5 ====
+	This iteration focuses on more pikmin 4 changes, and some flavor
+	
+	fatal_electricity
+		renamed to electricity_pikmin_2
+		electrocuted renamed to shocked_pikmin_2
+	stunning_electricity
+		renamed to electricity_pikmin_3
+		shocked renamed to shocked_pikmin_3
+	Electricity
+		New hazard with shocked status
+		Removable on whistle
+		-1.0 health ratio
+		stuns pikmin
+		All electricity now uses this hazard
+		
+	Purple pikmin
+		Increased attack animation length (0.8 -> 1.2)
+		Increased attack damage (10 -> 20)
+		Note: purely for flavor, makes them slightly stronger than red pikmin
+	White pikmin
+		Decreased attack animation length (0.8 -> 0.6)
+		Decreased attack damage (8 -> 6)
+		Note: purely for flavor, they maintain the same dps
+		
+	Red Bulborb
+		Now throws pikmin forward when missing an attack
+		itch_time increased (5 -> 10)
+		
+	Dwarf Red Bulborb
+		Screeching now knocks pikmin backwards
+		
+	Armored Cannon Beetle
+		Shell opening now knocks pikmin forward
+		Increased max health (1800 -> 2400)
+		Reduced cool struggle time (6 seconds -> 4)
+		Note: apparently this had been 6 instead of 4 for a long time, whoops!
+	
+	Beady Long Legs
+		Decreasd rest time (2-4 -> 2-3)
+		Decreased shake hit rate (75% -> 50%)
+
+==== Iteration 4 ====
+	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
+	
+	Large Rolling Boulder
+		New object
+		Acts like rolling boulder, but with different stats
+			Radius Bigger (32 -> 64)
+			Moves Slower (200 -> 150)
+			Turns slower (50 -> 5)
+	
+	Armored Cannon Beetle
+		Now spits Large Rolling Boulders
+		Now turns a bit towards the target when spitting
+	
+	Spicy Spray
+		Reduced duration (40 -> 20)
+		Reduced speed multiplier (1.5 -> 1.2)
+		Increased anim_speed_multiplier (1 -> 1.3)
+		Increased maturity change (0 -> 2)
+		Note: This was done to make spicy sprays have some combat usage, but not too much that it trivializes everything
+	
+	Spicy Burgeoning Spiderwort
+		Increased recharge amount (1 -> 5)
+		Note: This meant getting a single spray took 10 in game minutes, now it takes 2
+		
+	Bitter Burgeoning Spiderwort
+		Increased recharge amount (1 -> 5)
+		Increased recharge time (60 -> 120)
+		Note: Bitter sprays are *MUCH* more powerful, so they should be slower to obtain
+		
+	Burned, Bubbled, Drowining, Shocked, Poisoned
+		Decreased maturity change (0 -> -1)
+		
+	Pikmin
+		Increased maturity_speed_mult (0.1 -> 0.15)
+		Increased base speed (110 -> 120)
+		
+	White Pikmin
+		Increased base speed (125 -> 140)
+	
+	Purple Pikmin
+		Increased Landing damage (5 -> 25)
+		Increased base speed (90 -> 100)
+		Stun changes
+			Reduced slow (40% -> 20%)
+			Stacking now resets time instead of adding
+		Note: This was done to bring purple pikmin more in line with Pikmin 4, while keeping their unique stun still there
+	
+	Leaders
+		Increased movement speed (130 -> 150)
+		Decreased Plucking animation length (0.6 -> 0.4)
+	
+	Zoom
+		Max zoom decreased (3.0 -> 2.5)
+		Min zoom increased (0.66 -> 1)
+
+==== Release Candidate 3 ====
+	This iteration ports the pack to 0.23.2 and focuses on fixing inconsistencies
+	In addition, minor suggestions are implemented
+	
+	Cloaking burrow-nit
+		Standardized wither chance (5%)
+	Dwarf Red Bulborb
+		Only screeches the first time it shakes
+	Fire Geyser
+		Removed damange knockback
+		Note: Some sprites had it, some didn't. To further distinguish fire from electricity, it was removed from all sprites
+	
+	Drowning
+		Health change increased (-0.5 -> -0.4)
+		Note: Since escaping drowning is often more difficult than fire or poison, it should take longer to kill pikmin.
+		Speed Multiplier increased (0.2 -> 0.3)
+		Note: This was an unrecorded change from a previous iteration.
+		
+	Burned
+		Health change now properly set (-0.6 -> -0.5)
+		Note: This change was not properly recorded in previous iterations. It has been put in line to match Bubbled and Poisioned
+	
+	Electrocuted, Crushed
+		Health change reverted (-2.0 -> -1.5)
+		Note: As mentioned by Espyo, this allows the player to process how pikmin die, and has no effect in combat
+	White Pikmin Poison
+		health_change reverted (-800 -> -200)
+		auto_remove_time reverted (1 -> 4)
+
+==== Release Candidate 2 ====
+	This iteration tweaks previous changes and makes introduces purple pikmin stunning
+	
+	Purple Pikmin
+		Landing damage decreased (8 -> 5)
+		Attacking damage decreased (15 -> 10)
+		Added on land stun
+			Applies a 40% slow for 0.2 seconds
+			Time stacks as more pikmin land
+		
+	Red Bulborb	& Whiptongue Bulborb
+		Reordered hitbox priority (head/body/lower_body -> body/lower_body/head)
+		
+	Bubbled, Burned, Poisoned, Drowning
+		Health change decreased (-0.4 -> -0.5)
+		Note: Iteration 3's release did not have status changes, so the actual change is (-0.3 -> -0.5)
+	White Pikmin Poison
+		health_change decreased (-200 -> -800)
+		auto_remove_time decreased (4 -> 1)
+
+
+==== Iteration 3 / Release Candidate 1 ====
+	This iteration dives deeper into tweaking enemies, focusing on script and animation changes
+	In addition, previous changes are further tweaked.
+	
+	Armored Cannon Beetle
+		Reduced hot struggle time (5 seconds -> 3)
+		Reduced cool struggle time (5 seconds -> 4)
+		Note: Decreasing the struggle time while keeping it possible for reds to one phase it make reds more useful while also keeping all pikmin viable
+	Beady Long Legs
+		Increased rest time (1 second -> 2 - 4)
+		Note: Currently, the BLL has an incredibly small damage window for non yellow pikmin making it near impossible to cause damage with non yellows. This makes other pikmin much more viable without outclassing yellow pikmin.
+	Dwarf Red Bulborb
+		Health increased (100 -> 150)
+		Added screeching
+			Occurs before a shake
+			Any sleeping Red Bulborb in a 300 unit radius will wake up when a screech occurs
+	Red Bulborb
+		Split back hitbox into two separate hitboxes: body and body_lower
+			body_lower is the bottom 32 units of the original back hitbox and has a defense multiplier of 1.5
+			body now consists of the higher 96 units of the orignal back hitbox
+			body_lower has lower knockback (2)
+		Renamed old "body" hitbox to "head" to be consistent with Whiptongue Bulborb
+	Whiptongue Bulborb
+		Same hitbox split as Red Bulborb
+	Note: Bulborb changes were added to introduce a more interesting decision between swarming and throwing, having to choose between more attacks/sec or more damage/attack respectively.	
+	
+	Wood Bridge
+		Health increased (2000 -> 10000)
+		Note: This was overlooked during Iteration 2 buffing gates, so it has been added here.
+		
+==== Iteration 2 ====
+	This iteration introduces changes to pikmin's damage and enemies' health.
+	In addition, previous changes are further tweaked.
+	
+	Leaders
+		Explosion vulnerability reduced (100% -> 37.5%)
+		Note: This gives a bomb rock the equivilant damage of a strong hit
+	
+	Rock Pikmin
+		Damage increased (20 -> 40)
+		Note: Rock pikmin in Pikmin 3 get an inconsistent damage boost when they are thrown. Without this buff rock pikmin severly lack behind due to their low attacks per second.
+	Red Pikmin
+		Damage increased (12 -> 15)
+	Purple Pikmin
+		Damage increased (11 -> 15)
+	White Pikmin
+		Damage reduced (9 -> 8)
+	Bulbmin
+		Damage reduced (12 -> 10)
+	
+	Armored Cannon Beetle
+		Health increased (1300 -> 1800)
+	Dwarf Red Bulborb
+		Health reduced (200 -> 100)
+	Red Bulborb
+		Health increased (750 -> 1000)
+	Yellow Wollywog
+		Health reduced (1600 -> 900)
+	Whiptongue Bulborb
+		Health increased (975 -> 1300)
+	
+	Crystal Nodule
+		Damage reduced (300 -> 200)
+	
+	Bomb rocks
+		Damage increased (500 -> 800)
+	
+	Electric Gate
+		Health increased (2000 -> 8000)
+	White Bramble Gate
+		Health increased (2000 -> 16000)
+		Explosion vulnerability increased (100% -> 1000%)
+	Note: While the rest of these health values generally fit P3, I was only able to find data for P2's electric gate, so it's used as a reference.
+	Reinforced Wall
+		Health increased (1500 -> 2400)
+
+==== Iteration 1 ====
+	This iteration focuses on standardizing enemy damage to leaders. Damage values are based on Pikmin 1, doing either 10%, 20%, or 30% of a leader's health. The only exception to this are bomb rocks, which do 50% of a leader's health.
+	Furthermore, shakes have been standardized to do a small amount of damage.
+	Pikmin's health has also been tweaked, as the higher values would otherwise instakill pikmin. 
+	With changing the health regen to health ratio in order to prevent death from multiple strong attacks, statuses needed to be made slightly stronger to compensate. 
+	
+	Leaders
+		Standardized acceleration (800)
+		HP reduced (2000 -> 1000)
+		
+	Pikmin
+		Health increased (100 -> 500)
+		Health regen increased (10 -> 100)
+		Note: This makes sure that pikmin aren't instantly killed by higher power attacks, and otherwise doesn't affect gameplay
+		The increased health regen makes sure that they won't die to multiple repeated attacks
+		
+	Bubbled, Burned, Poisoned, Drowning
+		Health change decreased (-0.3 -> -0.4)
+	Electrocuted, Crushed
+		Health change decreased (-1.5 -> -2.0)
+		
+	Bombrock
+		Damage reduced (600 -> 500)
+		Health increased (50 -> 500)
+		
+	Enemies
+		Standardized damage into 3 groups:
+			Weak (100)
+				Dwarf Red Bulborb
+				Adult Bulbmin
+				Crumbug
+				Cloaking Burrow-Nit
+				Electric Water Dumple (Stun)
+				Water Dumple
+			Medium (200)
+				Firey Blowhog
+				Red Bulborb
+				Electric Water Dumple (Bite)
+				Yellow Wollywog
+				Whiptongue Bulborb
+				Fire Geyser
+				Electric Wire
+			Strong (300)
+				Rolling Boulder
+				Beady Long Legs Foot
+				Crystal Nodule
+				
+		Shake/Knockback damage standardized across enemies (20)
+			
+	Armored Cannon Beetle
+		Hot flesh hitbox is no longer enabled when cooling or closing
+	Rolling Boulder
+		Speed increased (125 -> 200)	
+	Reinforced Wall
+		Health reduced (1800 -> 1500)

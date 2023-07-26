@@ -8,13 +8,22 @@ animations{
 				duration=0.1000
 			}
 			attack{
+				duration=0.1000
+			}
+			attack_2{
+				duration=0.1000
+			}
+			attack_3{
+				duration=0.1000
+			}
+			attack_2{
 				duration=0.3000
 			}
 			grabbing{
-				duration=0.1000
+				duration=0.1500
 			}
 			grabbing_far{
-				duration=0.2000
+				duration=0.2500
 			}
 		}
 	}
@@ -171,8 +180,8 @@ sprites{
 		offset=3.5000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=13.0000 0.0000
-		top_size=5.5000 10.0000
+		top_pos=13.5000 0.0000
+		top_size=6.3250 11.5000
 		top_angle=3.1400
 		hitboxes{
 			top{
@@ -180,7 +189,61 @@ sprites{
 				height=24.0000
 				radius=8.0000
 				type=1
-				value=11.0000
+				value=10.0000
+			}
+			body{
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	attack_2{
+		file=Purple_Pikmin.png
+		file_pos=210.0000 35.0000
+		file_size=28.0000 34.0000
+		offset=3.5000 -0.5000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=13.0000 -0.5000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
+		hitboxes{
+			top{
+				coords=12.0000 -0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=10.0000
+			}
+			body{
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	attack_3{
+		file=Purple_Pikmin.png
+		file_pos=210.0000 35.0000
+		file_size=28.0000 34.0000
+		offset=3.5000 0.5000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=13.0000 0.5000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
+		hitboxes{
+			top{
+				coords=12.0000 -0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=10.0000
 			}
 			body{
 				coords=2.0000 0.0000 0.0000
@@ -371,7 +434,8 @@ sprites{
 				height=24.0000
 				radius=10.0000
 				type=1
-				value=8.0000
+				value=5.0000
+				hazards=purple_stun
 			}
 		}
 	}

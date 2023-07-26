@@ -5,6 +5,7 @@ states_ignoring_death = crushed
 
 init {
     set_var ignoring false
+    set_var can_screech true
 }
 
 script {
@@ -21,7 +22,7 @@ script {
             end_if
         }
         on_itch {
-            set_state shaking
+            set_state screeching
         }
         on_pikmin_land {
             set_state crushed
@@ -95,6 +96,22 @@ script {
         }
     }
     
+	screeching {
+        on_enter {
+            set_animation screeching
+            stop
+        }
+        on_pikmin_land {
+            set_state crushed
+        }
+        on_frame_signal {
+            send_message_to_nearby 300 dwarf_screech
+        }
+        on_animation_end {
+            set_state shaking
+        }
+    }
+	
     chasing {
         on_enter {
             set_animation moving
@@ -155,6 +172,10 @@ script {
     
     shaking {
         on_enter {
+            if $can_screech = true
+                set_var can_screech false
+                set_state screeching
+            end_if
             stop
             set_animation shaking
         }

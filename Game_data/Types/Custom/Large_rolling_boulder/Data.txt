@@ -1,0 +1,19 @@
+name = Large rolling boulder
+description = A blarge oulder that rolls forward until it hits a wall, crushing things in its way.
+
+acceleration = 800
+appears_in_area_editor = false
+can_walk_on_others = true
+custom_category_name = Obstacle, dangerous
+height = 64
+max_health = 200
+move_speed = 150
+pushable = false
+pushes = false
+radius = 64
+reaches {
+    homing = 200 360
+}
+rotation_speed = 25
+target_type = none
+can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; fragile

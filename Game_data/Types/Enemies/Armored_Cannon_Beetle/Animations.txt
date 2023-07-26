@@ -94,12 +94,6 @@ animations{
 			inhale5{
 				duration=0.1000
 			}
-			inhale2{
-				duration=0.1000
-			}
-			inhale3{
-				duration=0.1000
-			}
 			inhale1{
 				duration=0.1000
 			}
@@ -118,7 +112,7 @@ animations{
 				duration=0.1000
 			}
 			idling{
-				duration=0.8000
+				duration=0.3000
 			}
 		}
 	}
@@ -894,11 +888,12 @@ sprites{
 				value=0.0000
 			}
 			shell{
-				coords=41.8400 0.0000 0.0000
+				coords=15.0000 0.0000 0.0000
 				height=100.0000
-				radius=140.0000
-				type=0
-				value=0.0000
+				radius=150.0000
+				type=1
+				value=20.0000
+				knockback=2.0000
 			}
 		}
 	}
@@ -922,7 +917,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=20.0000
 				hazards=fire
 			}
 			blowhole{
@@ -961,7 +956,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=20.0000
 				hazards=fire
 			}
 			blowhole{
@@ -1000,7 +995,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=20.0000
 				hazards=fire
 			}
 			blowhole{
@@ -1040,7 +1035,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=20.0000
 				hazards=fire
 			}
 			blowhole{
@@ -1080,7 +1075,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=20.0000
 				hazards=fire
 			}
 			blowhole{
@@ -1254,7 +1249,7 @@ sprites{
 				height=100.0000
 				radius=100.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1262,12 +1257,9 @@ sprites{
 			hot_flesh{
 				coords=-10.0000 0.0000 50.0000
 				height=100.0000
-				radius=100.0000
-				type=1
+				radius=10.0000
+				type=2
 				value=0.0000
-				knockback_outward=true
-				knockback_angle=3.1400
-				knockback=1.0000
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1281,7 +1273,7 @@ sprites{
 				height=100.0000
 				radius=140.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1299,7 +1291,7 @@ sprites{
 				height=100.0000
 				radius=80.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1307,12 +1299,9 @@ sprites{
 			hot_flesh{
 				coords=-22.0000 0.0000 50.0000
 				height=100.0000
-				radius=80.0000
-				type=1
+				radius=10.0000
+				type=2
 				value=0.0000
-				knockback_outward=true
-				knockback_angle=3.1400
-				knockback=1.0000
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1326,7 +1315,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1344,7 +1333,7 @@ sprites{
 				height=100.0000
 				radius=100.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1352,12 +1341,9 @@ sprites{
 			hot_flesh{
 				coords=-10.0000 0.0000 50.0000
 				height=100.0000
-				radius=100.0000
-				type=1
+				radius=10.0000
+				type=2
 				value=0.0000
-				knockback_outward=true
-				knockback_angle=3.1400
-				knockback=1.0000
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1371,7 +1357,7 @@ sprites{
 				height=100.0000
 				radius=140.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1389,7 +1375,7 @@ sprites{
 				height=100.0000
 				radius=80.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1397,12 +1383,9 @@ sprites{
 			hot_flesh{
 				coords=-22.0000 0.0000 50.0000
 				height=100.0000
-				radius=80.0000
-				type=1
+				radius=10.0000
+				type=2
 				value=0.0000
-				knockback_outward=true
-				knockback_angle=3.1400
-				knockback=1.0000
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1416,7 +1399,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback_angle=3.1400
 				knockback=1.0000
@@ -1440,10 +1423,9 @@ sprites{
 			hot_flesh{
 				coords=0.0000 0.0000 50.0000
 				height=100.0000
-				radius=110.0000
-				type=0
+				radius=10.0000
+				type=2
 				value=1.0000
-				can_pikmin_latch=true
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1478,10 +1460,9 @@ sprites{
 			hot_flesh{
 				coords=0.0000 0.0000 50.0000
 				height=100.0000
-				radius=110.0000
-				type=0
+				radius=10.0000
+				type=2
 				value=1.0000
-				can_pikmin_latch=true
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1516,10 +1497,9 @@ sprites{
 			hot_flesh{
 				coords=0.0000 2.0000 50.0000
 				height=100.0000
-				radius=110.0000
-				type=0
+				radius=10.0000
+				type=2
 				value=1.0000
-				can_pikmin_latch=true
 			}
 			blowhole{
 				coords=116.0000 2.0000 50.0000
@@ -1554,10 +1534,9 @@ sprites{
 			hot_flesh{
 				coords=0.0000 4.0000 50.0000
 				height=100.0000
-				radius=110.0000
-				type=0
+				radius=10.0000
+				type=2
 				value=1.0000
-				can_pikmin_latch=true
 			}
 			blowhole{
 				coords=116.0000 4.0000 50.0000
@@ -1593,10 +1572,9 @@ sprites{
 			hot_flesh{
 				coords=0.0000 -2.0000 50.0000
 				height=100.0000
-				radius=110.0000
-				type=0
+				radius=10.0000
+				type=2
 				value=1.0000
-				can_pikmin_latch=true
 			}
 			blowhole{
 				coords=116.0000 -2.0000 50.0000
@@ -1632,10 +1610,9 @@ sprites{
 			hot_flesh{
 				coords=0.0000 -4.0000 50.0000
 				height=100.0000
-				radius=110.0000
-				type=0
+				radius=10.0000
+				type=2
 				value=1.0000
-				can_pikmin_latch=true
 			}
 			blowhole{
 				coords=116.0000 -4.0000 50.0000
@@ -1660,3 +1637,4 @@ body_parts{
 	blowhole
 	shell
 }
+engine_version=0.24.0

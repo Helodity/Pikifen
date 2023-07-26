@@ -1,106 +1,4 @@
 animations{
-	idling{
-		frames{
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	resting{
-		frames{
-			idling{
-				duration=0.3000
-			}
-			resting1{
-				duration=0.1000
-			}
-			resting2{
-				duration=0.1000
-			}
-			resting3{
-				duration=1.0000
-			}
-			resting2{
-				duration=0.1000
-			}
-			resting1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.2000
-			}
-		}
-	}
-	limb_idling{
-		frames{
-			limb{
-				duration=0.1000
-			}
-		}
-	}
-	pausing{
-		frames{
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	shaking{
-		hit_rate=75
-		frames{
-			shaking1{
-				duration=0.1000
-			}
-			shaking2{
-				duration=0.2000
-			}
-			shaking3{
-				duration=0.5000
-			}
-			shaking1{
-				duration=0.0500
-			}
-			shaking4{
-				duration=0.0500
-			}
-			shaking5{
-				duration=0.0500
-			}
-			shaking6{
-				duration=0.1000
-			}
-			shaking5{
-				duration=0.0500
-			}
-			shaking4{
-				duration=0.0500
-			}
-			shaking7{
-				duration=0.0500
-			}
-			shaking8{
-				duration=0.0500
-			}
-			shaking9{
-				duration=0.0500
-			}
-			shaking10{
-				duration=0.1000
-			}
-			shaking9{
-				duration=0.0500
-			}
-			shaking8{
-				duration=0.0500
-			}
-			shaking2{
-				duration=0.0500
-			}
-			shaking1{
-				duration=0.5000
-			}
-		}
-	}
 	dying1{
 		frames{
 			tense1{
@@ -176,6 +74,13 @@ animations{
 			}
 		}
 	}
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
 	limb_dying{
 		loop_frame=5
 		frames{
@@ -199,8 +104,321 @@ animations{
 			}
 		}
 	}
+	limb_idling{
+		frames{
+			limb{
+				duration=0.1000
+			}
+		}
+	}
+	pausing{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	resting{
+		loop_frame=3
+		frames{
+			idling{
+				duration=0.3000
+			}
+			resting1{
+				duration=0.1000
+			}
+			resting2{
+				duration=0.1000
+			}
+			resting3{
+				duration=1.0000
+			}
+			resting2{
+				duration=1.0000
+			}
+		}
+	}
+	resting_end{
+		frames{
+			resting2{
+				duration=0.1000
+			}
+			resting1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.2000
+			}
+		}
+	}
+	shaking{
+		hit_rate=50
+		frames{
+			shaking1{
+				duration=0.1000
+			}
+			shaking2{
+				duration=0.2000
+			}
+			shaking3{
+				duration=0.5000
+			}
+			shaking1{
+				duration=0.0500
+			}
+			shaking4{
+				duration=0.0500
+			}
+			shaking5{
+				duration=0.0500
+			}
+			shaking6{
+				duration=0.1000
+			}
+			shaking5{
+				duration=0.0500
+			}
+			shaking4{
+				duration=0.0500
+			}
+			shaking7{
+				duration=0.0500
+			}
+			shaking8{
+				duration=0.0500
+			}
+			shaking9{
+				duration=0.0500
+			}
+			shaking10{
+				duration=0.1000
+			}
+			shaking9{
+				duration=0.0500
+			}
+			shaking8{
+				duration=0.0500
+			}
+			shaking2{
+				duration=0.0500
+			}
+			shaking1{
+				duration=0.5000
+			}
+		}
+	}
 }
 sprites{
+	crumbling1{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 143.0000
+		file_size=278.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crumbling2{
+		file=Beady_Long_Legs.png
+		file_pos=279.0000 143.0000
+		file_size=278.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crumbling3{
+		file=Beady_Long_Legs.png
+		file_pos=558.0000 143.0000
+		file_size=210.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crumbling4{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 286.0000
+		file_size=210.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	crumbling5{
+		file=Beady_Long_Legs.png
+		file_pos=211.0000 286.0000
+		file_size=210.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
 	idling{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
@@ -213,8 +431,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_right{
 				coords=4.0000 4.0000 132.0000
@@ -222,8 +438,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
 				coords=4.0000 -4.0000 132.0000
@@ -231,8 +445,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
 				coords=-4.0000 4.0000 132.0000
@@ -240,8 +452,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
 				coords=-4.0000 -4.0000 132.0000
@@ -249,8 +459,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -265,8 +473,6 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_right{
 				coords=0.0000 0.0000 132.0000
@@ -274,8 +480,6 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
 				coords=0.0000 0.0000 132.0000
@@ -283,8 +487,6 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
 				coords=0.0000 0.0000 132.0000
@@ -292,8 +494,6 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
 				coords=0.0000 0.0000 132.0000
@@ -301,8 +501,432 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+		}
+	}
+	limb_crumbling1{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 454.0000
+		file_size=234.0000 24.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	limb_crumbling2{
+		file=Beady_Long_Legs.png
+		file_pos=235.0000 454.0000
+		file_size=234.0000 24.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	limb_crumbling3{
+		file=Beady_Long_Legs.png
+		file_pos=470.0000 454.0000
+		file_size=234.0000 24.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	limb_crumbling4{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 479.0000
+		file_size=234.0000 24.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	limb_crumbling5{
+		file=Beady_Long_Legs.png
+		file_pos=235.0000 479.0000
+		file_size=234.0000 24.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	opening1{
+		file=Beady_Long_Legs.png
+		file_pos=143.0000 0.0000
+		file_size=210.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	opening2{
+		file=Beady_Long_Legs.png
+		file_pos=354.0000 0.0000
+		file_size=278.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=2
+				value=1.0000
+			}
+			front_right{
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	resting1{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=0.9700 0.9700
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -25.0000
+				height=140.0000
+				radius=69.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			front_right{
+				coords=3.5000 3.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=3.5000 -3.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-3.5000 3.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-3.5000 -3.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	resting2{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=0.9400 0.9400
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -50.0000
+				height=140.0000
+				radius=67.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			front_right{
+				coords=3.0000 3.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=3.0000 -3.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-3.0000 3.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-3.0000 -3.0000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	resting3{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=0.9100 0.9100
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -75.0000
+				height=140.0000
+				radius=65.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			front_right{
+				coords=2.5000 2.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=2.5000 -2.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-2.5000 2.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-2.5000 -2.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -317,9 +941,6 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-				wither_chance=50
 			}
 			front_right{
 				coords=4.0000 4.0000 132.0000
@@ -327,8 +948,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
 				coords=4.0000 -4.0000 132.0000
@@ -336,8 +955,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
 				coords=-4.0000 4.0000 132.0000
@@ -345,8 +962,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
 				coords=-4.0000 -4.0000 132.0000
@@ -354,439 +969,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking2{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		angle=6.1800
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=0
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=5.0100 2.9300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=3.0700 -5.0300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-3.1000 4.4900 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-5.0400 -3.3200 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking3{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		angle=5.9900
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=0
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=6.5800 2.5900 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=2.9400 -5.9500 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-2.3800 5.3900 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-5.8800 -3.4300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking4{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		angle=0.3600
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=1
-				value=1.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=2.8600 6.0900 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=6.5900 -2.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-5.8800 2.3600 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-2.0000 -6.5400 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking5{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		angle=0.6600
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=1
-				value=1.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=2.0500 6.2500 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=7.2300 -1.2000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-6.5300 2.2000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-1.0200 -5.7300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking6{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		angle=0.9100
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=1
-				value=1.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=-1.6400 7.1300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=5.4800 0.3500 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-7.8900 0.3500 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-1.2900 -5.7300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking7{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=1
-				value=1.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking8{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		angle=5.9600
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=1
-				value=1.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=5.0100 2.9300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=3.0700 -5.0300 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-3.1000 4.4900 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-5.0400 -3.3200 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	shaking9{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		angle=5.7500
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=1
-				value=1.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
-			}
-			front_right{
-				coords=6.4100 1.0900 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=2.1600 -6.3500 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-1.1700 5.7900 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-6.7900 -2.2500 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -812,8 +994,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
 				coords=-0.4100 -6.3500 132.0000
@@ -821,8 +1001,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
 				coords=0.0400 6.4000 132.0000
@@ -830,8 +1008,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
 				coords=-6.6300 0.4800 132.0000
@@ -839,186 +1015,247 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	resting1{
+	shaking2{
 		file=Beady_Long_Legs.png
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
-		scale=0.9700 0.9700
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 -25.0000
-				height=140.0000
-				radius=69.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=3.5000 3.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=3.5000 -3.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-3.5000 3.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-3.5000 -3.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	resting2{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		scale=0.9400 0.9400
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 -50.0000
-				height=140.0000
-				radius=67.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=3.0000 3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=3.0000 -3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-3.0000 3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-3.0000 -3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	resting3{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		scale=0.9100 0.9100
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 -75.0000
-				height=140.0000
-				radius=65.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=2.5000 2.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=2.5000 -2.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-2.5000 2.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-2.5000 -2.5000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	opening1{
-		file=Beady_Long_Legs.png
-		file_pos=143.0000 0.0000
-		file_size=210.0000 142.0000
+		angle=6.1800
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
 				height=140.0000
 				radius=71.0000
+				type=0
+				value=1.0000
+			}
+			front_right{
+				coords=5.0100 2.9300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
 				value=1.0000
+			}
+			front_left{
+				coords=3.0700 -5.0300 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-3.1000 4.4900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-5.0400 -3.3200 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking3{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=5.9900
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=0
+				value=1.0000
+			}
+			front_right{
+				coords=6.5800 2.5900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=2.9400 -5.9500 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-2.3800 5.3900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-5.8800 -3.4300 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking4{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=0.3600
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=1
+				value=1.0000
 				knockback_outward=true
-				knockback=1.0000
+				knockback=2.0000
+				wither_chance=50
+			}
+			front_right{
+				coords=2.8600 6.0900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=6.5900 -2.5000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-5.8800 2.3600 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-2.0000 -6.5400 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking5{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=0.6600
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=2.0000
+				wither_chance=50
+			}
+			front_right{
+				coords=2.0500 6.2500 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=7.2300 -1.2000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-6.5300 2.2000 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-1.0200 -5.7300 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking6{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=0.9100
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=2.0000
+				wither_chance=50
+			}
+			front_right{
+				coords=-1.6400 7.1300 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=5.4800 0.3500 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-7.8900 0.3500 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-1.2900 -5.7300 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking7{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=2.0000
+				wither_chance=50
 			}
 			front_right{
 				coords=4.0000 4.0000 132.0000
@@ -1026,8 +1263,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
 				coords=4.0000 -4.0000 132.0000
@@ -1035,8 +1270,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
 				coords=-4.0000 4.0000 132.0000
@@ -1044,8 +1277,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
 				coords=-4.0000 -4.0000 132.0000
@@ -1053,60 +1284,98 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	opening2{
+	shaking8{
 		file=Beady_Long_Legs.png
-		file_pos=354.0000 0.0000
-		file_size=278.0000 142.0000
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=5.9600
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
 				height=140.0000
 				radius=71.0000
-				type=2
+				type=1
 				value=1.0000
 				knockback_outward=true
-				knockback=1.0000
+				knockback=2.0000
+				wither_chance=50
 			}
 			front_right{
-				coords=4.0000 4.0000 132.0000
+				coords=5.0100 2.9300 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
-				coords=4.0000 -4.0000 132.0000
+				coords=3.0700 -5.0300 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
-				coords=-4.0000 4.0000 132.0000
+				coords=-3.1000 4.4900 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
-				coords=-4.0000 -4.0000 132.0000
+				coords=-5.0400 -3.3200 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
 				value=1.0000
+			}
+		}
+	}
+	shaking9{
+		file=Beady_Long_Legs.png
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=5.7500
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
+				type=1
+				value=1.0000
 				knockback_outward=true
-				knockback=1.0000
+				knockback=2.0000
+				wither_chance=50
+			}
+			front_right{
+				coords=6.4100 1.0900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			front_left{
+				coords=2.1600 -6.3500 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_right{
+				coords=-1.1700 5.7900 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			back_left{
+				coords=-6.7900 -2.2500 132.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1122,8 +1391,6 @@ sprites{
 				radius=74.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_right{
 				coords=4.0000 4.0000 132.0000
@@ -1131,8 +1398,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
 				coords=4.0000 -4.0000 132.0000
@@ -1140,8 +1405,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
 				coords=-4.0000 4.0000 132.0000
@@ -1149,8 +1412,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
 				coords=-4.0000 -4.0000 132.0000
@@ -1158,8 +1419,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1175,8 +1434,6 @@ sprites{
 				radius=78.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_right{
 				coords=4.5000 4.5000 132.0000
@@ -1184,8 +1441,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			front_left{
 				coords=4.5000 -4.5000 132.0000
@@ -1193,8 +1448,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_right{
 				coords=-4.5000 4.5000 132.0000
@@ -1202,8 +1455,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			back_left{
 				coords=-4.5000 -4.5000 132.0000
@@ -1211,528 +1462,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	crumbling1{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 143.0000
-		file_size=278.0000 142.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	crumbling2{
-		file=Beady_Long_Legs.png
-		file_pos=279.0000 143.0000
-		file_size=278.0000 142.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	crumbling3{
-		file=Beady_Long_Legs.png
-		file_pos=558.0000 143.0000
-		file_size=210.0000 142.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	crumbling4{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 286.0000
-		file_size=210.0000 142.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	crumbling5{
-		file=Beady_Long_Legs.png
-		file_pos=211.0000 286.0000
-		file_size=210.0000 142.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=140.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=-4.0000 4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=-4.0000 -4.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	limb_crumbling1{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 454.0000
-		file_size=234.0000 24.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	limb_crumbling2{
-		file=Beady_Long_Legs.png
-		file_pos=235.0000 454.0000
-		file_size=234.0000 24.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	limb_crumbling3{
-		file=Beady_Long_Legs.png
-		file_pos=470.0000 454.0000
-		file_size=234.0000 24.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	limb_crumbling4{
-		file=Beady_Long_Legs.png
-		file_pos=0.0000 479.0000
-		file_size=234.0000 24.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	limb_crumbling5{
-		file=Beady_Long_Legs.png
-		file_pos=235.0000 479.0000
-		file_size=234.0000 24.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			front_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_right{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			back_left{
-				coords=0.0000 0.0000 132.0000
-				height=8.0000
-				radius=71.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -1744,3 +1473,4 @@ body_parts{
 	back_right
 	back_left
 }
+engine_version=0.24.0

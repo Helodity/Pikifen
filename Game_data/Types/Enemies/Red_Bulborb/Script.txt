@@ -15,10 +15,19 @@ script {
         on_opponent_in_reach {
             set_state waking_up
         }
+        on_receive_message {
+            get_info msg message
+            if $msg = dwarf_screech
+                set_state waking_up
+            end_if
+        }
         on_damage {
             set_state waking_up
         }
         on_touch_opponent {
+            set_state waking_up
+        }
+        on_touch_hazard {
             set_state waking_up
         }
     }
