@@ -25,9 +25,9 @@ reaches {
 }
 spawns {
     boulder {
-        object = Rolling boulder
+        object = Large rolling boulder
         relative = true
-        coordinates = 140 0 0
+        coordinates = 190 0 0
         angle = 0
     }
 }

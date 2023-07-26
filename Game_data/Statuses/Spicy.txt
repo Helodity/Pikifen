@@ -2,10 +2,12 @@ name = spicy
 description = A Pikmin that's spicy has been sprayed with ultra-spicy spray, and is able to move faster than normal, for a limited time.
 
 affects_pikmin = true
-auto_remove_time = 40
+anim_speed_multiplier = 1.3
+auto_remove_time = 20
 color = 255 64 64
+maturity_change_amount = 2
 particle_generator = spicy_sparkles
 particle_offset = 0 0 64
 reapply_rule = reset_time
-speed_multiplier = 1.5
+speed_multiplier = 1.2
 tint = 255 192 160

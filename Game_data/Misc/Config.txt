@@ -25,7 +25,7 @@ swarm_task_range = 3
 pikmin_chase_range = 200
 max_pikmin_in_field = 100
 maturity_power_mult = 0.1
-maturity_speed_mult = 0.1
+maturity_speed_mult = 0.15
 
 can_throw_leaders = true
 cursor_max_dist = 200
@@ -40,5 +40,5 @@ whistle_growth_speed = 180
 whistle_max_dist = 200
 
 message_char_interval = 0.03
-zoom_max_level = 3.0
-zoom_min_level = 0.66
+zoom_max_level = 2.5
+zoom_min_level = 1.0

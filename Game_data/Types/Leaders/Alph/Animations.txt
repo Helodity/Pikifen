@@ -42,19 +42,19 @@ animations{
 		loop_frame=4
 		frames{
 			ducking{
-				duration=0.2000
+				duration=0.1500
 			}
 			idling{
-				duration=0.1000
+				duration=0.0750
 			}
 			limbo{
-				duration=0.1000
+				duration=0.0750
 			}
 			half_limbo{
-				duration=0.1000
+				duration=0.0750
 			}
 			idling{
-				duration=0.1000
+				duration=0.0250
 			}
 		}
 	}
@@ -417,3 +417,4 @@ body_parts{
 	fist
 	body
 }
+engine_version=0.24.0

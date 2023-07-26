@@ -123,10 +123,13 @@ script {
     
     spitting {
         on_enter {
-            stop
+            receive_status triple_speed
+            turn_to_target focused_mob
             set_animation spitting
         }
         on_frame_signal {
+            stop
+            remove_status triple_speed
             start_particles dust_spit 180 0
             spawn boulder
         }
