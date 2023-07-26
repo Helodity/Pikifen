@@ -7,8 +7,8 @@ max_health = 200
 itch_damage = 30
 itch_time = 4
 height = 32
-radius = 30
-terrain_radius = 45
+radius = 24
+terrain_radius = 32
 move_speed = 50
 rotation_speed = 120
 
