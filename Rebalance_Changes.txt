@@ -1,6 +1,7 @@
 ==== Iteration 5 ====
 	This iteration focuses on more pikmin 4 changes, and some flavor
 	
+- Hazards -
 	fatal_electricity
 		renamed to electricity_pikmin_2
 		electrocuted renamed to shocked_pikmin_2
@@ -14,6 +15,7 @@
 		stuns pikmin
 		All electricity now uses this hazard
 		
+- Pikmin -
 	Purple pikmin
 		Increased attack animation length (0.8 -> 1.2)
 		Increased attack damage (10 -> 20)
@@ -23,6 +25,7 @@
 		Decreased attack damage (8 -> 6)
 		Note: purely for flavor, they maintain the same dps
 		
+- Enemies -
 	Red Bulborb
 		Now throws pikmin forward when missing an attack
 		itch_time increased (5 -> 10)
@@ -39,6 +42,19 @@
 	Beady Long Legs
 		Decreasd rest time (2-4 -> 2-3)
 		Decreased shake hit rate (75% -> 50%)
+		
+	Water Dumple
+		Values tweaked to be closer to Pikmin 4. Gave it squash properties.
+		
+		Slightly increased rotation speed (114 -> 120)
+		Reduced weight (5 -> 3)
+		Reduced max carriers (10 -> 6)
+		Reduced seed yield (5 -> 4)
+		Reduced points (30 -> 10)
+		Reduced itch damage (50 -> 30)
+		Damage on Purple land (0 -> 130)
+		Increased search 360 reach (30 -> 50)
+		Added wandering behavior
 
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks

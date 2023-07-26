@@ -155,19 +155,20 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=0.0000 0.0000
 		file_size=66.0000 50.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=25.0000 0.0000 0.0000
+				coords=20.2500 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -177,20 +178,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=201.0000 0.0000
 		file_size=72.0000 50.0000
-		offset=3.0000 0.0000
+		offset=2.4300 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=6.0000 0.0000 0.0000
+				coords=4.8600 0.0000 0.0000
 				height=32.0000
-				radius=32.0000
+				radius=25.9200
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=34.0000 0.0000 0.0000
+				coords=27.5400 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -200,20 +202,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=274.0000 0.0000
 		file_size=79.0000 50.0000
-		offset=6.0000 0.0000
+		offset=4.8600 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=11.2000 -0.1800 0.0000
+				coords=9.0720 -0.1458 0.0000
 				height=32.0000
-				radius=33.0000
+				radius=26.7300
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=40.0000 0.0000 0.0000
+				coords=32.4000 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -223,20 +226,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=67.0000 0.0000
 		file_size=67.0000 51.0000
-		offset=0.5000 0.5000
+		offset=0.4050 0.4050
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=25.0000 0.0000 0.0000
+				coords=20.2500 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -246,20 +250,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=135.0000 0.0000
 		file_size=65.0000 51.0000
-		offset=-0.5000 -0.5000
+		offset=-0.4050 -0.4050
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=25.0000 0.0000 0.0000
+				coords=20.2500 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -269,20 +274,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=0.0000 51.0000
 		file_size=60.0000 51.0000
-		offset=-3.0000 0.0000
+		offset=-2.4300 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=25.0000 0.0000 0.0000
+				coords=20.2500 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -292,20 +298,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=61.0000 52.0000
 		file_size=96.0000 50.0000
-		offset=15.0000 0.0000
+		offset=12.1500 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=18.0000 0.0000 0.0000
+				coords=14.5800 0.0000 0.0000
 				height=32.0000
-				radius=38.0000
+				radius=30.7800
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=57.0000 0.0000 -20.0000
+				coords=46.1700 0.0000 -20.0000
 				height=70.0000
-				radius=32.0000
+				radius=23.4000
 				type=1
 				value=100.0000
 				knockback=1.0000
@@ -316,20 +323,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=158.0000 52.0000
 		file_size=100.0000 50.0000
-		offset=17.0000 0.0000
+		offset=13.7700 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=22.0000 0.0000 0.0000
+				coords=17.8200 0.0000 0.0000
 				height=32.0000
-				radius=42.0000
+				radius=34.0200
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=65.0000 0.0000 -20.0000
+				coords=52.6500 0.0000 -20.0000
 				height=70.0000
-				radius=32.0000
+				radius=25.9200
 				type=1
 				value=100.0000
 				knockback=1.0000
@@ -340,20 +348,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=259.0000 51.0000
 		file_size=67.0000 52.0000
-		offset=-1.0000 -1.0000
+		offset=-0.8100 -0.8100
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=25.0000 1.0000 0.0000
+				coords=20.2500 0.8100 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -363,21 +372,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=259.0000 51.0000
 		file_size=67.0000 52.0000
-		offset=-1.0000 -1.0000
-		scale=1.0000 -1.0000
+		offset=-0.8100 -0.8100
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=25.0000 -1.0000 0.0000
+				coords=20.2500 -0.8100 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -387,12 +396,13 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=327.0000 51.0000
 		file_size=68.0000 55.0000
-		offset=-1.0000 0.0000
+		offset=-0.8100 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=1.0000 0.0000 -16.0000
+				coords=0.8100 0.0000 -16.0000
 				height=70.0000
-				radius=42.0000
+				radius=34.0200
 				type=1
 				value=20.0000
 				knockback_outward=true
@@ -400,9 +410,9 @@ sprites{
 				wither_chance=5
 			}
 			mouth{
-				coords=25.0000 0.0000 0.0000
+				coords=20.2500 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -412,12 +422,13 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=396.0000 51.0000
 		file_size=71.0000 60.0000
-		offset=-2.0000 0.0000
+		offset=-1.6200 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=1.0000 0.0000 -16.0000
+				coords=0.8100 0.0000 -16.0000
 				height=70.0000
-				radius=42.0000
+				radius=34.0200
 				type=1
 				value=20.0000
 				knockback_outward=true
@@ -425,9 +436,9 @@ sprites{
 				wither_chance=5
 			}
 			mouth{
-				coords=25.0000 0.0000 0.0000
+				coords=20.2500 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -437,19 +448,20 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=0.0000 103.0000
 		file_size=66.0000 50.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=30.0000 0.0000 0.0000
+				coords=24.3000 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -459,20 +471,21 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=67.0000 103.0000
 		file_size=67.0000 50.0000
-		offset=1.0000 0.0000
+		offset=0.8100 0.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=30.0000 0.0000 0.0000
+				coords=24.3000 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -482,18 +495,19 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=135.0000 103.0000
 		file_size=66.0000 51.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=25.0000 6.2700 0.0000
+				coords=20.2500 5.0787 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -503,18 +517,19 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=202.0000 104.0000
 		file_size=66.0000 36.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=25.0000 10.0000 0.0000
+				coords=20.2500 8.1000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -524,18 +539,19 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=269.0000 107.0000
 		file_size=66.0000 47.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=24.0000 2.0000 0.0000
+				coords=19.4400 1.6200 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -545,18 +561,19 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=336.0000 112.0000
 		file_size=66.0000 50.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=25.0000 0.0000 0.0000
+				coords=20.2500 0.0000 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -566,19 +583,19 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=269.0000 107.0000
 		file_size=66.0000 47.0000
-		scale=1.0000 -1.0000
+		scale=0.8000 0.8000
 		hitboxes{
 			body{
-				coords=3.0000 0.0000 0.0000
+				coords=2.4300 0.0000 0.0000
 				height=32.0000
-				radius=29.0000
+				radius=23.4900
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=24.0000 -2.0000 0.0000
+				coords=19.4400 -1.6200 0.0000
 				height=32.0000
-				radius=12.0000
+				radius=9.7200
 				type=2
 				value=1.0000
 			}
@@ -589,4 +606,4 @@ body_parts{
 	body
 	mouth
 }
-engine_version=0.23.2
+engine_version=0.24.98
