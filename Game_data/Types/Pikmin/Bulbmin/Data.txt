@@ -26,8 +26,9 @@ top_bud = White_bud_top.png
 top_flower = White_flower_top.png
 vulnerabilities {
     fire = 0
-    stunning_electricity = 0
-    fatal_electricity = 0
+    electricity = 0
+    electricity_pikmin_2 = 0
+    electricity_pikmin_3 = 0
     water = 0
     water_bubble = 0
     poison = 0

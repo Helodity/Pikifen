@@ -1,5 +1,5 @@
 name = shocked
-description = A Pikmin that has been shocked will be unable to move as the current surges through its body. It can be saved by being whistled.
+description = A Pikmin that has been shocked will be unable to move as the current surges through its body, eventually dying. It can be saved by being whistled.
 
 affects_pikmin = true
 maturity_change_amount = -1
@@ -7,5 +7,6 @@ overlay_animation = Sparks.txt
 overlay_anim_mob_scale = 1.5
 color = 255 255 128
 removable_with_whistle = true
+health_change_ratio = -1.0
 speed_multiplier = 0
 state_change_type = helpless

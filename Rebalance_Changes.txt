@@ -1,3 +1,45 @@
+==== Iteration 5 ====
+	This iteration focuses on more pikmin 4 changes, and some flavor
+	
+	fatal_electricity
+		renamed to electricity_pikmin_2
+		electrocuted renamed to shocked_pikmin_2
+	stunning_electricity
+		renamed to electricity_pikmin_3
+		shocked renamed to shocked_pikmin_3
+	Electricity
+		New hazard with shocked status
+		Removable on whistle
+		-1.0 health ratio
+		stuns pikmin
+		All electricity now uses this hazard
+		
+	Purple pikmin
+		Increased attack animation length (0.8 -> 1.2)
+		Increased attack damage (10 -> 20)
+		Note: purely for flavor, makes them slightly stronger than red pikmin
+	White pikmin
+		Decreased attack animation length (0.8 -> 0.6)
+		Decreased attack damage (8 -> 6)
+		Note: purely for flavor, they maintain the same dps
+		
+	Red Bulborb
+		Now throws pikmin forward when missing an attack
+		itch_time increased (5 -> 10)
+		
+	Dwarf Red Bulborb
+		Screeching now knocks pikmin backwards
+		
+	Armored Cannon Beetle
+		Shell opening now knocks pikmin forward
+		Increased max health (1800 -> 2400)
+		Reduced cool struggle time (6 seconds -> 4)
+		Note: apparently this had been 6 instead of 4 for a long time, whoops!
+	
+	Beady Long Legs
+		Decreasd rest time (2-4 -> 2-3)
+		Decreased shake hit rate (75% -> 50%)
+
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
 	

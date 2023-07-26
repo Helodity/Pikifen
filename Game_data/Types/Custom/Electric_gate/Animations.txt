@@ -97,7 +97,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -105,7 +105,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=0.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -113,7 +113,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -121,7 +121,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=0.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -129,7 +129,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -137,7 +137,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=0.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -145,7 +145,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -153,7 +153,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=0.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -161,7 +161,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -169,7 +169,7 @@ sprites{
 				radius=28.0000
 				type=2
 				value=0.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 		}
 	}
@@ -184,7 +184,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -192,7 +192,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -202,7 +202,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -210,7 +210,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -220,7 +220,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -228,7 +228,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -238,7 +238,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -246,7 +246,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -256,7 +256,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -264,7 +264,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -281,7 +281,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -289,7 +289,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -299,7 +299,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -307,7 +307,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -317,7 +317,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -325,7 +325,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -335,7 +335,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -343,7 +343,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -353,7 +353,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -361,7 +361,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -378,7 +378,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -386,7 +386,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -396,7 +396,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -404,7 +404,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -414,7 +414,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -422,7 +422,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -432,7 +432,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -440,7 +440,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -450,7 +450,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -458,7 +458,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -476,7 +476,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -484,7 +484,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -494,7 +494,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -502,7 +502,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -512,7 +512,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -520,7 +520,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -530,7 +530,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -538,7 +538,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -548,7 +548,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -556,7 +556,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -574,7 +574,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -582,7 +582,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -592,7 +592,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -600,7 +600,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -610,7 +610,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -618,7 +618,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -628,7 +628,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -636,7 +636,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -646,7 +646,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -654,7 +654,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -671,7 +671,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -679,7 +679,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -689,7 +689,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -697,7 +697,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -707,7 +707,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -715,7 +715,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -725,7 +725,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -733,7 +733,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -743,7 +743,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -751,7 +751,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -768,7 +768,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -776,7 +776,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -786,7 +786,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -794,7 +794,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -804,7 +804,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -812,7 +812,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -822,7 +822,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -830,7 +830,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -840,7 +840,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -848,7 +848,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -865,7 +865,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -873,7 +873,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -883,7 +883,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -891,7 +891,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -901,7 +901,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -909,7 +909,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -919,7 +919,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -927,7 +927,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -937,7 +937,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -945,7 +945,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -963,7 +963,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -971,7 +971,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -981,7 +981,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -989,7 +989,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -999,7 +999,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -1007,7 +1007,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1017,7 +1017,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -1025,7 +1025,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1035,7 +1035,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -1043,7 +1043,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1061,7 +1061,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -1069,7 +1069,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1079,7 +1079,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -1087,7 +1087,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1097,7 +1097,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -1105,7 +1105,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1115,7 +1115,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -1123,7 +1123,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1133,7 +1133,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -1141,7 +1141,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1158,7 +1158,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -1166,7 +1166,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1176,7 +1176,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -1184,7 +1184,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1194,7 +1194,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -1202,7 +1202,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1212,7 +1212,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -1220,7 +1220,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1230,7 +1230,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -1238,7 +1238,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1255,7 +1255,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -1263,7 +1263,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1273,7 +1273,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -1281,7 +1281,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1291,7 +1291,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -1299,7 +1299,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1309,7 +1309,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -1317,7 +1317,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1327,7 +1327,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -1335,7 +1335,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1352,7 +1352,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -1360,7 +1360,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1370,7 +1370,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -1378,7 +1378,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1388,7 +1388,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -1396,7 +1396,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1406,7 +1406,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -1414,7 +1414,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1424,7 +1424,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -1432,7 +1432,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1450,7 +1450,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -1458,7 +1458,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1468,7 +1468,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -1476,7 +1476,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1486,7 +1486,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -1494,7 +1494,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1504,7 +1504,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -1512,7 +1512,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1522,7 +1522,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -1530,7 +1530,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1548,7 +1548,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			center_zap{
 				coords=0.0000 0.0000 0.0000
@@ -1556,7 +1556,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1566,7 +1566,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_left_zap{
 				coords=0.0000 -35.0000 0.0000
@@ -1574,7 +1574,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1584,7 +1584,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			near_right_zap{
 				coords=0.0000 35.0000 0.0000
@@ -1592,7 +1592,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1602,7 +1602,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_left_zap{
 				coords=0.0000 -70.0000 0.0000
@@ -1610,7 +1610,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -1620,7 +1620,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				hazards=stunning_electricity
+				hazards=electricity
 			}
 			far_right_zap{
 				coords=0.0000 70.0000 0.0000
@@ -1628,7 +1628,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=20.0000
-				hazards=stunning_electricity
+				hazards=electricity
 				knockback_outward=true
 				knockback=1.0000
 			}

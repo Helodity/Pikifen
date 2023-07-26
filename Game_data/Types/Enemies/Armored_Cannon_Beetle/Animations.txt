@@ -888,11 +888,12 @@ sprites{
 				value=0.0000
 			}
 			shell{
-				coords=41.8400 0.0000 0.0000
+				coords=15.0000 0.0000 0.0000
 				height=100.0000
-				radius=140.0000
-				type=0
-				value=0.0000
+				radius=150.0000
+				type=1
+				value=20.0000
+				knockback=2.0000
 			}
 		}
 	}
@@ -1636,4 +1637,4 @@ body_parts{
 	blowhole
 	shell
 }
-engine_version=0.22.0
+engine_version=0.24.0

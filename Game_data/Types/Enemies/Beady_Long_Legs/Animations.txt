@@ -152,7 +152,7 @@ animations{
 		}
 	}
 	shaking{
-		hit_rate=75
+		hit_rate=50
 		frames{
 			shaking1{
 				duration=0.1000
@@ -1473,4 +1473,4 @@ body_parts{
 	back_right
 	back_left
 }
-engine_version=0.22.0
+engine_version=0.24.0

@@ -1,0 +1,5 @@
+name = electricity_pikmin_3
+description = Small currents of electricity that aren't harmful, but paralyze Pikmin.
+
+color = 255 255 128
+effects = shocked_pikmin_3

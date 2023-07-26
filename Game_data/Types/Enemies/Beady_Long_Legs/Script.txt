@@ -45,7 +45,7 @@ script {
         on_enter {
             set_gravity 0
             set_animation resting
-            get_random_decimal rest_time 2 4
+            get_random_decimal rest_time 2 3
             set_timer $rest_time
         }
         on_timer {
