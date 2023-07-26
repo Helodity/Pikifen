@@ -78,6 +78,7 @@ animations{
 	}
 	failing{
 		loop_frame=4
+		hit_rate=50
 		frames{
 			failing1{
 				duration=0.2000
@@ -1381,4 +1382,4 @@ body_parts{
 	head
 	mouth
 }
-engine_version=0.24.0
+engine_version=0.24.98
