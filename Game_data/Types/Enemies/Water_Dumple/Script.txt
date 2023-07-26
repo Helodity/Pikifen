@@ -26,12 +26,8 @@ script {
 		on_pikmin_land {
 			get_info pikmin mob_type
 			if $pikmin = Purple Pikmin
-				set_var damage -130
-			else
-				set_var damage 0
+				add_health -130
 			end_if
-			
-			add_health $damage
 		}
     }
 	
@@ -67,12 +63,8 @@ script {
 		on_pikmin_land {
 			get_info pikmin mob_type
 			if $pikmin = Purple Pikmin
-				set_var damage -130
-			else
-				set_var damage 0
+				add_health -130
 			end_if
-			
-			add_health $damage
 		}
     }
     
@@ -99,12 +91,8 @@ script {
 		on_pikmin_land {
 			get_info pikmin mob_type
 			if $pikmin = Purple Pikmin
-				set_var damage -130
-			else
-				set_var damage 0
+				add_health -130
 			end_if
-			
-			add_health $damage
 		}
     }
     
@@ -126,12 +114,8 @@ script {
 		on_pikmin_land {
 			get_info pikmin mob_type
 			if $pikmin = Purple Pikmin
-				set_var damage -130
-			else
-				set_var damage 0
+				add_health -130
 			end_if
-			
-			add_health $damage
 		}
     }
     
@@ -147,12 +131,8 @@ script {
 		on_pikmin_land {
 			get_info pikmin mob_type
 			if $pikmin = Purple Pikmin
-				set_var damage -130
-			else
-				set_var damage 0
+				add_health -130
 			end_if
-			
-			add_health $damage
 		}
     }
     
@@ -167,12 +147,8 @@ script {
 		on_pikmin_land {
 			get_info pikmin mob_type
 			if $pikmin = Purple Pikmin
-				set_var damage -130
-			else
-				set_var damage 0
+				add_health -130
 			end_if
-			
-			add_health $damage
 		}
     }
     
@@ -201,12 +177,8 @@ script {
 		on_pikmin_land {
 			get_info pikmin mob_type
 			if $pikmin = Purple Pikmin
-				set_var damage -130
-			else
-				set_var damage 0
+				add_health -130
 			end_if
-			
-			add_health $damage
 		}
     }
     
