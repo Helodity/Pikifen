@@ -18,7 +18,7 @@ script {
         on_opponent_in_reach {
             if $ignoring = false
                 focus trigger
-                set_state turning
+                set_state chasing
             end_if
         }
         on_itch {
@@ -56,7 +56,7 @@ script {
         }
         on_opponent_in_reach {
             focus trigger
-            set_state turning
+            set_state chasing
         }
         on_reach_destination {
             set_state examining
@@ -66,30 +66,6 @@ script {
         }
         on_far_from_home {
             set_state returning
-        }
-        on_pikmin_land {
-            set_state crushed
-        }
-    }
-    
-    turning {
-        on_enter {
-            set_animation moving
-            stop
-            turn_to_target focused_mob
-            set_near_reach chase
-            set_far_reach close
-        }
-        on_opponent_in_reach {
-            stop
-            focus trigger
-            set_state chasing
-        }
-        on_focus_off_reach {
-            set_state examining
-        }
-        on_itch {
-            set_state shaking
         }
         on_pikmin_land {
             set_state crushed
@@ -117,7 +93,7 @@ script {
             set_animation moving
             move_to_target focused_mob
             set_near_reach attack
-            set_far_reach chase
+            set_far_reach close
         }
         on_opponent_in_reach {
             set_state attacking
@@ -206,7 +182,7 @@ script {
         on_opponent_in_reach {
             if $ignoring = false
                 focus trigger
-                set_state turning
+                set_state chasing
             end_if
         }
         on_pikmin_land {
