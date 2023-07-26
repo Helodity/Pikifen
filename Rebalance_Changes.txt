@@ -1,6 +1,7 @@
 ==== Iteration 5 ====
 	This iteration focuses on more pikmin 4 changes, and some flavor
 	
+- Hazards -
 	fatal_electricity
 		renamed to electricity_pikmin_2
 		electrocuted renamed to shocked_pikmin_2
@@ -16,7 +17,8 @@
 		stuns pikmin
 		All electricity now uses this hazard
 		
-	Purple Pikmin
+- Pikmin -
+	Purple pikmin
 		Increased attack animation length (0.8 -> 1.2)
 		Increased attack damage (10 -> 20)
 		Note: purely for flavor, makes them slightly stronger than red pikmin
@@ -25,7 +27,8 @@
 		Decreased attack animation length (0.8 -> 0.6)
 		Decreased attack damage (8 -> 6)
 		Note: purely for flavor, they maintain the same dps
-	
+		
+- Enemies -
 	Firey Blowhog
 		Decreased weight (7 -> 5)
 		Decreased seed amount (8 -> 5)
@@ -33,7 +36,7 @@
 	Munge Dweevil
 		Decreased weight (3 -> 2)
 		Decreased seed amount (5 -> 3)
-	
+		
 	Red Bulborb
 		Now throws pikmin forward when missing an attack (50% hit rate)
 		itch_time increased (5 -> 10)
@@ -47,10 +50,6 @@
 	Yellow Wollywog
 		Decreased weight (7 -> 5)
 		Decreased seed amount (8 -> 6)
-	
-	Water Dumple
-		Decreased weight (5 -> 4)
-		Decreased seed amount (5 -> 4)
 	
 	Electric Water Dumple
 		Increased weight (7 -> 8)
@@ -72,6 +71,21 @@
 	Beady Long Legs
 		Decreasd rest time (2-4 -> 2-3)
 		Decreased shake hit rate (75% -> 50%)
+		
+	Water Dumple
+		Values tweaked to be closer to Pikmin 4. Gave it squash properties.
+		
+		Increased search 360 reach (30 -> 50)
+		Increased rotation speed (114 -> 120)
+		
+		Decreased weight (5 -> 3)
+		Decreased max_carriers (10 -> 6)
+		Decreased seed yield (5 -> 4)
+		Decreased points (30 -> 10)
+		Decreased itch_damage (50 -> 30)
+		
+		Damage on Purple Pikmin land (0 -> 130)
+		Added wandering behavior
 
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
