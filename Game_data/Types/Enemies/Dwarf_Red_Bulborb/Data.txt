@@ -1,29 +1,37 @@
 name = Dwarf Red Bulborb
 description = These beasts wander around in search of food, and can hunt down after Pikmin with their stubbly legs.
+custom_category_name = Enemy, small and aggressive
+target_type = enemy
+
+max_health = 150
+itch_damage = 50
+itch_time = 4
+height = 32
+radius = 20
+terrain_radius = 28
+move_speed = 40
+rotation_speed = 160
+
+drops_corpse = true
+weight = 3
+max_carriers = 6
+pikmin_seeds = 3
+points = 3
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, small and aggressive
-drops_corpse = true
-height = 32
-itch_damage = 50
-itch_time = 4
-max_carriers = 6
-max_health = 150
-move_speed = 40
-pikmin_seeds = 3
-points = 15
 pushable = true
 pushes = true
-radius = 20
+territory_radius = 300
+
 reaches {
     search = 100 180 20 360
     close = 100 360
     attack = 15 30
 }
-rotation_speed = 160
-target_type = enemy
-terrain_radius = 28
-territory_radius = 300
-weight = 3
+
+
+
+
+

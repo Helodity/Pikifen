@@ -40,10 +40,13 @@
 	Red Bulborb
 		Now throws pikmin forward when missing an attack (50% hit rate)
 		itch_time increased (5 -> 10)
+		Decreased points (50 -> 15)
+		Decreased seed yield (12 -> 10)
 		
 	Dwarf Red Bulborb
 		Screeching now knocks pikmin backwards (50% hit rate)
 		Decreased seed amount (4 -> 3)
+		Decreased points (15 -> 3)
 		Increased rotation speed (114 -> 160)
 		Removed turning state
 	
@@ -81,7 +84,7 @@
 		Decreased weight (5 -> 3)
 		Decreased max carriers (10 -> 6)
 		Decreased seed yield (5 -> 4)
-		Decreased points (30 -> 10)
+		Decreased points (30 -> 5)
 		Decreased itch damage (50 -> 30)
 		
 		Damage on Purple Pikmin land (0 -> 130)
@@ -93,7 +96,7 @@
 		Decreased weight (7 -> 5)
 		Decreased max carriers (14 -> 10)
 		Decreased seed yield (10 -> 5)
-		Decreased points (30 -> 20)
+		Decreased points (30 -> 7)
 		
 	Cloaking Burrow-Nit
 		Reworked to be a heavier Burrow-nit compared to its Joustmite cousins.
