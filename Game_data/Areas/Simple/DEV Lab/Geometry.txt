@@ -11139,7 +11139,7 @@ mobs{
 	Custom{
 		type=1 Pellet Posy
 		p=-768.0000 -2656.0000
-		vars=bloom_time=0.0000;red=true
+		vars=bloom_time=0.0000;red=true;respawn_time=60.0000
 	}
 	Custom{
 		type=5 Pellet Posy
@@ -11303,22 +11303,22 @@ mobs{
 	Custom{
 		type=5 Pellet Posy
 		p=-2688.0000 -2752.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		vars=bloom_time=0.0000;blue=true;red=true;respawn_time=30.0000;rock=true;winged=true;yellow=true
 	}
 	Custom{
 		type=10 Pellet Posy
 		p=-2688.0000 -2880.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		vars=bloom_time=0.0000;blue=true;red=true;respawn_time=30.0000;rock=true;winged=true;yellow=true
 	}
 	Custom{
 		type=20 Pellet Posy
 		p=-2688.0000 -3040.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		vars=bloom_time=0.0000;blue=true;red=true;respawn_time=30.0000;rock=true;winged=true;yellow=true
 	}
 	Custom{
 		type=1 Pellet Posy
 		p=-2688.0000 -2656.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		vars=bloom_time=0.0000;blue=true;red=true;respawn_time=30.0000;rock=true;winged=true;yellow=true
 	}
 	Interactable{
 		type=Orb sign

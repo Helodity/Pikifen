@@ -122,7 +122,7 @@
 		Decreased points (30 -> 7)
 		
 	Cloaking Burrow-Nit
-		Reworked to be a heavier Burrow-nit compared to its Joustmite cousins.
+		Note: Reworked to be a heavier Burrow-nit compared to its Joustmite cousins.
 		Increased health (300 -> 600)
 		Increased itch damage (20 -> 50)
 		Increased radius (30 -> 32)
@@ -134,7 +134,7 @@
 		Sprite update to accommodate larger size
 		
 	Electric Water Dumple
-		Buffed to be a bit more of a heavier weight enemy in the water.
+		Note: Buffed to be a bit more of a heavier weight enemy in the water.
 		
 		Increased health (400 -> 800)
 		Decreased itch damage (100 -> 50)
@@ -142,7 +142,7 @@
 		Decreased points (20 -> 12)
 		
 	Female Sheargrub
-		It's free.
+		Note: It's free.
 		
 		Decreased seed yield (2 -> 1)
 		Decreased points (2(?) -> 1)
@@ -166,6 +166,12 @@
 	Bitter Burgeoning Spiderwort
 		Reverted recharge amount (5 -> 1)
 		Decreased recharge time (120 -> 24)
+	
+	Pellet Posies
+		Can now respawn
+			Default time: 120 seconds
+			Can be turned off
+		No longer changes color after being damaged
 		
 - Sprays -
 	Ultra-Bitter Spray
