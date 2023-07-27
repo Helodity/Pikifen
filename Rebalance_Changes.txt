@@ -136,7 +136,7 @@
 		Increased defense on bosses (1.2x -> 20x)
 		
 - Leaders -
-	Reduced Olimar's pluck animation (others wip)
+	Decreased spray animation length (1.1 -> 0.5)
 	
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
