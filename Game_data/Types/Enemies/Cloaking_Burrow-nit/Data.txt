@@ -2,7 +2,7 @@ name = Cloaking Burrow-nit
 description = Its carapace looks like its face, but it is actually its backside, and it is armored.
 target_type = enemy
 
-max_health = 500
+max_health = 600
 health_regen = 1
 itch_damage = 50
 itch_time = 2
@@ -15,7 +15,7 @@ rotation_speed = 180
 drops_corpse = true
 weight = 8
 max_carriers = 16
-pikmin_seeds = 10
+pikmin_seeds = 8
 points = 20
 
 can_hunt = player; enemy

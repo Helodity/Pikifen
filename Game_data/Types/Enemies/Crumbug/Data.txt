@@ -1,26 +1,32 @@
 name = Crumbug
 description = This small creature resembles a loaf of bread. It just meanders about, but can bite Pikmin pretty quickly.
+custom_category_name = Enemy, small and aggressive
+target_type = enemy
+
+max_health = 5
+height = 24
+radius = 16
+move_speed = 40
+rotation_speed = 200
+
+drops_corpse = true
+weight = 2
+max_carriers = 3
+pikmin_seeds = 2
+points = 2
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, small and aggressive
-drops_corpse = true
-height = 24
-max_carriers = 3
-max_health = 5
-move_speed = 40
-pikmin_seeds = 2
-points = 15
 pushable = true
 pushes = true
-radius = 16
+territory_radius = 300
+
 reaches {
     search = 50 360
     attack = 2 40
     chase = 60 360
 }
-rotation_speed = 200
-target_type = enemy
-territory_radius = 300
-weight = 2
+
+
+

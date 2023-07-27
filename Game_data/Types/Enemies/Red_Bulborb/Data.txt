@@ -1,23 +1,31 @@
 name = Red Bulborb
 description = Although often sleeping, they can be dangerous foes when awakened, given their large size and large mouths.
+custom_category_name = Enemy, medium and aggressive
+target_type = enemy
 
+max_health = 1000
+itch_damage = 70
+itch_time = 10
+height = 128
+radius = 60
+terrain_radius = 90
 acceleration = 100
+move_speed = 70
+rotation_speed = 114
+
+drops_corpse = true
+weight = 10
+max_carriers = 20
+pikmin_seeds = 10
+points = 15
+
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, aggressive
-drops_corpse = true
-height = 128
-itch_damage = 70
-itch_time = 10
-max_carriers = 20
-max_health = 1000
-move_speed = 70
-pikmin_seeds = 12
-points = 50
 pushable = true
 pushes = true
-radius = 60
+territory_radius = 500
+
 reaches {
     wake_up = 10 360
     search = 250 180 30 360
@@ -25,8 +33,7 @@ reaches {
     close = 250 360
     attack = 40 30
 }
-rotation_speed = 114
-target_type = enemy
-terrain_radius = 90
-territory_radius = 500
-weight = 10
+
+
+
+

@@ -119,3 +119,6 @@ reaches {
     ambush = 300 360
 }
 
+status_vulnerabilities {
+	petrified = 0 petrified_boss true
+}

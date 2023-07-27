@@ -40,7 +40,6 @@ spawns {
     }
 }
 
-
-
-
-
+status_vulnerabilities {
+	petrified = 0 petrified_boss true
+}

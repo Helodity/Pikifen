@@ -1,0 +1,17 @@
+name = petrified_boss_cracking
+description = Enemies that are petrified will just stay in place, unable to cause harm. They will be slightly more resistant to damage, however.
+
+affects_enemies = true
+anim_speed_multiplier = 0
+auto_remove_time = 0.5
+color = 128 0 255
+defense_multiplier = 20
+disables_attack = true
+freezes_animation = true
+reapply_rule = keep_time
+replacement_on_timeout = petrified_cracked
+particle_generator = petrification_crack
+particle_offset = 0 0 1000
+speed_multiplier = 0
+shaking_effect = 2.0
+tint = 64 64 64

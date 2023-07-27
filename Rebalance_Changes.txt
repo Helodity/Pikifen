@@ -49,10 +49,13 @@
 	Red Bulborb
 		Now throws pikmin forward when missing an attack (50% hit rate)
 		itch_time increased (5 -> 10)
+		Decreased points (50 -> 15)
+		Decreased seed yield (12 -> 10)
 		
 	Dwarf Red Bulborb
 		Screeching now knocks pikmin backwards (50% hit rate)
 		Decreased seed amount (4 -> 3)
+		Decreased points (15 -> 3)
 		Increased rotation speed (114 -> 160)
 		Removed turning state
 	
@@ -88,7 +91,7 @@
 		Decreased weight (5 -> 3)
 		Decreased max carriers (10 -> 6)
 		Decreased seed yield (5 -> 4)
-		Decreased points (30 -> 10)
+		Decreased points (30 -> 5)
 		Decreased itch damage (50 -> 30)
 		
 		Damage on Purple Pikmin land (0 -> 130)
@@ -100,7 +103,7 @@
 		Decreased weight (7 -> 5)
 		Decreased max carriers (14 -> 10)
 		Decreased seed yield (10 -> 5)
-		Decreased points (30 -> 20)
+		Decreased points (30 -> 7)
 		
 	Cloaking Burrow-Nit
 		Reworked to be a heavier Burrow-nit compared to its Joustmite cousins.
@@ -113,6 +116,7 @@
 		Increased wake up/search radius (30 -> 50)
 		
 		Sprite update to accommodate larger size
+		
 - Plants -
 	Note: Sprays/minute is identical to earlier patches
 	
@@ -123,6 +127,16 @@
 	Bitter Burgeoning Spiderwort
 		Reverted recharge amount (5 -> 1)
 		Decreased recharge time (120 -> 24)
+		
+- Sprays -
+	Ultra-Bitter Spray
+		Decreased duration (10 -> 4)
+		Decreased duration on bosses (10 -> 1)
+		Increased defense (1.2x -> 3x)
+		Increased defense on bosses (1.2x -> 20x)
+		
+- Leaders -
+	Reduced Olimar's pluck animation (others wip)
 	
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
