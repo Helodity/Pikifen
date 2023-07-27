@@ -116,6 +116,7 @@
 		Increased wake up/search radius (30 -> 50)
 		
 		Sprite update to accommodate larger size
+		
 - Plants -
 	Note: Sprays/minute is identical to earlier patches
 	
@@ -126,6 +127,16 @@
 	Bitter Burgeoning Spiderwort
 		Reverted recharge amount (5 -> 1)
 		Decreased recharge time (120 -> 24)
+		
+- Sprays -
+	Ultra-Bitter Spray
+		Decreased duration (10 -> 4)
+		Decreased duration on bosses (10 -> 1)
+		Increased defense (1.2x -> 3x)
+		Increased defense on bosses (1.2x -> 20x)
+		
+- Leaders -
+	Reduced Olimar's pluck animation (others wip)
 	
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
