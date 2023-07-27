@@ -1,5 +1,6 @@
 name = Cloaking Burrow-nit
 description = Its carapace looks like its face, but it is actually its backside, and it is armored.
+custom_category_name = Enemy, medium and aggressive
 target_type = enemy
 
 max_health = 600
@@ -16,12 +17,11 @@ drops_corpse = true
 weight = 8
 max_carriers = 16
 pikmin_seeds = 8
-points = 20
+points = 10
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, small and aggressive
 pushable = true
 pushes = true
 pushes_with_hitboxes = true

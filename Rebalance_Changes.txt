@@ -38,19 +38,24 @@
 		Note: purely for flavor, they maintain the same dps
 		
 - Enemies -
-	Firey Blowhog
+	Fiery Blowhog
 		Decreased weight (7 -> 5)
+		Decreased max carriers (15 -> 10)
 		Decreased seed amount (8 -> 5)
+		Decreased points (30 -> 10)
+		Recategorized as a Medium Aggressive enemy
 	
 	Munge Dweevil
 		Decreased weight (3 -> 2)
 		Decreased seed amount (5 -> 3)
+		Decreased points (25 -> 5)
 		
 	Red Bulborb
 		Now throws pikmin forward when missing an attack (50% hit rate)
 		itch_time increased (5 -> 10)
 		Decreased points (50 -> 15)
 		Decreased seed yield (12 -> 10)
+		Recategorized as a Medium Aggressive enemy
 		
 	Dwarf Red Bulborb
 		Screeching now knocks pikmin backwards (50% hit rate)
@@ -60,27 +65,36 @@
 		Removed turning state
 	
 	Yellow Wollywog
-		Decreased weight (7 -> 5)
-		Decreased seed amount (8 -> 6)
+		Increased health (900 -> 1000)
+		Decreased weight (7 -> 6)
+		Decreased max carriers (14 -> 12)
+		Decreased seed amount (8 -> 7)
+		Decreased points (30 -> 15)
+		Recategorized as a Medium Aggressive enemy
 	
 	Electric Water Dumple
 		Increased weight (7 -> 8)
 		Increased seed amount (7 -> 9)
+		Recategorized as a Medium Aggressive enemy
 	
 	Whiptongue Bulborb
 		Decreased weight (12 -> 10)
 		Decreased seed amount (15 -> 12)
-		
+		Decreased max carriers (25 -> 20)
+		Decreased points (50 -> 17)
+		Recategorized as a Medium Aggressive enemy
 		
 	Armored Cannon Beetle
 		Shell opening now knocks pikmin forward
-		Increased max health (1800 -> 2400)
+		Increased max health (1800 -> 3000)
 		Reduced cool struggle time (6 seconds -> 4)
 		Note: apparently this had been 6 instead of 4 for a long time, whoops!
+		Recategorized as a Boss
 	
 	Beady Long Legs
 		Decreased rest time (2-4 -> 2-3)
 		Decreased shake hit rate (75% -> 50%)
+		Recategorized as a Boss
 		
 	Water Dumple
 		Note: Values tweaked to be closer to Pikmin 4. Gave it squash properties.
@@ -116,6 +130,29 @@
 		Increased wake up/search radius (30 -> 50)
 		
 		Sprite update to accommodate larger size
+		
+	Electric Water Dumple
+		Buffed to be a bit more of a heavier weight enemy in the water.
+		
+		Increased health (400 -> 800)
+		Decreased itch damage (100 -> 50)
+		Decreased itch time (5 -> 4)
+		Decreased points (20 -> 12)
+		
+	Female Sheargrub
+		It's free.
+		
+		Decreased seed yield (2 -> 1)
+		Decreased points (2(?) -> 1)
+		
+	Puffy Blowhog
+		Decreased max carriers (5 -> 4)
+		Decreased seed yield (8 -> 6)
+		Decreased points (40 -> 14)
+	
+	Skutterchuck
+		Increased health (100 -> 300)
+		Decreased points (15 -> 5)
 		
 - Plants -
 	Note: Sprays/minute is identical to earlier patches

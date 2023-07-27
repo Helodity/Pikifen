@@ -1,29 +1,37 @@
 name = Skutterchuck
 description = On its own, a Skutterchuck is fairly harmless, if feisty. But it can grab crystal nodules and chuck those that its victims.
+custom_category_name = Enemy, small and aggressive
+target_type = enemy
+
+max_health = 300
+itch_damage = 20
+itch_time = 4
+height = 32
+radius = 30
+terrain_radius = 42
+move_speed = 40
+rotation_speed = 114
+
+drops_corpse = true
+weight = 3
+max_carriers = 6
+pikmin_seeds = 3
+points = 5
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, small and aggressive
-drops_corpse = true
-height = 32
-itch_damage = 20
-itch_time = 4
-max_carriers = 6
-max_health = 100
-move_speed = 40
-pikmin_seeds = 3
-points = 15
 pushable = true
 pushes = true
-radius = 30
+territory_radius = 300
+
 reaches {
     nodule_search = 150 360
     nodule_pick_up = 5 360
     target_search = 100 180 20 360
 }
-rotation_speed = 114
-target_type = enemy
-terrain_radius = 42
-territory_radius = 300
-weight = 3
+
+
+
+
+

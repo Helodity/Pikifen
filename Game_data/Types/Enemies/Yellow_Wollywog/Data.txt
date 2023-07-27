@@ -1,31 +1,34 @@
 name = Yellow Wollywog
 description = Once it senses prey, a Yellow Wollywog will jump in the air if it can. It will then float for a bit, and land down with force, crushing anything below.
+custom_category_name = Enemy, medium and aggressive
+target_type = enemy
+
+max_health = 1000
+health_regen = 0
+itch_damage = 20
+itch_time = 4
+height = 100
+radius = 40
+terrain_radius = 48
+move_speed = 250
+rotation_speed = 80
+allow_ground_attacks = true
+
+drops_corpse = true
+weight = 6
+max_carriers = 12
+pikmin_seeds = 7
+points = 15
 
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, small and aggressive
-allow_ground_attacks = true
-drops_corpse = true
-health_regen = 0
-height = 100
-itch_damage = 20
-itch_time = 4
-max_carriers = 14
-max_health = 900
-move_speed = 250
-pikmin_seeds = 6
-points = 30
 pushable = true
 pushes = true
-radius = 40
+territory_radius = 500
+
 reaches {
     search = 250 360
     align = 250 2
     jump = 150 2
 }
-rotation_speed = 80
-target_type = enemy
-terrain_radius = 48
-territory_radius = 500
-weight = 5
