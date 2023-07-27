@@ -16,3 +16,7 @@ can_hurt = player; enemy; weak_plain_obstacle; fragile
 can_walk_on_others = true
 pushable = true
 pushes = true
+
+status_vulnerabilities {
+	petrified = 0 petrified_boss true
+}

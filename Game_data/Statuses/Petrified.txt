@@ -3,12 +3,13 @@ description = Enemies that are petrified will just stay in place, unable to caus
 
 affects_enemies = true
 anim_speed_multiplier = 0
-auto_remove_time = 8
+auto_remove_time = 2
 color = 128 0 255
-defense_multiplier = 1.2
+defense_multiplier = 3
 disables_attack = true
 freezes_animation = true
 reapply_rule = keep_time
 replacement_on_timeout = petrified_cracking
 speed_multiplier = 0
+shaking_effect = 0.25
 tint = 64 64 64
