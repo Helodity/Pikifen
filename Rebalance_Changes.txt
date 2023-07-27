@@ -73,7 +73,7 @@
 		Decreased shake hit rate (75% -> 50%)
 		
 	Water Dumple
-		Values tweaked to be closer to Pikmin 4. Gave it squash properties.
+		Note: Values tweaked to be closer to Pikmin 4. Gave it squash properties.
 		
 		Increased search 360 reach (30 -> 50)
 		Increased rotation speed (114 -> 120)
@@ -88,7 +88,7 @@
 		Added wandering behavior
 		
 	Adult Bulbmin
-		Values tweaked to better reflect it as a smaller grub-dog. Decreased seed yield, as it will usually be accompanied by Bulbmin.
+		Note: Values tweaked to better reflect it as a smaller grub-dog. Decreased seed yield, as it will usually be accompanied by Bulbmin.
 		
 		Decreased weight (7 -> 5)
 		Decreased max carriers (14 -> 10)
@@ -106,8 +106,17 @@
 		Increased wake up/search radius (30 -> 50)
 		
 		Sprite update to accommodate larger size
+- Plants -
+	Note: Sprays/minute is identical to earlier patches
+	
+	Spicy Burgeoning Spiderwort
+		Reverted recharge amount (5 -> 1)
+		Decreased recharge time (60 -> 12)
 		
-
+	Bitter Burgeoning Spiderwort
+		Reverted recharge amount (5 -> 1)
+		Decreased recharge time (120 -> 24)
+	
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
 	
