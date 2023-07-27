@@ -1,5 +1,5 @@
 ==== Iteration 5 ====
-	This iteration focuses on more pikmin 4 changes, and some flavor
+	This iteration focuses on more pikmin 4 changes, and adding more unique mechanics
 	
 - Hazards -
 	fatal_electricity
