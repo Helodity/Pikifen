@@ -1,3 +1,12 @@
+==== TODO =====
+	To think about:
+		Skutterchuck one shot by Purples
+		Should puffy blowhogs use directional knockback?
+		
+	Give puffy blowhogs a closer hitbox to avoid missing
+	Give whiptongue bulborbs a close attack (seen in p4)
+	Introduce some half crushing in script (Ex: Purples crush dumples for ~60% hp)
+	
 ==== Iteration 5 ====
 	This iteration focuses on more pikmin 4 changes, and adding more unique mechanics
 	
@@ -58,8 +67,6 @@
 	Whiptongue Bulborb
 		Decreased weight (12 -> 10)
 		Decreased seed amount (15 -> 12)
-		TODO: add feet lick
-			When pikmin are right next to it, it can do a lick attack below it instead of ahead
 		
 		
 	Armored Cannon Beetle
