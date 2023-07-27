@@ -1,17 +1,18 @@
 name = Beady Long Legs foot
 description = Foot of a Beady Long Legs.
-
-allow_ground_attacks = false
+custom_category_name = Aux
+target_type = enemy
 appears_in_area_editor = false
+
+height = 64
+radius = 37.5
+move_speed = 250
+rotation_speed = 200
+allow_ground_attacks = false
 can_free_move = true
+
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
 can_walk_on_others = true
-custom_category_name = Aux
-height = 64
-move_speed = 250
 pushable = true
 pushes = true
-radius = 37.5
-rotation_speed = 200
-target_type = enemy

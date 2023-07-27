@@ -1,24 +1,32 @@
 name = Armored Cannon Beetle
 description = This beetle's carapace is so hard that no Pikmin can damage it. If it overheats, it might expose its fleshy skin though.
+custom_category_name = Enemy, boss
+target_type = enemy
 
+max_health = 2400
+health_regen = 0
+itch_damage = 20
+itch_time = 2
+height = 100
+radius = 95
+terrain_radius = 200
+move_speed = 80
+rotation_speed = 40
 allow_ground_attacks = false
+
+drops_corpse = true
+weight = 30
+max_carriers = 50
+pikmin_seeds = 50
+points = 80
+
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, large and aggressive
-drops_corpse = true
-health_regen = 0
-height = 100
-itch_damage = 20
-itch_time = 2
-max_carriers = 50
-max_health = 2400
-move_speed = 80
-pikmin_seeds = 50
-points = 80
 pushable = true
 pushes = true
-radius = 95
+territory_radius = 300
+
 reaches {
     search = 300 180
     attack = 300 5
@@ -31,8 +39,8 @@ spawns {
         angle = 0
     }
 }
-rotation_speed = 40
-target_type = enemy
-terrain_radius = 200
-territory_radius = 300
-weight = 30
+
+
+
+
+

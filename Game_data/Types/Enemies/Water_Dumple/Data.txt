@@ -23,8 +23,8 @@ can_hurt = player; enemy; fragile
 can_walk_on_others = true
 pushable = true
 pushes = true
-
 territory_radius = 400
+
 reaches {
     search = 100 90 50 360
     attack = 25 30

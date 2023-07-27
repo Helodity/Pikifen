@@ -1,22 +1,28 @@
 name = Beady Long Legs
 description = A massive spider-like beast that stomps around. Every time it takes a step, it can crush Pikmin under its foot. Only its bulbous head is vulnerable.
-
-acceleration = 1000
 area_editor_tips = Make sure there is enough room for it to spawn its feet too!
-allow_ground_attacks = false
+custom_category_name = Enemy, boss
+target_type = enemy
+
+max_health = 2000
+health_regen = 0.4
+itch_damage = 50
+itch_time = 4
+height = 140
+radius = 71
+acceleration = 1000
+move_speed = 1000
+rotation_speed = 30
 can_free_move = true
+allow_ground_attacks = false
+
+points = 100
+
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
 can_walk_on_others = true
-custom_category_name = Enemy, large and aggressive
-health_regen = 0.4
-height = 140
-itch_damage = 50
-itch_time = 4
-max_health = 2000
-move_speed = 1000
-points = 100
-radius = 71
+territory_radius = 300
+
 spawns {
     foot_fr {
         object = Beady Long Legs foot
@@ -112,6 +118,4 @@ children {
 reaches {
     ambush = 300 360
 }
-rotation_speed = 30
-target_type = enemy
-territory_radius = 300
+
