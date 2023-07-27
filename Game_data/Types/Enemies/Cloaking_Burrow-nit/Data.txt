@@ -1,30 +1,35 @@
 name = Cloaking Burrow-nit
 description = Its carapace looks like its face, but it is actually its backside, and it is armored.
+target_type = enemy
+
+max_health = 500
+health_regen = 1
+itch_damage = 50
+itch_time = 2
+height = 64
+radius = 32
+terrain_radius = 50
+move_speed = 60
+rotation_speed = 180
+
+drops_corpse = true
+weight = 8
+max_carriers = 16
+pikmin_seeds = 10
+points = 20
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
 custom_category_name = Enemy, small and aggressive
-drops_corpse = true
-health_regen = 1
-height = 64
-itch_damage = 20
-itch_time = 2
-max_carriers = 16
-max_health = 300
-move_speed = 50
-pikmin_seeds = 10
-points = 30
 pushable = true
 pushes = true
-radius = 30
+pushes_with_hitboxes = true
+territory_radius = 300
+
 reaches {
-    wake_up = 20 360
-    search = 150 90 30 360
+    wake_up = 50 360
+    search = 150 90 50 360
     attack = 40 20
     chase = 150 360
 }
-rotation_speed = 170
-target_type = enemy
-territory_radius = 300
-weight = 8

@@ -69,7 +69,7 @@
 		Note: apparently this had been 6 instead of 4 for a long time, whoops!
 	
 	Beady Long Legs
-		Decreasd rest time (2-4 -> 2-3)
+		Decreased rest time (2-4 -> 2-3)
 		Decreased shake hit rate (75% -> 50%)
 		
 	Water Dumple
@@ -79,13 +79,34 @@
 		Increased rotation speed (114 -> 120)
 		
 		Decreased weight (5 -> 3)
-		Decreased max_carriers (10 -> 6)
+		Decreased max carriers (10 -> 6)
 		Decreased seed yield (5 -> 4)
 		Decreased points (30 -> 10)
-		Decreased itch_damage (50 -> 30)
+		Decreased itch damage (50 -> 30)
 		
 		Damage on Purple Pikmin land (0 -> 130)
 		Added wandering behavior
+		
+	Adult Bulbmin
+		Values tweaked to better reflect it as a smaller grub-dog. Decreased seed yield, as it will usually be accompanied by Bulbmin.
+		
+		Decreased weight (7 -> 5)
+		Decreased max carriers (14 -> 10)
+		Decreased seed yield (10 -> 5)
+		Decreased points (30 -> 20)
+		
+	Cloaking Burrow-Nit
+		Reworked to be a heavier Burrow-nit compared to its Joustmite cousins.
+		Increased health (300 -> 600)
+		Increased itch damage (20 -> 50)
+		Increased radius (30 -> 32)
+		Added terrain radius (-1 -> 50)
+		Pushes with hitboxes
+		Decreased points (30 -> 20)
+		Increased wake up/search radius (30 -> 50)
+		
+		Sprite update to accommodate larger size
+		
 
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks
