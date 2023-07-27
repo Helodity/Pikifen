@@ -139,7 +139,7 @@
 		Note: This makes bitter sprays more of a combat "reset" than a free win
 		
 - Leaders -
-	Reduced Spray animation (1.1 -> 0.5) (Olimar done, others wip)
+	Decreased spray animation length (1.1 -> 0.5)
 	
 ==== Iteration 4 ====
 	This iteration focuses on incorporating some of Pikmin 4's changes, and other tweaks

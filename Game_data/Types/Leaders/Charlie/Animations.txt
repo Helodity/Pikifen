@@ -129,8 +129,14 @@ animations{
 	}
 	spraying{
 		frames{
+			ducking2{
+				duration=0.1000
+			}
 			ducking{
-				duration=1.0000
+				duration=0.2000
+			}
+			ducking2{
+				duration=0.1000
 			}
 			idling{
 				duration=0.1000
@@ -417,4 +423,4 @@ body_parts{
 	fist
 	body
 }
-engine_version=0.24.0
+engine_version=0.24.98
