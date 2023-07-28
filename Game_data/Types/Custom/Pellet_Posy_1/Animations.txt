@@ -22,6 +22,7 @@ animations{
 			}
 			dying4{
 				duration=0.1000
+				signal=0
 			}
 			dying5{
 				duration=0.1000
@@ -818,3 +819,4 @@ body_parts{
 	pellet
 	body
 }
+engine_version=0.24.98

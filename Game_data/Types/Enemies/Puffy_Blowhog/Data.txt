@@ -10,8 +10,8 @@ height = 128
 radius = 75
 terrain_radius = 150
 acceleration = 50
-move_speed = 110
-rotation_speed = 70
+move_speed = 140
+rotation_speed = 80
 
 drops_corpse = true
 weight = 2

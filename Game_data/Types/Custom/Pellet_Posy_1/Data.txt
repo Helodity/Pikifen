@@ -55,6 +55,19 @@ area_editor_properties {
         min_value = 0
         tooltip = Time left until the posy blooms.
     }
+	Respawns {
+        var = respawning
+        type = bool
+        def_value = true
+        tooltip = Will the plant grow back?
+    }
+	Respawn Time {
+        var = respawn_time
+        type = decimal
+        def_value = 120
+        min_value = 0
+        tooltip = How long after harvesting it takes for the posy to bloom again.
+    }
     Red {
         var = red
         type = bool

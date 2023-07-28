@@ -9,6 +9,8 @@ init {
     set_var winged false
     set_var cur_color none
     set_var bloom_time 240
+	set_var respawning true
+	set_var respawn_time 0
 }
 
 script {
@@ -152,7 +154,10 @@ script {
             end_if
         }
         on_timer {
-            set_state picking_next_color
+			get_info ratio health_ratio
+			if $ratio = 1
+				set_state picking_next_color
+			end_if
         }
     }
     destroyed {
@@ -176,6 +181,13 @@ script {
                 spawn winged
             end_if
         }
+		on_frame_signal {
+			if $respawning = true
+				set_var bloom_time $respawn_time
+				add_health 100
+				set_state sprout
+			end_if
+		}
         on_animation_end {
             delete
         }
