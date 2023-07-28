@@ -155,7 +155,12 @@
 	Skutterchuck
 		Increased health (100 -> 300)
 		Decreased points (15 -> 5)
-		
+	
+	Puffy Blowhog
+		Increased movement speed (110 -> 140)
+		Increased rotation speed (70 -> 80)
+		Now tries to circle the leader when returning home
+	
 - Plants -
 	Note: Sprays/minute is identical to earlier patches
 	

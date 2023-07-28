@@ -75,8 +75,7 @@ script {
             get_angle a $x $y $fx $fy
         }
         on_far_from_home {
-            stop
-            turn_to_target focused_mob
+            set_state circling
         }
         on_itch {
             set_state shaking
@@ -85,10 +84,22 @@ script {
             set_state idling
         }
         on_timer {
-            //Periodically update the position compared to the opponent.
-            get_coordinates_from_angle x y $a 400
+            get_info x x
+            get_info y y
             get_focus_info fx x
             get_focus_info fy y
+            get_distance dist $x $y $fx $fy
+			
+            if $timeout <= 0
+                if $dist > 300
+                    if $dist < 500
+                        set_state inhaling
+                    end_if
+                end_if
+            end_if
+			
+            //Periodically update the position compared to the opponent.
+            get_coordinates_from_angle x y $a 400
             calculate x $fx - $x
             calculate y $fy - $y
 
@@ -100,9 +111,77 @@ script {
             set_timer 0.5
 
             calculate timeout $timeout - 0.5
+        }
+    }
+
+	circling {
+        on_enter {
+            set_timer 0.5
+            turn_to_target focused_mob
+        }
+        on_focus_off_reach {
+            set_state idling
+        }
+        on_itch {
+            set_state shaking
+        }
+        on_timer {
+            get_info x x
+            get_info y y
+            get_focus_info fx x
+            get_focus_info fy y
+            get_distance dist $x $y $fx $fy
+			
             if $timeout <= 0
-                set_state inhaling
+                if $dist > 300
+                    if $dist < 500
+                        set_state inhaling
+                    end_if
+                end_if
             end_if
+			
+            get_distance dist $x $y $home_x $home_y
+            if $dist < 200
+                set_state chasing
+            end_if
+			
+            //Calculate where we want to go
+            get_angle a $x $y $fx $fy
+            get_angle a_home $x $y $home_x $home_y			
+			
+            get_coordinates_from_angle offset_x offset_y $a_home 200
+            calculate x $x + $offset_x
+            calculate y $y + $offset_y
+            get_distance dist $x $y $fx $fy
+            if $dist < 400
+                //Too close to our focus, try moving around it!
+                get_angle a $x $y $fx $fy
+                calculate a_difference $a_home - $a
+
+                if $a_difference < 40
+                    if $a_difference >= 0
+                        calculate a $a - 40
+                    end_if
+                end_if
+                if $a_difference > -40
+                    if $a_difference < 0
+                        calculate a $a + 40
+                    end_if
+                end_if
+                calculate dist $dist + 20
+                get_coordinates_from_angle offset_x offset_y $a $dist	
+                calculate x $fx - $offset_x
+                calculate y $fy - $offset_y
+            end_if
+			
+            get_floor_z z $x $y
+            calculate z $z + 100		
+			
+            move_to_absolute $x $y $z
+            turn_to_target focused_mob
+            set_timer 0.5
+
+            calculate timeout $timeout - 0.5
         }
     }
 

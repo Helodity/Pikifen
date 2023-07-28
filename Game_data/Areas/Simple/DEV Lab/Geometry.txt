@@ -12436,10 +12436,12 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -200.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -200.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12448,18 +12450,22 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -216.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -216.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -232.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -232.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12472,18 +12478,22 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -248.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -248.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -264.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -264.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12492,10 +12502,12 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -280.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -280.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12508,18 +12520,22 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -296.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -296.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -312.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -312.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12528,10 +12544,12 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -328.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -328.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12540,10 +12558,12 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -344.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -360.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12552,10 +12572,12 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -376.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=0.0000 -376.0000
+		vars=maturity=1
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -12564,10 +12586,12 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -344.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-32.0000 -360.0000
+		vars=maturity=0
 	}
 	Pikmin{
 		type=Red Pikmin
