@@ -1,0 +1,6 @@
+name = Waterfall Foam Generator
+description = Emits waterfall foam particles.
+
+casts_shadow = false
+custom_category_name = Decoration
+radius = 16
