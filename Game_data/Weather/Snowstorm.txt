@@ -1,15 +1,15 @@
-//Sand and dust floating about, wind, and a yellow fog.
+//Snow floating about, wind, and a white fog.
 name = Snowstorm
 lighting {
-    0    = 32  32  32  192
-    300  = 32  32  32  192
-    360  = 64  64 64   160
+    0    = 32  32  48  164
+    300  = 96  96  96  128
+    360  = 96  96  96  96
     420  = 128 128 128 96
     480  = 128 128 128 64
-    1020 = 128 128 128 64
-    1080 = 128 128 128 96
-    1140 = 32  32  32  128
-    1200 = 32  32  32  220
+    1020 = 128 128 96  96
+    1080 = 96  96  64  96
+    1140 = 32  32  48  128
+    1200 = 32  32  48  164
 }
 sun_strength {
     0    = 96
@@ -25,6 +25,6 @@ fog_color {
    1200 = 255 255 255 245
 }
 
-fog_near = 20
-fog_far = 360
+fog_near = 100
+fog_far = 500
 //TODO: Add Snow!

@@ -10,7 +10,7 @@ init {
     set_var cur_color none
     set_var bloom_time 240
 	set_var respawning true
-	set_var respawn_time 120
+	set_var respawn_time 0
 }
 
 script {
@@ -186,6 +186,7 @@ script {
         }
 		on_frame_signal {
 			if $respawning = true
+                set_huntable false
 				set_state sprout
 			end_if
 		}

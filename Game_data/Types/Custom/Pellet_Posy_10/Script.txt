@@ -186,6 +186,7 @@ script {
         }
 		on_frame_signal {
 			if $respawning = true
+                set_huntable false
 				set_state sprout
 			end_if
 		}
