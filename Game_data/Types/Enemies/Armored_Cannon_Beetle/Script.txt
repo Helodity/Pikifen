@@ -46,6 +46,7 @@ script {
             set_state idling
         }
         on_opponent_in_reach {
+            focus trigger
             set_state turning
         }
     }

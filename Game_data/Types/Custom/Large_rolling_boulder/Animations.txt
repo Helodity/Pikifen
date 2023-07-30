@@ -24,22 +24,22 @@ animations{
 	growing{
 		frames{
 			growing1{
-				duration=0.0500
+				duration=0.1000
 			}
 			growing2{
-				duration=0.0500
+				duration=0.1000
 			}
 			growing3{
-				duration=0.0500
+				duration=0.1000
 			}
 			growing4{
-				duration=0.0500
+				duration=0.1000
 			}
 			growing5{
-				duration=0.0500
+				duration=0.1000
 			}
 			growing6{
-				duration=0.0500
+				duration=0.1000
 			}
 		}
 	}
@@ -270,4 +270,4 @@ sprites{
 body_parts{
 	rock
 }
-engine_version=0.24.0
+engine_version=0.24.98

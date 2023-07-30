@@ -35,7 +35,7 @@ spawns {
     boulder {
         object = Large rolling boulder
         relative = true
-        coordinates = 190 0 0
+        coordinates = 140 0 0
         angle = 0
     }
 }
