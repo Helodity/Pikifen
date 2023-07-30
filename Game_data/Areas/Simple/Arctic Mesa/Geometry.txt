@@ -4600,15 +4600,15 @@ mobs{
 	Leader{
 		type=Olimar
 		p=95.7000 255.7000
-		angle=1.4661
+		angle=0.1489
 	}
 	Onion{
 		type=Red Onion
-		p=32.0000 0.0000
+		p=307.7420 288.3329
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=32.0000 -32.0000
+		p=307.7420 256.3329
 		vars=maturity=0;sprout=true
 	}
 	Pile{
@@ -4781,6 +4781,11 @@ mobs{
 		type=Electric Water Dumple
 		p=1512.0000 -16.0000
 		angle=-2.9743
+	}
+	Ship{
+		type=Hocotate ship
+		p=44.5668 -26.8865
+		angle=1.4076
 	}
 }
 path_stops
