@@ -164,7 +164,6 @@ script {
         on_enter {
             set_animation dying
             start_particles pellet_posy_5_petals 64 0 150
-            start_dying
             if $cur_color = red
                 spawn red
             end_if
@@ -180,11 +179,13 @@ script {
             if $cur_color = winged
                 spawn winged
             end_if
+            if $respawning = true
+				set_var bloom_time $respawn_time
+				add_health 100
+			end_if
         }
 		on_frame_signal {
 			if $respawning = true
-				set_var bloom_time $respawn_time
-				add_health 100
 				set_state sprout
 			end_if
 		}
