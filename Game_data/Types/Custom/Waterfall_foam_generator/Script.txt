@@ -3,7 +3,7 @@ first_state = idling
 script {
     idling {
         on_enter {
-            start_particles waterfall_foam 0 0 512 
+            start_particles waterfall_foam 0 0 128 
         }
     }
 }
