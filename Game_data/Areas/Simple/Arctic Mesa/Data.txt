@@ -12,6 +12,6 @@ day_time_start=360
 day_time_speed=120
 maker=Neo, Helodity
 version=0.1.0
-engine_version=0.24.98
+engine_version=0.24.0
 notes=General area for quickly testing balance changes in a gameplay simulation.
 spray_amounts

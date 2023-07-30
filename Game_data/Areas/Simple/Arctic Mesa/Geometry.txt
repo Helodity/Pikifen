@@ -4884,7 +4884,6 @@ mobs{
 		type=Wood bridge
 		p=480.0000 -384.0000
 		angle=-0.7854
-		vars=chunks=20
 		links=4
 	}
 	Custom{
@@ -4894,14 +4893,8 @@ mobs{
 	}
 	Enemy{
 		type=Armored Cannon Beetle
-		p=1240.0000 -1200.0000
+		p=1320.0000 -1288.0000
 		angle=1.6734
-	}
-	Custom{
-		type=1 Pellet Posy
-		p=520.0000 264.0000
-		angle=3.0384
-		vars=bloom_time=2.0000;blue=true;red=true;respawn_time=120.0000;rock=true;winged=true;yellow=true
 	}
 	Custom{
 		type=Reinforced wall
@@ -4933,7 +4926,7 @@ mobs{
 		p=-152.0000 -392.0000
 		angle=-2.3287
 		vars=chunks=12
-		links=14
+		links=13
 	}
 	Custom{
 		type=Ceramic bridge base red
@@ -4962,7 +4955,7 @@ mobs{
 	Bouncer{
 		type=Geyser
 		p=-448.0000 -424.0000
-		links=20
+		links=19
 	}
 	Custom{
 		type=Dummy
@@ -5022,7 +5015,7 @@ mobs{
 	Pile{
 		type=Ceramic pile red
 		p=736.0000 -1664.0000
-		links=13
+		links=12
 	}
 	Converter{
 		type=Violet Candypop Bud
@@ -5061,23 +5054,11 @@ mobs{
 	Bouncer{
 		type=Geyser
 		p=338.3645 -1238.7279
-		links=42
+		links=41
 	}
 	Custom{
 		type=Dummy
 		p=461.0394 -1222.3202
-	}
-	Custom{
-		type=1 Pellet Posy
-		p=520.0000 368.0000
-		angle=-3.0168
-		vars=bloom_time=2.0000;blue=true;red=true;respawn_time=120.0000;rock=true;winged=true;yellow=true
-	}
-	Custom{
-		type=5 Pellet Posy
-		p=288.0000 480.0000
-		angle=4.1478
-		vars=bloom_time=20.0000;blue=true;red=true;respawn_time=240.0000;rock=true;winged=true;yellow=true
 	}
 	Custom{
 		type=5 Pellet Posy
@@ -5223,6 +5204,31 @@ mobs{
 		type=Crystal nodule
 		p=1280.0000 -2072.0000
 		angle=-2.6947
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=197.4853 257.4300
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Yellow Pikmin
+		p=245.5803 322.4197
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Rock Pikmin
+		p=123.9437 281.3584
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=124.6161 359.9168
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=195.8783 382.2832
+		vars=maturity=0;sprout=true
 	}
 }
 path_stops{
