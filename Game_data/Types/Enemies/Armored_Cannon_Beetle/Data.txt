@@ -3,7 +3,7 @@ description = This beetle's carapace is so hard that no Pikmin can damage it. If
 custom_category_name = Enemy, boss
 target_type = enemy
 
-max_health = 3000
+max_health = 4000
 health_regen = 0
 itch_damage = 20
 itch_time = 2

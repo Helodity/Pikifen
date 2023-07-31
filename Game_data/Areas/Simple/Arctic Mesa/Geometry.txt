@@ -4882,14 +4882,15 @@ mobs{
 	}
 	Bridge{
 		type=Wood bridge
-		p=480.0000 -384.0000
-		angle=-0.7854
+		p=-152.0000 -400.0000
+		angle=-2.2951
+		vars=chunks=20
 		links=4
 	}
 	Custom{
 		type=Dummy
-		p=800.0000 -704.0000
-		angle=-0.7854
+		p=-328.0000 -600.0000
+		angle=-2.3165
 	}
 	Enemy{
 		type=Armored Cannon Beetle
@@ -4923,15 +4924,15 @@ mobs{
 	}
 	Bridge{
 		type=Ceramic bridge red
-		p=-152.0000 -392.0000
-		angle=-2.3287
+		p=816.0000 -760.0000
+		angle=2.4881
 		vars=chunks=12
 		links=13
 	}
 	Custom{
 		type=Ceramic bridge base red
-		p=-344.0000 -600.0000
-		angle=-2.3348
+		p=408.0000 -440.0000
+		angle=-0.7074
 	}
 	Enemy{
 		type=Water Dumple
