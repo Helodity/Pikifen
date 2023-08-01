@@ -5,14 +5,14 @@ emission_interval = 0.2
 number = 1
 number_deviation = 0
 base {
-    bitmap = Smoke.png
+    bitmap = Vapor.png
     duration = 2
     friction = 1
     gravity = 0
-    size_grow_speed = 30
-    size = 48
+    size_grow_speed = 18
+    size = 64
     speed = 0 0
-    color = 255 255 255 192
+    color = 225 225 255 180
 }
 duration_deviation = 0.3
 friction_deviation = 0

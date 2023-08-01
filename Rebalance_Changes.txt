@@ -89,6 +89,7 @@
 	Armored Cannon Beetle
 		Shell opening now knocks pikmin forward
 		Increased max health (1800 -> 3000)
+        Increased territory radius (300 -> 400)
 		Reduced cool struggle time (6 seconds -> 4)
 		Note: apparently this had been 6 instead of 4 for a long time, whoops!
 		Recategorized as a Boss

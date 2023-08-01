@@ -4,6 +4,7 @@ script {
     idling {
         on_enter {
             start_particles waterfall_foam 0 0 128 
+			start_particles waterfall_mist 0 0 256
         }
     }
 }
