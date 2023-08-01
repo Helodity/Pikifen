@@ -8,10 +8,10 @@ bg_color=0 0 0
 bg_dist=2.0000
 bg_zoom=1.0000
 weather=Snowstorm
-day_time_start=420
+day_time_start=360
 day_time_speed=120
 maker=Neo, Helodity
 version=0.1.0
-engine_version=0.24.98
+engine_version=0.24.0
 notes=General area for quickly testing balance changes in a gameplay simulation.
 spray_amounts
