@@ -5208,27 +5208,77 @@ mobs{
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=197.4853 257.4300
+		p=219.1589 291.1447
 		vars=maturity=0;sprout=true
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=245.5803 322.4197
+		p=218.6415 350.8068
 		vars=maturity=0;sprout=true
 	}
 	Pikmin{
 		type=Rock Pikmin
-		p=123.9437 281.3584
+		p=158.4138 271.7995
 		vars=maturity=0;sprout=true
 	}
 	Pikmin{
 		type=Winged Pikmin
-		p=124.6161 359.9168
+		p=126.6437 317.6258
 		vars=maturity=0;sprout=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		p=195.8783 382.2832
+		p=160.5392 370.9863
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Rock Pikmin
+		p=128.1294 301.8270
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Rock Pikmin
+		p=146.9108 280.0000
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=207.7873 282.9753
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Yellow Pikmin
+		p=225.5807 304.3662
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Yellow Pikmin
+		p=224.2506 336.4241
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=175.8265 369.3880
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=149.0892 361.3301
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=128.1927 334.4772
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=207.1310 358.6623
+		vars=maturity=0;sprout=true
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=173.5721 270.1935
 		vars=maturity=0;sprout=true
 	}
 }
