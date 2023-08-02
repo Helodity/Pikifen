@@ -24,7 +24,6 @@ fog_color {
    1020 = 255 255 255 80
    1200 = 255 255 255 245
 }
-
 fog_near = 100
 fog_far = 500
 //TODO: Add Snow!
