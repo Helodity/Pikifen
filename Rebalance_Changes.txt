@@ -72,6 +72,11 @@
 		Decreased max carriers (14 -> 12)
 		Decreased seed amount (8 -> 7)
 		Decreased points (30 -> 15)
+        Decreased weight required to weigh down (30 -> 10)
+        Now knocks pikmin off when it reaches the peak of its jump
+        Decreased jump knockback hit rate (100% -> 33%)
+        Decreased falling hit rate (100% -> 95%)
+        Struggling now shakes 50% of pikmin off
 		Recategorized as a Medium Aggressive enemy
 	
 	Electric Water Dumple

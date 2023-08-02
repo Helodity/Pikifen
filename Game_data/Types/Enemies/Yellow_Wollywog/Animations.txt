@@ -42,6 +42,7 @@ animations{
 		}
 	}
 	falling{
+		hit_rate=95
 		frames{
 			falling1{
 				duration=0.1000
@@ -59,6 +60,7 @@ animations{
 	}
 	floating{
 		loop_frame=2
+		hit_rate=33
 		frames{
 			jump_up{
 				duration=0.1000
@@ -68,49 +70,6 @@ animations{
 			}
 			floating2{
 				duration=0.1000
-			}
-		}
-	}
-	hopping_in_place{
-		frames{
-			idling{
-				duration=0.1000
-			}
-			idling_shiver{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-			idling_shiver{
-				duration=0.1000
-			}
-			squatting{
-				duration=0.1000
-			}
-			jump_forward_damage{
-				duration=0.1000
-			}
-			jump_forward2{
-				duration=0.1500
-				signal=0
-			}
-			idling{
-				duration=0.2500
-			}
-		}
-	}
-	hopping_moving{
-		hit_rate=30
-		frames{
-			jump_forward_damage{
-				duration=0.1500
-			}
-			idling{
-				duration=0.2000
-			}
-			squatting{
-				duration=0.1500
 			}
 		}
 	}
@@ -139,6 +98,7 @@ animations{
 	}
 	jumping_up{
 		loop_frame=1
+		hit_rate=33
 		frames{
 			jump_up_damage{
 				duration=0.0400
@@ -182,7 +142,7 @@ animations{
 		}
 	}
 	struggling{
-		hit_rate=20
+		hit_rate=50
 		frames{
 			idling{
 				duration=0.1000
@@ -595,29 +555,6 @@ sprites{
 			}
 		}
 	}
-	idling_shiver{
-		file=Yellow_Wollywog.png
-		file_pos=0.0000 0.0000
-		file_size=90.0000 90.0000
-		offset=5.0000 2.0000
-		hitboxes{
-			body{
-				coords=7.0000 0.0000 0.0000
-				height=100.0000
-				radius=42.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			damage{
-				coords=7.0000 0.0000 0.0000
-				height=100.0000
-				radius=42.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
 	jump_forward{
 		file=Yellow_Wollywog.png
 		file_pos=268.0000 93.0000
@@ -661,32 +598,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-			}
-		}
-	}
-	jump_forward_damage{
-		file=Yellow_Wollywog.png
-		file_pos=268.0000 93.0000
-		file_size=92.0000 66.0000
-		offset=4.0000 0.0000
-		hitboxes{
-			body{
-				coords=7.0000 0.0000 0.0000
-				height=100.0000
-				radius=42.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			damage{
-				coords=7.0000 0.0000 0.0000
-				height=100.0000
-				radius=50.0000
-				type=1
-				value=200.0000
-				knockback_outward=true
-				knockback=1.0000
-				wither_chance=10
 			}
 		}
 	}
@@ -734,8 +645,8 @@ sprites{
 				type=1
 				value=20.0000
 				knockback_outward=true
-				knockback=0.5000
-				wither_chance=10
+				knockback=0.0100
+				wither_chance=20
 			}
 		}
 	}
@@ -788,29 +699,6 @@ sprites{
 			}
 		}
 	}
-	squatting_shake{
-		file=Yellow_Wollywog.png
-		file_pos=182.0000 93.0000
-		file_size=85.0000 96.0000
-		offset=5.0000 2.0000
-		hitboxes{
-			body{
-				coords=7.0000 0.0000 0.0000
-				height=100.0000
-				radius=42.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			damage{
-				coords=7.0000 0.0000 0.0000
-				height=100.0000
-				radius=42.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
 	struggling1{
 		file=Yellow_Wollywog.png
 		file_pos=91.0000 0.0000
@@ -821,20 +709,18 @@ sprites{
 			body{
 				coords=7.0000 0.0000 0.0000
 				height=100.0000
-				radius=42.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
+				radius=48.0000
+				type=1
+				value=20.0000
+				knockback_outward=true
+				knockback=2.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
 				height=100.0000
-				radius=46.0000
-				type=1
-				value=20.0000
-				knockback_outward=true
-				knockback=1.0000
-				wither_chance=5
+				radius=42.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -848,20 +734,18 @@ sprites{
 			body{
 				coords=7.0000 0.0000 0.0000
 				height=100.0000
-				radius=42.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
+				radius=48.0000
+				type=1
+				value=20.0000
+				knockback_outward=true
+				knockback=2.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
 				height=100.0000
-				radius=46.0000
-				type=1
-				value=20.0000
-				knockback_outward=true
-				knockback=1.0000
-				wither_chance=5
+				radius=42.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -964,4 +848,4 @@ body_parts{
 	body
 	damage
 }
-engine_version=0.24.98
+engine_version=0.24.0
