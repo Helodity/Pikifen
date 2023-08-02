@@ -87,12 +87,26 @@ script {
     squatting {
         on_enter {
             stop
-            get_info t latched_pikmin_weight
-            if $t >= 30
-                set_state struggling
-            else
-                set_animation squatting
-            end_if
+            get_info l_pikmin latched_pikmin
+			
+			if $l_pikmin >= 20
+				set_state struggling
+			end_if
+			
+			if $l_pikmin >= 10
+				set_state hopping
+			end_if
+			
+            if $l_pikmin >= 5
+                get_random_int i 1 3
+				if $i = 1
+					set_state jumping_up
+				else
+					set_state hopping
+				end_if
+			end_if
+
+            set_animation squatting
         }
         on_animation_end {
             set_state jumping_up
@@ -169,11 +183,58 @@ script {
     struggling {
         on_enter {
             set_animation struggling
+			move_to_target away_from_focused_mob
         }
         on_animation_end {
+			get_info l_pikmin latched_pikmin
+			
+			if $l_pikmin >= 20
+				set_state struggling
+			end_if
+			
+			if $l_pikmin >= 10
+				set_state hopping
+			end_if
+			
             set_state idling
         }
     }
+	
+	hopping {
+		on_enter {
+			stop
+			set_animation hopping_moving
+			move_to_target away_from_focused_mob
+		}
+		on_animation_end {
+			get_info l_pikmin latched_pikmin
+			
+			if $l_pikmin >= 10
+				set_state hopping
+			end_if
+			
+			set_state idling
+		}
+		on_itch {
+			set_state hard_shake
+		}
+	}
+	
+	hard_shake {
+		on_enter {
+			set_gravity -1
+			start_height_effect
+			set_animation hopping_in_place
+		}
+		on_frame_signal {
+			set_gravity 1
+		}
+		on_animation_end {
+			stop_height_effect
+			stop
+			set_state idling
+		}
+	}
     
     resting {
         on_enter {
