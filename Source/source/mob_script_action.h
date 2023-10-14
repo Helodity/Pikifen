@@ -249,6 +249,8 @@ enum MOB_ACTION_GET_INFO_TARGET_TYPES {
     MOB_ACTION_GET_INFO_TARGET_SELF,
     //Gets info about its focus.
     MOB_ACTION_GET_INFO_TARGET_FOCUS,
+    //Gets info trigger.
+    MOB_ACTION_GET_INFO_TARGET_TRIGGER,
 };
 
 //Get info action info types.
@@ -287,6 +289,8 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_MOB_TYPE,
     //Get the other body part that triggered the event.
     MOB_ACTION_GET_INFO_OTHER_BODY_PART,
+    //Get name of current state.
+    MOB_ACTION_GET_INFO_STATE,
     //Get X.
     MOB_ACTION_GET_INFO_X,
     //Get Y.

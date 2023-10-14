@@ -25,7 +25,7 @@ script {
         }
         on_object_in_reach {
             if $ignoring = false
-                get_event_info t mob_type
+                get_mob_info t trigger mob_type
                 if $t = Crystal nodule
                     focus trigger
                     save_focused_mob_memory 1
@@ -83,7 +83,7 @@ script {
             set_state shaking
         }
         on_object_in_reach {
-            get_event_info t mob_type
+            get_mob_info t trigger mob_type
             if $t = Crystal nodule
                 set_state picking_up
             end_if

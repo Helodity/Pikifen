@@ -330,15 +330,11 @@ bool mob_action_loaders::get_event_info(mob_action_call& call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HAZARD);
     } else if(call.args[1] == "message") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
-    } else if(call.args[1] == "mob_category") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
-    } else if(call.args[1] == "mob_type") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
     } else if(call.args[1] == "other_body_part") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
     } else {
         call.custom_error =
-            "Unknown info type \"" + call.args[0] + "\"! Try using \"get_mob_info\" or \"get_area_info\".";
+            "Unknown info type \"" + call.args[1] + "\"! Try using \"get_mob_info\" or \"get_area_info\".";
         return false;
     }
 
@@ -357,6 +353,8 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_SELF);
     } else if(call.args[1] == "focus") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_FOCUS);
+    } else if (call.args[1] == "trigger") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_TRIGGER);
     } else {
         report_enum_error(call, 1);
         return false;
@@ -1141,20 +1139,6 @@ void mob_action_runners::get_event_info(mob_action_run_data& data) {
         }
         break;
 
-    } case MOB_ACTION_GET_INFO_MOB_CATEGORY: {
-        mob* trigger = get_trigger_mob(data);
-        if (trigger) {
-            *var = trigger->type->category->name;
-        }
-        break;
-
-    } case MOB_ACTION_GET_INFO_MOB_TYPE: {
-        mob* trigger = get_trigger_mob(data);
-        if (trigger) {
-            *var = trigger->type->name;
-        }
-        break;
-
     } case MOB_ACTION_GET_INFO_OTHER_BODY_PART: {
         if (
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
@@ -1227,6 +1211,8 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         if(!data.m->focused_mob) return;
         target_mob = data.m->focused_mob;
         break;
+    } case MOB_ACTION_GET_INFO_TARGET_TRIGGER: {
+        target_mob = get_trigger_mob(data);
     }
     }
 
@@ -1286,6 +1272,10 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
 
     } case MOB_ACTION_GET_INFO_MOB_TYPE: {
         *var = target_mob->type->name;
+        break;
+
+    } case MOB_ACTION_GET_INFO_STATE: {
+        *var = target_mob->fsm.cur_state->name;
         break;
 
     } case MOB_ACTION_GET_INFO_X: {

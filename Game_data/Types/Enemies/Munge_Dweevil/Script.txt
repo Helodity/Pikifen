@@ -21,7 +21,7 @@ script {
         }
         on_object_in_reach {
             if $has_treasure = false
-                get_event_info t mob_category
+                get_mob_info t trigger mob_category
                 if $t = Treasure
                     focus trigger
                     save_focused_mob_memory 1
@@ -85,7 +85,7 @@ script {
             set_state relaxing
         }
         on_object_in_reach {
-            get_event_info t mob_category
+            get_mob_info t trigger mob_category
             if $t = Treasure
                 set_state picking_up
             end_if
