@@ -44,20 +44,22 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
     //Get angle between two sets of coordinates.
     MOB_ACTION_GET_ANGLE,
+    //Get information about the area.
+    MOB_ACTION_GET_AREA_INFO,
     //Get chomped by another mob.
     MOB_ACTION_GET_CHOMPED,
     //Get coordinates from a given angle.
     MOB_ACTION_GET_COORDINATES_FROM_ANGLE,
     //Get distance between two sets of coordinates.
     MOB_ACTION_GET_DISTANCE,
+    //Get information about an event.
+    MOB_ACTION_GET_EVENT_INFO,
     //Get the Z of the floor at a set of coordinates.
     MOB_ACTION_GET_FLOOR_Z,
-    //Get information from the focused mob.
-    MOB_ACTION_GET_FOCUS_INFO,
     //Get a script variable's value from the focused mob.
     MOB_ACTION_GET_FOCUS_VAR,
-    //Get information from this mob.
-    MOB_ACTION_GET_INFO,
+    //Get information about a mob.
+    MOB_ACTION_GET_MOB_INFO,
     //Get a random decimal number.
     MOB_ACTION_GET_RANDOM_DECIMAL,
     //Get a random integer number.
@@ -456,9 +458,10 @@ void get_angle(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_coordinates_from_angle(mob_action_run_data &data);
 void get_distance(mob_action_run_data &data);
-void get_info(mob_action_run_data &data);
+void get_event_info(mob_action_run_data& data);
+void get_area_info(mob_action_run_data &data);
 void get_floor_z(mob_action_run_data &data);
-void get_focus_info(mob_action_run_data &data);
+void get_mob_info(mob_action_run_data &data);
 void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
@@ -553,7 +556,6 @@ void report_enum_error(mob_action_call &call, const size_t arg_nr);
 bool assert_actions(
     const vector<mob_action_call*> &actions, data_node* dn
 );
-void get_info_runner(mob_action_run_data &data, mob* target_mob);
 void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 );
