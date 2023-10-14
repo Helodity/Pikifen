@@ -243,6 +243,13 @@ enum MOB_ACTION_IF_OPERATOR_TYPES {
     MOB_ACTION_IF_OP_MORE_E,
 };
 
+//Get info action target types.
+enum MOB_ACTION_GET_INFO_TARGET_TYPES {
+    //Gets info about itself.
+    MOB_ACTION_GET_INFO_TARGET_SELF,
+    //Gets info about its focus.
+    MOB_ACTION_GET_INFO_TARGET_FOCUS,
+};
 
 //Get info action info types.
 enum MOB_ACTION_GET_INFO_TYPES {
@@ -274,8 +281,6 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT,
     //Get message that triggered the event.
     MOB_ACTION_GET_INFO_MESSAGE,
-    //Get name of the message sender mob type that triggered the event.
-    MOB_ACTION_GET_INFO_MESSAGE_SENDER,
     //Get category of mob that triggered the event.
     MOB_ACTION_GET_INFO_MOB_CATEGORY,
     //Get type of mob that triggered the event.
@@ -532,7 +537,9 @@ namespace mob_action_loaders {
 bool arachnorb_plan_logic(mob_action_call &call);
 bool calculate(mob_action_call &call);
 bool focus(mob_action_call &call);
-bool get_info(mob_action_call &call);
+bool get_area_info(mob_action_call &call);
+bool get_event_info(mob_action_call& call);
+bool get_mob_info(mob_action_call& call);
 bool hold_focus(mob_action_call &call);
 bool if_function(mob_action_call &call);
 bool move_to_target(mob_action_call &call);

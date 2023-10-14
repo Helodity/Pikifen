@@ -3,7 +3,7 @@ first_state = closed
 init {
     get_mob_info x self x
     get_mob_info y self y
-    get_mob_info z_closed selfz
+    get_mob_info z_closed self z
     set_var z_open $z_closed
     calculate z_open $z_open + 150
     set_flying true

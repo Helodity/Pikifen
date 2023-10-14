@@ -846,7 +846,7 @@ void init_mob_actions() {
         MOB_ACTION_GET_AREA_INFO,
         "get_area_info",
         mob_action_runners::get_area_info,
-        mob_action_loaders::get_info
+        mob_action_loaders::get_area_info
     );
     
     reg_action(
@@ -885,7 +885,7 @@ void init_mob_actions() {
         MOB_ACTION_GET_EVENT_INFO,
         "get_event_info",
         mob_action_runners::get_event_info,
-        mob_action_loaders::get_info
+        mob_action_loaders::get_event_info
     );
 
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
@@ -914,7 +914,7 @@ void init_mob_actions() {
         MOB_ACTION_GET_MOB_INFO,
         "get_mob_info",
         mob_action_runners::get_mob_info,
-        mob_action_loaders::get_info
+        mob_action_loaders::get_mob_info
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);

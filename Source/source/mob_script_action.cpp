@@ -303,64 +303,101 @@ bool mob_action_loaders::focus(mob_action_call &call) {
  * call:
  *   Mob action call that called this.
  */
-bool mob_action_loaders::get_info(mob_action_call &call) {
-
-    int i = 1;
-    if(call.action->type == MOB_ACTION_GET_MOB_INFO) {
-        //get_mob_info has the target parameter, moving where the info parameter is located
-        i = 2;
-    }
-
-    if(call.args[i] == "angle") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_ANGLE);
-    } else if(call.args[i] == "body_part") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_BODY_PART);
-    } else if(call.args[i] == "chomped_pikmin") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
-    } else if(call.args[i] == "day_minutes") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
-    } else if(call.args[i] == "field_pikmin") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
-    } else if(call.args[i] == "focus_distance") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_FOCUS_DISTANCE);
-    } else if(call.args[i] == "frame_signal") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
-    } else if(call.args[i] == "group_task_power") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_GROUP_TASK_POWER);
-    } else if(call.args[i] == "hazard") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_HAZARD);
-    } else if(call.args[i] == "health") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_HEALTH);
-    } else if(call.args[i] == "health_ratio") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_HEALTH_RATIO);
-    } else if(call.args[i] == "latched_pikmin") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
-    } else if(call.args[i] == "latched_pikmin_weight") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
-    } else if(call.args[i] == "message") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
-    } else if(call.args[i] == "message_sender") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
-    } else if(call.args[i] == "mob_category") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
-    } else if(call.args[i] == "mob_type") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
-    } else if(call.args[i] == "other_body_part") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
-    } else if(call.args[i] == "x") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_X);
-    } else if(call.args[i] == "y") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_Y);
-    } else if(call.args[i] == "z") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_Z);
-    } else if(call.args[i] == "weight") {
-        call.args[i] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
+bool mob_action_loaders::get_area_info(mob_action_call &call) {
+    if(call.args[1] == "day_minutes") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
+    } else if (call.args[1] == "field_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
     } else {
-        report_enum_error(call, i);
+        call.custom_error =
+            "Unknown info type \"" + call.args[0] + "\"! Try using \"get_mob_info\" or \"get_event_info\".";
         return false;
     }
     return true;
 }
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the info getting script actions.
+ * call:
+ *   Mob action call that called this.
+ */
+bool mob_action_loaders::get_event_info(mob_action_call& call) {
+    if(call.args[1] == "body_part") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_BODY_PART);
+    } else if(call.args[1] == "frame_signal") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
+    } else if(call.args[1] == "hazard") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_HAZARD);
+    } else if(call.args[1] == "message") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
+    } else if(call.args[1] == "mob_category") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
+    } else if(call.args[1] == "mob_type") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
+    } else if(call.args[1] == "other_body_part") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
+    } else {
+        call.custom_error =
+            "Unknown info type \"" + call.args[0] + "\"! Try using \"get_mob_info\" or \"get_area_info\".";
+        return false;
+    }
+
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the info getting script actions.
+ * call:
+ *   Mob action call that called this.
+ */
+bool mob_action_loaders::get_mob_info(mob_action_call &call) {
+
+    if(call.args[1] == "self") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_SELF);
+    } else if (call.args[1] == "focus") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_FOCUS);
+    } else {
+        report_enum_error(call, 1);
+        return false;
+    }
+
+    if(call.args[2] == "angle") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_ANGLE);
+    } else if(call.args[2] == "chomped_pikmin") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
+    } else if(call.args[2] == "focus_distance") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_FOCUS_DISTANCE);
+    } else if(call.args[2] == "group_task_power") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_GROUP_TASK_POWER);
+    } else if(call.args[2] == "health") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_HEALTH);
+    } else if(call.args[2] == "health_ratio") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_HEALTH_RATIO);
+    } else if(call.args[2] == "latched_pikmin") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
+    } else if(call.args[2] == "latched_pikmin_weight") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
+    } else if(call.args[2] == "mob_category") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
+    } else if(call.args[2] == "mob_type") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
+    } else if(call.args[2] == "x") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_X);
+    } else if(call.args[2] == "y") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_Y);
+    } else if(call.args[2] == "z") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_Z);
+    } else if(call.args[2] == "weight") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
+    } else {
+        call.custom_error =
+            "Unknown info type \"" + call.args[0] + "\"! Try using \"get_event_info\" or \"get_area_info\".";
+        return false;
+    }
+    return true;
+}
+
 
 
 /* ----------------------------------------------------------------------------
@@ -1210,17 +1247,25 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::get_mob_info(mob_action_run_data &data) {
-    mob* target_mob = data.m;
     
-    if(data.args[1] == "focus") {
+    mob* target_mob = NULL;
+    MOB_ACTION_GET_INFO_TARGET_TYPES t = (MOB_ACTION_GET_INFO_TARGET_TYPES)s2i(data.args[1]);
+    
+    switch(t) {
+    case MOB_ACTION_GET_INFO_TARGET_SELF: {
+        target_mob = data.m;
+        break;
+    } case MOB_ACTION_GET_INFO_TARGET_FOCUS: {
         if(!data.m->focused_mob) return;
         target_mob = data.m->focused_mob;
+        break;
+    }
     }
 
     string* var = &(data.m->vars[data.args[0]]);
-    MOB_ACTION_GET_INFO_TYPES t = (MOB_ACTION_GET_INFO_TYPES)s2i(data.args[2]);
+    MOB_ACTION_GET_INFO_TYPES v = (MOB_ACTION_GET_INFO_TYPES)s2i(data.args[2]);
 
-    switch (t) {
+    switch (v) {
     case MOB_ACTION_GET_INFO_ANGLE: {
         *var = f2s(rad_to_deg(target_mob->angle));
         break;

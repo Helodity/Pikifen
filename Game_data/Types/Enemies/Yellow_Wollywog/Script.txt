@@ -87,7 +87,7 @@ script {
     squatting {
         on_enter {
             stop
-            get_mob_info self t latched_pikmin_weight
+            get_mob_info t self latched_pikmin_weight
             if $t >= 30
                 set_state struggling
             else
