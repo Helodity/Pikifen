@@ -355,7 +355,7 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
 
     if(call.args[1] == "self") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_SELF);
-    } else if (call.args[1] == "focus") {
+    } else if(call.args[1] == "focus") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_TARGET_FOCUS);
     } else {
         report_enum_error(call, 1);
@@ -902,15 +902,19 @@ void mob_action_runners::focus(mob_action_run_data &data) {
             data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EV_TOUCHED_OPPONENT
         ) {
-        
             data.m->focus_on_mob((mob*) (data.custom_data_1));
-            
         } else if(
             data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
         ) {
-        
             data.m->focus_on_mob((mob*) (data.custom_data_2));
-            
+        }
+        else if (
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
+            data.call->parent_event == MOB_EV_DAMAGE
+        ) {
+            data.m->focus_on_mob(((hitbox_interaction*)(data.custom_data_1))->mob2);
         }
         break;
         
@@ -1128,8 +1132,7 @@ void mob_action_runners::get_event_info(mob_action_run_data& data) {
             ) {
             *var =
                 data.m->get_closest_hitbox(
-                    ((mob*)(data.custom_data_1))->pos,
-                    INVALID, NULL
+                    ((mob*)(data.custom_data_1))->pos
                 )->body_part_name;
         }
         break;
@@ -1168,6 +1171,16 @@ void mob_action_runners::get_event_info(mob_action_run_data& data) {
             *var = ((mob*)(data.custom_data_1))->type->category->name;
         } else if (data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
             *var = ((mob*)(data.custom_data_2))->type->category->name;
+        } else if (
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
+            data.call->parent_event == MOB_EV_DAMAGE
+            ) {
+            *var =
+                (
+                    (hitbox_interaction*)(data.custom_data_1)
+                    )->mob2->type->category->name;
         }
         break;
 
@@ -1184,6 +1197,16 @@ void mob_action_runners::get_event_info(mob_action_run_data& data) {
             *var = ((mob*)(data.custom_data_1))->type->name;
         } else if (data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
             *var = ((mob*)(data.custom_data_2))->type->name;
+        } else if (
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
+            data.call->parent_event == MOB_EV_DAMAGE
+            ) {
+            *var =
+                (
+                    (hitbox_interaction*)(data.custom_data_1)
+                    )->mob2->type->name;
         }
         break;
 
@@ -1206,7 +1229,7 @@ void mob_action_runners::get_event_info(mob_action_run_data& data) {
             ) {
             *var =
                 ((mob*)(data.custom_data_1))->get_closest_hitbox(
-                    data.m->pos, INVALID, NULL
+                    data.m->pos
                 )->body_part_name;
         }
         break;
@@ -1261,6 +1284,8 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         break;
     }
     }
+
+    if(!target_mob) return;
 
     string* var = &(data.m->vars[data.args[0]]);
     MOB_ACTION_GET_INFO_TYPES v = (MOB_ACTION_GET_INFO_TYPES)s2i(data.args[2]);
