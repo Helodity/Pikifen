@@ -563,6 +563,7 @@ void report_enum_error(mob_action_call &call, const size_t arg_nr);
 bool assert_actions(
     const vector<mob_action_call*> &actions, data_node* dn
 );
+mob* get_trigger_mob(mob_action_run_data &data);
 void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 );

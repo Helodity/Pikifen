@@ -895,26 +895,9 @@ void mob_action_runners::focus(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_FOCUS_TRIGGER: {
-        if(
-            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT
-        ) {
-            data.m->focus_on_mob((mob*) (data.custom_data_1));
-        } else if(
-            data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
-        ) {
-            data.m->focus_on_mob((mob*) (data.custom_data_2));
-        }
-        else if (
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.call->parent_event == MOB_EV_DAMAGE
-        ) {
-            data.m->focus_on_mob(((hitbox_interaction*)(data.custom_data_1))->mob2);
+        mob* trigger = get_trigger_mob(data);
+        if(trigger) {
+            data.m->focus_on_mob(trigger);
         }
         break;
         
@@ -1159,54 +1142,16 @@ void mob_action_runners::get_event_info(mob_action_run_data& data) {
         break;
 
     } case MOB_ACTION_GET_INFO_MOB_CATEGORY: {
-        if (
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_HELD ||
-            data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
-            data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
-            ) {
-            *var = ((mob*)(data.custom_data_1))->type->category->name;
-        } else if (data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
-            *var = ((mob*)(data.custom_data_2))->type->category->name;
-        } else if (
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.call->parent_event == MOB_EV_DAMAGE
-            ) {
-            *var =
-                (
-                    (hitbox_interaction*)(data.custom_data_1)
-                    )->mob2->type->category->name;
+        mob* trigger = get_trigger_mob(data);
+        if (trigger) {
+            *var = trigger->type->category->name;
         }
         break;
 
     } case MOB_ACTION_GET_INFO_MOB_TYPE: {
-        if (
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
-            data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
-            data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
-            ) {
-            *var = ((mob*)(data.custom_data_1))->type->name;
-        } else if (data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
-            *var = ((mob*)(data.custom_data_2))->type->name;
-        } else if (
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.call->parent_event == MOB_EV_DAMAGE
-            ) {
-            *var =
-                (
-                    (hitbox_interaction*)(data.custom_data_1)
-                    )->mob2->type->name;
+        mob* trigger = get_trigger_mob(data);
+        if (trigger) {
+            *var = trigger->type->name;
         }
         break;
 
@@ -2438,6 +2383,42 @@ bool assert_actions(
     }
     
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Gets the mob that triggered an event
+ * data:
+ *   Data about the action call.
+ */
+mob* get_trigger_mob(mob_action_run_data& data) {
+    if (
+        data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
+        data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
+        data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
+        data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+        data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+        data.call->parent_event == MOB_EV_HELD ||
+        data.call->parent_event == MOB_EV_RELEASED ||
+        data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
+        data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
+        ) {
+        return (mob*)(data.custom_data_1);
+    }
+    else if (
+        data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
+    ) {
+        return(mob*)(data.custom_data_2);
+    }
+    else if (
+        data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+        data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+        data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
+        data.call->parent_event == MOB_EV_DAMAGE
+    ) {
+        return ((hitbox_interaction*)(data.custom_data_1))->mob2;
+    }
+    return NULL;
 }
 
 
