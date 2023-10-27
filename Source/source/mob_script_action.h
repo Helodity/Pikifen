@@ -22,6 +22,8 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
     //Add health.
     MOB_ACTION_ADD_HEALTH,
+    //Add script points.
+    MOB_ACTION_ADD_POINTS,
     //Plan something. Used for arachnorbs.
     MOB_ACTION_ARACHNORB_PLAN_LOGIC,
     //Perform a numeric calculation.
@@ -449,7 +451,7 @@ struct mob_action_call {
 
 namespace mob_action_runners {
 void add_health(mob_action_run_data &data);
-void add_health(mob_action_run_data &data);
+void add_points(mob_action_run_data &data);
 void arachnorb_plan_logic(mob_action_run_data &data);
 void calculate(mob_action_run_data &data);
 void delete_function(mob_action_run_data &data);

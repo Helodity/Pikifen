@@ -102,6 +102,8 @@ enum MISSION_SCORE_CRITERIA {
     MISSION_SCORE_CRITERIA_TREASURE_POINTS,
     //Points per enemy kill point.
     MISSION_SCORE_CRITERIA_ENEMY_POINTS,
+    //Points per script point.
+    MISSION_SCORE_CRITERIA_SCRIPT_POINTS,
 };
 
 
@@ -153,6 +155,8 @@ struct mission_data {
     int points_per_treasure_point;
     //Mission point multiplier for each enemy point obtained.
     int points_per_enemy_point;
+    //Mission point multiplier for each script point obtained.
+    int points_per_script_point;
     //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
     uint8_t point_loss_data;
     //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
@@ -645,6 +649,19 @@ public:
  * Class representing the "treasure points" mission score criterion.
  */
 class mission_score_criterion_treasure_points : public mission_score_criterion {
+public:
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "script points" mission score criterion.
+ */
+class mission_score_criterion_script_points : public mission_score_criterion {
 public:
     string get_name() const override;
     int get_multiplier(mission_data* mission) const override;

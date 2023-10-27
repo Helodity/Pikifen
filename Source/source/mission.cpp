@@ -42,6 +42,7 @@ mission_data::mission_data() :
     points_per_sec_passed(0),
     points_per_treasure_point(0),
     points_per_enemy_point(0),
+    points_per_script_point(0),
     point_loss_data(0),
     point_hud_data(255),
     starting_points(0),
@@ -2253,5 +2254,42 @@ int mission_score_criterion_treasure_points::get_score(
     return
         (int)
         gameplay->treasure_points_collected *
+        get_multiplier(mission);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's point multiplier.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_script_points::get_multiplier(
+    mission_data* mission
+) const {
+    return mission->points_per_script_point;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's name.
+ */
+string mission_score_criterion_script_points::get_name() const {
+    return "Script points";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's score for this criterion.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_script_points::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        (int)
+        gameplay->script_points_collected *
         get_multiplier(mission);
 }

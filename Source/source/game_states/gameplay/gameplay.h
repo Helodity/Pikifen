@@ -204,6 +204,8 @@ public:
     size_t enemy_points_collected;
     //How many enemy points exist in total.
     size_t enemy_points_total;
+    //How many script points collected so far.
+    size_t script_points_collected;
     //Reason for mission fail, if any. INVALID for none.
     MISSION_FAIL_CONDITIONS mission_fail_reason;
     //Current mission score, for use in the HUD.

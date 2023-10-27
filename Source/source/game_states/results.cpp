@@ -721,6 +721,15 @@ void results_state::load() {
     //Enemy points points bullet.
     add_score_stat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
     
+    //Script points bullet.
+    add_stat(
+        "Script points:",
+        i2s(game.states.gameplay->script_points_collected)
+    );
+
+    //script points points bullet.
+    add_score_stat(MISSION_SCORE_CRITERIA_SCRIPT_POINTS);
+
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
         game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS

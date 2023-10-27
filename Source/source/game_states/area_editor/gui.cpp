@@ -3734,6 +3734,66 @@ void area_editor::process_gui_panel_mission() {
                 
                 ImGui::Unindent();
             }
+
+            //Points per script point gathered value.
+            ImGui::SetNextItemWidth(50);
+            int ppsp = game.cur_area_data.mission.points_per_script_point;
+            if (
+                ImGui::DragInt("Points per script point", &ppsp, 0.1f)
+                ) {
+                register_change("mission grading change");
+                game.cur_area_data.mission.points_per_script_point = ppsp;
+            }
+            set_tooltip(
+                "Amount of points that the player receives for each\n"
+                "point gathered from scripts.\n"
+                "Negative numbers means the\n"
+                "player loses points. 0 means this criterion doesn't count.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            if (game.cur_area_data.mission.points_per_script_point != 0) {
+                ImGui::Indent();
+
+                //Treasure point point loss on fail checkbox.
+                int flags = game.cur_area_data.mission.point_loss_data;
+                if (
+                    ImGui::CheckboxFlags(
+                        "0 points on fail##zpoftp", &flags,
+                        get_index_bitmask(
+                            MISSION_SCORE_CRITERIA_SCRIPT_POINTS
+                        )
+                    )
+                    ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission.point_loss_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the player will receive 0 points for\n"
+                    "this criterion if they fail the mission."
+                );
+
+                //Treasure point use in HUD checkbox.
+                flags = game.cur_area_data.mission.point_hud_data;
+                if (
+                    ImGui::CheckboxFlags(
+                        "Use in HUD counter##uihtp", &flags,
+                        get_index_bitmask(
+                            MISSION_SCORE_CRITERIA_TREASURE_POINTS
+                        )
+                    )
+                    ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission.point_hud_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the HUD item for the score counter will\n"
+                    "use this criterion in its calculation. If none of\n"
+                    "the criteria are used for the HUD item, then it\n"
+                    "won't even show up."
+                );
+
+                ImGui::Unindent();
+            }
             
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));

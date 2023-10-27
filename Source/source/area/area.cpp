@@ -396,6 +396,7 @@ void area_data::clone(area_data &other) {
     other.mission.points_per_sec_passed = mission.points_per_sec_passed;
     other.mission.points_per_treasure_point = mission.points_per_treasure_point;
     other.mission.points_per_enemy_point = mission.points_per_enemy_point;
+    other.mission.points_per_enemy_point = mission.points_per_script_point;
     other.mission.point_loss_data = mission.point_loss_data;
     other.mission.point_hud_data = mission.point_hud_data;
     other.mission.starting_points = mission.starting_points;

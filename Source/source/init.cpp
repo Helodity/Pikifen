@@ -733,6 +733,9 @@ void init_misc_databases() {
     game.mission_score_criteria.push_back(
         new mission_score_criterion_enemy_points()
     );
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_script_points()
+    );
 }
 
 
@@ -771,6 +774,15 @@ void init_mob_actions() {
         mob_action_runners::add_health,
         nullptr
     );
+
+    reg_param("amount", MOB_ACTION_PARAM_INT, false, false);
+    reg_action(
+        MOB_ACTION_ADD_POINTS,
+        "add_points",
+        mob_action_runners::add_points,
+        nullptr
+    );
+
     
     reg_param("goal", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(

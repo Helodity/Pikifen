@@ -725,6 +725,16 @@ void mob_action_runners::add_health(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the script points addition mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::add_points(mob_action_run_data& data) {
+    game.states.gameplay->script_points_collected += s2i(data.args[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the arachnorb logic plan mob script action.
  * data:
  *   Data about the action call.

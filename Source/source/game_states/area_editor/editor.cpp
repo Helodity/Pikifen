@@ -3597,6 +3597,14 @@ bool area_editor::save_area(const bool to_backup) {
                     )
                 );
             }
+            if(game.cur_area_data.mission.points_per_script_point != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_points_per_script_point",
+                        i2s(game.cur_area_data.mission.points_per_script_point)
+                    )
+                );
+            }
             if(game.cur_area_data.mission.point_loss_data > 0) {
                 data_file.add(
                     new data_node(
