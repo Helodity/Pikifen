@@ -306,7 +306,7 @@ bool mob_action_loaders::focus(mob_action_call &call) {
 bool mob_action_loaders::get_area_info(mob_action_call &call) {
     if(call.args[1] == "day_minutes") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
-    } else if (call.args[1] == "field_pikmin") {
+    } else if(call.args[1] == "field_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
     } else {
         call.custom_error =
@@ -380,6 +380,8 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
         call.args[2] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
     } else if(call.args[2] == "mob_type") {
         call.args[2] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
+    } else if(call.args[2] == "state") {
+        call.args[2] = i2s(MOB_ACTION_GET_INFO_STATE);
     } else if(call.args[2] == "x") {
         call.args[2] = i2s(MOB_ACTION_GET_INFO_X);
     } else if(call.args[2] == "y") {
@@ -395,7 +397,6 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
     }
     return true;
 }
-
 
 
 /* ----------------------------------------------------------------------------
@@ -1150,8 +1151,7 @@ void mob_action_runners::get_event_info(mob_action_run_data& data) {
                 (
                     (hitbox_interaction*)(data.custom_data_1)
                     )->h2->body_part_name;
-        }
-        else if (
+        } else if (
             data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
             data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
@@ -1182,7 +1182,7 @@ void mob_action_runners::get_floor_z(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the focused mob var getting mob script action.
+ * Code for the focused mob var getting script action.
  * data:
  *   Data about the action call.
  */
@@ -1194,7 +1194,7 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the get mob info obtaining mob script action
+ * Code for the mob info obtaining mob script action
  * data:
  *   Data about the action call.
  */
@@ -1235,12 +1235,6 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
             float d =
                 dist(target_mob->pos, target_mob->focused_mob->pos).to_float();
             *var = f2s(d);
-        }
-        break;
-
-    } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
-        if (data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
-            *var = i2s(*((size_t*)(data.custom_data_1)));
         }
         break;
 
