@@ -26,6 +26,7 @@ leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
     whistle_range(LEADER::DEF_WHISTLE_RANGE),
     max_throw_height(0),
+    show_hud_bubble(true),
     bmp_icon(nullptr),
     sfx_whistle(nullptr),
     sfx_dismiss(nullptr),
@@ -80,6 +81,7 @@ void leader_type::load_properties(data_node* file) {
     
     rs.set("max_throw_height", max_throw_height);
     rs.set("whistle_range", whistle_range);
+    rs.set("show_hud_bubble", show_hud_bubble);
 }
 
 

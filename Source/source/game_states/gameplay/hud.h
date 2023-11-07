@@ -54,10 +54,12 @@ struct hud_struct {
         ALLEGRO_BITMAP* bmp;
         //Leader icon color.
         ALLEGRO_COLOR color;
+        bool render_bubbles;
         //Constructor.
         leader_icon_bubble() :
             bmp(NULL),
-            color(COLOR_EMPTY) {}
+            color(COLOR_EMPTY),
+            render_bubbles(true){}
     };
     
     //Health ratio and caution animation timer of a leader's health.

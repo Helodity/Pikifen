@@ -169,22 +169,26 @@ hud_struct::hud_struct() :
             
             if(!icon.bmp) return;
             
-            al_draw_filled_circle(
-                final_center.x, final_center.y,
-                std::min(final_size.x, final_size.y) / 2.0f,
-                change_alpha(
-                    icon.color,
-                    128
-                )
-            );
+            if(icon.render_bubbles) {
+                al_draw_filled_circle(
+                    final_center.x, final_center.y,
+                    std::min(final_size.x, final_size.y) / 2.0f,
+                    change_alpha(
+                        icon.color,
+                        128
+                    )
+                );
+            }
             draw_bitmap_in_box(
                 icon.bmp,
                 final_center, final_size, true
             );
-            draw_bitmap_in_box(
-                bmp_bubble,
-                final_center, final_size, true
-            );
+            if(icon.render_bubbles) {
+                draw_bitmap_in_box(
+                    bmp_bubble,
+                    final_center, final_size, true
+                );
+            }
         };
         gui.add_item(leader_icon, "leader_" + i2s(l + 1) + "_icon");
         leader_icon_mgr.register_bubble(l, leader_icon);
@@ -1797,6 +1801,7 @@ void hud_struct::tick(const float delta_t) {
         if(l_ptr) {
             icon.bmp = l_ptr->lea_type->bmp_icon;
             icon.color = l_ptr->lea_type->main_color;
+            icon.render_bubbles = l_ptr->lea_type->show_hud_bubble;
         }
         
         leader_icon_mgr.update(l, l_ptr, icon);

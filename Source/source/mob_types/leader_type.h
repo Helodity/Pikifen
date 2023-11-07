@@ -139,6 +139,8 @@ public:
     float whistle_range;
     //How high it can reach when thrown.
     float max_throw_height;
+    //Should the bubble be drawn with the hud?
+    bool show_hud_bubble;
     //Standby icon.
     ALLEGRO_BITMAP* bmp_icon;
     //Sound effect for when it whistles.
