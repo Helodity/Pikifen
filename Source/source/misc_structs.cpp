@@ -650,7 +650,7 @@ bool error_manager::session_has_errors() {
 /* ----------------------------------------------------------------------------
  * Creates a fade manager.
  */
-fade_manager::fade_manager() :
+transition_manager::transition_manager() :
     time_left(0),
     fade_in(false),
     on_end(nullptr) {
@@ -661,15 +661,70 @@ fade_manager::fade_manager() :
 /* ----------------------------------------------------------------------------
  * Draws the fade overlay, if there is a fade in progress.
  */
-void fade_manager::draw() {
-    if(is_fading()) {
-        unsigned char alpha = (game.fade_mgr.get_perc_left()) * 255;
-        al_draw_filled_rectangle(
-            0, 0, game.win_w, game.win_h,
-            al_map_rgba(
-                0, 0, 0, (game.fade_mgr.is_fade_in() ? alpha : 255 - alpha)
-            )
-        );
+void transition_manager::draw() {
+    if(is_transitioning()) {
+        float percent = get_perc_left();
+
+        if(!is_fade_in()) {
+            percent = 1 - percent;
+        }
+        percent = ease(EASE_IN, percent);
+
+        int half_h = game.win_h / 2;
+        int half_w = game.win_w / 2;
+
+        ALLEGRO_COLOR final_color = al_map_rgb(10, 15, 20);
+
+        switch(transition_type) {
+            case SCENE_TRANSITION_FADE:
+                al_draw_filled_rectangle(
+                    0, 0, game.win_w, game.win_h,
+                    change_alpha(final_color, percent * 255)
+                );
+                break;
+            case SCENE_TRANSTION_SWIPE_RIGHT:
+                al_draw_filled_rectangle(
+                    0, 0, game.win_w * percent, game.win_h,
+                    final_color
+                );
+                al_draw_filled_ellipse(
+                    game.win_w * percent, half_h, half_h * percent, half_h,
+                    final_color
+                );
+                break;
+            case SCENE_TRANSTION_SWIPE_LEFT:
+                al_draw_filled_rectangle(
+                    game.win_w - game.win_w * percent, 0, game.win_w, game.win_h,
+                    final_color
+                );
+                al_draw_filled_ellipse(
+                    game.win_w - game.win_w * percent, half_h, half_h * percent, half_h,
+                    final_color
+                );
+                break;
+            case SCENE_TRANSTION_SWIPE_DOWN:
+                al_draw_filled_rectangle(
+                    0, 0, game.win_w, game.win_h * percent,
+                    final_color
+                );
+                al_draw_filled_ellipse(
+                    half_w, game.win_h * percent, half_w, half_w * percent,
+                    final_color
+                );
+                break;
+            case SCENE_TRANSTION_SWIPE_UP:
+                al_draw_filled_rectangle(
+                    0, game.win_h - game.win_h * percent, game.win_w, game.win_h,
+                    final_color
+                );
+                al_draw_filled_ellipse(
+                    half_w, game.win_h - game.win_h * percent, half_w, half_w * percent,
+                    final_color
+                );
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -677,7 +732,7 @@ void fade_manager::draw() {
 /* ----------------------------------------------------------------------------
  * Returns the percentage of progress left in the current fade.
  */
-float fade_manager::get_perc_left() const {
+float transition_manager::get_perc_left() const {
     return time_left / GAME::FADE_DURATION;
 }
 
@@ -685,7 +740,7 @@ float fade_manager::get_perc_left() const {
 /* ----------------------------------------------------------------------------
  * Returns whether the current fade is a fade in or fade out.
  */
-bool fade_manager::is_fade_in() const {
+bool transition_manager::is_fade_in() const {
     return fade_in;
 }
 
@@ -693,7 +748,7 @@ bool fade_manager::is_fade_in() const {
 /* ----------------------------------------------------------------------------
  * Returns whether or not a fade is currently in progress.
  */
-bool fade_manager::is_fading() const {
+bool transition_manager::is_transitioning() const {
     return time_left > 0;
 }
 
@@ -704,10 +759,37 @@ bool fade_manager::is_fading() const {
  *   If true, this fades in. If false, fades out.
  * on_end:
  *   Code to run when the fade finishes.
+ * t_type:
+ *   The type of transition to show
  */
-void fade_manager::start_fade(
-    const bool is_fade_in, const std::function<void()> &on_end
+void transition_manager::start_transition(
+    const bool is_fade_in, const std::function<void()> &on_end, 
+    const SCENE_TRANSITION_TYPES t_type
 ) {
+    if(t_type == SCENE_TRANSTION_INVERSE) {
+        switch (transition_type)
+        {   
+        case SCENE_TRANSTION_SWIPE_LEFT:
+            transition_type = SCENE_TRANSTION_SWIPE_RIGHT;
+            break;
+        case SCENE_TRANSTION_SWIPE_RIGHT:
+            transition_type = SCENE_TRANSTION_SWIPE_LEFT;
+            break;
+        case SCENE_TRANSTION_SWIPE_UP:
+            transition_type = SCENE_TRANSTION_SWIPE_DOWN;
+            break;
+        case SCENE_TRANSTION_SWIPE_DOWN:
+            transition_type = SCENE_TRANSTION_SWIPE_UP;
+            break;
+        default:
+            transition_type = SCENE_TRANSITION_FADE;
+            break;
+        }
+    }
+    else {
+        transition_type = t_type;
+    }
+
     time_left = GAME::FADE_DURATION;
     fade_in = is_fade_in;
     this->on_end = on_end;
@@ -719,7 +801,7 @@ void fade_manager::start_fade(
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
-void fade_manager::tick(const float delta_t) {
+void transition_manager::tick(const float delta_t) {
     if(time_left == 0) return;
     time_left -= delta_t;
     if(time_left <= 0) {

@@ -110,7 +110,7 @@ public:
     //Error manager.
     error_manager errors;
     //Manager for all full-screen fade-ins and fade-outs.
-    fade_manager fade_mgr;
+    transition_manager transition_mgr;
     //List of fonts.
     font_list fonts;
     //Duration of the last few frames.

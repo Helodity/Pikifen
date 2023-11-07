@@ -188,7 +188,7 @@ void gameplay_state::do_game_drawing(
             );
         }
         
-        game.fade_mgr.draw();
+        game.transition_mgr.draw();
         
     }
     

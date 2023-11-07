@@ -107,6 +107,23 @@ extern const string NAMES[N_MAKER_TOOLS];
 }
 
 
+//Types of scene transitions
+enum SCENE_TRANSITION_TYPES {
+    //Fade to black.
+    SCENE_TRANSITION_FADE,
+    //A swipe to the right.
+    SCENE_TRANSTION_SWIPE_LEFT,
+    //A swipe to the right.
+    SCENE_TRANSTION_SWIPE_RIGHT,
+    //A swipe to the right.
+    SCENE_TRANSTION_SWIPE_UP,
+    //A swipe to the right.
+    SCENE_TRANSTION_SWIPE_DOWN,
+    //The opposite of the previous transtion
+    SCENE_TRANSTION_INVERSE,
+};
+
+
 //Types of string token.
 enum STRING_TOKEN_TYPES {
     //None.
@@ -751,12 +768,13 @@ struct system_asset_list {
 /* ----------------------------------------------------------------------------
  * Manages fade ins/outs for transitions.
  */
-struct fade_manager {
+struct transition_manager {
     public:
-    fade_manager();
-    void start_fade(const bool fade_in, const std::function<void()> &on_end);
+    transition_manager();
+    void start_transition(const bool fade_in, const std::function<void()> &on_end, 
+        const SCENE_TRANSITION_TYPES transtion_type = SCENE_TRANSITION_FADE);
     bool is_fade_in() const;
-    bool is_fading() const;
+    bool is_transitioning() const;
     float get_perc_left() const;
     void tick(const float delta_t);
     void draw();
@@ -764,9 +782,11 @@ struct fade_manager {
     private:
     //Time left in the current fade in/out.
     float time_left;
+    //What type of transition is being animated
+    SCENE_TRANSITION_TYPES transition_type;
     //True if fading in, false if fading out.
     bool fade_in;
-    //Code to run when the fade in/out finishes.
+    //Code to run when the transition finishes.
     std::function<void()> on_end;
     
 };

@@ -1340,7 +1340,7 @@ void gameplay_state::do_menu_logic() {
     area_title_fade_timer.tick(game.delta_t);
     
     //Fade.
-    game.fade_mgr.tick(game.delta_t);
+    game.transition_mgr.tick(game.delta_t);
 }
 
 

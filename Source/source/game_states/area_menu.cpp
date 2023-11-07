@@ -405,7 +405,7 @@ void area_menu_state::do_drawing() {
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
-    game.fade_mgr.draw();
+    game.transition_mgr.draw();
     
     al_flip_display();
 }
@@ -422,7 +422,7 @@ void area_menu_state::do_logic() {
     
     gui.tick(game.delta_t);
     
-    game.fade_mgr.tick(game.delta_t);
+    game.transition_mgr.tick(game.delta_t);
 }
 
 
@@ -440,7 +440,7 @@ string area_menu_state::get_name() const {
  *   Event to handle.
  */
 void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+    if(game.transition_mgr.is_transitioning()) return;
     
     gui.handle_event(ev);
     game.controls.handle_allegro_event(ev);
@@ -675,9 +675,9 @@ void area_menu_state::init_gui_main() {
                 game.states.gameplay->path_of_area_to_load =
                     get_base_area_folder_path(area_type, true) + "/" +
                     area_folder;
-                game.fade_mgr.start_fade(false, [] () {
+                game.transition_mgr.start_transition(false, [] () {
                     game.change_state(game.states.gameplay);
-                });
+                }, SCENE_TRANSTION_SWIPE_UP);
             };
             area_button->on_selected =
             [this, a] () { change_info(a); };
@@ -928,10 +928,10 @@ void area_menu_state::init_gui_specs_page() {
  * Leaves the area menu and goes into the main menu.
  */
 void area_menu_state::leave() {
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         game.states.main_menu->page_to_load = MAIN_MENU_PAGE_PLAY;
         game.change_state(game.states.main_menu);
-    });
+    }, SCENE_TRANSTION_SWIPE_LEFT);
 }
 
 
@@ -1035,7 +1035,7 @@ void area_menu_state::load() {
         gui.set_selected_item(first_area_button);
     }
     
-    game.fade_mgr.start_fade(true, nullptr);
+    game.transition_mgr.start_transition(true, nullptr, SCENE_TRANSTION_INVERSE);
     
 }
 

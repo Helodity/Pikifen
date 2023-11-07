@@ -156,7 +156,7 @@ void editor::close_top_dialog() {
  */
 void editor::do_logic_post() {
     escape_was_pressed = false;
-    game.fade_mgr.tick(game.delta_t);
+    game.transition_mgr.tick(game.delta_t);
 }
 
 
@@ -328,7 +328,7 @@ point editor::get_last_widget_pos() {
  *   Event to handle.
  */
 void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+    if(game.transition_mgr.is_transitioning()) return;
     
     bool is_mouse_in_canvas =
         dialogs.empty() && !is_mouse_in_gui;
@@ -844,7 +844,7 @@ void editor::leave() {
     //Save the user's preferred tree node open states.
     save_options();
     
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         if(game.states.area_ed->quick_play_area_path.empty()) {
             game.states.main_menu->page_to_load = MAIN_MENU_PAGE_MAKE;
             game.change_state(game.states.main_menu);
@@ -853,7 +853,7 @@ void editor::leave() {
                 game.states.area_ed->quick_play_area_path;
             game.change_state(game.states.gameplay);
         }
-    });
+    }, SCENE_TRANSTION_SWIPE_DOWN);
     
     set_status("Bye!");
 }
@@ -916,7 +916,7 @@ void editor::load() {
     last_input_was_keyboard = false;
     changes_mgr.reset();
     
-    game.fade_mgr.start_fade(true, nullptr);
+    game.transition_mgr.start_transition(true, nullptr, SCENE_TRANSTION_INVERSE);
     
     //Set the editor style.
     update_style();

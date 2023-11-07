@@ -110,7 +110,7 @@ void main_menu_state::do_drawing() {
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
-    game.fade_mgr.draw();
+    game.transition_mgr.draw();
     
     al_flip_display();
 }
@@ -167,7 +167,7 @@ void main_menu_state::do_logic() {
     //the fade finishes and the state changes, and
     //after that we still attempt to do stuff in
     //this function, we're going to have a bad time.
-    game.fade_mgr.tick(game.delta_t);
+    game.transition_mgr.tick(game.delta_t);
     
 }
 
@@ -186,7 +186,7 @@ string main_menu_state::get_name() const {
  *   Event to handle.
  */
 void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+    if(game.transition_mgr.is_transitioning()) return;
     
     main_gui.handle_event(ev);
     play_gui.handle_event(ev);
@@ -266,9 +266,9 @@ void main_menu_state::init_main_page() {
         new button_gui_item("Options", game.fonts.area_name);
     options_button->on_activate =
     [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.change_state(game.states.options_menu);
-        });
+        }, SCENE_TRANSTION_SWIPE_DOWN);
     };
     options_button->on_get_tooltip =
     [] () { return "Customize your playing experience."; };
@@ -279,9 +279,9 @@ void main_menu_state::init_main_page() {
         new button_gui_item("Statistics", game.fonts.area_name);
     stats_button->on_activate =
     [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.change_state(game.states.stats_menu);
-        });
+        }, SCENE_TRANSTION_SWIPE_DOWN);
     };
     stats_button->on_get_tooltip =
     [] () { return "Check out some fun lifetime statistics."; };
@@ -336,9 +336,9 @@ void main_menu_state::init_make_page() {
         new button_gui_item("Animation editor", game.fonts.area_name);
     anim_ed_button->on_activate =
     [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.change_state(game.states.animation_ed);
-        });
+        }, SCENE_TRANSTION_SWIPE_UP);
     };
     anim_ed_button->on_get_tooltip =
     [] () { return "Make an animation for any object in the game."; };
@@ -349,9 +349,9 @@ void main_menu_state::init_make_page() {
         new button_gui_item("Area editor", game.fonts.area_name);
     area_ed_button->on_activate =
     [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.change_state(game.states.area_ed);
-        });
+        }, SCENE_TRANSTION_SWIPE_UP);
     };
     area_ed_button->on_get_tooltip =
     [] () { return "Make an area to play on."; };
@@ -362,9 +362,9 @@ void main_menu_state::init_make_page() {
         new button_gui_item("GUI editor", game.fonts.area_name);
     gui_ed_button->on_activate =
     [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.change_state(game.states.gui_ed);
-        });
+        }, SCENE_TRANSTION_SWIPE_UP);
     };
     gui_ed_button->on_get_tooltip =
     [] () { return "Change the way menus and the gameplay HUD look."; };
@@ -433,10 +433,10 @@ void main_menu_state::init_play_page() {
         new button_gui_item("Simple areas", game.fonts.area_name);
     simple_button->on_activate =
     [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.states.area_menu->area_type = AREA_TYPE_SIMPLE;
             game.change_state(game.states.area_menu);
-        });
+        }, SCENE_TRANSTION_SWIPE_RIGHT);
     };
     simple_button->on_get_tooltip =
     [] () { return "Pick a simple area with no goal, and start playing!"; };
@@ -447,10 +447,10 @@ void main_menu_state::init_play_page() {
         new button_gui_item("Missions", game.fonts.area_name);
     mission_button->on_activate =
     [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.states.area_menu->area_type = AREA_TYPE_MISSION;
             game.change_state(game.states.area_menu);
-        });
+        }, SCENE_TRANSTION_SWIPE_RIGHT);
     };
     mission_button->on_get_tooltip =
     [] () {
@@ -549,9 +549,9 @@ void main_menu_state::init_tutorial_page() {
         game.states.gameplay->path_of_area_to_load =
             get_base_area_folder_path(AREA_TYPE_MISSION, true) + "/" +
             "Tutorial Meadow";
-        game.fade_mgr.start_fade(false, [] () {
+        game.transition_mgr.start_transition(false, [] () {
             game.change_state(game.states.gameplay);
-        });
+        }, SCENE_TRANSTION_SWIPE_UP);
     };
     yes_button->on_get_tooltip =
     [] () {
@@ -708,7 +708,7 @@ void main_menu_state::load() {
     }
     
     //Finishing touches.
-    game.fade_mgr.start_fade(true, nullptr);
+    game.transition_mgr.start_transition(true, nullptr, SCENE_TRANSTION_INVERSE);
 }
 
 

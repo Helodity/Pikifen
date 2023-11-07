@@ -98,7 +98,7 @@ void options_menu_state::do_drawing() {
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
-    game.fade_mgr.draw();
+    game.transition_mgr.draw();
     
     al_flip_display();
 }
@@ -115,7 +115,7 @@ void options_menu_state::do_logic() {
     
     gui.tick(game.delta_t);
     
-    game.fade_mgr.tick(game.delta_t);
+    game.transition_mgr.tick(game.delta_t);
 }
 
 
@@ -131,7 +131,7 @@ string options_menu_state::get_name() const {
  * Goes to the controls menu.
  */
 void options_menu_state::go_to_controls() {
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         game.change_state(game.states.controls_menu);
     });
 }
@@ -143,7 +143,7 @@ void options_menu_state::go_to_controls() {
  *   Event to handle.
  */
 void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+    if(game.transition_mgr.is_transitioning()) return;
     
     gui.handle_event(ev);
     game.controls.handle_allegro_event(ev);
@@ -154,9 +154,9 @@ void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Leaves the options menu and goes to the main menu.
  */
 void options_menu_state::leave() {
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         game.change_state(game.states.main_menu);
-    });
+    }, SCENE_TRANSTION_SWIPE_UP);
     save_options();
 }
 
@@ -370,7 +370,7 @@ void options_menu_state::load() {
     gui.add_item(warning_text, "restart_warning");
     
     //Finishing touches.
-    game.fade_mgr.start_fade(true, nullptr);
+    game.transition_mgr.start_transition(true, nullptr, SCENE_TRANSTION_INVERSE);
     gui.set_selected_item(gui.back_item);
     
 }

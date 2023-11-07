@@ -125,7 +125,7 @@ void stats_menu_state::do_drawing() {
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
-    game.fade_mgr.draw();
+    game.transition_mgr.draw();
     
     al_flip_display();
 }
@@ -144,7 +144,7 @@ void stats_menu_state::do_logic() {
     
     update_runtime_value_text();
     
-    game.fade_mgr.tick(game.delta_t);
+    game.transition_mgr.tick(game.delta_t);
 }
 
 
@@ -162,7 +162,7 @@ string stats_menu_state::get_name() const {
  *   Event to handle.
  */
 void stats_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+    if(game.transition_mgr.is_transitioning()) return;
     
     gui.handle_event(ev);
     game.controls.handle_allegro_event(ev);
@@ -174,9 +174,9 @@ void stats_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void stats_menu_state::leave() {
     save_statistics();
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         game.change_state(game.states.main_menu);
-    });
+    }, SCENE_TRANSTION_SWIPE_UP);
 }
 
 
@@ -224,7 +224,7 @@ void stats_menu_state::load() {
     populate_stats_list();
     
     //Finishing touches.
-    game.fade_mgr.start_fade(true, nullptr);
+    game.transition_mgr.start_transition(true, nullptr, SCENE_TRANSTION_INVERSE);
     gui.set_selected_item(gui.back_item);
     
 }

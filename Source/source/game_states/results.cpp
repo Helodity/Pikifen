@@ -133,7 +133,7 @@ void results_state::add_stat(
  * playing the area.
  */
 void results_state::continue_playing() {
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         game.states.gameplay->after_hours = true;
         game.states.gameplay->mission_fail_reason =
             (MISSION_FAIL_CONDITIONS) INVALID;
@@ -163,7 +163,7 @@ void results_state::do_drawing() {
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
-    game.fade_mgr.draw();
+    game.transition_mgr.draw();
     
     al_flip_display();
 }
@@ -201,7 +201,7 @@ void results_state::do_logic() {
     
     gui.tick(game.delta_t);
     
-    game.fade_mgr.tick(game.delta_t);
+    game.transition_mgr.tick(game.delta_t);
 }
 
 
@@ -219,7 +219,7 @@ string results_state::get_name() const {
  *   Event to handle.
  */
 void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+    if(game.transition_mgr.is_transitioning()) return;
     
     gui.handle_event(ev);
     game.controls.handle_allegro_event(ev);
@@ -230,7 +230,7 @@ void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Leaves the results menu and goes to the area menu.
  */
 void results_state::leave() {
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         AREA_TYPES area_type = game.cur_area_data.type;
         game.unload_loaded_state(game.states.gameplay);
         if(game.states.area_ed->quick_play_area_path.empty()) {
@@ -796,7 +796,7 @@ void results_state::load() {
     gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    game.fade_mgr.start_fade(true, nullptr);
+    game.transition_mgr.start_transition(true, nullptr, SCENE_TRANSTION_INVERSE);
     gui.set_selected_item(gui.back_item);
     gui_time_spent = 0.0f;
 }
@@ -807,7 +807,7 @@ void results_state::load() {
  * the area.
  */
 void results_state::retry_area() {
-    game.fade_mgr.start_fade(false, [] () {
+    game.transition_mgr.start_transition(false, [] () {
         game.unload_loaded_state(game.states.gameplay);
         game.change_state(game.states.gameplay);
     });

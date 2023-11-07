@@ -331,7 +331,7 @@ void gameplay_state::enter() {
     
     hud->gui.hide_items();
     if(went_to_results) {
-        game.fade_mgr.start_fade(true, nullptr);
+        game.transition_mgr.start_transition(true, nullptr, SCENE_TRANSTION_INVERSE);
         if(pause_menu) {
             pause_menu->to_delete = true;
         }
@@ -1054,7 +1054,7 @@ void gameplay_state::load_game_content() {
  *   Where to leave to.
  */
 void gameplay_state::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
-    game.fade_mgr.start_fade( false, [this, target] () { leave(target); });
+    game.transition_mgr.start_transition(false, [this, target] () { leave(target); });
 }
 
 

@@ -780,7 +780,7 @@ void draw_loading_screen(
 ) {
     unsigned char blackness_alpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(
-        0, 0, game.win_w, game.win_h, al_map_rgba(0, 0, 0, blackness_alpha)
+        0, 0, game.win_w, game.win_h, al_map_rgba(10, 15, 20, blackness_alpha)
     );
     
     int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;

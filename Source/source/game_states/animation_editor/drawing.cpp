@@ -34,7 +34,7 @@ void animation_editor::do_drawing() {
     draw_op_error_cursor();
     
     //And the fade manager atop it all.
-    game.fade_mgr.draw();
+    game.transition_mgr.draw();
     
     //Finally, swap buffers.
     al_flip_display();

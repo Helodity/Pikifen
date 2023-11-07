@@ -35,7 +35,7 @@ const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Duration of full-screen fades.
-const float FADE_DURATION = 0.15f;
+const float FADE_DURATION = 0.2f;
 //When getting a framerate average, use a sample of this size.
 const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 //Only save the latest N FPS samples.
