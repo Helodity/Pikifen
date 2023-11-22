@@ -231,9 +231,11 @@ bool leader::can_grab_group_member(mob* m) const {
     if(!has_clear_line(m)) {
         return false;
     }
-
-    //Check if the mob isn't too far under the leader.
-    if(z - (m->z + m->height) > GEOMETRY::STEP_HEIGHT) {
+    //Check if the mob isn't too far under the leader when on the same sector.
+    if(z - (m->z + m->height) > GEOMETRY::STEP_HEIGHT && 
+        center_sector == m->center_sector &&
+        standing_on_mob == m->standing_on_mob
+    ) {
         return false;
     }
     return true;
