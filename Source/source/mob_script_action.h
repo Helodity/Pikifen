@@ -131,6 +131,9 @@ enum MOB_ACTION {
     
     //Release mobs that are stored inside.
     MOB_ACTION_RELEASE_STORED_MOBS,
+
+    //Run a predefined function.
+    MOB_ACTION_RUN_FUNCTION,
     
     //Remove a status effect.
     MOB_ACTION_REMOVE_STATUS,

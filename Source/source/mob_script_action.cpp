@@ -2505,7 +2505,34 @@ void load_actions(mob_type* mt, data_node* node, vector<mob_action_call*>* actio
         else {
             mob_action_call* new_a = new mob_action_call();
             if (new_a->load_from_data_node(action_node, mt)) {
-                actions->push_back(new_a);
+                if(new_a->action->type == MOB_ACTION_RUN_FUNCTION) {
+                    bool func_found = false;
+                    for (size_t f = 0; f < mt->functions.size(); ++f) {
+                        if (mt->functions[f]->name == new_a->args[0]) {
+                            vector<mob_action_call*> func_actions; 
+                            load_actions(
+                                mt, mt->functions[f], &func_actions, settings
+                            );
+
+                            actions->insert(
+                                actions->end(),
+                                func_actions.begin(),
+                                func_actions.end()
+                            );
+                            func_found = true;
+                            break;
+                        }
+                    }
+                    if (!func_found) {
+                        game.errors.report(
+                            "Unknown function name \"" + new_a->args[0] + "\"!", action_node
+                        );
+                    }
+                    delete new_a;
+                }
+                else {
+                    actions->push_back(new_a);
+                }
             }
             else {
                 delete new_a;

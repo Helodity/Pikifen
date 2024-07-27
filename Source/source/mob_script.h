@@ -492,7 +492,7 @@ size_t fix_states(
     vector<mob_state*> &states, const string &starting_state, const mob_type* mt
 );
 void load_script(
-    mob_type* mt, data_node* script_node, data_node* global_node, 
+    mob_type* mt, data_node script_file,
     vector<mob_state*>* states
 );
 void load_state(

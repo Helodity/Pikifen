@@ -528,11 +528,32 @@ size_t fix_states(
  * @brief Loads the states off of a data node.
  *
  * @param mt The type of mob the states are going to.
- * @param script_node The data node containing the mob's script.
- * @param global_node The data node containing global events.
+ * @param script_file The data node containing the mob's script.
  * @param states Vector of states to place the new states on.
  */
-void load_script(mob_type* mt, data_node* script_node, data_node* global_node, vector<mob_state*>* states) {
+void load_script(
+    mob_type* mt, data_node script_file, vector<mob_state*>* states
+) {
+
+    //Load functions
+    size_t n_functions = script_file.get_child_by_name("functions")->get_nr_of_children();
+    for(size_t f = 0; f < n_functions; ++f) {
+        data_node* func_node = script_file.get_child_by_name("functions")->get_child(f);
+        mt->functions.push_back(func_node);
+    }
+
+
+    //Load init actions
+    load_actions(
+        mt,
+        script_file.get_child_by_name("init"), &mt->init_actions, 0
+    );
+
+
+
+
+    data_node* script_node = script_file.get_child_by_name("script");
+
     size_t n_new_states = script_node->get_nr_of_children();
     
     //Let's save the states now, so that the state switching events
@@ -555,7 +576,7 @@ void load_script(mob_type* mt, data_node* script_node, data_node* global_node, v
     for(size_t s = 0; s < states->size(); ++s) {
         mob_state* state_ptr = (*states)[s];
         data_node* state_node = script_node->get_child_by_name(state_ptr->name);
-        load_state(mt, state_node, global_node, state_ptr);
+        load_state(mt, state_node, script_file.get_child_by_name("global"), state_ptr);
         state_ptr->id = s;       
     }
     
@@ -571,7 +592,9 @@ void load_script(mob_type* mt, data_node* script_node, data_node* global_node, v
  * @param global_node The data node containing global events.
  * @param state_ptr Pointer to the state to load.
  */
-void load_state(mob_type* mt, data_node* state_node, data_node* global_node, mob_state* state_ptr) {
+void load_state(
+    mob_type* mt, data_node* state_node, data_node* global_node, mob_state* state_ptr
+) {
     size_t n_events = state_node->get_nr_of_children();
     size_t n_global_events = global_node->get_nr_of_children();
     if (n_events + n_global_events == 0) return;
