@@ -54,7 +54,7 @@ bool are_walls_between(
     float ignore_walls_below_z, bool* out_impassable_walls
 ) {
     point bb_tl(std::min(p1.x, p2.x), std::min(p1.y, p2.y));
-    point bb_br(std::max(p1.x, p1.x), std::max(p2.y, p2.y));
+    point bb_br(std::max(p1.x, p2.x), std::max(p1.y, p2.y));
     
     set<edge*> candidate_edges;
     if(

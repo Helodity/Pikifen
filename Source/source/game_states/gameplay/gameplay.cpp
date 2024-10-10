@@ -530,13 +530,11 @@ long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
  * In the case all candidate members are out of reach,
  * this returns the closest. Otherwise, it returns the closest
  * and more mature one.
- * Returns NULL if there is no member of that subgroup available.
- * type:
- *   Type to search for.
- * distant:
- *   If all members are ungrabbable, this returns true.
+ * @param type Type to search for
+ * @param distant If all members are out of reach, this returns true
+ * @return The closest member, or nullptr if there is no member of that subgroup available
  */
-mob* gameplay_state::get_closest_group_member(subgroup_type* type, bool* distant) {
+mob* gameplay_state::get_closest_group_member(const subgroup_type* type, bool* distant) {
     if(!cur_leader_ptr) return NULL;
     
     mob* result = nullptr;

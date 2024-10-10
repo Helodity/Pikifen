@@ -199,12 +199,8 @@ leader::leader(const point &pos, leader_type* type, float angle) :
 bool leader::can_receive_status(status_type* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_FLAG_LEADERS);
 }
-
-/**
- * @brief Returns whether or not a leader can grab a group member.
- * 
- * @param m Group member to check.
- * @return Whether it can throw.
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a leader can grab the specified mob.
  */
 bool leader::can_grab_group_member(mob* m) const {
     if (

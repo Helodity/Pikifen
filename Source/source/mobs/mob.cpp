@@ -2442,7 +2442,7 @@ bool mob::has_clear_line(const mob* target_mob) const {
         if(!m_ptr->type->pushes) continue;
         if(has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE)) continue;
         const float m_ptr_max_z = m_ptr->z + m_ptr->height;
-        if(m_ptr_max_z < z && m_ptr_max_z < target_mob->z) continue;
+        if(m_ptr_max_z < z || m_ptr_max_z < target_mob->z) continue;
         if(
             m_ptr->z > z + height &&
             m_ptr->z > target_mob->z + target_mob->height
@@ -2492,17 +2492,6 @@ bool mob::has_clear_line(const mob* target_mob) const {
     //We can ignore walls that are below both mobs, so use the lowest of the
     //two Zs as a cut-off point.
     if(are_walls_between(pos, target_mob->pos, std::min(z, target_mob->z))) {
-        return false;
-    }
-    
-    //Check for when they're (not) standing on different mobs.
-    //This is a bit rudimentary, but for the sake of performance, it'll do.
-    if(
-        standing_on_mob != target_mob->standing_on_mob &&
-        fabs(z - target_mob->z) > GEOMETRY::STEP_HEIGHT
-    ) {
-        //This is likely a situation where the leader is on a bridge,
-        //and the Pikmin is (far) below it. Let's not let this happen.
         return false;
     }
     
