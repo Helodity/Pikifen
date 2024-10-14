@@ -2491,7 +2491,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     leader* l = (leader*) m;
     hazard* h = (hazard*) info1;
-    mob_type::vulnerability_t vuln = m->get_hazard_vulnerability(h);
+    vulnerability_t vuln = m->get_hazard_vulnerability(h);
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
         for(size_t e = 0; e < h->effects.size(); e++) {

@@ -22,8 +22,8 @@
 bridge_type::bridge_type() :
     mob_type(MOB_CATEGORY_BRIDGES) {
     
-    inheritable_data.radius = 32;
-    inheritable_data.max_health = 2000;
+    base_data.radius = 32;
+    base_data.max_health = 2000;
     pushable = false;
     pushes = false;
     can_block_paths = true;

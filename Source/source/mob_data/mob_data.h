@@ -10,23 +10,8 @@
 
 #pragma once
 
-#include <functional>
 #include <map>
 
-#include <allegro5/allegro.h>
-
-#include "../animation.h"
-#include "../audio.h"
-#include "../const.h"
-#include "../content.h"
-#include "../misc_structs.h"
-#include "../mob_categories/mob_category.h"
-#include "../mob_script.h"
-#include "../status.h"
-#include "../libs/data_file.h"
-#include "../mobs/mob_enums.h"
-#include "../spike_damage.h"
-#include "../utils/general_utils.h"
 
 /**
  * @brief Contents of a mob type that can be altered on a per-mob basis
@@ -51,4 +36,19 @@ public:
 
     //Maximum health.
     float max_health = 100.0f;
+
+    //- Vulnerabilities -
+
+    //For every hazard, multiply damage taken by this much.
+    map<hazard*, vulnerability_t> hazard_vulnerabilities;
+
+    //What sort of spike damage it causes, if any.
+    spike_damage_type* spike_damage = nullptr;
+
+    //For every type of spike damage, multiply damage taken by this much.
+    map<spike_damage_type*, vulnerability_t> spike_damage_vulnerabilities;
+
+    //For every type of status, multiply damage taken by this much.
+    map<status_type*, vulnerability_t> status_vulnerabilities;
+
 };

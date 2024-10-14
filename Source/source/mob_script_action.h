@@ -206,6 +206,9 @@ enum MOB_ACTION {
     
     //Set a script variable.
     MOB_ACTION_SET_VAR,
+
+    //Set animation.
+    MOB_ACTION_SET_VULNERABILITY,
     
     //Show a message that is inside a script variable.
     MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
@@ -278,6 +281,18 @@ enum MOB_ACTION {
     
 };
 
+//Get area info action info types.
+enum MOB_ACTION_SET_VULNERABILITY_TYPE {
+
+    //Modify vulnerability to a status.
+    MOB_ACTION_SET_VULNERABILITY_TYPE_STATUS,
+
+    //Modify vulnerability to a hazard.
+    MOB_ACTION_SET_VULNERABILITY_TYPE_HAZARD,
+
+    //Modify vulnerability to a spike damage.
+    MOB_ACTION_SET_VULNERABILITY_TYPE_SPIKE_DAMAGE,
+};
 
 //Arachnorb plan logic action sub-types.
 enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE {
@@ -744,6 +759,7 @@ void set_tangible(mob_action_run_data &data);
 void set_team(mob_action_run_data &data);
 void set_timer(mob_action_run_data &data);
 void set_var(mob_action_run_data &data);
+void set_vulnerability(mob_action_run_data& data);
 void show_message_from_var(mob_action_run_data &data);
 void spawn(mob_action_run_data &data);
 void stabilize_z(mob_action_run_data &data);
@@ -787,6 +803,7 @@ bool set_far_reach(mob_action_call &call);
 bool set_holdable(mob_action_call &call);
 bool set_near_reach(mob_action_call &call);
 bool set_team(mob_action_call &call);
+bool set_vulnerability(mob_action_call& call);
 bool spawn(mob_action_call &call);
 bool stabilize_z(mob_action_call &call);
 bool start_chomping(mob_action_call &call);

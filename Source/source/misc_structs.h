@@ -1230,6 +1230,25 @@ struct edge_offset_cache {
 
 
 /**
+     * @brief Info on how vulnerable the object is to a certain source.
+     */
+struct vulnerability_t {
+
+    //--- Members ---
+
+    //Multiply damage taken by this.
+    float damage_mult = 1.0f;
+
+    //When affected by the source, receive this status effect.
+    status_type* status_to_apply = nullptr;
+
+    //If "status_to_apply" overrides any status effect that'd be received.
+    bool status_overrides = true;
+
+};
+
+
+/**
  * @brief Info about the current whistle usage.
  */
 struct whistle_t {

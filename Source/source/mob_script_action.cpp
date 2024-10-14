@@ -643,6 +643,47 @@ bool mob_action_loaders::set_team(mob_action_call &call) {
 
 
 /**
+ * @brief Loading code for the team setting mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::set_vulnerability(mob_action_call& call) {
+
+    if (call.args[0] == "hazard") {
+        call.args[0] = i2s(MOB_ACTION_SET_VULNERABILITY_TYPE_HAZARD);
+        if(game.content.hazards.find(call.args[1]) == game.content.hazards.end()) {
+            call.custom_error =
+                "Unknown hazard \"" + call.args[1] + "\"!";
+            return false;
+        }
+    }
+    else if (call.args[0] == "status") {
+        call.args[0] = i2s(MOB_ACTION_SET_VULNERABILITY_TYPE_STATUS);
+        if (game.content.status_types.find(call.args[1]) == game.content.status_types.end()) {
+            call.custom_error =
+                "Unknown status \"" + call.args[1] + "\"!";
+            return false;
+        }
+    }
+    else if (call.args[0] == "spike_damage") {
+        call.args[0] = i2s(MOB_ACTION_SET_VULNERABILITY_TYPE_SPIKE_DAMAGE);
+        if (game.content.spike_damage_types.find(call.args[1]) == game.content.spike_damage_types.end()) {
+            call.custom_error =
+                "Unknown spike damage \"" + call.args[1] + "\"!";
+            return false;
+        }
+    }
+    else {
+        report_enum_error(call, 0);
+        return false;
+    }
+    return true;
+}
+
+
+
+/**
  * @brief Loading code for the spawning mob script action.
  *
  * @param call Mob action call that called this.
@@ -1963,6 +2004,29 @@ void mob_action_runners::set_timer(mob_action_run_data &data) {
  */
 void mob_action_runners::set_var(mob_action_run_data &data) {
     data.m->set_var(data.args[0], data.args[1]);
+}
+
+
+/**
+ * @brief Code for the var setting mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void mob_action_runners::set_vulnerability(mob_action_run_data& data) {
+
+    MOB_ACTION_SET_VULNERABILITY_TYPE t =
+        (MOB_ACTION_SET_VULNERABILITY_TYPE)s2i(data.args[2]);
+    switch(t) {
+        case MOB_ACTION_SET_VULNERABILITY_TYPE_STATUS:
+            data.m->inheritable_data.status_vulnerabilities[game.content.status_types[data.args[0]]].damage_mult = s2f(data.args[1]);
+            break;
+        case MOB_ACTION_SET_VULNERABILITY_TYPE_HAZARD:
+            data.m->inheritable_data.hazard_vulnerabilities[&game.content.hazards[data.args[0]]].damage_mult = s2f(data.args[1]);
+            break;
+        case MOB_ACTION_SET_VULNERABILITY_TYPE_SPIKE_DAMAGE:
+            data.m->inheritable_data.spike_damage_vulnerabilities[&game.content.spike_damage_types[data.args[0]]].damage_mult = s2f(data.args[1]);
+            break;
+    }
 }
 
 

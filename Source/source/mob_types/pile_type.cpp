@@ -94,5 +94,5 @@ void pile_type::load_cat_properties(data_node* file) {
         animation_group_suffixes.push_back("");
     }
     
-    inheritable_data.max_health = health_per_resource * max_amount;
+    base_data.max_health = health_per_resource * max_amount;
 }

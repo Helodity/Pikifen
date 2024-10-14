@@ -656,7 +656,7 @@ void area_editor::draw_canvas() {
                 if(show_link) {
                     draw_arrow(
                         m_ptr->pos, m2_ptr->pos,
-                        m_ptr->type->inheritable_data.radius, m2_ptr->type->inheritable_data.radius,
+                        m_ptr->type->base_data.radius, m2_ptr->type->base_data.radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
                         al_map_rgb(160, 224, 64)
                     );
@@ -675,7 +675,7 @@ void area_editor::draw_canvas() {
                 if(show_store) {
                     draw_arrow(
                         m_ptr->pos, m2_ptr->pos,
-                        m_ptr->type->inheritable_data.radius, m2_ptr->type->inheritable_data.radius,
+                        m_ptr->type->base_data.radius, m2_ptr->type->base_data.radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
                         al_map_rgb(224, 200, 200)
                     );
@@ -696,9 +696,9 @@ void area_editor::draw_canvas() {
                 );
         }
         
-        if(m_ptr->type && m_ptr->type->inheritable_data.rectangular_dim.x != 0) {
+        if(m_ptr->type && m_ptr->type->base_data.rectangular_dim.x != 0) {
             draw_rotated_rectangle(
-                m_ptr->pos, m_ptr->type->inheritable_data.rectangular_dim,
+                m_ptr->pos, m_ptr->type->base_data.rectangular_dim,
                 m_ptr->angle, color, 1.0f / game.cam.zoom
             );
         }
@@ -721,15 +721,15 @@ void area_editor::draw_canvas() {
                     );
                 if(!c_type) continue;
                 
-                if(c_type->inheritable_data.rectangular_dim.x != 0) {
+                if(c_type->base_data.rectangular_dim.x != 0) {
                     float c_rot = m_ptr->angle + spawn_info->angle;
                     draw_rotated_rectangle(
-                        c_pos, c_type->inheritable_data.rectangular_dim,
+                        c_pos, c_type->base_data.rectangular_dim,
                         c_rot, color, 1.0f / game.cam.zoom
                     );
                 } else {
                     al_draw_circle(
-                        c_pos.x, c_pos.y, c_type->inheritable_data.radius,
+                        c_pos.x, c_pos.y, c_type->base_data.radius,
                         color, 1.0f / game.cam.zoom
                     );
                 }

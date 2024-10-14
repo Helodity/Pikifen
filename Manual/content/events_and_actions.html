@@ -435,6 +435,20 @@
           </dd>
         </dl></td>
       </tr>
+      <tr id="set-vulnerability">
+        <th><code>set_vulnerability</code></th>
+        <td><dl>
+          <dt><code><b>set_vulnerability</b> &lt;source_type&gt; &lt;source_name&gt; &lt;damage_multiplier&gt;</code></dt>
+          <dd>
+          Changes a mob's vulnerability 0 is invulnerable, 1 is normal damage, 2 is double damage, etc. <code>&lt;source_type&gt;</code> can have these types:
+          <ul>
+            <li><code>hazard</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> head objects to turn according to where their feet objects are located. See the <code><a href="#arachnorb-plan-logic">arachnorb_plan_logic</a></code> action for more information.</li>
+            <li><code>status</code>: Constantly turn towards the focused mob. You can make it stop with the <code><a href="#stop">stop</a></code> action.</li>
+            <li><code>spike</code>: Turn towards home (spawn point).</li>
+           </ul>
+          </dd>
+        </dl></td>
+      </tr>
       <tr id="start-dying">
         <th><code>start_dying</code></th>
         <td>Runs the procedure related to the start of the object's death sequence. Amongst other things, this makes enemies unleash a cloud of sparkle particles.</td>

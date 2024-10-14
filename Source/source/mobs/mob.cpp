@@ -169,12 +169,12 @@ mob::mob(const point &pos, mob_type* type, float angle) :
     type(type),
     pos(pos),
     angle(angle),
-    inheritable_data(type->inheritable_data),
+    inheritable_data(type->base_data),
     fsm(this),
     intended_turn_angle(angle),
     home(pos),
     id(game.states.gameplay->next_mob_id),
-    health(type->inheritable_data.max_health),
+    health(type->base_data.max_health),
     itch_time(type->itch_time),
     anim(&type->anims) {
     
@@ -347,8 +347,8 @@ void mob::apply_status_effect(
     }
     
     //Get the vulnerabilities to this status.
-    auto vuln_it = type->status_vulnerabilities.find(s);
-    if(vuln_it != type->status_vulnerabilities.end()) {
+    auto vuln_it = type->base_data.status_vulnerabilities.find(s);
+    if(vuln_it != type->base_data.status_vulnerabilities.end()) {
         if(vuln_it->second.status_to_apply) {
             //It must instead receive this status.
             apply_status_effect(
@@ -828,7 +828,7 @@ bool mob::calculate_damage(
         if(!attack_h->hazards.empty()) {
             float max_vulnerability = 0.0f;
             for(size_t h = 0; h < attack_h->hazards.size(); h++) {
-                mob_type::vulnerability_t vuln =
+                vulnerability_t vuln =
                     victim->get_hazard_vulnerability(attack_h->hazards[h]);
                 max_vulnerability =
                     std::max(vuln.damage_mult, max_vulnerability);
@@ -1003,11 +1003,16 @@ void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
     }
     
     auto v =
-        victim->type->spike_damage_vulnerabilities.find(type->spike_damage);
-    if(v != victim->type->spike_damage_vulnerabilities.end()) {
+        victim->inheritable_data.spike_damage_vulnerabilities.find(type->spike_damage);
+    if(v != victim->inheritable_data.spike_damage_vulnerabilities.end()) {
         damage *= v->second.damage_mult;
     }
-    
+
+    //This mob is immune to the spike damage
+    if(damage == 0) {
+        return;
+    }
+
     if(type->spike_damage->status_to_apply) {
         victim->apply_status_effect(
             type->spike_damage->status_to_apply, false, false
@@ -1026,7 +1031,7 @@ void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
     }
     
     if(
-        v != victim->type->spike_damage_vulnerabilities.end() &&
+        v != victim->inheritable_data.spike_damage_vulnerabilities.end() &&
         v->second.status_to_apply
     ) {
         victim->apply_status_effect(
@@ -1620,7 +1625,7 @@ bool mob::follow_path(
             group->get_group_invulnerabilities(this);
     } else {
         //Use the object's standard invulnerabilities.
-        for(auto &v : type->hazard_vulnerabilities) {
+        for(auto &v : inheritable_data.hazard_vulnerabilities) {
             if(v.second.damage_mult == 0.0f) {
                 final_settings.invulnerabilities.push_back(v.first);
             }
@@ -1898,14 +1903,14 @@ void mob::get_group_spot_info(
  * @param h_ptr The hazard to check.
  * @return The vulnerability info.
  */
-mob_type::vulnerability_t mob::get_hazard_vulnerability(
+vulnerability_t mob::get_hazard_vulnerability(
     hazard* h_ptr
 ) const {
-    mob_type::vulnerability_t vuln;
+    vulnerability_t vuln;
     vuln.damage_mult = type->default_vulnerability;
     
-    auto v = type->hazard_vulnerabilities.find(h_ptr);
-    if(v != type->hazard_vulnerabilities.end()) {
+    auto v = inheritable_data.hazard_vulnerabilities.find(h_ptr);
+    if(v != inheritable_data.hazard_vulnerabilities.end()) {
         vuln = v->second;
     }
     
@@ -3661,8 +3666,8 @@ void mob::tick_misc_logic(float delta_t) {
         statuses[s].tick(delta_t);
         
         float damage_mult = 1.0f;
-        auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
-        if(vuln_it != type->status_vulnerabilities.end()) {
+        auto vuln_it = inheritable_data.status_vulnerabilities.find(statuses[s].type);
+        if(vuln_it != inheritable_data.status_vulnerabilities.end()) {
             damage_mult = vuln_it->second.damage_mult;
         }
         

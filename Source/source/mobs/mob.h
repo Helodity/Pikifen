@@ -410,7 +410,7 @@ public:
     void release(mob* m);
     bool can_hurt(mob* m) const;
     bool can_hunt(mob* m) const;
-    mob_type::vulnerability_t get_hazard_vulnerability(
+    vulnerability_t get_hazard_vulnerability(
         hazard* h_ptr
     ) const;
     bool is_resistant_to_hazards(const vector<hazard*> &hazards) const;

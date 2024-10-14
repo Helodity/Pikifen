@@ -226,25 +226,7 @@ public:
         string tooltip;
         
     };
-    
-    /**
-     * @brief Info on how vulnerable the object is to a certain source.
-     */
-    struct vulnerability_t {
-    
-        //--- Members ---
-        
-        //Multiply damage taken by this.
-        float damage_mult = 1.0f;
-        
-        //When affected by the source, receive this status effect.
-        status_type* status_to_apply = nullptr;
-        
-        //If "status_to_apply" overrides any status effect that'd be received.
-        bool status_overrides = true;
-        
-    };
-    
+
     /**
      * @brief Info on a sound effect this mob can emit.
      */
@@ -271,8 +253,8 @@ public:
     
     //- Basic information -
     
-    //
-    mob_data inheritable_data;
+    //Data each mob gets, but can be individually modified
+    mob_data base_data;
 
     //Name of the folder its data is on.
     string folder_name;
@@ -434,17 +416,8 @@ public:
     //All damage received is multiplied by this much.
     float default_vulnerability = 1.0f;
     
-    //For every hazard, multiply damage taken by this much.
-    map<hazard*, vulnerability_t> hazard_vulnerabilities;
-    
     //What sort of spike damage it causes, if any.
     spike_damage_type* spike_damage = nullptr;
-    
-    //For every type of spike damage, multiply damage taken by this much.
-    map<spike_damage_type*, vulnerability_t> spike_damage_vulnerabilities;
-    
-    //For every type of status, multiply damage taken by this much.
-    map<status_type*, vulnerability_t> status_vulnerabilities;
     
     //- Editor info -
     

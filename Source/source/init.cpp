@@ -1344,6 +1344,16 @@ void init_mob_actions() {
         mob_action_runners::set_var,
         nullptr
     );
+
+    reg_param("source type", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("source name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("value", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_SET_VULNERABILITY,
+        "set_vulnerability",
+        mob_action_runners::set_vulnerability,
+        mob_action_loaders::set_vulnerability
+    );
     
     reg_param("var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(

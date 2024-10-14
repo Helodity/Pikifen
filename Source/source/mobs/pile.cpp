@@ -163,7 +163,7 @@ void pile::update() {
         set_radius(
             interpolate_number(
                 amount, 1, pil_type->max_amount,
-                pil_type->auto_shrink_smallest_radius, pil_type->inheritable_data.radius
+                pil_type->auto_shrink_smallest_radius, pil_type->base_data.radius
             )
         );
     }

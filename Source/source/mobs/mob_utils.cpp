@@ -1349,7 +1349,7 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
     //Count how many types are invulnerable to each detected hazard.
     map<hazard*, size_t> inv_instances;
     for(auto &t : types) {
-        for(auto &h : t->hazard_vulnerabilities) {
+        for(auto &h : t->base_data.hazard_vulnerabilities) {
             if(h.second.damage_mult == 0.0f) {
                 inv_instances[h.first]++;
             }
