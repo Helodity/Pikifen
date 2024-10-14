@@ -69,6 +69,10 @@ enum MOB_EV {
     //When it lands on a bottomless pit.
     MOB_EV_BOTTOMLESS_PIT,
     
+    //When the mob was sucessfully delivered
+    //to its destination after being carried.
+    MOB_EV_CARRY_DELIVERED,
+
     //When it is damaged.
     MOB_EV_DAMAGE,
     
@@ -223,10 +227,6 @@ enum MOB_EV {
     
     //When the mob needs to stop moving, as it's no longer being carried.
     MOB_EV_CARRY_STOP_MOVE,
-    
-    //When the mob was sucessfully delivered
-    //to its destination after being carried.
-    MOB_EV_CARRY_DELIVERED,
     
     //When the mob following a path encounters an obstacle.
     MOB_EV_PATH_BLOCKED,
