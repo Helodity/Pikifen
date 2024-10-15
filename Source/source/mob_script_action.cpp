@@ -520,6 +520,30 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
 }
 
 
+
+/**
+ * @brief Loading code for the status removal mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::run_as(mob_action_call& call) {
+    if (call.args[0] == "focus") {
+        call.args[0] = i2s(MOB_ACTION_RUN_AS_TARGET_FOCUS);
+    }
+    else if (call.args[0] == "link") {
+        call.args[0] = i2s(MOB_ACTION_RUN_AS_TARGET_LINK);
+    }
+    else if (call.args[0] == "trigger") {
+        call.args[0] = i2s(MOB_ACTION_RUN_AS_TARGET_TRIGGER);
+    }
+    else {
+        report_enum_error(call, 1);
+        return false;
+    }
+}
+
+
 /**
  * @brief Reports an error of an unknown enum value.
  *
@@ -1668,6 +1692,50 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
             data.m->statuses[s].to_delete = true;
         }
     }
+}
+
+
+/**
+ * @brief Code for the status removal mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void mob_action_runners::run_as(mob_action_run_data& data) {
+
+    MOB_ACTION_RUN_AS_TARGET t = (MOB_ACTION_RUN_AS_TARGET)s2i(data.args[0]);
+    mob* target = nullptr;
+    switch (t) {
+    case MOB_ACTION_RUN_AS_TARGET_LINK: {
+        if (!data.m->links.empty() && data.m->links[0]) {
+            target = data.m->links[0];
+        }
+        break;
+
+    } case MOB_ACTION_RUN_AS_TARGET_FOCUS: {
+        target = data.m->focused_mob;
+        break;
+
+    } case MOB_ACTION_FOCUS_TYPE_TRIGGER: {
+        mob* trigger = get_trigger_mob(data);
+        break;
+
+    }
+    }
+
+    //Target invalid, don't run anything.
+    if(!target)
+        return;
+
+    mob_action_call new_a;
+    data_node temp_node;
+    temp_node.name = data.args[1];
+    for (size_t p = 2; p < data.args.size(); p++) {
+        temp_node.name.append(" ");
+        temp_node.name.append(data.args[p]);
+    }
+
+    new_a.load_from_data_node(&temp_node, target->type);
+    new_a.run(target, data.custom_data_1, data.custom_data_2);
 }
 
 

@@ -1148,6 +1148,14 @@ void init_mob_actions() {
         mob_action_runners::remove_status,
         mob_action_loaders::remove_status
     );
+    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("action", MOB_ACTION_PARAM_STRING, false, true);
+    reg_action(
+        MOB_ACTION_RUN_AS,
+        "run_as",
+        mob_action_runners::run_as,
+        mob_action_loaders::run_as
+    );
     
     reg_param("slot", MOB_ACTION_PARAM_INT, false, false);
     reg_action(
