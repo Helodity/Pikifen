@@ -36,7 +36,7 @@ mob* mob::get_mob_to_walk_on() const {
         if(m_ptr == this) {
             continue;
         }
-        if(fabs(z - (m_ptr->z + m_ptr->height)) > GEOMETRY::STEP_HEIGHT) {
+        if(fabs(z - (m_ptr->z + m_ptr->inheritable_data.height)) > GEOMETRY::STEP_HEIGHT) {
             continue;
         }
         if(best_candidate && m_ptr->z <= best_candidate->z) {
@@ -45,35 +45,35 @@ mob* mob::get_mob_to_walk_on() const {
         
         //Check if they collide on X+Y.
         if(
-            rectangular_dim.x != 0 &&
-            m_ptr->rectangular_dim.x != 0
+            inheritable_data.rectangular_dim.x != 0 &&
+            m_ptr->inheritable_data.rectangular_dim.x != 0
         ) {
             //Rectangle vs rectangle.
             if(
                 !rectangles_intersect(
-                    pos, rectangular_dim, angle,
-                    m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle
+                    pos, inheritable_data.rectangular_dim, angle,
+                    m_ptr->pos, m_ptr->inheritable_data.rectangular_dim, m_ptr->angle
                 )
             ) {
                 continue;
             }
-        } else if(rectangular_dim.x != 0) {
+        } else if(inheritable_data.rectangular_dim.x != 0) {
             //Rectangle vs circle.
             if(
                 !circle_intersects_rectangle(
-                    m_ptr->pos, m_ptr->radius,
-                    pos, rectangular_dim,
+                    m_ptr->pos, m_ptr->inheritable_data.radius,
+                    pos, inheritable_data.rectangular_dim,
                     angle
                 )
             ) {
                 continue;
             }
-        } else if(m_ptr->rectangular_dim.x != 0) {
+        } else if(m_ptr->inheritable_data.rectangular_dim.x != 0) {
             //Circle vs rectangle.
             if(
                 !circle_intersects_rectangle(
-                    pos, radius,
-                    m_ptr->pos, m_ptr->rectangular_dim,
+                    pos, inheritable_data.radius,
+                    m_ptr->pos, m_ptr->inheritable_data.rectangular_dim,
                     m_ptr->angle
                 )
             ) {
@@ -83,7 +83,7 @@ mob* mob::get_mob_to_walk_on() const {
             //Circle vs circle.
             if(
                 dist(pos, m_ptr->pos) >
-                (radius + m_ptr->radius)
+                (inheritable_data.radius + m_ptr->inheritable_data.radius)
             ) {
                 continue;
             }
@@ -115,7 +115,7 @@ H_MOVE_RESULT mob::get_movement_edge_intersections(
     //Otherwise if it's a corpse, it can use the regular radius.
     float radius_to_use =
         (type->terrain_radius < 0 || health <= 0) ?
-        radius :
+        inheritable_data.radius :
         type->terrain_radius;
         
     if(
@@ -294,7 +294,7 @@ H_MOVE_RESULT mob::get_physics_horizontal_movement(
         //Overly-aggressive pushing results in going through walls.
         //Let's place a cap.
         push_amount =
-            std::min(push_amount, (float) (radius / delta_t) * 4);
+            std::min(push_amount, (float) (inheritable_data.radius / delta_t) * 4);
             
         move_speed->x +=
             cos(push_angle) * (push_amount + MOB::PUSH_EXTRA_AMOUNT);
@@ -769,7 +769,7 @@ void mob::tick_vertical_movement_physics(
     hazard* new_on_hazard = nullptr;
     if(speed_z <= 0) {
         if(standing_on_mob) {
-            z = standing_on_mob->z + standing_on_mob->height;
+            z = standing_on_mob->z + standing_on_mob->inheritable_data.height;
             speed_z = 0;
             disable_flag(flags, MOB_FLAG_WAS_THROWN);
             fsm.run_event(MOB_EV_LANDED);
@@ -847,7 +847,7 @@ void mob::tick_walkable_riding_physics(float delta_t) {
     
     //Check which mob it is on top of, if any.
     if(new_standing_on_mob) {
-        z = new_standing_on_mob->z + new_standing_on_mob->height;
+        z = new_standing_on_mob->z + new_standing_on_mob->inheritable_data.height;
     }
     
     if(new_standing_on_mob != standing_on_mob) {

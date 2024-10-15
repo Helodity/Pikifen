@@ -476,7 +476,7 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
 void pikmin::start_throw_trail() {
     particle throw_p(
         PARTICLE_TYPE_CIRCLE, pos, z,
-        radius, 0.6, PARTICLE_PRIORITY_LOW
+        inheritable_data.radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(type->main_color, 128);
@@ -508,7 +508,7 @@ void pikmin::tick_class_specifics(float delta_t) {
         
         particle par(
             PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
-            radius * 2, 2.0f
+            inheritable_data.radius * 2, 2.0f
         );
         par.bitmap = game.sys_assets.bmp_pikmin_spirit;
         par.speed.x = randomf(-20, 20);

@@ -104,8 +104,8 @@ void gameplay_state::do_aesthetic_leader_logic(float delta_t) {
         }
         if(
             throw_dest_mob &&
-            m_ptr->z + m_ptr->height <
-            throw_dest_mob->z + throw_dest_mob->height
+            m_ptr->z + m_ptr->inheritable_data.height <
+            throw_dest_mob->z + throw_dest_mob->inheritable_data.height
         ) {
             //If this mob is lower than the previous known "under cursor" mob,
             //then forget it.
@@ -250,7 +250,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
             "Get up",
             point(
                 cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                cur_leader_ptr->pos.y - cur_leader_ptr->inheritable_data.radius
             )
         );
         notification_done = true;
@@ -268,7 +268,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
             "Stop throwing",
             point(
                 cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                cur_leader_ptr->pos.y - cur_leader_ptr->inheritable_data.radius
             )
         );
         notification_done = true;
@@ -285,7 +285,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
             "Stop",
             point(
                 cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                cur_leader_ptr->pos.y - cur_leader_ptr->inheritable_data.radius
             )
         );
         notification_done = true;
@@ -302,7 +302,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
             "Stop",
             point(
                 cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                cur_leader_ptr->pos.y - cur_leader_ptr->inheritable_data.radius
             )
         );
         notification_done = true;
@@ -320,7 +320,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
             if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
                 continue;
             }
-            if(cur_leader_ptr->health == cur_leader_ptr->max_health) {
+            if(cur_leader_ptr->health == cur_leader_ptr->inheritable_data.max_health) {
                 continue;
             }
             if(!s_ptr->shi_type->can_heal) {
@@ -336,7 +336,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
                     point(
                         close_to_ship_to_heal->pos.x,
                         close_to_ship_to_heal->pos.y -
-                        close_to_ship_to_heal->radius
+                        close_to_ship_to_heal->inheritable_data.radius
                     )
                 );
                 notification_done = true;
@@ -363,7 +363,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
                         point(
                             close_to_interactable_to_use->pos.x,
                             close_to_interactable_to_use->pos.y -
-                            close_to_interactable_to_use->radius
+                            close_to_interactable_to_use->inheritable_data.radius
                         )
                     );
                     notification_done = true;
@@ -386,7 +386,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
                     point(
                         p->pos.x,
                         p->pos.y -
-                        p->radius
+                        p->inheritable_data.radius
                     )
                 );
                 notification_done = true;
@@ -411,7 +411,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
                         point(
                             close_to_nest_to_open->m_ptr->pos.x,
                             close_to_nest_to_open->m_ptr->pos.y -
-                            close_to_nest_to_open->m_ptr->radius
+                            close_to_nest_to_open->m_ptr->inheritable_data.radius
                         )
                     );
                     notification_done = true;
@@ -435,7 +435,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
                         point(
                             close_to_nest_to_open->m_ptr->pos.x,
                             close_to_nest_to_open->m_ptr->pos.y -
-                            close_to_nest_to_open->m_ptr->radius
+                            close_to_nest_to_open->m_ptr->inheritable_data.radius
                         )
                     );
                     notification_done = true;
@@ -1244,7 +1244,7 @@ void gameplay_state::do_menu_logic() {
                 box_string(f2s(game.maker_tools.info_lock->health), 6) +
                 " / " +
                 box_string(
-                    f2s(game.maker_tools.info_lock->max_health), 6
+                    f2s(game.maker_tools.info_lock->inheritable_data.max_health), 6
                 ),
                 23
             );
@@ -1668,10 +1668,10 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         return
         (
             e1.d.to_float() -
-            (m_ptr->radius + e1.mob_ptr->radius)
+            (m_ptr->inheritable_data.radius + e1.mob_ptr->inheritable_data.radius)
         ) < (
             e2.d.to_float() -
-            (m_ptr->radius + e2.mob_ptr->radius)
+            (m_ptr->inheritable_data.radius + e2.mob_ptr->inheritable_data.radius)
         );
     }
     );
@@ -1896,12 +1896,12 @@ void gameplay_state::process_mob_touches(
         ok_to_push &&
         (m2_ptr->type->pushes || both_idle_pikmin) && (
             (
-                m2_ptr->z < m_ptr->z + m_ptr->height &&
-                m2_ptr->z + m2_ptr->height > m_ptr->z
+                m2_ptr->z < m_ptr->z + m_ptr->inheritable_data.height &&
+                m2_ptr->z + m2_ptr->inheritable_data.height > m_ptr->z
             ) || (
-                m_ptr->height == 0
+                m_ptr->inheritable_data.height == 0
             ) || (
-                m2_ptr->height == 0
+                m2_ptr->inheritable_data.height == 0
             )
         ) && !(
             //If they are both being carried by Pikmin, one of them
@@ -1940,10 +1940,10 @@ void gameplay_state::process_mob_touches(
                 //need to be re-calculated.
                 
                 dist hd(m_ptr->pos, h_pos);
-                if(hd < m_ptr->radius + h_ptr->radius) {
+                if(hd < m_ptr->inheritable_data.radius + h_ptr->radius) {
                     float p =
                         fabs(
-                            hd.to_float() - m_ptr->radius -
+                            hd.to_float() - m_ptr->inheritable_data.radius -
                             h_ptr->radius
                         );
                     if(push_amount == 0 || p > push_amount) {
@@ -1958,43 +1958,43 @@ void gameplay_state::process_mob_touches(
             float temp_push_amount = 0;
             float temp_push_angle = 0;
             if(
-                m_ptr->rectangular_dim.x != 0 &&
-                m2_ptr->rectangular_dim.x != 0
+                m_ptr->inheritable_data.rectangular_dim.x != 0 &&
+                m2_ptr->inheritable_data.rectangular_dim.x != 0
             ) {
                 //Rectangle vs rectangle.
                 xy_collision =
                     rectangles_intersect(
-                        m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle,
-                        m2_ptr->pos, m2_ptr->rectangular_dim, m2_ptr->angle,
+                        m_ptr->pos, m_ptr->inheritable_data.rectangular_dim, m_ptr->angle,
+                        m2_ptr->pos, m2_ptr->inheritable_data.rectangular_dim, m2_ptr->angle,
                         &temp_push_amount, &temp_push_angle
                     );
-            } else if(m_ptr->rectangular_dim.x != 0) {
+            } else if(m_ptr->inheritable_data.rectangular_dim.x != 0) {
                 //Rectangle vs circle.
                 xy_collision =
                     circle_intersects_rectangle(
-                        m2_ptr->pos, m2_ptr->radius,
-                        m_ptr->pos, m_ptr->rectangular_dim,
+                        m2_ptr->pos, m2_ptr->inheritable_data.radius,
+                        m_ptr->pos, m_ptr->inheritable_data.rectangular_dim,
                         m_ptr->angle, &temp_push_amount, &temp_push_angle
                     );
                 temp_push_angle += TAU / 2.0f;
-            } else if(m2_ptr->rectangular_dim.x != 0) {
+            } else if(m2_ptr->inheritable_data.rectangular_dim.x != 0) {
                 //Circle vs rectangle.
                 xy_collision =
                     circle_intersects_rectangle(
-                        m_ptr->pos, m_ptr->radius,
-                        m2_ptr->pos, m2_ptr->rectangular_dim,
+                        m_ptr->pos, m_ptr->inheritable_data.radius,
+                        m2_ptr->pos, m2_ptr->inheritable_data.rectangular_dim,
                         m2_ptr->angle, &temp_push_amount, &temp_push_angle
                     );
             } else {
                 //Circle vs circle.
                 xy_collision =
-                    d <= (m_ptr->radius + m2_ptr->radius);
+                    d <= (m_ptr->inheritable_data.radius + m2_ptr->inheritable_data.radius);
                 if(xy_collision) {
                     //Only bother calculating if there's a collision.
                     temp_push_amount =
                         fabs(
-                            d.to_float() - m_ptr->radius -
-                            m2_ptr->radius
+                            d.to_float() - m_ptr->inheritable_data.radius -
+                            m2_ptr->inheritable_data.radius
                         );
                     temp_push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
                 }
@@ -2057,49 +2057,49 @@ void gameplay_state::process_mob_touches(
     
         bool z_touch;
         if(
-            m_ptr->height == 0 ||
-            m2_ptr->height == 0
+            m_ptr->inheritable_data.height == 0 ||
+            m2_ptr->inheritable_data.height == 0
         ) {
             z_touch = true;
         } else {
             z_touch =
                 !(
-                    (m2_ptr->z > m_ptr->z + m_ptr->height) ||
-                    (m2_ptr->z + m2_ptr->height < m_ptr->z)
+                    (m2_ptr->z > m_ptr->z + m_ptr->inheritable_data.height) ||
+                    (m2_ptr->z + m2_ptr->inheritable_data.height < m_ptr->z)
                 );
         }
         
         bool xy_collision = false;
         if(
-            m_ptr->rectangular_dim.x != 0 &&
-            m2_ptr->rectangular_dim.x != 0
+            m_ptr->inheritable_data.rectangular_dim.x != 0 &&
+            m2_ptr->inheritable_data.rectangular_dim.x != 0
         ) {
             //Rectangle vs rectangle.
             xy_collision =
                 rectangles_intersect(
-                    m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle,
-                    m2_ptr->pos, m2_ptr->rectangular_dim, m2_ptr->angle
+                    m_ptr->pos, m_ptr->inheritable_data.rectangular_dim, m_ptr->angle,
+                    m2_ptr->pos, m2_ptr->inheritable_data.rectangular_dim, m2_ptr->angle
                 );
-        } else if(m_ptr->rectangular_dim.x != 0) {
+        } else if(m_ptr->inheritable_data.rectangular_dim.x != 0) {
             //Rectangle vs circle.
             xy_collision =
                 circle_intersects_rectangle(
-                    m2_ptr->pos, m2_ptr->radius,
-                    m_ptr->pos, m_ptr->rectangular_dim,
+                    m2_ptr->pos, m2_ptr->inheritable_data.radius,
+                    m_ptr->pos, m_ptr->inheritable_data.rectangular_dim,
                     m_ptr->angle
                 );
-        } else if(m2_ptr->rectangular_dim.x != 0) {
+        } else if(m2_ptr->inheritable_data.rectangular_dim.x != 0) {
             //Circle vs rectangle.
             xy_collision =
                 circle_intersects_rectangle(
-                    m_ptr->pos, m_ptr->radius,
-                    m2_ptr->pos, m2_ptr->rectangular_dim,
+                    m_ptr->pos, m_ptr->inheritable_data.radius,
+                    m2_ptr->pos, m2_ptr->inheritable_data.rectangular_dim,
                     m2_ptr->angle
                 );
         } else {
             //Circle vs circle.
             xy_collision =
-                d <= (m_ptr->radius + m2_ptr->radius);
+                d <= (m_ptr->inheritable_data.radius + m2_ptr->inheritable_data.radius);
         }
         
         if(

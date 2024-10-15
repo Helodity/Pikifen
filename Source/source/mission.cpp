@@ -732,7 +732,7 @@ bool mission_fail_take_damage::is_met(
     for(size_t l = 0; l < gameplay->mobs.leaders.size(); l++) {
         if(
             gameplay->mobs.leaders[l]->health <
-            gameplay->mobs.leaders[l]->max_health
+            gameplay->mobs.leaders[l]->inheritable_data.max_health
         ) {
             return true;
         }

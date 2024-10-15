@@ -627,8 +627,8 @@ void animation_editor::pick_sprite(
             anims.sprites.push_back(new sprite(name));
             anims.sprites.back()->create_hitboxes(
                 &anims,
-                loaded_mob_type ? loaded_mob_type->height : 128,
-                loaded_mob_type ? loaded_mob_type->radius : 32
+                loaded_mob_type ? loaded_mob_type->inheritable_data.height : 128,
+                loaded_mob_type ? loaded_mob_type->inheritable_data.radius : 32
             );
             anims.sort_alphabetically();
             changes_mgr.mark_as_changed();
@@ -1513,8 +1513,8 @@ void animation_editor::update_hitboxes() {
                 s_ptr->hitboxes.push_back(
                     hitbox(
                         name, INVALID, nullptr, point(), 0,
-                        loaded_mob_type ? loaded_mob_type->height : 128,
-                        loaded_mob_type ? loaded_mob_type->radius : 32
+                        loaded_mob_type ? loaded_mob_type->inheritable_data.height : 128,
+                        loaded_mob_type ? loaded_mob_type->inheritable_data.radius : 32
                     )
                 );
             }

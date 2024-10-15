@@ -216,7 +216,7 @@ void ship::heal_leader(leader* l) const {
     
     particle p(
         PARTICLE_TYPE_BITMAP,
-        l->pos, l->z + l->height, 16, 3,
+        l->pos, l->z + l->inheritable_data.height, 16, 3,
         PARTICLE_PRIORITY_LOW
     );
     p.bitmap = game.sys_assets.bmp_sparkle;
@@ -225,7 +225,7 @@ void ship::heal_leader(leader* l) const {
     
     particle_generator g(0, p, 12);
     g.duration_deviation = 0.5;
-    g.pos_deviation = point(l->radius, l->radius);
+    g.pos_deviation = point(l->inheritable_data.radius, l->inheritable_data.radius);
     g.emit(game.states.gameplay->particles);
 }
 

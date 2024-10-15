@@ -99,7 +99,7 @@ void enemy::finish_dying_class_specifics() {
     particle par(
         PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
         clamp(
-            radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
+            inheritable_data.radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
             ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
         ),
         2, PARTICLE_PRIORITY_MEDIUM

@@ -27,6 +27,7 @@
 #include "../mobs/mob_enums.h"
 #include "../spike_damage.h"
 #include "../utils/general_utils.h"
+#include "../mob_data/mob_data.h"
 
 
 using std::size_t;
@@ -270,6 +271,9 @@ public:
     
     //- Basic information -
     
+    //
+    mob_data inheritable_data;
+
     //Name of the folder its data is on.
     string folder_name;
     
@@ -315,15 +319,6 @@ public:
     
     //- Physical space -
     
-    //Radius of the space it occupies. Can be overridden on a per-mob basis.
-    float radius = 0.0f;
-    
-    //Height. Can be overridden on a per-mob basis.
-    float height = 0.0f;
-    
-    //Rectangular dimensions, if it's meant to use them instead of a radius.
-    point rectangular_dim;
-    
     //Pikmin strength needed to carry it.
     float weight = 0.0f;
     
@@ -358,9 +353,6 @@ public:
     vector<point> custom_carry_spots;
     
     //- General behavior -
-    
-    //Maximum health. Can be overridden on a per-mob basis.
-    float max_health = 100.0f;
     
     //Regenerates these many health points per second.
     float health_regen = 0.0f;
@@ -470,13 +462,6 @@ public:
     
     //Should it have links going into it?
     bool area_editor_recommend_links_to = false;
-    
-    //- Caches -
-    
-    //How far its radius or hitboxes reach from the center.
-    //Cache for performance.
-    float physical_span = 0.0f;
-    
     
     //--- Function declarations ---
     

@@ -729,9 +729,9 @@ void draw_mob_shadow(
     float delta_z, float shadow_stretch
 ) {
 
-    point shadow_size = point(m->radius * 2.2f, m->radius * 2.2f);
-    if(m->rectangular_dim.x != 0) {
-        shadow_size = m->rectangular_dim * 1.1f;
+    point shadow_size = point(m->inheritable_data.radius * 2.2f, m->inheritable_data.radius * 2.2f);
+    if(m->inheritable_data.rectangular_dim.x != 0) {
+        shadow_size = m->inheritable_data.rectangular_dim * 1.1f;
     }
     
     if(shadow_stretch <= 0) return;
@@ -751,7 +751,7 @@ void draw_mob_shadow(
         shadow_x += shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
     }
     
-    if(m->rectangular_dim.x != 0) {
+    if(m->inheritable_data.rectangular_dim.x != 0) {
         draw_bitmap(
             game.sys_assets.bmp_shadow_square,
             point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
@@ -1159,7 +1159,7 @@ void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects) {
     draw_bitmap(
         status_bmp,
         m->pos,
-        point(m->radius * 2 * status_bmp_scale, -1)
+        point(m->inheritable_data.radius * 2 * status_bmp_scale, -1)
     );
 }
 

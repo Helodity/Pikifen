@@ -240,8 +240,8 @@ void onion::tick_class_specifics(float delta_t) {
         game.states.gameplay->cur_leader_ptr &&
         bbox_check(
             game.states.gameplay->cur_leader_ptr->pos, pos,
-            game.states.gameplay->cur_leader_ptr->radius +
-            radius * 3
+            game.states.gameplay->cur_leader_ptr->inheritable_data.radius +
+            inheritable_data.radius * 3
         )
     ) {
         final_alpha = ONION::SEETHROUGH_ALPHA;
@@ -251,8 +251,8 @@ void onion::tick_class_specifics(float delta_t) {
         game.states.gameplay->cur_leader_ptr &&
         bbox_check(
             game.states.gameplay->leader_cursor_w, pos,
-            game.states.gameplay->cur_leader_ptr->radius +
-            radius * 3
+            game.states.gameplay->cur_leader_ptr->inheritable_data.radius +
+            inheritable_data.radius * 3
         )
     ) {
         final_alpha = ONION::SEETHROUGH_ALPHA;

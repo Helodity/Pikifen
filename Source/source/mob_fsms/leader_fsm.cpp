@@ -1771,7 +1771,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
         &pik_ptr->pos, &pik_ptr->z,
         point(), 0.0f,
         CHASE_FLAG_ANY_ANGLE,
-        pik_ptr->radius + lea_ptr->radius
+        pik_ptr->inheritable_data.radius + lea_ptr->inheritable_data.radius
     );
     pik_ptr->pluck_reserved = true;
     
@@ -2172,7 +2172,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
             
             if(
                 dist(m->pos, am_ptr->pos) >
-                spray_type_ref.distance_range + am_ptr->radius
+                spray_type_ref.distance_range + am_ptr->inheritable_data.radius
             ) {
                 continue;
             }
@@ -2520,7 +2520,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             p.bitmap = game.sys_assets.bmp_wave_ring;
-            p.size_grow_speed = m->radius * 4;
+            p.size_grow_speed = m->inheritable_data.radius * 4;
             particle_generator pg(0.3, p, 1);
             pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;

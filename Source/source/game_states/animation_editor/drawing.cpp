@@ -341,7 +341,7 @@ void animation_editor::draw_canvas() {
     if(draw_leader_silhouette) {
         float x_offset = 32;
         if(loaded_mob_type) {
-            x_offset += loaded_mob_type->radius;
+            x_offset += loaded_mob_type->inheritable_data.radius;
         }
         
         if(side_view && state == EDITOR_STATE_HITBOXES) {
@@ -473,7 +473,7 @@ void animation_editor::draw_side_view_sprite(const sprite* s) {
     
     if(loaded_mob_type) {
         color = loaded_mob_type->main_color;
-        min.y = loaded_mob_type->height;
+        min.y = loaded_mob_type->inheritable_data.height;
     } else {
         min.y = max.x - min.x;
     }
@@ -687,13 +687,13 @@ void animation_editor::draw_top_down_view_leader_silhouette(
  */
 void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
     al_draw_circle(
-        0, 0, mt->radius,
+        0, 0, mt->inheritable_data.radius,
         al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
-    if(mt->rectangular_dim.x != 0) {
+    if(mt->inheritable_data.rectangular_dim.x != 0) {
         al_draw_rectangle(
-            -mt->rectangular_dim.x / 2.0, -mt->rectangular_dim.y / 2.0,
-            mt->rectangular_dim.x / 2.0, mt->rectangular_dim.y / 2.0,
+            -mt->inheritable_data.rectangular_dim.x / 2.0, -mt->inheritable_data.rectangular_dim.y / 2.0,
+            mt->inheritable_data.rectangular_dim.x / 2.0, mt->inheritable_data.rectangular_dim.y / 2.0,
             al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
         );
     }

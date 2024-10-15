@@ -799,7 +799,7 @@ void area_editor::find_problems() {
             if(
                 circle_intersects_line_seg(
                     m_ptr->pos,
-                    m_ptr->type->radius,
+                    m_ptr->type->inheritable_data.radius,
                     point(
                         e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
                     ),
@@ -1549,7 +1549,7 @@ vector<edge_intersection> area_editor::get_intersecting_edges() const {
  * @return The radius or the default.
  */
 float area_editor::get_mob_gen_radius(mob_gen* m) const {
-    return m->type ? m->type->radius == 0 ? 16 : m->type->radius : 16;
+    return m->type ? m->type->inheritable_data.radius == 0 ? 16 : m->type->inheritable_data.radius : 16;
 }
 
 

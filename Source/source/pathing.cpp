@@ -134,7 +134,7 @@ void path_manager::handle_obstacle_add(mob* m) {
             
             if(
                 circle_intersects_line_seg(
-                    m->pos, m->radius,
+                    m->pos, m->inheritable_data.radius,
                     s_ptr->pos, l_ptr->end_ptr->pos
                 )
             ) {

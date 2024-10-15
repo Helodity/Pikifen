@@ -91,7 +91,7 @@ void pile::read_script_vars(const script_var_reader &svr) {
     }
     
     health = pil_type->health_per_resource * amount;
-    max_health = health;
+    inheritable_data.max_health = health;
     update();
 }
 
@@ -163,7 +163,7 @@ void pile::update() {
         set_radius(
             interpolate_number(
                 amount, 1, pil_type->max_amount,
-                pil_type->auto_shrink_smallest_radius, pil_type->radius
+                pil_type->auto_shrink_smallest_radius, pil_type->inheritable_data.radius
             )
         );
     }

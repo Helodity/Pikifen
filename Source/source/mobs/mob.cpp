@@ -169,18 +169,14 @@ mob::mob(const point &pos, mob_type* type, float angle) :
     type(type),
     pos(pos),
     angle(angle),
-    radius(type->radius),
-    height(type->height),
-    rectangular_dim(type->rectangular_dim),
+    inheritable_data(type->inheritable_data),
     fsm(this),
     intended_turn_angle(angle),
     home(pos),
     id(game.states.gameplay->next_mob_id),
-    health(type->max_health),
-    max_health(type->max_health),
+    health(type->inheritable_data.max_health),
     itch_time(type->itch_time),
-    anim(&type->anims),
-    physical_span(type->physical_span) {
+    anim(&type->anims) {
     
     game.states.gameplay->next_mob_id++;
     
@@ -202,7 +198,13 @@ mob::mob(const point &pos, mob_type* type, float angle) :
     if(type->has_group) {
         group = new group_t(this);
     }
-    
+
+    physical_span =
+        calculate_mob_physical_span(
+            inheritable_data.radius,
+            type->anims.hitbox_span,
+            inheritable_data.rectangular_dim
+        );
     update_interaction_span();
 }
 
@@ -995,7 +997,7 @@ void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
     
     float damage;
     if(type->spike_damage->is_damage_ratio) {
-        damage = victim->max_health * type->spike_damage->damage;
+        damage = victim->inheritable_data.max_health * type->spike_damage->damage;
     } else {
         damage = type->spike_damage->damage;
     }
@@ -1802,12 +1804,12 @@ dist mob::get_distance_between(
 ) const {
     dist mob_to_hotspot_dist;
     float dist_padding;
-    if(m2_ptr->rectangular_dim.x != 0.0f) {
+    if(m2_ptr->inheritable_data.rectangular_dim.x != 0.0f) {
         bool is_inside = false;
         point hotspot =
             get_closest_point_in_rotated_rectangle(
                 pos,
-                m2_ptr->pos, m2_ptr->rectangular_dim,
+                m2_ptr->pos, m2_ptr->inheritable_data.rectangular_dim,
                 m2_ptr->angle,
                 &is_inside
             );
@@ -1816,14 +1818,14 @@ dist mob::get_distance_between(
         } else {
             mob_to_hotspot_dist = dist(pos, hotspot);
         }
-        dist_padding = radius;
+        dist_padding = inheritable_data.radius;
     } else {
         if(regular_distance_cache) {
             mob_to_hotspot_dist = *regular_distance_cache;
         } else {
             mob_to_hotspot_dist = dist(pos, m2_ptr->pos);
         }
-        dist_padding = radius + m2_ptr->radius;
+        dist_padding = inheritable_data.radius + m2_ptr->inheritable_data.radius;
     }
     mob_to_hotspot_dist -= dist_padding;
     return mob_to_hotspot_dist;
@@ -2441,11 +2443,11 @@ bool mob::has_clear_line(const mob* target_mob) const {
         
         if(!m_ptr->type->pushes) continue;
         if(has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE)) continue;
-        const float m_ptr_max_z = m_ptr->z + m_ptr->height;
+        const float m_ptr_max_z = m_ptr->z + m_ptr->inheritable_data.height;
         if(m_ptr_max_z < z && m_ptr_max_z < target_mob->z) continue;
         if(
-            m_ptr->z > z + height &&
-            m_ptr->z > target_mob->z + target_mob->height
+            m_ptr->z > z + inheritable_data.height &&
+            m_ptr->z > target_mob->z + target_mob->inheritable_data.height
         ) {
             continue;
         }
@@ -2466,11 +2468,11 @@ bool mob::has_clear_line(const mob* target_mob) const {
             continue;
         }
         
-        if(m_ptr->rectangular_dim.x != 0.0f) {
+        if(m_ptr->inheritable_data.rectangular_dim.x != 0.0f) {
             if(
                 line_seg_intersects_rotated_rectangle(
                     pos, target_mob->pos,
-                    m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle
+                    m_ptr->pos, m_ptr->inheritable_data.rectangular_dim, m_ptr->angle
                 )
             ) {
                 return false;
@@ -2478,7 +2480,7 @@ bool mob::has_clear_line(const mob* target_mob) const {
         } else {
             if(
                 circle_intersects_line_seg(
-                    m_ptr->pos, m_ptr->radius,
+                    m_ptr->pos, m_ptr->inheritable_data.radius,
                     pos, target_mob->pos,
                     nullptr, nullptr
                 )
@@ -2570,13 +2572,13 @@ bool mob::is_off_camera() const {
     }
     
     float collision_bound = 0;
-    if(rectangular_dim.x == 0) {
-        collision_bound = radius;
+    if(inheritable_data.rectangular_dim.x == 0) {
+        collision_bound = inheritable_data.radius;
     } else {
         collision_bound =
             std::max(
-                rectangular_dim.x / 2.0,
-                rectangular_dim.y / 2.0
+                inheritable_data.rectangular_dim.x / 2.0,
+                inheritable_data.rectangular_dim.y / 2.0
             );
     }
     
@@ -2592,17 +2594,17 @@ bool mob::is_off_camera() const {
  * @return Whether it is on top.
  */
 bool mob::is_point_on(const point &p) const {
-    if(rectangular_dim.x == 0) {
-        return dist(p, pos) <= radius;
+    if(inheritable_data.rectangular_dim.x == 0) {
+        return dist(p, pos) <= inheritable_data.radius;
         
     } else {
         point p_delta = p - pos;
         p_delta = rotate_point(p_delta, -angle);
-        p_delta += rectangular_dim / 2.0f;
+        p_delta += inheritable_data.rectangular_dim / 2.0f;
         
         return
-            p_delta.x > 0 && p_delta.x < rectangular_dim.x &&
-            p_delta.y > 0 && p_delta.y < rectangular_dim.y;
+            p_delta.x > 0 && p_delta.x < inheritable_data.rectangular_dim.x &&
+            p_delta.y > 0 && p_delta.y < inheritable_data.rectangular_dim.y;
     }
 }
 
@@ -2785,13 +2787,13 @@ void mob::read_script_vars(const script_var_reader &svr) {
         }
     }
     
-    if(svr.get("max_health", max_health)) {
-        max_health = std::max(1.0f, max_health);
-        health = max_health;
+    if(svr.get("max_health", inheritable_data.max_health)) {
+        inheritable_data.max_health = std::max(1.0f, inheritable_data.max_health);
+        health = inheritable_data.max_health;
     }
     
     if(svr.get("health", health)) {
-        health = std::min(health, max_health);
+        health = std::min(health, inheritable_data.max_health);
     }
 }
 
@@ -3009,11 +3011,11 @@ void mob::set_can_block_paths(bool blocks) {
  */
 void mob::set_health(bool add, bool ratio, float amount) {
     float change = amount;
-    if(ratio) change = max_health * amount;
+    if(ratio) change = inheritable_data.max_health * amount;
     float base_nr = 0;
     if(add) base_nr = health;
     
-    health = clamp(base_nr + change, 0.0f, max_health);
+    health = clamp(base_nr + change, 0.0f, inheritable_data.max_health);
 }
 
 
@@ -3023,12 +3025,12 @@ void mob::set_health(bool add, bool ratio, float amount) {
  * @param radius New radius.
  */
 void mob::set_radius(float radius) {
-    this->radius = radius;
+    this->inheritable_data.radius = radius;
     physical_span =
         calculate_mob_physical_span(
             radius,
             type->anims.hitbox_span,
-            rectangular_dim
+            inheritable_data.rectangular_dim
         );
     update_interaction_span();
 }
@@ -3040,10 +3042,10 @@ void mob::set_radius(float radius) {
  * @param rectangular_dim New rectangular dimensions.
  */
 void mob::set_rectangular_dim(const point &rectangular_dim) {
-    this->rectangular_dim = rectangular_dim;
+    this->inheritable_data.rectangular_dim = rectangular_dim;
     physical_span =
         calculate_mob_physical_span(
-            radius,
+            inheritable_data.radius,
             type->anims.hitbox_span,
             rectangular_dim
         );
@@ -3227,7 +3229,7 @@ void mob::start_dying_class_specifics() {
  */
 float mob::get_drawing_height() const {
     //We can't use FLT_MAX since multiple mobs with max height can stack.
-    return height == 0 ? 1000000 : height;
+    return inheritable_data.height == 0 ? 1000000 : inheritable_data.height;
 }
 
 /**
@@ -3716,7 +3718,7 @@ void mob::tick_misc_logic(float delta_t) {
         type->show_health &&
         !has_flag(flags, MOB_FLAG_HIDDEN) &&
         health > 0.0f &&
-        health < max_health;
+        health < inheritable_data.max_health;
     if(!health_wheel && should_show_health) {
         health_wheel = new in_world_health_wheel(this);
     } else if(health_wheel && !should_show_health) {
@@ -3768,7 +3770,7 @@ void mob::tick_misc_logic(float delta_t) {
         bool is_holding = !holding.empty();
         bool is_far_from_group =
             dist(group->get_average_member_pos(), pos) >
-            MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
+            MOB::GROUP_SHUFFLE_DIST + (group->radius + inheritable_data.radius);
         bool is_swarming =
             game.states.gameplay->swarm_magnitude &&
             game.states.gameplay->cur_leader_ptr == this;
@@ -3790,7 +3792,7 @@ void mob::tick_misc_logic(float delta_t) {
             group->anchor_angle = angle + TAU / 2.0f;
             point new_anchor_rel_pos =
                 rotate_point(
-                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    point(inheritable_data.radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchor_angle
                 );
             group->anchor = pos + new_anchor_rel_pos;
@@ -3815,7 +3817,7 @@ void mob::tick_misc_logic(float delta_t) {
                 group_mid_point,
                 pos,
                 type->move_speed,
-                group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2.0f,
+                group->radius + inheritable_data.radius + MOB::GROUP_SPOT_INTERVAL * 2.0f,
                 &mov,
                 nullptr, nullptr, delta_t
             );
@@ -3833,7 +3835,7 @@ void mob::tick_misc_logic(float delta_t) {
             group->anchor_angle = game.states.gameplay->swarm_angle;
             point new_anchor_rel_pos =
                 rotate_point(
-                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    point(inheritable_data.radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchor_angle
                 );
             group->anchor = pos + new_anchor_rel_pos;
@@ -3908,7 +3910,7 @@ void mob::tick_script(float delta_t) {
     }
     
     //Is it dead?
-    if(health <= 0 && max_health != 0) {
+    if(health <= 0 && inheritable_data.max_health != 0) {
         fsm.run_event(MOB_EV_DEATH, this);
     }
     
@@ -3940,11 +3942,11 @@ void mob::tick_script(float delta_t) {
                 if(
                     (
                         d > r_ptr->radius_1 +
-                        (radius + focus->radius) ||
+                        (inheritable_data.radius + focus->inheritable_data.radius) ||
                         face_diff > r_ptr->angle_1 / 2.0f
                     ) && (
                         d > r_ptr->radius_2 +
-                        (radius + focus->radius) ||
+                        (inheritable_data.radius + focus->inheritable_data.radius) ||
                         face_diff > r_ptr->angle_2 / 2.0f
                     )
                     

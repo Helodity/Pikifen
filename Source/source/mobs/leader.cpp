@@ -163,8 +163,8 @@ leader::leader(const point &pos, leader_type* type, float angle) :
             );
         p.friction = LEADER::SWARM_PARTICLE_FRICTION;
         p.pos = this->pos;
-        p.pos.x += randomf(-this->radius * 0.5f, this->radius * 0.5f);
-        p.pos.y += randomf(-this->radius * 0.5f, this->radius * 0.5f);
+        p.pos.x += randomf(-this->inheritable_data.radius * 0.5f, this->inheritable_data.radius * 0.5f);
+        p.pos.y += randomf(-this->inheritable_data.radius * 0.5f, this->inheritable_data.radius * 0.5f);
         p.priority = PARTICLE_PRIORITY_MEDIUM;
         p.size = LEADER::SWARM_PARTICLE_SIZE;
         float p_speed =
@@ -183,7 +183,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         p.speed = rotate_point(point(p_speed, 0.0f), p_angle);
         p.time = p.duration;
         p.type = PARTICLE_TYPE_BITMAP;
-        p.z = this->z + this->height / 2.0f;
+        p.z = this->z + this->inheritable_data.height / 2.0f;
         game.states.gameplay->particles.add(p);
     };
     swarm_next_arrow_timer.start();
@@ -572,7 +572,7 @@ void leader::dismiss() {
         par.speed = rotate_point(point(par_speed, 0.0f), par_angle);
         par.time = par.duration;
         par.type = PARTICLE_TYPE_BITMAP;
-        par.z = z + height / 2.0f;
+        par.z = z + inheritable_data.height / 2.0f;
         game.states.gameplay->particles.add(par);
     }
     set_animation(LEADER_ANIM_DISMISSING);
@@ -665,8 +665,8 @@ void leader::get_group_spot_info(
     group_t* leader_group_ptr = following_group->group;
     
     float distance =
-        following_group->radius +
-        radius + game.config.standard_pikmin_radius;
+        following_group->inheritable_data.radius +
+        inheritable_data.radius + game.config.standard_pikmin_radius;
         
     for(size_t me = 0; me < leader_group_ptr->members.size(); me++) {
         mob* member_ptr = leader_group_ptr->members[me];
@@ -676,7 +676,7 @@ void leader::get_group_spot_info(
             //If this member is also a leader,
             //then that means the current leader should stick behind.
             distance +=
-                member_ptr->radius * 2 + MOB::GROUP_SPOT_INTERVAL;
+                member_ptr->inheritable_data.radius * 2 + MOB::GROUP_SPOT_INTERVAL;
         }
     }
     
@@ -808,7 +808,7 @@ void leader::start_auto_throwing() {
 void leader::start_throw_trail() {
     particle throw_p(
         PARTICLE_TYPE_CIRCLE, pos, z,
-        radius, 0.6, PARTICLE_PRIORITY_LOW
+        inheritable_data.radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(type->main_color, 128);
@@ -948,11 +948,11 @@ void leader::tick_class_specifics(float delta_t) {
     
     //Health wheel logic.
     health_wheel_visible_ratio +=
-        ((health / max_health) - health_wheel_visible_ratio) *
+        ((health / inheritable_data.max_health) - health_wheel_visible_ratio) *
         (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * delta_t);
         
     if(
-        health < max_health * LEADER::HEALTH_CAUTION_RATIO ||
+        health < inheritable_data.max_health * LEADER::HEALTH_CAUTION_RATIO ||
         health_wheel_caution_timer > 0.0f
     ) {
         health_wheel_caution_timer += delta_t;
@@ -982,7 +982,7 @@ void leader::update_throw_variables() {
     if(game.states.gameplay->throw_dest_mob) {
         target_z =
             game.states.gameplay->throw_dest_mob->z +
-            game.states.gameplay->throw_dest_mob->height;
+            game.states.gameplay->throw_dest_mob->inheritable_data.height;
     } else if(game.states.gameplay->throw_dest_sector) {
         target_z = game.states.gameplay->throw_dest_sector->z;
     } else {

@@ -709,7 +709,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     vars_in_widgets["team"] = true;
     
     //Health property.
-    float max_health = m_ptr->type->max_health;
+    float max_health = m_ptr->type->inheritable_data.max_health;
     if(vars_map.find("max_health") != vars_map.end()) {
         max_health = s2f(vars_map["max_health"]);
     }
@@ -739,13 +739,13 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     }
     set_tooltip(
         "Maximum health for this specific object.\n"
-        "The object type's default is " + f2s(m_ptr->type->max_health) + ".\n"
+        "The object type's default is " + f2s(m_ptr->type->inheritable_data.max_health) + ".\n"
         "(Variable name: \"max_health\".)",
         "",
         WIDGET_EXPLANATION_DRAG
     );
     
-    if(max_health != m_ptr->type->max_health) {
+    if(max_health != m_ptr->type->inheritable_data.max_health) {
         new_vars_map["max_health"] = f2s(max_health);
     }
     vars_in_widgets["max_health"] = true;

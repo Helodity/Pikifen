@@ -1284,7 +1284,7 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO: {
-        *var = f2s(target_mob->health / target_mob->max_health);
+        *var = f2s(target_mob->health / target_mob->inheritable_data.max_health);
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_ID: {
@@ -1776,14 +1776,14 @@ void mob_action_runners::set_health(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::set_height(mob_action_run_data &data) {
-    data.m->height = s2f(data.args[0]);
+    data.m->inheritable_data.height = s2f(data.args[0]);
     
     if(data.m->type->walkable) {
         //Update the Z of mobs standing on top of it.
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->standing_on_mob == data.m) {
-                m2_ptr->z = data.m->z + data.m->height;
+                m2_ptr->z = data.m->z + data.m->inheritable_data.height;
             }
         }
     }

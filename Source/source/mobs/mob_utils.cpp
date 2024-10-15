@@ -55,9 +55,9 @@ carry_t::carry_t(
             p =
                 point(
                     cos(angle) *
-                    (m->radius + game.config.standard_pikmin_radius),
+                    (m->inheritable_data.radius + game.config.standard_pikmin_radius),
                     sin(angle) *
-                    (m->radius + game.config.standard_pikmin_radius)
+                    (m->inheritable_data.radius + game.config.standard_pikmin_radius)
                 );
         } else {
             p = m->type->custom_carry_spots[c];
@@ -187,9 +187,9 @@ void carry_t::rotate_points(float angle) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         point p(
             cos(s_angle) *
-            (m->radius + game.config.standard_pikmin_radius),
+            (m->inheritable_data.radius + game.config.standard_pikmin_radius),
             sin(s_angle) *
-            (m->radius + game.config.standard_pikmin_radius)
+            (m->inheritable_data.radius + game.config.standard_pikmin_radius)
         );
         spot_info[s].pos = p;
     }
@@ -707,9 +707,9 @@ point hold_t::get_final_pos(float* out_z) const {
         final_pos +=
             angle_to_coordinates(
                 offset_angle + m->angle,
-                offset_dist * m->radius
+                offset_dist * m->inheritable_data.radius
             );
-        *out_z = m->z + (m->height * vertical_dist);
+        *out_z = m->z + (m->inheritable_data.height * vertical_dist);
     }
     
     return final_pos;

@@ -56,7 +56,7 @@ bridge::bridge(const point &pos, bridge_type* type, float angle) :
  */
 bool bridge::check_health() {
     //Figure out how many chunks should exist based on the bridge's completion.
-    float completion = 1.0f - clamp(health / max_health, 0.0f, 1.0f);
+    float completion = 1.0f - clamp(health / inheritable_data.max_health, 0.0f, 1.0f);
     size_t expected_chunks = floor(total_chunks_needed * completion);
     
     if(chunks >= expected_chunks) {
@@ -111,7 +111,7 @@ bool bridge::check_health() {
                 prev_chunk_components[m]->set_rectangular_dim(
                     point(
                         new_component_width,
-                        prev_chunk_components[m]->rectangular_dim.y
+                        prev_chunk_components[m]->inheritable_data.rectangular_dim.y
                     )
                 );
             }
@@ -161,11 +161,11 @@ bool bridge::check_health() {
             left_rail_component->z = start_z + z_offset;
             left_rail_component->set_rectangular_dim(
                 point(
-                    floor_component->rectangular_dim.x,
+                    floor_component->inheritable_data.rectangular_dim.x,
                     bri_type->rail_width
                 )
             );
-            left_rail_component->height += GEOMETRY::STEP_HEIGHT * 2.0 + 1.0f;
+            left_rail_component->inheritable_data.height += GEOMETRY::STEP_HEIGHT * 2.0 + 1.0f;
             new_mobs.push_back(left_rail_component);
             
             //Finally, the right rail component.
@@ -187,9 +187,9 @@ bool bridge::check_health() {
             }
             right_rail_component->z = start_z + z_offset;
             right_rail_component->set_rectangular_dim(
-                left_rail_component->rectangular_dim
+                left_rail_component->inheritable_data.rectangular_dim
             );
-            right_rail_component->height = left_rail_component->height;
+            right_rail_component->inheritable_data.height = left_rail_component->inheritable_data.height;
             new_mobs.push_back(right_rail_component);
             
             prev_chunk_z_offset = z_offset;
@@ -246,7 +246,7 @@ void bridge::draw_component(mob* m) {
         bri_ptr->bri_type->bmp_right_rail_texture :
         bri_ptr->bri_type->bmp_main_texture;
     int texture_h = al_get_bitmap_height(texture);
-    int texture_v0 = texture_h / 2.0f - m->rectangular_dim.y / 2.0f;
+    int texture_v0 = texture_h / 2.0f - m->inheritable_data.rectangular_dim.y / 2.0f;
     float texture_offset = s2f(m->vars["offset"]);
     
     ALLEGRO_TRANSFORM angle_transform;
@@ -260,48 +260,48 @@ void bridge::draw_component(mob* m) {
     }
     
     vertexes[0].color = map_gray(100);
-    vertexes[0].x = m->rectangular_dim.x / 2.0f;
-    vertexes[0].y = -m->rectangular_dim.y / 2.0f;
-    vertexes[0].u = texture_offset + m->rectangular_dim.x;
+    vertexes[0].x = m->inheritable_data.rectangular_dim.x / 2.0f;
+    vertexes[0].y = -m->inheritable_data.rectangular_dim.y / 2.0f;
+    vertexes[0].u = texture_offset + m->inheritable_data.rectangular_dim.x;
     vertexes[0].v = texture_v0;
     
     vertexes[1].color = map_gray(100);
-    vertexes[1].x = -m->rectangular_dim.x / 2.0f;
-    vertexes[1].y = -m->rectangular_dim.y / 2.0f;
+    vertexes[1].x = -m->inheritable_data.rectangular_dim.x / 2.0f;
+    vertexes[1].y = -m->inheritable_data.rectangular_dim.y / 2.0f;
     vertexes[1].u = texture_offset;
     vertexes[1].v = texture_v0;
     
     vertexes[2].x = vertexes[0].x;
-    vertexes[2].y = -0.5f * m->rectangular_dim.y / 2.0f;
-    vertexes[2].u = texture_offset + m->rectangular_dim.x;
-    vertexes[2].v = texture_v0 + 0.25f * m->rectangular_dim.y;
+    vertexes[2].y = -0.5f * m->inheritable_data.rectangular_dim.y / 2.0f;
+    vertexes[2].u = texture_offset + m->inheritable_data.rectangular_dim.x;
+    vertexes[2].v = texture_v0 + 0.25f * m->inheritable_data.rectangular_dim.y;
     
     vertexes[3].x = vertexes[1].x;
-    vertexes[3].y = -0.5f * m->rectangular_dim.y / 2.0f;
+    vertexes[3].y = -0.5f * m->inheritable_data.rectangular_dim.y / 2.0f;
     vertexes[3].u = texture_offset;
-    vertexes[3].v = texture_v0 + 0.25f * m->rectangular_dim.y;
+    vertexes[3].v = texture_v0 + 0.25f * m->inheritable_data.rectangular_dim.y;
     
     vertexes[4].x = vertexes[0].x;
-    vertexes[4].y = 0.5f * m->rectangular_dim.y / 2.0f;
-    vertexes[4].u = texture_offset + m->rectangular_dim.x;
-    vertexes[4].v = texture_v0 + 0.75f * m->rectangular_dim.y;
+    vertexes[4].y = 0.5f * m->inheritable_data.rectangular_dim.y / 2.0f;
+    vertexes[4].u = texture_offset + m->inheritable_data.rectangular_dim.x;
+    vertexes[4].v = texture_v0 + 0.75f * m->inheritable_data.rectangular_dim.y;
     
     vertexes[5].x = vertexes[1].x;
-    vertexes[5].y = 0.5f * m->rectangular_dim.y / 2.0f;
+    vertexes[5].y = 0.5f * m->inheritable_data.rectangular_dim.y / 2.0f;
     vertexes[5].u = texture_offset;
-    vertexes[5].v = texture_v0 + 0.75f * m->rectangular_dim.y;
+    vertexes[5].v = texture_v0 + 0.75f * m->inheritable_data.rectangular_dim.y;
     
     vertexes[6].color = map_gray(100);
     vertexes[6].x = vertexes[0].x;
-    vertexes[6].y = m->rectangular_dim.y / 2.0f;
-    vertexes[6].u = texture_offset + m->rectangular_dim.x;
-    vertexes[6].v = texture_v0 + m->rectangular_dim.y;
+    vertexes[6].y = m->inheritable_data.rectangular_dim.y / 2.0f;
+    vertexes[6].u = texture_offset + m->inheritable_data.rectangular_dim.x;
+    vertexes[6].v = texture_v0 + m->inheritable_data.rectangular_dim.y;
     
     vertexes[7].color = map_gray(100);
     vertexes[7].x = vertexes[1].x;
-    vertexes[7].y = m->rectangular_dim.y / 2.0f;
+    vertexes[7].y = m->inheritable_data.rectangular_dim.y / 2.0f;
     vertexes[7].u = texture_offset;
-    vertexes[7].v = texture_v0 + m->rectangular_dim.y;
+    vertexes[7].v = texture_v0 + m->inheritable_data.rectangular_dim.y;
     
     for(size_t v = 0; v < 8; v++) {
         al_transform_coordinates(

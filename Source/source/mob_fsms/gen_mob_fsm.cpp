@@ -112,7 +112,7 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
             ship* shi_ptr = (ship*) m->carry_info->intended_mob;
             settings.final_target_distance =
                 std::max(
-                    m->radius -
+                    m->inheritable_data.radius -
                     shi_ptr->shi_type->control_point_radius,
                     3.0f
                 );

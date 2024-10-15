@@ -131,7 +131,7 @@ void in_world_fraction::draw() {
     final_color.a *= alpha_mult;
     
     if(requirement_number > 0) {
-        point pos(m->pos.x, m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING);
+        point pos(m->pos.x, m->pos.y - m->inheritable_data.radius - IN_WORLD_FRACTION::PADDING);
         draw_fraction(
             pos,
             value_number, requirement_number, final_color, size_mult
@@ -139,7 +139,7 @@ void in_world_fraction::draw() {
     } else {
         point pos(
             m->pos.x,
-            m->pos.y - m->radius -
+            m->pos.y - m->inheritable_data.radius -
             al_get_font_line_height(game.sys_assets.fnt_standard) -
             IN_WORLD_FRACTION::PADDING
         );
@@ -248,8 +248,8 @@ void in_world_fraction::tick(float delta_t) {
 in_world_health_wheel::in_world_health_wheel(mob* m) :
     in_world_hud_item(m) {
     
-    if(m->max_health > 0.0f) {
-        visible_ratio = m->health / m->max_health;
+    if(m->inheritable_data.max_health > 0.0f) {
+        visible_ratio = m->health / m->inheritable_data.max_health;
     }
     transition_timer = IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION;
 }
@@ -284,7 +284,7 @@ void in_world_health_wheel::draw() {
     draw_health(
         point(
             m->pos.x,
-            m->pos.y - m->radius -
+            m->pos.y - m->inheritable_data.radius -
             radius - IN_WORLD_HEALTH_WHEEL::PADDING
         ),
         visible_ratio,
@@ -314,10 +314,10 @@ void in_world_health_wheel::start_fading() {
 void in_world_health_wheel::tick(float delta_t) {
     in_world_hud_item::tick(delta_t);
     
-    if(m->max_health == 0.0f) return;
+    if(m->inheritable_data.max_health == 0.0f) return;
     
     visible_ratio +=
-        ((m->health / m->max_health) - visible_ratio) *
+        ((m->health / m->inheritable_data.max_health) - visible_ratio) *
         (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * delta_t);
 }
 

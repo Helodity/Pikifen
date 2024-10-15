@@ -47,7 +47,7 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
     pg.follow_z_offset = z + get_drawing_height() + 1.0f;
     pg.duration_deviation = 0.1f;
     pg.interval_deviation = 0.05f;
-    pg.pos_deviation = point(radius * 0.75f, radius * 0.75f);
+    pg.pos_deviation = point(inheritable_data.radius * 0.75f, inheritable_data.radius * 0.75f);
     pg.size_deviation = 4.0f;
     particle_generators.push_back(pg);
     

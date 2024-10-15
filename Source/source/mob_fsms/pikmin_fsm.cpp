@@ -2285,7 +2285,7 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
     
     bool go_cw = randomf(0.0f, 1.0f) <= 0.5f;
     m->circle_around(
-        m->focused_mob, point(), m->focused_mob->radius + m->radius, go_cw,
+        m->focused_mob, point(), m->focused_mob->inheritable_data.radius + m->inheritable_data.radius, go_cw,
         m->get_base_speed(), true
     );
     
@@ -2364,9 +2364,9 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
         
         if(
             !closest_h || !closest_h->can_pikmin_latch ||
-            h_z > pik_ptr->z + pik_ptr->height ||
+            h_z > pik_ptr->z + pik_ptr->inheritable_data.height ||
             h_z + closest_h->height < pik_ptr->z ||
-            d >= closest_h->radius + pik_ptr->radius
+            d >= closest_h->radius + pik_ptr->inheritable_data.radius
         ) {
             //Can't latch to the closest hitbox.
             
@@ -2453,13 +2453,13 @@ void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
     float impact_speed = 0.0f;
     
     if(pik_ptr->focused_mob) {
-        if(pik_ptr->focused_mob->rectangular_dim.x != 0) {
+        if(pik_ptr->focused_mob->inheritable_data.rectangular_dim.x != 0) {
             impact_angle =
                 get_angle(
                     get_closest_point_in_rotated_rectangle(
                         pik_ptr->pos,
                         pik_ptr->focused_mob->pos,
-                        pik_ptr->focused_mob->rectangular_dim,
+                        pik_ptr->focused_mob->inheritable_data.rectangular_dim,
                         pik_ptr->focused_mob->angle,
                         nullptr
                     ),
@@ -2959,7 +2959,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
             !ene_ptr->ene_type->allow_ground_attacks &&
             !pik_ptr->pik_type->can_fly
         ) return;
-        if(ene_ptr->z > m->z + m->height) return;
+        if(ene_ptr->z > m->z + m->inheritable_data.height) return;
     }
     
     if(pik_ptr->pik_type->can_fly) {
@@ -2971,19 +2971,19 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     
     point offset = point();
     float target_distance =
-        m->focused_mob->radius + m->radius + PIKMIN::GROUNDED_ATTACK_DIST;
+        m->focused_mob->inheritable_data.radius + m->inheritable_data.radius + PIKMIN::GROUNDED_ATTACK_DIST;
         
-    if(m->focused_mob->rectangular_dim.x != 0.0f) {
+    if(m->focused_mob->inheritable_data.rectangular_dim.x != 0.0f) {
         bool is_inside = false;
         offset =
             get_closest_point_in_rotated_rectangle(
                 m->pos,
                 m->focused_mob->pos,
-                m->focused_mob->rectangular_dim,
+                m->focused_mob->inheritable_data.rectangular_dim,
                 m->focused_mob->angle,
                 &is_inside
             ) - m->focused_mob->pos;
-        target_distance -= m->focused_mob->radius;
+        target_distance -= m->focused_mob->inheritable_data.radius;
     }
     
     m->chase(
@@ -3044,7 +3044,7 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     m->chase(
         &too_ptr->pos, &too_ptr->z,
         point(), 0.0f, 0,
-        pik_ptr->radius + too_ptr->radius
+        pik_ptr->inheritable_data.radius + too_ptr->inheritable_data.radius
     );
     pik_ptr->set_timer(PIKMIN::GOTO_TIMEOUT);
     
@@ -3398,13 +3398,13 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->was_last_hit_dud = false;
     
-    if(p->focused_mob->rectangular_dim.x != 0.0f) {
+    if(p->focused_mob->inheritable_data.rectangular_dim.x != 0.0f) {
         bool is_inside = false;
         point target =
             get_closest_point_in_rotated_rectangle(
                 m->pos,
                 m->focused_mob->pos,
-                m->focused_mob->rectangular_dim,
+                m->focused_mob->inheritable_data.rectangular_dim,
                 m->focused_mob->angle,
                 &is_inside
             );
@@ -3495,7 +3495,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
         m->focused_mob &&
         m->focused_mob->health > 0 &&
         dist(m->pos, m->focused_mob->pos) <=
-        (m->radius + m->focused_mob->radius + PIKMIN::GROUNDED_ATTACK_DIST);
+        (m->inheritable_data.radius + m->focused_mob->inheritable_data.radius + PIKMIN::GROUNDED_ATTACK_DIST);
         
     if(!can_continue_attacking) {
         //The opponent cannot be chased down. Become idle.
@@ -4195,7 +4195,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             par.bitmap = game.sys_assets.bmp_wave_ring;
-            par.size_grow_speed = m->radius * 4;
+            par.size_grow_speed = m->inheritable_data.radius * 4;
             particle_generator pg(0.3, par, 1);
             pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;

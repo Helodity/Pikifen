@@ -691,14 +691,14 @@ void gameplay_state::draw_ingame_text() {
                         );
                     }
                 }
-            } else if(mob_ptr->rectangular_dim.x != 0) {
+            } else if(mob_ptr->inheritable_data.rectangular_dim.x != 0) {
                 point tl(
-                    -mob_ptr->rectangular_dim.x / 2.0f,
-                    -mob_ptr->rectangular_dim.y / 2.0f
+                    -mob_ptr->inheritable_data.rectangular_dim.x / 2.0f,
+                    -mob_ptr->inheritable_data.rectangular_dim.y / 2.0f
                 );
                 point br(
-                    mob_ptr->rectangular_dim.x / 2.0f,
-                    mob_ptr->rectangular_dim.y / 2.0f
+                    mob_ptr->inheritable_data.rectangular_dim.x / 2.0f,
+                    mob_ptr->inheritable_data.rectangular_dim.y / 2.0f
                 );
                 vector<point> rect_vertices {
                     rotate_point(tl, mob_ptr->angle) +
@@ -725,7 +725,7 @@ void gameplay_state::draw_ingame_text() {
             } else {
                 al_draw_circle(
                     mob_ptr->pos.x, mob_ptr->pos.y,
-                    mob_ptr->radius, COLOR_WHITE, 1
+                    mob_ptr->inheritable_data.radius, COLOR_WHITE, 1
                 );
             }
         }
@@ -1145,7 +1145,7 @@ void gameplay_state::draw_lighting_filter() {
             if(m_ptr->type->blackout_radius > 0.0f) {
                 radius *= m_ptr->type->blackout_radius;
             } else {
-                radius *= m_ptr->radius;
+                radius *= m_ptr->inheritable_data.radius;
             }
             
             al_draw_scaled_bitmap(

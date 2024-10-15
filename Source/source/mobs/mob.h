@@ -102,6 +102,8 @@ public:
     //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
     mob_type* type = nullptr;
     
+    mob_data inheritable_data;
+
     //Schedule this mob to be deleted from memory at the end of the frame.
     bool to_delete = false;
     
@@ -168,18 +170,7 @@ public:
     
     //Onion delivery info. If nullptr, the mob is not being delivered.
     delivery_t* delivery_info = nullptr;
-    
-    //-Physical space-
-    
-    //Current radius.
-    float radius = 0.0f;
-    
-    //Current height.
-    float height = 0.0f;
-    
-    //Current rectangular dimensions.
-    point rectangular_dim;
-    
+
     //-Scripting-
     
     //Finite-state machine.
@@ -224,9 +215,6 @@ public:
     
     //Current health.
     float health = 0.0f;
-    
-    //Maximum health.
-    float max_health = 0.0f;
     
     //During this period, the mob cannot be attacked.
     timer invuln_period;

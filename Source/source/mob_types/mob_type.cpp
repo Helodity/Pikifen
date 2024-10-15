@@ -258,20 +258,20 @@ void mob_type::load_from_data_node(
     rs.set("description", description);
     rs.set("has_group", has_group);
     rs.set("health_regen", health_regen);
-    rs.set("height", height);
+    rs.set("height", inheritable_data.height);
     rs.set("inactive_logic", inactive_logic_str, &inactive_logic_node);
     rs.set("itch_damage", itch_damage);
     rs.set("itch_time", itch_time);
     rs.set("main_color", main_color);
     rs.set("max_carriers", max_carriers);
-    rs.set("max_health", max_health);
+    rs.set("max_health", inheritable_data.max_health);
     rs.set("move_speed", move_speed);
     rs.set("pushable", pushable);
     rs.set("pushes", pushes);
     rs.set("pushes_softly", pushes_softly);
     rs.set("pushes_with_hitboxes", pushes_with_hitboxes);
-    rs.set("radius", radius);
-    rs.set("rectangular_dimensions", rectangular_dim);
+    rs.set("radius", inheritable_data.radius);
+    rs.set("rectangular_dimensions", inheritable_data.rectangular_dim);
     rs.set("rotation_speed", rotation_speed);
     rs.set("show_health", show_health);
     rs.set("spike_damage", spike_damage_str, &spike_damage_node);
@@ -915,13 +915,6 @@ void mob_type::load_from_data_node(
         load_cat_resources(node);
         anims.create_conversions(get_anim_conversions(), node);
     }
-    
-    physical_span =
-        calculate_mob_physical_span(
-            radius,
-            (load_resources ? anims.hitbox_span : 0),
-            rectangular_dim
-        );
         
     if(custom_category_name.empty()) {
         custom_category_name = category->name;
@@ -978,9 +971,8 @@ void create_special_mob_types() {
     bridge_component_type->appears_in_area_editor = false;
     bridge_component_type->casts_shadow = false;
     bridge_component_type->custom_category_name = "Misc";
-    bridge_component_type->height = 8.0f;
-    bridge_component_type->physical_span = 8.0f;
-    bridge_component_type->radius = 8.0f;
+    bridge_component_type->inheritable_data.height = 8.0f;
+    bridge_component_type->inheritable_data.radius = 8.0f;
     bridge_component_type->walkable = true;
     bridge_component_type->draw_mob_callback = bridge::draw_component;
     bridge_component_type->pushes = true;
