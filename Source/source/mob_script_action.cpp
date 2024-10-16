@@ -79,7 +79,40 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     
     string name = words[0];
     words.erase(words.begin());
-    
+
+    bool looking_for_closing_quote = false;
+    size_t opening_quote_idx = 0;
+    for (size_t w = 0; w < words.size(); w++) {
+        words[w] = trim_spaces(words[w]);
+        string word = words[w];
+        if (!looking_for_closing_quote) {
+            if (word.at(0) == '"') {
+                looking_for_closing_quote = true;
+                opening_quote_idx = w;
+                words[w].erase(0, 1);
+            }
+        }
+        if (word.back() == '"') {
+            looking_for_closing_quote = false;
+            string full_word = words[opening_quote_idx];
+            for (size_t cur_index = opening_quote_idx + 1; cur_index <= w; cur_index++) {
+                full_word.append(" ");
+                full_word.append(words[cur_index]);
+            }
+            full_word.erase(full_word.begin() + full_word.size() - 1);
+            words[opening_quote_idx] = full_word;
+
+            words.erase(words.begin() + opening_quote_idx + 1, words.begin() + w + 1);
+            w = opening_quote_idx;
+        }
+    }
+
+
+    if (looking_for_closing_quote) {
+        game.errors.report("Missing a closing quote!", dn);
+        return false;
+    }
+
     //Find the corresponding action.
     for(size_t a = 0; a < game.mob_actions.size(); a++) {
         if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) continue;
