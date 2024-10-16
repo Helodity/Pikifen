@@ -174,7 +174,7 @@ void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
         m->delivery_info->intended_pik_type = m->carry_info->intended_pik_type;
     }
     
-    m->fsm.run_event(MOB_EV_CARRY_DELIVERED);
+    m->fsm.run_event(MOB_EV_CARRY_DELIVERED, (void*)m->carry_info->intended_mob);
 }
 
 
