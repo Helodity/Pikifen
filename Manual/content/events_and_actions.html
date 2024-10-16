@@ -909,7 +909,24 @@
       </tr>
     </table>
     
+    <h2 id="actions-category">Category Specific Actions</h2>
+    
+    <p>These actions require the mob be part of a category to run.</p>   
+    <h3 id="actions-onion">Onions</h3>
+    
+    <table>
+      <tr><th>Action</th><th>Description</th></tr>
+      <tr id="set_pikmin_inside">
+        <th><code>set_pikmin_inside</code></th>
+        <td>
+          <dl><dt><code><b>set_pikmin_inside</b> &lt;pikmin_type&gt; &lt;maturity&gt; &lt;amount&gt;</code></dt>
+          <dd>Sets the amount of pikmin of a specified type and maturity. Does not impact other types or maturities. Use quotations around the pikmin type to include spaces.</dd>
+        </dl></td>
+      </tr>
+    </table>
+    
     <h2 id="target-selector">Target Selectors</h2>   
+    
     <p>Some actions require a mob to be selected as a target. Possible target types are:</p>  
     <ul>
       <li><code><b>self</b></code>: The object that the script belongs to.</li>
