@@ -186,6 +186,9 @@ enum MOB_ACTION {
     //Set its near reach.
     MOB_ACTION_SET_NEAR_REACH,
     
+    //Sets the pikmin inside an onion.
+    MOB_ACTION_SET_PIKMIN_INSIDE,
+
     //Set its radius.
     MOB_ACTION_SET_RADIUS,
     
@@ -748,6 +751,7 @@ void set_holdable(mob_action_run_data &data);
 void set_huntable(mob_action_run_data &data);
 void set_limb_animation(mob_action_run_data &data);
 void set_near_reach(mob_action_run_data &data);
+void set_pikmin_inside(mob_action_run_data& data);
 void set_radius(mob_action_run_data &data);
 void set_state(mob_action_run_data &data);
 void set_sector_scroll(mob_action_run_data &data);
@@ -800,6 +804,7 @@ bool set_animation(mob_action_call &call);
 bool set_far_reach(mob_action_call &call);
 bool set_holdable(mob_action_call &call);
 bool set_near_reach(mob_action_call &call);
+bool set_pikmin_inside(mob_action_call& call);
 bool set_team(mob_action_call &call);
 bool set_vulnerability(mob_action_call& call);
 bool spawn(mob_action_call &call);

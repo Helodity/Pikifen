@@ -686,6 +686,42 @@ bool mob_action_loaders::set_near_reach(mob_action_call &call) {
 
 
 /**
+ * @brief Loading code for the near reach setting mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::set_pikmin_inside(mob_action_call& call) {
+    if(call.mt->category->id != MOB_CATEGORY_ONIONS) {
+        call.custom_error = "\"set_pikmin_inside\" can only be ran on onions!";
+        return false;
+    }
+
+    if(game.content.mob_types.pikmin.find(call.args[0]) == game.content.mob_types.pikmin.end()) {
+        call.custom_error =
+            "Unknown pikmin type \"" + call.args[0] + "\"!";
+        return false;
+    }
+
+    if (call.args[1] == "flower") {
+        call.args[1] = i2s(2);
+    }
+    else if (call.args[1] == "bud") {
+        call.args[1] = i2s(1);
+    }
+    else if (call.args[1] == "leaf") {
+        call.args[1] = i2s(0);
+    }
+    else {
+        report_enum_error(call, 1);
+        return false;
+    }
+
+    return true;
+}
+
+
+/**
  * @brief Loading code for the team setting mob script action.
  *
  * @param call Mob action call that called this.
@@ -1993,6 +2029,28 @@ void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
 void mob_action_runners::set_near_reach(mob_action_run_data &data) {
     data.m->near_reach = s2i(data.args[0]);
     data.m->update_interaction_span();
+}
+
+
+/**
+ * @brief Code for the set pikmin inside onion script action.
+ *
+ * @param data Data about the action call.
+ */
+void mob_action_runners::set_pikmin_inside(mob_action_run_data& data) {
+    onion* oni_ptr = (onion*)data.m;
+
+    pikmin_type* target_type = game.content.mob_types.pikmin[data.args[0]];
+
+    int maturity = s2i(data.args[1]);
+
+
+    for(size_t t = 0; t < oni_ptr->nest->nest_type->pik_types.size(); t++) {
+        pikmin_type* cur_type = oni_ptr->nest->nest_type->pik_types[t];
+        if (cur_type == target_type) {
+            oni_ptr->nest->pikmin_inside[t][maturity] = s2i(data.args[2]);
+        }
+    }
 }
 
 

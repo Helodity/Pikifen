@@ -1286,6 +1286,16 @@ void init_mob_actions() {
         mob_action_runners::set_near_reach,
         mob_action_loaders::set_near_reach
     );
+
+    reg_param("pikmin type", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("maturity", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("amount", MOB_ACTION_PARAM_FLOAT, false, true);
+    reg_action(
+        MOB_ACTION_SET_PIKMIN_INSIDE,
+        "set_pikmin_inside",
+        mob_action_runners::set_pikmin_inside,
+        mob_action_loaders::set_pikmin_inside
+    );
     
     reg_param("radius", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
