@@ -191,6 +191,9 @@ enum MOB_ACTION {
 
     //Set its radius.
     MOB_ACTION_SET_RADIUS,
+
+    //Set its rectangular dimensions.
+    MOB_ACTION_SET_RECTANGULAR_DIMENSIONS,
     
     //Set scrolling of its sector.
     MOB_ACTION_SET_SECTOR_SCROLL,
@@ -753,6 +756,7 @@ void set_limb_animation(mob_action_run_data &data);
 void set_near_reach(mob_action_run_data &data);
 void set_pikmin_inside(mob_action_run_data& data);
 void set_radius(mob_action_run_data &data);
+void set_rectangular_dimensions(mob_action_run_data& data);
 void set_state(mob_action_run_data &data);
 void set_sector_scroll(mob_action_run_data &data);
 void set_shadow_visibility(mob_action_run_data &data);

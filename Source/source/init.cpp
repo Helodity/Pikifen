@@ -1304,6 +1304,15 @@ void init_mob_actions() {
         mob_action_runners::set_radius,
         nullptr
     );
+
+    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_SET_RECTANGULAR_DIMENSIONS,
+        "set_rectangular_dimensions",
+        mob_action_runners::set_rectangular_dimensions,
+        nullptr
+    );
     
     reg_param("x speed", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y speed", MOB_ACTION_PARAM_FLOAT, false, false);

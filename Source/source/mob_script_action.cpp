@@ -2065,6 +2065,16 @@ void mob_action_runners::set_radius(mob_action_run_data &data) {
 
 
 /**
+ * @brief Code for the radius setting mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void mob_action_runners::set_rectangular_dimensions(mob_action_run_data& data) {
+    data.m->set_rectangular_dim(point(s2f(data.args[0]), s2f(data.args[1])));
+}
+
+
+/**
  * @brief Code for the sector scroll setting mob script action.
  *
  * @param data Data about the action call.
