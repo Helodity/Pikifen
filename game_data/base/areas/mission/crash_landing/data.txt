@@ -1,27 +1,30 @@
 name=Crash Landing
-subtitle=Escape the cargo ship!
 description=The Koppaites' cargo ship is going to crash! Get all three leaders to the cockpit so they can escape! But if you can rescue some of the treasures along the way, all the better...
 tags=Short and sweet; Metal
+maker=Helodity
+version=1.3.0
+engine_version=0.25.0
+subtitle=Escape the cargo ship!
 difficulty=5
 bg_bmp=textures/space
 bg_color=0 0 0
 bg_dist=2.0000
 bg_zoom=3.0000
+song
 weather=red_alert
 day_time_start=0
 day_time_speed=600
-maker=Helodity
-version=1.3.0
-engine_version=0.25.0
-notes
 spray_amounts
 mission_goal=Get to the exit
 mission_goal_all_mobs=true
 mission_goal_exit_center=1392.0000 -44.0000
 mission_goal_exit_size=416.0000 504.0000
-mission_fail_conditions=129
+mission_fail_conditions=169
+mission_fail_pik_killed=4
+mission_fail_leaders_kod=2
 mission_fail_time_limit=100
-mission_fail_hud_primary_cond=0
+mission_fail_hud_primary_cond=3
+mission_fail_hud_secondary_cond=5
 mission_grading_mode=0
 mission_points_per_sec_left=5
 mission_points_per_treasure_point=1

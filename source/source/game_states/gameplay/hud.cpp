@@ -650,10 +650,23 @@ hud_t::hud_t() :
             );
             field_count_nr = cur_amount;
         }
-        
+
+        ALLEGRO_COLOR color = cur_amount == game.config.max_pikmin_in_field ? 
+            interpolate_color(
+                field_amount->get_juice_ratio(),
+                1, 0,
+                interpolate_color(
+                    (sin(game.states.gameplay->area_time_passed) + 1) / 2,
+                    0, 1,
+                    al_map_rgb(255,0,0), COLOR_WHITE
+                ), 
+                COLOR_WHITE
+            ) 
+            : COLOR_WHITE;
+
         draw_text(
             i2s(cur_amount), game.sys_assets.fnt_counter,
-            center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
+            center, point(size.x * 0.70f, size.y * 0.50f), color,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             point(1.0f, 1.0f) + field_amount->get_juice_value()
         );
@@ -1525,14 +1538,23 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
                 get_cur_amount(game.states.gameplay);
             string text;
             if(cond == MISSION_FAIL_COND_TIME_LIMIT) {
-                text = time_to_str2(value, ":", "");
+                text = time_to_str2(value, ":", "");        
             } else {
                 text = i2s(value);
             }
+                
+            ALLEGRO_COLOR color = 
+                interpolate_color(
+                    mission_fail_cur->get_juice_ratio(),
+                    0, 1,
+                    al_map_rgb(255,0,0), 
+                    COLOR_WHITE
+                );
+
             float juicy_grow_amount = mission_fail_cur->get_juice_value();
             draw_text(
                 text, game.sys_assets.fnt_counter, center, size,
-                COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
             );
         };

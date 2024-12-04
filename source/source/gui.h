@@ -209,6 +209,7 @@ public:
     void delete_all_children();
     float get_child_bottom();
     float get_juice_value();
+    float get_juice_ratio();
     point get_reference_center();
     point get_reference_size();
     bool is_mouse_on(const point &cursor_pos);
