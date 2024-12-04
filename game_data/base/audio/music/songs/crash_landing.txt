@@ -1,0 +1,11 @@
+name = Crash Landing!
+description = Groove out as you plummet to your demise!
+
+tags = Energetic
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+loop_start = 0
+
+main_track = crash_landing
