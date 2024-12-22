@@ -1,5 +1,5 @@
-name=dust_spit
-description=Some particles of dust being blown outward. Used by the Armored Cannon Beetle when it blows out a boulder.
+name = Dust (spit)
+description = Some particles of dust being blown outward. Used by the Armored Cannon Beetle when it blows out a boulder.
 emission{
 	number=8
 	number_deviation=0

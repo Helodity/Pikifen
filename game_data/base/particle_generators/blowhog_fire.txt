@@ -1,4 +1,4 @@
-name=blowhog_fire
+name= Blowhog Fire
 description=Fire blown forward.
 emission{
 	number=5

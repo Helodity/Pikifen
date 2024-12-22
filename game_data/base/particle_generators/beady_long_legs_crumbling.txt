@@ -1,5 +1,5 @@
-name=beady_long_legs_crumbling
-description=The flakes dropped by a crumbling Beady Long Legs.
+name = Beady Long Legs crumbling
+description = The flakes dropped by a crumbling Beady Long Legs.
 emission{
 	number=10
 	number_deviation=0

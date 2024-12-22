@@ -1,5 +1,5 @@
-name=bubble_hazard
-description=Small bubbles that come out of Pikmin tops periodically, indicating they are suffocating from a bubble of water.
+name = Bubble hazard
+description = Small bubbles that come out of Pikmin tops periodically, indicating they are suffocating from a bubble of water.
 emission{
 	number=1
 	number_deviation=0

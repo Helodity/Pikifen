@@ -1,5 +1,5 @@
-name=dust_pressure_plate_click
-description=A quick explosion of dust. Used, for instance, when a pressure plate is pressed down.
+name = Dust (pressure plate click)
+description = A quick explosion of dust. Used, for instance, when a pressure plate is pressed down.
 emission{
 	number=15
 	number_deviation=0

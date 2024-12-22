@@ -1,5 +1,5 @@
-name=egg_shard_explosion
-description=An explosion of shards from a recently-broken egg's shell.
+name = Egg shard explosion
+description = An explosion of shards from a recently-broken egg's shell.
 emission{
 	number=12
 	number_deviation=1

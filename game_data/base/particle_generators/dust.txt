@@ -1,5 +1,5 @@
-name=dust
-description=Generic puffs of dust being lifted to the air in place. Used, for instance, by the trail left behind a rolling boulder.
+name = Dust
+description = Generic puffs of dust being lifted to the air in place. Used, for instance, by the trail left behind a rolling boulder.
 emission{
 	number=1
 	number_deviation=0

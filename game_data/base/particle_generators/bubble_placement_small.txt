@@ -1,5 +1,5 @@
-name=bubble_placement_small
-description=A generic patch of small bubbles placed in place. Used, for instance, when the Cyclopod is swimming.
+name = Bubble placement (small)
+description = A generic patch of small bubbles placed in place. Used, for instance, when the Cyclopod is swimming.
 emission{
 	number=2
 	number_deviation=1

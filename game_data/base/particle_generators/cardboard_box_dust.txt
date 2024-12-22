@@ -1,5 +1,5 @@
-name=cardboard_box_dust
-description=The dust spread to the air by a cardboard box that's being dragged.
+name = Cardboard box dust
+description = The dust spread to the air by a cardboard box that's being dragged.
 emission{
 	number=1
 	number_deviation=0

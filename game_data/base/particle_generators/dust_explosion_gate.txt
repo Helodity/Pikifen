@@ -1,5 +1,5 @@
-name=dust_explosion_gate
-description=A generic gate-sized explosion of dust. Used, for instance, when a lifted gate lands.
+name = Dust explosion (gate)
+description = A generic gate-sized explosion of dust. Used, for instance, when a lifted gate lands.
 emission{
 	number=18
 	number_deviation=0
