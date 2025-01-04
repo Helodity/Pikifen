@@ -1,3 +1,5 @@
+name=animations
+engine_version=0.25.0
 animations{
 	attacking{
 		frames{
@@ -121,7 +123,7 @@ sprites{
 				height=48.0000
 				radius=7.0000
 				type=1
-				value=20.0000
+				value=100.0000
 			}
 		}
 	}
@@ -361,4 +363,3 @@ body_parts{
 	body
 	mouth
 }
-engine_version=0.25.0

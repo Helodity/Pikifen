@@ -1,4 +1,4 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	dying_01{
@@ -172,7 +172,19 @@ animations{
 				interpolate=true
 			}
 			resting_03{
-				duration=1.0000
+				duration=0.2500
+				interpolate=true
+			}
+			resting_03{
+				duration=0.7500
+				interpolate=true
+			}
+			resting_02{
+				duration=0.7500
+				interpolate=true
+			}
+			resting_03{
+				duration=0.7500
 				interpolate=true
 			}
 			resting_02{

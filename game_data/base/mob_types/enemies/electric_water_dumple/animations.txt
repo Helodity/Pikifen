@@ -1,4 +1,4 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	attacking{
@@ -294,7 +294,7 @@ sprites{
 				height=100.0000
 				radius=62.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				knockback=1.0000
 			}
 			zapping{
@@ -325,7 +325,7 @@ sprites{
 				height=100.0000
 				radius=62.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				knockback=1.0000
 			}
 			zapping{
@@ -906,7 +906,7 @@ sprites{
 				height=100.0000
 				radius=70.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=10
@@ -938,7 +938,7 @@ sprites{
 				height=100.0000
 				radius=70.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=10
@@ -1045,7 +1045,7 @@ sprites{
 				height=100.0000
 				radius=62.0000
 				type=1
-				value=30.0000
+				value=100.0000
 				hazards=stunning_electricity
 				knockback=1.0000
 			}
@@ -1077,7 +1077,7 @@ sprites{
 				height=100.0000
 				radius=62.0000
 				type=1
-				value=30.0000
+				value=100.0000
 				hazards=stunning_electricity
 				knockback=1.0000
 			}
@@ -1109,7 +1109,7 @@ sprites{
 				height=100.0000
 				radius=62.0000
 				type=1
-				value=30.0000
+				value=100.0000
 				hazards=stunning_electricity
 				knockback=1.0000
 			}

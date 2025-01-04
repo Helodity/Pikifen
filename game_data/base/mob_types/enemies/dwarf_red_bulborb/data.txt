@@ -25,9 +25,9 @@ territory_radius = 300
 weight = 3
 
 reaches {
-    search = 100 180 20 360
-    chase = 100 2
-    close = 100 360
+    search = 200 180 100 360
+    chase = 200 2
+    close = 200 360
     attack = 15 30
 }
 

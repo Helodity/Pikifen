@@ -1,4 +1,4 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	destroyed{
@@ -88,7 +88,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=1.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -131,7 +131,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -154,7 +154,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -177,7 +177,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{
@@ -201,7 +201,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			hit{

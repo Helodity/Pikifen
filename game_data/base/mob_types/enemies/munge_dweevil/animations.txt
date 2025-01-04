@@ -1,4 +1,4 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	attacking{
@@ -951,7 +951,7 @@ sprites{
 				height=108.0000
 				radius=32.0000
 				type=1
-				value=0.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=1.0000
 			}

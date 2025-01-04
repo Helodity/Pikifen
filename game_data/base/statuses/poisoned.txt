@@ -3,10 +3,10 @@ description = Pikmin that are poisoned will start choking from the poison gas on
 
 affects = pikmin
 color = 128 16 112
-health_change_ratio = -0.3
+health_change_ratio = -0.45
 maturity_change_amount = -1
 particle_generator = poison_gas
 particle_offset = 0 0 32
 removable_with_whistle = true
-speed_multiplier = 2.0
+speed_multiplier = 3
 state_change_type = panic

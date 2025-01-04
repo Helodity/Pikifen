@@ -11,7 +11,7 @@ height = 128
 itch_damage = 70
 itch_time = 5
 max_carriers = 20
-max_health = 750
+max_health = 700
 move_speed = 70
 pikmin_seeds = 12
 points = 50
@@ -19,15 +19,15 @@ pushable = true
 pushes = true
 pushes_softly = true
 radius = 60
-rotation_speed = 114
+rotation_speed = 104
 target_type = enemy
 terrain_radius = 90
 territory_radius = 500
 weight = 10
 
 reaches {
-    wake_up = 10 360
-    search = 250 180 30 360
+    wake_up = 10 360 50 90
+    search = 250 180 40 360
     chase = 250 2
     close = 250 360
     attack = 40 30

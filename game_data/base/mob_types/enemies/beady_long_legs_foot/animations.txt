@@ -1,4 +1,4 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	dying{
@@ -173,7 +173,7 @@ sprites{
 				height=64.0000
 				radius=40.0000
 				type=1
-				value=60.0000
+				value=300.0000
 				hazards=crush
 				knockback_outward=true
 				knockback=0.5000

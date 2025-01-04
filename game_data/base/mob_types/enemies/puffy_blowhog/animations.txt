@@ -1,4 +1,4 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	blowing{
@@ -2070,7 +2070,7 @@ sprites{
 				height=128.0000
 				radius=86.0000
 				type=1
-				value=1.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=3.0000
 				wither_chance=10
@@ -2080,7 +2080,7 @@ sprites{
 				height=128.0000
 				radius=70.0000
 				type=1
-				value=1.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=3.0000
 				wither_chance=10
@@ -2138,7 +2138,7 @@ sprites{
 				height=128.0000
 				radius=86.0000
 				type=1
-				value=1.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=3.0000
 				wither_chance=10
@@ -2148,7 +2148,7 @@ sprites{
 				height=128.0000
 				radius=70.0000
 				type=1
-				value=1.0000
+				value=20.0000
 				knockback_outward=true
 				knockback=3.0000
 				wither_chance=10

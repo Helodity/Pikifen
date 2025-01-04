@@ -3,7 +3,7 @@ description = Pikmin that are bubbled will start choking with a bubble of water 
 
 affects = pikmin
 color = 0 255 255
-health_change_ratio = -0.3
+health_change_ratio = -0.45
 maturity_change_amount = -1
 overlay_anim_mob_scale = 2
 overlay_animation = bubble

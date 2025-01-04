@@ -1,4 +1,4 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	exploding{
@@ -50,7 +50,7 @@ sprites{
 				height=70.0000
 				radius=34.0000
 				type=1
-				value=600.0000
+				value=500.0000
 				hazards=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -76,7 +76,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=600.0000
+				value=500.0000
 				hazards=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -102,7 +102,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=600.0000
+				value=500.0000
 				hazards=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -128,7 +128,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=600.0000
+				value=500.0000
 				hazards=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -154,7 +154,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=600.0000
+				value=500.0000
 				hazards=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -180,7 +180,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=600.0000
+				value=500.0000
 				hazards=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -205,7 +205,10 @@ sprites{
 				height=40.0000
 				radius=26.0000
 				type=1
-				value=1.0000
+				value=500.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
 			}
 		}
 	}

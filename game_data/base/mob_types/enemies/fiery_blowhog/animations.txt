@@ -1,18 +1,18 @@
-name
+name=animations
 engine_version=0.25.0
 animations{
 	attacking{
 		frames{
 			idling{
-				duration=0.4000
+				duration=0.2000
 				interpolate=true
 			}
 			puffing_01{
-				duration=0.4000
+				duration=0.3000
 				interpolate=true
 			}
 			puffing_02{
-				duration=0.5000
+				duration=0.3000
 				interpolate=true
 			}
 			puffing_02{
@@ -196,7 +196,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire2{
@@ -204,7 +204,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire3{
@@ -212,7 +212,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 		}
@@ -236,7 +236,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire2{
@@ -244,7 +244,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire3{
@@ -252,7 +252,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 		}
@@ -276,7 +276,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire2{
@@ -284,7 +284,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire3{
@@ -292,7 +292,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 		}
@@ -316,7 +316,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire2{
@@ -324,7 +324,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire3{
@@ -332,7 +332,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 		}
@@ -356,7 +356,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire2{
@@ -364,7 +364,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire3{
@@ -372,7 +372,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 		}
@@ -396,7 +396,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire2{
@@ -404,7 +404,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 			fire3{
@@ -412,7 +412,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=200.0000
 				hazards=fire
 			}
 		}
@@ -539,7 +539,7 @@ sprites{
 				height=120.0000
 				radius=50.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				knockback=3.0000
 				wither_chance=5
 			}
@@ -577,7 +577,7 @@ sprites{
 				height=120.0000
 				radius=50.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				knockback=3.0000
 				wither_chance=5
 			}
@@ -615,7 +615,7 @@ sprites{
 				height=120.0000
 				radius=50.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				knockback=3.0000
 				wither_chance=5
 			}
