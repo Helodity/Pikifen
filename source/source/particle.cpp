@@ -17,6 +17,7 @@
 #include "game.h"
 #include "mobs/mob.h"
 #include "utils/allegro_utils.h"
+#include "utils/general_utils.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
 
