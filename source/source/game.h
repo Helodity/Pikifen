@@ -29,6 +29,7 @@
 #include "mob_script_action.h"
 #include "misc_structs.h"
 #include "options.h"
+#include "shaders.h"
 
 
 namespace GAME {
@@ -68,7 +69,7 @@ struct game_state_list {
     
     //GUI editor state.
     gui_editor* gui_ed = nullptr;
-
+    
     //GUI editor state.
     particle_editor* particle_ed = nullptr;
     
@@ -137,6 +138,9 @@ public:
     
     //Error manager.
     error_manager errors;
+    
+    //Shader manager.
+    shader_manager shaders;
     
     //Manager for all full-screen fade-ins and fade-outs.
     fade_manager fade_mgr;

@@ -592,7 +592,7 @@ void init_event_things(
 ) {
     al_set_new_display_flags(
         al_get_new_display_flags() |
-        ALLEGRO_OPENGL
+        ALLEGRO_OPENGL | ALLEGRO_PROGRAMMABLE_PIPELINE
     );
     if(game.options.window_position_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
@@ -660,6 +660,7 @@ void init_event_things(
  */
 void init_misc() {
     game.mouse_cursor.init();
+    game.shaders.compile_shaders();
     
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
@@ -1025,6 +1026,7 @@ void init_mob_actions() {
     );
     
     reg_param("body part name", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("hold above", MOB_ACTION_PARAM_BOOL, false, true);
     reg_action(
         MOB_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
