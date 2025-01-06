@@ -54,3 +54,7 @@ sounds {
         speed_deviation = 20
     }
 }
+
+vulnerabilities {
+    explosion = 75
+}

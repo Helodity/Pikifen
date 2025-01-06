@@ -261,20 +261,20 @@ sprites{
 		file_size=166.0000 102.0000
 		offset=30.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=75.0000 -2.0000 0.0000
@@ -306,20 +306,20 @@ sprites{
 		file_size=156.0000 104.0000
 		offset=25.0000 -3.0000
 		hitboxes{
+			body{
+				coords=1.0000 -2.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 -2.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 -2.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=70.0000 -9.0000 0.0000
@@ -351,20 +351,20 @@ sprites{
 		file_size=188.0000 104.0000
 		offset=41.0000 1.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=78.0000 2.0000 0.0000
@@ -396,20 +396,20 @@ sprites{
 		file_size=239.0000 105.0000
 		offset=66.0000 1.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=80.2200 4.5900 0.0000
@@ -441,20 +441,20 @@ sprites{
 		file_size=293.0000 108.0000
 		offset=93.0000 3.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=81.6300 9.1700 0.0000
@@ -486,20 +486,20 @@ sprites{
 		file_size=260.0000 140.0000
 		offset=77.0000 19.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=79.5100 7.4100 0.0000
@@ -531,20 +531,20 @@ sprites{
 		file_size=216.0000 114.0000
 		offset=55.0000 6.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=84.0000 14.0000 0.0000
@@ -576,20 +576,20 @@ sprites{
 		file_size=185.0000 103.0000
 		offset=40.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=78.1000 -6.6900 0.0000
@@ -621,20 +621,20 @@ sprites{
 		file_size=177.0000 104.0000
 		offset=36.0000 1.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=80.2200 -0.7000 0.0000
@@ -666,20 +666,20 @@ sprites{
 		file_size=166.0000 102.0000
 		offset=31.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -711,20 +711,20 @@ sprites{
 		file_size=164.0000 102.0000
 		offset=29.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=67.4500 0.0000 0.0000
@@ -756,20 +756,20 @@ sprites{
 		file_size=160.0000 102.0000
 		offset=27.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=64.9100 0.0800 0.0000
@@ -801,19 +801,19 @@ sprites{
 		file_size=163.0000 102.0000
 		offset=29.0000 0.0000
 		hitboxes{
-			legs{
-				coords=1.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=1.0000 0.0000 0.0000
 				height=128.0000
 				radius=56.0000
 				type=2
 				value=0.8000
+			}
+			legs{
+				coords=1.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -844,19 +844,19 @@ sprites{
 		file_size=144.0000 102.0000
 		offset=21.0000 0.0000
 		hitboxes{
-			legs{
-				coords=1.0000 0.0000 0.0000
-				height=50.0000
-				radius=52.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=1.0000 0.0000 0.0000
 				height=128.0000
 				radius=52.0000
 				type=2
 				value=0.8000
+			}
+			legs{
+				coords=1.0000 0.0000 0.0000
+				height=50.0000
+				radius=52.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=56.1900 0.0000 0.0000
@@ -887,19 +887,19 @@ sprites{
 		file_size=144.0000 102.0000
 		offset=23.0000 0.0000
 		hitboxes{
-			legs{
-				coords=3.0000 0.0000 0.0000
-				height=50.0000
-				radius=52.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=3.0000 0.0000 0.0000
 				height=128.0000
 				radius=52.0000
 				type=2
 				value=0.8000
+			}
+			legs{
+				coords=3.0000 0.0000 0.0000
+				height=50.0000
+				radius=52.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=58.0000 0.0000 0.0000
@@ -930,19 +930,19 @@ sprites{
 		file_size=171.0000 102.0000
 		offset=33.0000 0.0000
 		hitboxes{
-			legs{
-				coords=1.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=1.0000 0.0000 0.0000
 				height=128.0000
 				radius=56.0000
 				type=2
 				value=0.8000
+			}
+			legs{
+				coords=1.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -973,19 +973,19 @@ sprites{
 		file_size=177.0000 102.0000
 		offset=38.0000 0.0000
 		hitboxes{
-			legs{
-				coords=5.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=5.0000 0.0000 0.0000
 				height=128.0000
 				radius=56.0000
 				type=2
 				value=0.8000
+			}
+			legs{
+				coords=5.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=80.0000 0.0000 0.0000
@@ -1016,19 +1016,19 @@ sprites{
 		file_size=185.0000 102.0000
 		offset=40.0000 0.0000
 		hitboxes{
-			legs{
-				coords=8.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=8.0000 0.0000 0.0000
 				height=128.0000
 				radius=56.0000
 				type=2
 				value=0.8000
+			}
+			legs{
+				coords=8.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=91.0000 0.0000 0.0000
@@ -1059,20 +1059,20 @@ sprites{
 		file_size=171.0000 102.0000
 		offset=33.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=75.0000 0.0000 0.0000
@@ -1104,20 +1104,20 @@ sprites{
 		file_size=171.0000 102.0000
 		offset=33.0000 2.0000
 		hitboxes{
+			body{
+				coords=1.0000 2.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 2.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 2.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=75.0000 2.0000 0.0000
@@ -1149,13 +1149,6 @@ sprites{
 		file_size=171.0000 102.0000
 		offset=33.0000 -8.0000
 		hitboxes{
-			legs{
-				coords=1.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=-1.7700 -8.7600 -32.0000
 				height=200.0000
@@ -1165,6 +1158,13 @@ sprites{
 				knockback_angle=4.7124
 				knockback=3.0000
 				wither_chance=10
+			}
+			legs{
+				coords=1.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=70.0000 0.0000 -32.0000
@@ -1198,13 +1198,6 @@ sprites{
 		file_size=167.0000 115.0000
 		offset=30.0000 -16.0000
 		hitboxes{
-			legs{
-				coords=1.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=-1.0000 -16.0000 -32.0000
 				height=200.0000
@@ -1214,6 +1207,13 @@ sprites{
 				knockback_angle=4.7124
 				knockback=3.0000
 				wither_chance=10
+			}
+			legs{
+				coords=1.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=70.0000 -10.0000 -32.0000
@@ -1248,13 +1248,6 @@ sprites{
 		offset=33.0000 8.0000
 		scale=1.0000 -1.0000
 		hitboxes{
-			legs{
-				coords=1.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=-1.7700 8.7600 -32.0000
 				height=200.0000
@@ -1264,6 +1257,13 @@ sprites{
 				knockback_angle=1.5708
 				knockback=3.0000
 				wither_chance=10
+			}
+			legs{
+				coords=1.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=70.0000 0.0000 -32.0000
@@ -1298,13 +1298,6 @@ sprites{
 		offset=30.0000 16.0000
 		scale=1.0000 -1.0000
 		hitboxes{
-			legs{
-				coords=1.0000 0.0000 0.0000
-				height=50.0000
-				radius=56.0000
-				type=2
-				value=1.0000
-			}
 			body{
 				coords=-1.0000 16.0000 -32.0000
 				height=200.0000
@@ -1314,6 +1307,13 @@ sprites{
 				knockback_angle=1.5708
 				knockback=3.0000
 				wither_chance=10
+			}
+			legs{
+				coords=1.0000 0.0000 0.0000
+				height=50.0000
+				radius=56.0000
+				type=2
+				value=1.0000
 			}
 			head{
 				coords=70.0000 10.0000 -32.0000
@@ -1347,20 +1347,20 @@ sprites{
 		file_size=166.0000 102.0000
 		offset=30.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -1392,20 +1392,20 @@ sprites{
 		file_size=162.0000 102.0000
 		offset=31.0000 0.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -1437,20 +1437,20 @@ sprites{
 		file_size=162.0000 106.0000
 		offset=31.0000 -2.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=70.0000 -6.0000 0.0000
@@ -1483,20 +1483,20 @@ sprites{
 		offset=31.0000 0.0000
 		scale=1.0000 -1.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -1529,20 +1529,20 @@ sprites{
 		offset=31.0000 2.0000
 		scale=1.0000 -1.0000
 		hitboxes{
+			body{
+				coords=1.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=1.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=1.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=70.0000 6.0000 0.0000
@@ -1574,20 +1574,20 @@ sprites{
 		file_size=171.0000 105.0000
 		offset=33.0000 3.0000
 		hitboxes{
+			body{
+				coords=0.0000 2.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=0.0000 2.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=0.0000 2.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=75.0000 1.0000 0.0000
@@ -1619,20 +1619,20 @@ sprites{
 		file_size=171.0000 114.0000
 		offset=33.0000 6.0000
 		hitboxes{
+			body{
+				coords=0.0000 0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=0.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=75.0000 9.0000 0.0000
@@ -1665,20 +1665,20 @@ sprites{
 		offset=33.0000 -3.0000
 		scale=1.0000 -1.0000
 		hitboxes{
+			body{
+				coords=0.0000 -2.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=0.0000 -2.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=0.0000 -2.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=75.0000 -1.0000 0.0000
@@ -1711,20 +1711,20 @@ sprites{
 		offset=33.0000 -6.0000
 		scale=1.0000 -1.0000
 		hitboxes{
+			body{
+				coords=0.0000 -0.0000 50.0000
+				height=78.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
 			legs{
 				coords=0.0000 0.0000 0.0000
 				height=50.0000
 				radius=56.0000
 				type=0
 				value=4.0000
-			}
-			body{
-				coords=0.0000 -0.0000 0.0000
-				height=128.0000
-				radius=56.0000
-				type=0
-				value=0.8000
-				can_pikmin_latch=true
 			}
 			head{
 				coords=75.0000 -9.0000 0.0000
@@ -1752,8 +1752,8 @@ sprites{
 	}
 }
 body_parts{
-	legs
 	body
+	legs
 	head
 	tongue1
 	tongue2

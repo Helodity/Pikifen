@@ -10,7 +10,7 @@ height = 70
 itch_damage = 50
 itch_time = 2
 max_carriers = 15
-max_health = 800
+max_health = 750
 move_speed = 45
 pikmin_seeds = 8
 points = 30
@@ -45,4 +45,8 @@ sounds {
         file = flamethrower
         loop = true
     }
+}
+
+vulnerabilities {
+    explosion = 150
 }

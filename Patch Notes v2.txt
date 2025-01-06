@@ -1,0 +1,161 @@
+======= v2.0 ==========
+General Stuff
+    Zoom
+        Given how zooming in makes nearby mobs not tick, the max zoom is being reduced a bit
+        - Reduced max zoom (3 -> 2)
+
+Leaders
+    Right now leaders are absolute tanks. While this is mostly due to low enemy damage numbers,
+    reducing the health to a power of 10 makes knowing how much damage it does to a leader easier.
+
+    Furthermore, leaders are noticably a bit slow.
+
+    - Health Decreased (2000 -> 1000)
+    - Movement speed increased (130 -> 150)
+
+Pikmin
+    This makes sure that pikmin aren't instantly killed by higher power attacks, and otherwise doesn't affect gameplay
+    The increased health regen makes sure that they won't die to multiple repeated attacks
+    - Health increased (100 -> 500)
+    - Health regen increased (10 -> 100)
+    - Move speed increased (110 -> 130)
+
+    Despite this decrease, Red pikmin getting their 1.5x attack back means they are technically buffed (14.4 -> 15)
+    - Maturity power mult decreased (0.1 -> 0)
+
+    Red Pikmin:
+        Red pikmin don't have their 1.5x attack damage... Why?
+        - Damage increased (12 -> 15)
+    Purple Pikmin:
+        - Damage increased (11 -> 15)
+        - Landing damage increased (8 -> 20)
+        - Move speed increased (90 -> 105)
+    Rock Pikmin:
+        - Damage increased (20 -> 40)
+    White Pikmin:
+        - Speed increased (125 -> 150)
+
+Statuses:
+    Note: All hazard statuses need a slight health drain increase to account for the change in pikmin health regen (10%/sec -> 20%/sec)
+    Furthermore, non liquid hazards are getting a slight buff to make them a bit more threatening
+
+    Drowning
+        -Health change decreased (-0.3 -> -0.4) (Net change: -20%/sec -> -20%/sec)
+
+    These hazards are getting buffs in various ways to add some variety, and a bit of a heirarchy.
+    Currently, fatal electricity is the most lethal, and the rest are basically equal.
+    Bubbled
+        I'm like 90% sure this is currently unused. Nevertheless, water is already super prominent, so this doesnt really need much of a buff.
+        - Health change decreased (-0.3 -> -0.45) (Net change: -20%/sec -> -25%/sec)
+    Burned
+        Fire is currently not very prominent, and not very scary. This brings back some of that Pikmin 1 fear.
+        - Health change decreased (-0.3 -> -0.7) (Net change: -20%/sec -> -50%/sec)
+        - Maturity change amount decreased (-1 -> -2)
+    Poisoned
+        Poison is a bit more prominent than fire; gas pipes act like walls until they are destroyed.
+        Instead of just a straight damage buff, they are also getting a speed increase to make whistling them slightly harder.
+        - Health change decreased (-0.3 -> -0.45) (Net change: -20%/sec -> -25%/sec)
+        - Speed multiplier increased (2 -> 3)
+
+    Bomb rock health drain
+        I think bombrocks having a shorter fuse incrases their risk and reward.
+        On the one hand, you dont need to time them as well on mobile enemies
+        On the other... if an enemy makes you drop one, well good luck.
+        - Health change decreased (-0.25 -> -0.33)
+
+    Petrified
+        Currently bitter sprays are incredibly overpowered. This reworks them into less of an instant win, and more of a regroup option.
+        - Duration reduced (10 -> 5)
+        - Defense multiplier increased (1.2 -> 5)
+    Petrified
+        On the other hand, spicy sprays do nothing for combat. The logical option is an animation speed increase instead of a damage buff.
+        - Animation speed increased (1 -> 1.25)
+
+
+
+Bombrock
+    Damage decreased (600 -> 500)
+    Health increased (50 -> 500)
+
+Reinforced Wall
+    Health reduced (1800 -> 1500)
+
+Enemies
+    Standardized damage into 5 groups:
+        Shake/Knockback (20)
+        Weak (100)
+            Dwarf Red Bulborb
+            Adult Bulbmin
+            Crumbug
+            Cloaking Burrow-Nit
+            Electric Water Dumple (Stun)
+            Water Dumple
+        Medium (200)
+            Firey Blowhog
+            Red Bulborb
+            Electric Water Dumple (Bite)
+            Yellow Wollywog
+            Whiptongue Bulborb
+            Fire Geyser
+            Electric Wire
+        Strong (300)
+            Rolling Boulder
+            Beady Long Legs Foot
+            Crystal Nodule
+        Very Strong (500)
+            Bombrock
+
+    Red Bulborb
+        Red Bulborbs are weak when attacking from behind, and should pose more of a threat when approached from the front
+        Buffs
+            - Wake up reach now has a 50 unit range with 90 degrees, this should have them wake up when next to them from the front.
+            - Increased full circle search reach (30 -> 40)
+            - Decreased wake up time (1.35s -> 1.05s)
+            - Decreased eating time (1.85s -> 1.4s)
+            - Decreased shake wind up (0.7s -> 0.5s)
+            - Legs now have a 80% damage reduction
+            - Gained 25% damage reduction to bombrocks
+        Nerfs
+            - Health decreased (750 -> 700)
+            - Failing length increased (0.7s -> 0.9s)
+            - Decreased rotation speed (114 -> 104)
+    Whiptongue Bulborb
+        These guys are already quite strong compared to a red bulborb.
+        For consistency, they are getting leg hitboxes as well.
+
+        Buffs
+            - Legs now have a 75% damage reduction.
+            - Gained 25% damage reduction to bombrocks
+
+    Fiery Blowhog
+        The usage of blowhogs is a fire enemy thats risky to approach with non-reds, not a health sponge
+
+        Buffs
+            - Decreased inhale time (1.5s -> 1s)
+        Nerfs
+            - Health reduced (1000 -> 750)
+            - Gained 25% damage increase to bombrocks
+            - Increased rest time after blow (0.3s -> 0.6s)
+
+    Yellow Wollywog
+        This guy has so much health oh my god
+
+        Nerfs
+            - Decreased Health (1600 -> 1000)
+
+    Armored Cannon Beetle
+        This fight favors the usage of red pikmin, but can easily be two phased with like 25 blues.
+        It can still be two phased with 25 blues, but its a lot tighter now.
+
+        Buffs
+            - Health increased (1300 -> 1400)
+            - Increased time before cool down (5sec -> 6sec)
+
+    Beady Long Legs
+        Right now, theres almost no time to react to a rest. The subtle animation makes it take even longer to see.
+
+        Nerfs
+            - Increased Rest time (2.9s -> 3.4s)
+
+
+
