@@ -32,8 +32,14 @@ Pikmin
         - Move speed increased (90 -> 105)
     Rock Pikmin:
         - Damage increased (20 -> 40)
+    Bulbmin
+        Bulbmin had the 1.2x damage reds had... why?
+        - Damage decreased (12 -> 10)
     White Pikmin:
-        - Speed increased (125 -> 150)
+        White pikmin are basically the opposite of combat pikmin, focusing on pure speed.
+        This makes leafs faster than normal flower pikmin
+        - Speed increased (125 -> 160)
+        - Damage decreased (9 -> 7)
 
 Statuses:
     Note: All hazard statuses need a slight health drain increase to account for the change in pikmin health regen (10%/sec -> 20%/sec)
