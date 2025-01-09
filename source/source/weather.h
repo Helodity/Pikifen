@@ -17,26 +17,12 @@
 #include <allegro5/allegro.h>
 
 #include "content.h"
+#include "particle.h"
 
 
 using std::size_t;
 using std::string;
 using std::vector;
-
-
-//Types of precipitation.
-enum PRECIPITATION_TYPE {
-
-    //None.
-    PRECIPITATION_TYPE_NONE,
-    
-    //Rain.
-    PRECIPITATION_TYPE_RAIN,
-    
-    //Wind.
-    PRECIPITATION_TYPE_WIND,
-    
-};
 
 
 
@@ -74,8 +60,9 @@ public:
     //Fog -- color and density at 100% fogginess. Values throughout the day.
     vector<std::pair<int, ALLEGRO_COLOR> > fog_color;
     
-    //Precipitation type, if any.
-    PRECIPITATION_TYPE precipitation_type = PRECIPITATION_TYPE_NONE;
+    bool has_precipitation = false;
+
+    particle_generator* precipitation_generator;
     
     
     //--- Function declarations ---
@@ -84,8 +71,7 @@ public:
     weather(
         const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
         const vector<std::pair<int, unsigned char> > &ss,
-        const vector<std::pair<int, unsigned char> > &bs,
-        const PRECIPITATION_TYPE pt
+        const vector<std::pair<int, unsigned char> > &bs
     );
     unsigned char get_blackout_strength();
     ALLEGRO_COLOR get_daylight_color();

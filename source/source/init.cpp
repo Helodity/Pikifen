@@ -684,6 +684,9 @@ void init_misc() {
     
     game.states.gameplay->particles =
         particle_manager(game.options.max_particles);
+    
+    game.states.gameplay->precipitation_particles =
+        particle_manager(game.options.max_particles);
         
     game.options.zoom_mid_level =
         clamp(

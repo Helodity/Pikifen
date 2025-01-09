@@ -810,33 +810,8 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         *                   /  /  *
         **************************/
         
-        /*
-        if(
-            cur_area_data.weather_condition.precipitation_type !=
-            PRECIPITATION_TYPE_NONE
-        ) {
-            precipitation_timer.tick(delta_t);
-            if(precipitation_timer.ticked) {
-                precipitation_timer = timer(
-                    cur_area_data.weather_condition.
-                    precipitation_frequency.get_random_number()
-                );
-                precipitation_timer.start();
-                precipitation.push_back(point(0, 0));
-            }
-        
-            for(size_t p = 0; p < precipitation.size();) {
-                precipitation[p].y +=
-                    cur_area_data.weather_condition.
-                    precipitation_speed.get_random_number() * delta_t;
-                if(precipitation[p].y > scr_h) {
-                    precipitation.erase(precipitation.begin() + p);
-                } else {
-                    p++;
-                }
-            }
-        }
-        */
+        game.cur_area_data->weather_condition.precipitation_generator->tick(delta_t, precipitation_particles);
+        precipitation_particles.tick_all(delta_t);
         
         
         /******************
@@ -1165,7 +1140,7 @@ void gameplay_state::do_menu_logic() {
         string n_mobs_str =
             box_string(i2s(mobs.all.size()), 7);
         string n_particles_str =
-            box_string(i2s(particles.get_count()), 7);
+            box_string(i2s(particles.get_count() + precipitation_particles.get_count()), 7);
         string resolution_str =
             i2s(game.win_w) + "x" + i2s(game.win_h);
         string area_v_str =

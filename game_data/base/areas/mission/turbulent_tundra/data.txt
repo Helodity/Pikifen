@@ -11,7 +11,7 @@ bg_color=0 0 0
 bg_dist=0.0000
 bg_zoom=0.0000
 song=frosty_breath
-weather=snowstorm
+weather=blizzard
 day_time_start=480
 day_time_speed=72
 spray_amounts

@@ -216,12 +216,9 @@ public:
     
     //Path of the folder of the area to be loaded.
     string path_of_area_to_load;
-    
-    //All droplets of precipitation.
-    vector<point> precipitation;
-    
-    //Time until the next drop of precipitation.
-    timer precipitation_timer;
+
+    //All particles of precipitation.
+    particle_manager precipitation_particles;
     
     //Spray that player 1 has currently selected.
     size_t selected_spray = 0;

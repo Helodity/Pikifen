@@ -38,13 +38,11 @@ weather::weather() {
 weather::weather(
     const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
     const vector<std::pair<int, unsigned char> > &ss,
-    const vector<std::pair<int, unsigned char> > &bs,
-    const PRECIPITATION_TYPE pt
+    const vector<std::pair<int, unsigned char> > &bs
 ) :
     daylight(dl),
     sun_strength(ss),
-    blackout_strength(bs),
-    precipitation_type(pt) {
+    blackout_strength(bs) {
     
     name = n;
 }
@@ -156,8 +154,12 @@ void weather::load_from_data_node(data_node* node) {
     //Standard data.
     reader_setter rs(node);
     
+    data_node* particle_gen_node = nullptr;
+    string particle_gen_str;
+    
     rs.set("fog_near", fog_near);
     rs.set("fog_far", fog_far);
+    rs.set("particle_generator", particle_gen_str, &particle_gen_node);
     
     fog_near = std::max(fog_near, 0.0f);
     fog_far = std::max(fog_far, fog_near);
@@ -215,5 +217,22 @@ void weather::load_from_data_node(data_node* node) {
                 s2c(fog_color_table[p].second)
             )
         );
+    }
+
+    //Precipitation
+    if(particle_gen_node) {
+        if(
+            game.content.custom_particle_gen.list.find(particle_gen_str) ==
+            game.content.custom_particle_gen.list.end()
+        ) {
+            game.errors.report(
+                "Unknown particle generator \"" +
+                particle_gen_str + "\"!", particle_gen_node
+            );
+        } else {
+            has_precipitation = true;
+            precipitation_generator =
+                &game.content.custom_particle_gen.list[particle_gen_str];
+        }
     }
 }

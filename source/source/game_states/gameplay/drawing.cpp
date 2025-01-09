@@ -1380,18 +1380,32 @@ void gameplay_state::draw_pause_menu() {
  * @brief Draws the precipitation.
  */
 void gameplay_state::draw_precipitation() {
-    if(
-        game.cur_area_data->weather_condition.precipitation_type !=
-        PRECIPITATION_TYPE_NONE
-    ) {
-        size_t n_precipitation_particles = precipitation.size();
-        for(size_t p = 0; p < n_precipitation_particles; p++) {
-            al_draw_filled_circle(
-                precipitation[p].x, precipitation[p].y,
-                3, COLOR_WHITE
-            );
-        }
+    vector<world_component> particles;
+    float width = game.win_w / game.config.zoom_min_level;
+    float height = game.win_h / game.config.zoom_min_level;
+    //Get all the particles, since we are tiling them.
+    precipitation_particles.fill_component_list(particles);
+
+    for(size_t p = 0; p < particles.size(); p++) {
+        point old_pos = particles[p].particle_ptr->pos;
+        point pos = old_pos;
+        pos -= game.cam.pos;
+        pos.x += width / 2;
+        pos.x = wrap_float(pos.x, 0, width);
+        pos.x -= width / 2;
+
+        pos.y += height / 2;
+        pos.y = wrap_float(pos.y, 0, height);
+        pos.y -= height / 2;
+
+        pos += game.cam.pos;
+        
+        particles[p].particle_ptr->pos = pos;
+        particles[p].particle_ptr->draw();
+        particles[p].particle_ptr->pos = old_pos;
     }
+
+
 }
 
 
