@@ -810,8 +810,10 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
         *                   /  /  *
         **************************/
         
-        game.cur_area_data->weather_condition.precipitation_generator->tick(delta_t, precipitation_particles);
-        precipitation_particles.tick_all(delta_t);
+        if(game.cur_area_data->weather_condition.has_precipitation) {
+            game.cur_area_data->weather_condition.precipitation_generator.tick(delta_t, precipitation_particles);
+            precipitation_particles.tick_all(delta_t);
+        }
         
         
         /******************

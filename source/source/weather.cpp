@@ -232,7 +232,29 @@ void weather::load_from_data_node(data_node* node) {
         } else {
             has_precipitation = true;
             precipitation_generator =
-                &game.content.custom_particle_gen.list[particle_gen_str];
+                game.content.custom_particle_gen.list[particle_gen_str];
+
+            //Scale the emission rate to match the scaled area.
+            float area = 1;
+
+            if(precipitation_generator.emission.shape == PARTICLE_EMISSION_SHAPE_RECTANGLE) {
+                area = precipitation_generator.emission.rect_outer_dist.x * precipitation_generator.emission.rect_outer_dist.y;
+                area -= precipitation_generator.emission.rect_inner_dist.x * precipitation_generator.emission.rect_inner_dist.y;
+            }
+            if(precipitation_generator.emission.shape == PARTICLE_EMISSION_SHAPE_CIRCLE) {
+                area = (precipitation_generator.emission.circle_outer_dist * precipitation_generator.emission.circle_outer_dist) * (TAU / 2);
+                area -= 
+                    (precipitation_generator.emission.circle_inner_dist * precipitation_generator.emission.circle_inner_dist) * (TAU / 2);
+                area *= (precipitation_generator.emission.circle_arc / TAU);
+            }
+            point dims = (point(game.win_w, game.win_h) / game.config.zoom_min_level) * 1.1f;
+            float new_area = dims.x * dims.y;
+
+            precipitation_generator.emission.number *= (new_area / area);
+            precipitation_generator.emission.number_deviation *= (new_area / area);
+            
+            precipitation_generator.emission.shape = PARTICLE_EMISSION_SHAPE_RECTANGLE;
+            precipitation_generator.emission.rect_outer_dist = dims;
         }
     }
 }

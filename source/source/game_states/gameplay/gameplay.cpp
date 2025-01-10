@@ -1233,6 +1233,7 @@ void gameplay_state::unload() {
     path_mgr.clear();
     spray_stats.clear();
     particles.clear();
+    precipitation_particles.clear();
     
     leader_movement.reset(); //TODO replace with a better solution.
     

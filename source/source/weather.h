@@ -62,7 +62,7 @@ public:
     
     bool has_precipitation = false;
 
-    particle_generator* precipitation_generator;
+    particle_generator precipitation_generator;
     
     
     //--- Function declarations ---

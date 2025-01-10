@@ -1381,8 +1381,10 @@ void gameplay_state::draw_pause_menu() {
  */
 void gameplay_state::draw_precipitation() {
     vector<world_component> particles;
-    float width = game.win_w / game.config.zoom_min_level;
-    float height = game.win_h / game.config.zoom_min_level;
+    //Add a small buffer outside the bounds of the screen
+    float width = (game.win_w / game.config.zoom_min_level) * 1.1f;
+    float height = (game.win_h / game.config.zoom_min_level) * 1.1f;
+    
     //Get all the particles, since we are tiling them.
     precipitation_particles.fill_component_list(particles);
 
