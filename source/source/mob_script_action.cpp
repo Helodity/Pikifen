@@ -449,6 +449,8 @@ bool mob_action_loaders::load_mob_target_type(
         call.args[arg_idx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_LINK);
     } else if(call.args[arg_idx] == "parent") {
         call.args[arg_idx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_PARENT);
+    } else if(call.args[arg_idx] == "memory") {
+        call.args[arg_idx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_MEMORY);
     } else {
         report_enum_error(call, arg_idx);
         return false;
@@ -1387,6 +1389,11 @@ mob* get_target_mob(
     } case MOB_ACTION_MOB_TARGET_TYPE_PARENT: {
         if(data.m->parent) {
             return data.m->parent->m;
+        }
+        break;
+    } case MOB_ACTION_MOB_TARGET_TYPE_MEMORY: {
+        if(!data.m->focused_mob_memory.empty() && data.m->focused_mob_memory[index]) {
+            return data.m->focused_mob_memory[index];
         }
         break;
     }

@@ -351,11 +351,14 @@ enum MOB_ACTION_MOB_TARGET_TYPE {
     //Targets the mob that triggered the event, if any.
     MOB_ACTION_MOB_TARGET_TYPE_TRIGGER,
     
-    //Targets the first linked object, if any.
+    //Targets a linked object, if any.
     MOB_ACTION_MOB_TARGET_TYPE_LINK,
     
     //Targets the parent mob, if any.
     MOB_ACTION_MOB_TARGET_TYPE_PARENT,
+
+    //Targets a mob from memory, if any.
+    MOB_ACTION_MOB_TARGET_TYPE_MEMORY,
     
 };
 
