@@ -434,6 +434,11 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
 bool mob_action_loaders::load_mob_target_type(
     mob_action_call &call, size_t arg_idx
 ) {
+    //Separate the index from the argument.
+    vector<string> split_args = split(call.args[arg_idx], "_");
+    string target_idx = split_args.size() > 1 ? split_args[1] : i2s(0);
+    call.args[arg_idx] = split_args[0];
+
     if(call.args[arg_idx] == "self") {
         call.args[arg_idx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_SELF);
     } else if(call.args[arg_idx] == "focus") {
@@ -448,6 +453,8 @@ bool mob_action_loaders::load_mob_target_type(
         report_enum_error(call, arg_idx);
         return false;
     }
+    //Append the index again so we can access it later.
+    call.args[arg_idx] += "_" + target_idx;
     return true;
 }
 
@@ -925,8 +932,7 @@ void mob_action_runners::finish_dying(mob_action_run_data &data) {
  */
 void mob_action_runners::focus(mob_action_run_data &data) {
 
-    MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
-    mob* target = get_target_mob(data, s);
+    mob* target = get_target_mob(data, data.args[0]);
     
     if(!target) return;
     
@@ -1237,8 +1243,7 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::get_mob_info(mob_action_run_data &data) {
-    MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
-    mob* target = get_target_mob(data, s);
+    mob* target = get_target_mob(data, data.args[1]);
     
     if(!target) return;
     
@@ -1354,11 +1359,16 @@ void mob_action_runners::get_random_int(mob_action_run_data &data) {
  * @brief Returns the mob matching the mob target type.
  *
  * @param data Data about the action call.
- * @param type Type of target.
+ * @param target_info Info about which mob to target, given in a "<type>_<idx>" format
  */
 mob* get_target_mob(
-    mob_action_run_data &data, MOB_ACTION_MOB_TARGET_TYPE type
+    mob_action_run_data &data, string target_info
 ) {
+    //Split info into two separate arguments.
+    vector<string> args = split(target_info, "_");
+    MOB_ACTION_MOB_TARGET_TYPE type = (MOB_ACTION_MOB_TARGET_TYPE) s2i(args[0]);
+    int index = s2i(args[1]);
+
     switch (type) {
     case MOB_ACTION_MOB_TARGET_TYPE_SELF: {
         return data.m;
@@ -1370,8 +1380,8 @@ mob* get_target_mob(
         return get_trigger_mob(data);
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_LINK: {
-        if(!data.m->links.empty() && data.m->links[0]) {
-            return data.m->links[0];
+        if(!data.m->links.empty() && data.m->links[index]) {
+            return data.m->links[index];
         }
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_PARENT: {
@@ -1666,8 +1676,7 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::run_as(mob_action_run_data& data) {
-    MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
-    mob* target = get_target_mob(data, s);
+    mob* target = get_target_mob(data, data.args[0]);
 
     //Target is invalid, don't run anything.
     if(!target)

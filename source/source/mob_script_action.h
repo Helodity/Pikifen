@@ -799,7 +799,7 @@ bool assert_actions(
 );
 mob* get_trigger_mob(mob_action_run_data &data);
 mob* get_target_mob(
-    mob_action_run_data &data, MOB_ACTION_MOB_TARGET_TYPE type
+    mob_action_run_data &data, string target_info
 );
 void insert_event_actions(
     mob_event* ev, const vector<mob_action_call*> &actions, bool at_end
