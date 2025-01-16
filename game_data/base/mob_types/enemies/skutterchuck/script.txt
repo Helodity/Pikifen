@@ -129,7 +129,7 @@ script {
             if $ignoring = false
                 focus trigger
                 save_focused_mob_memory 2
-                load_focused_mob_memory 1
+                focus memory_1
                 set_state preparing
             end_if
         }
@@ -162,7 +162,7 @@ script {
             if $ignoring = false
                 focus trigger
                 save_focused_mob_memory 2
-                load_focused_mob_memory 1
+                focus memory_1
                 set_state preparing
             end_if
         }
@@ -191,7 +191,7 @@ script {
             if $ignoring = false
                 focus trigger
                 save_focused_mob_memory 2
-                load_focused_mob_memory 1
+                focus memory_1
                 set_state preparing
             end_if
         }
@@ -201,7 +201,7 @@ script {
         on_enter {
             stop
             set_animation preparing
-            load_focused_mob_memory 2
+            focus memory_2
         }
         on_tick {
             get_mob_info target_x focus x
@@ -227,7 +227,7 @@ script {
             set_animation flinging
         }
         on_frame_signal {
-            load_focused_mob_memory 1
+            focus memory_1
             throw_focused_mob $target_x $target_y $target_z 300
             send_message_to_target focus be_flung
             set_var has_nodule false
@@ -265,7 +265,7 @@ script {
             set_animation dying
         }
         on_animation_end {
-            load_focused_mob_memory 1
+            focus memory_1
             finish_dying
             if $has_nodule = true
                 send_message_to_target focus be_dropped

@@ -102,9 +102,6 @@ enum MOB_ACTION {
     //Create a link with the focused mob.
     MOB_ACTION_LINK_WITH_TARGET,
     
-    //Load focused mob from focused mobs memory.
-    MOB_ACTION_LOAD_FOCUS_MEMORY,
-    
     //Move to absolute coordinates.
     MOB_ACTION_MOVE_TO_ABSOLUTE,
     
@@ -706,7 +703,6 @@ void goto_function(mob_action_run_data &data);
 void hold_focus(mob_action_run_data &data);
 void if_function(mob_action_run_data &data);
 void link_with_target(mob_action_run_data &data);
-void load_focus_memory(mob_action_run_data &data);
 void move_to_absolute(mob_action_run_data &data);
 void move_to_relative(mob_action_run_data &data);
 void move_to_target(mob_action_run_data &data);

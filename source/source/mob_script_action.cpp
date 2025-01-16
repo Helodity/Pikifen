@@ -1523,20 +1523,6 @@ void mob_action_runners::link_with_target(mob_action_run_data &data) {
 
 
 /**
- * @brief Code for the load focused mob memory mob script action.
- *
- * @param data Data about the action call.
- */
-void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
-    if(data.m->focused_mob_memory.empty()) {
-        return;
-    }
-    
-    data.m->focus_on_mob(data.m->focused_mob_memory[s2i(data.args[0])]);
-}
-
-
-/**
  * @brief Code for the move to absolute coordinates mob script action.
  *
  * @param data Data about the action call.

@@ -1060,14 +1060,6 @@ void init_mob_actions() {
         mob_action_loaders::link_with_target
     );
     
-    reg_param("slot", MOB_ACTION_PARAM_INT, false, false);
-    reg_action(
-        MOB_ACTION_LOAD_FOCUS_MEMORY,
-        "load_focused_mob_memory",
-        mob_action_runners::load_focus_memory,
-        nullptr
-    );
-    
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("z", MOB_ACTION_PARAM_FLOAT, false, true);
