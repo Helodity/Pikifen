@@ -76,7 +76,7 @@ enum MOB_ACTION {
     MOB_ACTION_GET_FLOOR_Z,
     
     //Get a script variable's value from the focused mob.
-    MOB_ACTION_GET_FOCUS_VAR,
+    MOB_ACTION_GET_MOB_VAR,
     
     //Get information about a mob.
     MOB_ACTION_GET_MOB_INFO,
@@ -699,7 +699,7 @@ void get_event_info(mob_action_run_data &data);
 void get_area_info(mob_action_run_data &data);
 void get_floor_z(mob_action_run_data &data);
 void get_mob_info(mob_action_run_data &data);
-void get_focus_var(mob_action_run_data &data);
+void get_mob_var(mob_action_run_data &data);
 void get_random_real(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
 void goto_function(mob_action_run_data &data);
@@ -774,6 +774,7 @@ bool focus(mob_action_call &call);
 bool get_area_info(mob_action_call &call);
 bool get_event_info(mob_action_call &call);
 bool get_mob_info(mob_action_call &call);
+bool get_mob_var(mob_action_call &call);
 bool hold_focus(mob_action_call &call);
 bool if_function(mob_action_call &call);
 bool move_to_target(mob_action_call &call);

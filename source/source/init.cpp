@@ -882,7 +882,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
         MOB_ACTION_FOCUS,
         "focus",
@@ -979,12 +979,13 @@ void init_mob_actions() {
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("focused mob's var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
-        MOB_ACTION_GET_FOCUS_VAR,
-        "get_focus_var",
-        mob_action_runners::get_focus_var,
-        nullptr
+        MOB_ACTION_GET_MOB_VAR,
+        "get_mob_var",
+        mob_action_runners::get_mob_var,
+        mob_action_loaders::get_mob_var
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);

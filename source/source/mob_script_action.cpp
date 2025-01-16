@@ -381,6 +381,16 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
 
 
 /**
+ * @brief Loading code for the get mob var mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::get_mob_var(mob_action_call &call) {
+    return load_mob_target_type(call, 1);
+}
+
+/**
  * @brief Loading code for the hold focused mob mob script action.
  *
  * @param call Mob action call that called this.
@@ -1232,10 +1242,11 @@ void mob_action_runners::get_floor_z(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_focus_var(mob_action_run_data &data) {
-    if(!data.m->focused_mob) return;
-    data.m->vars[data.args[0]] =
-        data.m->focused_mob->vars[data.args[1]];
+void mob_action_runners::get_mob_var(mob_action_run_data &data) {
+    mob* target = get_target_mob(data, data.args[1]);
+
+    if(!target) return;
+    data.m->vars[data.args[0]] = target->vars[data.args[2]];
 }
 
 
