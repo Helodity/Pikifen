@@ -1169,12 +1169,13 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
     reg_action(
-        MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
-        "send_message_to_focus",
-        mob_action_runners::send_message_to_focus,
-        nullptr
+        MOB_ACTION_SEND_MESSAGE_TO_TARGET,
+        "send_message_to_target",
+        mob_action_runners::send_message_to_target,
+        mob_action_loaders::send_message_to_target
     );
     
     reg_param("message", MOB_ACTION_PARAM_STRING, false, false);

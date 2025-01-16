@@ -578,6 +578,17 @@ void mob_action_loaders::report_enum_error(
 
 
 /**
+ * @brief Loading code for the send message to target mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::send_message_to_target(mob_action_call& call) {
+    return load_mob_target_type(call, 0);
+}
+
+
+/**
  * @brief Loading code for the animation setting mob script action.
  *
  * @param call Mob action call that called this.
@@ -1732,9 +1743,10 @@ void mob_action_runners::save_focus_memory(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
-    if(!data.m->focused_mob) return;
-    data.m->send_message(data.m->focused_mob, data.args[0]);
+void mob_action_runners::send_message_to_target(mob_action_run_data &data) {
+    mob* target = get_target_mob(data, data.args[0]);
+    if(!target) return;
+    data.m->send_message(target, data.args[1]);
 }
 
 

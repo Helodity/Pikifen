@@ -142,7 +142,7 @@ enum MOB_ACTION {
     MOB_ACTION_SAVE_FOCUS_MEMORY,
     
     //Send a message to the focused mob.
-    MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
+    MOB_ACTION_SEND_MESSAGE_TO_TARGET,
     
     //Send a message to all linked mobs.
     MOB_ACTION_SEND_MESSAGE_TO_LINKS,
@@ -719,7 +719,7 @@ void release_stored_mobs(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);
 void run_as(mob_action_run_data& data);
 void save_focus_memory(mob_action_run_data &data);
-void send_message_to_focus(mob_action_run_data &data);
+void send_message_to_target(mob_action_run_data &data);
 void send_message_to_links(mob_action_run_data &data);
 void send_message_to_nearby(mob_action_run_data &data);
 void set_animation(mob_action_run_data &data);
@@ -782,6 +782,7 @@ bool play_sound(mob_action_call &call);
 bool receive_status(mob_action_call &call);
 bool remove_status(mob_action_call &call);
 bool run_as(mob_action_call& call);
+bool send_message_to_target(mob_action_call &call);
 bool set_animation(mob_action_call &call);
 bool set_far_reach(mob_action_call &call);
 bool set_holdable(mob_action_call &call);
