@@ -434,6 +434,16 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
     return true;
 }
 
+/**
+ * @brief Loading code for the status removal mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::link_with_target(mob_action_call& call) {
+    return load_mob_target_type(call, 0);
+}
+
 
 /**
  * @brief Loads a mob target type from an action call.
@@ -1496,19 +1506,19 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::link_with_focus(mob_action_run_data &data) {
-    if(!data.m->focused_mob) {
-        return;
-    }
+void mob_action_runners::link_with_target(mob_action_run_data &data) {
+    mob* target = get_target_mob(data, data.args[1]);
+    
+    if(!target) return;
     
     for(size_t l = 0; l < data.m->links.size(); l++) {
-        if(data.m->links[l] == data.m->focused_mob) {
+        if(data.m->links[l] == target) {
             //Already linked.
             return;
         }
     }
     
-    data.m->links.push_back(data.m->focused_mob);
+    data.m->links.push_back(target);
 }
 
 

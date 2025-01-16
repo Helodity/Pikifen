@@ -100,7 +100,7 @@ enum MOB_ACTION {
     MOB_ACTION_LABEL,
     
     //Create a link with the focused mob.
-    MOB_ACTION_LINK_WITH_FOCUS,
+    MOB_ACTION_LINK_WITH_TARGET,
     
     //Load focused mob from focused mobs memory.
     MOB_ACTION_LOAD_FOCUS_MEMORY,
@@ -705,7 +705,7 @@ void get_random_int(mob_action_run_data &data);
 void goto_function(mob_action_run_data &data);
 void hold_focus(mob_action_run_data &data);
 void if_function(mob_action_run_data &data);
-void link_with_focus(mob_action_run_data &data);
+void link_with_target(mob_action_run_data &data);
 void load_focus_memory(mob_action_run_data &data);
 void move_to_absolute(mob_action_run_data &data);
 void move_to_relative(mob_action_run_data &data);
@@ -777,6 +777,7 @@ bool get_mob_info(mob_action_call &call);
 bool get_mob_var(mob_action_call &call);
 bool hold_focus(mob_action_call &call);
 bool if_function(mob_action_call &call);
+bool link_with_target(mob_action_call &call);
 bool move_to_target(mob_action_call &call);
 bool play_sound(mob_action_call &call);
 bool receive_status(mob_action_call &call);

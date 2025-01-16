@@ -1054,10 +1054,10 @@ void init_mob_actions() {
     );
     
     reg_action(
-        MOB_ACTION_LINK_WITH_FOCUS,
-        "link_with_focused_mob",
-        mob_action_runners::link_with_focus,
-        nullptr
+        MOB_ACTION_LINK_WITH_TARGET,
+        "link_with_target_mob",
+        mob_action_runners::link_with_target,
+        mob_action_loaders::link_with_target
     );
     
     reg_param("slot", MOB_ACTION_PARAM_INT, false, false);
