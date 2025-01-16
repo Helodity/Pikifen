@@ -531,6 +531,17 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
 
 
 /**
+ * @brief Loading code for the status removal mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool mob_action_loaders::run_as(mob_action_call& call) {
+    return load_mob_target_type(call, 0);
+}
+
+
+/**
  * @brief Reports an error of an unknown enum value.
  *
  * @param call Mob action call that called this.
@@ -1647,6 +1658,31 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
             data.m->statuses[s].to_delete = true;
         }
     }
+}
+
+/**
+ * @brief Code for the run as mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void mob_action_runners::run_as(mob_action_run_data& data) {
+    MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
+    mob* target = get_target_mob(data, s);
+
+    //Target is invalid, don't run anything.
+    if(!target)
+        return;
+    
+    mob_action_call new_a;
+    data_node temp_node;
+    //Put the remaining arguments back into a data node to be read by the action.
+    temp_node.name = data.args[1];
+    for (size_t p = 2; p < data.args.size(); p++) {
+        temp_node.name.append(" ");
+        temp_node.name.append(data.args[p]);
+    }
+    new_a.load_from_data_node(&temp_node, target->type);
+    new_a.run(target, data.custom_data_1, data.custom_data_2);
 }
 
 

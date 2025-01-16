@@ -134,6 +134,9 @@ enum MOB_ACTION {
     
     //Remove a status effect.
     MOB_ACTION_REMOVE_STATUS,
+
+    //Run an action as another mob.
+    MOB_ACTION_RUN_AS,
     
     //Save focused mob into focused mobs memory.
     MOB_ACTION_SAVE_FOCUS_MEMORY,
@@ -711,6 +714,7 @@ void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);
 void release_stored_mobs(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);
+void run_as(mob_action_run_data& data);
 void save_focus_memory(mob_action_run_data &data);
 void send_message_to_focus(mob_action_run_data &data);
 void send_message_to_links(mob_action_run_data &data);
@@ -773,6 +777,7 @@ bool move_to_target(mob_action_call &call);
 bool play_sound(mob_action_call &call);
 bool receive_status(mob_action_call &call);
 bool remove_status(mob_action_call &call);
+bool run_as(mob_action_call& call);
 bool set_animation(mob_action_call &call);
 bool set_far_reach(mob_action_call &call);
 bool set_holdable(mob_action_call &call);
