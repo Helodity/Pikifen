@@ -256,13 +256,11 @@ const char* LIQUID_FRAG_SHADER = R"(
     float noiseScale = 0.01;
     
     //Calculate simplex noise effects.
-    float nX = simplex_noise(worldCoords, noiseScale, step, 0.3);
-    nX *= distortion_amount.x;
-    nX *= opacity;
-    float nY = simplex_noise(worldCoords, noiseScale, step, 0.3);
-    nY *= distortion_amount.y;
-    nY *= opacity;
-    vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
+    float effect_scale = simplex_noise(worldCoords, noiseScale, step, 0.3);
+
+    float noise_bend_x = effect_scale * distortion_amount.x * opacity;
+    float noise_bend_y = effect_scale * distortion_amount.y * opacity;
+    vec2 pEffect = rotate(vec2(noise_bend_x, noise_bend_y), tex_rotation);
     
     //Convert from world coords to texture coords with the simplex noise effect applied.
     vec2 sample_texcoord =
@@ -289,18 +287,21 @@ const char* LIQUID_FRAG_SHADER = R"(
 
 
     // -- Random shines --
-    //Get the average of each effect.
-    float shineScale = (nX / distortion_amount.x) + (nY / distortion_amount.y);
+    //Get the average of each effecst.
+    float shineScale = effect_scale;
+
+    //Convert from (-1 - 1) to (0 - 1)
+    shineScale += 1;
     shineScale /= 2;
 
     //Anything below `shine_amount` will be below 0, resulting in it not showing.
-    //This puts our scale from 0 - (1 - `shine_amount`)
-    shineScale -= (1 - shine_amount);
+    //This puts our scale from 0 - `shine_amount`
+    shineScale -= max(0.0, 1 - shine_amount);
 
     //Now that we're below the threshold, multiply it to return it to a 0-1 scale.
     //Multiply by the reciprocal to bring it back to 0 - 1;
     //Add a min value of 0.1 to prevent divide by 0 errors.
-    shineScale *= (1 / max(0.1, 1 - shine_amount));
+    shineScale *= (1 / max(0.1, shine_amount));
 
     //Since we havent actually restricted negative values yet, do that now.
     shineScale = max(shineScale, 0.0);
@@ -308,13 +309,14 @@ const char* LIQUID_FRAG_SHADER = R"(
     //Multiply by alpha and brightness after, since we want these to apply no matter what.
     shineScale *= brightness;
     shineScale *= shine_color.a;
+    shineScale *= opacity;
 
     //Add the shine!
-    tmp.r = tmp.r + (shine_color.r - tmp.r) * shineScale;
-    tmp.g = tmp.g + (shine_color.g - tmp.g) * shineScale;
-    tmp.b = tmp.b + (shine_color.b - tmp.b) * shineScale;
+    tmp.r = tmp.r + ((shine_color.r - tmp.r) * shineScale);
+    tmp.g = tmp.g + ((shine_color.g - tmp.g) * shineScale);
+    tmp.b = tmp.b + ((shine_color.b - tmp.b) * shineScale);
 
-    // TODO: remove two lines when edge foam is shader side.
+    // TODO: remove two lines when edge foam becomes shader side.
     fragColor = tmp;
     return;
 
