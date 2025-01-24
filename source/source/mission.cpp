@@ -2116,10 +2116,10 @@ bool mission_record::is_platinum(const mission_data &mission) {
  * @param mission Mission data to get info from.
  * @return The multiplier.
  */
-int mission_score_criterion_enemy_points::get_multiplier(
+int mission_score_criterion_enemy_collection_points::get_multiplier(
     mission_data* mission
 ) const {
-    return mission->points_per_enemy_point;
+    return mission->points_per_enemy_collection_point;
 }
 
 
@@ -2128,8 +2128,8 @@ int mission_score_criterion_enemy_points::get_multiplier(
  *
  * @return The name.
  */
-string mission_score_criterion_enemy_points::get_name() const {
-    return "Enemy points";
+string mission_score_criterion_enemy_collection_points::get_name() const {
+    return "Enemy collection points";
 }
 
 
@@ -2140,12 +2140,52 @@ string mission_score_criterion_enemy_points::get_name() const {
  * @param mission Mission data to get info from.
  * @return The score.
  */
-int mission_score_criterion_enemy_points::get_score(
+int mission_score_criterion_enemy_collection_points::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
         (int)
-        gameplay->enemy_points_collected *
+        gameplay->enemy_collection_points_collected *
+        get_multiplier(mission);
+}
+
+
+/**
+ * @brief Returns the mission score criterion's point multiplier.
+ *
+ * @param mission Mission data to get info from.
+ * @return The multiplier.
+ */
+int mission_score_criterion_enemy_death_points::get_multiplier(
+    mission_data* mission
+) const {
+    return mission->points_per_enemy_death_point;
+}
+
+
+/**
+ * @brief Returns the mission score criterion's name.
+ *
+ * @return The name.
+ */
+string mission_score_criterion_enemy_death_points::get_name() const {
+    return "Enemy death points";
+}
+
+
+/**
+ * @brief Returns the player's score for this criterion.
+ *
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param mission Mission data to get info from.
+ * @return The score.
+ */
+int mission_score_criterion_enemy_death_points::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        (int)
+        gameplay->enemy_death_points_collected *
         get_multiplier(mission);
 }
 

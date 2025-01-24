@@ -707,13 +707,30 @@ void results_state::load() {
     //Enemy points bullet.
     add_stat(
         "Enemy kill points:",
-        i2s(game.states.gameplay->enemy_points_collected) + "/" +
+        i2s(game.states.gameplay->enemy_death_points_collected) + "/" +
         i2s(game.states.gameplay->enemy_points_total)
     );
     
     //Enemy points points bullet.
-    add_score_stat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
+    add_score_stat(MISSION_SCORE_CRITERIA_ENEMY_DEATH_POINTS);
     
+    //Enemy deaths bullet.
+    add_stat(
+        "Enemy collections:",
+        i2s(game.states.gameplay->enemy_collections) + "/" +
+        i2s(game.states.gameplay->enemy_total)
+    );
+
+    //Enemy collection bullet.
+    add_stat(
+        "Enemy collection points:",
+        i2s(game.states.gameplay->enemy_collection_points_collected) + "/" +
+        i2s(game.states.gameplay->enemy_points_total)
+    );
+    
+    //Enemy points points bullet.
+    add_score_stat(MISSION_SCORE_CRITERIA_ENEMY_DELIVERY_POINTS);
+
     if(
         game.cur_area_data->type == AREA_TYPE_MISSION &&
         game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS

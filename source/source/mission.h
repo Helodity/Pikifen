@@ -144,7 +144,10 @@ enum MISSION_SCORE_CRITERIA {
     MISSION_SCORE_CRITERIA_TREASURE_POINTS,
     
     //Points per enemy kill point.
-    MISSION_SCORE_CRITERIA_ENEMY_POINTS,
+    MISSION_SCORE_CRITERIA_ENEMY_DEATH_POINTS,
+
+    //Points per enemy delivery point.
+    MISSION_SCORE_CRITERIA_ENEMY_DELIVERY_POINTS
     
 };
 
@@ -223,8 +226,11 @@ struct mission_data {
     //Mission point multiplier for each treasure point obtained.
     int points_per_treasure_point = 0;
     
-    //Mission point multiplier for each enemy point obtained.
-    int points_per_enemy_point = 0;
+    //Mission point multiplier for each enemy death point obtained.
+    int points_per_enemy_death_point = 0;
+
+    //Mission point multiplier for each enemy collection point obtained.
+    int points_per_enemy_collection_point = 0;
     
     //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
     bitmask_8_t point_loss_data = 0;
@@ -728,9 +734,27 @@ public:
 
 
 /**
- * @brief Class representing the "enemy points" mission score criterion.
+ * @brief Class representing the "enemy death points" mission score criterion.
  */
-class mission_score_criterion_enemy_points : public mission_score_criterion {
+class mission_score_criterion_enemy_death_points : public mission_score_criterion {
+
+public:
+
+    //--- Function declarations ---
+    
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "enemy collection points" mission score criterion.
+ */
+class mission_score_criterion_enemy_collection_points : public mission_score_criterion {
 
 public:
 

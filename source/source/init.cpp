@@ -801,7 +801,10 @@ void init_misc_databases() {
         new mission_score_criterion_treasure_points()
     );
     game.mission_score_criteria.push_back(
-        new mission_score_criterion_enemy_points()
+        new mission_score_criterion_enemy_death_points()
+    );
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_enemy_collection_points()
     );
 }
 

@@ -3790,21 +3790,21 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::Unindent();
             }
             
-            //Points per enemy point gathered value.
+            //Points per enemy collection point gathered value.
             ImGui::SetNextItemWidth(50);
-            int ppep = game.cur_area_data->mission.points_per_enemy_point;
-            if(ImGui::DragInt("Points per enemy point", &ppep, 0.1f)) {
+            int ppecp = game.cur_area_data->mission.points_per_enemy_collection_point;
+            if(ImGui::DragInt("Points per enemy collection point", &ppecp, 0.1f)) {
                 register_change("mission grading change");
-                game.cur_area_data->mission.points_per_enemy_point = ppep;
+                game.cur_area_data->mission.points_per_enemy_collection_point = ppecp;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
-                "enemy point. Different enemies are worth different\n"
+                "enemy collection point. Different enemies are worth different\n"
                 "points. Negative numbers means the player loses points.\n"
                 "0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if(game.cur_area_data->mission.points_per_enemy_point != 0) {
+            if(game.cur_area_data->mission.points_per_enemy_collection_point != 0) {
                 ImGui::Indent();
                 
                 //Enemy kill point point loss on fail checkbox.
@@ -3812,7 +3812,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpofep", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_DELIVERY_POINTS)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3828,7 +3828,61 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihep", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_DELIVERY_POINTS)
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data->mission.point_hud_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the HUD item for the score counter will\n"
+                    "use this criterion in its calculation. If none of\n"
+                    "the criteria are used for the HUD item, then it\n"
+                    "won't even show up."
+                );
+                
+                ImGui::Unindent();
+            }
+            
+            //Points per enemy point gathered value.
+            ImGui::SetNextItemWidth(50);
+            int ppedp = game.cur_area_data->mission.points_per_enemy_death_point;
+            if(ImGui::DragInt("Points per enemy death point", &ppedp, 0.1f)) {
+                register_change("mission grading change");
+                game.cur_area_data->mission.points_per_enemy_death_point = ppedp;
+            }
+            set_tooltip(
+                "Amount of points that the player receives for each\n"
+                "enemy death point. Different enemies are worth different\n"
+                "points. Negative numbers means the player loses points.\n"
+                "0 means this criterion doesn't count.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            if(game.cur_area_data->mission.points_per_enemy_death_point != 0) {
+                ImGui::Indent();
+                
+                //Enemy kill point point loss on fail checkbox.
+                int flags = game.cur_area_data->mission.point_loss_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "0 points on fail##zpofep", &flags,
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_DEATH_POINTS)
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data->mission.point_loss_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the player will receive 0 points for\n"
+                    "this criterion if they fail the mission."
+                );
+                
+                //Enemy kill point use in HUD checkbox.
+                flags = game.cur_area_data->mission.point_hud_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "Use in HUD counter##uihep", &flags,
+                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_DEATH_POINTS)
                     )
                 ) {
                     register_change("mission grading change");

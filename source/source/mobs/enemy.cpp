@@ -123,7 +123,7 @@ void enemy::finish_dying_class_specifics() {
  */
 void enemy::start_dying_class_specifics() {
     game.states.gameplay->enemy_deaths++;
-    game.states.gameplay->enemy_points_collected += ene_type->points;
+    game.states.gameplay->enemy_death_points_collected += ene_type->points;
     game.states.gameplay->last_enemy_killed_pos = pos;
     game.statistics.enemy_deaths++;
     

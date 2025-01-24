@@ -746,8 +746,10 @@ void gameplay_state::load() {
     treasure_points_collected = 0;
     treasure_points_total = 0;
     enemy_deaths = 0;
+    enemy_collections = 0;
     enemy_total = 0;
-    enemy_points_collected = 0;
+    enemy_death_points_collected = 0;
+    enemy_collection_points_collected = 0;
     enemy_points_total = 0;
     cur_leaders_in_mission_exit = 0;
     mission_required_mob_amount = 0;

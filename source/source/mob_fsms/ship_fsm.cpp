@@ -83,6 +83,24 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         }
         break;
         
+    } case MOB_CATEGORY_ENEMIES :  {
+        enemy* ene_ptr = (enemy*) delivery;
+        game.states.gameplay->enemy_collections++;
+        game.states.gameplay->enemy_collection_points_collected +=
+            ene_ptr->ene_type->points;
+        game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
+        
+        if(game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+            auto it =
+                game.states.gameplay->mission_remaining_mob_ids.find(
+                    delivery->id
+                );
+            if(it != game.states.gameplay->mission_remaining_mob_ids.end()) {
+                game.states.gameplay->mission_remaining_mob_ids.erase(it);
+                game.states.gameplay->goal_treasures_collected++;
+            }
+        }
+        break;
     } case MOB_CATEGORY_RESOURCES: {
         resource* res_ptr = (resource*) delivery;
         switch(res_ptr->res_type->delivery_result) {

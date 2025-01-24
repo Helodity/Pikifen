@@ -289,6 +289,9 @@ public:
     //How many treasure points exist in total.
     size_t treasure_points_total = 0;
     
+    //How many enemy collections so far.
+    size_t enemy_collections = 0;
+
     //How many enemy deaths so far.
     size_t enemy_deaths = 0;
     
@@ -296,7 +299,10 @@ public:
     size_t enemy_total = 0;
     
     //How many enemy points collected so far.
-    size_t enemy_points_collected = 0;
+    size_t enemy_death_points_collected = 0;
+
+    //How many enemy points collected so far.
+    size_t enemy_collection_points_collected = 0;
     
     //How many enemy points exist in total.
     size_t enemy_points_total = 0;
