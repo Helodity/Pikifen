@@ -93,7 +93,7 @@ void enemy::draw_mob() {
  */
 void enemy::finish_dying_class_specifics() {
     if(ene_type->drops_corpse) {
-        become_carriable(CARRY_DESTINATION_ONION);
+        become_carriable(CARRY_DESTINATION_SHIP_NO_ONION);
         fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     }
     particle par(
