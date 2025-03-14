@@ -1436,6 +1436,7 @@ int RngManager::i(int minimum, int maximum) {
  */
 void RngManager::init() {
     seed = time(nullptr);
+    srand(seed);
 }
 
 
@@ -1444,6 +1445,7 @@ void RngManager::init() {
  */
 void RngManager::init(unsigned int seed) {
     this->seed = seed;
+    srand(this->seed);
 }
 
 
