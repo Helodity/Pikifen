@@ -17,6 +17,7 @@
 #include "string_utils.h"
 
 
+
 /**
  * @brief Clears all items.
  */
@@ -253,19 +254,26 @@ void Timer::tick(float delta_t) {
 string get_current_time(bool file_name_friendly) {
     time_t t;
     time(&t);
-    tm* cur_time = localtime(&t);
+
+    struct tm cur_time;
+    #ifdef _MSC_VER
+    localtime_s(&cur_time, &t);
+    #else
+    localtime_r(&t, &cur_time);
+    #endif
+
     return
-        i2s(cur_time->tm_year + 1900) +
+        i2s(cur_time.tm_year + 1900) +
         (file_name_friendly ? "-" : "/") +
-        leading_zero(cur_time->tm_mon + 1) +
+        leading_zero(cur_time.tm_mon + 1) +
         (file_name_friendly ? "-" : "/") +
-        leading_zero(cur_time->tm_mday) +
+        leading_zero(cur_time.tm_mday) +
         (file_name_friendly ? "_" : " ") +
-        leading_zero(cur_time->tm_hour) +
+        leading_zero(cur_time.tm_hour) +
         (file_name_friendly ? "." : ":") +
-        leading_zero(cur_time->tm_min) +
+        leading_zero(cur_time.tm_min) +
         (file_name_friendly ? "." : ":") +
-        leading_zero(cur_time->tm_sec);
+        leading_zero(cur_time.tm_sec);
 }
 
 
