@@ -212,8 +212,9 @@ float interpolate_number(
 float randomf(float minimum, float maximum, unsigned int* seed) {
     if(minimum == maximum) return minimum;
     if(minimum > maximum) std::swap(minimum, maximum);
+    srand(*seed);
     return
-        (float) rand_r(seed) /
+        (float) rand() /
         ((float) RAND_MAX / (maximum - minimum)) + minimum;
 }
 
@@ -229,7 +230,8 @@ float randomf(float minimum, float maximum, unsigned int* seed) {
 int randomi(int minimum, int maximum, unsigned int* seed) {
     if(minimum == maximum) return minimum;
     if(minimum > maximum) std::swap(minimum, maximum);
-    return ((rand_r(seed)) % (maximum - minimum + 1)) + minimum;
+    srand(*seed);
+    return ((rand()) % (maximum - minimum + 1)) + minimum;
 }
 
 

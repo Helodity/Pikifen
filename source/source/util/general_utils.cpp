@@ -9,7 +9,7 @@
  */
 
 #include <csignal>
-#include <time.h>
+#include <ctime>
 
 #include "general_utils.h"
 
@@ -251,22 +251,21 @@ void Timer::tick(float delta_t) {
  * @return The string.
  */
 string get_current_time(bool file_name_friendly) {
-    time_t tt;
-    time(&tt);
-    struct tm t;
-    localtime_r(&tt, &t);
+    time_t t;
+    time(&t);
+    tm* cur_time = localtime(&t);
     return
-        i2s(t.tm_year + 1900) +
+        i2s(cur_time->tm_year + 1900) +
         (file_name_friendly ? "-" : "/") +
-        leading_zero(t.tm_mon + 1) +
+        leading_zero(cur_time->tm_mon + 1) +
         (file_name_friendly ? "-" : "/") +
-        leading_zero(t.tm_mday) +
+        leading_zero(cur_time->tm_mday) +
         (file_name_friendly ? "_" : " ") +
-        leading_zero(t.tm_hour) +
+        leading_zero(cur_time->tm_hour) +
         (file_name_friendly ? "." : ":") +
-        leading_zero(t.tm_min) +
+        leading_zero(cur_time->tm_min) +
         (file_name_friendly ? "." : ":") +
-        leading_zero(t.tm_sec);
+        leading_zero(cur_time->tm_sec);
 }
 
 
