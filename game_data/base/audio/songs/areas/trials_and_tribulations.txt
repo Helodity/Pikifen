@@ -1,7 +1,7 @@
 name = Trials and Tribulations
 description = A bold and orchestral piece for a test of skill.
 
-tags = Area; Calm; Reflective
+tags = Area; Triumphant; Upbeat;
 maker = Helodity
 version = 1.0.0
 engine_version = 1.0.0
