@@ -711,38 +711,33 @@ void GameplayState::drawGameplayMessageBox() {
         float interpolationFactor;
         msgBox->speakerAnim.getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
 
-        /*
-        if(outEffTrans) {
-            *outEffTrans =
-                interpolatePoint(
-                    interpolationFactor, 0.0f, 1.0f,
-                    *outEffTrans, nextTrans
-                );
-        }
-        if(outEffAngle) {
-            *outEffAngle =
-                interpolateAngle(
-                    interpolationFactor, 0.0f, 1.0f,
-                    *outEffAngle, nextAngle
-                );
-        }
-        if(outEffScale) {
-            *outEffScale =
-                interpolatePoint(
-                    interpolationFactor, 0.0f, 1.0f,
-                    *outEffScale, nextScale
-                );
-        } 
-        */
+        
+        Point icon_offset =
+            interpolatePoint(
+                interpolationFactor, 0.0f, 1.0f,
+                curSPtr->offset, nextSPtr->offset
+            );
 
-        //drawBitmapWithEffects(curSPtr->bitmap, eff);
+        float angle =
+            interpolateAngle(
+                interpolationFactor, 0.0f, 1.0f,
+                curSPtr->angle, nextSPtr->angle
+            );
+
+        Point scale =
+            interpolatePoint(
+                interpolationFactor, 0.0f, 1.0f,
+                curSPtr->scale, nextSPtr->scale
+            );
+        
         drawBitmap(
             curSPtr->bitmap,
             Point(
                 40,
                 game.winH - boxHeight - 16 + offset
-            ),
-            Point(48.0f)
+            ) + icon_offset,
+            Point(48.0f) * scale,
+            angle
         );
         drawBitmap(
             players[0].hud->bmpBubble,
