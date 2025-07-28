@@ -546,6 +546,10 @@ struct GameplayMessageBox {
     //Should a bubble be drawn around the speaker icon?
     bool shouldDrawSpeakerBubble = false;
 
+    //The size of the first sprite in the animation
+    //Other sprites will be scaled relative to this
+    float speakerBubbleReferenceSize = 1.0f;
+
     //What section of the message are we in?
     size_t curSection = 0;
     

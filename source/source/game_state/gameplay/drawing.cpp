@@ -705,7 +705,10 @@ void GameplayState::drawGameplayMessageBox() {
     );
     
     //Draw the speaker's animation, if any.
-    if(msgBox->speakerAnim.curAnim != nullptr) {
+    if(
+        msgBox->speakerAnim.curAnim != nullptr && 
+        msgBox->speakerAnim.curAnim->frames.size() > 0
+    ) {
         Sprite* curSPtr;
         Sprite* nextSPtr;
         float interpolationFactor;
@@ -716,7 +719,6 @@ void GameplayState::drawGameplayMessageBox() {
                 interpolationFactor, 0.0f, 1.0f,
                 curSPtr->offset, nextSPtr->offset
             );
-
 
         float iconAngle =
             interpolateAngle(
@@ -731,22 +733,22 @@ void GameplayState::drawGameplayMessageBox() {
             );
         
         //Needed for lower resolutions where the bubble would look too small
-        float iconSize = std::max(
+        float bubbleSize = std::max(
             (float)(std::max(game.winH, game.winW) * 0.05f),
              boxHeight * 0.75f
         );
 
-        //Scale the translation depending on the size of the icon
-        iconOffset *=  iconSize * 0.75f / curSPtr->bmpSize.x;
+        float scaleFactor = (bubbleSize * 0.75f) / msgBox->speakerBubbleReferenceSize;
 
-        float bmpRatio = curSPtr->bmpSize.x / curSPtr->bmpSize.y;
+        //Scale the translation depending on the size of the icon
+        iconOffset *=  bubbleSize * 0.75f / curSPtr->bmpSize.x;
         drawBitmap(
             curSPtr->bitmap,
             Point(
-                10 + (iconSize * 0.5),
-                game.winH - boxHeight - 10 - (iconSize * 0.5f) + offset
+                10 + (bubbleSize * 0.5),
+                game.winH - boxHeight - 10 - (bubbleSize * 0.5f) + offset
             ) + iconOffset,
-            Point(iconSize * 0.75f, iconSize * 0.75f / bmpRatio) * iconScale,
+            Point(curSPtr->bmpSize.x,  curSPtr->bmpSize.y) * iconScale * scaleFactor,
             iconAngle
         );
 
@@ -755,10 +757,10 @@ void GameplayState::drawGameplayMessageBox() {
             drawBitmap(
                 players[0].hud->bmpBubble,
                 Point(
-                    10 + (iconSize * 0.5f),
-                    game.winH - boxHeight - 10 - (iconSize * 0.5f) + offset
+                    10 + (bubbleSize * 0.5f),
+                    game.winH - boxHeight - 10 - (bubbleSize * 0.5f) + offset
                 ),
-                Point(iconSize)
+                Point(bubbleSize)
             );
         }
     }
