@@ -661,11 +661,12 @@ bool MobActionLoaders::setTeam(MobActionCall& call) {
 bool MobActionLoaders::showMessageFromVar(MobActionCall& call) {
     if(call.args.size() > 1) {
         size_t aPos = call.mt->animDb->findAnimation(call.args[1]);
-        if(aPos != INVALID) {
-            call.args[1] = i2s(aPos);
-        } else {
-            call.args[1] = "";
+        if(aPos == INVALID) {
+            call.customError =
+                "Unknown animation \"" + call.args[1] + "\"!";
+            return false;
         }
+        call.args[1] = i2s(aPos);
     }
     return true;
 }

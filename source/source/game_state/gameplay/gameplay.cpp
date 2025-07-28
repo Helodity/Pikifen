@@ -183,9 +183,8 @@ void BigMessageInfo::tick(float deltaT) {
  */
 GameplayMessageBox::GameplayMessageBox(
     const string& text, Animation* anim
-) :
-    speakerAnim(nullptr)
-    {
+):
+    speakerAnim(nullptr) {
 
     string message = unescapeString(text);
     if(message.size() && message.back() == '\n') {
