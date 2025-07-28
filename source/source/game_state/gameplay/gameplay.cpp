@@ -185,7 +185,7 @@ GameplayMessageBox::GameplayMessageBox(
     const string& text, Animation* anim
 ):
     speakerAnim(nullptr) {
-
+    
     string message = unescapeString(text);
     if(message.size() && message.back() == '\n') {
         message.pop_back();

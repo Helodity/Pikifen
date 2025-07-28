@@ -2,7 +2,7 @@ name=Orb sign animations
 description=Animations for the orb sign.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=0.25.0
 animations{
 	idling{
 		frames{
@@ -24,8 +24,73 @@ animations{
 			}
 		}
 	}
+	speaking_icon{
+		frames{
+			d{
+				duration=0.1700
+				interpolate=true
+			}
+			d2{
+				duration=0.1700
+				interpolate=true
+			}
+			d{
+				duration=0.1700
+				interpolate=true
+			}
+			d4{
+				duration=0.1700
+				interpolate=true
+			}
+		}
+	}
+	speaking_icon_bubble{
+		frames{
+			d{
+				duration=0.1700
+				interpolate=true
+			}
+			d2{
+				duration=0.1700
+				interpolate=true
+			}
+			d{
+				duration=0.1700
+				interpolate=true
+			}
+		}
+	}
 }
 sprites{
+	d{
+		file=gui/discord_icon
+		file_pos=0.0000 15.0000
+		file_size=128.0000 97.0000
+	}
+	d2{
+		file=gui/discord_icon
+		file_pos=0.0000 15.0000
+		file_size=128.0000 97.0000
+		angle=1.5708
+	}
+	d3{
+		file=gui/discord_icon
+		file_pos=0.0000 15.0000
+		file_size=128.0000 97.0000
+		scale=2.0000 2.0000
+	}
+	d4{
+		file=gui/discord_icon
+		file_pos=0.0000 15.0000
+		file_size=128.0000 97.0000
+		offset=100.0000 0.0000
+	}
+	d5{
+		file=gui/discord_icon
+		file_pos=0.0000 15.0000
+		file_size=128.0000 97.0000
+		scale=1.0000 2.0000
+	}
 	idling_01{
 		file=other_mobs/orb_sign
 		file_pos=0.0000 0.0000
