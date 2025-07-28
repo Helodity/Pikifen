@@ -741,7 +741,8 @@ void GameplayState::drawGameplayMessageBox() {
         float scaleFactor = (bubbleSize * 0.75f) / msgBox->speakerBubbleReferenceSize;
 
         //Scale the translation depending on the size of the icon
-        iconOffset *=  bubbleSize * 0.75f / curSPtr->bmpSize.x;
+        iconOffset *=  scaleFactor;
+        
         drawBitmap(
             curSPtr->bitmap,
             Point(
