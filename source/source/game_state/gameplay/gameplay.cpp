@@ -213,6 +213,25 @@ GameplayMessageBox::GameplayMessageBox(
     if (anim != nullptr) {
         speakerAnim.curAnim = anim;
         speakerAnim.curFrameIdx = 0;
+        shouldDrawSpeakerBubble = true;
+        for(size_t s = 0; s < anim->frames.size(); s++) {
+            Sprite* sPtr = anim->frames[s].spritePtr;
+
+            float bmpRatio = sPtr->bmpSize.x / sPtr->bmpSize.y;
+
+            //Ensure the sprite remains in the bubble
+            if(0.75f * sPtr->scale.x <= 1 && 0.75f / bmpRatio * sPtr->scale.y <= 1){
+                shouldDrawSpeakerBubble = false;
+                break;
+            }
+
+            if(sPtr->offset.x > 0.25f * sPtr->bmpSize.x && sPtr->offset.y > 0.25f / bmpRatio * sPtr->bmpSize.y) {
+                shouldDrawSpeakerBubble = false;
+                break;
+            }
+
+        }
+
     }
 
 

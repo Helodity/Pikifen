@@ -711,42 +711,56 @@ void GameplayState::drawGameplayMessageBox() {
         float interpolationFactor;
         msgBox->speakerAnim.getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
 
-        
-        Point icon_offset =
+        Point iconOffset =
             interpolatePoint(
                 interpolationFactor, 0.0f, 1.0f,
                 curSPtr->offset, nextSPtr->offset
             );
 
-        float angle =
+
+        float iconAngle =
             interpolateAngle(
                 interpolationFactor, 0.0f, 1.0f,
                 curSPtr->angle, nextSPtr->angle
             );
 
-        Point scale =
+        Point iconScale =
             interpolatePoint(
                 interpolationFactor, 0.0f, 1.0f,
                 curSPtr->scale, nextSPtr->scale
             );
         
+        //Needed for lower resolutions where the bubble would look too small
+        float iconSize = std::max(
+            (float)(std::max(game.winH, game.winW) * 0.05f),
+             boxHeight * 0.75f
+        );
+
+        //Scale the translation depending on the size of the icon
+        iconOffset *=  iconSize * 0.75f / curSPtr->bmpSize.x;
+
+        float bmpRatio = curSPtr->bmpSize.x / curSPtr->bmpSize.y;
         drawBitmap(
             curSPtr->bitmap,
             Point(
-                40,
-                game.winH - boxHeight - 16 + offset
-            ) + icon_offset,
-            Point(48.0f) * scale,
-            angle
+                10 + (iconSize * 0.5),
+                game.winH - boxHeight - 10 - (iconSize * 0.5f) + offset
+            ) + iconOffset,
+            Point(iconSize * 0.75f, iconSize * 0.75f / bmpRatio) * iconScale,
+            iconAngle
         );
-        drawBitmap(
-            players[0].hud->bmpBubble,
-            Point(
-                40,
-                game.winH - boxHeight - 16 + offset
-            ),
-            Point(64.0f)
-        );
+
+        //Only draw if the sprite fits in the bubble
+        if(msgBox->shouldDrawSpeakerBubble){
+            drawBitmap(
+                players[0].hud->bmpBubble,
+                Point(
+                    10 + (iconSize * 0.5f),
+                    game.winH - boxHeight - 10 - (iconSize * 0.5f) + offset
+                ),
+                Point(iconSize)
+            );
+        }
     }
     
     //Draw the button to advance, if it's time.

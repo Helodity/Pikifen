@@ -542,7 +542,10 @@ struct GameplayMessageBox {
     
     //Icon that represents the speaker, if any.
     AnimationInstance speakerAnim;
-    
+
+    //Should a bubble be drawn around the speaker icon?
+    bool shouldDrawSpeakerBubble = false;
+
     //What section of the message are we in?
     size_t curSection = 0;
     
