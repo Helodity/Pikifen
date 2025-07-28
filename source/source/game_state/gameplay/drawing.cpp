@@ -704,10 +704,40 @@ void GameplayState::drawGameplayMessageBox() {
         game.sysContent.bmpBubbleBox
     );
     
-    //Draw the speaker's icon, if any.
-    if(msgBox->speakerIcon) {
+    //Draw the speaker's animation, if any.
+    if(msgBox->speakerAnim.curAnim != nullptr) {
+        Sprite* curSPtr;
+        Sprite* nextSPtr;
+        float interpolationFactor;
+        msgBox->speakerAnim.getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+
+        /*
+        if(outEffTrans) {
+            *outEffTrans =
+                interpolatePoint(
+                    interpolationFactor, 0.0f, 1.0f,
+                    *outEffTrans, nextTrans
+                );
+        }
+        if(outEffAngle) {
+            *outEffAngle =
+                interpolateAngle(
+                    interpolationFactor, 0.0f, 1.0f,
+                    *outEffAngle, nextAngle
+                );
+        }
+        if(outEffScale) {
+            *outEffScale =
+                interpolatePoint(
+                    interpolationFactor, 0.0f, 1.0f,
+                    *outEffScale, nextScale
+                );
+        } 
+        */
+
+        //drawBitmapWithEffects(curSPtr->bitmap, eff);
         drawBitmap(
-            msgBox->speakerIcon,
+            curSPtr->bitmap,
             Point(
                 40,
                 game.winH - boxHeight - 16 + offset

@@ -1606,11 +1606,12 @@ void initMobActions() {
     );
     
     regParam("var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("animation name", MOB_ACTION_PARAM_STRING, true, true);
     regAction(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
         MobActionRunners::showMessageFromVar,
-        nullptr
+        MobActionLoaders::showMessageFromVar
     );
     
     regParam("spawn data", MOB_ACTION_PARAM_ENUM, true, false);

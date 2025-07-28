@@ -1546,11 +1546,11 @@ ParticleGenerator standardParticleGenSetup(
  * @param text Text to display.
  * @param speakerBmp Bitmap representing the speaker.
  */
-void startGameplayMessage(const string& text, ALLEGRO_BITMAP* speakerBmp) {
+void startGameplayMessage(const string& text, Animation* speakerAnim) {
     if(!text.empty()) {
         string finalText = unescapeString(text);
         game.states.gameplay->msgBox =
-            new GameplayMessageBox(finalText, speakerBmp);
+            new GameplayMessageBox(finalText, speakerAnim);
         for(Player& player : game.states.gameplay->players) {
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,

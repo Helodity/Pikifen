@@ -541,7 +541,7 @@ struct GameplayMessageBox {
     vector<vector<StringToken> > tokensPerLine;
     
     //Icon that represents the speaker, if any.
-    ALLEGRO_BITMAP* speakerIcon = nullptr;
+    AnimationInstance speakerAnim;
     
     //What section of the message are we in?
     size_t curSection = 0;
@@ -579,7 +579,7 @@ struct GameplayMessageBox {
     
     //--- Function declarations ---
     
-    GameplayMessageBox(const string& text, ALLEGRO_BITMAP* speakerIcon);
+    GameplayMessageBox(const string& text, Animation* speakerAnim);
     void advance();
     void close();
     void tick(float deltaT);

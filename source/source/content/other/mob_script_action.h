@@ -775,6 +775,7 @@ bool setFarReach(MobActionCall& call);
 bool setHoldable(MobActionCall& call);
 bool setNearReach(MobActionCall& call);
 bool setTeam(MobActionCall& call);
+bool showMessageFromVar(MobActionCall& call);
 bool spawn(MobActionCall& call);
 bool stabilizeZ(MobActionCall& call);
 bool startChomping(MobActionCall& call);

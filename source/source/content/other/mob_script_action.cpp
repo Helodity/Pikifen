@@ -653,6 +653,25 @@ bool MobActionLoaders::setTeam(MobActionCall& call) {
 
 
 /**
+ * @brief Loading code for the show message from var mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool MobActionLoaders::showMessageFromVar(MobActionCall& call) {
+    if(call.args.size() > 1) {
+        size_t aPos = call.mt->animDb->findAnimation(call.args[1]);
+        if(aPos != INVALID) {
+            call.args[1] = i2s(aPos);
+        } else {
+            call.args[1] = "";
+        }
+    }
+    return true;
+}
+
+
+/**
  * @brief Loading code for the spawning mob script action.
  *
  * @param call Mob action call that called this.
@@ -1950,7 +1969,18 @@ void MobActionRunners::setVar(MobActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::showMessageFromVar(MobActionRunData& data) {
-    startGameplayMessage(data.m->vars[data.args[0]], nullptr);
+
+    Animation* newAnim = nullptr;
+    if(data.args.size() > 1) {
+        if(data.args[1] != "") {
+            int idx = s2i(data.args[1]);
+            if(idx < data.m->type->animDb->animations.size()) {
+                newAnim = data.m->anim.animDb->animations[idx];
+            }
+        }
+    }
+    
+    startGameplayMessage(data.m->vars[data.args[0]], newAnim);
 }
 
 

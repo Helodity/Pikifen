@@ -182,10 +182,11 @@ void BigMessageInfo::tick(float deltaT) {
  * is talking.
  */
 GameplayMessageBox::GameplayMessageBox(
-    const string& text, ALLEGRO_BITMAP* speakerIcon
-):
-    speakerIcon(speakerIcon) {
-    
+    const string& text, Animation* anim
+) :
+    speakerAnim(nullptr)
+    {
+
     string message = unescapeString(text);
     if(message.size() && message.back() == '\n') {
         message.pop_back();
@@ -208,6 +209,13 @@ GameplayMessageBox::GameplayMessageBox(
     if(!line.empty()) {
         tokensPerLine.push_back(line);
     }
+
+    if (anim != nullptr) {
+        speakerAnim.curAnim = anim;
+        speakerAnim.curFrameIdx = 0;
+    }
+
+
 }
 
 
@@ -281,6 +289,9 @@ void GameplayMessageBox::tick(float deltaT) {
         }
     }
     
+    //Tick the speaker animation
+    speakerAnim.tick(deltaT);
+
     if(!transitionIn || transitionTimer == 0.0f) {
     
         //Animate the text.
