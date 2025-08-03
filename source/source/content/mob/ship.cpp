@@ -89,59 +89,6 @@ Ship::~Ship() {
  * @brief Draws a ship.
  */
 void Ship::drawMob() {
-
-    //Draw the rings on the control point.
-    for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
-        float ringIdxRatio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
-        
-        float ringHue = 360 * ringIdxRatio;
-        ALLEGRO_COLOR ringColor = al_color_hsl(ringHue, 1.0f, 0.8f);
-        
-        float ringAnimRatio =
-            fmod(
-                game.states.gameplay->areaTimePassed +
-                SHIP::CONTROL_POINT_ANIM_DUR * ringIdxRatio,
-                SHIP::CONTROL_POINT_ANIM_DUR
-            );
-        ringAnimRatio /= SHIP::CONTROL_POINT_ANIM_DUR;
-        
-        unsigned char ringAlpha = 120;
-        
-        if(ringAnimRatio <= 0.3f) {
-            //Fading into existence.
-            ringAlpha =
-                interpolateNumber(
-                    ringAnimRatio,
-                    0.0f, 0.3f,
-                    0, ringAlpha
-                );
-        } else if(ringAnimRatio >= 0.7f) {
-            //Shrinking down.
-            ringAlpha =
-                interpolateNumber(
-                    ringAnimRatio,
-                    0.7f, 1.0f,
-                    ringAlpha, 0
-                );
-        }
-        
-        float ringScale =
-            interpolateNumber(
-                ease(EASE_METHOD_IN, ringAnimRatio),
-                0.0f, 1.0f,
-                1.0f, 0.3f
-            );
-        float ringDiameter =
-            shiType->controlPointRadius * 2.0f * ringScale;
-            
-        drawBitmap(
-            game.sysContent.bmpBrightRing,
-            controlPointFinalPos, Point(ringDiameter),
-            0.0f,
-            changeAlpha(ringColor, ringAlpha)
-        );
-    }
-    
     //Drawing the beam rings.
     //Go in reverse to ensure the most recent rings are drawn underneath.
     for(char r = (char) beamRings.size() - 1; r > 0; r--) {
@@ -203,6 +150,71 @@ void Ship::drawMob() {
     }
     
     Mob::drawMob();
+}
+
+void Ship::fillComponentList(vector<WorldComponent>& list) {
+
+    WorldComponent c;
+    c.z = groundSector->z + 0.001;
+
+    auto callback = [this] () {
+        //Draw the rings on the control point.
+        for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
+            float ringIdxRatio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
+            
+            float ringHue = 360 * ringIdxRatio;
+            ALLEGRO_COLOR ringColor = al_color_hsl(ringHue, 1.0f, 0.8f);
+            
+            float ringAnimRatio =
+                fmod(
+                    game.states.gameplay->areaTimePassed +
+                    SHIP::CONTROL_POINT_ANIM_DUR * ringIdxRatio,
+                    SHIP::CONTROL_POINT_ANIM_DUR
+                );
+            ringAnimRatio /= SHIP::CONTROL_POINT_ANIM_DUR;
+            
+            unsigned char ringAlpha = 120;
+            
+            if(ringAnimRatio <= 0.3f) {
+                //Fading into existence.
+                ringAlpha =
+                    interpolateNumber(
+                        ringAnimRatio,
+                        0.0f, 0.3f,
+                        0, ringAlpha
+                    );
+            } else if(ringAnimRatio >= 0.7f) {
+                //Shrinking down.
+                ringAlpha =
+                    interpolateNumber(
+                        ringAnimRatio,
+                        0.7f, 1.0f,
+                        ringAlpha, 0
+                    );
+            }
+            
+            float ringScale =
+                interpolateNumber(
+                    ease(EASE_METHOD_IN, ringAnimRatio),
+                    0.0f, 1.0f,
+                    1.0f, 0.3f
+                );
+            float ringDiameter =
+                shiType->controlPointRadius * 2.0f * ringScale;
+                
+            drawBitmap(
+                game.sysContent.bmpBrightRing,
+                controlPointFinalPos, Point(ringDiameter),
+                0.0f,
+                changeAlpha(ringColor, ringAlpha)
+            );
+        }
+    };
+    c.drawCallback = callback;
+    list.push_back(c);
+
+
+    Mob::fillComponentList(list);
 }
 
 

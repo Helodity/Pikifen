@@ -72,6 +72,9 @@ public:
     void healLeader(Leader* l) const;
     bool isLeaderOnCp(const Leader* l) const;
     void drawMob() override;
+    void fillComponentList(
+        vector<WorldComponent>& list
+    ) override;
     void readScriptVars(const ScriptVarReader& svr) override;
     void tickClassSpecifics(float deltaT) override;
     
