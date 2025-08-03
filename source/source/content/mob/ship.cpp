@@ -154,9 +154,6 @@ void Ship::drawMob() {
 
 void Ship::fillComponentList(vector<WorldComponent>& list) {
 
-    WorldComponent c;
-    c.z = groundSector->z + 0.001;
-
     auto callback = [this] () {
         //Draw the rings on the control point.
         for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
@@ -210,7 +207,8 @@ void Ship::fillComponentList(vector<WorldComponent>& list) {
             );
         }
     };
-    c.drawCallback = callback;
+    
+    WorldComponent c(groundSector->z + 0.001, callback);
     list.push_back(c);
 
 

@@ -28,11 +28,18 @@ public:
 
     //--- Members ---
     //Its Z coordinate.
-    float z = 0.0f;
+    float z;
     
     //Index in the list of world components. Used for sorting.
-    size_t idx = 0;
+    size_t idx;
     
     //The function that should be called to draw the component.
-    std::function<void()> drawCallback = nullptr;
+    std::function<void()> drawCallback;
+
+    //--- Function declarations ---
+    WorldComponent(float z, std::function<void()> drawCallback) :
+    z(z),
+    idx(0),
+    drawCallback(drawCallback) 
+    {}
 };

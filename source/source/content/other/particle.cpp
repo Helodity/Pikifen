@@ -767,12 +767,10 @@ void ParticleManager::fillComponentList(
             continue;
         }
         
-        WorldComponent wc;
-        wc.z = pPtr->z;
         auto callback = [pPtr] () {
             pPtr->draw();
         };
-        wc.drawCallback = callback;
+        WorldComponent wc(pPtr->z, callback);
         list.push_back(wc);
     }
 }

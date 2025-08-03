@@ -2512,15 +2512,15 @@ void Mob::fillComponentList(vector<WorldComponent>& list) {
         type->castsShadow &&
         !hasFlag(flags, MOB_FLAG_SHADOW_INVISIBLE)
     ) {
-        WorldComponent c;
+        float targetZ = 0;
         if(standingOnMob) {
-            c.z =
+            targetZ =
                 standingOnMob->z +
                 standingOnMob->getDrawingHeight();
         } else {
-            c.z = groundSector->z;
+            targetZ = groundSector->z;
         }
-        c.z += getDrawingHeight() - 1;
+        targetZ += getDrawingHeight() - 1;
 
         auto callback = [this, mobShadowStretch] () {
             float deltaZ = 0;
@@ -2535,36 +2535,36 @@ void Mob::fillComponentList(vector<WorldComponent>& list) {
                 mobShadowStretch
             );
         };
-        c.drawCallback =  callback;
+        WorldComponent c(targetZ, callback);
         list.push_back(c);
     }
     
     //Limbs.
     if(parent && parent->limbAnim.animDb) {
         unsigned char method = parent->limbDrawMethod;
-        WorldComponent c;
         
+        float targetZ = 0;
         switch(method) {
         case LIMB_DRAW_METHOD_BELOW_BOTH: {
-            c.z = std::min(z, parent->m->z);
+            targetZ = std::min(z, parent->m->z);
             break;
         } case LIMB_DRAW_METHOD_BELOW_CHILD: {
-            c.z = z;
+            targetZ = z;
             break;
         } case LIMB_DRAW_METHOD_BELOW_PARENT: {
-            c.z = parent->m->z;
+            targetZ = parent->m->z;
             break;
         } case LIMB_DRAW_METHOD_ABOVE_PARENT: {
-            c.z =
+            targetZ =
                 parent->m->z +
                 parent->m->getDrawingHeight() +
                 0.001;
             break;
         } case LIMB_DRAW_METHOD_ABOVE_CHILD: {
-            c.z = z + getDrawingHeight() + 0.001;
+            targetZ = z + getDrawingHeight() + 0.001;
             break;
         } case LIMB_DRAW_METHOD_ABOVE_BOTH: {
-            c.z =
+            targetZ =
                 std::max(
                     parent->m->z +
                     parent->m->getDrawingHeight() +
@@ -2581,16 +2581,15 @@ void Mob::fillComponentList(vector<WorldComponent>& list) {
                 drawLimb();
             }
         };
-        c.drawCallback = callback;
 
+        WorldComponent c(targetZ, callback);
         list.push_back(c);
     }
     
     //The mob proper.
-    WorldComponent c;
-    c.z = z + getDrawingHeight();
+    float mob_z = z + getDrawingHeight();
     if(holder.m && holder.forceAboveHolder) {
-        c.z += holder.m->getDrawingHeight() + 1;
+        mob_z += holder.m->getDrawingHeight() + 1;
     }
 
     auto callback = [this] () {
@@ -2601,7 +2600,7 @@ void Mob::fillComponentList(vector<WorldComponent>& list) {
             }
         }
     };
-    c.drawCallback = callback;
+    WorldComponent c(mob_z, callback);
     list.push_back(c);
 }
 

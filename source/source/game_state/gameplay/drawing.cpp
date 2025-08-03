@@ -1950,9 +1950,6 @@ void GameplayState::drawWorldComponents(
             continue;
         }
         
-        WorldComponent c;
-        c.z = sPtr->z;
-
         auto callback = [
             sPtr, bmpOutput, customLiquidLimitEffectBuffer, 
             customWallOffsetEffectBuffer, view
@@ -1995,7 +1992,7 @@ void GameplayState::drawWorldComponents(
                 1.0f, view
             );
         };
-        c.drawCallback = callback;
+        WorldComponent c(sPtr->z, callback);
         components.push_back(c);
     }
     
@@ -2035,9 +2032,7 @@ void GameplayState::drawWorldComponents(
     for(size_t c = 0; c < components.size(); c++) {
         WorldComponent* cPtr = &components[c];
         
-        if(cPtr->sectorPtr) {
-
-        } else if(cPtr->drawCallback) {       
+        if(cPtr->drawCallback) {       
             cPtr->drawCallback();           
         }
     }
