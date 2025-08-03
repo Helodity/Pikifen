@@ -2495,6 +2495,117 @@ void Mob::getSpriteBitmapEffects(
 }
 
 
+void Mob::fillComponentList(vector<WorldComponent>& list) {
+
+    float mobShadowStretch = 0;
+    
+    if(game.states.gameplay->dayMinutes < 60 * 5 || game.states.gameplay->dayMinutes > 60 * 20) {
+        mobShadowStretch = 1;
+    } else if(game.states.gameplay->dayMinutes < 60 * 12) {
+        mobShadowStretch = 1 - ((game.states.gameplay->dayMinutes - 60 * 5) / (60 * 12 - 60 * 5));
+    } else {
+        mobShadowStretch = (game.states.gameplay->dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
+    }
+
+    //Shadows.
+    if(
+        type->castsShadow &&
+        !hasFlag(flags, MOB_FLAG_SHADOW_INVISIBLE)
+    ) {
+        WorldComponent c;
+        if(standingOnMob) {
+            c.z =
+                standingOnMob->z +
+                standingOnMob->getDrawingHeight();
+        } else {
+            c.z = groundSector->z;
+        }
+        c.z += getDrawingHeight() - 1;
+
+        auto callback = [this, mobShadowStretch] () {
+            float deltaZ = 0;
+            if(!standingOnMob) {
+                deltaZ =
+                    z -
+                    groundSector->z;
+            }
+            drawMobShadow(
+                this,
+                deltaZ,
+                mobShadowStretch
+            );
+        };
+        c.drawCallback =  callback;
+        list.push_back(c);
+    }
+    
+    //Limbs.
+    if(parent && parent->limbAnim.animDb) {
+        unsigned char method = parent->limbDrawMethod;
+        WorldComponent c;
+        
+        switch(method) {
+        case LIMB_DRAW_METHOD_BELOW_BOTH: {
+            c.z = std::min(z, parent->m->z);
+            break;
+        } case LIMB_DRAW_METHOD_BELOW_CHILD: {
+            c.z = z;
+            break;
+        } case LIMB_DRAW_METHOD_BELOW_PARENT: {
+            c.z = parent->m->z;
+            break;
+        } case LIMB_DRAW_METHOD_ABOVE_PARENT: {
+            c.z =
+                parent->m->z +
+                parent->m->getDrawingHeight() +
+                0.001;
+            break;
+        } case LIMB_DRAW_METHOD_ABOVE_CHILD: {
+            c.z = z + getDrawingHeight() + 0.001;
+            break;
+        } case LIMB_DRAW_METHOD_ABOVE_BOTH: {
+            c.z =
+                std::max(
+                    parent->m->z +
+                    parent->m->getDrawingHeight() +
+                    0.001,
+                    z + getDrawingHeight() +
+                    0.001
+                );
+            break;
+        }
+        }
+        
+        auto callback = [this] () {
+            if(!hasFlag(flags, MOB_FLAG_HIDDEN)) {
+                drawLimb();
+            }
+        };
+        c.drawCallback = callback;
+
+        list.push_back(c);
+    }
+    
+    //The mob proper.
+    WorldComponent c;
+    c.z = z + getDrawingHeight();
+    if(holder.m && holder.forceAboveHolder) {
+        c.z += holder.m->getDrawingHeight() + 1;
+    }
+
+    auto callback = [this] () {
+        if(!hasFlag(flags, MOB_FLAG_HIDDEN)) {
+            drawMob();
+            if(type->drawMobCallback) {
+                type->drawMobCallback(this);
+            }
+        }
+    };
+    c.drawCallback = callback;
+    list.push_back(c);
+}
+
+
 /**
  * @brief Returns data for figuring out the state of the current sprite
  * of animation.

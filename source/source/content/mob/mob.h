@@ -519,6 +519,9 @@ public:
         Sprite* sPtr, Sprite* nextSPtr, float interpolationFactor,
         BitmapEffect* info, Bitmask16 effects
     ) const;
+    virtual void fillComponentList(
+        vector<WorldComponent>& list
+    );
     
     string printStateHistory() const;
     

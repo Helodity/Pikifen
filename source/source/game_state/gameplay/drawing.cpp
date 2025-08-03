@@ -1951,8 +1951,51 @@ void GameplayState::drawWorldComponents(
         }
         
         WorldComponent c;
-        c.sectorPtr = sPtr;
         c.z = sPtr->z;
+
+        auto callback = [
+            sPtr, bmpOutput, customLiquidLimitEffectBuffer, 
+            customWallOffsetEffectBuffer, view
+        ] () {
+            bool hasLiquid = false;
+            if(
+                sPtr->hazard &&
+                sPtr->hazard->associatedLiquid
+            ) {
+                drawLiquid(
+                    sPtr,
+                    sPtr->hazard->associatedLiquid,
+                    Point(),
+                    1.0f,
+                    game.states.gameplay->areaTimePassed
+                );
+                hasLiquid = true;
+            }
+            if(!hasLiquid) {
+                drawSectorTexture(sPtr, Point(), 1.0f, 1.0f);
+            }
+            float liquidOpacityMult = 1.0f;
+            if(sPtr->drainingLiquid) {
+                liquidOpacityMult =
+                    sPtr->liquidDrainLeft /
+                    GEOMETRY::LIQUID_DRAIN_DURATION;
+            }
+            drawSectorEdgeOffsets(
+                sPtr,
+                bmpOutput ?
+                customLiquidLimitEffectBuffer :
+                game.liquidLimitEffectBuffer,
+                liquidOpacityMult, view
+            );
+            drawSectorEdgeOffsets(
+                sPtr,
+                bmpOutput ?
+                customWallOffsetEffectBuffer :
+                game.wallOffsetEffectBuffer,
+                1.0f, view
+            );
+        };
+        c.drawCallback = callback;
         components.push_back(c);
     }
     
@@ -1971,73 +2014,7 @@ void GameplayState::drawWorldComponents(
         if(hasFlag(mobPtr->flags, MOB_FLAG_HIDDEN)) continue;
         if(mobPtr->isStoredInsideMob()) continue;
         
-        //Shadows.
-        if(
-            mobPtr->type->castsShadow &&
-            !hasFlag(mobPtr->flags, MOB_FLAG_SHADOW_INVISIBLE)
-        ) {
-            WorldComponent c;
-            c.mobShadowPtr = mobPtr;
-            if(mobPtr->standingOnMob) {
-                c.z =
-                    mobPtr->standingOnMob->z +
-                    mobPtr->standingOnMob->getDrawingHeight();
-            } else {
-                c.z = mobPtr->groundSector->z;
-            }
-            c.z += mobPtr->getDrawingHeight() - 1;
-            components.push_back(c);
-        }
-        
-        //Limbs.
-        if(mobPtr->parent && mobPtr->parent->limbAnim.animDb) {
-            unsigned char method = mobPtr->parent->limbDrawMethod;
-            WorldComponent c;
-            c.mobLimbPtr = mobPtr;
-            
-            switch(method) {
-            case LIMB_DRAW_METHOD_BELOW_BOTH: {
-                c.z = std::min(mobPtr->z, mobPtr->parent->m->z);
-                break;
-            } case LIMB_DRAW_METHOD_BELOW_CHILD: {
-                c.z = mobPtr->z;
-                break;
-            } case LIMB_DRAW_METHOD_BELOW_PARENT: {
-                c.z = mobPtr->parent->m->z;
-                break;
-            } case LIMB_DRAW_METHOD_ABOVE_PARENT: {
-                c.z =
-                    mobPtr->parent->m->z +
-                    mobPtr->parent->m->getDrawingHeight() +
-                    0.001;
-                break;
-            } case LIMB_DRAW_METHOD_ABOVE_CHILD: {
-                c.z = mobPtr->z + mobPtr->getDrawingHeight() + 0.001;
-                break;
-            } case LIMB_DRAW_METHOD_ABOVE_BOTH: {
-                c.z =
-                    std::max(
-                        mobPtr->parent->m->z +
-                        mobPtr->parent->m->getDrawingHeight() +
-                        0.001,
-                        mobPtr->z + mobPtr->getDrawingHeight() +
-                        0.001
-                    );
-                break;
-            }
-            }
-            
-            components.push_back(c);
-        }
-        
-        //The mob proper.
-        WorldComponent c;
-        c.mobPtr = mobPtr;
-        c.z = mobPtr->z + mobPtr->getDrawingHeight();
-        if(mobPtr->holder.m && mobPtr->holder.forceAboveHolder) {
-            c.z += mobPtr->holder.m->getDrawingHeight() + 1;
-        }
-        components.push_back(c);
+        mobPtr->fillComponentList(components);
     }
     
     //Time to draw!
@@ -2054,93 +2031,14 @@ void GameplayState::drawWorldComponents(
         return c1.z < c2.z;
     }
     );
-    
-    float mobShadowStretch = 0;
-    
-    if(dayMinutes < 60 * 5 || dayMinutes > 60 * 20) {
-        mobShadowStretch = 1;
-    } else if(dayMinutes < 60 * 12) {
-        mobShadowStretch = 1 - ((dayMinutes - 60 * 5) / (60 * 12 - 60 * 5));
-    } else {
-        mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
-    }
-    
+
     for(size_t c = 0; c < components.size(); c++) {
         WorldComponent* cPtr = &components[c];
         
         if(cPtr->sectorPtr) {
-        
-            bool hasLiquid = false;
-            if(
-                cPtr->sectorPtr->hazard &&
-                cPtr->sectorPtr->hazard->associatedLiquid
-            ) {
-                drawLiquid(
-                    cPtr->sectorPtr,
-                    cPtr->sectorPtr->hazard->associatedLiquid,
-                    Point(),
-                    1.0f,
-                    areaTimePassed
-                );
-                hasLiquid = true;
-            }
-            if(!hasLiquid) {
-                drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
-            }
-            float liquidOpacityMult = 1.0f;
-            if(cPtr->sectorPtr->drainingLiquid) {
-                liquidOpacityMult =
-                    cPtr->sectorPtr->liquidDrainLeft /
-                    GEOMETRY::LIQUID_DRAIN_DURATION;
-            }
-            drawSectorEdgeOffsets(
-                cPtr->sectorPtr,
-                bmpOutput ?
-                customLiquidLimitEffectBuffer :
-                game.liquidLimitEffectBuffer,
-                liquidOpacityMult, view
-            );
-            drawSectorEdgeOffsets(
-                cPtr->sectorPtr,
-                bmpOutput ?
-                customWallOffsetEffectBuffer :
-                game.wallOffsetEffectBuffer,
-                1.0f, view
-            );
-            
-        } else if(cPtr->mobShadowPtr) {
-        
-            float deltaZ = 0;
-            if(!cPtr->mobShadowPtr->standingOnMob) {
-                deltaZ =
-                    cPtr->mobShadowPtr->z -
-                    cPtr->mobShadowPtr->groundSector->z;
-            }
-            drawMobShadow(
-                cPtr->mobShadowPtr,
-                deltaZ,
-                mobShadowStretch
-            );
-            
-        } else if(cPtr->mobLimbPtr) {
-        
-            if(!hasFlag(cPtr->mobLimbPtr->flags, MOB_FLAG_HIDDEN)) {
-                cPtr->mobLimbPtr->drawLimb();
-            }
-            
-        } else if(cPtr->mobPtr) {
-        
-            if(!hasFlag(cPtr->mobPtr->flags, MOB_FLAG_HIDDEN)) {
-                cPtr->mobPtr->drawMob();
-                if(cPtr->mobPtr->type->drawMobCallback) {
-                    cPtr->mobPtr->type->drawMobCallback(cPtr->mobPtr);
-                }
-            }
-            
-        } else if(cPtr->particlePtr) {
-        
-            cPtr->particlePtr->draw();
-            
+
+        } else if(cPtr->drawCallback) {       
+            cPtr->drawCallback();           
         }
     }
     

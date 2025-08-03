@@ -108,8 +108,8 @@ void ParticleEditor::drawCanvas() {
     );
     for(size_t c = 0; c < components.size(); ++c) {
         WorldComponent* cPtr = &components[c];
-        if(cPtr->particlePtr) {
-            cPtr->particlePtr->draw();
+        if(cPtr->drawCallback) {
+            cPtr->drawCallback();
         }
     }
     

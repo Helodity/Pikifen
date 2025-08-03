@@ -11,7 +11,7 @@
 #pragma once
 
 #include <cstdio>
-
+#include <functional>
 
 struct Sector;
 class Mob;
@@ -27,26 +27,12 @@ class WorldComponent {
 public:
 
     //--- Members ---
-    
-    //If it's a sector, this points to it.
-    Sector* sectorPtr = nullptr;
-    
-    //If it's a mob shadow, this points to its mob.
-    Mob* mobShadowPtr = nullptr;
-    
-    //If it's a mob limb, this points to its mob.
-    Mob* mobLimbPtr = nullptr;
-    
-    //If it's a mob, this points to it.
-    Mob* mobPtr = nullptr;
-    
-    //If it's a particle, this points to it.
-    Particle* particlePtr = nullptr;
-    
     //Its Z coordinate.
     float z = 0.0f;
     
     //Index in the list of world components. Used for sorting.
     size_t idx = 0;
     
+    //The function that should be called to draw the component.
+    std::function<void()> drawCallback = nullptr;
 };
