@@ -124,8 +124,8 @@ void PacksMenu::initGuiMain() {
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     gui.backItem->onActivate =
     [this] (const Point&) {
-        game.options.packs.order = packOrder;
-        game.options.packs.disabled = packsDisabled;
+        game.options.packs.orderNextLoad = packOrder;
+        game.options.packs.disabledNextLoad = packsDisabled;
         saveOptions();
         leave();
     };
@@ -360,8 +360,7 @@ void PacksMenu::initGuiMain() {
     //Restart warning text.
     warningText =
         new TextGuiItem(
-        "You may need to leave this menu and then restart for some of "
-        "the changes to take effect.",
+        "Pack changes will not take effect until you leave this menu and restart!",
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     warningText->visible = false;
@@ -403,9 +402,9 @@ void PacksMenu::load() {
     packOrder =
         sortVectorWithPreferenceList(
             game.content.packs.manifestsSansBaseRaw,
-            game.options.packs.order
+            game.options.packs.orderNextLoad
         );
-    packsDisabled = game.options.packs.disabled;
+    packsDisabled = game.options.packs.disabledNextLoad;
     
     //Get the thumbnails.
     for(

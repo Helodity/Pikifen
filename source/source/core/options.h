@@ -395,9 +395,15 @@ struct Options {
     
         //Disabled packs.
         vector<string> disabled;
+
+        //Disabled packs for next load.
+        vector<string> disabledNextLoad;
         
         //Preferred pack load order.
         vector<string> order;
+
+        //Preferred pack load order for next load.
+        vector<string> orderNextLoad;
         
     } packs;
     

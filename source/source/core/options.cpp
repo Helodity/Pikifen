@@ -483,7 +483,9 @@ void Options::loadFromDataNode(DataNode* file) {
         pRS.set("order", packsLoadOrderStr);
         
         packs.disabled = semicolonListToVector(packsDisabledStr);
+        packs.disabledNextLoad = semicolonListToVector(packsDisabledStr);
         packs.order = semicolonListToVector(packsLoadOrderStr);
+        packs.orderNextLoad = semicolonListToVector(packsLoadOrderStr);
     }
     
     //Particle editor.
@@ -659,8 +661,8 @@ void Options::saveToDataNode(DataNode* file) const {
     
     //Packs.
     {
-        string packsDisabledStr = join(packs.disabled, ";");
-        string packsLoadOrderStr = join(packs.order, ";");
+        string packsDisabledStr = join(packs.disabledNextLoad, ";");
+        string packsLoadOrderStr = join(packs.orderNextLoad, ";");
         GetterWriter pGW(file->addNew("packs"));
         
         pGW.write("disabled", packsDisabledStr);
