@@ -55,6 +55,7 @@ void PacksMenu::changeInfo(int idx) {
     if(!packPtr) {
         packNameText->text.clear();
         packDescriptionText->text.clear();
+        packDependenciesText->text.clear();
         packTagsText->text.clear();
         packMakerText->text.clear();
         packVersionText->text.clear();
@@ -72,6 +73,12 @@ void PacksMenu::changeInfo(int idx) {
         packPtr->description;
     packDescriptionText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+    );
+
+    packDependenciesText->text =
+        (packPtr->dependencies.empty() ? "" : "Dependencies: " + packPtr->dependencies);
+    packDependenciesText->startJuiceAnimation(
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     
     packTagsText->text =
@@ -107,7 +114,8 @@ void PacksMenu::initGuiMain() {
     gui.registerCoords("info_box",           76,   47, 44, 74);
     gui.registerCoords("pack_name",        67.5,   19, 25, 16);
     gui.registerCoords("pack_thumbnail",     89,   19, 16, 16);
-    gui.registerCoords("pack_description",   76, 48.5, 42, 41);
+    gui.registerCoords("pack_description",   76,   45, 42, 34);
+    gui.registerCoords("pack_dependencies",  76,   66, 42,  6);
     gui.registerCoords("pack_tags",          76,   73, 42,  6);
     gui.registerCoords("pack_maker",         65,   80, 20,  6);
     gui.registerCoords("pack_version",       87,   80, 20,  6);
@@ -191,20 +199,23 @@ void PacksMenu::initGuiMain() {
         );
         check->ratioCenter = Point(0.78f, rowCenterY);
         check->ratioSize = Point(0.08f, ITEM_HEIGHT);
+        check->onTick =
+        [p, check, this] (const Point & pos) {
+            check->value = 
+                std::find(packsDisabled.begin(), packsDisabled.end(), packOrder[p]) ==
+                packsDisabled.end();
+        };
         check->onActivate =
         [p, check, this] (const Point & pos) {
             check->defActivateCode();
             if(check->value) {
-                packsDisabled.erase(
-                    std::find(
-                        packsDisabled.begin(), packsDisabled.end(),
-                        packOrder[p]
-                    )
-                );
+                if(tryEnablePack(packOrder[p])){
+                    triggerRestartWarning();
+                }
             } else {
-                packsDisabled.push_back(packOrder[p]);
+                disablePack(packOrder[p]);
+                triggerRestartWarning();
             }
-            triggerRestartWarning();
         };
         check->onSelected = [p, this] () { changeInfo((int) p); };
         check->onGetTooltip =
@@ -336,6 +347,13 @@ void PacksMenu::initGuiMain() {
     packDescriptionText->lineWrap = true;
     gui.addItem(packDescriptionText, "pack_description");
     
+    //Pack dependencies text.
+    packDependenciesText =
+        new TextGuiItem(
+        "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+    );
+    gui.addItem(packDependenciesText, "pack_dependencies");
+
     //Pack tags text.
     packTagsText =
         new TextGuiItem(
@@ -462,4 +480,68 @@ void PacksMenu::unload() {
     packThumbs.clear();
     
     Menu::unload();
+}
+
+
+/**
+ * @brief Tries to enable a pack.
+ * 
+ * @param packName Internal name of the pack.
+ * 
+ * @returns whether the pack was successfully enabled.
+ */
+bool PacksMenu::tryEnablePack(string packName) {
+    auto packIt = game.content.packs.list.find(packName);
+
+    if(packIt == game.content.packs.list.end()){
+        //Trying to enable nonexistant pack.
+        return false;
+    }
+
+    Pack toEnable = packIt->second;
+
+    //Ensure each dependency is enabled.
+    std::vector<string> depList = semicolonListToVector(toEnable.dependencies);
+    for(size_t d = 0; d < depList.size(); d++) {
+        if(packIt == game.content.packs.list.end()){
+            //Couldn't find required pack.
+            return false;
+        }
+        if(std::find(packsDisabled.begin(), packsDisabled.end(), depList[d]) != packsDisabled.end()){
+            //Pack is disabled
+            return false;
+        }
+    }
+
+    //Sucessfully enable the pack.
+    packsDisabled.erase(
+        std::find(
+            packsDisabled.begin(), packsDisabled.end(),
+            packName
+        )
+    );
+    return true;
+}
+
+/**
+ * @brief Disables a pack and any packs that are dependant on it.
+ * 
+ * @param packName Internal name of the pack.
+ */
+void PacksMenu::disablePack(string packName) {
+    packsDisabled.push_back(packName);
+
+    for(auto it = game.content.packs.list.begin(); it != game.content.packs.list.end(); it++) {
+        Pack p = it->second;
+
+        std::vector<string> depList = semicolonListToVector(p.dependencies);
+        if(
+            std::find(depList.begin(), depList.end(), packName) != depList.end() &&
+            std::find(packsDisabled.begin(), packsDisabled.end(), it->first) == packsDisabled.end()
+        ) {  
+            packsDisabled.push_back(it->first);
+        }
+
+    }
+
 }

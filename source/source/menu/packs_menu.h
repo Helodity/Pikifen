@@ -69,6 +69,9 @@ private:
     
     //Pack name text item.
     TextGuiItem* packNameText = nullptr;
+
+    //Pack dependancies text item.
+    TextGuiItem* packDependenciesText = nullptr;
     
     //Pack description text item.
     TextGuiItem* packDescriptionText = nullptr;
@@ -97,5 +100,6 @@ private:
     void initGuiMain();
     void populatePacksList();
     void triggerRestartWarning();
-    
+    bool tryEnablePack(string packName);
+    void disablePack(string packName);
 };

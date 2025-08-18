@@ -1,7 +1,7 @@
 name=Pack management menu
 description=GUI for the pack management menu.
 maker=Espyo
-version=1.0.0
+version=1.0.1
 engine_version=1.0.0
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
@@ -12,7 +12,8 @@ positions{
 	info_box=76.0000 47.0000 44.0000 74.0000
 	pack_name=67.5000 19.0000 25.0000 16.0000
 	pack_thumbnail=89.0000 19.0000 16.0000 16.0000
-	pack_description=76.0000 48.5000 42.0000 41.0000
+	pack_description=76.0000 45.0000 42.0000 34.0000
+	pack_dependencies=76.0000 66.0000 42.0000 6.0000
 	pack_tags=76.0000 73.0000 42.0000 6.0000
 	pack_maker=65.0000 80.0000 20.0000 6.0000
 	pack_version=87.0000 80.0000 20.0000 6.0000
