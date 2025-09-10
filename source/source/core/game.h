@@ -177,7 +177,9 @@ public:
     
     //Loading screen main text buffer.
     ALLEGRO_BITMAP* loadingTextBmp = nullptr;
-    
+
+    bool loadingScreenInfoLoaded = false;
+
     //List of mob actions.
     vector<MobAction> mobActions;
     
@@ -303,7 +305,6 @@ private:
     //Is deltaT meant to be reset for the next frame?
     bool resetDeltaT = true;
     
-    
     //--- Function declarations ---
     
     void drawFramerateChart() const;
@@ -314,6 +315,7 @@ private:
     bool globalHandleSystemPlayerAction(const PlayerAction& action);
     void processSystemInfo();
     
+    static void *stateLoadingThread(ALLEGRO_THREAD *thread, void *arg);
 };
 
 

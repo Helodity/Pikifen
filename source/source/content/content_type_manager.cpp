@@ -155,26 +155,9 @@ bool AreaContentManager::loadArea(
     if(game.perfMon) game.perfMon->startMeasurement("Area -- Data");
     areaPtr->loadMainDataFromDataNode(&dataFile, level);
     areaPtr->loadMissionDataFromDataNode(&dataFile);
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR)
+        game.loadingScreenInfoLoaded = true;
     if(game.perfMon) game.perfMon->finishMeasurement();
-    
-    //Loading screen.
-    if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
-        if(game.loadingTextBmp) al_destroy_bitmap(game.loadingTextBmp);
-        if(game.loadingSubtextBmp) al_destroy_bitmap(game.loadingSubtextBmp);
-        game.loadingTextBmp = nullptr;
-        game.loadingSubtextBmp = nullptr;
-        drawLoadingScreen(
-            areaPtr->name,
-            getSubtitleOrMissionGoal(
-                areaPtr->subtitle,
-                areaPtr->type,
-                areaPtr->mission.goal
-            ),
-            areaPtr->maker,
-            1.0f
-        );
-        al_flip_display();
-    }
     
     //Thumbnail image.
     string thumbnailPath = baseFolderPath + "/" + FILE_NAMES::AREA_THUMBNAIL;

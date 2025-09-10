@@ -51,7 +51,7 @@ void TitleScreen::doDrawing() {
     al_clear_to_color(COLOR_BLACK);
     
     if(game.debug.showDearImGuiDemo) return;
-    
+
     drawBitmap(
         bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
         Point(game.winW, game.winH)
@@ -851,7 +851,6 @@ void TitleScreen::initGuiTutorialPage() {
  * @brief Loads the title screen into memory.
  */
 void TitleScreen::load() {
-    drawLoadingScreen("", "", "", 1.0);
     al_flip_display();
     
     //Game content.

@@ -203,7 +203,7 @@ void drawLiquid(
 );
 void drawLoadingScreen(
     const string& areaName, const string& subtitle, const string& maker,
-    float opacity
+    float opacity, float elapsedTime
 );
 void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,

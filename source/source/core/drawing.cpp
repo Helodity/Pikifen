@@ -591,7 +591,7 @@ void drawLiquid(
  */
 void drawLoadingScreen(
     const string& text, const string& subtext, const string& maker,
-    float opacity
+    float opacity, float elapsedTime
 ) {
     const float textW = game.winW * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
     const float textH = game.winH * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
@@ -789,7 +789,7 @@ void drawLoadingScreen(
             drawBitmap(
                 game.sysContent.bmpIcon, iconPos,
                 Point(-1, textBox.y),
-                0, al_map_rgba(255, 255, 255, opacity * 255.0)
+                elapsedTime * 3, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         

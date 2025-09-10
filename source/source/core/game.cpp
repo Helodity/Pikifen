@@ -108,8 +108,39 @@ void Game::changeState(
     curState = newState;
     
     if(loadNew) {
-        curState->load();
-        curState->loaded = true;
+        ALLEGRO_THREAD* loadingThread = al_create_thread(stateLoadingThread, curState);
+        al_start_thread(loadingThread);
+        //Begin loading screen rendering.
+        double elapsedTime = 0;
+        game.loadingScreenInfoLoaded = false;
+        while(!curState->loaded) {
+            double curFrameStartTime = al_get_time();
+            if(game.loadingScreenInfoLoaded){
+                if(game.loadingTextBmp) al_destroy_bitmap(game.loadingTextBmp);
+                if(game.loadingSubtextBmp) al_destroy_bitmap(game.loadingSubtextBmp);
+                game.loadingTextBmp = nullptr;
+                game.loadingSubtextBmp = nullptr;
+                drawLoadingScreen(
+                    game.curAreaData->name,
+                    getSubtitleOrMissionGoal(
+                        game.curAreaData->subtitle,
+                        game.curAreaData->type,
+                        game.curAreaData->mission.goal
+                    ),
+                    game.curAreaData->maker,
+                    1.0f, elapsedTime
+                );
+            } else {
+                drawLoadingScreen("", "", "", 1.0, elapsedTime);
+            }
+            al_flip_display();
+            double curFrameEndTime = al_get_time();
+            elapsedTime += curFrameEndTime - curFrameStartTime;
+        }
+        //End loading screen rendering.
+        al_join_thread(loadingThread, NULL);
+        al_convert_memory_bitmaps();
+        al_destroy_thread(loadingThread);
     }
     
     //Because during the loading screens there is no activity, on the
@@ -665,7 +696,7 @@ int Game::start() {
     loadMiscSounds();
     
     //Draw the basic loading screen.
-    drawLoadingScreen("", "", "", 1.0);
+    //drawLoadingScreen("", "", "", 1.0, 0);
     al_flip_display();
     
     //Init Dear ImGui.
@@ -742,6 +773,25 @@ int Game::start() {
 void Game::unloadLoadedState(GameState* loadedState) {
     loadedState->unload();
 }
+
+void* Game::stateLoadingThread(ALLEGRO_THREAD *thread, void *arg){
+    int newBitmapFlags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
+    if(game.options.advanced.smoothScaling) {
+        enableFlag(newBitmapFlags, ALLEGRO_MAG_LINEAR);
+        enableFlag(newBitmapFlags, ALLEGRO_MIN_LINEAR);
+    }
+    if(game.options.advanced.mipmapsEnabled) {
+        enableFlag(newBitmapFlags, ALLEGRO_MIPMAP);
+    }
+    al_add_new_bitmap_flag(newBitmapFlags);
+
+    GameState* curState = (GameState*)arg;
+    curState->load(); //Loads all the bitmaps 
+    curState->loaded = true;
+
+    return NULL;
+}
+
 
 
 /**
