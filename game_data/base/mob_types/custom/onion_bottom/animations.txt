@@ -22,14 +22,14 @@ sprites{
 		file=onions/onion_bottom
 		file_pos=3.0000 0.0000
 		file_size=277.0000 320.0000
-		offset=22.1000 0.0000
+		offset=22.5000 0.0000
 		scale=0.5000 0.5000
 	}
 	idling_02{
 		file=onions/onion_bottom
 		file_pos=3.0000 0.0000
 		file_size=277.0000 320.0000
-		offset=22.2000 0.0000
+		offset=22.6000 0.0000
 		scale=0.5060 0.5060
 	}
 }

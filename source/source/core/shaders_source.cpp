@@ -618,13 +618,6 @@ bool alpha_test_func(float x, int op, float compare)
  */
 
 void main() {
-
-    float final_alpha = opacity;
-
-    if(al_use_tex) {
-        final_alpha *= (varying_color * texture2D(al_tex, varying_texcoord)).a;
-    }
-
     //--- Basics ---
 
     //Define some variables that'll be used throughout the shader.
@@ -634,6 +627,14 @@ void main() {
     float raw_noise_value = simplex_noise(varying_texcoord, scale, noise_func_step, 0.02);
     raw_noise_value = simplex_noise(varying_texcoord + raw_noise_value, scale, noise_func_step, 0.02);
     vec4 final_pixel = texture(colormap, vec2((raw_noise_value + 0.2) * 2.5, 0));
+
+    //Calculate alpha
+    float final_alpha = opacity;
+
+    if(al_use_tex) {
+        final_alpha *= (varying_color * texture2D(al_tex, varying_texcoord)).a;
+    }
+
     final_pixel.a = final_alpha;
     final_pixel.r *= brightness;
     final_pixel.g *= brightness;
