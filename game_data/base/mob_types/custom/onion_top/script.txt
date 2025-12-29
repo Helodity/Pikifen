@@ -5,5 +5,31 @@ script {
         on_enter {
             set_animation idling
         }
+        on_receive_message {
+            get_event_info msg message
+            if $msg = started_generation
+                set_state generating
+            end_if
+        }
+    }
+    generating {
+        on_enter {
+            set_animation generating
+        }
+        on_receive_message {
+            get_event_info msg message
+            if $msg = stopped_generation
+                set_state stopping_generation
+            end_if
+        }
+    }
+    stopping_generation {
+        on_enter {
+            set_animation stopping_generation
+        }
+        on_animation_end {
+            set_state idling
+        }
+
     }
 }

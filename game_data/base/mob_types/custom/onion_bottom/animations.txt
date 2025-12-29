@@ -1,9 +1,54 @@
-name=Blue Onion animations
-description=Animations for the Blue Onion.
+name=Master Onion animations
+description=Animations for the Master Onion.
 maker=Espyo
 version=1.0.0
 engine_version=1.1.0
 animations{
+	generating{
+		loop_frame=6
+		frames{
+			idling_01{
+				duration=0.0600
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0300
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
 	idling{
 		frames{
 			idling_01{
@@ -12,6 +57,46 @@ animations{
 			}
 			idling_02{
 				duration=0.1100
+				interpolate=true
+			}
+		}
+	}
+	stopping_generation{
+		frames{
+			idling_01{
+				duration=0.0600
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
 				interpolate=true
 			}
 		}

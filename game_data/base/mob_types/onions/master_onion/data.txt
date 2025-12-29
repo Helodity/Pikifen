@@ -38,12 +38,14 @@ spawns {
         relative = true
         coordinates = 0 0 0
         angle = 0
+        link_object_to_spawn = true
     }
     bottom {
         object = onion_bottom
         relative = true
         coordinates = 0 0 0
         angle = 0
+        link_object_to_spawn = true
     }
 }
 

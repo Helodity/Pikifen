@@ -5,8 +5,45 @@ version=1.0.0
 engine_version=1.1.0
 animations{
 	generating{
+		loop_frame=6
 		frames{
 			idling_01{
+				duration=0.0600
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0300
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
 				duration=0.0500
 				interpolate=true
 			}
@@ -38,6 +75,30 @@ animations{
 				duration=0.0500
 				interpolate=true
 			}
+			idling_01{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
 		}
 	}
 }
@@ -56,7 +117,7 @@ sprites{
 				value=1.0000
 			}
 			bottom{
-				coords=0.0000 0.0000 170.0000
+				coords=0.0000 0.0000 190.0000
 				height=10.0000
 				radius=10.0000
 				type=2
@@ -120,7 +181,7 @@ sprites{
 				value=1.0000
 			}
 			bottom{
-				coords=0.0000 0.0000 170.0000
+				coords=0.0000 0.0000 190.0000
 				height=10.0000
 				radius=10.0000
 				type=2
