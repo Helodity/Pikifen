@@ -1,0 +1,87 @@
+name = Ice Onion
+description = Onion that houses Ice Pikmin.
+
+blackout_radius = 48
+height = 200
+leg_body_parts = hole_1; foot_1; hole_2; foot_2; hole_3; foot_3
+pikmin_enter_speed = 0.7
+pikmin_exit_speed = 2
+pikmin_types = ice_pikmin
+pushable = false
+pushes = false
+radius = 16
+use_nearby_player_fade = true
+
+children {
+    top {
+        spawn = top
+        parent_holds = true
+        hold_body_part = top
+        hold_rotation_method = copy_parent
+        handle_damage = false
+        handle_events = false
+        handle_statuses = false
+    }
+    bottom {
+        spawn = bottom
+        parent_holds = true
+        hold_body_part = bottom
+        hold_rotation_method = copy_parent
+        handle_damage = false
+        handle_events = false
+        handle_statuses = false
+    }
+}
+
+spawns {
+    top {
+        object = onion_top
+        relative = true
+        coordinates = 0 0 0
+        angle = 0
+    }
+    bottom {
+        object = onion_bottom
+        relative = true
+        coordinates = 0 0 0
+        angle = 0
+    }
+}
+
+sounds {
+    beam {
+        sound = effects/beam
+        volume = 30
+        speed_deviation = 5
+        loop = true
+    }
+    pop {
+        sound = pikmin/seed_pop
+        volume = 40
+        speed_deviation = 5
+        stack_min_pos = 0.005
+    }
+    pikmin_entry {
+        sound = effects/pop
+        volume = 20
+        speed = 50
+        speed_deviation = 8
+        stack_min_pos = 0.02
+    }
+    pikmin_exit {
+        sound = effects/pop
+        volume = 20
+        speed = 70
+        speed_deviation = 8
+        stack_min_pos = 0.02
+    }
+    reception {
+        sound = effects/poof
+        volume = 40
+        speed_deviation = 15
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0
