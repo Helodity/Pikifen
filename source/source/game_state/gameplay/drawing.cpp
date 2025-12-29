@@ -1506,6 +1506,7 @@ void GameplayState::drawOnionMenu() {
         al_set_shader_float("area_time", game.timePassed);
         al_set_shader_float("brightness", 0.4f);
         al_set_shader_float("opacity", 0.8f * onionMenu->bgAlphaMult);
+        al_set_shader_float("scale", 0.1f);
         
         drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
         al_use_shader(nullptr);

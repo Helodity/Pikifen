@@ -11,6 +11,42 @@ pushable = false
 pushes = false
 radius = 16
 
+children {
+    top {
+        spawn = top
+        parent_holds = true
+        hold_body_part = top
+        hold_rotation_method = copy_parent
+        handle_damage = false
+        handle_events = false
+        handle_statuses = false
+    }
+    bottom {
+        spawn = bottom
+        parent_holds = true
+        hold_body_part = bottom
+        hold_rotation_method = copy_parent
+        handle_damage = false
+        handle_events = false
+        handle_statuses = false
+    }
+}
+
+spawns {
+    top {
+        object = onion_top
+        relative = true
+        coordinates = 0 0 0
+        angle = 0
+    }
+    bottom {
+        object = onion_bottom
+        relative = true
+        coordinates = 0 0 0
+        angle = 0
+    }
+}
+
 sounds {
     beam {
         sound = effects/beam

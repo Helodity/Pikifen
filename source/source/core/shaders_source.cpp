@@ -67,9 +67,6 @@ void main() {
   } else {
     result = varying_color;
   }
-  if(al_alpha_test && !alpha_test_func(result.a, al_alpha_func, al_alpha_test_val)) {
-    discard;
-  }
   
   //Colorize it.
   result.r = result.r * texture_weight + colorizer_color.r * colorizer_weight;
@@ -450,6 +447,12 @@ out vec4 frag_color;
  * ========================
  */
 
+uniform sampler2D al_tex;
+uniform bool al_use_tex;
+uniform bool al_alpha_test;
+uniform int al_alpha_func;
+uniform float al_alpha_test_val;
+
 // Time passed in the area.
 uniform float area_time;
 
@@ -464,6 +467,9 @@ uniform sampler2D colormap;
 
 //Brightness to use.
 uniform float brightness;
+
+//Noise scale to use
+uniform float scale;
 
 
 /*
@@ -586,6 +592,24 @@ float simplex_noise(vec2 xy, float noise_scale, vec2 step, float time_scale) {
     return x;
 }
 
+/*
+ * ========================
+ * Other functions
+ * ========================
+ */
+
+bool alpha_test_func(float x, int op, float compare)
+{
+  if (op == 0) return false;
+  else if (op == 1) return true;
+  else if (op == 2) return x < compare;
+  else if (op == 3) return x == compare;
+  else if (op == 4) return x <= compare;
+  else if (op == 5) return x > compare;
+  else if (op == 6) return x != compare;
+  else if (op == 7) return x >= compare;
+  return false;
+}
 
 /*
  * ========================
@@ -594,17 +618,23 @@ float simplex_noise(vec2 xy, float noise_scale, vec2 step, float time_scale) {
  */
 
 void main() {
+
+    float final_alpha = opacity;
+
+    if(al_use_tex) {
+        final_alpha *= (varying_color * texture2D(al_tex, varying_texcoord)).a;
+    }
+
     //--- Basics ---
 
     //Define some variables that'll be used throughout the shader.
     vec2 noise_func_step = vec2(1.3, 1.7);
-    float noise_func_scale = 0.1;
 
     //Calculate simplex noise effects.
-    float raw_noise_value = simplex_noise(varying_texcoord, noise_func_scale, noise_func_step, 0.02);
-    raw_noise_value = simplex_noise(varying_texcoord + raw_noise_value, noise_func_scale, noise_func_step, 0.02);
+    float raw_noise_value = simplex_noise(varying_texcoord, scale, noise_func_step, 0.02);
+    raw_noise_value = simplex_noise(varying_texcoord + raw_noise_value, scale, noise_func_step, 0.02);
     vec4 final_pixel = texture(colormap, vec2((raw_noise_value + 0.2) * 2.5, 0));
-    final_pixel.a = opacity;
+    final_pixel.a = final_alpha;
     final_pixel.r *= brightness;
     final_pixel.g *= brightness;
     final_pixel.b *= brightness;

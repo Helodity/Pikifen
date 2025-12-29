@@ -237,7 +237,7 @@ void drawPrimRect(
     vertexes[3].v = 1.0f;
     
     al_draw_prim(
-        vertexes, nullptr, texture, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+        vertexes, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
     );
 }
 

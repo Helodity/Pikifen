@@ -124,9 +124,17 @@ void Onion::drawMob() {
         (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
-    eff.tintColor.a *= (seethrough / 255.0f);
-    
+    //eff.tintColor.a *= (seethrough / 255.0f);
+    al_use_shader(game.shaders.getShader(SHADER_TYPE_ONION));
+    al_set_shader_sampler(
+        "colormap", nest->nestType->menuColormap, 1
+    );
+    al_set_shader_float("area_time", game.timePassed * 1.5f);
+    al_set_shader_float("brightness", 1.0f);
+    al_set_shader_float("opacity", 1.0f);
+    al_set_shader_float("scale", 0.2f);
     drawBitmapWithEffects(curSPtr->bitmap, eff);
+    al_use_shader(nullptr);
 }
 
 
