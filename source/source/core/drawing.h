@@ -122,8 +122,8 @@ void drawHealth(
     bool justChart = false
 );
 void drawLiquid(
-    Sector* sPtr, Liquid* lPtr, const Point& where, float scale,
-    float time
+    Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
+    float time, float drainOpacity
 );
 void drawLoadingScreen(
     const string& areaName, const string& subtitle, const string& maker,
@@ -146,6 +146,10 @@ void drawInputSourceIcon(
 );
 void drawSectorTexture(
     Sector* sPtr, const Point& where, float scale, float opacity
+);
+void drawSectorIce(
+    Sector* sPtr, const Point& where, float scale, float opacity,
+    float thawEffectOpacity, float flashEffectOpacity, bool cracked
 );
 void drawSectorEdgeOffsets(
     Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity, const Viewport& view

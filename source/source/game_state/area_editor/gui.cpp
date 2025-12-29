@@ -5249,6 +5249,42 @@ void AreaEditor::processGuiPanelSector() {
                 "and you can see the background (or void)."
             );
             
+            if(
+                sPtr->hazard && sPtr->hazard->associatedLiquid &&
+                sPtr->hazard->associatedLiquid->canFreeze
+            ) {
+            
+                //Freezing point override.
+                int freezingPointVar = 0;
+                map<string, string> sectorVars = getVarMap(sPtr->vars);
+                if(!sPtr->vars.empty()) {
+                    auto var =
+                        sectorVars.find(LIQUID::FREEZING_POINT_SECTOR_VAR);
+                    if(var != sectorVars.end()) {
+                        freezingPointVar = s2i(var->second);
+                    }
+                }
+                ImGui::SetNextItemWidth(50);
+                if(ImGui::DragInt("Freezing point", &freezingPointVar, 0.1f)) {
+                    registerChange("sector vars change");
+                    if(freezingPointVar <= 0) {
+                        sectorVars.erase(LIQUID::FREEZING_POINT_SECTOR_VAR);
+                    } else {
+                        sectorVars[LIQUID::FREEZING_POINT_SECTOR_VAR] =
+                            i2s(freezingPointVar);
+                    }
+                    sPtr->vars = saveVarMap(sectorVars);
+                }
+                setTooltip(
+                    "Normally, a liquid's freezing point is determined\n"
+                    "automatically from its surface area. The closest\n"
+                    "multiple of 5 is used so the freezing point is a\n"
+                    "nice round number. You can override it with a manual\n"
+                    "value here. Use 0 to not override.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            }
+            
             ImGui::TreePop();
         }
         

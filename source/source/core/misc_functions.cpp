@@ -1197,6 +1197,8 @@ bool readEnumProp(
     const string& valueStr, int* outInt, const vector<string> possibleValues,
     const string& errorThing, DataNode* errorNode
 ) {
+    if(valueStr.empty()) return false;
+    
     for(size_t v = 0; v < possibleValues.size(); v++) {
         if(valueStr == possibleValues[v]) {
             *outInt = (int) v;
@@ -1346,6 +1348,24 @@ void saveStatistics() {
     sGW.write("sprays_used", s.spraysUsed);
     
     statsFile.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
+}
+
+
+/**
+ * @brief Saves a map of script variables onto a string.
+ * 
+ * @param varsMap Map to save.
+ * @return The string.
+ */
+string saveVarMap(const map<string, string>& varsMap) {
+    string finalString;
+    for(const auto& v : varsMap) {
+        finalString += v.first + "=" + v.second + ";";
+    }
+    if(finalString.back() == ';') {
+        finalString.pop_back();
+    }
+    return finalString;
 }
 
 

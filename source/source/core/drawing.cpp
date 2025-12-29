@@ -492,20 +492,16 @@ void drawInputSourceIcon(
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
  * @param time How much time has passed. Used to animate.
+ * @param drainOpacity Opacity multiplier, used for draining. 1 if not draining.
  */
 void drawLiquid(
-    Sector* sPtr, Liquid* lPtr, const Point& where, float scale,
-    float time
+    Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
+    float time, float drainOpacity
 ) {
     //Setup.
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
     
-    float liquidOpacityMult = 1.0f;
-    if(sPtr->drainingLiquid) {
-        liquidOpacityMult =
-            sPtr->liquidDrainLeft / GEOMETRY::LIQUID_DRAIN_DURATION;
-    }
     float brightnessMult = sPtr->brightness / 255.0;
     float sectorScroll[2] = {
         sPtr->scroll.x,
@@ -591,7 +587,7 @@ void drawLiquid(
     ALLEGRO_SHADER* liqShader = game.shaders.getShader(SHADER_TYPE_LIQUID);
     al_use_shader(liqShader);
     al_set_shader_float("area_time", time * lPtr->animSpeed);
-    al_set_shader_float("opacity", liquidOpacityMult);
+    al_set_shader_float("opacity", drainOpacity);
     al_set_shader_float("sector_brightness", brightnessMult);
     al_set_shader_float_vector("sector_scroll", 2, &sectorScroll[0], 1);
     al_set_shader_float("shine_min_threshold", lPtr->shineMinThreshold);
@@ -1241,6 +1237,104 @@ void drawPlayerActionInputSourceIcon(
         binds[bindIdx].inputSource, where, maxSize,
         condensed, font, tint
     );
+}
+
+
+/**
+ * @brief Draws a sector as an ice sheet.
+ *
+ * @param sPtr Pointer to the sector.
+ * @param where X and Y offset.
+ * @param scale Scale the sector by this much.
+ * @param opacity Draw the texture at this opacity [0 - 1].
+ * @param thawEffectOpacity If not 0, multiply the texture opacity with this,
+ * for an effect that indicates the ice is just about to thaw.
+ * @param flashEffectOpacity If not 0, draw a flash of white with this opacity,
+ * for an effect that indicates the liquid was just frozen.
+ * @param cracked If true, use the cracked texture.
+ */
+void drawSectorIce(
+    Sector* sPtr, const Point& where, float scale, float opacity,
+    float thawEffectOpacity, float flashEffectOpacity, bool cracked
+) {
+    if(!sPtr) return;
+    if(sPtr->isBottomlessPit) return;
+    
+    if(thawEffectOpacity > 0.0f) {
+        opacity *= thawEffectOpacity;
+    }
+    
+    size_t nVertexes = sPtr->triangles.size() * 3;
+    ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[nVertexes];
+    
+    for(size_t v = 0; v < nVertexes; v++) {
+        const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
+        Vertex* vPtr = tPtr->points[v % 3];
+        float vx = vPtr->x;
+        float vy = vPtr->y;
+        float brightnessMult = sPtr->brightness / 255.0;
+        
+        av[v].x = vx - where.x;
+        av[v].y = vy - where.y;
+        av[v].u = vx;
+        av[v].v = vy;
+        av[v].z = 0;
+        av[v].color =
+            al_map_rgba_f(
+                brightnessMult,
+                brightnessMult,
+                brightnessMult,
+                opacity
+            );
+    }
+    
+    for(size_t v = 0; v < nVertexes; v++) {
+        av[v].x *= scale;
+        av[v].y *= scale;
+    }
+    
+    al_draw_prim(
+        av, nullptr,
+        cracked ?
+        game.sysContent.bmpFrozenLiquidCracked :
+        game.sysContent.bmpFrozenLiquid,
+        0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+    );
+    
+    if(flashEffectOpacity > 0.0f) {
+        for(size_t v = 0; v < nVertexes; v++) {
+            const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
+            Vertex* vPtr = tPtr->points[v % 3];
+            float vx = vPtr->x;
+            float vy = vPtr->y;
+            float brightnessMult = sPtr->brightness / 255.0;
+            
+            av[v].x = vx - where.x;
+            av[v].y = vy - where.y;
+            av[v].u = vx;
+            av[v].v = vy;
+            av[v].z = 0;
+            av[v].color =
+                al_map_rgba_f(
+                    brightnessMult,
+                    brightnessMult,
+                    brightnessMult,
+                    opacity * flashEffectOpacity
+                );
+        }
+        
+        for(size_t v = 0; v < nVertexes; v++) {
+            av[v].x *= scale;
+            av[v].y *= scale;
+        }
+        
+        al_draw_prim(
+            av, nullptr, nullptr,
+            0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+        );
+    }
+    
+    delete[] av;
 }
 
 
