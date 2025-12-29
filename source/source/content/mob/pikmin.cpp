@@ -133,7 +133,8 @@ void Pikmin::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0) |
+        (type->useNearbyPlayerSeethrough ? SPRITE_BMP_EFFECT_NEARBY_PLAYER_SEETHROUGH : 0)
     );
     BitmapEffect pikSpriteEff = mobEff;
     getSpriteBitmapEffects(

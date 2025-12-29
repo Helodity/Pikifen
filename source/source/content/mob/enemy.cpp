@@ -92,7 +92,8 @@ void Enemy::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY |
         (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0) |
-        SPRITE_BMP_EFFECT_CARRY
+        SPRITE_BMP_EFFECT_CARRY |
+        (type->useNearbyPlayerSeethrough ? SPRITE_BMP_EFFECT_NEARBY_PLAYER_SEETHROUGH : 0)
     );
     drawBitmapWithEffects(curSPtr->bitmap, eff);
     drawStatusEffectBmp(this, eff);

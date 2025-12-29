@@ -356,6 +356,9 @@ enum SPRITE_BMP_EFFECT_FLAG {
     
     //Sway from being carried.
     SPRITE_BMP_EFFECT_CARRY = 1 << 6,
+
+    //Transparancy from nearby players.
+    SPRITE_BMP_EFFECT_NEARBY_PLAYER_SEETHROUGH = 1 << 7,
     
 };
 

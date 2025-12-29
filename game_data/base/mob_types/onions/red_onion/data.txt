@@ -10,6 +10,7 @@ pikmin_types = red_pikmin
 pushable = false
 pushes = false
 radius = 16
+use_nearby_player_fade = true
 
 children {
     top {

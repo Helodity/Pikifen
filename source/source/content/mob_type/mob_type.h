@@ -289,6 +289,9 @@ public:
     
     //Does it cast a shadow?
     bool castsShadow = true;
+
+    //Whether to use the nearby player fade effect.
+    bool useNearbyPlayerSeethrough = false;
     
     //Whether to use the damage squash-and-stretch effect.
     bool useDamageSquashAndStretch = false;

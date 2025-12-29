@@ -25,9 +25,6 @@ using std::string;
 
 namespace ONION {
 
-//How quickly an Onion fades to and from see-through, in values per second.
-const float FADE_SPEED = 255.0f;
-
 //Delay before the Onion starts the generation process.
 const float GENERATION_DELAY = 2.0f;
 
@@ -36,9 +33,6 @@ const float NEW_SEED_Z_OFFSET = 320.0f;
 
 //Interval between each individual Pikmin generation.
 const float NEXT_GENERATION_INTERVAL = 0.10f;
-
-//Onion opacity when it goes see-through.
-const unsigned char SEETHROUGH_ALPHA = 128;
 
 //After spitting a seed, the next seed's angle shifts by this much.
 const float SPIT_ANGLE_SHIFT = TAU * 0.12345;
@@ -121,7 +115,8 @@ void Onion::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0) |
+        (type->useNearbyPlayerSeethrough ? SPRITE_BMP_EFFECT_NEARBY_PLAYER_SEETHROUGH : 0)
     );
     
     if(nest->nestType->pikTypes.size() == 1) {
@@ -139,9 +134,7 @@ void Onion::drawMob() {
         al_set_shader_float("opacity", 1.0f);
         al_set_shader_float("scale", 0.2f);
     }
-    
     drawBitmapWithEffects(curSPtr->bitmap, eff);
-    //eff.tintColor.a *= (seethrough / 255.0f);
     al_use_shader(nullptr);
 }
 
@@ -234,45 +227,5 @@ void Onion::stopGenerating() {
 void Onion::tickClassSpecifics(float deltaT) {
     generationDelayTimer.tick(deltaT);
     nextGenerationTimer.tick(deltaT);
-    
-    unsigned char finalAlpha = 255;
-    
-    for(const Player& player : game.states.gameplay->players) {
-        if(!player.leaderPtr) continue;
-        if(
-            bBoxCheck(
-                player.leaderPtr->pos, pos,
-                player.leaderPtr->radius + radius * 3
-            )
-        ) {
-            finalAlpha = ONION::SEETHROUGH_ALPHA;
-        }
-        
-        if(
-            bBoxCheck(
-                player.leaderCursorWorld, pos,
-                player.leaderPtr->radius + radius * 3
-            )
-        ) {
-            finalAlpha = ONION::SEETHROUGH_ALPHA;
-        }
-    }
-    
-    if(seethrough != finalAlpha) {
-        if(finalAlpha < seethrough) {
-            seethrough =
-                std::max(
-                    (double) finalAlpha,
-                    (double) seethrough - ONION::FADE_SPEED * deltaT
-                );
-        } else {
-            seethrough =
-                std::min(
-                    (double) finalAlpha,
-                    (double) seethrough + ONION::FADE_SPEED * deltaT
-                );
-        }
-    }
-    
     nest->tick(deltaT);
 }

@@ -714,7 +714,8 @@ void Leader::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY |
         SPRITE_BMP_EFFECT_CARRY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0) |
+        (type->useNearbyPlayerSeethrough ? SPRITE_BMP_EFFECT_NEARBY_PLAYER_SEETHROUGH : 0)
     );
     BitmapEffect leaSpriteEff = mobEff;
     getSpriteBitmapEffects(

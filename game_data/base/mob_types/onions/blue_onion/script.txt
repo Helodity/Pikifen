@@ -1,7 +1,6 @@
 global {
-    on_message_received {
+    on_receive_message {
         get_event_info msg message
         send_message_to_links $msg
     }
-
 }

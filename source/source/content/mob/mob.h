@@ -70,6 +70,8 @@ extern const float PUSH_EXTRA_AMOUNT;
 extern const float PUSH_SOFTLY_AMOUNT;
 extern const float PUSH_THROTTLE_FACTOR;
 extern const float PUSH_THROTTLE_TIMEOUT;
+extern const unsigned char SEETHROUGH_ALPHA;
+extern const float SEETHROUGH_FADE_SPEED;
 extern const float SHADOW_STRETCH_MULT;
 extern const float SHADOW_Y_MULT;
 extern const float SMACK_PARTICLE_DUR;
@@ -312,6 +314,9 @@ public:
     
     //Time left in the current damage squash and stretch animation.
     float damageSquashTime = 0.0f;
+
+    //TODO
+    unsigned char nearbyPlayerSeethrough = 255;
     
     //Particle generators attached to it.
     vector<ParticleGenerator> particleGenerators;

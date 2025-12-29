@@ -129,6 +129,12 @@ const float PUSH_THROTTLE_FACTOR = 0.1f;
 //Before this much time, a mob can't push others as effectively.
 const float PUSH_THROTTLE_TIMEOUT = 1.0f;
 
+//Mob opacity when a player is nearby, if enabled.
+const unsigned char SEETHROUGH_ALPHA = 128;
+
+//Mob opacity when a player is nearby, if enabled.
+const float SEETHROUGH_FADE_SPEED = 255.0f;
+
 //Multiply the stretch of the shadow by this much.
 const float SHADOW_STRETCH_MULT = 0.5f;
 
@@ -1719,9 +1725,10 @@ void Mob::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY |
         SPRITE_BMP_EFFECT_CARRY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0) |
+        (type->useNearbyPlayerSeethrough ? SPRITE_BMP_EFFECT_NEARBY_PLAYER_SEETHROUGH : 0)
     );
-    
+
     drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
@@ -2613,6 +2620,9 @@ void Mob::getSpriteBitmapEffects(
             info->tf.rot -=
                 factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
         }
+    }
+    if(hasFlag(effects, SPRITE_BMP_EFFECT_NEARBY_PLAYER_SEETHROUGH)){
+        info->tintColor.a *= (nearbyPlayerSeethrough / 255.0f);
     }
 }
 
@@ -4274,6 +4284,49 @@ void Mob::tickMiscLogic(float deltaT) {
     ) {
         deliveryInfo->animTimeRatioLeft = scriptTimer.getRatioLeft();
     }
+
+    //Nearby player alpha
+    if(type->useNearbyPlayerSeethrough) {
+        unsigned char finalAlpha = 255;
+    
+        for(const Player& player : game.states.gameplay->players) {
+            if(!player.leaderPtr) continue;
+            if(
+                bBoxCheck(
+                    player.leaderPtr->pos, pos,
+                    player.leaderPtr->radius + radius * 3
+                )
+            ) {
+                finalAlpha = MOB::SEETHROUGH_ALPHA;
+            }
+            
+            if(
+                bBoxCheck(
+                    player.leaderCursorWorld, pos,
+                    player.leaderPtr->radius + radius * 3
+                )
+            ) {
+                finalAlpha = MOB::SEETHROUGH_ALPHA;
+            }
+        }
+        
+        if(nearbyPlayerSeethrough != finalAlpha) {
+            if(finalAlpha < nearbyPlayerSeethrough) {
+                nearbyPlayerSeethrough =
+                    std::max(
+                        (double) finalAlpha,
+                        (double) nearbyPlayerSeethrough - MOB::SEETHROUGH_FADE_SPEED * deltaT
+                    );
+            } else {
+                nearbyPlayerSeethrough =
+                    std::min(
+                        (double) finalAlpha,
+                        (double) nearbyPlayerSeethrough + MOB::SEETHROUGH_FADE_SPEED * deltaT
+                    );
+            }
+        }
+    }
+    
 }
 
 
