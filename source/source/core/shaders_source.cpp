@@ -449,15 +449,9 @@ out vec4 frag_color;
 
 uniform sampler2D al_tex;
 uniform bool al_use_tex;
-uniform bool al_alpha_test;
-uniform int al_alpha_func;
-uniform float al_alpha_test_val;
 
 // Time passed in the area.
 uniform float area_time;
-
-//Multiply the general distortion by this much.
-uniform vec2 distortion_amount;
 
 //Opacity of the liquid.
 uniform float opacity;
@@ -580,35 +574,14 @@ float noise(vec3 v) {
                                     dot(p2,x2), dot(p3,x3) ) );
 }
 
-float color(vec2 xy, float time_scale) { return noise(vec3(1.5*xy, time_scale * area_time)); }
+float color(vec2 xy) { return noise(vec3(xy, area_time)); }
 
-float simplex_noise(vec2 xy, float noise_scale, vec2 step, float time_scale) {
-    float x = 0;
-    x += 0.5 * color(xy * 2.0 * noise_scale - step, time_scale);
-    x += 0.25 * color(xy * 4.0 * noise_scale - 2.0 * step, time_scale);
-    x += 0.125 * color(xy * 8.0 * noise_scale - 4.0 * step, time_scale);
-    x += 0.0625 * color(xy * 16.0 * noise_scale - 6.0 * step, time_scale);
-    x += 0.03125 * color(xy * 32.0 * noise_scale - 8.0 * step, time_scale);
+float simplex_noise(vec2 xy, float noise_scale, vec2 step) {
+    float x = color(xy * noise_scale);
+    x += 0.5 * color(xy * 2.0 * noise_scale - step);
+    x += 0.25 * color(xy * 4.0 * noise_scale - 2.0 * step);
+    x += 0.125 * color(xy * 8.0 * noise_scale - 4.0 * step);
     return x;
-}
-
-/*
- * ========================
- * Other functions
- * ========================
- */
-
-bool alpha_test_func(float x, int op, float compare)
-{
-  if (op == 0) return false;
-  else if (op == 1) return true;
-  else if (op == 2) return x < compare;
-  else if (op == 3) return x == compare;
-  else if (op == 4) return x <= compare;
-  else if (op == 5) return x > compare;
-  else if (op == 6) return x != compare;
-  else if (op == 7) return x >= compare;
-  return false;
 }
 
 /*
@@ -622,11 +595,12 @@ void main() {
 
     //Define some variables that'll be used throughout the shader.
     vec2 noise_func_step = vec2(1.3, 1.7);
+    vec2 base_pos = varying_texcoord;
 
-    //Calculate simplex noise effects.
-    float raw_noise_value = simplex_noise(varying_texcoord, scale, noise_func_step, 0.02);
-    raw_noise_value = simplex_noise(varying_texcoord + raw_noise_value, scale, noise_func_step, 0.02);
-    vec4 final_pixel = texture(colormap, vec2((raw_noise_value + 0.2) * 2.5, 0));
+    //Calculate simplex noise effects. Apply twice to create the swirl effect
+    float raw_noise_value = simplex_noise(base_pos, scale, noise_func_step) * 0.5 + 0.5;
+    raw_noise_value = simplex_noise(base_pos + raw_noise_value, scale, noise_func_step) * 0.5 + 0.5;
+    vec4 final_pixel = texture(colormap, vec2(raw_noise_value, 0));
 
     //Calculate alpha
     float final_alpha = opacity;

@@ -129,10 +129,10 @@ void Onion::drawMob() {
         al_set_shader_sampler(
             "colormap", nest->nestType->menuColormap, 1
         );
-        al_set_shader_float("area_time", game.timePassed + pos.x);
+        al_set_shader_float("area_time", game.timePassed * 0.02f + pos.x);
         al_set_shader_float("brightness", 1.0f);
         al_set_shader_float("opacity", 1.0f);
-        al_set_shader_float("scale", 0.2f);
+        al_set_shader_float("scale", 0.6f);
     }
     drawBitmapWithEffects(curSPtr->bitmap, eff);
     al_use_shader(nullptr);
