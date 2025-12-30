@@ -4,7 +4,7 @@
    height="1361"
    id="svg6166"
    version="1.1"
-   inkscape:version="1.4 (e7c3feb, 2024-10-09)"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
    sodipodi:docname="onions.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -3423,6 +3423,572 @@
        x2="1531.1875"
        y2="476.4375"
        spreadMethod="reflect" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shadow"
+       id="radialGradient2289-9"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-46.5,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="23.499998" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shine"
+       id="radialGradient2287-9"
+       gradientUnits="userSpaceOnUse"
+       cx="62"
+       cy="58"
+       fx="62"
+       fy="58"
+       r="8" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3004-0">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3526-6-5"
+         id="use3006-6"
+         width="100%"
+         height="100%"
+         transform="translate(-978,-5)" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#stigma"
+       id="radialGradient2285-1"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-46.5,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="5" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3139-7">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use3141-5"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient6"
+       gradientTransform="scale(1.0470147,0.95509643)"
+       x1="74.497521"
+       y1="72.795524"
+       x2="85.958678"
+       y2="72.795524"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         style="stop-color:#f2f4e1;stop-opacity:1;"
+         offset="0"
+         id="stop4" />
+      <stop
+         id="stop5"
+         offset="0.5"
+         style="stop-color:#d1ddc3;stop-opacity:1" />
+      <stop
+         style="stop-color:#f2f4e1;stop-opacity:1"
+         offset="1"
+         id="stop6" />
+    </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use9"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath15">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use15-6"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath21">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use21-0"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath27">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use27-6"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shadow"
+       id="radialGradient2275-2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(1.4999997,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="23.499998" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shine"
+       id="radialGradient2273-2"
+       gradientUnits="userSpaceOnUse"
+       cx="62"
+       cy="58"
+       fx="62"
+       fy="58"
+       r="8" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath36">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3526-6-5"
+         id="use36-2"
+         width="100%"
+         height="100%"
+         transform="translate(-978,-5)" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#stigma"
+       id="radialGradient2271-8"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(1.4999997,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="5" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath46">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use46-6"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath52">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use52"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath58">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use58"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath64">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use64"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath70">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use70-1"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shadow"
+       id="radialGradient2261-7"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(49.499996,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="23.499998" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shine"
+       id="radialGradient2259-3"
+       gradientUnits="userSpaceOnUse"
+       cx="62"
+       cy="58"
+       fx="62"
+       fy="58"
+       r="8" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath79">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3526-6-5"
+         id="use79-8"
+         width="100%"
+         height="100%"
+         transform="translate(-978,-5)" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#stigma"
+       id="radialGradient2257-6"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(49.499996,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="5" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath89">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use89-9"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath95">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use95"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath101">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use101"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath107">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use107"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath113">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use113"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shadow"
+       id="radialGradient2247-2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(97.499996,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="23.499998" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#orb_shine"
+       id="radialGradient2245-9"
+       gradientUnits="userSpaceOnUse"
+       cx="62"
+       cy="58"
+       fx="62"
+       fy="58"
+       r="8" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath122">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3526-6-5"
+         id="use122"
+         width="100%"
+         height="100%"
+         transform="translate(-978,-5)" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#stigma"
+       id="radialGradient2243-3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(97.499996,1310.5)"
+       cx="70"
+       cy="75"
+       fx="70"
+       fy="75"
+       r="5" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath132">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use132-9"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath138">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use138"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath144">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use144"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath150">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use150"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath156">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use156"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#leg"
+       id="linearGradient160"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(192.00001,1167.0001)"
+       x1="108"
+       y1="75"
+       x2="122"
+       y2="75" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#leg_cylinder_shade"
+       id="linearGradient163"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(192.00001,1162.0001)"
+       x1="90"
+       y1="77"
+       x2="90"
+       y2="80"
+       spreadMethod="reflect" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#petal"
+       id="linearGradient1"
+       gradientUnits="userSpaceOnUse"
+       x1="82"
+       y1="74"
+       x2="82"
+       y2="76" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6"
+       id="linearGradient2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="scale(1.0470147,0.95509643)"
+       x1="74.497521"
+       y1="72.795524"
+       x2="85.958678"
+       y2="72.795524" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6"
+       id="linearGradient3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="scale(1.0470147,0.95509643)"
+       x1="74.497521"
+       y1="72.795524"
+       x2="85.958678"
+       y2="72.795524" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6"
+       id="linearGradient4"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="scale(1.0470147,0.95509643)"
+       x1="74.497521"
+       y1="72.795524"
+       x2="85.958678"
+       y2="72.795524" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3004-3">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3526-6-5"
+         id="use3006-0"
+         width="100%"
+         height="100%"
+         transform="translate(-978,-5)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3139-2">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use3141-0"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath18">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use18"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath24">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use24"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath30">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use30-6"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath36-6">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3130"
+         id="use36-4"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#leg"
+       id="linearGradient8"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(191.99999,1367.0001)"
+       x1="108"
+       y1="75"
+       x2="122"
+       y2="75" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#leg_cylinder_shade"
+       id="linearGradient9"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(191.99999,1362.0001)"
+       x1="90"
+       y1="77"
+       x2="90"
+       y2="80"
+       spreadMethod="reflect" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -3431,15 +3997,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.62742282"
-     inkscape:cx="213.57209"
-     inkscape:cy="664.62358"
+     inkscape:zoom="0.88730986"
+     inkscape:cx="312.17956"
+     inkscape:cy="1487.0792"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
-     inkscape:window-width="1872"
-     inkscape:window-height="1051"
-     inkscape:window-x="48"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-bbox="true"
@@ -3965,6 +4531,51 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/onions/ice_icon.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       y="1362.0001"
+       x="192"
+       height="160"
+       width="140"
+       id="rect9-5"
+       style="display:inline;fill:#008000;fill-opacity:1;stroke-width:1.016px;stop-color:#000000" />
+    <rect
+       style="fill:#40c040;fill-opacity:1;stroke-width:30.2362;stroke-linejoin:round;paint-order:markers stroke fill"
+       id="rect12"
+       width="191"
+       height="47.000122"
+       x="0"
+       y="1362.0001" />
+    <rect
+       style="fill:#008000;stroke-width:45.7783;stroke-linejoin:round;paint-order:markers stroke fill"
+       id="rect11"
+       width="47"
+       height="47"
+       x="0"
+       y="1362.0001" />
+    <rect
+       style="display:inline;fill:#008000;stroke-width:45.7783;stroke-linejoin:round;paint-order:markers stroke fill"
+       id="rect11-4"
+       width="47"
+       height="47"
+       x="48.000008"
+       y="1362.0002" />
+    <rect
+       style="display:inline;fill:#008000;stroke-width:45.7783;stroke-linejoin:round;paint-order:markers stroke fill"
+       id="rect11-4-1"
+       width="47"
+       height="47"
+       x="96.000008"
+       y="1362.0001" />
+    <rect
+       style="display:inline;fill:#008000;stroke-width:45.7783;stroke-linejoin:round;paint-order:markers stroke fill"
+       id="rect11-4-1-9"
+       width="47"
+       height="47"
+       x="144"
+       y="1362.0002" />
   </g>
   <g
      inkscape:label="Sprites"
@@ -14504,5 +15115,909 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion_icon.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-51.651389"
+       height="100%"
+       width="100%"
+       transform="rotate(-120,239.99999,1442.0002)"
+       id="use50-4"
+       inkscape:transform-center-x="28.986349"
+       xlink:href="#path51-7"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="51.651389"
+       height="100%"
+       width="100%"
+       transform="rotate(120,239.99999,1442.0002)"
+       id="use51-8"
+       inkscape:transform-center-x="28.986349"
+       xlink:href="#path51-7"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <path
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-x="-60.5"
+       sodipodi:nodetypes="cccc"
+       id="path51-7"
+       d="m 268.99999,1439.0001 c 0,0 63,0 63,3 0,3 -63,3 -63,3 z"
+       style="display:inline;fill:url(#linearGradient8);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="display:inline;fill:url(#linearGradient9);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 268.99999,1439.0001 c 0,0 63,0 63,3 0,3 -63,3 -63,3 z"
+       id="path52-7"
+       sodipodi:nodetypes="cccc"
+       inkscape:transform-center-x="-60.5" />
+    <path
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-x="-27"
+       sodipodi:nodetypes="ccccc"
+       d="m 269.99999,1436.0001 -6,4 v 4 l 6,4 z"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1.1111;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       id="path53-2" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-51.659723"
+       height="100%"
+       width="100%"
+       transform="rotate(-120,239.99999,1442.0002)"
+       id="use53-7"
+       inkscape:transform-center-x="29.027118"
+       xlink:href="#path52-7"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-24.382686"
+       height="100%"
+       width="100%"
+       transform="rotate(-120,239.99999,1442.0002)"
+       id="use54-2"
+       inkscape:transform-center-x="15"
+       xlink:href="#path53-2"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="51.659723"
+       height="100%"
+       width="100%"
+       transform="rotate(120,239.99999,1442.0002)"
+       id="use55-2"
+       inkscape:transform-center-x="29.027118"
+       xlink:href="#path52-7"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="24.382686"
+       height="100%"
+       width="100%"
+       transform="rotate(120,239.99999,1442.0002)"
+       id="use56-6"
+       inkscape:transform-center-x="15"
+       xlink:href="#path53-2"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <path
+       id="circle2015-0-63"
+       style="display:inline;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1.1111"
+       d="m 239.99999,1417.0001 a 25,25 0 0 0 -25,25 25,25 0 0 0 25,25 25,25 0 0 0 25,-25 25,25 0 0 0 -25,-25 z m 0,2.5 a 22.5,22.5 0 0 1 22.5,22.5 22.5,22.5 0 0 1 -22.5,22.5 22.5,22.5 0 0 1 -22.5,-22.5 22.5,22.5 0 0 1 22.5,-22.5 z" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       id="circle2031-5"
+       style="display:inline;fill:url(#radialGradient2289-9);fill-opacity:1;stroke:none;stroke-width:1.04444;stroke-opacity:1"
+       cx="23.499998"
+       cy="1385.5001"
+       r="23.499998" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       transform="translate(-46.5,1310.5)"
+       clip-path="url(#clipPath3004-0)"
+       r="8"
+       cy="58"
+       cx="62"
+       id="circle2033-5"
+       style="display:inline;fill:url(#radialGradient2287-9);fill-opacity:1;stroke:none;stroke-width:1px;stroke-opacity:1;stop-color:#000000" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       r="10"
+       cy="1385.5001"
+       cx="23.499998"
+       id="circle2035-4"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1.38888;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(72,-961.46727,744.03237)"
+       id="use2037-7"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(144,-234.85253,707.38304)"
+       id="use2039-6"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(-144,214.77057,684.53917)"
+       id="use2041-5"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(-72,944.19628,647.48583)"
+       id="use2043-6"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="translate(69.433706,1384.7708)"
+       id="use2045-9"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       id="circle2047-3"
+       cx="23.499998"
+       cy="1385.5001"
+       r="6" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       r="5"
+       cy="1385.5001"
+       cx="23.499998"
+       id="circle2049-7"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient2285-1);fill-opacity:1;stroke:none;stroke-width:0.694438;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000" />
+    <g
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       transform="translate(-46.5,1310.5)"
+       inkscape:transform-center-x="-13"
+       id="g2057-4"
+       style="display:inline">
+      <path
+         id="path2051-5"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 78,71 -3,2 v 4 l 3,2 z"
+         inkscape:transform-center-x="-6"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:url(#linearGradient1);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 78,71 c 5,-2 12,-3 12,4 0,7 -7,6 -12,4 z"
+         id="path2053-2"
+         sodipodi:nodetypes="czcc" />
+      <path
+         style="fill:#4a4269;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 90,72 -4,3 4,3 1,-3 z"
+         id="path2055-5"
+         clip-path="url(#clipPath3139-7)"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-12.054718"
+       height="100%"
+       width="100%"
+       transform="rotate(-72,23.499993,1385.5)"
+       id="use2059-4"
+       inkscape:transform-center-x="-4.3551317"
+       xlink:href="#g2057-4"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-7.8099508"
+       height="100%"
+       width="100%"
+       transform="rotate(-144,23.499996,1385.4998)"
+       id="use2061-7"
+       inkscape:transform-center-x="10.406605"
+       xlink:href="#g2057-4"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="7.8099503"
+       height="100%"
+       width="100%"
+       transform="rotate(144,23.499996,1385.4998)"
+       id="use2063-4"
+       inkscape:transform-center-x="10.406605"
+       xlink:href="#g2057-4"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="12.054717"
+       height="100%"
+       width="100%"
+       transform="rotate(72,23.499986,1385.5)"
+       id="use2065-4"
+       inkscape:transform-center-x="-4.3551318"
+       xlink:href="#g2057-4"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <circle
+       r="23.499998"
+       cy="1385.5002"
+       cx="71.500008"
+       style="display:inline;fill:url(#radialGradient2275-2);fill-opacity:1;stroke:none;stroke-width:1.04444;stroke-opacity:1"
+       id="circle2089-9"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="display:inline;fill:url(#radialGradient2273-2);fill-opacity:1;stroke:none;stroke-width:1px;stroke-opacity:1;stop-color:#000000"
+       id="circle2091-2"
+       cx="62"
+       cy="58"
+       r="8"
+       clip-path="url(#clipPath3004-0)"
+       transform="translate(1.4999997,1310.5)" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1.38888;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       id="circle2093-0"
+       cx="71.500008"
+       cy="1385.5002"
+       r="10" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="7.8534778"
+       inkscape:transform-center-x="10.156229"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2095-6"
+       transform="rotate(162,-95.600727,705.33783)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="13.336058"
+       inkscape:transform-center-x="-1.9880057"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2097-8"
+       transform="rotate(90,-677.40973,754.87095)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-6.8735059"
+       inkscape:transform-center-x="7.6351737"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2099-9"
+       transform="rotate(-126,366.81875,666.16367)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-5.4098681"
+       inkscape:transform-center-x="-9.1477012"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2101-2"
+       transform="rotate(-54,1374.7191,580.36442)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="7.457396"
+       inkscape:transform-center-x="-10.975485"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2103-6"
+       transform="rotate(18,-4358.0753,1065.9455)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       r="6"
+       cy="1385.5002"
+       cx="71.500008"
+       id="circle2105-6"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient2271-8);fill-opacity:1;stroke:none;stroke-width:0.694438;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       id="circle2107-4"
+       cx="71.500008"
+       cy="1385.5002"
+       r="5" />
+    <g
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="4.3551323"
+       id="g2115-9"
+       inkscape:transform-center-x="-12.054719"
+       transform="rotate(18,-4066.3361,734.98534)"
+       style="display:inline">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:transform-center-x="-6"
+         d="m 78,71 -3,2 v 4 l 3,2 z"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         id="path2109-5" />
+      <path
+         sodipodi:nodetypes="czcc"
+         id="path2111-0"
+         d="m 78,71 c 5,-2 12,-3 12,4 0,7 -7,6 -12,4 z"
+         style="fill:url(#linearGradient2);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         clip-path="url(#clipPath3139-7)"
+         id="path2113-4"
+         d="m 90,72 -4,3 4,3 1,-3 z"
+         style="fill:#4a4269;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2115-9"
+       inkscape:transform-center-x="-5.0335171"
+       id="use2117-8"
+       transform="rotate(-72,71.500003,1385.5001)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="-13.041651"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2115-9"
+       inkscape:transform-center-x="11.081927"
+       id="use2119-7"
+       transform="rotate(-144,71.49999,1385.5)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="-8.73945"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2115-9"
+       inkscape:transform-center-x="11.554867"
+       id="use2121-1"
+       transform="rotate(144,71.499996,1385.5)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="8.1501608"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2115-9"
+       inkscape:transform-center-x="-4.4340881"
+       id="use2123-7"
+       transform="rotate(72,71.499996,1385.5001)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="13.446796"
+       style="display:inline" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       id="circle2147-4"
+       style="display:inline;fill:url(#radialGradient2261-7);fill-opacity:1;stroke:none;stroke-width:1.04444;stroke-opacity:1"
+       cx="119.50001"
+       cy="1385.5001"
+       r="23.499998" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       transform="translate(49.499996,1310.5)"
+       clip-path="url(#clipPath3004-0)"
+       r="8"
+       cy="58"
+       cx="62"
+       id="circle2149-9"
+       style="display:inline;fill:url(#radialGradient2259-3);fill-opacity:1;stroke:none;stroke-width:1px;stroke-opacity:1;stop-color:#000000" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       r="10"
+       cy="1385.5001"
+       cx="119.50001"
+       id="circle2151-0"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1.38888;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(180,38.43776,696.1151)"
+       id="use2153-9"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       inkscape:transform-center-x="11.058225"
+       inkscape:transform-center-y="3.4198007"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(108,-464.52609,756.05517)"
+       id="use2155-1"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       inkscape:transform-center-x="2.7431234"
+       inkscape:transform-center-y="13.397693"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(-108,541.14862,636.2566)"
+       id="use2157-7"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       inkscape:transform-center-x="4.7844813"
+       inkscape:transform-center-y="-7.5755125"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(-36,2171.6754,441.41368)"
+       id="use2159-7"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       inkscape:transform-center-x="-10.375877"
+       inkscape:transform-center-y="-3.0859723"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       height="100%"
+       width="100%"
+       transform="rotate(36,-2093.5479,949.78637)"
+       id="use2161-1"
+       xlink:href="#path3220"
+       y="0"
+       x="0"
+       inkscape:transform-center-x="-9.5910736"
+       inkscape:transform-center-y="10.782085"
+       style="display:inline" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       id="circle2163-1"
+       cx="119.50001"
+       cy="1385.5001"
+       r="6" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       r="5"
+       cy="1385.5001"
+       cx="119.50001"
+       id="circle2165-5"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient2257-6);fill-opacity:1;stroke:none;stroke-width:0.694438;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000" />
+    <g
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       transform="rotate(36,-1921.9023,806.42272)"
+       inkscape:transform-center-x="-10.406605"
+       id="g2173-9"
+       inkscape:transform-center-y="7.8099512"
+       style="display:inline">
+      <path
+         id="path2167-7"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 78,71 -3,2 v 4 l 3,2 z"
+         inkscape:transform-center-x="-6"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:url(#linearGradient3);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 78,71 c 5,-2 12,-3 12,4 0,7 -7,6 -12,4 z"
+         id="path2169-7"
+         sodipodi:nodetypes="czcc" />
+      <path
+         style="fill:#4a4269;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 90,72 -4,3 4,3 1,-3 z"
+         id="path2171-6"
+         clip-path="url(#clipPath3139-7)"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-10.406606"
+       height="100%"
+       width="100%"
+       transform="rotate(-72,119.5,1385.5001)"
+       id="use2175-7"
+       inkscape:transform-center-x="-7.8099514"
+       xlink:href="#g2173-9"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-11.554868"
+       height="100%"
+       width="100%"
+       transform="rotate(-144,119.5,1385.5)"
+       id="use2177-3"
+       inkscape:transform-center-x="8.1501548"
+       xlink:href="#g2173-9"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="4.4340902"
+       height="100%"
+       width="100%"
+       transform="rotate(144,119.5,1385.5)"
+       id="use2179-6"
+       inkscape:transform-center-x="13.446794"
+       xlink:href="#g2173-9"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="14.299552"
+       height="100%"
+       width="100%"
+       transform="rotate(72,119.50001,1385.5001)"
+       id="use2181-5"
+       inkscape:transform-center-x="0.50525936"
+       xlink:href="#g2173-9"
+       y="0"
+       x="0"
+       style="display:inline" />
+    <circle
+       r="23.499998"
+       cy="1385.5002"
+       cx="167.5"
+       style="display:inline;fill:url(#radialGradient2247-2);fill-opacity:1;stroke:none;stroke-width:1.04444;stroke-opacity:1"
+       id="circle2205-8"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="display:inline;fill:url(#radialGradient2245-9);fill-opacity:1;stroke:none;stroke-width:1px;stroke-opacity:1;stop-color:#000000"
+       id="circle2207-8"
+       cx="62"
+       cy="58"
+       r="8"
+       clip-path="url(#clipPath3004-0)"
+       transform="translate(97.499996,1310.5)" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1.38888;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       id="circle2209-5"
+       cx="167.5"
+       cy="1385.5002"
+       r="10" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-1.1939543"
+       inkscape:transform-center-x="11.761565"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2211-0"
+       transform="rotate(-162,171.77736,679.26777)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="12.665882"
+       inkscape:transform-center-x="6.9404401"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2213-9"
+       transform="rotate(126,-290.40771,750.48377)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="-8.1866015"
+       inkscape:transform-center-x="1.2885515"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2215-6"
+       transform="rotate(-90,754.25255,589.96194)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="0.21504155"
+       inkscape:transform-center-x="-10.028671"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2217-3"
+       transform="rotate(-18,4437.0104,22.962133)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="12.486789"
+       inkscape:transform-center-x="-6.7964778"
+       x="0"
+       y="0"
+       xlink:href="#path3220"
+       id="use2219-8"
+       transform="rotate(54,-1297.2203,904.74516)"
+       width="100%"
+       height="100%"
+       style="display:inline" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       r="6"
+       cy="1385.5002"
+       cx="167.5"
+       id="circle2221-5"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000" />
+    <circle
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient2243-3);fill-opacity:1;stroke:none;stroke-width:0.694438;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       id="circle2223-6"
+       cx="167.5"
+       cy="1385.5002"
+       r="5" />
+    <g
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       inkscape:transform-center-y="10.406609"
+       id="g2231-1"
+       inkscape:transform-center-x="-7.8099516"
+       transform="rotate(54,-1167.2507,825.9274)"
+       style="display:inline">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:transform-center-x="-6"
+         d="m 78,71 -3,2 v 4 l 3,2 z"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#3d3d3d;fill-opacity:1;stroke:none;stroke-width:0.833325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         id="path2225-1" />
+      <path
+         sodipodi:nodetypes="czcc"
+         id="path2227-5"
+         d="m 78,71 c 5,-2 12,-3 12,4 0,7 -7,6 -12,4 z"
+         style="fill:url(#linearGradient4);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         clip-path="url(#clipPath3139-7)"
+         id="path2229-9"
+         d="m 90,72 -4,3 4,3 1,-3 z"
+         style="fill:#4a4269;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2231-1"
+       inkscape:transform-center-x="-8.7394515"
+       id="use2233-8"
+       transform="rotate(-72,167.49999,1385.5002)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="-11.081927"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2231-1"
+       inkscape:transform-center-x="8.1188753"
+       id="use2235-4"
+       transform="rotate(-144,167.49999,1385.5001)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="-12.752059"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2231-1"
+       inkscape:transform-center-x="14.795136"
+       id="use2237-8"
+       transform="rotate(144,167.49998,1385.5001)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="4.0790035"
+       style="display:inline" />
+    <use
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Onion.png"
+       x="0"
+       y="0"
+       xlink:href="#g2231-1"
+       inkscape:transform-center-x="1.3873775"
+       id="use2239-1"
+       transform="rotate(72,167.49999,1385.5002)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="15.379358"
+       style="display:inline" />
   </g>
 </svg>
