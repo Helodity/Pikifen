@@ -576,11 +576,11 @@ float noise(vec3 v) {
 
 float color(vec2 xy) { return noise(vec3(xy, area_time)); }
 
-float simplex_noise(vec2 xy, float noise_scale, vec2 step) {
-    float x = color(xy * noise_scale);
-    x += 0.5 * color(xy * 2.0 * noise_scale - step);
-    x += 0.25 * color(xy * 4.0 * noise_scale - 2.0 * step);
-    x += 0.125 * color(xy * 8.0 * noise_scale - 4.0 * step);
+float simplex_noise(vec2 xy, vec2 step) {
+    float x = color(xy);
+    x += 0.5 * color(xy * 2.0 - step);
+    x += 0.25 * color(xy * 4.0 - 2.0 * step);
+    x += 0.125 * color(xy * 8.0 - 4.0 * step);
     return x;
 }
 
@@ -595,16 +595,16 @@ void main() {
 
     //Define some variables that'll be used throughout the shader.
     vec2 noise_func_step = vec2(1.3, 1.7);
-    vec2 base_pos = varying_texcoord;
+    vec2 base_pos = varying_texcoord * scale;
 
     //Calculate simplex noise effects. Apply twice to create the swirl effect
-    float raw_noise_value = simplex_noise(base_pos, scale, noise_func_step) * 0.5 + 0.5;
-    raw_noise_value = simplex_noise(base_pos + raw_noise_value, scale, noise_func_step) * 0.5 + 0.5;
-    vec4 final_pixel = texture(colormap, vec2(raw_noise_value, 0));
+    float raw_noise_value = simplex_noise(base_pos, noise_func_step) * 0.5 + 0.5;
+    raw_noise_value = simplex_noise(base_pos + raw_noise_value, noise_func_step) * 0.5 + 0.5;
+    float final_noise_value = smoothstep(0.1, 0.9,raw_noise_value);
+    vec4 final_pixel = texture(colormap, vec2(final_noise_value, 0));
 
     //Calculate alpha
     float final_alpha = opacity;
-
     if(al_use_tex) {
         final_alpha *= (varying_color * texture2D(al_tex, varying_texcoord)).a;
     }
