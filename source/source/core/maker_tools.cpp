@@ -54,7 +54,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
             return false;
         } else if(playConfirmationPresses == 2) {
             game.console.write(
-                "Maker tools are now allowed till you leave the area.\n"
+                "Maker tools are now allowed till you next enter an area.\n"
                 "Check the options to always allow maker tools in normal "
                 "gameplay.",
                 15

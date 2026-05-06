@@ -4648,7 +4648,7 @@ void Editor::Picker::process() {
         
     ImGui::FocusOnInputText(needsFilterBoxFocus);
     bool hitFilterWidget = false;
-    if(filter.empty()) {
+    if(!useMonospace) {
         hitFilterWidget =
             ImGui::InputTextWithHint(
                 "##filter", filterWidgetHint.c_str(), &filter,

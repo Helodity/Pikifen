@@ -1,11 +1,11 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
 
 Current tasks (tasks being worked on, but not yet committed)
-    New editor selection system
-        Select geyser, destination, and clover at top-right of the start of DEV Lab, plus that corridor's sign, scale the selection downward, it'll just move it
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Misc. sprite tools button in the animation editor isn't working
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
@@ -15,6 +15,7 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     More powerful scripting
+        Rename "get_chomped" to "be_chomped"
         Create a ready block, that triggers when the area is ready, and move some on_ready and init things there (maybe even delete on_ready)
         Add region trigger mobs, that output power based on how many mobs are inside the given region
         New actions
@@ -49,6 +50,7 @@ Next tasks (roughly sorted most important first)
         If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     All editors should have buttons to load/pick a thing, and buttons to create a thing, separated. As opposed to it all being bundled into one thing
+    The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Global script and script variables, which apply to the whole area
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
         A way for the area script to focus on some mobs
@@ -91,6 +93,7 @@ Next tasks (roughly sorted most important first)
             Add HUD support for all the different split-screen layouts
             During loading, show how the screen is going to be split, and show which player is in which screen
             Show each player's name in their screen somewhere
+            Since 4-leader areas will become a more-or-less normal thing with 4 players, add a fourth leader bubble to the HUD
         Make sure that:
             Leaders can't steal each other's group members
             Logic like culling isn't relying on just the first player
