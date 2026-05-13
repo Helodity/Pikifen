@@ -1,32 +1,163 @@
 <div align="center">
 
-![Pikifen's logo](game_data/base/graphics/gui/icon.png)  
 ![Pikifen's wordmark](game_data/base/graphics/gui/wordmark.png)
 
-_Pikifen_, a fan-made _Pikmin_-based game/engine for players to make and play their own _Pikmin_ fan content in.  
+<img src="game_data/base/graphics/gui/icon.png" alt="drawing" height="16pt"/> _Pikifen_, an open-source _Pikmin_-based game/engine for making and playing fan-made content.  
 Made with ♡ by Espyo.
 
-> **[⤓ Download for Windows! ⤓](#windows)**
+> **[⤓ Download for Windows! ⤓](#get-the-latest-version)**
 
-[![GitHub Downloads (all assets, latest release)](
-    https://img.shields.io/github/downloads-pre/Espyo/Pikifen/latest/total?style=plastic&logo=github&label=Latest%20version%20downloads
+[![V1.0 trailer](
+    https://img.shields.io/badge/V1.0%20trailer-darkred?style=plastic&logo=youtube
 )](
-    https://github.com/Espyo/Pikifen/releases
+    https://www.youtube.com/watch?v=ZmGOG88c0ag
 )
 [![Discord](
-    https://img.shields.io/discord/459094367425134593?style=plastic&logo=discord&label=Discord&color=green
+    https://img.shields.io/discord/459094367425134593?style=plastic&logo=discord&label=Discord&labelColor=mediumblue&color=slateblue&logoColor=white
 )](
     https://discord.gg/qbhz4u3
 )
 [![Bluesky](
-    https://img.shields.io/badge/-Bluesky-gray?style=plastic&logo=Bluesky
+    https://img.shields.io/badge/-Bluesky-royalblue?style=plastic&logo=Bluesky&logoColor=white
 )](
     https://bsky.app/profile/pikifen.bsky.social
 )
 [![Pikmin Fanon](
-    https://img.shields.io/badge/Pikmin%20Fanon%20page-green?style=plastic
+    https://img.shields.io/badge/Pikmin%20Fanon-darkgreen?style=plastic
 )](
     https://www.pikminfanon.com/wiki/Pikifen
+)
+
+![Gameplay and editor footage.](manual/images/footage.gif)
+
+</div>
+
+---
+<br>
+
+> * [Overview](#overview)
+> * [Playing and making](#playing-and-making)
+> * [Notable features](#notable-features)
+> * [Get the latest version](#get-the-latest-version)
+> * [Roadmap](#roadmap)
+> * [Troubleshooting](#troubleshooting)
+> * [Repository](#repository)
+> * [Disclaimer](#disclaimer)
+
+On top of this readme, the included manual (download _Pikifen_ and open `manual.html`) contains tutorials, the changelog, troubleshooting information, compilation instructions, an FAQ, credits, and more!
+
+
+## Overview
+
+* **_Pikifen_** (formerly Pikmin fangame engine) is a game and engine capable of creating and playing _Pikmin_ fan content. Think of it like a "_Pikmin [Maker](https://www.mariowiki.com/Super_Mario_Maker)_".
+* It's a simplified take on the _Pikmin_ games, even being in a 2D [orthographic](https://en.wikipedia.org/wiki/Orthographic_projection) top-down view, but is still very powerful and jam-packed with features.
+* The idea is for fans to create their own content (enemies, areas, etc.), while the engine itself handles the game logic (physics, scripting, etc.). Still, it comes with some base content so you can experiment with its features right away.
+* It's available for Windows, Linux, and Mac, and you can use a keyboard, mouse, and/or controller.
+* This project is under constant development, so expect some things to be incomplete! Some things may also be different from the canon games because it's simpler, better for the engine's flexibility, or impossible to fully replicate.
+
+![Gameplay screenshot of Crash Landing.](manual/images/gameplay_screenshot.jpg)
+
+
+## Playing and making
+
+* To play...
+  * Just double-click `pikifen.exe` (if you can't find it, make sure you followed [the instructions](#get-the-latest-version)), then pick an area and start playing!
+  * While it has no Story Mode support, it has missions, which give you a medal based on your performance!
+* To make content...
+  * Just edit the image, sound, or text files in the `game_data` folder. Some things can also be edited using the built-in editors.
+  * Alternatively, you can download some content made by other players (check the [Discord server](https://discord.gg/qbhz4u3)!)
+* For more detailed information, including tutorials, please check the included manual.
+
+
+## Notable features
+
+### Feature-rich
+
+* Replicates most of the standard _Pikmin_ gameplay.
+* Implements some of the more complex features, such as dynamic music or Go Here!
+* Unique features like status effects, weather conditions, elaborate missions, and more.
+* A handful of pre-packaged content to play with right away.
+
+### Powerful content editing
+
+* Content that can be customized simply by editing its files.
+* Intuitive and deep editors, for areas, animations, particles, and the GUI. (Made with [Dear ImGui](https://github.com/ocornut/imgui)!)
+* Scripting for objects using [finite-state machines](https://en.wikipedia.org/wiki/Finite-state_machine) and a custom scripting language.
+
+### Content-making utilities
+
+* A pack system, designed to make sharing custom content easy.
+* Tools to help with debugging custom content.
+* A comprehensive but easy-to-follow manual to help with making content.
+
+### Polish
+
+* Highly-customizable control schemes.
+* Filled with quality-of-life features and details, both for gameplay and for content-making.
+* Fairly low system requirements, 60FPS, no special permissions to run, no need to install, and less than 100 MB when extracted.
+
+### Open-source friendly
+
+* Made almost entirely from scratch (with [Allegro](https://github.com/liballeg/allegro5)!), as free and open-source software, for Windows, Linux (Steam Deck too!), and Mac.
+* Made almost exclusively using free and open-source software, and no generative AI.
+* Organized codebase with very few external dependencies.
+* The source "code" for some of the graphics and songs is also available.
+
+### [Accessible Games Initiative](https://accessiblegames.com/accessibility-tags/) tags
+
+* Auditory features:
+  * [Multiple Volume Controls](https://accessiblegames.com/accessibility-tags/multiple-volume-controls/)
+* Input features:
+  * [Full Input Remapping](https://accessiblegames.com/accessibility-tags/full-remapping/), [Playable with Buttons Only](https://accessiblegames.com/accessibility-tags/buttons-only-option/), [Playable with Keyboard Only](https://accessiblegames.com/accessibility-tags/keyboard-only-option/), [Playable with Mouse Only](https://accessiblegames.com/accessibility-tags/mouse-only-option/), [Playable without Button Holds](https://accessiblegames.com/accessibility-tags/playable-without-button-holds/), [Stick Inversion](https://accessiblegames.com/accessibility-tags/stick-inversion/)
+* Visual features:
+  * [Camera Comfort](https://accessiblegames.com/accessibility-tags/camera-comfort/)
+
+![Area editor screenshot.](manual/images/editor_screenshot.jpg)
+
+
+## Get the latest version
+
+### Upgrading from an older version
+
+* If you are upgrading from an older version of _Pikifen_, you should extract it into a new folder and use that one instead.
+* If you care about your settings, records, and personal backups, copy over the `user_data` folder from the previous version as well.
+* If you have any custom-made content you want to keep, copy that too, and remember to also follow any instructions noted in the changelog, inside the included manual.
+* If you just extract the new version into the same folder as the old one, you risk having files you care about be replaced, as well as keeping old files that the new version doesn't use and end up wasting space.
+
+### Windows
+
+* The latest version available for download for Windows is shown at the top of the [GitHub releases page](https://github.com/Espyo/Pikifen/releases). Open the "Assets" list, then click the `Pikifen_***.zip` file for that version.
+* Once downloaded, just unzip the downloaded zip file onto a folder, and double-click `pikifen.exe` inside to start running.
+* If you can't find any `pikifen.exe` file to double-click, then check if there's a `source` folder. If there is, you've downloaded the wrong zip file.
+* Alternatively, if you're experienced, you can download the source code and compile it to get the most up-to-date features. Compilation instructions can be found in the included manual.
+        
+### Linux and Mac
+
+* In order to play on Linux or Mac, you can build it from the source code. A simple tutorial on how to compile the engine can be found in the included manual.
+* Alternatively, you can run the [Windows executable](#windows) under [Wine](https://en.wikipedia.org/wiki/Wine_(software)). It works fairly well, though if you run into issues, check the included manual's "Troubleshooting" page.
+
+
+## Roadmap
+
+* To know what still needs to be done in the project, please check:
+  * The included manual's "History" page for a general overview.
+  * The project's [todo file](https://github.com/Espyo/Pikifen/blob/master/source/documents/todo.txt) for details.
+
+
+## Troubleshooting
+
+* If you have any issue, please check the included manual's "Troubleshooting" and "FAQ" pages.
+
+
+## Repository
+
+[![GitHub Downloads (all assets, latest release)](
+    https://img.shields.io/github/downloads-pre/Espyo/Pikifen/latest/total?style=plastic&logo=github&label=Latest%20version%20downloads&color=lightgray
+)](
+    https://github.com/Espyo/Pikifen/releases
+)
+![Platforms](
+    https://img.shields.io/badge/Platforms-Windows%2C%20Linux%2C%20MacOS-lightgray?style=plastic
 )  
 [![License](
     https://img.shields.io/badge/License-MIT-lightgray?style=plastic
@@ -39,110 +170,8 @@ Made with ♡ by Espyo.
 ![Repo size](
     https://img.shields.io/github/repo-size/Espyo/Pikifen?style=plastic&label=Repo%20size&color=lightgray
 )
-![Platforms](
-    https://img.shields.io/badge/Platforms-Windows%2C%20Linux%2C%20MacOS-lightgray?style=plastic
-)
 
-![Gameplay and editor footage.](manual/images/footage.gif)
-
-</div>
-
----
-<br>
-
-> * [Overview](#overview)
-> * [Notable features](#notable-features)
-> * [Get the latest version](#get-the-latest-version)
-> * [Playing and making](#playing-and-making)
-> * [What's left](#whats-left)
-> * [Troubleshooting](#troubleshooting)
-> * [Contributing](#contributing)
-> * [Disclaimer](#disclaimer)
-
-The included manual (download _Pikifen_ and open `manual.html`) contains, amongst other things, tutorials, the changelog, troubleshooting information, compilation instructions, an FAQ, and credits.
-
-
-## Overview
-
-**_Pikifen_** (formerly Pikmin fangame engine) is a game and engine capable of creating and playing _Pikmin_ fan content. Think of it like a "_Pikmin Maker_". It is a free open-source game with gameplay very similar to the [_Pikmin_ games](https://www.pikminwiki.com/Pikmin_series), in that leaders can whistle and throw Pikmin, Pikmin can carry objects, and so on.
-
-The idea is for fans to create their own content (enemies, areas, etc.), while the engine itself handles the game logic (like physics, scripting, and so on) as well as reading said content to turn it all into something playable. That said, the project also comes with some base content, so you can experiment with its features right away.
-
-Its most recent version is available for download with the [methods later in this readme](#get-the-latest-version). It can run on Windows, Linux, and Mac. Being a PC game, it is played using a keyboard, mouse, and/or a controller.
-    
-The game playable by the engine has a 2-dimensional look, and is seen from an [orthographic](https://en.wikipedia.org/wiki/Orthographic_projection) top-down view, although it is still a 3-dimensional game, in that height and gravity exist. The mechanics attempt to mimic those found in the _Pikmin_ games, although not always to the same degree. They can be different because it's easier that way, it's better for the engine's flexibility, or because it's not possible to fully replicate what happens in the canon games.
-    
-Depending on the area you select, you can either explore around freely without a care, or you must complete a mission, usually with some goal, fail conditions, and scoring criteria. More game modes and ways of playing will be added in the future. Since it is still in development, different features may be fully implemented, missing entirely, or working incorrectly.
-
-
-## Notable features
-
-* Replicates most of the standard _Pikmin_ gameplay.
-* Replicates some of the more complex features, such as dynamic music or Go Here!
-* Unique features like weather conditions, elaborate missions, and more.
-* Content that can be edited via text files, or by just replacing the image and sound files.
-* Intuitive and deep editors, such as an area editor, animation editor, and more. (Made with [Dear ImGui](https://github.com/ocornut/imgui)!)
-* Scripting for custom objects using [finite-state machines](https://en.wikipedia.org/wiki/Finite-state_machine) and a custom scripting language.
-* Tools to help with debugging custom content.
-* A comprehensive but easy-to-follow manual to help with making content.
-* A pack system, designed to make sharing custom content easy.
-* Highly-customizable control schemes.
-* Filled with quality-of-life features and details, both for gameplay and for content-making.
-* Fairly low system requirements, 60FPS, no special permissions to run, no need to install, and less than 100 MB when extracted.
-* Made almost entirely from scratch (with [Allegro](https://github.com/liballeg/allegro5)!), as free and open-source software, for Windows, Linux (Steam Deck too!), and Mac.
-* Made almost exclusively using free and open-source software.
-* Organized codebase with very few external dependencies.
-* The source "code" for some of the graphics and songs is also available.
-* All handmade, none of it created by Generative AI.
-
-[Accessible Games Initiative](https://accessiblegames.com/accessibility-tags/) tags:
-
-* Auditory features: [Multiple Volume Controls](https://accessiblegames.com/accessibility-tags/multiple-volume-controls/)
-* Input features: [Full Input Remapping](https://accessiblegames.com/accessibility-tags/full-remapping/), [Playable with Buttons Only](https://accessiblegames.com/accessibility-tags/buttons-only-option/), [Playable with Keyboard Only](https://accessiblegames.com/accessibility-tags/keyboard-only-option/), [Playable with Mouse Only](https://accessiblegames.com/accessibility-tags/mouse-only-option/), [Playable without Button Holds](https://accessiblegames.com/accessibility-tags/playable-without-button-holds/), [Stick Inversion](https://accessiblegames.com/accessibility-tags/stick-inversion/)
-* Visual features: [Camera Comfort](https://accessiblegames.com/accessibility-tags/camera-comfort/)
-
-
-## Get the latest version
-
-### Upgrading from an older version
-
-If you are upgrading from an older version of _Pikifen_, you should extract it into a new folder and use that one instead. If you do this, remember to copy over the `user_data` folder from the previous version, if you care about your settings and personal backups. If you have any custom-made content you want to keep, copy that too, and remember to also follow any instructions noted in the changelog, inside the included manual.
-If you just extract the new version into the same folder as the old one, you risk having files you care about be replaced, as well as keeping old files that the new version doesn't use and end up wasting space.
-
-### Windows
-The latest version available for download for Windows is shown at the top of the [GitHub releases page](https://github.com/Espyo/Pikifen/releases). Open the "Assets" list, then click the `Pikifen_***.zip` file for that version.
-
-Once downloaded, just unzip the downloaded zip file onto a folder, and double-click `pikifen.exe` inside to start running. If you have downloaded a zip file in hopes of just playing the game, but can't find any `pikifen.exe` file to double-click, then check if there's a `source` folder. If there is, you've downloaded the wrong zip file.
-
-Alternatively, you can download the source code and compile it to get the most up-to-date features; compilation instructions can be found in the included manual.
-        
-### Linux and Mac
-In order to play on Linux or Mac, you can build it from the source code. A simple tutorial on how to compile the engine can be found in the included manual.
-Alternatively, you can run the [Windows executable](#windows) under [Wine](https://en.wikipedia.org/wiki/Wine_(software)). It works fairly well, though if you run into issues, check the included manual's "Troubleshooting" page.
-
-
-## Playing and making
-
-* To play, just double-click `pikifen.exe` (if you can't find it, make sure you followed "Get the latest version" above), then pick an area and start playing!
-* To make content for the engine, just edit the image, sound, or text files in the `game_data` folder. Some things can also be edited using the built-in editors.
-* Alternatively, you can download some content made by other players (check the [Discord server](https://discord.gg/qbhz4u3)!)
-* This project is still under construction, so expect some things to be incomplete!
-* For more detailed information, including tutorials, please check the included manual.
-
-
-## What's left
-
-To know what still needs to be done in the project, please check the included manual's "History" page for a general overview, or the project's [todo file](https://github.com/Espyo/Pikifen/blob/master/source/documents/todo.txt) for details.
-
-
-## Troubleshooting
-
-If you have any issue, please check the included manual's "Troubleshooting" and "FAQ" pages.
-
-
-## Contributing
-
-Please see the [contributing file](https://github.com/Espyo/Pikifen/blob/master/contributing.md).
+* For information on how to contribute, please see the [contributing file](https://github.com/Espyo/Pikifen/blob/master/contributing.md).
 
 
 ## Disclaimer

@@ -5,6 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If the Frames section is collapsed in the animation panel, changing animations won't show anything
     Misc. sprite tools button in the animation editor isn't working
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -46,6 +47,7 @@ Next tasks (roughly sorted most important first)
     Lumiknolls
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Freezecake
+    White and Purple Onions
     Other mission tweaks
         If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
@@ -59,6 +61,8 @@ Next tasks (roughly sorted most important first)
         Add some script to DEV Lab
     
     --- 2.0.0 ---
+    Update Dear ImGui to 1.92.8
+        > Made AddCallback() user data default to Null for convenience.
     Multiplayer co-op
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Menus
@@ -461,6 +465,7 @@ Small tasks (for when I'm feeling lazy)
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
         Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
+        Rename the header files to .hpp?
     
     
 Misc things (so I don't forget)
