@@ -23,7 +23,7 @@ script {
             end_if
         }
         on_hitbox_touch_eat {
-            get_chomped
+            be_chomped
             set_state held_by_enemy
         }
         on_land {
@@ -71,7 +71,7 @@ script {
             end_if
         }
         on_hitbox_touch_eat {
-            get_chomped
+            be_chomped
             set_state held_by_enemy
         }
         on_land {

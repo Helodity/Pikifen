@@ -168,6 +168,22 @@ void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the being chomped script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::beChomped(ScriptActionInstRunData& data) {
+    //Main logic.
+    if(data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_EAT) {
+        ((Mob*) (data.customData1))->chomp(
+            data.scriptVM->mob,
+            (Hitbox*) (data.customData2)
+        );
+    }
+}
+
+
+/**
  * @brief Code for the calculation script action type.
  *
  * @param data Data about the action call.
@@ -622,22 +638,6 @@ void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
     
     //Store the result.
     data.scriptVM->vars[destVarArg] = result;
-}
-
-
-/**
- * @brief Code for the getting chomped script action type.
- *
- * @param data Data about the action call.
- */
-void ScriptActionRunners::getChomped(ScriptActionInstRunData& data) {
-    //Main logic.
-    if(data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_EAT) {
-        ((Mob*) (data.customData1))->chomp(
-            data.scriptVM->mob,
-            (Hitbox*) (data.customData2)
-        );
-    }
 }
 
 

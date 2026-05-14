@@ -16,7 +16,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     More powerful scripting
-        Rename "get_chomped" to "be_chomped"
         Create a ready block, that triggers when the area is ready, and move some on_ready and init things there (maybe even delete on_ready)
         Add region trigger mobs, that output power based on how many mobs are inside the given region
         New actions

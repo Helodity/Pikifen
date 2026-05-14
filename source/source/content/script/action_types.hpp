@@ -46,6 +46,9 @@ enum SCRIPT_ACTION {
     //Plan something. Used for arachnorbs.
     SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC,
     
+    //Be chomped by another mob.
+    SCRIPT_ACTION_BE_CHOMPED,
+    
     //Perform a numeric calculation.
     SCRIPT_ACTION_CALCULATE,
     
@@ -911,6 +914,7 @@ void addHealth(ScriptActionInstRunData& data);
 void addListItem(ScriptActionInstRunData& data);
 void addToString(ScriptActionInstRunData& data);
 void arachnorbPlanLogic(ScriptActionInstRunData& data);
+void beChomped(ScriptActionInstRunData& data);
 void calculate(ScriptActionInstRunData& data);
 void ceilNumber(ScriptActionInstRunData& data);
 void clearVar(ScriptActionInstRunData& data);
@@ -927,7 +931,6 @@ void followPathToAbsolute(ScriptActionInstRunData& data);
 void getAngle(ScriptActionInstRunData& data);
 void getAngleCwDiff(ScriptActionInstRunData& data);
 void getAngleSmallestDiff(ScriptActionInstRunData& data);
-void getChomped(ScriptActionInstRunData& data);
 void getCoordinatesFromAngle(ScriptActionInstRunData& data);
 void getDistance(ScriptActionInstRunData& data);
 void getEventInfo(ScriptActionInstRunData& data);

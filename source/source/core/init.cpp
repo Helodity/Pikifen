@@ -2010,6 +2010,13 @@ void initScriptActionTypes() {
         ScriptActionRunners::arachnorbPlanLogic
     );
     
+    //Be chomped.
+    commitAction(
+        SCRIPT_ACTION_BE_CHOMPED,
+        "be_chomped",
+        ScriptActionRunners::beChomped
+    );
+    
     //Delete.
     commitAction(
         SCRIPT_ACTION_DELETE,
@@ -2067,11 +2074,12 @@ void initScriptActionTypes() {
         ScriptActionRunners::followPathToAbsolute
     );
     
+    //DEPRECATED in 1.2.0 by "be_chomped".
     //Get chomped.
     commitAction(
         SCRIPT_ACTION_GET_CHOMPED,
         "get_chomped",
-        ScriptActionRunners::getChomped
+        ScriptActionRunners::beChomped
     );
     
     //Get floor Z.
