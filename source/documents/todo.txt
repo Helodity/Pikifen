@@ -46,17 +46,16 @@ Next tasks (roughly sorted most important first)
     Lumiknolls
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Freezecake
-    White and Purple Onions
+    White and Purple Onions and pellets
     Other mission tweaks
         If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
-    All editors should have buttons to load/pick a thing, and buttons to create a thing, separated. As opposed to it all being bundled into one thing
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Global script and script variables, which apply to the whole area
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
         A way for the area script to focus on some mobs
         A button in the area editor that creates/opens the script file externally?
-        A maker tool to debug the area's script with, like the mob info tool
+        A maker tool to debug the area's script with, like the mob inspector tool
         Add some script to DEV Lab
     
     --- 2.0.0 ---

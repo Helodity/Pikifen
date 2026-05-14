@@ -55,7 +55,7 @@ enum MAKER_TOOL_TYPE {
     MAKER_TOOL_TYPE_HURT_MOB,
     
     //Get info on the mob beneath mouse cursor.
-    MAKER_TOOL_TYPE_MOB_INFO,
+    MAKER_TOOL_TYPE_MOB_INSPECTOR,
     
     //Create a new Pikmin beneath mouse cursor.
     MAKER_TOOL_TYPE_NEW_PIKMIN,
@@ -151,8 +151,8 @@ struct MakerTools {
     //Is the HUD visible?
     bool hud = true;
     
-    //Mob currently locked-on to for the mob information tool. nullptr if off.
-    Mob* infoLock = nullptr;
+    //Mob currently being inspected. nullptr if none.
+    Mob* inspectedMob = nullptr;
     
     //When we last spawned a Pikmin, what was its type?
     PikminType* lastPikminType = nullptr;
@@ -166,10 +166,10 @@ struct MakerTools {
     //Whether the second modifier input is held down.
     bool mod2 = false;
     
-    //Show path info of the currently info-locked mob?
+    //Show path info of the currently inspected mob?
     bool pathInfo = false;
     
-    //Show the reaches of the currently info-locked mob?
+    //Show the reaches of the currently inspected mob?
     bool reaches = false;
 
     //Mouse cursor world coordinates when the latest maker tool was started.

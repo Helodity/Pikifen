@@ -1010,9 +1010,9 @@ void GameplayState::drawInGameText(Player* player) {
     
     //Maker tool -- draw path info.
     if(
-        game.makerTools.infoLock &&
+        game.makerTools.inspectedMob &&
         game.makerTools.pathInfo &&
-        game.makerTools.infoLock->pathInfo
+        game.makerTools.inspectedMob->pathInfo
     ) {
         const ALLEGRO_COLOR BLOCKED_LINE_COLOR = al_map_rgba(255, 0, 0, 200);
         const ALLEGRO_COLOR FREE_LINE_COLOR = al_map_rgba(0, 0, 255, 200);
@@ -1027,7 +1027,7 @@ void GameplayState::drawInGameText(Player* player) {
         const ALLEGRO_COLOR FAKE_START_COLOR = al_map_rgba(255, 0, 0, 200);
         const ALLEGRO_COLOR FAKE_END_COLOR = al_map_rgba(0, 255, 0, 200);
         
-        Path* path = game.makerTools.infoLock->pathInfo;
+        Path* path = game.makerTools.inspectedMob->pathInfo;
         Point targetPos =
             hasFlag(path->settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB) ?
             path->settings.targetMob->center :
@@ -1073,8 +1073,8 @@ void GameplayState::drawInGameText(Player* player) {
             bool isBlocked = path->blockReason != PATH_BLOCK_REASON_NONE;
             //Line directly to the target.
             al_draw_line(
-                game.makerTools.infoLock->center.x,
-                game.makerTools.infoLock->center.y,
+                game.makerTools.inspectedMob->center.x,
+                game.makerTools.inspectedMob->center.y,
                 targetPos.x,
                 targetPos.y,
                 isBlocked ? BLOCKED_LINE_COLOR : FREE_LINE_COLOR,
@@ -1084,8 +1084,8 @@ void GameplayState::drawInGameText(Player* player) {
             bool isBlocked = path->blockReason != PATH_BLOCK_REASON_NONE;
             //Line to the next stop, and circle for the next stop in blue.
             al_draw_line(
-                game.makerTools.infoLock->center.x,
-                game.makerTools.infoLock->center.y,
+                game.makerTools.inspectedMob->center.x,
+                game.makerTools.inspectedMob->center.y,
                 path->path[path->curPathStopIdx]->center.x,
                 path->path[path->curPathStopIdx]->center.y,
                 isBlocked ? BLOCKED_LINE_COLOR : FREE_LINE_COLOR,
@@ -1129,45 +1129,45 @@ void GameplayState::drawInGameText(Player* player) {
     }
     
     //Maker tool -- draw reaches.
-    if(game.makerTools.infoLock && game.makerTools.reaches) {
+    if(game.makerTools.inspectedMob && game.makerTools.reaches) {
         const ALLEGRO_COLOR FAR_REACH_COLOR = al_map_rgba(192, 64, 64, 192);
         const ALLEGRO_COLOR NEAR_REACH_COLOR = al_map_rgba(64, 192, 64, 192);
         
-        if(game.makerTools.infoLock->farReach != INVALID) {
+        if(game.makerTools.inspectedMob->farReach != INVALID) {
             MobType::Reach* farReach =
-                &game.makerTools.infoLock->type->reaches[
-                    game.makerTools.infoLock->farReach
+                &game.makerTools.inspectedMob->type->reaches[
+                    game.makerTools.inspectedMob->farReach
                 ];
             ALLEGRO_COLOR color = FAR_REACH_COLOR;
             drawReach(
-                game.makerTools.infoLock->center,
-                game.makerTools.infoLock->angle,
-                game.makerTools.infoLock->radius,
+                game.makerTools.inspectedMob->center,
+                game.makerTools.inspectedMob->angle,
+                game.makerTools.inspectedMob->radius,
                 farReach->angle1, farReach->radius1, color
             );
             drawReach(
-                game.makerTools.infoLock->center,
-                game.makerTools.infoLock->angle,
-                game.makerTools.infoLock->radius,
+                game.makerTools.inspectedMob->center,
+                game.makerTools.inspectedMob->angle,
+                game.makerTools.inspectedMob->radius,
                 farReach->angle2, farReach->radius2, color
             );
         }
-        if(game.makerTools.infoLock->nearReach != INVALID) {
+        if(game.makerTools.inspectedMob->nearReach != INVALID) {
             MobType::Reach* nearReach =
-                &game.makerTools.infoLock->type->reaches[
-                    game.makerTools.infoLock->nearReach
+                &game.makerTools.inspectedMob->type->reaches[
+                    game.makerTools.inspectedMob->nearReach
                 ];
             ALLEGRO_COLOR color = NEAR_REACH_COLOR;
             drawReach(
-                game.makerTools.infoLock->center,
-                game.makerTools.infoLock->angle,
-                game.makerTools.infoLock->radius,
+                game.makerTools.inspectedMob->center,
+                game.makerTools.inspectedMob->angle,
+                game.makerTools.inspectedMob->radius,
                 nearReach->angle1, nearReach->radius1, color
             );
             drawReach(
-                game.makerTools.infoLock->center,
-                game.makerTools.infoLock->angle,
-                game.makerTools.infoLock->radius,
+                game.makerTools.inspectedMob->center,
+                game.makerTools.inspectedMob->angle,
+                game.makerTools.inspectedMob->radius,
                 nearReach->angle2, nearReach->radius2, color
             );
         }

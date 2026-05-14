@@ -1137,27 +1137,27 @@ void GameplayState::doMenuLogic() {
         player.inventory->tick(game.deltaT);
     }
     
-    //Print info on a mob.
-    if(game.makerTools.infoLock) {
+    //Print info on the inspected mob.
+    if(game.makerTools.inspectedMob) {
         string nameStr =
             resizeString(
-                "ID " + i2s(game.makerTools.infoLock->id) + ", " +
-                game.makerTools.infoLock->type->name,
+                "ID " + i2s(game.makerTools.inspectedMob->id) + ", " +
+                game.makerTools.inspectedMob->type->name,
                 26
             );
         string coordsStr =
             resizeString(
-                resizeString(f2s(game.makerTools.infoLock->center.x), 8) + " " +
-                resizeString(f2s(game.makerTools.infoLock->center.y), 8) + " " +
-                resizeString(f2s(game.makerTools.infoLock->bottomZ), 8),
+                resizeString(f2s(game.makerTools.inspectedMob->center.x), 8) + " " +
+                resizeString(f2s(game.makerTools.inspectedMob->center.y), 8) + " " +
+                resizeString(f2s(game.makerTools.inspectedMob->bottomZ), 8),
                 26
             );
         string angleStr =
-            resizeString(f2s(radToDeg(game.makerTools.infoLock->angle)), 8);
+            resizeString(f2s(radToDeg(game.makerTools.inspectedMob->angle)), 8);
         string stateStr =
             resizeString(
-                game.makerTools.infoLock->scriptVM.fsm.curState ?
-                game.makerTools.infoLock->scriptVM.fsm.curState->name :
+                game.makerTools.inspectedMob->scriptVM.fsm.curState ?
+                game.makerTools.inspectedMob->scriptVM.fsm.curState->name :
                 "(None!)",
                 20
             );
@@ -1165,26 +1165,26 @@ void GameplayState::doMenuLogic() {
         for(unsigned char p = 0; p < FSM::STATE_HISTORY_SIZE; p++) {
             prevStatesStr +=
                 resizeString(
-                    game.makerTools.infoLock->scriptVM.fsm.prevStateNames[p],
+                    game.makerTools.inspectedMob->scriptVM.fsm.prevStateNames[p],
                     20
                 ) + " ";
         }
         string animStr =
             resizeString(
-                game.makerTools.infoLock->anim.curAnim ?
-                game.makerTools.infoLock->anim.curAnim->name :
+                game.makerTools.inspectedMob->anim.curAnim ?
+                game.makerTools.inspectedMob->anim.curAnim->name :
                 "(None!)",
                 20
             );
         string healthStr =
             resizeString(
-                resizeString(f2s(game.makerTools.infoLock->health), 6) +
+                resizeString(f2s(game.makerTools.inspectedMob->health), 6) +
                 " / " +
-                resizeString(f2s(game.makerTools.infoLock->maxHealth), 6),
+                resizeString(f2s(game.makerTools.inspectedMob->maxHealth), 6),
                 23, true, true
             );
         string timerStr =
-            f2s(game.makerTools.infoLock->scriptVM.timer.timeLeft);
+            f2s(game.makerTools.inspectedMob->scriptVM.timer.timeLeft);
             
         game.console.write(
             "Mob: " + nameStr + "\n"
@@ -1192,16 +1192,16 @@ void GameplayState::doMenuLogic() {
             "Health: " + healthStr + "\n"
             "Animation: " + animStr + " | Timer: " + timerStr + "\n"
             "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
-            game.makerTools.infoLock->scriptVM.getMakerToolVarsStr(),
+            game.makerTools.inspectedMob->scriptVM.getMakerToolVarsStr(),
             5.0f, 3.0f
         );
     }
     
     //Print path info.
-    if(game.makerTools.infoLock && game.makerTools.pathInfo) {
-        if(game.makerTools.infoLock->pathInfo) {
+    if(game.makerTools.inspectedMob && game.makerTools.pathInfo) {
+        if(game.makerTools.inspectedMob->pathInfo) {
         
-            Path* path = game.makerTools.infoLock->pathInfo;
+            Path* path = game.makerTools.inspectedMob->pathInfo;
             string resultStr = pathResultToString(path->result);
             
             string stopsStr =

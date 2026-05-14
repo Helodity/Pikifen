@@ -231,8 +231,8 @@ enum PLAYER_ACTION_TYPE {
     //Hurt mob.
     PLAYER_ACTION_TYPE_MT_HURT_MOB,
     
-    //Mob info.
-    PLAYER_ACTION_TYPE_MT_MOB_INFO,
+    //Mob inspector.
+    PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR,
     
     //New Pikmin.
     PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,

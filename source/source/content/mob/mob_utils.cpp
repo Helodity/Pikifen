@@ -1416,7 +1416,7 @@ Mob* createMob(MobGen* gen) {
  * and such, since everything is going to be destroyed.
  */
 void deleteMob(Mob* mPtr, bool completeDestruction) {
-    if(game.makerTools.infoLock == mPtr) game.makerTools.infoLock = nullptr;
+    if(game.makerTools.inspectedMob == mPtr) game.makerTools.inspectedMob = nullptr;
     
     if(!completeDestruction) {
         mPtr->leaveGroup();

@@ -676,11 +676,11 @@ void initControls() {
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_MOB_INFO,
+        PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Mob info",
+        "Mob inspector",
         "Toggle info about the mob under the mouse cursor.",
-        "mt_mob_info", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_mob_inspector", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -703,7 +703,7 @@ void initControls() {
         PLAYER_ACTION_TYPE_MT_PATH_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Path info",
-        "Toggle info about paths the info'd mob is taking.",
+        "Toggle info about paths the inspected mob is taking.",
         "mt_path_info", "k_34", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
@@ -727,7 +727,7 @@ void initControls() {
         PLAYER_ACTION_TYPE_MT_SHOW_REACHES,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show reaches",
-        "Toggle drawing the info'd mob's reaches.",
+        "Toggle drawing the inspected mob's reaches.",
         "mt_show_reaches", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );

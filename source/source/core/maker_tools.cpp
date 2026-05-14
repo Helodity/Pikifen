@@ -196,14 +196,14 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         usedHelpingTools = true;
         break;
         
-    } case PLAYER_ACTION_TYPE_MT_MOB_INFO: {
+    } case PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR: {
 
-        Mob* prevLockMob = infoLock;
+        Mob* prevInspectedMob = inspectedMob;
         Mob* m;
         if(mod1) {
             m =
                 getNextMobNearCursor(
-                    game.states.gameplay->players[0].view, prevLockMob, false
+                    game.states.gameplay->players[0].view, prevInspectedMob, false
                 );
         } else if(mod2) {
             m = nullptr;
@@ -214,10 +214,10 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                 );
         }
         
-        infoLock = prevLockMob == m ? nullptr : m;
+        inspectedMob = prevInspectedMob == m ? nullptr : m;
         if(
-            prevLockMob != nullptr &&
-            infoLock == nullptr
+            prevInspectedMob != nullptr &&
+            inspectedMob == nullptr
         ) {
             game.console.write("Mob: None.", 2.0f, 2.0f);
         }
@@ -335,8 +335,8 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
 
         Mob* mobToTeleport =
-            (mod1 && infoLock) ?
-            infoLock :
+            (mod1 && inspectedMob) ?
+            inspectedMob :
             game.states.gameplay->players[0].leaderPtr;
             
         Sector* mouseSector =
@@ -566,7 +566,7 @@ void MakerTools::resetForGameplay() {
     geometryInfo = false;
     hitboxes = false;
     hud = true;
-    infoLock = nullptr;
+    inspectedMob = nullptr;
     lastPikminType = nullptr;
     pathInfo = false;
     reaches = false;

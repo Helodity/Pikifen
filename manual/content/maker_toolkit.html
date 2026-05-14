@@ -158,9 +158,9 @@
       </tr>
     </table>
 
-    <h3 id="mob-info">Mob info</h3>
+    <h3 id="mob-inspector">Mob inspector</h3>
     
-    <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it locks-on to that mob, and only unlocks if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will lock to that one instead. This lock-on can also be useful for other maker tools. If you were holding "modifier 1", it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding "modifier 2", it will stop locking on. The information shown is:</p>
+    <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it starts inspecting that mob, and only stops inspecting if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will inspect that one instead. Some other maker tools may also need that a mob is currently being inspected. If you were holding "modifier 1", it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding "modifier 2", it will stop inspecting no matter what. The information shown is:</p>
     
     <ul>
       <li><b>Name</b>: The name of the type of mob this is (e.g. Red Bulborb, Olimar).</li>
@@ -174,7 +174,7 @@
 
     <p>As such, the information shown is mostly useful to debug scripts and animations. </p>
     
-    <p><b>Tool internal name</b>: <code>mob_info</code>.</p>
+    <p><b>Tool internal name</b>: <code>mob_inspector</code>.</p>
 
     <p><b>Properties</b>: none.</p>
 
@@ -196,7 +196,7 @@
     
     <h3 id="path-info">Path info</h3>
     
-    <p>When on, prints out important information about the path that the <a href="#mob-info">locked-on mob</a> is taking. It also draws its path on the area. Pressing the button toggles the feature on and off.</p>
+    <p>When on, prints out important information about the path that the <a href="#mob-inspector">inspected mob</a> is taking. It also draws its path on the area. Pressing the button toggles the feature on and off.</p>
 
     <p>The information at the top is:</p>
 
@@ -250,7 +250,7 @@
 
     <h3 id="reaches">Show reaches</h3>
     
-    <p>Toggles visibility of mob reaches in-game. This only affects the <a href="#mob-info">locked-on mob</a>. It will show pie-slices or circles for the current far reach in red, and for the current near reach in green.</p>
+    <p>Toggles visibility of mob reaches in-game. This only affects the <a href="#mob-inspector">inspected mob</a>. It will show pie-slices or circles for the current far reach in red, and for the current near reach in green.</p>
 
     <p><b>Tool internal name</b>: <code>reaches</code>.</p>
 
@@ -258,7 +258,7 @@
 
     <h3 id="teleport">Teleport</h3>
     
-    <p>Teleports the current leader to the cursor's position. This uses the mouse cursor, not the leader's cursor. Use this to go somewhere instantly or to move around the area quickly. Pikmin and leaders in your party will teleport with you. You can also down the input bound to this maker tool to repeatedly go to the cursor, which updates with the leader, meaning that this allows you to quickly move through everything in the direction the cursor is. This is however very hard to control. If you were holding "modifier 1", it will instead teleport the mob that's <a href="#mob-info">locked-on</a>. If you were holding "modifier 2", the Pikmin and leaders in your group will not teleport with you.</p>
+    <p>Teleports the current leader to the cursor's position. This uses the mouse cursor, not the leader's cursor. Use this to go somewhere instantly or to move around the area quickly. Pikmin and leaders in your party will teleport with you. You can also down the input bound to this maker tool to repeatedly go to the cursor, which updates with the leader, meaning that this allows you to quickly move through everything in the direction the cursor is. This is however very hard to control. If you were holding "modifier 1", it will instead teleport the mob that's <a href="#mob-inspector">being inspected</a>. If you were holding "modifier 2", the Pikmin and leaders in your group will not teleport with you.</p>
 
     <p><b>Tool internal name</b>: <code>teleport</code>.</p>
 
