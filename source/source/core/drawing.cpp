@@ -11,21 +11,21 @@
 #include <algorithm>
 #include <typeinfo>
 
-#include "drawing.h"
+#include "drawing.hpp"
 
-#include "../content/animation/animation.h"
-#include "../content/mob/group_task.h"
-#include "../content/mob/pile.h"
-#include "../content/mob/scale.h"
-#include "../game_state/gameplay/gameplay.h"
-#include "../util/allegro_utils.h"
-#include "../util/drawing_utils.h"
-#include "../util/general_utils.h"
-#include "../util/geometry_utils.h"
-#include "../util/string_utils.h"
-#include "const.h"
-#include "game.h"
-#include "misc_functions.h"
+#include "../content/animation/animation.hpp"
+#include "../content/mob/group_task.hpp"
+#include "../content/mob/pile.hpp"
+#include "../content/mob/scale.hpp"
+#include "../game_state/gameplay/gameplay.hpp"
+#include "../util/allegro_utils.hpp"
+#include "../util/drawing_utils.hpp"
+#include "../util/general_utils.hpp"
+#include "../util/geometry_utils.hpp"
+#include "../util/string_utils.hpp"
+#include "const.hpp"
+#include "game.hpp"
+#include "misc_functions.hpp"
 
 
 namespace BIND_INPUT_ICON {

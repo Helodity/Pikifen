@@ -8,10 +8,10 @@
  * Scale type class and scale type-related functions.
  */
 
-#include "scale_type.h"
+#include "scale_type.hpp"
 
-#include "../../util/string_utils.h"
-#include "../mob/scale.h"
+#include "../../util/string_utils.hpp"
+#include "../mob/scale.hpp"
 
 
 /**

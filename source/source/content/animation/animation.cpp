@@ -13,12 +13,12 @@
 #include <map>
 #include <vector>
 
-#include "animation.h"
+#include "animation.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/string_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using std::size_t;

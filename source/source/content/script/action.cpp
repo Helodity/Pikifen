@@ -9,10 +9,10 @@
  */
 
 
-#include "action.h"
+#include "action.hpp"
 
-#include "../../core/game.h"
-#include "script_utils.h"
+#include "../../core/game.hpp"
+#include "script_utils.hpp"
 
 
 #pragma region Script action block definition

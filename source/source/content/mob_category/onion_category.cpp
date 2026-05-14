@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "onion_category.h"
+#include "onion_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/onion.h"
+#include "../../core/game.hpp"
+#include "../mob/onion.hpp"
 
 
 /**

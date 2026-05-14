@@ -8,11 +8,11 @@
  * Help menu structs and functions.
  */
 
-#include "help_menu.h"
+#include "help_menu.hpp"
 
-#include "../core/game.h"
-#include "../core/misc_functions.h"
-#include "../util/string_utils.h"
+#include "../core/game.hpp"
+#include "../core/misc_functions.hpp"
+#include "../util/string_utils.hpp"
 
 
 using DrawInfo = GuiItem::DrawInfo;

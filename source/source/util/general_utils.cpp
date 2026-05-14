@@ -11,10 +11,10 @@
 #include <algorithm>
 #include <csignal>
 
-#include "general_utils.h"
+#include "general_utils.hpp"
 
-#include "math_utils.h"
-#include "string_utils.h"
+#include "math_utils.hpp"
+#include "string_utils.hpp"
 
 
 #pragma region Auto repeater

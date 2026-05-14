@@ -16,13 +16,13 @@
 
 #include <allegro5/allegro_color.h>
 
-#include "geometry.h"
+#include "geometry.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/container_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/geometry_utils.h"
-#include "vertex.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/container_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/geometry_utils.hpp"
+#include "vertex.hpp"
 
 
 using std::vector;

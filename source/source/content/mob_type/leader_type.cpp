@@ -8,15 +8,15 @@
  * Leader type class and leader type-related functions.
  */
 
-#include "leader_type.h"
+#include "leader_type.hpp"
 
-#include "../../core/const.h"
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob_script/gen_mob_fsm.h"
-#include "../mob_script/leader_fsm.h"
+#include "../../core/const.hpp"
+#include "../../core/game.hpp"
+#include "../../core/load.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_script/gen_mob_fsm.hpp"
+#include "../mob_script/leader_fsm.hpp"
 
 
 namespace LEADER_TYPE {

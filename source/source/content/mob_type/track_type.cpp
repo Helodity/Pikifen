@@ -8,13 +8,13 @@
  * Track type class and track type-related functions.
  */
 
-#include "track_type.h"
+#include "track_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob_script/track_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_script/track_fsm.hpp"
 
 
 /**

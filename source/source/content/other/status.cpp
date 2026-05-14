@@ -10,13 +10,13 @@
 
 #include <algorithm>
 
-#include "status.h"
+#include "status.hpp"
 
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../core/misc_functions.h"
-#include "../../core/misc_structs.h"
-#include "../../util/general_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/load.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../core/misc_structs.hpp"
+#include "../../util/general_utils.hpp"
 
 
 #pragma region Status

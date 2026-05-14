@@ -8,14 +8,14 @@
  * Bridge finite-state machine logic.
  */
 
-#include "bridge_fsm.h"
+#include "bridge_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob/bridge.h"
-#include "gen_mob_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/bridge.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM

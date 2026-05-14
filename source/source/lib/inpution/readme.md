@@ -32,8 +32,8 @@ On top of simply giving the game a list of actions, it also simplifies a lot of 
 ## Quick example
 
 ```cpp
-#include "inpution.h"
-#include "my_game_stuff.h"
+#include "inpution.hpp"
+#include "my_game_stuff.hpp"
 
 enum PLAYER_ACTION {
     PLAYER_ACTION_MOVE_LEFT,

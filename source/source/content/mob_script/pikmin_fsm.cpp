@@ -10,20 +10,20 @@
 
 #include <algorithm>
 
-#include "pikmin_fsm.h"
+#include "pikmin_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob/bridge.h"
-#include "../mob/drop.h"
-#include "../mob/group_task.h"
-#include "../mob/pikmin.h"
-#include "../mob/tool.h"
-#include "../mob/track.h"
-#include "../other/hazard.h"
-#include "gen_mob_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/bridge.hpp"
+#include "../mob/drop.hpp"
+#include "../mob/group_task.hpp"
+#include "../mob/pikmin.hpp"
+#include "../mob/tool.hpp"
+#include "../mob/track.hpp"
+#include "../other/hazard.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM

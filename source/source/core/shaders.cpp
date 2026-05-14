@@ -8,9 +8,9 @@
  * Shader related functions.
  */
 
-#include "game.h"
-#include "misc_functions.h"
-#include "shaders.h"
+#include "game.hpp"
+#include "misc_functions.hpp"
+#include "shaders.hpp"
 
 
 /**

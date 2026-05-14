@@ -11,15 +11,15 @@
 #include <algorithm>
 #include <unordered_set>
 
-#include "enemy.h"
+#include "enemy.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/math_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob_type/mob_type.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/math_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_type/mob_type.hpp"
 
 
 namespace ENEMY {

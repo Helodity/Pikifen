@@ -10,11 +10,11 @@
 
 #include <algorithm>
 
-#include "editor.h"
+#include "editor.hpp"
 
-#include "../../content/mob/mob_utils.h"
-#include "../../core/game.h"
-#include "../../util/allegro_utils.h"
+#include "../../content/mob/mob_utils.hpp"
+#include "../../core/game.hpp"
+#include "../../util/allegro_utils.hpp"
 
 
 /**

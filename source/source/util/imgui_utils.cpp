@@ -13,11 +13,11 @@
 #include <cmath>
 #include <cstdarg>
 
-#include "imgui_utils.h"
+#include "imgui_utils.hpp"
 
-#include "allegro_utils.h"
-#include "container_utils.h"
-#include "math_utils.h"
+#include "allegro_utils.hpp"
+#include "container_utils.hpp"
+#include "math_utils.hpp"
 
 
 namespace ImGui {

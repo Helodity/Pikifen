@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "tool_category.h"
+#include "tool_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/tool.h"
+#include "../../core/game.hpp"
+#include "../mob/tool.hpp"
 
 
 /**

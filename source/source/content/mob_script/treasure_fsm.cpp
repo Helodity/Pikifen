@@ -8,13 +8,13 @@
  * Treasure finite-state machine logic.
  */
 
-#include "treasure_fsm.h"
+#include "treasure_fsm.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/ship.h"
-#include "../mob/treasure.h"
-#include "gen_mob_fsm.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/ship.hpp"
+#include "../mob/treasure.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM

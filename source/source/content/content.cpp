@@ -8,10 +8,10 @@
  * Class representing a piece of game content.
  */
 
-#include "content.h"
+#include "content.hpp"
 
-#include "../core/misc_structs.h"
-#include "../util/string_utils.h"
+#include "../core/misc_structs.hpp"
+#include "../util/string_utils.hpp"
 
 
 /**

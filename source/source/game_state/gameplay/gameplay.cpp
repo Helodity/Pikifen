@@ -13,19 +13,19 @@
 
 #include <allegro5/allegro_native_dialog.h>
 
-#include "gameplay.h"
+#include "gameplay.hpp"
 
-#include "../../content/mob/converter.h"
-#include "../../content/mob/pile.h"
-#include "../../content/mob/resource.h"
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../core/misc_functions.h"
-#include "../../core/misc_structs.h"
-#include "../../lib/data_file/data_file.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/string_utils.h"
+#include "../../content/mob/converter.hpp"
+#include "../../content/mob/pile.hpp"
+#include "../../content/mob/resource.hpp"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/load.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../core/misc_structs.hpp"
+#include "../../lib/data_file/data_file.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 namespace GAMEPLAY {

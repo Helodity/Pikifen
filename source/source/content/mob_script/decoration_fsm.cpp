@@ -8,12 +8,12 @@
  * Decoration finite-state machine logic.
  */
 
-#include "decoration_fsm.h"
+#include "decoration_fsm.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/decoration.h"
-#include "gen_mob_fsm.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/decoration.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM

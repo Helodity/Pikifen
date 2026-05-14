@@ -8,15 +8,15 @@
  * Pikmin type class and Pikmin type-related functions.
  */
 
-#include "pikmin_type.h"
+#include "pikmin_type.hpp"
 
-#include "../../core/const.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/leader.h"
-#include "../mob_script/pikmin_fsm.h"
-#include "../script/script.h"
+#include "../../core/const.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/leader.hpp"
+#include "../mob_script/pikmin_fsm.hpp"
+#include "../script/script.hpp"
 
 
 namespace PIKMIN_TYPE {

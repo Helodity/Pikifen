@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "../easy_spat_nav.h"
+#include "../easy_spat_nav.hpp"
 
 
 #pragma region Test scaffolding

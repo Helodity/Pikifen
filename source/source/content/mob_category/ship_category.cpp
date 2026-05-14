@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "ship_category.h"
+#include "ship_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/ship.h"
+#include "../../core/game.hpp"
+#include "../mob/ship.hpp"
 
 
 /**

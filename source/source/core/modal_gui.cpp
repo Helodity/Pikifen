@@ -11,9 +11,9 @@
 
 #include <allegro5/allegro_primitives.h>
 
-#include "game.h"
-#include "misc_functions.h"
-#include "modal_gui.h"
+#include "game.hpp"
+#include "misc_functions.hpp"
+#include "modal_gui.hpp"
 
 
 using DrawInfo = GuiItem::DrawInfo;

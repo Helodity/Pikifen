@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "bouncer_category.h"
+#include "bouncer_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/bouncer.h"
+#include "../../core/game.hpp"
+#include "../mob/bouncer.hpp"
 
 
 /**

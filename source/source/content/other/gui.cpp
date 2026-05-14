@@ -12,12 +12,12 @@
 
 #include <algorithm>
 
-#include "gui.h"
+#include "gui.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using DrawInfo = GuiItem::DrawInfo;

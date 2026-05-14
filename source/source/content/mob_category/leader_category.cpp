@@ -10,11 +10,11 @@
 
 #include <algorithm>
 
-#include "leader_category.h"
+#include "leader_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/leader.h"
-#include "../mob_script/leader_fsm.h"
+#include "../../core/game.hpp"
+#include "../mob/leader.hpp"
+#include "../mob_script/leader_fsm.hpp"
 
 
 /**

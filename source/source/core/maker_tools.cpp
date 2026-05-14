@@ -9,11 +9,11 @@
  */
 
 
-#include "maker_tools.h"
+#include "maker_tools.hpp"
 
-#include "../util/os_utils.h"
-#include "game.h"
-#include "misc_functions.h"
+#include "../util/os_utils.hpp"
+#include "game.hpp"
+#include "misc_functions.hpp"
 
 
 namespace MAKER_TOOLS {

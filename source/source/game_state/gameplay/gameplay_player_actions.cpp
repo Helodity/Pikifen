@@ -10,9 +10,9 @@
 
 #include <algorithm>
 
-#include "gameplay.h"
+#include "gameplay.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 /**

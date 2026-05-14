@@ -10,7 +10,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "code_debug.h"
+#include "code_debug.hpp"
 
 
 double codeDebugBenchmarkMeasureStart;

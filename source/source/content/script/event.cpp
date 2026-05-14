@@ -9,9 +9,9 @@
  */
 
 
-#include "event.h"
+#include "event.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 #pragma region FSM event definition

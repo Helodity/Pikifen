@@ -1,0 +1,177 @@
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the in-world HUD class and
+ * in-world HUD related functions.
+ */
+
+#pragma once
+
+#include <allegro5/allegro.h>
+
+#include "../../core/const.hpp"
+#include "../../util/drawing_utils.hpp"
+
+
+namespace IN_WORLD_FRACTION {
+extern const float GROW_JUICE_DURATION;
+extern const float GROW_JUICE_AMOUNT;
+extern const float ICON_SIZE;
+extern const float ICON_X_OFFSET;
+extern const float PADDING;
+extern const float REQ_MET_GROW_JUICE_AMOUNT;
+extern const float REQ_MET_JUICE_DURATION;
+extern const float ROW_HEIGHT;
+extern const float TRANSITION_IN_DURATION;
+extern const float TRANSITION_OUT_DURATION;
+}
+
+
+namespace IN_WORLD_HEALTH_WHEEL {
+extern const float ALPHA;
+extern const float PADDING;
+extern const float SMOOTHNESS_MULT;
+extern const float TRANSITION_IN_DURATION;
+extern const float TRANSITION_OUT_DURATION;
+}
+
+
+namespace IN_WORLD_STATUS_BUILDUP {
+extern const float CORNER_RADIUS;
+extern const float HEIGHT;
+extern const float ALPHA;
+extern const float OUTLINE_SIZE;
+extern const float PADDING;
+extern const float WIDTH;
+}
+
+
+//In-world HUD item transitions.
+enum IN_WORLD_HUD_TRANSITION {
+
+    //Not transitioning.
+    IN_WORLD_HUD_TRANSITION_NONE,
+    
+    //Fading in.
+    IN_WORLD_HUD_TRANSITION_IN,
+    
+    //Fading out.
+    IN_WORLD_HUD_TRANSITION_OUT,
+    
+};
+
+
+class Mob;
+
+
+/**
+ * @brief Info about some HUD item that is located in the game world.
+ * Sort of. Instead of being in a fixed position in the HUD, these follow
+ * mobs around.
+ */
+class InWorldHudItem {
+
+public:
+
+    //--- Public members ---
+    
+    //Associated mob, if any.
+    Mob* m = nullptr;
+    
+    //Current transition.
+    IN_WORLD_HUD_TRANSITION transition = IN_WORLD_HUD_TRANSITION_IN;
+    
+    //Time left in the current transition, if any.
+    float transitionTimer = 0.0f;
+    
+    //Does it need to be deleted?
+    bool toDelete = false;
+    
+    
+    //--- Public function declarations ---
+    
+    InWorldHudItem(Mob* m);
+    virtual ~InWorldHudItem() = default;
+    virtual void draw() = 0;
+    virtual void startFading() = 0;
+    virtual void tick(float deltaT);
+    
+};
+
+
+/**
+ * @brief Info about a fraction in the game world, placed atop an enemy.
+ */
+class InWorldFraction : public InWorldHudItem {
+
+public:
+
+    //--- Public members ---
+    
+    //Icon to show alongside it, if any.
+    ALLEGRO_BITMAP* bmpIcon = nullptr;
+    
+    
+    //--- Public function declarations ---
+    
+    InWorldFraction(Mob* m = nullptr);
+    void draw() override;
+    void setColor(const ALLEGRO_COLOR& newColor);
+    void setNoMobPos(const Point& pos);
+    void setRequirementNumber(float newReqNr);
+    void setValueNumber(float newValueNr);
+    void startFading() override;
+    void tick(float deltaT) override;
+    
+    
+private:
+
+    //--- Private members ---
+    
+    //Upper number, the one representing the current value.
+    float valueNumber = 0.0f;
+    
+    //Lower number, the one representing the requirement.
+    float requirementNumber = 0.0f;
+    
+    //Color to use.
+    ALLEGRO_COLOR color = COLOR_BLACK;
+    
+    //Value change growth juice timer. 0 means not animating.
+    float growJuiceTimer = 0.0f;
+    
+    //Requirement met flash juice timer. 0 means not animating.
+    float reqMetJuiceTimer = 0.0f;
+    
+    //Position to place it at, in the case where there's no associated mob.
+    Point noMobPos;
+    
+};
+
+
+/**
+ * @brief Info about a health wheel in the game world, placed
+ * atop an enemy.
+ */
+class InWorldHealthWheel : public InWorldHudItem {
+
+public:
+
+    //--- Public members ---
+    
+    //How much the health wheel is filled. Gradually moves to the target amount.
+    float visibleRatio = 0.0f;
+    
+    
+    //--- Public function declarations ---
+    
+    explicit InWorldHealthWheel(Mob* m);
+    void draw() override;
+    void startFading() override;
+    void tick(float deltaT) override;
+    
+};

@@ -10,14 +10,14 @@
 
 #include <algorithm>
 
-#include "content_type_manager.h"
+#include "content_type_manager.hpp"
 
-#include "../core/game.h"
-#include "../core/init.h"
-#include "../core/load.h"
-#include "../core/misc_functions.h"
-#include "../util/allegro_utils.h"
-#include "../util/string_utils.h"
+#include "../core/game.hpp"
+#include "../core/init.hpp"
+#include "../core/load.hpp"
+#include "../core/misc_functions.hpp"
+#include "../util/allegro_utils.hpp"
+#include "../util/string_utils.hpp"
 
 
 #pragma region Area

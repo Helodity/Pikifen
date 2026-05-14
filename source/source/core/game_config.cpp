@@ -8,10 +8,10 @@
  * Struct that holds the game's configuration, and related functions.
  */
 
-#include "game_config.h"
+#include "game_config.hpp"
 
-#include "../util/string_utils.h"
-#include "game.h"
+#include "../util/string_utils.hpp"
+#include "game.hpp"
 
 
 #pragma region Defaults

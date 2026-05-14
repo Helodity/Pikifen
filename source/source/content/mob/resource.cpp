@@ -8,11 +8,11 @@
  * Resource class and resource-related functions.
  */
 
-#include "resource.h"
+#include "resource.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
 
 
 /**

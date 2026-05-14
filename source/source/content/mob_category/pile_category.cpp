@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "pile_category.h"
+#include "pile_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/pile.h"
+#include "../../core/game.hpp"
+#include "../mob/pile.hpp"
 
 
 /**

@@ -8,10 +8,10 @@
  * Pellet class and pellet-related functions.
  */
 
-#include "pellet.h"
+#include "pellet.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
+#include "../../core/drawing.hpp"
+#include "../../core/misc_functions.hpp"
 
 
 /**

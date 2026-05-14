@@ -8,9 +8,9 @@
  * Group task class and group task-related functions.
  */
 
-#include "group_task.h"
+#include "group_task.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 /**

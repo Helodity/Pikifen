@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "treasure_category.h"
+#include "treasure_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/treasure.h"
+#include "../../core/game.hpp"
+#include "../mob/treasure.hpp"
 
 
 /**

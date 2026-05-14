@@ -10,12 +10,12 @@
 
 #include <algorithm>
 
-#include "pathing.h"
+#include "pathing.hpp"
 
-#include "../content/mob/mob_utils.h"
-#include "../util/general_utils.h"
-#include "game.h"
-#include "misc_functions.h"
+#include "../content/mob/mob_utils.hpp"
+#include "../util/general_utils.hpp"
+#include "game.hpp"
+#include "misc_functions.hpp"
 
 
 using std::map;

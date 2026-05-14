@@ -8,13 +8,13 @@
  * Resource finite-state machine logic.
  */
 
-#include "resource_fsm.h"
+#include "resource_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/resource.h"
-#include "gen_mob_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/resource.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM

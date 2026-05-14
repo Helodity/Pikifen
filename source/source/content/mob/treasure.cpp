@@ -8,13 +8,13 @@
  * Treasure class and treasure-related functions.
  */
 
-#include "treasure.h"
+#include "treasure.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "ship.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "ship.hpp"
 
 
 /**

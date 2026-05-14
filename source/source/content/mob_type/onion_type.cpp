@@ -8,12 +8,12 @@
  * Onion type class and Onion type-related functions.
  */
 
-#include "onion_type.h"
+#include "onion_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../mob/onion.h"
-#include "../mob_script/onion_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../mob/onion.hpp"
+#include "../mob_script/onion_fsm.hpp"
 
 
 /**

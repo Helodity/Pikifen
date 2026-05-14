@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "pikmin_category.h"
+#include "pikmin_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/pikmin.h"
+#include "../../core/game.hpp"
+#include "../mob/pikmin.hpp"
 
 
 /**

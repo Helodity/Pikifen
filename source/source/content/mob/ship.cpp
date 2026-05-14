@@ -10,15 +10,15 @@
 
 #include <allegro5/allegro_color.h>
 
-#include "ship.h"
+#include "ship.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/geometry_utils.h"
-#include "leader.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/geometry_utils.hpp"
+#include "leader.hpp"
 
 
 namespace SHIP {

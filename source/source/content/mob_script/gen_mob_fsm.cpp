@@ -10,18 +10,18 @@
 
 #include <algorithm>
 
-#include "gen_mob_fsm.h"
+#include "gen_mob_fsm.hpp"
 
-#include "../../core/const.h"
-#include "../../core/misc_functions.h"
-#include "../../util/container_utils.h"
-#include "../../util/general_utils.h"
-#include "../mob/bridge.h"
-#include "../mob/enemy.h"
-#include "../mob/onion.h"
-#include "../mob/pikmin.h"
-#include "../mob/ship.h"
-#include "../other/spray_type.h"
+#include "../../core/const.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/container_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../mob/bridge.hpp"
+#include "../mob/enemy.hpp"
+#include "../mob/onion.hpp"
+#include "../mob/pikmin.hpp"
+#include "../mob/ship.hpp"
+#include "../other/spray_type.hpp"
 
 
 /**

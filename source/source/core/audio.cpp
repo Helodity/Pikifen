@@ -10,12 +10,12 @@
 
 #include <algorithm>
 
-#include "audio.h"
+#include "audio.hpp"
 
-#include "../util/general_utils.h"
-#include "game.h"
-#include "load.h"
-#include "misc_functions.h"
+#include "../util/general_utils.hpp"
+#include "game.hpp"
+#include "load.hpp"
+#include "misc_functions.hpp"
 
 
 namespace AUDIO {

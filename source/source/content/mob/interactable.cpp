@@ -8,7 +8,7 @@
  * Interactable class and interactable-related functions.
  */
 
-#include "interactable.h"
+#include "interactable.hpp"
 
 
 /**

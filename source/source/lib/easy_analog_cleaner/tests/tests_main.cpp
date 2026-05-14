@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-#include "../easy_analog_cleaner.h"
+#include "../easy_analog_cleaner.hpp"
 
 
 #pragma region Test scaffolding

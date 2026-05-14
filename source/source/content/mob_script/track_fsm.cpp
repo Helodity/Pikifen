@@ -8,12 +8,12 @@
  * Track finite-state machine logic.
  */
 
-#include "track_fsm.h"
+#include "track_fsm.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob/track.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/track.hpp"
 
 
 #pragma region FSM

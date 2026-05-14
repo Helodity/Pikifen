@@ -10,15 +10,15 @@
 
 #include <algorithm>
 
-#include "title_screen.h"
+#include "title_screen.hpp"
 
-#include "../core/drawing.h"
-#include "../core/game.h"
-#include "../core/load.h"
-#include "../core/misc_functions.h"
-#include "../util/allegro_utils.h"
-#include "../util/os_utils.h"
-#include "../util/string_utils.h"
+#include "../core/drawing.hpp"
+#include "../core/game.hpp"
+#include "../core/load.hpp"
+#include "../core/misc_functions.hpp"
+#include "../util/allegro_utils.hpp"
+#include "../util/os_utils.hpp"
+#include "../util/string_utils.hpp"
 
 
 using DrawInfo = GuiItem::DrawInfo;

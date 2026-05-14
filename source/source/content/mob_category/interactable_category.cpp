@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "interactable_category.h"
+#include "interactable_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob_type/interactable_type.h"
+#include "../../core/game.hpp"
+#include "../mob_type/interactable_type.hpp"
 
 
 /**

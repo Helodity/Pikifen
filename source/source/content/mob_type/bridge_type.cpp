@@ -8,12 +8,12 @@
  * Bridge type class and bridge type-related functions.
  */
 
-#include "bridge_type.h"
+#include "bridge_type.hpp"
 
-#include "../../core/game.h"
-#include "../mob/bridge.h"
-#include "../mob_script/bridge_fsm.h"
-#include "../script/script.h"
+#include "../../core/game.hpp"
+#include "../mob/bridge.hpp"
+#include "../mob_script/bridge_fsm.hpp"
+#include "../script/script.hpp"
 
 
 /**

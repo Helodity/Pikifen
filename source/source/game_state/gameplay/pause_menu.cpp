@@ -10,15 +10,15 @@
 
 #include <algorithm>
 
-#include "gameplay.h"
+#include "gameplay.hpp"
 
-#include "../../content/mob/resource.h"
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
+#include "../../content/mob/resource.hpp"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using DrawInfo = GuiItem::DrawInfo;

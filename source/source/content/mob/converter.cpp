@@ -8,11 +8,11 @@
  * Converter class and converter related functions.
  */
 
-#include "converter.h"
+#include "converter.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../core/misc_structs.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../core/misc_structs.hpp"
 
 
 namespace CONVERTER {

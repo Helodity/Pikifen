@@ -8,13 +8,13 @@
  * Pellet finite-state machine logic.
  */
 
-#include "pellet_fsm.h"
+#include "pellet_fsm.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/onion.h"
-#include "../mob/pellet.h"
-#include "gen_mob_fsm.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/onion.hpp"
+#include "../mob/pellet.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM

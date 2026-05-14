@@ -8,12 +8,12 @@
  * Group task type class and group task type-related functions.
  */
 
-#include "group_task_type.h"
+#include "group_task_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/mob.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/mob.hpp"
 
 
 /**

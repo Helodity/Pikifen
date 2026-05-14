@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "inpution.h"
+#include "inpution.hpp"
 
 
 namespace Inpution {

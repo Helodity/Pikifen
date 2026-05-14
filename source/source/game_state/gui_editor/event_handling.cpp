@@ -8,9 +8,9 @@
  * GUI editor event handler function.
  */
 
-#include "editor.h"
+#include "editor.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 /**

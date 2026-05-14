@@ -11,10 +11,10 @@
 
 #include <allegro5/allegro_primitives.h>
 
-#include "drawing_utils.h"
+#include "drawing_utils.hpp"
 
-#include "math_utils.h"
-#include "string_utils.h"
+#include "math_utils.hpp"
+#include "string_utils.hpp"
 
 
 /**

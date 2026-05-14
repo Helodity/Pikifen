@@ -8,14 +8,14 @@
  * Ship finite-state machine logic.
  */
 
-#include "ship_fsm.h"
+#include "ship_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/resource.h"
-#include "../mob/ship.h"
-#include "../other/particle.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/resource.hpp"
+#include "../mob/ship.hpp"
+#include "../other/particle.hpp"
 
 
 #pragma region FSM

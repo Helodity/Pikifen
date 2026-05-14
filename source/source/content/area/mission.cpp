@@ -8,13 +8,13 @@
  * Mission class and related functions.
  */
 
-#include "mission.h"
+#include "mission.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../game_state/area_editor/editor.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../game_state/area_editor/editor.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 namespace MISSION {

@@ -11,10 +11,10 @@
 
 #include <cmath>
 
-#include "hardware_mediator.h"
+#include "hardware_mediator.hpp"
 
-#include "../util/string_utils.h"
-#include "game.h"
+#include "../util/string_utils.hpp"
+#include "game.hpp"
 
 
 using std::make_pair;

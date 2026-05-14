@@ -10,9 +10,9 @@
 
 #define _USE_MATH_DEFINES
 
-#include "vertex.h"
+#include "vertex.hpp"
 
-#include "edge.h"
+#include "edge.hpp"
 
 
 /**

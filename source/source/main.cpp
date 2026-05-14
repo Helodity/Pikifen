@@ -8,7 +8,7 @@
  * Program start and main loop.
  */
 
-#include "core/game.h"
+#include "core/game.hpp"
 
 
 /**

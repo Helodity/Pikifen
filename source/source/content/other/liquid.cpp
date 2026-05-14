@@ -8,14 +8,14 @@
  * Liquid class and liquid-related functions.
  */
 
-#include "liquid.h"
+#include "liquid.hpp"
 
-#include "../../content/other/status.h"
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../core/misc_functions.h"
-#include "../../core/misc_structs.h"
-#include "../../util/string_utils.h"
+#include "../../content/other/status.hpp"
+#include "../../core/game.hpp"
+#include "../../core/load.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../core/misc_structs.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using std::string;

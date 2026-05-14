@@ -8,11 +8,11 @@
  * Drop finite-state machine logic.
  */
 
-#include "drop_fsm.h"
+#include "drop_fsm.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/drop.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/drop.hpp"
 
 
 #pragma region FSM

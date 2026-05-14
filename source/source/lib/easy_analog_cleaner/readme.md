@@ -21,8 +21,8 @@ The library is entirely stateless and easy to use: you feed it the X and Y coord
 ## Quick example
 
 ```cpp
-#include "easy_analog_cleaner.h"
-#include "my_game_stuff.h"
+#include "easy_analog_cleaner.hpp"
+#include "my_game_stuff.hpp"
 
 // (...)
 

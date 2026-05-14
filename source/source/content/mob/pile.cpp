@@ -8,14 +8,14 @@
  * Pile class and pile-related functions.
  */
 
-#include "pile.h"
+#include "pile.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "resource.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "resource.hpp"
 
 
 /**

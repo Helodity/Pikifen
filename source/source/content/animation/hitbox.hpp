@@ -1,0 +1,176 @@
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the hitbox class and hitbox-related functions.
+ */
+
+#pragma once
+
+#include <vector>
+
+#include "../../core/const.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/geometry_utils.hpp"
+
+
+using std::string;
+using std::vector;
+
+
+#pragma region Constants
+
+
+//Types of hitboxes.
+enum HITBOX_TYPE {
+
+    //Can be hurt by "attack"-type hitboxes.
+    HITBOX_TYPE_NORMAL,
+    
+    //Hurts "normal"-type hitboxes.
+    HITBOX_TYPE_ATTACK,
+    
+    //Currently disabled.
+    HITBOX_TYPE_DISABLED,
+    
+};
+
+
+//Types of knockback an attack hitbox can cause.
+enum KNOCKBACK_TYPE {
+
+    //No knockback whatsoever.
+    KNOCKBACK_TYPE_NONE,
+    
+    //Makes the mob flinch but not leave their spot.
+    KNOCKBACK_TYPE_FLINCH,
+    
+    //Knocks the mob away from the hitbox center.
+    KNOCKBACK_TYPE_OUTWARD,
+    
+    //Knocks the mob away in a specific direction.
+    KNOCKBACK_TYPE_DIRECTIONAL,
+    
+};
+
+
+//Types of surfaces a hitbox can have, for thrown Pikmin purposes.
+enum HITBOX_SURFACE_TYPE {
+
+    //Thrown Pikmin just collide with it.
+    HITBOX_SURFACE_TYPE_SMOOTH,
+    
+    //Thrown Pikmin can latch onto it.
+    HITBOX_SURFACE_TYPE_LATCHABLE,
+    
+    //Thrown Pikmin bounce off of it.
+    HITBOX_SURFACE_TYPE_BOUNCY,
+    
+};
+
+
+#pragma endregion
+#pragma region Classes
+
+
+struct Hazard;
+
+
+/**
+ * @brief A body part.
+ */
+class BodyPart {
+
+public:
+
+    //--- Public members ---
+    
+    //The body part's name.
+    string name;
+    
+    
+    //--- Public function declarations ---
+    
+    explicit BodyPart(const string& name = "");
+    
+};
+
+
+/**
+ * @brief A hitbox in a sprite. Despite the name, it is a cylinder.
+ */
+class Hitbox {
+
+public:
+
+    //--- Public members ---
+    
+    //The name of the body part to use.
+    string bodyPartName;
+    
+    //Index of the body part. Cache for performance.
+    size_t bodyPartIdx;
+    
+    //Pointer to the body part. Cache for performance.
+    BodyPart* bodyPartPtr = nullptr;
+    
+    //Center of the hitbox (relative coordinates).
+    Point center;
+    
+    //Bottom of the hitbox (relative coordinates).
+    float bottomZ = 0.0f;
+    
+    //Total hitbox height.
+    float height = 128.0f;
+    
+    //Hitbox radius.
+    float radius = 32.0f;
+    
+    //Type of hitbox.
+    HITBOX_TYPE type = HITBOX_TYPE_NORMAL;
+    
+    //Hazard, if any.
+    Hazard* hazard = nullptr;
+    
+    //If it's a normal hitbox, this is the defense multiplier.
+    //If it's an attack one, the attack power.
+    float value = 1.0f;
+    
+    //Type of knockback.
+    KNOCKBACK_TYPE knockbackType = KNOCKBACK_TYPE_DIRECTIONAL;
+    
+    //Knockback strength.
+    float knockbackStrength = 0.0f;
+    
+    //Knockback angle, if directional.
+    float knockbackAngle = 0.0f;
+    
+    //Chance of this attack withering a Pikmin's maturity [0 - 100].
+    unsigned char witherChance = 0.0f;
+    
+    //Surface type for normal hitboxes.
+    HITBOX_SURFACE_TYPE surfaceType = HITBOX_SURFACE_TYPE_SMOOTH;
+    
+    
+    //--- Public function declarations ---
+    
+    explicit Hitbox(
+        const string& bpn = "", size_t bpi = INVALID, BodyPart* bpp = nullptr,
+        const Point& pos = Point(), float bottomZ = 0,
+        float height = 128, float radius = 32
+    );
+    Point getCurPos(
+        const Point& mobPos, float mobAngle
+    ) const;
+    Point getCurPos(
+        const Point& mobPos,
+        float mobAngleCos, float mobAngleSin
+    ) const;
+    
+};
+
+
+#pragma endregion

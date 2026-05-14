@@ -8,10 +8,10 @@
  * Tool type class and tool type-related functions.
  */
 
-#include "tool_type.h"
+#include "tool_type.hpp"
 
-#include "../../core/game.h"
-#include "../../util/string_utils.h"
+#include "../../core/game.hpp"
+#include "../../util/string_utils.hpp"
 
 
 /**

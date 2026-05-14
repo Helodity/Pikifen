@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "drop.h"
+#include "drop.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
 
 
 /**

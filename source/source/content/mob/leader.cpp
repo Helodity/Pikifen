@@ -10,14 +10,14 @@
 
 #include <algorithm>
 
-#include "leader.h"
+#include "leader.hpp"
 
-#include "../../core/const.h"
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/general_utils.h"
+#include "../../core/const.hpp"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/general_utils.hpp"
 
 namespace LEADER {
 

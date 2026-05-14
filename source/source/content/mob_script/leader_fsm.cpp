@@ -10,18 +10,18 @@
 
 #include <algorithm>
 
-#include "leader_fsm.h"
+#include "leader_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../game_state/gameplay/gameplay.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob/drop.h"
-#include "../mob/leader.h"
-#include "../mob/track.h"
-#include "../mob_type/leader_type.h"
-#include "gen_mob_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../game_state/gameplay/gameplay.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/drop.hpp"
+#include "../mob/leader.hpp"
+#include "../mob/track.hpp"
+#include "../mob_type/leader_type.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 using std::unordered_set;

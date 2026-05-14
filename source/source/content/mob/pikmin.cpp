@@ -10,18 +10,18 @@
 
 #include <algorithm>
 
-#include "pikmin.h"
+#include "pikmin.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/geometry_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob_script/pikmin_fsm.h"
-#include "mob.h"
-#include "mob_enums.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/geometry_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_script/pikmin_fsm.hpp"
+#include "mob.hpp"
+#include "mob_enums.hpp"
 
 
 namespace PIKMIN {

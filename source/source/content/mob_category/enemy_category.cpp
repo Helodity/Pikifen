@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "enemy_category.h"
+#include "enemy_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/enemy.h"
+#include "../../core/game.hpp"
+#include "../mob/enemy.hpp"
 
 
 /**

@@ -10,14 +10,14 @@
 
 #include <algorithm>
 
-#include "options_menu.h"
+#include "options_menu.hpp"
 
-#include "../core/game.h"
-#include "../core/load.h"
-#include "../core/misc_functions.h"
-#include "../util/os_utils.h"
-#include "../util/string_utils.h"
-#include "menu.h"
+#include "../core/game.hpp"
+#include "../core/load.hpp"
+#include "../core/misc_functions.hpp"
+#include "../util/os_utils.hpp"
+#include "../util/string_utils.hpp"
+#include "menu.hpp"
 
 
 using DrawInfo = GuiItem::DrawInfo;

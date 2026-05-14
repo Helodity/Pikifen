@@ -11,15 +11,15 @@
 #include <algorithm>
 #include <queue>
 
-#include "editor.h"
+#include "editor.hpp"
 
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/os_utils.h"
-#include "../../util/string_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/load.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/os_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using std::queue;

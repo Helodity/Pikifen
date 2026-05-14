@@ -8,12 +8,12 @@
  * Converter finite-state machine logic.
  */
 
-#include "converter_fsm.h"
+#include "converter_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/converter.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/converter.hpp"
 
 
 #pragma region FSM

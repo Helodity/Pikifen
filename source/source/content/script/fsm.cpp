@@ -9,9 +9,9 @@
  */
 
 
-#include "fsm.h"
+#include "fsm.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 #pragma region Easy FSM creator

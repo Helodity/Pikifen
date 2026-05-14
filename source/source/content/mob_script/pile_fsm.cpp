@@ -10,15 +10,15 @@
 
 #include <algorithm>
 
-#include "pile_fsm.h"
+#include "pile_fsm.hpp"
 
-#include "../../core/const.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/pile.h"
-#include "../mob/resource.h"
-#include "gen_mob_fsm.h"
+#include "../../core/const.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/pile.hpp"
+#include "../mob/resource.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 using std::size_t;

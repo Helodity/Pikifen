@@ -8,7 +8,7 @@
  * Tool class and tool-related functions.
  */
 
-#include "tool.h"
+#include "tool.hpp"
 
 
 /**

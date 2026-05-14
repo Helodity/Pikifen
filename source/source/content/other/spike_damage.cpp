@@ -8,10 +8,10 @@
  * Spike damage class and spike damage-related functions.
  */
 
-#include "spike_damage.h"
+#include "spike_damage.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_structs.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_structs.hpp"
 
 
 /**

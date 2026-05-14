@@ -8,13 +8,13 @@
  * Pellet type class and pellet type-related functions.
  */
 
-#include "pellet_type.h"
+#include "pellet_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob_script/gen_mob_fsm.h"
-#include "../mob_script/pellet_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_script/gen_mob_fsm.hpp"
+#include "../mob_script/pellet_fsm.hpp"
 
 
 /**

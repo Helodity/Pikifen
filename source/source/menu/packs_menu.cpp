@@ -9,13 +9,13 @@
  * Pack management menu struct and functions.
  */
 
-#include "packs_menu.h"
+#include "packs_menu.hpp"
 
-#include "../core/game.h"
-#include "../core/load.h"
-#include "../core/misc_functions.h"
-#include "../util/os_utils.h"
-#include "../util/string_utils.h"
+#include "../core/game.hpp"
+#include "../core/load.hpp"
+#include "../core/misc_functions.hpp"
+#include "../util/os_utils.hpp"
+#include "../util/string_utils.hpp"
 
 
 using DrawInfo = GuiItem::DrawInfo;

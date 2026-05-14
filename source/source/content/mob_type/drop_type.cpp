@@ -8,11 +8,11 @@
  * Drop type class and drop type-related functions.
  */
 
-#include "drop_type.h"
+#include "drop_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../mob_script/drop_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../mob_script/drop_fsm.hpp"
 
 
 /**

@@ -10,9 +10,9 @@
 
 #include <algorithm>
 
-#include "../mob/mob.h"
-#include "../../core/game.h"
-#include "script.h"
+#include "../mob/mob.hpp"
+#include "../../core/game.hpp"
+#include "script.hpp"
 
 
 #pragma region Script definition

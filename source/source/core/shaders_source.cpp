@@ -8,7 +8,7 @@
  * Shader source code.
  */
 
-#include "shaders.h"
+#include "shaders.hpp"
 
 
 namespace SHADER_SOURCES {

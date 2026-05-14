@@ -9,9 +9,9 @@
  */
 
 
-#include "state.h"
+#include "state.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 #pragma region FSM state definition

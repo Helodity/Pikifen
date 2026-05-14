@@ -10,13 +10,13 @@
 
 #include <algorithm>
 
-#include "bouncer_fsm.h"
+#include "bouncer_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob/bouncer.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/bouncer.hpp"
 
 
 #pragma region FSM

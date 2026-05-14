@@ -8,13 +8,13 @@
  * Ship type class and ship type-related functions.
  */
 
-#include "ship_type.h"
+#include "ship_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/ship.h"
-#include "../mob_script/ship_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/ship.hpp"
+#include "../mob_script/ship_fsm.hpp"
 
 
 /**

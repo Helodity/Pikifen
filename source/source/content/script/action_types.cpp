@@ -10,15 +10,15 @@
 
 #include <algorithm>
 
-#include "action_types.h"
+#include "action_types.hpp"
 
-#include "../../content/mob/group_task.h"
-#include "../../content/mob/scale.h"
-#include "../../content/mob/tool.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
+#include "../../content/mob/group_task.hpp"
+#include "../../content/mob/scale.hpp"
+#include "../../content/mob/tool.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using std::set;

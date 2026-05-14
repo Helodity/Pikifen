@@ -10,13 +10,13 @@
 
 #include <algorithm>
 
-#include "onion.h"
+#include "onion.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/geometry_utils.h"
-#include "../../util/string_utils.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/geometry_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using std::size_t;

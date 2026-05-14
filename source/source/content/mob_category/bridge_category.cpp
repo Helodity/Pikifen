@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "bridge_category.h"
+#include "bridge_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/bridge.h"
+#include "../../core/game.hpp"
+#include "../mob/bridge.hpp"
 
 
 /**

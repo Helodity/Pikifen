@@ -8,11 +8,11 @@
  * Spray type class and spray type-related functions.
  */
 
-#include "spray_type.h"
+#include "spray_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_structs.h"
-#include "../../util/string_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_structs.hpp"
+#include "../../util/string_utils.hpp"
 
 
 /**

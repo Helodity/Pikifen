@@ -11,11 +11,11 @@
 #include <algorithm>
 #include <allegro5/allegro.h>
 
-#include "editor.h"
+#include "editor.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using std::set;

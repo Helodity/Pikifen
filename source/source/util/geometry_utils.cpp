@@ -15,9 +15,9 @@
 #include <math.h>
 #include <vector>
 
-#include "geometry_utils.h"
-#include "math_utils.h"
-#include "string_utils.h"
+#include "geometry_utils.hpp"
+#include "math_utils.hpp"
+#include "string_utils.hpp"
 
 using std::vector;
 

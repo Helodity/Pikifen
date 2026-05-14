@@ -12,7 +12,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "data_file.h"
+#include "data_file.hpp"
 
 
 using std::size_t;

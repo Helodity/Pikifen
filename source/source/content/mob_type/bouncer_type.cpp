@@ -8,13 +8,13 @@
  * Bouncer type class and bouncer type-related functions.
  */
 
-#include "bouncer_type.h"
+#include "bouncer_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob_script/bouncer_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_script/bouncer_fsm.hpp"
 
 
 /**

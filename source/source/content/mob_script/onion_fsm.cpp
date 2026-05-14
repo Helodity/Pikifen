@@ -8,14 +8,14 @@
  * Onion finite-state machine logic.
  */
 
-#include "onion_fsm.h"
+#include "onion_fsm.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/onion.h"
-#include "../mob/pellet.h"
-#include "../other/particle.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/onion.hpp"
+#include "../mob/pellet.hpp"
+#include "../other/particle.hpp"
 
 
 #pragma region FSM

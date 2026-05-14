@@ -8,11 +8,11 @@
  * Converter type class and converter type-related functions.
  */
 
-#include "converter_type.h"
+#include "converter_type.hpp"
 
-#include "../../core/game.h"
-#include "../../util/string_utils.h"
-#include "../mob_script/converter_fsm.h"
+#include "../../core/game.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_script/converter_fsm.hpp"
 
 
 /**

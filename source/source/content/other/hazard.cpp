@@ -8,11 +8,11 @@
  * Hazard class and hazard-related functions.
  */
 
-#include "hazard.h"
+#include "hazard.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_structs.h"
-#include "../../util/string_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_structs.hpp"
+#include "../../util/string_utils.hpp"
 
 
 using std::string;

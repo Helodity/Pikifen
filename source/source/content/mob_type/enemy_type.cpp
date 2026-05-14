@@ -8,11 +8,11 @@
  * Enemy type class and enemy type-related functions.
  */
 
-#include "enemy_type.h"
+#include "enemy_type.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob_script/gen_mob_fsm.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob_script/gen_mob_fsm.hpp"
 
 
 /**

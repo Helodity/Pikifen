@@ -8,7 +8,7 @@
  * Bouncer class and bouncer-related functions.
  */
 
-#include "bouncer.h"
+#include "bouncer.hpp"
 
 
 /**

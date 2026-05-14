@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "converter_category.h"
+#include "converter_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/converter.h"
+#include "../../core/game.hpp"
+#include "../mob/converter.hpp"
 
 
 /**

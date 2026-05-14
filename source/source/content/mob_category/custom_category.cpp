@@ -10,9 +10,9 @@
 
 #include <algorithm>
 
-#include "custom_category.h"
+#include "custom_category.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 /**

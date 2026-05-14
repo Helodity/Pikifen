@@ -10,13 +10,13 @@
 
 #include <algorithm>
 
-#include "options.h"
+#include "options.hpp"
 
-#include "../util/allegro_utils.h"
-#include "../util/string_utils.h"
-#include "game.h"
-#include "misc_functions.h"
-#include "misc_structs.h"
+#include "../util/allegro_utils.hpp"
+#include "../util/string_utils.hpp"
+#include "game.hpp"
+#include "misc_functions.hpp"
+#include "misc_structs.hpp"
 
 
 #pragma region Defaults

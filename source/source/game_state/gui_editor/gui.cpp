@@ -8,14 +8,14 @@
  * GUI editor Dear ImGui logic.
  */
 
-#include "editor.h"
+#include "editor.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
 #include "../../lib/imgui/imgui_stdlib.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/imgui_utils.h"
-#include "../../util/string_utils.h"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/imgui_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 /**

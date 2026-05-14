@@ -10,22 +10,22 @@
 
 #include <algorithm>
 
-#include "mob.h"
+#include "mob.hpp"
 
-#include "../../content/script/action_types.h"
-#include "../../core/const.h"
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/container_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/geometry_utils.h"
-#include "../../util/string_utils.h"
-#include "pikmin.h"
-#include "ship.h"
-#include "tool.h"
-#include "track.h"
+#include "../../content/script/action_types.hpp"
+#include "../../core/const.hpp"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/container_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/geometry_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "pikmin.hpp"
+#include "ship.hpp"
+#include "tool.hpp"
+#include "track.hpp"
 
 
 namespace MOB {

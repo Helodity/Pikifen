@@ -15,12 +15,12 @@
 
 #include <allegro5/allegro_native_dialog.h>
 
-#include "allegro_utils.h"
+#include "allegro_utils.hpp"
 
-#include "../core/misc_functions.h"
-#include "general_utils.h"
-#include "math_utils.h"
-#include "string_utils.h"
+#include "../core/misc_functions.hpp"
+#include "general_utils.hpp"
+#include "math_utils.hpp"
+#include "string_utils.hpp"
 
 
 using std::vector;

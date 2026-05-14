@@ -15,18 +15,18 @@
 #include <climits>
 #include <iostream>
 
-#include "misc_structs.h"
+#include "misc_structs.hpp"
 
-#include "../util/allegro_utils.h"
-#include "../util/container_utils.h"
-#include "../util/general_utils.h"
-#include "../util/os_utils.h"
-#include "../util/string_utils.h"
-#include "const.h"
-#include "drawing.h"
-#include "game.h"
-#include "load.h"
-#include "misc_functions.h"
+#include "../util/allegro_utils.hpp"
+#include "../util/container_utils.hpp"
+#include "../util/general_utils.hpp"
+#include "../util/os_utils.hpp"
+#include "../util/string_utils.hpp"
+#include "const.hpp"
+#include "drawing.hpp"
+#include "game.hpp"
+#include "load.hpp"
+#include "misc_functions.hpp"
 
 
 #pragma region Constants

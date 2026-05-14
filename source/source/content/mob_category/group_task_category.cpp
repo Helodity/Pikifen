@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "group_task_category.h"
+#include "group_task_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/group_task.h"
+#include "../../core/game.hpp"
+#include "../mob/group_task.hpp"
 
 
 /**

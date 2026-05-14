@@ -8,12 +8,12 @@
  * Statistics menu struct and functions.
  */
 
-#include "stats_menu.h"
+#include "stats_menu.hpp"
 
-#include "../core/game.h"
-#include "../core/load.h"
-#include "../core/misc_functions.h"
-#include "../util/string_utils.h"
+#include "../core/game.hpp"
+#include "../core/load.hpp"
+#include "../core/misc_functions.hpp"
+#include "../util/string_utils.hpp"
 
 
 namespace STATS_MENU {

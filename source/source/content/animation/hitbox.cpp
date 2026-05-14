@@ -8,7 +8,7 @@
  * Hitbox class and hitbox-related functions.
  */
 
-#include "hitbox.h"
+#include "hitbox.hpp"
 
 
 /**

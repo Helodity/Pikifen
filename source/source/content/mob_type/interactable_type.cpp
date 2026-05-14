@@ -8,10 +8,10 @@
  * Interactable type class and interactable type-related functions.
  */
 
-#include "interactable_type.h"
+#include "interactable_type.hpp"
 
-#include "../../util/string_utils.h"
-#include "../mob/mob.h"
+#include "../../util/string_utils.hpp"
+#include "../mob/mob.hpp"
 
 
 /**

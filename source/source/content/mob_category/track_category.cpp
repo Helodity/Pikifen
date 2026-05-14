@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "track_category.h"
+#include "track_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/track.h"
+#include "../../core/game.hpp"
+#include "../mob/track.hpp"
 
 
 /**

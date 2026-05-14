@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "resource_category.h"
+#include "resource_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/resource.h"
+#include "../../core/game.hpp"
+#include "../mob/resource.hpp"
 
 
 /**

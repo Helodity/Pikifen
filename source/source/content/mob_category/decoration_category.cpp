@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "decoration_category.h"
+#include "decoration_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/decoration.h"
+#include "../../core/game.hpp"
+#include "../mob/decoration.hpp"
 
 
 /**

@@ -14,7 +14,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "easy_analog_cleaner.h"
+#include "easy_analog_cleaner.hpp"
 
 
 const EasyAnalogCleaner::Settings EasyAnalogCleaner::SETTINGS_NO_CHANGES = {

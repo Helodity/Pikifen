@@ -8,10 +8,10 @@
  * GUI editor drawing logic.
  */
 
-#include "editor.h"
+#include "editor.hpp"
 
-#include "../../core/game.h"
-#include "../../util/allegro_utils.h"
+#include "../../core/game.hpp"
+#include "../../util/allegro_utils.hpp"
 
 
 /**

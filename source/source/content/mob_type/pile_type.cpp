@@ -8,13 +8,13 @@
  * Pile type class and pile type-related functions.
  */
 
-#include "pile_type.h"
+#include "pile_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/pile.h"
-#include "../mob_script/pile_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/pile.hpp"
+#include "../mob_script/pile_fsm.hpp"
 
 
 /**

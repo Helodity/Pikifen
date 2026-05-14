@@ -8,9 +8,9 @@
  * Scale class and scale-related functions.
  */
 
-#include "scale.h"
+#include "scale.hpp"
 
-#include "../../core/game.h"
+#include "../../core/game.hpp"
 
 
 /**

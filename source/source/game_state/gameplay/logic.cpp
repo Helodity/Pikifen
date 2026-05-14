@@ -11,19 +11,19 @@
 #include <algorithm>
 #include <unordered_set>
 
-#include "gameplay.h"
+#include "gameplay.hpp"
 
-#include "../../content/mob/group_task.h"
-#include "../../content/mob/pikmin.h"
-#include "../../content/mob/pile.h"
-#include "../../content/mob/resource.h"
-#include "../../content/mob/tool.h"
-#include "../../core/const.h"
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
+#include "../../content/mob/group_task.hpp"
+#include "../../content/mob/pikmin.hpp"
+#include "../../content/mob/pile.hpp"
+#include "../../content/mob/resource.hpp"
+#include "../../content/mob/tool.hpp"
+#include "../../core/const.hpp"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 /**

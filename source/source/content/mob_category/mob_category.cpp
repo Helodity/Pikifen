@@ -10,12 +10,12 @@
 
 #include <algorithm>
 
-#include "mob_category.h"
+#include "mob_category.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../mob/mob.h"
-#include "../mob_type/mob_type.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../mob/mob.hpp"
+#include "../mob_type/mob_type.hpp"
 
 
 using std::size_t;

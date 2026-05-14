@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "drop_category.h"
+#include "drop_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/drop.h"
+#include "../../core/game.hpp"
+#include "../mob/drop.hpp"
 
 
 /**

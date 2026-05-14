@@ -8,12 +8,12 @@
  * Content manager class and related functions.
  */
 
-#include "content_manager.h"
+#include "content_manager.hpp"
 
-#include "../core/game.h"
-#include "../core/load.h"
-#include "../core/misc_functions.h"
-#include "../util/allegro_utils.h"
+#include "../core/game.hpp"
+#include "../core/load.hpp"
+#include "../core/misc_functions.hpp"
+#include "../util/allegro_utils.hpp"
 
 
 #pragma region Content manager

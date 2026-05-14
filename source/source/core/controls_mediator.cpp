@@ -14,16 +14,16 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "controls_mediator.h"
+#include "controls_mediator.hpp"
 
-#include "../game_state/gameplay/gameplay.h"
-#include "../lib/easy_analog_cleaner/easy_analog_cleaner.h"
-#include "../util/general_utils.h"
-#include "../util/string_utils.h"
-#include "const.h"
-#include "drawing.h"
-#include "game.h"
-#include "misc_functions.h"
+#include "../game_state/gameplay/gameplay.hpp"
+#include "../lib/easy_analog_cleaner/easy_analog_cleaner.hpp"
+#include "../util/general_utils.hpp"
+#include "../util/string_utils.hpp"
+#include "const.hpp"
+#include "drawing.hpp"
+#include "game.hpp"
+#include "misc_functions.hpp"
 
 
 /**

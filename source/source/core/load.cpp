@@ -12,17 +12,17 @@
 
 #include <allegro5/allegro_ttf.h>
 
-#include "load.h"
+#include "load.hpp"
 
-#include "../content/other/spike_damage.h"
-#include "../util/allegro_utils.h"
-#include "../util/general_utils.h"
-#include "../util/string_utils.h"
-#include "const.h"
-#include "drawing.h"
-#include "game.h"
-#include "init.h"
-#include "misc_functions.h"
+#include "../content/other/spike_damage.hpp"
+#include "../util/allegro_utils.hpp"
+#include "../util/general_utils.hpp"
+#include "../util/string_utils.hpp"
+#include "const.hpp"
+#include "drawing.hpp"
+#include "game.hpp"
+#include "init.hpp"
+#include "misc_functions.hpp"
 
 
 using std::make_pair;

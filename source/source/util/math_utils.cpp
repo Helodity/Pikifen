@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "math_utils.h"
+#include "math_utils.hpp"
 
 
 /**

@@ -29,8 +29,8 @@ Spatial navigation is surprisingly tricky, especially with arbitrary layouts. Gu
 ## Quick example
 
 ```cpp
-#include "easy_spat_nav.h"
-#include "my_program_stuff.h"
+#include "easy_spat_nav.hpp"
+#include "my_program_stuff.hpp"
 
 // (...)
 

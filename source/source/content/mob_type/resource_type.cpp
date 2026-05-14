@@ -8,13 +8,13 @@
  * Resource type class and resource type-related functions.
  */
 
-#include "resource_type.h"
+#include "resource_type.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "../mob/resource.h"
-#include "../mob_script/resource_fsm.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/resource.hpp"
+#include "../mob_script/resource_fsm.hpp"
 
 
 /**

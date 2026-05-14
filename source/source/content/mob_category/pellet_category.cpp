@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "pellet_category.h"
+#include "pellet_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/pellet.h"
+#include "../../core/game.hpp"
+#include "../mob/pellet.hpp"
 
 
 /**

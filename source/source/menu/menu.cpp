@@ -8,10 +8,10 @@
  * Menu class and related functions.
  */
 
-#include "menu.h"
+#include "menu.hpp"
 
-#include "../core/game.h"
-#include "../game_state/gameplay/gameplay.h"
+#include "../core/game.hpp"
+#include "../game_state/gameplay/gameplay.hpp"
 
 
 /**

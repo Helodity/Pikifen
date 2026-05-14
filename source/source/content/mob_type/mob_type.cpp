@@ -10,24 +10,24 @@
 
 #include <algorithm>
 
-#include "mob_type.h"
+#include "mob_type.hpp"
 
-#include "../../content/script/action_types.h"
-#include "../../core/const.h"
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
-#include "../mob/bridge.h"
-#include "../mob_script/gen_mob_fsm.h"
-#include "enemy_type.h"
-#include "leader_type.h"
-#include "onion_type.h"
-#include "pellet_type.h"
-#include "pikmin_type.h"
-#include "treasure_type.h"
+#include "../../content/script/action_types.hpp"
+#include "../../core/const.hpp"
+#include "../../core/game.hpp"
+#include "../../core/load.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
+#include "../mob/bridge.hpp"
+#include "../mob_script/gen_mob_fsm.hpp"
+#include "enemy_type.hpp"
+#include "leader_type.hpp"
+#include "onion_type.hpp"
+#include "pellet_type.hpp"
+#include "pikmin_type.hpp"
+#include "treasure_type.hpp"
 
 
 using std::string;

@@ -23,9 +23,9 @@
 #include <shellapi.h> //For ShellExecuteA().
 #endif
 
-#include "os_utils.h"
+#include "os_utils.hpp"
 
-#include "string_utils.h"
+#include "string_utils.hpp"
 
 
 /**

@@ -10,12 +10,12 @@
 
 #define _USE_MATH_DEFINES
 
-#include "edge.h"
+#include "edge.hpp"
 
-#include "../../core/misc_functions.h"
-#include "../../util/string_utils.h"
-#include "geometry.h"
-#include "sector.h"
+#include "../../core/misc_functions.hpp"
+#include "../../util/string_utils.hpp"
+#include "geometry.hpp"
+#include "sector.hpp"
 
 
 /**

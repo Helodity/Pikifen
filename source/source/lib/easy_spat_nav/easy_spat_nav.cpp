@@ -11,7 +11,7 @@
 #include <float.h>
 #include <limits.h>
 
-#include "easy_spat_nav.h"
+#include "easy_spat_nav.hpp"
 
 
 namespace EasySpatNav {

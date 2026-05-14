@@ -15,15 +15,15 @@
 
 #include <allegro5/allegro_native_dialog.h>
 
-#include "game.h"
+#include "game.hpp"
 
 #include "../lib/imgui/imgui_impl_allegro5.h"
-#include "../util/allegro_utils.h"
-#include "../util/general_utils.h"
-#include "drawing.h"
-#include "init.h"
-#include "load.h"
-#include "misc_functions.h"
+#include "../util/allegro_utils.hpp"
+#include "../util/general_utils.hpp"
+#include "drawing.hpp"
+#include "init.hpp"
+#include "load.hpp"
+#include "misc_functions.hpp"
 
 
 namespace GAME {

@@ -10,11 +10,11 @@
 
 #include <algorithm>
 
-#include "mob.h"
+#include "mob.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/general_utils.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/general_utils.hpp"
 
 
 using std::set;

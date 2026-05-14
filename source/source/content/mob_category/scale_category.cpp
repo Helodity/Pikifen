@@ -10,10 +10,10 @@
 
 #include <algorithm>
 
-#include "scale_category.h"
+#include "scale_category.hpp"
 
-#include "../../core/game.h"
-#include "../mob/scale.h"
+#include "../../core/game.hpp"
+#include "../mob/scale.hpp"
 
 
 /**

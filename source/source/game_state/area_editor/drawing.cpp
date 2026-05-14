@@ -10,16 +10,16 @@
 
 #include <algorithm>
 
-#include "editor.h"
+#include "editor.hpp"
 
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
 #include "../../lib/imgui/imgui_impl_allegro5.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/container_utils.h"
-#include "../../util/general_utils.h"
-#include "../../util/string_utils.h"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/container_utils.hpp"
+#include "../../util/general_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 /**

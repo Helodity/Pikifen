@@ -11,11 +11,11 @@
 
 #include <algorithm>
 
-#include "sector.h"
+#include "sector.hpp"
 
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "geometry.h"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "geometry.hpp"
 
 
 /**

@@ -8,11 +8,11 @@
  * Decoration type class and decoration type-related functions.
  */
 
-#include "decoration_type.h"
+#include "decoration_type.hpp"
 
-#include "../mob/decoration.h"
-#include "../mob_script/decoration_fsm.h"
-#include "../script/script.h"
+#include "../mob/decoration.hpp"
+#include "../mob_script/decoration_fsm.hpp"
+#include "../script/script.hpp"
 
 
 /**

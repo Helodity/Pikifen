@@ -8,14 +8,14 @@
  * In-world HUD class and in-world HUD-related functions.
  */
 
-#include "in_world_hud.h"
+#include "in_world_hud.hpp"
 
-#include "../../content/mob/mob.h"
-#include "../../core/drawing.h"
-#include "../../core/game.h"
-#include "../../core/misc_functions.h"
-#include "../../util/allegro_utils.h"
-#include "../../util/string_utils.h"
+#include "../../content/mob/mob.hpp"
+#include "../../core/drawing.hpp"
+#include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
+#include "../../util/allegro_utils.hpp"
+#include "../../util/string_utils.hpp"
 
 
 namespace IN_WORLD_FRACTION {
