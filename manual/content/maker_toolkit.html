@@ -71,6 +71,23 @@
         <td>true</td>
       </tr>
     </table>
+
+    <h3 id="area-inspector">Area inspector</h3>
+    
+    <p>Prints out important information about the current area, on the top of the game window. If pressed again it stops inspecting the area. The information shown is:</p>
+    
+    <ul>
+      <li><b>Timer</b>: Time left on the currently running script timer, if any.</li>
+      <li><b>State</b>: Name of the current script FSM state.</li>
+      <li><b>Prev. states</b>: Name of the previous script FSM states (up to 4). Sorted most recent to oldest.</li>
+      <li><b>Vars</b>: Name and value of all script variables.</li>
+    </ul>
+
+    <p>As such, the information shown is mostly useful to debug area scripts. </p>
+    
+    <p><b>Tool internal name</b>: <code>area_inspector</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
     
     <h3 id="auto-start">Auto start</h3>
     
@@ -163,12 +180,14 @@
     <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it starts inspecting that mob, and only stops inspecting if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will inspect that one instead. Some other maker tools may also need that a mob is currently being inspected. If you were holding "modifier 1", it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding "modifier 2", it will stop inspecting no matter what. The information shown is:</p>
     
     <ul>
-      <li><b>Name</b>: The name of the type of mob this is (e.g. Red Bulborb, Olimar).</li>
+      <li><b>Mob</b>: The numeric ID and the name of the type of mob this is (e.g. Red Bulborb, Olimar).</li>
       <li><b>Coords</b>: The mob's current coordinates, separated by space. The third coordinate is the Z, which means its vertical position.</li>
-      <li><b>State hist.</b>: Name of the script FSM states it has gone through (up to 4). The current one is the first on the list.</li>
+      <li><b>Angle</b>: The mob's current angle.</li>
       <li><b>Health</b>: Current health amount.</li>
-      <li><b>Timer</b>: Time left on the currently running script timer, if any.</li>
       <li><b>Animation</b>: Name of the current playing animation, if any.</li>
+      <li><b>Timer</b>: Time left on the currently running script timer, if any.</li>
+      <li><b>State</b>: Name of the current script FSM state.</li>
+      <li><b>Prev. states</b>: Name of the previous script FSM states (up to 4). Sorted most recent to oldest.</li>
       <li><b>Vars</b>: Name and value of all script variables.</li>
     </ul>
 

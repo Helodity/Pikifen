@@ -216,6 +216,9 @@ enum PLAYER_ACTION_TYPE {
     //Area image.
     PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
     
+    //Area inspector.
+    PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR,
+    
     //Change speed.
     PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
     

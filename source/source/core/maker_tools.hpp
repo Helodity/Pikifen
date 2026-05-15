@@ -33,6 +33,9 @@ enum MAKER_TOOL_TYPE {
     //Create an image of the whole area.
     MAKER_TOOL_TYPE_AREA_IMAGE,
     
+    //Get info on the current area.
+    MAKER_TOOL_TYPE_AREA_INSPECTOR,
+    
     //Change gameplay speed.
     MAKER_TOOL_TYPE_CHANGE_SPEED,
     
@@ -150,6 +153,9 @@ struct MakerTools {
     
     //Is the HUD visible?
     bool hud = true;
+    
+    //Are we inspecting the current area?
+    bool inspectingArea = false;
     
     //Mob currently being inspected. nullptr if none.
     Mob* inspectedMob = nullptr;

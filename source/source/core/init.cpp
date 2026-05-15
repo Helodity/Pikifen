@@ -635,6 +635,14 @@ void initControls() {
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Area inspector",
+        "Toggle info about the current area.",
+        "mt_area_inspector", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Change speed",

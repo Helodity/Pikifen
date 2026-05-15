@@ -55,7 +55,6 @@ Next tasks (roughly sorted most important first)
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
         A way for the area script to focus on some mobs
         A button in the area editor that creates/opens the script file externally?
-        A maker tool to debug the area's script with, like the mob inspector tool
         Add some script to DEV Lab
     
     --- 2.0.0 ---

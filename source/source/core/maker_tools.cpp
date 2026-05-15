@@ -123,6 +123,12 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         usedHelpingTools = true;
         break;
         
+    } case PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR: {
+
+        inspectingArea = !inspectingArea;
+        usedHelpingTools = true;
+        break;
+        
     } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
 
         if(frameAdvanceMode) {
@@ -566,6 +572,7 @@ void MakerTools::resetForGameplay() {
     geometryInfo = false;
     hitboxes = false;
     hud = true;
+    inspectingArea = false;
     inspectedMob = nullptr;
     lastPikminType = nullptr;
     pathInfo = false;

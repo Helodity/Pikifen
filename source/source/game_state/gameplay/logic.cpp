@@ -1136,6 +1136,41 @@ void GameplayState::doMenuLogic() {
         player.hud->tick(game.deltaT);
         player.inventory->tick(game.deltaT);
     }
+
+    const auto getInspectorStrings = [] (
+        ScriptVM* scriptVM,
+        string* outStateStr, string* outPrevStatesStr, string* outTimerStr
+    ) {
+        *outStateStr =
+            resizeString(
+                scriptVM->fsm.curState ?
+                scriptVM->fsm.curState->name :
+                "(None!)",
+                20
+            );
+        for(unsigned char p = 0; p < FSM::STATE_HISTORY_SIZE; p++) {
+            (*outPrevStatesStr) +=
+                resizeString(scriptVM->fsm.prevStateNames[p], 20) + " ";
+        }
+        string timerStr =
+            f2s(scriptVM->timer.timeLeft);
+    };
+    
+    //Print info on the current area.
+    if(game.makerTools.inspectingArea) {
+        string stateStr, prevStatesStr, timerStr;
+        getInspectorStrings(
+            &game.states.gameplay->scriptVM,
+            &stateStr, &prevStatesStr, &timerStr
+        );
+            
+        game.console.write(
+            "Timer: " + timerStr + "\n"
+            "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
+            game.makerTools.inspectedMob->scriptVM.getMakerToolVarsStr(),
+            5.0f, 3.0f
+        );
+    }
     
     //Print info on the inspected mob.
     if(game.makerTools.inspectedMob) {
@@ -1154,21 +1189,11 @@ void GameplayState::doMenuLogic() {
             );
         string angleStr =
             resizeString(f2s(radToDeg(game.makerTools.inspectedMob->angle)), 8);
-        string stateStr =
-            resizeString(
-                game.makerTools.inspectedMob->scriptVM.fsm.curState ?
-                game.makerTools.inspectedMob->scriptVM.fsm.curState->name :
-                "(None!)",
-                20
-            );
-        string prevStatesStr;
-        for(unsigned char p = 0; p < FSM::STATE_HISTORY_SIZE; p++) {
-            prevStatesStr +=
-                resizeString(
-                    game.makerTools.inspectedMob->scriptVM.fsm.prevStateNames[p],
-                    20
-                ) + " ";
-        }
+        string stateStr, prevStatesStr, timerStr;
+        getInspectorStrings(
+            &game.makerTools.inspectedMob->scriptVM,
+            &stateStr, &prevStatesStr, &timerStr
+        );
         string animStr =
             resizeString(
                 game.makerTools.inspectedMob->anim.curAnim ?
@@ -1183,8 +1208,6 @@ void GameplayState::doMenuLogic() {
                 resizeString(f2s(game.makerTools.inspectedMob->maxHealth), 6),
                 23, true, true
             );
-        string timerStr =
-            f2s(game.makerTools.inspectedMob->scriptVM.timer.timeLeft);
             
         game.console.write(
             "Mob: " + nameStr + "\n"
