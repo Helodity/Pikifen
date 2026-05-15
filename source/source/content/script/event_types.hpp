@@ -35,6 +35,7 @@ enum FSM_EV {
     //When the game ticks a frame.
     FSM_EV_ON_TICK,
     
+    //DEPRECATED in 1.2.0 by the "ready" block.
     //For mobs, triggered when the mob has been created, and has links and
     //such set up and ready.
     FSM_EV_ON_READY,

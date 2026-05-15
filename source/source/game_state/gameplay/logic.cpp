@@ -763,6 +763,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *                              `-´  *
         *************************************/
         
+        if(areaTimePassed == 0.0f) {
+            //This is a convenient spot to signal that the area is ready.
+            //This will only run once, and only after the area is all set up.
+            scriptVM.runReadyActions();
+        }
         areaTimePassed += deltaT;
         if(interlude.get() == INTERLUDE_NONE) {
             gameplayTimePassed += deltaT;

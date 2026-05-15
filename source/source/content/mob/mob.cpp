@@ -4163,6 +4163,7 @@ void Mob::tickMiscLogic(float deltaT) {
     if(timeAlive == 0.0f) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
+        scriptVM.runReadyActions();
         scriptVM.fsm.runEvent(FSM_EV_ON_READY);
     }
     timeAlive += deltaT;

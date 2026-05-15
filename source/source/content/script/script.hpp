@@ -46,6 +46,9 @@ public:
     //Actions to run on script startup.
     ScriptActionBlockDef initActions;
     
+    //Actions to run when the area or mob is fully loaded and ready.
+    ScriptActionBlockDef readyActions;
+    
     //Definition of the finite-state machine.
     FsmDef fsm;
     
@@ -101,6 +104,7 @@ public:
     void init(ScriptDef* scriptDef, Mob* mobPtr = nullptr);
     void tick(float deltaT);
     void clear();
+    void runReadyActions();
     void focusOnMob(Mob* m);
     void unfocusFromMob();
     void setTimer(float time);

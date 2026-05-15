@@ -1,10 +1,13 @@
 first_state = idling
 
+ready {
+    set_var msg power
+    add_list_item msg $msg 1
+    send_message_to_links $msg
+}
+
 script {
     idling {
-        on_ready {
-            send_message_to_links 1
-        }
         on_receive_message {
             get_event_info msg message
             get_list_item temp $msg 1

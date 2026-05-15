@@ -1,5 +1,11 @@
 first_state = up
 
+ready {
+    set_var msg power
+    add_list_item msg $msg 0
+    send_message_to_links $msg
+}
+
 script{
     up {
         on_enter {
@@ -23,11 +29,6 @@ script{
         }
         on_pikmin_land {
             set_state down
-        }
-        on_ready {
-            set_var msg power
-            add_list_item msg $msg 0
-            send_message_to_links $msg
         }
     }
 

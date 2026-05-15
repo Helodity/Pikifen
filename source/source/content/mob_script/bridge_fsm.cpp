@@ -32,9 +32,6 @@ void BridgeFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(BridgeFsm::setAnim);
         }
-        efc.newEvent(FSM_EV_ON_READY); {
-            efc.run(BridgeFsm::setup);
-        }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
             efc.run(GenMobFsm::beAttacked);
             efc.run(BridgeFsm::checkHealth);
@@ -61,6 +58,9 @@ void BridgeFsm::createFsm(MobType* typ) {
     
     typ->scriptDef.fsm.states = efc.finish();
     typ->scriptDef.fsm.setFirstState("idling");
+    typ->scriptDef.readyActions.list.push_back(
+        new ScriptActionDef(BridgeFsm::setup)
+    );
     
     //Check if the number in the enum and the total match up.
     engineAssert(

@@ -16,7 +16,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     More powerful scripting
-        Create a ready block, that triggers when the area is ready, and move some on_ready and init things there (maybe even delete on_ready)
         Add region trigger mobs, that output power based on how many mobs are inside the given region
         New actions
             A way to run actions on other mobs
@@ -60,6 +59,20 @@ Next tasks (roughly sorted most important first)
     --- 2.0.0 ---
     Update Dear ImGui to 1.92.8
         > Made AddCallback() user data default to Null for convenience.
+    Add a proper maker console
+        Helpful so you can see error logs, script prints, etc.
+        The ability to write commands that trigger maker tools, with parameters too
+        Page up and page down to scroll the output, up and down for input history, tab to auto-complete
+        Add general commands
+            help
+            clear
+            alias
+        Printing something to the console should receive an argument that specifies whether that gets shown in the "console preview" and added to the console's output for later viewing (errors, script prints) or if it is just shown in the preview (mob inspector, area inspector)
+        Move somewhere the logic that is common between this system and the existing script action parsing/running system
+        Smooth scrolling in/out animation
+        Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
+    New maker tools
+        Fill the player's inventory with 99 of all possible inventory items
     Multiplayer co-op
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Menus

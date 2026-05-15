@@ -1,5 +1,10 @@
 first_state = off
 
+ready {
+    set_var msg power
+    add_list_item msg $msg 0
+    send_message_to_links $msg
+}
 
 global {
     on_receive_message {
@@ -27,11 +32,6 @@ script{
         }
         on_pikmin_land {
             set_state flipping_on
-        }
-        on_ready {
-            set_var msg power
-            add_list_item msg $msg 0
-            send_message_to_links $msg
         }
     }
 

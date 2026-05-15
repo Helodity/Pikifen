@@ -85,6 +85,13 @@ bool ScriptDef::loadFromDataNode(DataNode* node) {
             this
         );
         
+    //Ready actions.
+    success &=
+        readyActions.loadFromDataNode(
+            node->getChildByName("ready"),
+            this
+        );
+        
     //The FSM.
     success &=
         fsm.loadFromDataNode(
@@ -100,6 +107,7 @@ bool ScriptDef::loadFromDataNode(DataNode* node) {
  * @brief Unloads the script definition and its contents from memory.
  */
 void ScriptDef::unload() {
+    readyActions.unload();
     initActions.unload();
     fsm.unload();
 }
@@ -177,6 +185,15 @@ string ScriptVM::getMakerToolVarsStr() const {
     result = wordWrap(result, 98, 2);
     
     return result;
+}
+
+
+/**
+ * @brief Runs the block of actions that are meant to run when the
+ * mob or area are fully loaded and ready.
+ */
+void ScriptVM::runReadyActions() {
+    scriptDef->readyActions.run(this);
 }
 
 

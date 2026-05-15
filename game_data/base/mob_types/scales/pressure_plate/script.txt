@@ -5,6 +5,12 @@ init {
     set_var weight 0
 }
 
+ready {
+    set_var msg power
+    add_list_item msg $msg 0
+    send_message_to_links $msg
+}
+
 script {
     up {
         on_enter {
@@ -25,11 +31,6 @@ script {
         }
         on_weight_removed {
             get_mob_info weight self weight
-        }
-        on_ready {
-            set_var msg power
-            add_list_item msg $msg 0
-            send_message_to_links $msg
         }
     }
     

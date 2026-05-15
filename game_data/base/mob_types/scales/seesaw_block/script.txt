@@ -7,6 +7,13 @@ init {
     set_var weight 0
 }
 
+ready {
+    if $start_down = true
+        set_var start_down false
+        set_state down
+    end_if
+}
+
 global {
     on_receive_message {
         get_event_info msg message
@@ -50,12 +57,6 @@ script {
         on_receive_message {
             if $weight > $pair_weight
                 set_state lowering
-            end_if
-        }
-        on_ready {
-            if $start_down = true
-                set_var start_down false
-                set_state down
             end_if
         }
     }

@@ -5,6 +5,12 @@ init {
     set_var time 0
 }
 
+ready {
+    set_var msg power
+    add_list_item msg $msg 0
+    send_message_to_links $msg
+}
+
 global {
     on_receive_message {
         get_event_info msg message
@@ -33,11 +39,6 @@ script{
         }
         on_pikmin_land {
             set_state flipping_on
-        }
-        on_ready {
-            set_var msg power
-            add_list_item msg $msg 0
-            send_message_to_links $msg
         }
     }
 
