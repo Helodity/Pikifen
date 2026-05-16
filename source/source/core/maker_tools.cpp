@@ -126,6 +126,9 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     } case PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR: {
 
         inspectingArea = !inspectingArea;
+        if(!inspectingArea) {
+            game.console.write("No longer inspecting area.", 2.0f, 2.0f);
+        }
         usedHelpingTools = true;
         break;
         

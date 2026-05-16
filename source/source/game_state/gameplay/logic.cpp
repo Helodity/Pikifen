@@ -1141,10 +1141,11 @@ void GameplayState::doMenuLogic() {
         player.hud->tick(game.deltaT);
         player.inventory->tick(game.deltaT);
     }
-
-    const auto getInspectorStrings = [] (
-        ScriptVM* scriptVM,
-        string* outStateStr, string* outPrevStatesStr, string* outTimerStr
+    
+    const auto getInspectorStrings =
+        [] (
+            ScriptVM * scriptVM,
+            string* outStateStr, string* outPrevStatesStr, string* outTimerStr
     ) {
         *outStateStr =
             resizeString(
@@ -1157,8 +1158,7 @@ void GameplayState::doMenuLogic() {
             (*outPrevStatesStr) +=
                 resizeString(scriptVM->fsm.prevStateNames[p], 20) + " ";
         }
-        string timerStr =
-            f2s(scriptVM->timer.timeLeft);
+        *outTimerStr = f2s(scriptVM->timer.timeLeft);
     };
     
     //Print info on the current area.
@@ -1168,11 +1168,11 @@ void GameplayState::doMenuLogic() {
             &game.states.gameplay->scriptVM,
             &stateStr, &prevStatesStr, &timerStr
         );
-            
+        
         game.console.write(
             "Timer: " + timerStr + "\n"
             "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
-            game.makerTools.inspectedMob->scriptVM.getMakerToolVarsStr(),
+            game.states.gameplay->scriptVM.getMakerToolVarsStr(),
             5.0f, 3.0f
         );
     }

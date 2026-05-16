@@ -30,7 +30,7 @@ ScriptDef::ScriptDef() :
 /**
  * @brief Returns whether the current script context is valid for the given
  * context flags.
- * 
+ *
  * @param flags The flags.
  * @return Whether it is valid.
  */
@@ -42,7 +42,7 @@ bool ScriptDef::checkContextFlags(Bitmask8 flags) const {
 
 /**
  * @brief Returns what the current script context is.
- * 
+ *
  * @return The context.
  */
 SCRIPT_CONTEXT ScriptDef::getContext() const {
@@ -52,7 +52,7 @@ SCRIPT_CONTEXT ScriptDef::getContext() const {
 
 /**
  * @brief Returns the name of the current script context, in lowercase.
- * 
+ *
  * @return The name.
  */
 string ScriptDef::getContextName() const {
@@ -193,6 +193,7 @@ string ScriptVM::getMakerToolVarsStr() const {
  * mob or area are fully loaded and ready.
  */
 void ScriptVM::runReadyActions() {
+    if(!scriptDef) return;
     scriptDef->readyActions.run(this);
 }
 
