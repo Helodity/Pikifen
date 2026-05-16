@@ -20,6 +20,7 @@
 #include "../../util/enum_utils.hpp"
 #include "../../util/general_utils.hpp"
 #include "../../util/imgui_utils.hpp"
+#include "../../util/os_utils.hpp"
 #include "../../util/string_utils.hpp"
 
 
@@ -2057,6 +2058,29 @@ void AreaEditor::processGuiPanelGameplay() {
         setTooltip(
             "If checked, all Onions will eject fully-grown Pikmin\n"
             "instead of seeds."
+        );
+        
+        ImGui::TreePop();
+    }
+    
+    //Script node.
+    ImGui::Spacer();
+    if(saveableTreeNode("gameplay", "Script")) {
+    
+        //Open script file button.
+        if(ImGui::Button("Open script file externally")) {
+            string filePath =
+                game.curArea->manifest->path + "/" +
+                FILE_NAMES::AREA_SCRIPT;
+            if(!al_filename_exists(filePath.c_str())) {
+                ALLEGRO_FILE* file = al_fopen(filePath.c_str(), "w");
+                al_fclose(file);
+            }
+            openFileExplorer(filePath);
+        }
+        setTooltip(
+            "Open the area's script file in your operative system.\n"
+            "If it does not exist, it will be created."
         );
         
         ImGui::TreePop();
