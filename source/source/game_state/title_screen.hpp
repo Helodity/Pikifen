@@ -110,9 +110,9 @@ private:
     //--- Private misc. declarations ---
     
     /**
-     * @brief Represents a Pikmin in the logo.
+     * @brief Represents a Pikmin in the game's wordmark.
      */
-    struct LogoPikmin {
+    struct WordmarkPikmin {
     
         //--- Public members ---
         
@@ -151,39 +151,42 @@ private:
     //Bitmap of the menu background.
     ALLEGRO_BITMAP* bmpMenuBg = nullptr;
     
-    //List of Pikmin that make up the logo.
-    vector<LogoPikmin> logoPikmin;
+    //Buffer where the wordmark Pikmin shadows are drawn.
+    ALLEGRO_BITMAP* bmpWordmarkShadows = nullptr;
     
-    //Top-left coordinates of the logo, in window percentage.
-    Point logoMinWindowLimit = Point(10.0f);
+    //List of Pikmin that make up the wordmark.
+    vector<WordmarkPikmin> wordmarkPikmin;
     
-    //Bottom-right coordinates of the logo, in window percentage.
-    Point logoMaxWindowLimit = Point(90.0f, 50.0f);
+    //Top-left coordinates of the wordmark, in window percentage.
+    Point wordmarkMinWindowLimit = Point(10.0f);
     
-    //Maximum speed a logo Pikmin can move at, in window width or height ratio
+    //Bottom-right coordinates of the wordmark, in window percentage.
+    Point wordmarkMaxWindowLimit = Point(90.0f, 50.0f);
+    
+    //Maximum speed a wordmark Pikmin can move at, in window width or height ratio
     //per second (the largest of width or height).
-    float logoPikminMaxSpeed = 800.0f;
+    float wordmarkPikminMaxSpeed = 800.0f;
     
-    //Minimum speed a logo Pikmin can move at, in window width or height ratio
+    //Minimum speed a wordmark Pikmin can move at, in window width or height ratio
     //per second (the largest of width or height).
-    float logoPikminMinSpeed = 600.0f;
+    float wordmarkPikminMinSpeed = 600.0f;
     
-    //How much to smooth a logo Pikmin's speed by.
-    float logoPikminSpeedSmoothness = 0.08f;
+    //How much to smooth a wordmark Pikmin's speed by.
+    float wordmarkPikminSpeedSmoothness = 0.08f;
     
-    //How much to sway a logo Pikmin by.
-    float logoPikminSwayAmount = 3.0f;
+    //How much to sway a wordmark Pikmin by.
+    float wordmarkPikminSwayAmount = 3.0f;
     
-    //Maximum speed at which a logo Pikmin can sway.
-    float logoPikminSwayMaxSpeed = 5.5f;
+    //Maximum speed at which a wordmark Pikmin can sway.
+    float wordmarkPikminSwayMaxSpeed = 5.5f;
     
-    //Minimum speed at which a logo Pikmin can sway.
-    float logoPikminSwayMinSpeed = 2.5f;
+    //Minimum speed at which a wordmark Pikmin can sway.
+    float wordmarkPikminSwayMinSpeed = 2.5f;
     
-    //Width and height of a logo Pikmin.
-    Point logoPikminSize = Point(3.5f);
+    //Width and height of a wordmark Pikmin.
+    Point wordmarkPikminSize = Point(3.5f);
     
     //Map of what characters represent what Pikmin top bitmaps.
-    map<unsigned char, ALLEGRO_BITMAP*> logoTypeBitmaps;
+    map<unsigned char, ALLEGRO_BITMAP*> wordmarkTypeBitmaps;
     
 };

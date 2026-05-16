@@ -734,33 +734,75 @@ void MainMenu::load() {
  * @brief Draws the title screen.
  */
 void TitleScreen::doDrawing() {
-    al_clear_to_color(COLOR_BLACK);
-    
-    if(game.debug.showDearImGuiDemo) return;
-    
-    drawBitmap(
-        bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
-        Point(game.winW, game.winH)
-    );
-    
-    //Draw the logo Pikmin.
-    Point pikSize = logoPikminSize;
+    Point pikSize = wordmarkPikminSize;
     pikSize.x *= game.winW / 100.0f;
     pikSize.y *= game.winH / 100.0f;
     
-    forIdx(p, logoPikmin) {
-        LogoPikmin* pik = &logoPikmin[p];
-        drawBitmapInBox(
-            game.sysContent.bmpShadow,
-            pik->center + pikSize * 0.30f, pikSize * 1.2f,
-            true, 0.0f, COLOR_TRANSPARENT_WHITE
+    //To export the wordmark into its own bitmap, set this to true.
+    //One good trick is to set it to true if game.timePassed > 10.
+    const bool justWordmark = false;
+    
+    ALLEGRO_BITMAP* bmpJustWordmark = nullptr;
+    if(justWordmark) {
+        bmpJustWordmark = al_create_bitmap(game.winW, game.winH);
+        al_set_target_bitmap(bmpJustWordmark);
+    }
+    
+    //Draw the background fill color.
+    al_clear_to_color(justWordmark ? COLOR_EMPTY : COLOR_BLACK);
+    
+    if(game.debug.showDearImGuiDemo) return;
+    
+    //Fill the wordmark Pikmin's shadow buffer.
+    ALLEGRO_BITMAP* oldTargetBmp = al_get_target_bitmap();
+    al_set_target_bitmap(bmpWordmarkShadows);
+    al_clear_to_color(COLOR_EMPTY);
+    int oldOp = 0, oldSource = 0, oldDest = 0;
+    al_get_blender(&oldOp, &oldSource, &oldDest);
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE); {
+        forIdx(p, wordmarkPikmin) {
+            WordmarkPikmin* pik = &wordmarkPikmin[p];
+            drawBitmapInBox(
+                game.sysContent.bmpShadow,
+                pik->center + pikSize * 0.30f, pikSize * 1.2f, true
+            );
+        }
+    } al_set_blender(oldOp, oldSource, oldDest);
+    al_set_target_bitmap(oldTargetBmp);
+    
+    //Draw the background.
+    if(!justWordmark) {
+        drawBitmap(
+            bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
+            Point(game.winW, game.winH)
         );
     }
-    forIdx(p, logoPikmin) {
-        LogoPikmin* pik = &logoPikmin[p];
+    
+    //Draw the wordmark Pikmin shadows.
+    al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER)); {
+        //Color it just a bit green so it's more natural.
+        ALLEGRO_COLOR color = al_map_rgba(0, 255, 0, 32);
+        al_set_shader_float_vector(
+            "colorizer_color", 4, (float*) &color, 1
+        );
+        drawBitmap(
+            bmpWordmarkShadows, Point(game.winW / 2.0f, game.winH / 2.0f),
+            Point(game.winW, game.winH), 0.0f, COLOR_TRANSPARENT_WHITE
+        );
+    } al_use_shader(nullptr);
+    
+    //Draw the wordmark Pikmin proper.
+    forIdx(p, wordmarkPikmin) {
+        WordmarkPikmin* pik = &wordmarkPikmin[p];
         drawBitmapInBox(
             pik->top, pik->center, pikSize, true, pik->angle
         );
+    }
+    
+    if(justWordmark) {
+        //Do what you want with bmpJustWordmark, like using al_save_bitmap().
+        al_destroy_bitmap(bmpJustWordmark);
+        return;
     }
     
     drawText(
@@ -799,10 +841,10 @@ void TitleScreen::doDrawing() {
 void TitleScreen::doLogic() {
     if(game.debug.showDearImGuiDemo) return;
     
-    //Animate the logo Pikmin.
+    //Animate the wordmark Pikmin.
     int largestWindowDim = std::max(game.winW, game.winH);
-    forIdx(p, logoPikmin) {
-        LogoPikmin* pik = &logoPikmin[p];
+    forIdx(p, wordmarkPikmin) {
+        WordmarkPikmin* pik = &wordmarkPikmin[p];
         
         if(!pik->reachedDestination) {
             float a = getAngle(pik->center, pik->destination);
@@ -810,7 +852,7 @@ void TitleScreen::doLogic() {
                 std::min(
                     pik->speed * largestWindowDim * (float) game.deltaT,
                     Distance(pik->center, pik->destination).toFloat() *
-                    logoPikminSpeedSmoothness
+                    wordmarkPikminSpeedSmoothness
                 );
             pik->center.x += cos(a) * speed;
             pik->center.y += sin(a) * speed;
@@ -826,7 +868,7 @@ void TitleScreen::doLogic() {
             pik->swayVar += pik->swaySpeed * game.deltaT;
             pik->center.x =
                 pik->destination.x +
-                sin(pik->swayVar) * logoPikminSwayAmount;
+                sin(pik->swayVar) * wordmarkPikminSwayAmount;
         }
     }
     
@@ -890,6 +932,7 @@ void TitleScreen::load() {
     );
     
     //Misc. initializations.
+    bmpWordmarkShadows = al_create_bitmap(game.winW, game.winH);
     mainMenu.pageToLoad = pageToLoad;
     mainMenu.load();
     
@@ -900,21 +943,21 @@ void TitleScreen::load() {
     bmpMenuBg =
         game.content.bitmaps.list.get(game.sysContentNames.bmpTitleScreenBg);
         
-    //Logo pikmin.
-    DataNode* logoNode = settingsFile->getChildByName("logo");
-    ReaderSetter lRS(logoNode);
+    //Wordmark pikmin.
+    DataNode* wordmarkNode = settingsFile->getChildByName("logo");
+    ReaderSetter lRS(wordmarkNode);
     
     DataNode* pikTypesNode =
-        logoNode->getChildByName("pikmin_types");
+        wordmarkNode->getChildByName("pikmin_types");
     for(size_t t = 0; t < pikTypesNode->getNrOfChildren(); t++) {
         DataNode* typeNode = pikTypesNode->getChild(t);
         if(typeNode->name.empty()) continue;
-        logoTypeBitmaps[typeNode->name[0]] =
+        wordmarkTypeBitmaps[typeNode->name[0]] =
             game.content.bitmaps.list.get(typeNode->value, typeNode);
     }
     
     DataNode* mapNode =
-        logoNode->getChildByName("map");
+        wordmarkNode->getChildByName("map");
     size_t mapTotalRows = mapNode->getNrOfChildren();
     size_t mapTotalCols = 0;
     for(size_t r = 0; r < mapTotalRows; r++) {
@@ -922,15 +965,15 @@ void TitleScreen::load() {
             std::max(mapTotalCols, mapNode->getChild(r)->name.size());
     }
     
-    lRS.set("min_window_limit", logoMinWindowLimit);
-    lRS.set("max_window_limit", logoMaxWindowLimit);
-    lRS.set("pikmin_max_speed", logoPikminMaxSpeed);
-    lRS.set("pikmin_min_speed", logoPikminMinSpeed);
-    lRS.set("pikmin_speed_smoothness", logoPikminSpeedSmoothness);
-    lRS.set("pikmin_sway_amount", logoPikminSwayAmount);
-    lRS.set("pikmin_sway_max_speed", logoPikminSwayMaxSpeed);
-    lRS.set("pikmin_sway_min_speed", logoPikminSwayMinSpeed);
-    lRS.set("pikmin_size", logoPikminSize);
+    lRS.set("min_window_limit", wordmarkMinWindowLimit);
+    lRS.set("max_window_limit", wordmarkMaxWindowLimit);
+    lRS.set("pikmin_max_speed", wordmarkPikminMaxSpeed);
+    lRS.set("pikmin_min_speed", wordmarkPikminMinSpeed);
+    lRS.set("pikmin_speed_smoothness", wordmarkPikminSpeedSmoothness);
+    lRS.set("pikmin_sway_amount", wordmarkPikminSwayAmount);
+    lRS.set("pikmin_sway_max_speed", wordmarkPikminSwayMaxSpeed);
+    lRS.set("pikmin_sway_min_speed", wordmarkPikminSwayMinSpeed);
+    lRS.set("pikmin_size", wordmarkPikminSize);
     
     bool mapOk = true;
     
@@ -939,7 +982,7 @@ void TitleScreen::load() {
         
         forIdx(c, row) {
             if(row[c] == '.') continue;
-            if(!isInMap(logoTypeBitmaps, row[c])) {
+            if(!isInMap(wordmarkTypeBitmaps, row[c])) {
                 mapOk = false;
                 game.errors.report(
                     "Title screen Pikmin logo map has an unknown character \"" +
@@ -949,16 +992,16 @@ void TitleScreen::load() {
                 break;
             }
             
-            LogoPikmin pik;
+            WordmarkPikmin pik;
             
-            Point minPos = logoMinWindowLimit;
+            Point minPos = wordmarkMinWindowLimit;
             minPos.x *= game.winW / 100.0f;
             minPos.y *= game.winH / 100.0f;
-            Point maxPos = logoMaxWindowLimit;
+            Point maxPos = wordmarkMaxWindowLimit;
             maxPos.x *= game.winW / 100.0f;
             maxPos.y *= game.winH / 100.0f;
             
-            pik.top = logoTypeBitmaps[row[c]];
+            pik.top = wordmarkTypeBitmaps[row[c]];
             pik.destination =
                 Point(
                     minPos.x +
@@ -980,12 +1023,12 @@ void TitleScreen::load() {
                 );
                 
             pik.angle = game.rng.f(0, TAU);
-            pik.speed = game.rng.f(logoPikminMinSpeed, logoPikminMaxSpeed);
+            pik.speed = game.rng.f(wordmarkPikminMinSpeed, wordmarkPikminMaxSpeed);
             pik.swaySpeed =
-                game.rng.f(logoPikminSwayMinSpeed, logoPikminSwayMaxSpeed);
+                game.rng.f(wordmarkPikminSwayMinSpeed, wordmarkPikminSwayMaxSpeed);
             pik.swayVar = 0;
             pik.reachedDestination = false;
-            logoPikmin.push_back(pik);
+            wordmarkPikmin.push_back(pik);
         }
         
         if(!mapOk) break;
@@ -1008,16 +1051,18 @@ void TitleScreen::unload() {
     //Resources.
     game.content.bitmaps.list.free(bmpMenuBg);
     bmpMenuBg = nullptr;
-    for(const auto& t : logoTypeBitmaps) {
+    for(const auto& t : wordmarkTypeBitmaps) {
         game.content.bitmaps.list.free(t.second);
     }
-    logoTypeBitmaps.clear();
+    wordmarkTypeBitmaps.clear();
     
     //Menu items.
     mainMenu.unload();
     
     //Misc.
-    logoPikmin.clear();
+    wordmarkPikmin.clear();
+    al_destroy_bitmap(bmpWordmarkShadows);
+    bmpWordmarkShadows = nullptr;
     
     //Game content.
     game.content.unloadAll(
