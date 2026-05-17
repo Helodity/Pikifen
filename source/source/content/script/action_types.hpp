@@ -145,6 +145,9 @@ enum SCRIPT_ACTION {
     //Get list of mob IDs with a matching script var.
     SCRIPT_ACTION_GET_MOB_IDS_WITH_VAR,
     
+    //Get list of mob IDs within an area region.
+    SCRIPT_ACTION_GET_MOB_IDS_IN_REGION,
+    
     //Get information about a mob.
     SCRIPT_ACTION_GET_MOB_INFO,
     
@@ -947,6 +950,7 @@ void getListItemNumber(ScriptActionInstRunData& data);
 void getListSize(ScriptActionInstRunData& data);
 void getMiscInfo(ScriptActionInstRunData& data);
 void getMissionMetric(ScriptActionInstRunData& data);
+void getMobIdsInRegion(ScriptActionInstRunData& data);
 void getMobIdsWithVar(ScriptActionInstRunData& data);
 void getMobInfo(ScriptActionInstRunData& data);
 void getFocusVar(ScriptActionInstRunData& data);

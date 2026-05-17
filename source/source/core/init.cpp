@@ -1797,6 +1797,15 @@ void initScriptActionTypes() {
         ScriptActionRunners::getMissionMetric
     );
     
+    //Get mob IDs in region.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("region number", ptInt);
+    commitAction(
+        SCRIPT_ACTION_GET_MOB_IDS_IN_REGION,
+        "get_mob_ids_in_region",
+        ScriptActionRunners::getMobIdsInRegion
+    );
+    
     //Get mob IDs with var.
     queueParam("destination var name", ptString, pfConst);
     queueParam("var", ptString);

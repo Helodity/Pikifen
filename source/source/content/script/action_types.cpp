@@ -1070,6 +1070,48 @@ void ScriptActionRunners::getMissionMetric(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the region mob ID retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getMobIdsInRegion(
+    ScriptActionInstRunData& data
+) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& regionNumberArg = data.args[1];
+    
+    //Main logic.
+    vector<string> idsStrs;
+    size_t regionIdx = s2i(regionNumberArg) - 1;
+    if(regionIdx >= game.states.gameplay->areaRegions.size()) {
+        reportActionError(
+            data,
+            "Area region number " + regionNumberArg + " doesn't exist!"
+        );
+        return;
+    }
+    AreaRegion* rPtr = game.curArea->regions[regionIdx];
+    
+    forIdx(m, game.states.gameplay->mobs.all) {
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
+        
+        bool isInside;
+        getClosestPointInRotatedRectangle(
+            mPtr->center, Rect(rPtr->pose.pos, rPtr->pose.size),
+            rPtr->pose.angle, &isInside
+        );
+        if(!isInside) continue;
+        
+        idsStrs.push_back(i2s(mPtr->id));
+    }
+    
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = join(idsStrs, ",");;
+}
+
+
+/**
  * @brief Code for the var mob ID retrieval script action type.
  *
  * @param data Data about the action call.
@@ -1086,11 +1128,13 @@ void ScriptActionRunners::getMobIdsWithVar(
     vector<string> idsStrs;
     forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
+        
         auto it = mPtr->scriptVM.vars.find(varArg);
         if(it == mPtr->scriptVM.vars.end()) continue;
         if(!valueArg.empty()) {
             if(it->second != valueArg) continue;
         }
+        
         idsStrs.push_back(i2s(mPtr->id));
     }
     

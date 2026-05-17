@@ -9,7 +9,7 @@ script {
             if $temp = dev_lab_kill_room
                 get_list_item temp $msg 2
                 if $temp = 1
-                    get_mob_ids_with_var temp dev_lab_kill_room true
+                    get_mob_ids_in_region temp 1
                     get_list_item id $temp 1
                     focus_on_id $id
                     print Killing mob with ID $id ...

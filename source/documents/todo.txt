@@ -45,9 +45,6 @@ Next tasks (roughly sorted most important first)
         If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
-    Global script and script variables, which apply to the whole area
-        A way for the area script to focus on some mobs
-        Add some script to DEV Lab
     
     --- 2.0.0 ---
     Update Dear ImGui to 1.92.8

@@ -19244,4 +19244,11 @@ tree_shadows{
 		sway=6.0000 0.5000
 	}
 }
-regions
+regions{
+	region{
+		type=Script usage
+		center=1504.0000 2800.0000
+		size=192.0000 160.0000
+		angle=0.0000
+	}
+}

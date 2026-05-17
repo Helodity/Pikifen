@@ -43,12 +43,16 @@ enum AREA_REGION_TYPE {
     //Something used for the mission, highlighted in the radar.
     AREA_REGION_TYPE_MISSION,
     
+    //Something used for the script only.
+    AREA_REGION_TYPE_SCRIPT,
+    
 };
 
 
 //Area region type enum naming.
 buildEnumNames(areaRegionTypeNames, AREA_REGION_TYPE)({
     { AREA_REGION_TYPE_MISSION, "Mission region" },
+    { AREA_REGION_TYPE_SCRIPT, "Script usage" },
 });
 
 
