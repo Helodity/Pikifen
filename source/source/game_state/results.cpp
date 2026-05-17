@@ -752,7 +752,7 @@ void Results::initGuiMain() {
             conclusion =
                 "Played in after hours, so the "
                 "result past that point won't be saved.";
-        } else if(!game.options.advanced.expoMode) {
+        } else if(game.options.advanced.expoMode) {
             conclusion =
                 "This is an expo showcase, "
                 "so the result won't be saved.";

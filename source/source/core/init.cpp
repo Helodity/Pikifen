@@ -1940,6 +1940,15 @@ void initScriptActionTypes() {
         ScriptActionRunners::setListItem
     );
     
+    //Set mission metric script slot.
+    queueParam("slot number", ptInt);
+    queueParam("value", ptInt);
+    commitAction(
+        SCRIPT_ACTION_SET_MISSION_METRIC_SCRIPT_SLOT,
+        "set_mission_metric_script_slot",
+        ScriptActionRunners::setMissionMetricScriptSlot
+    );
+    
     //Set state.
     queueParam("state name", ptString, pfConst);
     commitAction(

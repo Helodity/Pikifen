@@ -265,6 +265,9 @@ enum SCRIPT_ACTION {
     //Set list item.
     SCRIPT_ACTION_SET_LIST_ITEM,
     
+    //Set mission metric script slot.
+    SCRIPT_ACTION_SET_MISSION_METRIC_SCRIPT_SLOT,
+    
     //Set its near reach.
     SCRIPT_ACTION_SET_NEAR_REACH,
     
@@ -981,6 +984,7 @@ void setHoldable(ScriptActionInstRunData& data);
 void setHuntable(ScriptActionInstRunData& data);
 void setLimbAnimation(ScriptActionInstRunData& data);
 void setListItem(ScriptActionInstRunData& data);
+void setMissionMetricScriptSlot(ScriptActionInstRunData& data);
 void setNearReach(ScriptActionInstRunData& data);
 void setRadius(ScriptActionInstRunData& data);
 void setState(ScriptActionInstRunData& data);

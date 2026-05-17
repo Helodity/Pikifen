@@ -122,6 +122,9 @@ enum MISSION_METRIC {
     //Enemy defeat points.
     MISSION_METRIC_ENEMY_DEFEAT_PTS,
     
+    //Custom script-defined slot.
+    MISSION_METRIC_ENEMY_SCRIPT_SLOT,
+    
 };
 
 
@@ -140,6 +143,7 @@ buildEnumNames(missionMetricNames, MISSION_METRIC)({
     { MISSION_METRIC_TREASURE_COLLECTION_PTS, "Treasure collection points" },
     { MISSION_METRIC_ENEMY_COLLECTION_PTS, "Enemy collection points" },
     { MISSION_METRIC_ENEMY_DEFEAT_PTS, "Enemy defeat points" },
+    { MISSION_METRIC_ENEMY_SCRIPT_SLOT, "Script slot" },
 });
 
 
@@ -158,6 +162,7 @@ buildEnumNames(missionMetricINames, MISSION_METRIC)({
     { MISSION_METRIC_TREASURE_COLLECTION_PTS, "treasure_collection_points" },
     { MISSION_METRIC_ENEMY_COLLECTION_PTS, "enemy_collection_points" },
     { MISSION_METRIC_ENEMY_DEFEAT_PTS, "enemy_defeat_points" },
+    { MISSION_METRIC_ENEMY_SCRIPT_SLOT, "script_slot" },
 });
 
 

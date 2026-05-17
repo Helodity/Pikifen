@@ -345,6 +345,9 @@ public:
     //Status of each mission mob group.
     vector<MissionMobGroupStatus> missionMobGroups;
     
+    //Values for mission metrics decided by the script.
+    map<size_t, int> missionMetricScriptSlots;
+    
     //How many Pikmin were born so far.
     size_t pikminBorn = 0;
     

@@ -1722,8 +1722,7 @@ bool MissionMetricTypePikminDeaths::getZoomData(
  * @return The amount.
  */
 int MissionMetricTypeScriptSlot::getAmount(size_t idxParam) const {
-    //TODO;
-    return 0;
+    return game.states.gameplay->missionMetricScriptSlots[idxParam];
 }
 
 

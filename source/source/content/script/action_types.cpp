@@ -2231,7 +2231,7 @@ void ScriptActionRunners::setLimbAnimation(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the list item retrieval script action type.
+ * @brief Code for the list item setting script action type.
  *
  * @param data Data about the action call.
  */
@@ -2268,6 +2268,26 @@ void ScriptActionRunners::setListItem(ScriptActionInstRunData& data) {
     
     //Store the result.
     data.scriptVM->vars[destVarArg] = newListStr;
+}
+
+
+/**
+ * @brief Code for the mission metric script slot setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setMissionMetricScriptSlot(
+    ScriptActionInstRunData& data
+) {
+    //Get the arguments.
+    const string& slotNumberArg = data.args[0];
+    const string& valueArg = data.args[1];
+    
+    //Main logic.
+    if(game.curArea->type != AREA_TYPE_MISSION) return;
+    size_t slotNumber = s2i(slotNumberArg) - 1;
+    int value = s2i(valueArg);
+    game.states.gameplay->missionMetricScriptSlots[slotNumber] = value;
 }
 
 
