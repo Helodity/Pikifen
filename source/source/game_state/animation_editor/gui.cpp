@@ -2063,9 +2063,6 @@ void AnimationEditor::processGuiPanelSprite() {
         setTooltip("Miscellaneous sprite tools.");
     }
     
-    //End the nav box.
-    processGuiNavBoxEnd();
-    
     //Sprite misc. popup.
     bool mustOpenResizePopup = false;
     if(ImGui::BeginPopup("spriteMisc")) {
@@ -2150,6 +2147,9 @@ void AnimationEditor::processGuiPanelSprite() {
     ) {
         resizeSprite(curSprite, s2f(resizeSpriteMult));
     }
+    
+    //End the nav box.
+    processGuiNavBoxEnd();
     
     ImVec2 modeButtonsSize(-1.0f, 24.0f);
     

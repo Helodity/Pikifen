@@ -821,7 +821,7 @@ void AnimationInstance::clear() {
     curAnim = nullptr;
     animDb = nullptr;
     curFrameTime = 0;
-    curFrameIdx = INVALID;
+    curFrameIdx = 0;
 }
 
 

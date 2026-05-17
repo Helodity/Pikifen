@@ -5,8 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If the Frames section is collapsed in the animation panel, changing animations won't show anything
-    Misc. sprite tools button in the animation editor isn't working
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
