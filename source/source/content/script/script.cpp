@@ -189,6 +189,28 @@ string ScriptVM::getMakerToolVarsStr() const {
 
 
 /**
+ * @brief Returns the mob under which the action should be run.
+ *
+ * @return The mob.
+ */
+Mob* ScriptVM::getRunnerMob() const {
+    if(nextActionSurrogateMob) return nextActionSurrogateMob;
+    return mob;
+}
+
+
+/**
+ * @brief Returns the script VM under which the action should be run.
+ *
+ * @return The mob.
+ */
+ScriptVM* ScriptVM::getRunnerScriptVM() {
+    if(nextActionSurrogateMob) return &nextActionSurrogateMob->scriptVM;
+    return this;
+}
+
+
+/**
  * @brief Runs the block of actions that are meant to run when the
  * mob or area are fully loaded and ready.
  */

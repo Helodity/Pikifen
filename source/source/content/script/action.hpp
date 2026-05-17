@@ -74,7 +74,9 @@ public:
     explicit ScriptActionDef(SCRIPT_ACTION type = SCRIPT_ACTION_UNKNOWN);
     explicit ScriptActionDef(ScriptActionCustomCode code);
     bool loadFromDataNode(
-        DataNode* node, ScriptDef* scriptDef, bool isDataNodeRelevant = true
+        DataNode* node, ScriptDef* scriptDef,
+        const vector<ScriptActionDef*>& actionList,
+        bool isDataNodeRelevant = true
     );
     bool run(ScriptVM* m, void* customData1, void* customData2);
     void unload();

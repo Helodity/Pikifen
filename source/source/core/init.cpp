@@ -1922,6 +1922,14 @@ void initScriptActionTypes() {
         ScriptActionRunners::roundNumber
     );
     
+    //Run next action as.
+    queueParam("target", ptEnum, pfConst);
+    commitAction(
+        SCRIPT_ACTION_RUN_NEXT_ACTION_AS,
+        "run_next_action_as",
+        ScriptActionRunners::runNextActionAs
+    );
+    
     //Send script message to area.
     queueParam("message", ptString);
     commitAction(

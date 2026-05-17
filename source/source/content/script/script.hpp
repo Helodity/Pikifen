@@ -94,6 +94,10 @@ public:
     //The mob it has focus on.
     Mob* focusedMob = nullptr;
     
+    //The mob that the next actions will be run as. nullptr means the
+    //current mob, if applicable.
+    Mob* nextActionSurrogateMob = nullptr;
+    
     //Variables.
     map<string, string> vars;
     
@@ -109,6 +113,8 @@ public:
     void unfocusFromMob();
     void setTimer(float time);
     void setVar(const string& name, const string& value);
+    Mob* getRunnerMob() const;
+    ScriptVM* getRunnerScriptVM();
     string getMakerToolVarsStr() const;
     
 };

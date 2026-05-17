@@ -217,6 +217,9 @@ enum SCRIPT_ACTION {
     //Round a float number.
     SCRIPT_ACTION_ROUND_NUMBER,
     
+    //Run next action as.
+    SCRIPT_ACTION_RUN_NEXT_ACTION_AS,
+    
     //Save focused mob into focused mobs memory.
     SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
     
@@ -974,6 +977,7 @@ void releaseStoredMobs(ScriptActionInstRunData& data);
 void removeListItem(ScriptActionInstRunData& data);
 void removeStatus(ScriptActionInstRunData& data);
 void roundNumber(ScriptActionInstRunData& data);
+void runNextActionAs(ScriptActionInstRunData& data);
 void saveFocusMemory(ScriptActionInstRunData& data);
 void sendMessageToArea(ScriptActionInstRunData& data);
 void sendMessageToFocus(ScriptActionInstRunData& data);

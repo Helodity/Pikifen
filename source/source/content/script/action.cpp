@@ -149,6 +149,19 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
         }
     }
     
+    //Check if there are missing actions after a "run_next_action_as".
+    forIdx(a, list) {
+        if(list[a]->actionType->type == SCRIPT_ACTION_RUN_NEXT_ACTION_AS) {
+            if(a == list.size() - 1) {
+                game.errors.report(
+                    "There is a \"" + list[a]->actionType->name + "\" "
+                    "with no other action after it!", dn
+                );
+                return false;
+            }
+        }
+    }
+    
     return true;
 }
 
@@ -174,7 +187,7 @@ bool ScriptActionBlockDef::loadFromDataNode(
             enableFlag(*outFlags, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER);
         } else {
             ScriptActionDef* newA = new ScriptActionDef();
-            if(newA->loadFromDataNode(actionNode, scriptDef)) {
+            if(newA->loadFromDataNode(actionNode, scriptDef, list)) {
                 list.push_back(newA);
             } else {
                 delete newA;
@@ -347,6 +360,15 @@ void ScriptActionBlockDef::run(
         } case FLOW_CODE_NONE: {
             //Normal action.
             list[a]->run(scriptVM, customData1, customData2);
+            
+            //Reset the surrogate, if applicable.
+            if(
+                scriptVM->nextActionSurrogateMob &&
+                list[a]->actionType->type != SCRIPT_ACTION_RUN_NEXT_ACTION_AS
+            ) {
+                scriptVM->nextActionSurrogateMob = nullptr;
+            }
+            
             //If the state got changed, jump out.
             if(list[a]->actionType->type == SCRIPT_ACTION_SET_STATE) return;
             
@@ -410,13 +432,15 @@ ScriptActionDef::ScriptActionDef(ScriptActionCustomCode code) :
  *
  * @param node The data node.
  * @param scriptDef Script definition it belongs to, if any.
+ * @param actionList List of actions so far.
  * @param isDataNodeRelevant Whether the action was loaded from a data node
  * that is relevant to mob type or area it belongs to, or if it got loaded
  * from an external source.
  * @return Whether it was successful.
  */
 bool ScriptActionDef::loadFromDataNode(
-    DataNode* node, ScriptDef* scriptDef, bool isDataNodeRelevant
+    DataNode* node, ScriptDef* scriptDef,
+    const vector<ScriptActionDef*>& actionList, bool isDataNodeRelevant
 ) {
     actionType = nullptr;
     if(isDataNodeRelevant) {
@@ -451,11 +475,25 @@ bool ScriptActionDef::loadFromDataNode(
     
     //Check if this action is allowed in the current context.
     if(!scriptDef->checkContextFlags(actionType->contexts)) {
-        game.errors.report(
-            "The action \"" + name + "\" can't be used in an " +
-            scriptDef->getContextName() + " script context!", node
-        );
-        return false;
+        bool canUse = false;
+        if(hasFlag(actionType->contexts, getIdxBitmask(SCRIPT_CONTEXT_MOB))) {
+            if(
+                !actionList.empty() &&
+                actionList.back()->actionType->type ==
+                SCRIPT_ACTION_RUN_NEXT_ACTION_AS
+            ) {
+                //If it can be used in a mob context and we're specifying
+                //a surrogate mob just before, then yes, we can run it.
+                canUse = true;
+            }
+        }
+        if(!canUse) {
+            game.errors.report(
+                "The action \"" + name + "\" can't be used in an " +
+                scriptDef->getContextName() + " script context!", node
+            );
+            return false;
+        }
     }
     
     //Check if there are too many or too few arguments.
