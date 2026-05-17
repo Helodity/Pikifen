@@ -1460,7 +1460,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
             }
             if(m2Ptr->storedInsideAnother == mPtr) {
                 mPtr->release(m2Ptr);
-                m2Ptr->storedInsideAnother = nullptr;
+                m2Ptr->stopBeingStored();
             }
             if(m2Ptr->carryInfo) {
                 forIdx(c, m2Ptr->carryInfo->spotInfo) {

@@ -3306,18 +3306,7 @@ void Mob::releaseStoredMobs() {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         if(mPtr->storedInsideAnother == this) {
             release(mPtr);
-            mPtr->storedInsideAnother = nullptr;
-            mPtr->timeAlive = 0.0f;
-            float a = game.rng.f(0, TAU);
-            const float momentum = 100;
-            mPtr->speed.x = cos(a) * momentum;
-            mPtr->speed.y = sin(a) * momentum;
-            mPtr->speedZ = momentum * 7;
-            
-            if(mPtr->type->category->id == MOB_CATEGORY_LEADERS) {
-                //A new leader is accessible.
-                game.states.gameplay->updateAvailableLeaders();
-            }
+            mPtr->stopBeingStored();
         }
     }
 }
@@ -3674,6 +3663,25 @@ void Mob::startDyingClassSpecifics() {
  */
 void Mob::startHeightEffect() {
     heightEffectPivot = bottomZ;
+}
+
+
+/**
+ * @brief Makes a mob stop being stored inside the mob it is stored.
+ */
+void Mob::stopBeingStored() {
+    storedInsideAnother = nullptr;
+    timeAlive = 0.0f;
+    float a = game.rng.f(0, TAU);
+    const float momentum = 100.0f;
+    speed.x = cos(a) * momentum;
+    speed.y = sin(a) * momentum;
+    speedZ = momentum * 7.0f;
+    
+    if(type->category->id == MOB_CATEGORY_LEADERS) {
+        //A new leader is accessible.
+        game.states.gameplay->updateAvailableLeaders();
+    }
 }
 
 

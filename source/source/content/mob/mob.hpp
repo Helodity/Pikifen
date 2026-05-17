@@ -431,6 +431,7 @@ public:
     void storeMobInside(Mob* m);
     void releaseChompedPikmin();
     void releaseStoredMobs();
+    void stopBeingStored();
     Mob* spawn(const MobType::SpawnInfo* info, MobType* typePtr = nullptr);
     void startDying();
     void finishDying();
