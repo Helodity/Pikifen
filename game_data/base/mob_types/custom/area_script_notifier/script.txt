@@ -1,0 +1,21 @@
+first_state = idling
+
+init {
+    set_var msg_prefix power
+}
+
+script {
+    idling {
+        on_receive_message {
+            get_event_info msg message
+            get_list_item temp $msg 1
+
+            if $temp = power
+                get_list_item power $msg 2
+                set_var msg $msg_prefix
+                add_list_item msg $msg $power
+                send_message_to_area $msg
+            end_if
+        }
+    }
+}

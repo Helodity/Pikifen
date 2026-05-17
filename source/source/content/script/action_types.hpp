@@ -142,6 +142,9 @@ enum SCRIPT_ACTION {
     //Get mission metric value.
     SCRIPT_ACTION_GET_MISSION_METRIC,
     
+    //Get list of mob IDs with a matching script var.
+    SCRIPT_ACTION_GET_MOB_IDS_WITH_VAR,
+    
     //Get information about a mob.
     SCRIPT_ACTION_GET_MOB_INFO,
     
@@ -944,6 +947,7 @@ void getListItemNumber(ScriptActionInstRunData& data);
 void getListSize(ScriptActionInstRunData& data);
 void getMiscInfo(ScriptActionInstRunData& data);
 void getMissionMetric(ScriptActionInstRunData& data);
+void getMobIdsWithVar(ScriptActionInstRunData& data);
 void getMobInfo(ScriptActionInstRunData& data);
 void getFocusVar(ScriptActionInstRunData& data);
 void getRandomFloat(ScriptActionInstRunData& data);

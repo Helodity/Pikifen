@@ -1797,6 +1797,16 @@ void initScriptActionTypes() {
         ScriptActionRunners::getMissionMetric
     );
     
+    //Get mob IDs with var.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("var", ptString);
+    queueParam("value", ptString, pfOpt, "");
+    commitAction(
+        SCRIPT_ACTION_GET_MOB_IDS_WITH_VAR,
+        "get_mob_ids_with_var",
+        ScriptActionRunners::getMobIdsWithVar
+    );
+    
     //Get mob info.
     queueParam("destination var name", ptString, pfConst);
     queueParam("target", ptString, pfConst);

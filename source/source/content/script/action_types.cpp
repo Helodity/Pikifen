@@ -531,7 +531,7 @@ void ScriptActionRunners::followPathToAbsolute(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the angle obtaining script action type.
+ * @brief Code for the angle retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -555,7 +555,7 @@ void ScriptActionRunners::getAngle(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the angle closest difference obtaining script action type.
+ * @brief Code for the angle closest difference retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -577,7 +577,7 @@ void ScriptActionRunners::getAngleCwDiff(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the angle smallest difference obtaining script action type.
+ * @brief Code for the angle smallest difference retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -600,7 +600,7 @@ void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the area info obtaining script action type.
+ * @brief Code for the area info retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -642,7 +642,7 @@ void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the coordinate from angle obtaining script action type.
+ * @brief Code for the coordinate from angle retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -668,7 +668,7 @@ void ScriptActionRunners::getCoordinatesFromAngle(
 
 
 /**
- * @brief Code for the distance obtaining script action type.
+ * @brief Code for the distance retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -694,7 +694,7 @@ void ScriptActionRunners::getDistance(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the event info obtaining script action type.
+ * @brief Code for the event info retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -816,7 +816,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the floor Z obtaining script action type.
+ * @brief Code for the floor Z retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -969,7 +969,7 @@ void ScriptActionRunners::getListSize(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the misc info obtaining script action type.
+ * @brief Code for the misc info retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -1027,7 +1027,7 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the mission metric obtaining script action type.
+ * @brief Code for the mission metric retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -1070,7 +1070,37 @@ void ScriptActionRunners::getMissionMetric(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the mob info obtaining script action type.
+ * @brief Code for the var mob ID retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getMobIdsWithVar(
+    ScriptActionInstRunData& data
+) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& varArg = data.args[1];
+    const string& valueArg = data.args[2];
+    
+    //Main logic.
+    vector<string> idsStrs;
+    forIdx(m, game.states.gameplay->mobs.all) {
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
+        auto it = mPtr->scriptVM.vars.find(varArg);
+        if(it == mPtr->scriptVM.vars.end()) continue;
+        if(!valueArg.empty()) {
+            if(it->second != valueArg) continue;
+        }
+        idsStrs.push_back(i2s(mPtr->id));
+    }
+    
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = join(idsStrs, ",");;
+}
+
+
+/**
+ * @brief Code for the mob info retrieval script action type.
  *
  * @param data Data about the action call.
  */

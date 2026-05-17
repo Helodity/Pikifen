@@ -5,6 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    > If you free a leader by sucking the object they are in into the ship, you are unable to swap to them --Nugget
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
@@ -28,10 +29,6 @@ Next tasks (roughly sorted most important first)
                     Degrees to radians and vice-versa?
                     Bitmask set, unset, test?
                     Min and max?
-            Setting the camera position and zoom
-            Music control
-            Inventory control
-            Display something on the HUD
     New sounds
         Pikmin or enemy getting frozen
         Glow Pikmin teleport
@@ -596,6 +593,9 @@ Misc things (so I don't forget)
         New actions
             [NEEDS BRAINSTORMING] Logic for an arachnorb to turn to/chase the focused mob? (thanks Neo)
             [NEEDS BRAINSTORMING] Logic for arachnorbs to move freely, instead of only forward? (thanks Neo)
+            Setting the camera position and zoom
+            Music control
+            Inventory control
     Upgrades
         All of these can be toggled on or off in a mission, and can be unlocked in Story Mode
             In the mission select menu, probably show this as icons, and only for the collected ones, so it's not a wall of text
