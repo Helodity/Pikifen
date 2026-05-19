@@ -2268,16 +2268,18 @@ void GameplayState::processMobTouches(
                 if(h2Ptr->type == HITBOX_TYPE_DISABLED) continue;
                 
                 //Get the real hitbox locations.
+                float m1HZ;
                 Point m1HPos =
                     h1Ptr->getCurPos(
-                        mPtr->center, mPtr->angleCos, mPtr->angleSin
+                        mPtr->center, mPtr->bottomZ,
+                        mPtr->angleCos, mPtr->angleSin, &m1HZ
                     );
+                float m2HZ;
                 Point m2HPos =
                     h2Ptr->getCurPos(
-                        m2Ptr->center, m2Ptr->angleCos, m2Ptr->angleSin
+                        m2Ptr->center, m2Ptr->bottomZ,
+                        m2Ptr->angleCos, m2Ptr->angleSin, &m2HZ
                     );
-                float m1HZ = mPtr->bottomZ + h1Ptr->bottomZ;
-                float m2HZ = m2Ptr->bottomZ + h2Ptr->bottomZ;
                 
                 bool collided = false;
                 

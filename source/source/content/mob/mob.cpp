@@ -914,7 +914,11 @@ void Mob::calculateAttackKnockback(
             *outKbExists = true;
             *outKbStrength = attackH->knockbackStrength;
             *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
-            *outKbAngle = getAngle(attackH->getCurPos(center, angle), victim->center);
+            *outKbAngle =
+                getAngle(
+                    attackH->getCurPos(center, bottomZ, angle, nullptr),
+                    victim->center
+                );
             break;
         } case KNOCKBACK_TYPE_DIRECTIONAL: {
             *outKbExists = true;
@@ -1707,8 +1711,12 @@ void Mob::doAttackEffects(
     }
     
     //Calculate the particle's final position.
-    Point attackHPos = attackH->getCurPos(attacker->center, attacker->angle);
-    Point victimHPos = victimH->getCurPos(center, angle);
+    Point attackHPos =
+        attackH->getCurPos(
+            attacker->center, attacker->bottomZ, attacker->angle, nullptr
+        );
+    Point victimHPos =
+        victimH->getCurPos(center, bottomZ, angle, nullptr);
     
     float edgesD;
     float aToVAngle;
@@ -1800,7 +1808,8 @@ void Mob::drawLimb() {
             parent->m->getHitbox(
                 parent->limbParentBodyPart
             )->getCurPos(
-                parent->m->center, parent->m->angleCos, parent->m->angleSin
+                parent->m->center, parent->m->bottomZ,
+                parent->m->angleCos, parent->m->angleSin, nullptr
             );
     }
     
@@ -1811,7 +1820,7 @@ void Mob::drawLimb() {
         childEnd =
             getHitbox(
                 parent->limbChildBodyPart
-            )->getCurPos(center, angleCos, angleSin);
+            )->getCurPos(center, bottomZ, angleCos, angleSin, nullptr);
     }
     
     float p2cAngle = getAngle(parentEnd, childEnd);
@@ -2076,7 +2085,7 @@ Hitbox* Mob::getClosestHitbox(
         
         float thisD =
             Distance(
-                hPtr->getCurPos(center, angleCos, angleSin), p
+                hPtr->getCurPos(center, bottomZ, angleCos, angleSin, nullptr), p
             ).toFloat() - hPtr->radius;
         if(closestHitbox == nullptr || thisD < closestHitboxDist) {
             closestHitboxDist = thisD;
@@ -2263,8 +2272,9 @@ void Mob::getHitboxHoldPoint(
     const Mob* mobToHold, const Hitbox* hPtr,
     float* offsetDist, float* offsetAngle, float* verticalDist
 ) const {
-    Point actualHPos = hPtr->getCurPos(center, angleCos, angleSin);
-    float actualHZ = bottomZ + hPtr->bottomZ;
+    float actualHZ;
+    Point actualHPos =
+        hPtr->getCurPos(center, bottomZ, angleCos, angleSin, &actualHZ);
     
     Point posDif = mobToHold->center - actualHPos;
     coordinatesToAngle(posDif, offsetAngle, offsetDist);
@@ -4613,10 +4623,18 @@ bool Mob::tickTrackRide() {
         trackInfo->m->getHitbox(
             trackInfo->checkpoints[trackInfo->curCpIdx + 1]
         );
+    float curCpZ;
     Point curCpPos =
-        curCp->getCurPos(trackInfo->m->center, trackInfo->m->angle);
+        curCp->getCurPos(
+            trackInfo->m->center, trackInfo->m->bottomZ,
+            trackInfo->m->angle, &curCpZ
+        );
+    float nextCpZ;
     Point nextCpPos =
-        nextCp->getCurPos(trackInfo->m->center, trackInfo->m->angle);
+        nextCp->getCurPos(
+            trackInfo->m->center, trackInfo->m->bottomZ,
+            trackInfo->m->angle, &nextCpZ
+        );
         
     Point destXy(
         interpolateNumber(
@@ -4631,9 +4649,7 @@ bool Mob::tickTrackRide() {
     
     float destZ =
         interpolateNumber(
-            trackInfo->curCpProgress, 0.0f, 1.0f,
-            trackInfo->m->bottomZ + curCp->bottomZ,
-            trackInfo->m->bottomZ + nextCp->bottomZ
+            trackInfo->curCpProgress, 0.0f, 1.0f, curCpZ, nextCpZ
         );
         
     float destAngle = getAngle(curCpPos, nextCpPos);

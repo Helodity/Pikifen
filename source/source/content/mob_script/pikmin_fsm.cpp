@@ -3363,9 +3363,10 @@ void PikminFsm::goToOnion(ScriptVM* scriptVM, void* info1, void* info2) {
             nestPtr->nestType->legBodyParts[pikPtr->tempI * 2 + 1]
         );
     Point coords =
-        nestPtr->mPtr->getHitbox(
-            legFootBPIdx
-        )->getCurPos(nestPtr->mPtr->center, nestPtr->mPtr->angle);
+        nestPtr->mPtr->getHitbox(legFootBPIdx)->getCurPos(
+            nestPtr->mPtr->center, nestPtr->mPtr->bottomZ,
+            nestPtr->mPtr->angle, nullptr
+        );
         
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);

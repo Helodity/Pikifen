@@ -920,7 +920,7 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
             );
         Point spawnCoords =
             mPtr->getHitbox(legHoleBPIdx)->getCurPos(
-                mPtr->center, mPtr->angle
+                mPtr->center, mPtr->bottomZ, mPtr->angle, nullptr
             );
         float spawnAngle =
             getAngle(mPtr->center, spawnCoords);

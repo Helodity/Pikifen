@@ -64,7 +64,7 @@ public:
     unsigned int nSpits = 0;
     
     //The Onion's alpha [0 - 1].
-    float seethrough = 1.0f;
+    float seeThrough = 1.0f;
     
     //How many objects are currently being beamed?
     size_t mobsBeingBeamed = 0;
@@ -80,7 +80,7 @@ public:
     void drawMob() override;
     void generate();
     void readScriptVars(const ScriptVarReader& svr) override;
-    void spitPikminSeed(size_t typeIdx);
+    void spit(size_t typeIdx);
     void startGenerating();
     void stopGenerating();
     

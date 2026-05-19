@@ -124,7 +124,7 @@ void Onion::drawMob() {
         (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
-    eff.tintColor.a *= seethrough;
+    eff.tintColor.a *= seeThrough;
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
@@ -173,7 +173,7 @@ void Onion::generate() {
             
         } else {
             //Don't generate inside, just spit the seed out directly.
-            spitPikminSeed(t);
+            spit(t);
             
         }
         
@@ -201,14 +201,14 @@ void Onion::readScriptVars(const ScriptVarReader& svr) {
  *
  * @param typeIdx Index of the Pikmin type in the nest's data.
  */
-void Onion::spitPikminSeed(size_t typeIdx) {
+void Onion::spit(size_t typeIdx) {
     if(
         game.states.gameplay->mobs.pikmin.size() >=
         game.curArea->getMaxPikminInField()
     ) {
         return;
     }
-    ::spitPikminSeed(
+    spitPikminSeed(
         center, bottomZ + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[typeIdx],
         nSpits, ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
         ONION::SPIT_V_SPEED
@@ -274,16 +274,16 @@ void Onion::tickClassSpecifics(float deltaT) {
         }
     }
     
-    if(seethrough != finalAlpha) {
-        if(finalAlpha < seethrough) {
-            seethrough =
+    if(seeThrough != finalAlpha) {
+        if(finalAlpha < seeThrough) {
+            seeThrough =
                 std::max(
-                    finalAlpha, seethrough - ONION::FADE_SPEED * deltaT
+                    finalAlpha, seeThrough - ONION::FADE_SPEED * deltaT
                 );
         } else {
-            seethrough =
+            seeThrough =
                 std::min(
-                    finalAlpha, seethrough + ONION::FADE_SPEED * deltaT
+                    finalAlpha, seeThrough + ONION::FADE_SPEED * deltaT
                 );
         }
     }
@@ -311,7 +311,7 @@ void Onion::tickClassSpecifics(float deltaT) {
                     nest->requestPikmin(t, 1, nullptr);
                 }
             } else {
-                spitPikminSeed(t);
+                spit(t);
             }
         }
     }
