@@ -142,11 +142,11 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
     
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    size_t seeds = 0;
+    size_t nutrients = 0;
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
-        seeds = ((Enemy*) delivery)->eneType->pikminSeeds;
+        nutrients = ((Enemy*) delivery)->eneType->pikminSeeds;
         
         game.states.gameplay->enemyCollectionPointsObtained +=
             ((Enemy*) delivery)->eneType->points;
@@ -159,9 +159,9 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
             pelPtr->pelType->pikType ==
             delivery->deliveryInfo->intendedPikType
         ) {
-            seeds = pelPtr->pelType->matchSeeds;
+            nutrients = pelPtr->pelType->matchNutrients;
         } else {
-            seeds = pelPtr->pelType->nonMatchSeeds;
+            nutrients = pelPtr->pelType->nonMatchNutrients;
         }
         break;
     } default: {
@@ -188,7 +188,11 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
     
     oniPtr->stopGenerating();
     oniPtr->generationDelayTimer.start();
-    oniPtr->generationQueue[typeIdx] += seeds;
+    oniPtr->nutrients[typeIdx] += nutrients;
+    while(oniPtr->nutrients[typeIdx] >= oniPtr->oniType->nutrientsPerSeed) {
+        oniPtr->generationQueue[typeIdx]++;
+        oniPtr->nutrients[typeIdx] -= oniPtr->oniType->nutrientsPerSeed;
+    }
     
     ParticleGenerator pg =
         standardParticleGenSetup(

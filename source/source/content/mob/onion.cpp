@@ -91,6 +91,7 @@ Onion::Onion(const Point& center, OnionType* type, float angle) :
     
     forIdx(t, oniType->nest->pikTypes) {
         generationQueue.push_back(0);
+        nutrients.push_back(0);
     }
 }
 

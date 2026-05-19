@@ -60,6 +60,9 @@ public:
     //Time left until it generates the next Pikmin in the queue.
     Timer nextGenerationTimer = Timer(ONION::NEXT_GENERATION_INTERVAL);
     
+    //Nutrients currently inside, in queue for generating a seed.
+    vector<size_t> nutrients;
+    
     //Number of seeds it has spit so far.
     unsigned int nSpits = 0;
     

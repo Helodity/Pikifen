@@ -42,7 +42,7 @@ enum PELLET_STATE {
 /**
  * @brief A pellet type.
  *
- * Contains info on how many seeds the Onion should receive,
+ * Contains info on how many nutrients the Onion should receive,
  * depending on whether it matches the Pikmin type or not.
  */
 class PelletType : public MobType {
@@ -57,15 +57,15 @@ public:
     //Number on the pellet, and hence, its weight.
     size_t number = 0;
     
-    //Number of seeds given out if the pellet's taken to a matching Onion.
-    size_t matchSeeds = 0;
+    //Number of nutrients given out if the pellet's taken to a matching Onion.
+    size_t matchNutrients = 0;
     
-    //Number of seeds given out if the pellet's taken to a non-matching Onion.
-    size_t nonMatchSeeds = 0;
+    //Number of nutrients given out if the pellet's taken to a non-matching Onion.
+    size_t nonMatchNutrients = 0;
     
     //Bitmap to use to represent the number on the pellet.
     ALLEGRO_BITMAP* bmpNumber = nullptr;
-
+    
     //Whether to draw the number on it.
     bool drawNumber = true;
     
