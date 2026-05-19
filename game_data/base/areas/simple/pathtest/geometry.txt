@@ -1,0 +1,80 @@
+vertexes{
+	v=-544.0000 -448.0000
+	v=608.0000 -448.0000
+	v=608.0000 448.0000
+	v=-544.0000 448.0000
+}
+edges{
+	e{
+		s=-1 0
+		v=3 0
+	}
+	e{
+		s=-1 0
+		v=0 1
+	}
+	e{
+		s=-1 0
+		v=1 2
+	}
+	e{
+		s=-1 0
+		v=2 3
+	}
+}
+sectors{
+	s{
+		z=0.0000
+		texture=textures/grass_dark
+	}
+}
+mobs{
+	leader{
+		type=olimar
+		p=0.0000 0.0000
+	}
+	ship{
+		type=hocotate_ship
+		p=-256.0000 -192.0000
+	}
+	ship{
+		type=hocotate_ship
+		p=512.0000 -192.0000
+		angle=3.1416
+	}
+	custom{
+		type=bramble_gate_white
+		p=352.0000 -192.0000
+	}
+	resource{
+		type=chocolate_square
+		p=32.0000 -192.0000
+	}
+	resource{
+		type=chocolate_square
+		p=192.0000 -192.0000
+	}
+}
+path_stops{
+	s{
+		pos=416.0000 -192.0000
+		links{
+			l=1
+		}
+	}
+	s{
+		pos=192.0000 -192.0000
+		links{
+			l=0
+			l=2
+		}
+	}
+	s{
+		pos=-160.0000 -192.0000
+		links{
+			l=1
+		}
+	}
+}
+tree_shadows
+regions

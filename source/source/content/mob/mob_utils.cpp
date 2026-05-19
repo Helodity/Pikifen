@@ -803,7 +803,7 @@ Parent::Parent(Mob* m) :
  * @param settings Settings about how the path should be followed.
  */
 Path::Path(
-    Mob* m,
+    const Mob* m,
     const PathFollowSettings& settings
 ) :
     m(m),

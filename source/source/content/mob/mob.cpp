@@ -1150,14 +1150,48 @@ Ship* Mob::calculateCarryingShip() const {
     //Go to the nearest ship.
     Ship* closestShip = nullptr;
     Distance closestShipDist;
+    int highestPathPriority = 0;
     
     forIdx(s, game.states.gameplay->mobs.ships) {
         Ship* sPtr = game.states.gameplay->mobs.ships[s];
+        //Paths dont contain a built in full length checker.
         Distance d(center, sPtr->controlPointFinalPos);
-        
-        if(!closestShip || d < closestShipDist) {
+
+        //Basic Settings
+        PathFollowSettings settings = PathFollowSettings();
+        settings.targetMob = sPtr;
+
+        PATH_RESULT pathResults = Path(this, settings).result;
+        int pathPriority;
+        switch (pathResults)
+        {
+        case PATH_RESULT_NORMAL_PATH:
+        case PATH_RESULT_PATH_WITH_SINGLE_STOP:
+        case PATH_RESULT_DIRECT:
+        case PATH_RESULT_DIRECT_NO_STOPS:
+        case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS:
+            //Complete access
+            pathPriority = 2;
+            break;
+        case PATH_RESULT_PATH_WITH_OBSTACLES:
+            //Obstacles but reachable
+            pathPriority = 1;
+            break;
+        default:
+            //Inaccessible
+            pathPriority = 0;
+        }
+
+        if(
+            !closestShip || //If there is no ship, always set it
+            (highestPathPriority < pathPriority) || //If the current ship is more accessible, go to that one
+            (d < closestShipDist && (highestPathPriority == pathPriority)) //If the ship is closer go to that one
+        )
+            {
+
             closestShip = sPtr;
             closestShipDist = d;
+            highestPathPriority = pathPriority;
         }
     }
     return closestShip;
