@@ -16,6 +16,7 @@
 #include "../mob/onion.hpp"
 #include "../mob/pellet.hpp"
 #include "../other/particle.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM
@@ -39,8 +40,14 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(GenMobFsm::beAttacked);
+        }
         efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dead");
         }
     }
     
@@ -54,8 +61,14 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(GenMobFsm::beAttacked);
+        }
         efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStopGenerating);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dead");
         }
     }
     
@@ -72,8 +85,20 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
         }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(GenMobFsm::beAttacked);
+        }
         efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dead");
+        }
+    }
+    
+    efc.newState("dead", ONION_STATE_DEAD); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
+            efc.run(OnionFsm::die);
         }
     }
     
@@ -126,6 +151,23 @@ void OnionFsm::checkStopGenerating(
     if(*msg == "stopped_generation") {
         scriptVM->fsm.setState(ONION_STATE_STOPPING_GENERATION);
     }
+}
+
+
+/**
+ * @brief When an Onion dies.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Pointer to the script message received.
+ * @param info2 Unused.
+ */
+void OnionFsm::die(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
+    
+    oniPtr->startDying();
+    oniPtr->activated = false;
 }
 
 

@@ -29,6 +29,9 @@ enum ONION_STATE {
     //Stopped generating Pikmin.
     ONION_STATE_STOPPING_GENERATION,
     
+    //Dead.
+    ONION_STATE_DEAD,
+    
     //Total amount of Onion object states.
     N_ONION_STATES,
     
