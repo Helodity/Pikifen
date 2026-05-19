@@ -192,10 +192,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\*.h" />
-    <ClInclude Include="..\source\*\*.h" />
-    <ClInclude Include="..\source\*\*\*.h" />
-    <ClInclude Include="..\source\*\*\*\*.h" />
+    <ClInclude Include="..\source\*.hpp" />
+    <ClInclude Include="..\source\*\*.hpp" />
+    <ClInclude Include="..\source\*\*\*.hpp" />
+    <ClInclude Include="..\source\*\*\*\*.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\*.cpp" />

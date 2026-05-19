@@ -1149,32 +1149,31 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
 Ship* Mob::calculateCarryingShip() const {
     //Go to the nearest ship.
     Ship* closestShip = nullptr;
-    Distance closestShipDist;
+    float closestShipDist;
     int highestPathPriority = 0;
     
     forIdx(s, game.states.gameplay->mobs.ships) {
         Ship* sPtr = game.states.gameplay->mobs.ships[s];
-        //Paths dont contain a built in full length checker.
-        Distance d(center, sPtr->controlPointFinalPos);
 
-        //Basic Settings
+        //Path setup
         PathFollowSettings settings = PathFollowSettings();
         settings.targetMob = sPtr;
+        settings.targetPoint = sPtr->controlPointFinalPos;
+        Path path = Path(this, settings);
 
-        PATH_RESULT pathResults = Path(this, settings).result;
         int pathPriority;
-        switch (pathResults)
+        switch (path.result)
         {
         case PATH_RESULT_NORMAL_PATH:
         case PATH_RESULT_PATH_WITH_SINGLE_STOP:
         case PATH_RESULT_DIRECT:
         case PATH_RESULT_DIRECT_NO_STOPS:
         case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS:
-            //Complete access
+            //Currently accessible
             pathPriority = 2;
             break;
         case PATH_RESULT_PATH_WITH_OBSTACLES:
-            //Obstacles but reachable
+            //Can be accessed.
             pathPriority = 1;
             break;
         default:
@@ -1182,15 +1181,12 @@ Ship* Mob::calculateCarryingShip() const {
             pathPriority = 0;
         }
 
-        if(
-            !closestShip || //If there is no ship, always set it
-            (highestPathPriority < pathPriority) || //If the current ship is more accessible, go to that one
-            (d < closestShipDist && (highestPathPriority == pathPriority)) //If the ship is closer go to that one
-        )
-            {
-
+        if(!closestShip || //No current target, set this to target.
+            highestPathPriority < pathPriority || //Higher priority, set this to target.
+            (highestPathPriority == pathPriority && path.totalDistance < closestShipDist) //Same priority, set if closer.
+        ) {
             closestShip = sPtr;
-            closestShipDist = d;
+            closestShipDist = path.totalDistance;
             highestPathPriority = pathPriority;
         }
     }
