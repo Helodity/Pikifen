@@ -68,6 +68,7 @@ Onion::Onion(const Point& center, OnionType* type, float angle) :
     oniType(type) {
     
     nest = new PikminNest(this, oniType->nest);
+    nest->nSpitsPtr = &nSpits;
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.

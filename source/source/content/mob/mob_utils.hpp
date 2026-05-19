@@ -695,6 +695,9 @@ struct PikminNestType {
     //Speed at which Pikmin exit the nest.
     float pikminExitSpeed = 2.0f;
     
+    //Are exiting Pikmin spat out, or do they slide down a leg?
+    bool pikminExitSpat = false;
+    
     //Whether it has a menu that can be interacted with by leaders.
     bool hasMenu = true;
     
@@ -742,6 +745,9 @@ struct PikminNest {
     
     //Time left until it can eject the next Pikmin in the call queue.
     float nextCallTime = 0.0f;
+    
+    //Pointer to the number of spits so far.
+    unsigned int* nSpitsPtr = nullptr;
     
     
     //--- Public function declarations ---
