@@ -462,9 +462,10 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                             clickedELink->link1, clickedELink->link2,
                             snapPoint(game.editorsView.mouseCursorWorldPos)
                         );
-                    pathLinkSelection.setSingle(
+                    pathStopSelection.setSingle(
                         game.curArea->findPathStopIdx(newStop)
                     );
+                    pathLinkSelection.clear();
                     updateSelectionRequirements();
                     highlightedPathStop = newStop;
                     doFakeClick = true;
