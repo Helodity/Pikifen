@@ -90,6 +90,9 @@ public:
     //Radius of the area where a carried mob can be delivered.
     float deliveryAreaRadius = 0.0f;
     
+    //Whether it can turn see-through.
+    bool canTurnSeeThrough = true;
+    
     
     //--- Public function declarations ---
     
