@@ -29,6 +29,9 @@ enum ONION_STATE {
     //Stopped generating Pikmin.
     ONION_STATE_STOPPING_GENERATION,
     
+    //Dead.
+    ONION_STATE_DEAD,
+    
     //Total amount of Onion object states.
     N_ONION_STATES,
     
@@ -68,6 +71,9 @@ public:
     
     //Whether it ejects seeds or fully-formed Pikmin.
     bool ejectGrownPikmin = false;
+    
+    //Number of nutrients required to form one Pikmin.
+    size_t nutrientsPerSeed = 1;
     
     //Sound data index for the beam sound. Cache for performance.
     size_t soundBeamIdx = INVALID;

@@ -918,9 +918,10 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
             mPtr->anim.animDb->findBodyPart(
                 nestType->legBodyParts[legIdx * 2 + 1]
             );
+        float spawnZ;
         Point spawnCoords =
             mPtr->getHitbox(legHoleBPIdx)->getCurPos(
-                mPtr->center, mPtr->angle
+                mPtr->center, mPtr->bottomZ, mPtr->angle, &spawnZ
             );
         float spawnAngle =
             getAngle(mPtr->center, spawnCoords);
@@ -934,20 +935,37 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
                 "maturity=" + i2s(curM)
             );
             
-        //Set its data to start sliding.
-        newPikmin->scriptVM.fsm.setState(
-            PIKMIN_STATE_LEAVING_ONION, (void*) this
-        );
-        vector<size_t> checkpoints;
-        checkpoints.push_back(legHoleBPIdx);
-        checkpoints.push_back(legFootBPIdx);
-        newPikmin->trackInfo =
-            new TrackRideInfo(
-            mPtr, checkpoints, nestType->pikminExitSpeed
-        );
+        //Set its data to start sliding or to be spat out.
+        if(!nestType->pikminExitSpat) {
+            newPikmin->scriptVM.fsm.setState(
+                PIKMIN_STATE_LEAVING_ONION, (void*) this
+            );
+            vector<size_t> checkpoints;
+            checkpoints.push_back(legHoleBPIdx);
+            checkpoints.push_back(legFootBPIdx);
+            newPikmin->trackInfo =
+                new TrackRideInfo(
+                mPtr, checkpoints, nestType->pikminExitSpeed
+            );
+            
+        } else {
+            newPikmin->scriptVM.fsm.setState(PIKMIN_STATE_THROWN);
+            newPikmin->setAnimation(PIKMIN_ANIM_THROWN);
+            getPikminSpitData(
+                nSpitsPtr ? *nSpitsPtr : 0,
+                ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
+                &newPikmin->angle, &newPikmin->speed
+            );
+            newPikmin->intendedTurnAngle = newPikmin->angle;
+            newPikmin->bottomZ = spawnZ;
+            newPikmin->speedZ = ONION::SPIT_V_SPEED;
+            if(nSpitsPtr) (*nSpitsPtr)++;
+        }
+        
+        //Set some other important data.
         newPikmin->leaderToReturnTo = callingLeader;
         
-        //Sound.
+        //Play the sound.
         mPtr->playSound(nestType->soundPikminExitIdx);
         
         return true;
@@ -1167,6 +1185,7 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     nRS.set("leg_body_parts", legsStr, &legsNode);
     nRS.set("pikmin_types", pikTypesStr, &pikTypesNode);
     nRS.set("pikmin_enter_speed", pikminEnterSpeed);
+    nRS.set("pikmin_exit_spat", pikminExitSpat);
     nRS.set("pikmin_exit_speed", pikminExitSpeed);
     
     legBodyParts = semicolonListToVector(legsStr);

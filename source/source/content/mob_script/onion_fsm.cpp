@@ -16,6 +16,7 @@
 #include "../mob/onion.hpp"
 #include "../mob/pellet.hpp"
 #include "../other/particle.hpp"
+#include "gen_mob_fsm.hpp"
 
 
 #pragma region FSM
@@ -39,8 +40,14 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(GenMobFsm::beAttacked);
+        }
         efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dead");
         }
     }
     
@@ -54,8 +61,14 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(GenMobFsm::beAttacked);
+        }
         efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStopGenerating);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dead");
         }
     }
     
@@ -72,8 +85,20 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
         }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(GenMobFsm::beAttacked);
+        }
         efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dead");
+        }
+    }
+    
+    efc.newState("dead", ONION_STATE_DEAD); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
+            efc.run(OnionFsm::die);
         }
     }
     
@@ -130,6 +155,23 @@ void OnionFsm::checkStopGenerating(
 
 
 /**
+ * @brief When an Onion dies.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Pointer to the script message received.
+ * @param info2 Unused.
+ */
+void OnionFsm::die(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
+    
+    oniPtr->startDying();
+    oniPtr->activated = false;
+}
+
+
+/**
  * @brief When an Onion finishes receiving a mob carried by Pikmin.
  *
  * @param scriptVM The script VM responsible.
@@ -142,11 +184,11 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
     
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    size_t seeds = 0;
+    size_t nutrients = 0;
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
-        seeds = ((Enemy*) delivery)->eneType->pikminSeeds;
+        nutrients = ((Enemy*) delivery)->eneType->pikminSeeds;
         
         game.states.gameplay->enemyCollectionPointsObtained +=
             ((Enemy*) delivery)->eneType->points;
@@ -159,9 +201,9 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
             pelPtr->pelType->pikType ==
             delivery->deliveryInfo->intendedPikType
         ) {
-            seeds = pelPtr->pelType->matchSeeds;
+            nutrients = pelPtr->pelType->matchNutrients;
         } else {
-            seeds = pelPtr->pelType->nonMatchSeeds;
+            nutrients = pelPtr->pelType->nonMatchNutrients;
         }
         break;
     } default: {
@@ -188,7 +230,11 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
     
     oniPtr->stopGenerating();
     oniPtr->generationDelayTimer.start();
-    oniPtr->generationQueue[typeIdx] += seeds;
+    oniPtr->nutrients[typeIdx] += nutrients;
+    while(oniPtr->nutrients[typeIdx] >= oniPtr->oniType->nutrientsPerSeed) {
+        oniPtr->generationQueue[typeIdx]++;
+        oniPtr->nutrients[typeIdx] -= oniPtr->oniType->nutrientsPerSeed;
+    }
     
     ParticleGenerator pg =
         standardParticleGenSetup(

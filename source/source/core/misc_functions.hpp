@@ -139,6 +139,11 @@ map<string, string> getVarMap(const string& varsString);
 string getEngineVersionString(
     bool includeInDev = false, bool includeDate = false
 );
+void getPikminSpitData(
+    uint32_t spitNr, float baseHorizontalSpeed,
+    float maxHorizontalSpeedDeviation, float* outAngle,
+    Point* outHorizontalSpeed
+);
 ALLEGRO_COLOR getWallShadowColor(Edge* ePtr);
 float getWallShadowLength(Edge* ePtr);
 vector<std::pair<int, string> > getWeatherTable(DataNode* node);

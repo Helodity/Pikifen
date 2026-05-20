@@ -556,6 +556,39 @@ Mob* getNextMobNearCursor(
 
 
 /**
+ * @brief Returns data about how a Pikmin should be spat out, normally from
+ * an Onion or converter.
+ * 
+ * @param spitNr Number of this spit. This gets hashed and used to determine the
+ * angle and horizontal speed of the spit.
+ * @param baseHorizontalSpeed Horizontal speed sans deviation.
+ * @param maxHorizontalSpeedDeviation Maximum horizontal speed deviation
+ * to add or remove from the base horizontal speed.
+ * @param outAngle The Pikmin's angle is returned here.
+ * @param outHorizontalSpeed The Pikmin's horizontal speed is returned here.
+ */
+void getPikminSpitData(
+    uint32_t spitNr, float baseHorizontalSpeed,
+    float maxHorizontalSpeedDeviation, float* outAngle,
+    Point* outHorizontalSpeed
+) {
+    uint32_t angleI = hashNr(spitNr);
+    uint32_t horizontalDevMultI = hashNr(spitNr + 1);
+    float angle = angleI / (float) UINT32_MAX;
+    angle *= TAU;
+    float horizontalDevMult = horizontalDevMultI / (float) UINT32_MAX;
+    horizontalDevMult = horizontalDevMult * 2.0f - 1.0f;
+    float horizontalSpeed =
+        baseHorizontalSpeed +
+        horizontalDevMult * maxHorizontalSpeedDeviation;
+        
+    *outAngle = angle;
+    outHorizontalSpeed->x = cos(angle) * horizontalSpeed;
+    outHorizontalSpeed->y = sin(angle) * horizontalSpeed;
+}
+
+
+/**
  * @brief Calculates the vertex info necessary to draw the throw preview line,
  * from a given start point to a given end point.
  *
@@ -1413,15 +1446,13 @@ void spitPikminSeed(
     uint32_t spitNr, float baseHorizontalSpeed,
     float maxHorizontalSpeedDeviation, float verticalSpeed
 ) {
-    uint32_t angleI = hashNr(spitNr);
-    uint32_t horizontalDevMultI = hashNr(spitNr + 1);
-    float angle = angleI / (float) UINT32_MAX;
-    angle *= TAU;
-    float horizontalDevMult = horizontalDevMultI / (float) UINT32_MAX;
-    horizontalDevMult = horizontalDevMult * 2.0f - 1.0f;
-    float horizontalSpeed =
-        baseHorizontalSpeed +
-        horizontalDevMult * maxHorizontalSpeedDeviation;
+    float angle;
+    Point horizontalSpeed;
+
+    getPikminSpitData(
+        spitNr, baseHorizontalSpeed, maxHorizontalSpeedDeviation,
+        &angle, &horizontalSpeed
+    );
         
     Pikmin* newPikmin =
         (
@@ -1432,8 +1463,7 @@ void spitPikminSeed(
             )
         );
     newPikmin->bottomZ = z;
-    newPikmin->speed.x = cos(angle) * horizontalSpeed;
-    newPikmin->speed.y = sin(angle) * horizontalSpeed;
+    newPikmin->speed = horizontalSpeed;
     newPikmin->speedZ = verticalSpeed;
     newPikmin->maturity = 0;
 }

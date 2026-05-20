@@ -52,9 +52,13 @@ void PelletType::loadCatProperties(DataNode* file) {
     string pikTypeStr;
     DataNode* pikTypeNode = nullptr;
     
+    //DEPRECATED in 1.2.0 by "match_nutrients" and "non_match_nutrients".
+    pRS.set("match_seeds", matchNutrients);
+    pRS.set("non_match_seeds", nonMatchNutrients);
+    
     pRS.set("draw_number", drawNumber);
-    pRS.set("match_seeds", matchSeeds);
-    pRS.set("non_match_seeds", nonMatchSeeds);
+    pRS.set("match_nutrients", matchNutrients);
+    pRS.set("non_match_nutrients", nonMatchNutrients);
     pRS.set("number", number);
     pRS.set("pikmin_type", pikTypeStr, &pikTypeNode);
     

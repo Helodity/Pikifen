@@ -23,9 +23,9 @@
 
     <h2 id="overview">Overview</h2>
 
-    <p>Each pellet object type can be bound to one type of Pikmin. Its color and look can be anything, though. That said, a pellet is forced to have a number drawn on top of it. Each pellet type is bound to one Pikmin type, and has data on how many seeds to give when the Pikmin type matches the Onion, and how many for when it doesn't.</p>
+    <p>Each pellet object type can be bound to one type of Pikmin. Its color and look can be anything, though. That said, a pellet is forced to have a number drawn on top of it. Each pellet type is bound to one Pikmin type, and has data on how many nutrients to give when the pellet's Pikmin type matches the Onion delivery's Pikmin type, and how many for when it doesn't. Once a given type has received enough nutrients (usually 1), a seed of that type will be generated.</p>
 
-    <p>Pellet type objects are hardcoded in the engine to be carriable, have a number displayed on top of them, have a number for Pikmin type match seeds, and a number for non-match seeds.</p>
+    <p>Pellet type objects are hardcoded in the engine to be carriable, have a number displayed on top of them, have a number for Pikmin type match nutrients, and a number for non-match nutrients.</p>
 
     <h2 id="props">Properties</h2>
 
@@ -65,14 +65,14 @@
         <td>0</td>
       </tr>
       <tr>
-        <td>match_seeds</td>
-        <td>How many seeds it gives to the Onion when the pellet's Pikmin type matches the Onion's.</td>
+        <td>match_nutrients</td>
+        <td>How many nutrients it gives to the Onion when the pellet's Pikmin type matches the Onion delivery's.</td>
         <td>Number</td>
         <td>0</td>
       </tr>
       <tr>
-        <td>non_match_seeds</td>
-        <td>How many seeds it gives to the Onion when the pellet's Pikmin type does not match the Onion's.</td>
+        <td>non_match_nutrients</td>
+        <td>How many nutrients it gives to the Onion when the pellet's Pikmin type does not match the Onion delivery's.</td>
         <td>Number</td>
         <td>0</td>
       </tr>

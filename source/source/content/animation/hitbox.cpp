@@ -54,12 +54,18 @@ Hitbox::Hitbox(
  * location and angle.
  *
  * @param mobPos The mob's position.
+ * @param mobBottomZ The mob's bottom Z coordinate.
  * @param mobAngle The angle the mob is facing.
+ * @param outZ If not nullptr, the Z coordinate is returned here.
  * @return The position.
  */
-Point Hitbox::getCurPos(const Point& mobPos, float mobAngle) const {
+Point Hitbox::getCurPos(
+    const Point& mobPos, float mobBottomZ, float mobAngle, float* outZ
+) const {
     float mobAngleCos = cos(mobAngle);
     float mobAngleSin = sin(mobAngle);
+    
+    if(outZ) *outZ = mobBottomZ + bottomZ;
     return
         Point(
             mobPos.x + (center.x * mobAngleCos - center.y * mobAngleSin),
@@ -75,13 +81,18 @@ Point Hitbox::getCurPos(const Point& mobPos, float mobAngle) const {
  * previously, use this function, since it's faster.
  *
  * @param mobPos The mob's position.
+ * @param mobBottomZ The mob's bottom Z coordinate.
  * @param mobAngleCos Cosine of the angle the mob is facing.
  * @param mobAngleSin Sine of the angle the mob is facing.
+ * @param outZ If not nullptr, the Z coordinate is returned here.
  * @return The position.
  */
 Point Hitbox::getCurPos(
-    const Point& mobPos, float mobAngleCos, float mobAngleSin
+    const Point& mobPos, float mobBottomZ,
+    float mobAngleCos, float mobAngleSin,
+    float* outZ
 ) const {
+    if(outZ) *outZ = mobBottomZ + bottomZ;
     return
         Point(
             mobPos.x + (center.x * mobAngleCos - center.y * mobAngleSin),
