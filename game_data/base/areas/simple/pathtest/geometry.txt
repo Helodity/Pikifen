@@ -35,7 +35,7 @@ mobs{
 	}
 	ship{
 		type=hocotate_ship
-		p=-256.0000 -192.0000
+		p=-352.0000 -192.0000
 	}
 	ship{
 		type=hocotate_ship
@@ -70,7 +70,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=-160.0000 -192.0000
+		pos=-128.0000 -192.0000
 		links{
 			l=1
 		}

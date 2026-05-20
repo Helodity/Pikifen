@@ -378,6 +378,7 @@ public:
     ) const;
     Onion* calculateCarryingOnion(PikminType** targetType) const;
     Ship* calculateCarryingShip() const;
+    Mob* calculateCarryingMob(const vector<Mob*> potentialMobs) const;
     bool calculateAttackDamage(
         Mob* victim, Hitbox* attackH, const Hitbox* victimH,
         float offenseMultiplier, float defenseMultiplier,
