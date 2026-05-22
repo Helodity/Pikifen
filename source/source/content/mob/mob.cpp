@@ -949,7 +949,7 @@ void Mob::calculateAttackKnockback(
  */
 bool Mob::calculateCarryingDestination(
     PikminType** outTargetType, Mob** outTargetMob, Point* outTargetPoint
-) const {
+) {
     *outTargetMob = nullptr;
     *outTargetPoint = center;
     if(!carryInfo) return false;
@@ -1053,7 +1053,7 @@ bool Mob::calculateCarryingDestination(
         //Figure out which linked mob matches the decided type.
         vector<Mob*> potentialLinks;
         forIdx(m, mobsPerType) {
-            if(mobsPerType[m].second != decidedType) potentialLinks.push_back(mobsPerType[m].first);         
+            if(mobsPerType[m].second == decidedType) potentialLinks.push_back(mobsPerType[m].first);         
         }
 
         //Calculate the target from those mobs
@@ -1082,7 +1082,7 @@ bool Mob::calculateCarryingDestination(
  * @param outTargetType If not nullptr, the target Pikmin type is returned here.
  * @return The Onion, or nullptr if no valid one was found.
  */
-Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
+Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
     //First, check which Onion Pikmin types are even available.
     unordered_set<PikminType*> availableTypes;
     forIdx(o, game.states.gameplay->mobs.onions) {
@@ -1129,7 +1129,7 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
  *
  * @return The ship.
  */
-Ship* Mob::calculateCarryingShip() const {
+Ship* Mob::calculateCarryingShip() {
     vector<Mob*> castedArray;
     forIdx(s, game.states.gameplay->mobs.ships) {
         castedArray.push_back(game.states.gameplay->mobs.ships[s]);
@@ -1145,7 +1145,7 @@ Ship* Mob::calculateCarryingShip() const {
  * 
  * @return The mob.
  */
-Mob* Mob::calculateCarryingMob(const vector<Mob*> potentialMobs) const {
+Mob* Mob::calculateCarryingMob(const vector<Mob*> potentialMobs) {
 
     Mob* closestMob = nullptr;
     float closestDist = FLT_MAX;

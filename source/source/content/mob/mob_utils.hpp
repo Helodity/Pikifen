@@ -646,7 +646,7 @@ struct Path {
     //--- Public members ---
     
     //Mob that this struct belongs to.
-    const Mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Path to take the mob to while being carried.
     vector<PathStop*> path;
@@ -670,7 +670,7 @@ struct Path {
     //--- Public function declarations ---
     
     Path(
-        const Mob* m,
+        Mob* m,
         const PathFollowSettings& settings
     );
     bool checkBlockage(PATH_BLOCK_REASON* outReason = nullptr);

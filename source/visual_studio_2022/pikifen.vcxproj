@@ -196,6 +196,10 @@
     <ClInclude Include="..\source\*\*.hpp" />
     <ClInclude Include="..\source\*\*\*.hpp" />
     <ClInclude Include="..\source\*\*\*\*.hpp" />
+	<ClInclude Include="..\source\*.h" />
+    <ClInclude Include="..\source\*\*.h" />
+    <ClInclude Include="..\source\*\*\*.h" />
+    <ClInclude Include="..\source\*\*\*\*.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\*.cpp" />
