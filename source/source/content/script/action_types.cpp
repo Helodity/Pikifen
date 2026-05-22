@@ -60,7 +60,7 @@ void ScriptActionRunners::absoluteNumber(ScriptActionInstRunData& data) {
     float result = fabs(s2f(numberArg));
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -113,7 +113,7 @@ void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
     string newListStr = join(items, delChar);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = newListStr;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, newListStr);
 }
 
 
@@ -135,7 +135,7 @@ void ScriptActionRunners::addToString(ScriptActionInstRunData& data) {
     result += newContentArg;
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = result;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -249,7 +249,7 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -264,7 +264,7 @@ void ScriptActionRunners::clearVar(ScriptActionInstRunData& data) {
     
     //Main logic.
     if(data.scriptVM->getRunnerScriptVM()->vars.contains(varArg)) {
-        data.scriptVM->getRunnerScriptVM()->vars[varArg].clear();
+        data.scriptVM->getRunnerScriptVM()->vars.setValue(varArg, "");
     }
 }
 
@@ -283,7 +283,7 @@ void ScriptActionRunners::ceilNumber(ScriptActionInstRunData& data) {
     float result = ceil(s2f(numberArg));
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -340,7 +340,7 @@ void ScriptActionRunners::easeNumber(ScriptActionInstRunData& data) {
     float result = ease(s2f(numberArg), method);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -369,7 +369,7 @@ void ScriptActionRunners::floorNumber(ScriptActionInstRunData& data) {
     float result = floor(s2f(numberArg));
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -551,7 +551,7 @@ void ScriptActionRunners::getAngle(ScriptActionInstRunData& data) {
     angle = radToDeg(angle);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(angle);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, angle);
 }
 
 
@@ -573,7 +573,7 @@ void ScriptActionRunners::getAngleCwDiff(ScriptActionInstRunData& data) {
     diff = radToDeg(diff);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(diff);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, diff);
 }
 
 
@@ -595,7 +595,7 @@ void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
     diff = radToDeg(diff);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(diff);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, diff);
 }
 
 
@@ -638,7 +638,7 @@ void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = result;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -663,8 +663,8 @@ void ScriptActionRunners::getCoordinatesFromAngle(
     Point p = angleToCoordinates(angle, magnitude);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[xDestVarArg] = f2s(p.x);
-    data.scriptVM->getRunnerScriptVM()->vars[yDestVarArg] = f2s(p.y);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(xDestVarArg, p.x);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(yDestVarArg, p.y);
 }
 
 
@@ -690,7 +690,7 @@ void ScriptActionRunners::getDistance(ScriptActionInstRunData& data) {
         Distance(Point(centerX, centerY), Point(focusX, focusY)).toFloat();
         
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(dist);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, dist);
 }
 
 
@@ -812,7 +812,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = result;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -833,7 +833,7 @@ void ScriptActionRunners::getFloorZ(ScriptActionInstRunData& data) {
     float result = s ? s->floorZ : 0.0f;
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -849,10 +849,13 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
     
     //Main logic.
     if(!data.scriptVM->getRunnerScriptVM()->focusedMob) return;
-    string result = data.scriptVM->getRunnerScriptVM()->focusedMob->scriptVM.vars[focusVarArg];
+    string result;
+    data.scriptVM->getRunnerScriptVM()->focusedMob->scriptVM.vars.getValue(
+        focusVarArg, result
+    );
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = result;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -892,7 +895,7 @@ void ScriptActionRunners::getListItem(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = item;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, item);
 }
 
 
@@ -933,7 +936,7 @@ void ScriptActionRunners::getListItemNumber(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = i2s(number);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, number);
 }
 
 
@@ -965,7 +968,7 @@ void ScriptActionRunners::getListSize(ScriptActionInstRunData& data) {
     size_t size = getSplitCount(listArg, delChar, true);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = i2s(size);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, size);
 }
 
 
@@ -1023,7 +1026,7 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = result;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1066,7 +1069,7 @@ void ScriptActionRunners::getMissionMetric(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = result;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1106,9 +1109,10 @@ void ScriptActionRunners::getMobIdsInRegion(
         
         idsStrs.push_back(i2s(mPtr->id));
     }
+    string result = join(idsStrs, ",");
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = join(idsStrs, ",");;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1129,18 +1133,20 @@ void ScriptActionRunners::getMobIdsWithVar(
     vector<string> idsStrs;
     forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
+        const map<string, string>& mPtrVars = mPtr->scriptVM.vars.toMap();
         
-        auto it = mPtr->scriptVM.vars.find(varArg);
-        if(it == mPtr->scriptVM.vars.end()) continue;
+        auto it = mPtrVars.find(varArg);
+        if(it == mPtrVars.end()) continue;
         if(!valueArg.empty()) {
             if(it->second != valueArg) continue;
         }
         
         idsStrs.push_back(i2s(mPtr->id));
     }
+    string result = join(idsStrs, ",");
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = join(idsStrs, ",");;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1275,7 +1281,7 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = result;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1318,7 +1324,7 @@ void ScriptActionRunners::getRandomFloat(ScriptActionInstRunData& data) {
     float result = game.rng.f(s2f(minArg), s2f(maxArg));
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1337,7 +1343,7 @@ void ScriptActionRunners::getRandomInt(ScriptActionInstRunData& data) {
     int result = game.rng.i(s2i(minArg), s2i(maxArg));
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = i2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1354,11 +1360,13 @@ void ScriptActionRunners::getVarPresence(ScriptActionInstRunData& data) {
     //Main logic.
     bool exists = data.scriptVM->getRunnerScriptVM()->vars.contains(varArg);
     if(exists) {
-        exists = !data.scriptVM->getRunnerScriptVM()->vars[varArg].empty();
+        string value;
+        data.scriptVM->getRunnerScriptVM()->vars.getValue(varArg, value);
+        exists = !value.empty();
     }
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = b2s(exists);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, exists);
 }
 
 
@@ -1481,7 +1489,7 @@ void ScriptActionRunners::interpolateNumber(ScriptActionInstRunData& data) {
         );
         
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1518,11 +1526,10 @@ void ScriptActionRunners::loadFocusMemory(ScriptActionInstRunData& data) {
     
     //Main logic.
     string varName = "_focus_memory_" + slotArg;
-    if(!isInMap(data.scriptVM->getRunnerScriptVM()->vars, varName)) {
+    size_t id;
+    if(!data.scriptVM->getRunnerScriptVM()->vars.getValue(varName, id)) {
         return;
     }
-    
-    size_t id = s2i(data.scriptVM->getRunnerScriptVM()->vars[varName]);
     Mob* target = game.states.gameplay->getMobById(id);
     if(!target) return;
     data.scriptVM->getRunnerScriptVM()->focusOnMob(target);
@@ -1720,7 +1727,9 @@ void ScriptActionRunners::playSound(ScriptActionInstRunData& data) {
     size_t soundId = data.scriptVM->getRunnerMob()->playSound(soundDataIdx);
     
     //Store the result.
-    if(!destVarArg.empty()) data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = i2s(soundId);
+    if(!destVarArg.empty()) {
+        data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, soundId);
+    }
 }
 
 
@@ -1844,7 +1853,7 @@ void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
     string newListStr = join(items, delChar);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = newListStr;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, newListStr);
 }
 
 
@@ -1920,7 +1929,7 @@ void ScriptActionRunners::roundNumber(ScriptActionInstRunData& data) {
     float result = round(s2f(numberArg));
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 
@@ -1939,7 +1948,8 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
     }
     
     string varName = "_focus_memory_" + slotArg;
-    data.scriptVM->getRunnerScriptVM()->vars[varName] = i2s(data.scriptVM->getRunnerScriptVM()->focusedMob->id);
+    string varValue = i2s(data.scriptVM->getRunnerScriptVM()->focusedMob->id);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(varName, varValue);
 }
 
 
@@ -2168,7 +2178,9 @@ void ScriptActionRunners::setFocusVar(ScriptActionInstRunData& data) {
     
     //Main logic.
     if(!data.scriptVM->getRunnerScriptVM()->focusedMob) return;
-    data.scriptVM->getRunnerScriptVM()->focusedMob->scriptVM.vars[varArg] = valueArg;
+    data.scriptVM->getRunnerScriptVM()->focusedMob->scriptVM.vars.setValue(
+        varArg, valueArg
+    );
 }
 
 
@@ -2360,7 +2372,7 @@ void ScriptActionRunners::setListItem(ScriptActionInstRunData& data) {
     string newListStr = join(items, delChar);
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = newListStr;
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, newListStr);
 }
 
 
@@ -2563,7 +2575,7 @@ void ScriptActionRunners::setVar(ScriptActionInstRunData& data) {
     const string& valueArg = data.args[1];
     
     //Main logic.
-    data.scriptVM->getRunnerScriptVM()->setVar(varArg, valueArg);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(varArg, valueArg);
 }
 
 
@@ -2614,7 +2626,9 @@ void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData& data) {
     const string& varArg = data.args[0];
     
     //Main logic.
-    startCutsceneMessage(data.scriptVM->getRunnerScriptVM()->vars[varArg], nullptr);
+    string text;
+    data.scriptVM->getRunnerScriptVM()->vars.getValue(varArg, text);
+    startCutsceneMessage(text, nullptr);
 }
 
 
@@ -2664,7 +2678,7 @@ void ScriptActionRunners::squareRootNumber(ScriptActionInstRunData& data) {
     float result = (float) sqrt(s2f(numberArg));
     
     //Store the result.
-    data.scriptVM->getRunnerScriptVM()->vars[destVarArg] = f2s(result);
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 

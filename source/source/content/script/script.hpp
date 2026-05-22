@@ -17,6 +17,7 @@
 
 #include "fsm.hpp"
 #include "script_utils.hpp"
+#include "../../core/misc_structs.hpp"
 
 using std::map;
 using std::string;
@@ -98,8 +99,8 @@ public:
     //current mob, if applicable.
     Mob* nextActionSurrogateMob = nullptr;
     
-    //Variables.
-    map<string, string> vars;
+    //Script variables.
+    ScriptVarManager vars;
     
     
     //--- Public function declarations ---
@@ -112,7 +113,6 @@ public:
     void focusOnMob(Mob* m);
     void unfocusFromMob();
     void setTimer(float time);
-    void setVar(const string& name, const string& value);
     Mob* getRunnerMob() const;
     ScriptVM* getRunnerScriptVM();
     string getMakerToolVarsStr() const;

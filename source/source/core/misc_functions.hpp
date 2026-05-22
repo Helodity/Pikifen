@@ -135,7 +135,6 @@ unsigned char getThrowPreviewVertexes(
     float uOffset, float uScale,
     bool varyThickness
 );
-map<string, string> getVarMap(const string& varsString);
 string getEngineVersionString(
     bool includeInDev = false, bool includeDate = false
 );
@@ -195,7 +194,6 @@ bool saveMissionRecords(DataNode* fileNode);
 void saveOptions(bool showNotification = false);
 void saveScreenshot();
 void saveStatistics();
-string saveVarMap(const map<string, string>& varsMap);
 void setStringTokenWidths(
     vector<StringToken>& tokens,
     const ALLEGRO_FONT* textFont, const ALLEGRO_FONT* controlFont,

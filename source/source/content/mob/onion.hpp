@@ -82,7 +82,7 @@ public:
     ~Onion();
     void drawMob() override;
     void generate();
-    void readScriptVars(const ScriptVarReader& svr) override;
+    void readScriptVars(const ScriptVarManager& varsMgr) override;
     void spit(size_t typeIdx);
     void startGenerating();
     void stopGenerating();

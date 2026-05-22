@@ -617,32 +617,45 @@ struct ReaderSetter {
 };
 
 
-
 /**
- * @brief Makes it easy to read script variables, and make changes
- * based on which
- * ones exist, and what values they have.
+ * @brief Manages a collection of script vars and their values.
  */
-struct ScriptVarReader {
+struct ScriptVarManager {
 
-    //--- Public members ---
+    //--- Public functions ---
+
+    ScriptVarManager() = default;
+    ScriptVarManager(const string& str);
+
+    bool fromString(const string& str);
+    string toString() const;
+    const map<string, string>& toMap() const;
+    bool getValue(const string& name, string& dest) const;
+    bool getValue(const string& name, size_t& dest) const;
+    bool getValue(const string& name, int& dest) const;
+    bool getValue(const string& name, unsigned char& dest) const;
+    bool getValue(const string& name, bool& dest) const;
+    bool getValue(const string& name, float& dest) const;
+    bool getValue(const string& name, ALLEGRO_COLOR& dest) const;
+    bool getValue(const string& name, Point& dest) const;
+    void setValue(const string& name, const string& value);
+    void setValue(const string& name, size_t value);
+    void setValue(const string& name, int value);
+    void setValue(const string& name, unsigned char value);
+    void setValue(const string& name, bool value);
+    void setValue(const string& name, float value);
+    void setValue(const string& name, const ALLEGRO_COLOR& value);
+    void setValue(const string& name, const Point& value);
+    bool contains(const string& name) const;
+    void erase(const string& name);
+    void clear();
+    bool empty() const;
+
+    //--- Private members ---
     
-    //Reference to the list of script variables it pertains to.
-    map<string, string>& vars;
-    
-    
-    //--- Public function declarations ---
-    
-    explicit ScriptVarReader(map<string, string>& vars);
-    bool get(const string& name, string& dest) const;
-    bool get(const string& name, size_t& dest) const;
-    bool get(const string& name, int& dest) const;
-    bool get(const string& name, unsigned char& dest) const;
-    bool get(const string& name, bool& dest) const;
-    bool get(const string& name, float& dest) const;
-    bool get(const string& name, ALLEGRO_COLOR& dest) const;
-    bool get(const string& name, Point& dest) const;
-    
+    //The list proper.
+    map<string, string> varsMap;
+
 };
 
 

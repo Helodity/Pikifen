@@ -178,7 +178,8 @@ string ScriptVM::getMakerToolVarsStr() const {
         return result;
     }
     
-    for(const auto& v : vars) {
+    const map<string, string>& varMap = vars.toMap();
+    for(const auto& v : varMap) {
         result += v.first + "=" + v.second + "; ";
     }
     result.erase(result.size() - 2, 2);
@@ -228,17 +229,6 @@ void ScriptVM::runReadyActions() {
 void ScriptVM::setTimer(float time) {
     timer.duration = time;
     timer.start();
-}
-
-
-/**
- * @brief Sets a script variable's value.
- *
- * @param name The variable's name.
- * @param value The variable's new value.
- */
-void ScriptVM::setVar(const string& name, const string& value) {
-    vars[name] = value;
 }
 
 

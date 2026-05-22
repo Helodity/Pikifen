@@ -79,7 +79,7 @@ public:
     float getPower() const;
     Point getSpotPos(const Pikmin* whose) const;
     void reserveSpot(GroupTaskSpot* spot, Pikmin* who);
-    void readScriptVars(const ScriptVarReader& svr) override;
+    void readScriptVars(const ScriptVarManager& varsMgr) override;
     
 protected:
 

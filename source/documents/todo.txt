@@ -32,8 +32,8 @@ Next tasks (roughly sorted most important first)
         Ice vent emitting vapor
         Leader swap sound, so swapping to the rookie isn't silent
         Swarming jingle
-    Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
     Lumiknolls
+        Tricknolls
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Freezecake
     White and Purple Onions and pellets
@@ -45,6 +45,7 @@ Next tasks (roughly sorted most important first)
     --- 2.0.0 ---
     Update Dear ImGui to 1.92.8
         > Made AddCallback() user data default to Null for convenience.
+    Increase the size of all gates to 256? A lot of the larger enemies and treasures have a hard time squeezing through the 192-length gaps
     Add a proper maker console
         Helpful so you can see error logs, script prints, etc.
         The ability to write commands that trigger maker tools, with parameters too
@@ -79,9 +80,7 @@ Next tasks (roughly sorted most important first)
                     What control scheme they're using (and a button to change it), and what controllers, if any, they are using
                         If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                         Write the controller's names, given by Allegro
-                    Their favorite leader, including "none" and "random
-                        When the area loads, that player's leader gets replaced with the player's favorite, if it is not set to "none"
-                        The game config should include a list of "strong leaders" that cannot be picked this way, since they have stats that are more powerful than normal, and would provide an unfair advantage, especially in missions
+                    Their favorite leader, including "none" and "random"
             Pause menu
                 The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
                 The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
@@ -112,7 +111,23 @@ Next tasks (roughly sorted most important first)
             The ability to mark a leader as "multiplayer extra", so it's only used if the normal leaders are all taken up by players, and if not, it doesn't spawn in the first place
         Gameplay
             All players are under the same team
-            The game just gives the earliest leader in the leader order to player 1, then to player 2, etc. e.g. if there's a Louie mob and an Olimar mob, P1 should get Olimar
+            Leader mob decision algorithms
+                Balanced pick algorithm: Create a list of what leaders currently appear least in the area, sorted in the game config leader order. e.g. in a game with only the three Koppaite leaders, in an area with just Brittany, the list would consist of Alph and Charlie
+                New fair leader algorithm: Use the "balanced pick algorithm", then pick the earliest leader in the game leader order. e.g. in a game with only the three Koppaite leaders, in an area with those three, Alph gets picked
+                New random leader algorithm: Use the "balanced pick algorithm", then pick a random one from that list
+                Default distribution algorithm: Given the leader mobs in the area, the game assigns the earliest one in the game config leader order to player 1, the next to player 2, etc. e.g. if the mob generator 3 is Louie and the mob generator 5 is Olimar, P1 should get Olimar
+            Area load and leader assignments
+                When any area loads, at first:
+                    Assign each player one leader mob using the "default distribution algorithm"
+                When a simple area loads:
+                    If a player's favorite leader is "none", leave its assigned mob as is. If there is no assigned mob, create one with the "new fair leader algorithm"
+                    If a player's favorite leader is "random", replace that leader's mob with one from the "new random leader algorithm"
+                    If a player's favorite leader is fixed, replace that leader's mob with that one
+                    Even if some leaders are stronger than others, that's up to the players to balance it between themselves (think Oddjob in GoldenEye 007).
+                When a mission area loads:
+                    If a player doesn't have an assigned mob, create one with the "new fair leader algorithm"
+                    This makes it so missions play out always the same and stops players from picking an overpowered leader as their favorite and abuse that to a cheap score
+            If a new leader mob needs to be created, it should be placed super close to where P1's leader is, then the next one should be super close to where P2's leader is, then the next to where P3's leader is
         Onions should be able to auto-eject seeds
         Mission high scores need to be saved independently for each player amount
         Game statistics for how much time was spent in multiplayer play
@@ -122,7 +137,6 @@ Next tasks (roughly sorted most important first)
         Menus
             Player setup menu
                 Each column should also let players pick which teams they belong to
-                Each column should also let players pick what leader they want to control first. Should probably let you pick from all leaders, not just the ones in the area
             Area selection menu
                 Areas that don't match up with the current ruleset can still be selected, but with a warning.
         HUD changes
@@ -245,7 +259,6 @@ Next tasks (roughly sorted most important first)
         Gameplay
             Players can be in teams or not; depends on their choices
             The area maker must specify where team 1's leader goes, where team 2's leader goes, etc.
-            Alternatively, they must specify what leader mob corresponds to what team's leader, but since players can pick their leaders, this doesn't mean they will get the leader in the area
             Players in the same team spawn in the same spot, though slightly offset, just like how if the game wants to spawn more leaders than there are available
             The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
         Results screen

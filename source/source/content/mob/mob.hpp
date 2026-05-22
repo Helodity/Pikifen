@@ -499,7 +499,7 @@ public:
     virtual int getMissionPoints(bool* applicableInThisMission) const;
     virtual void handleStatusEffectGain(StatusType* staType);
     virtual void handleStatusEffectLoss(StatusType* staType);
-    virtual void readScriptVars(const ScriptVarReader& svr);
+    virtual void readScriptVars(const ScriptVarManager& varsMgr);
     virtual void startDyingClassSpecifics();
     virtual void finishDyingClassSpecifics();
     bool tickTrackRide();

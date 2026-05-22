@@ -1459,10 +1459,10 @@ void GameplayState::load() {
     
     dayMinutes = game.curArea->dayTimeStart;
     
-    map<string, string> sprayStrs =
-        getVarMap(game.curArea->sprayAmounts);
+    ScriptVarManager sprayVars(game.curArea->sprayAmounts);
+    const map<string, string>& sprayVarMap = sprayVars.toMap();
         
-    for(auto& s : sprayStrs) {
+    for(const auto& s : sprayVarMap) {
         size_t sprayIdx = 0;
         for(; sprayIdx < game.config.misc.sprayOrder.size(); sprayIdx++) {
             if(

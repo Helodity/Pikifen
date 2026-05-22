@@ -98,30 +98,30 @@ void Decoration::drawMob() {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Decoration::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Decoration::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
     bool randomAnimationDelayVar;
     bool randomTintVar;
     bool randomScaleVar;
     bool randomRotationVar;
     
-    if(svr.get("random_animation_delay", randomAnimationDelayVar)) {
+    if(varsMgr.getValue("random_animation_delay", randomAnimationDelayVar)) {
         individualRandomAnimDelay = randomAnimationDelayVar;
     }
-    if(svr.get("random_tint", randomTintVar)) {
+    if(varsMgr.getValue("random_tint", randomTintVar)) {
         if(!randomTintVar) {
             individualTint = COLOR_WHITE;
         }
     }
-    if(svr.get("random_scale", randomScaleVar)) {
+    if(varsMgr.getValue("random_scale", randomScaleVar)) {
         if(!randomScaleVar) {
             individualScale = 1.0f;
         }
     }
-    if(svr.get("random_rotation", randomRotationVar)) {
+    if(varsMgr.getValue("random_rotation", randomRotationVar)) {
         if(!randomRotationVar) {
             individualRotation = 0.0f;
         }

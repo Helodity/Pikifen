@@ -87,10 +87,10 @@ FRACTION_NR_VISIBILITY Scale::getFractionNumbersInfo(
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Scale::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Scale::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
-    svr.get("goal_number", goalNumber);
+    varsMgr.getValue("goal_number", goalNumber);
 }

@@ -47,7 +47,7 @@ public:
     static void drawComponent(Mob* m);
     bool checkHealth();
     Point getStartPoint();
-    void readScriptVars(const ScriptVarReader& svr) override;
+    void readScriptVars(const ScriptVarManager& varsMgr) override;
     void setup();
 
 private:

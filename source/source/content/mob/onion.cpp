@@ -189,12 +189,12 @@ void Onion::generate() {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Onion::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Onion::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
-    nest->readScriptVars(svr);
+    nest->readScriptVars(varsMgr);
 }
 
 

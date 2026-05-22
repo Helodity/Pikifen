@@ -125,8 +125,8 @@ struct MobGen {
     //Angle.
     float angle = 0.0f;
     
-    //Script vars.
-    string vars;
+    //String representation of the script vars.
+    string varsStr;
     
     //Indexes of linked objects.
     vector<size_t> linkIdxs;

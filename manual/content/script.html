@@ -603,7 +603,19 @@ reaches {
     <h2 id="tips">Tips</h2>
 
     <ul>
-      <li>The <code>init</code> block of the script file runs right as soon as the object spawns. Directly after that, the object changes to its first state and runs that state's <code><a href="events_and_actions.html#on-enter">on_enter</a></code> event. At this point, things like mob links have not been set up yet. Later, in the first frame of gameplay after the object's creation, the <code>ready</code> block of the script will be run (which works the same way as the <code>init</code> block). When you want to run something at the start of the object's life, it's important to pick which of these three points to use.</li>
+      <li>When you want to run something at the start of the object's life, it's important to pick where to place the actions. The order of operations is as follows, with the three possible choices in bold:
+        <ol>
+          <li>The object is created with some basic info.</li>
+          <li>The object's script vars are read for internal purposes (team, health, Pikmin maturity, bridge chunks, etc.).</li>
+          <li>The <b><code>init</code> block</b> of the script file is run. This is a good place for script var default values.</li>
+          <li>The first state is set and its <b><code>on_enter</code> event</b> is triggered.</li>
+          <li>The object's script vars are read for scripting purposes and saved in the object.</li>
+          <li>The object's children are spawned.</li>
+          <li>The object's links are settled.</li>
+          <li>The object is stored inside another, or gets other objects stored inside.</li>
+          <li>The <b><code>ready</code> block</b> of the script file is run.</li>
+        </ol>
+      </li>
       <li>The built-in script timer feature only keeps track of one timer. But you can create custom hand-made timers to keep track of multiple things. Have a variable store the time left for the timer to trigger, in seconds. Then, in a state (or better yet, the <a href="#global-events">global events</a> block), listen for the <a href="events_and_actions.html#on-tick"><code>on_tick</code></a> event, and use the <a href="events_and_actions.html#get-misc-info"><code>get_misc_info</code></a> action, with the <code>delta_t</code> data, in order to know how many seconds to decrease the timer variable by. Once it reaches 0 or below, the timer has just triggered!</li>
       <li>To help debug the script, use the <a href="maker_toolkit.html#mob-inspector">mob inspector</a> or <a href="maker_toolkit.html#area-inspector">area inspector</a> maker tools.</li>
     </ul>

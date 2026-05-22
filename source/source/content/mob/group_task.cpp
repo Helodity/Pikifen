@@ -258,12 +258,12 @@ Point GroupTask::getSpotPos(const Pikmin* whose) const {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void GroupTask::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void GroupTask::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
-    svr.get("power_goal", powerGoal);
+    varsMgr.getValue("power_goal", powerGoal);
 }
 
 

@@ -618,7 +618,7 @@ bool ScriptActionDef::run(
     data.args = args;
     forIdx(a, args) {
         if(argIsVar[a]) {
-            data.args[a] = scriptVM->vars[args[a]];
+            scriptVM->vars.getValue(args[a], data.args[a]);
         }
     }
     data.customData1 = customData1;

@@ -136,14 +136,14 @@ int Pile::getMissionPoints(bool* applicableInThisMission) const {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Pile::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Pile::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
     size_t amountVar;
     
-    if(svr.get("amount", amountVar)) {
+    if(varsMgr.getValue("amount", amountVar)) {
         amount = amountVar;
         amount = std::clamp(amount, (size_t) 0, pilType->maxAmount);
     }

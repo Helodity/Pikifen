@@ -756,7 +756,7 @@ struct PikminNest {
     bool callPikmin(Mob* mPtr, size_t typeIdx);
     size_t getAmountByType(const PikminType* type);
     bool hasPikminInside(size_t typeIdx);
-    void readScriptVars(const ScriptVarReader& svr);
+    void readScriptVars(const ScriptVarManager& varsMgr);
     void requestPikmin(
         size_t typeIdx, size_t amount, Leader* lPtr
     );
@@ -806,7 +806,7 @@ float calculateMobPhysicalSpan(
 );
 Mob* createMob(
     MobCategory* category, const Point& pos, MobType* type,
-    float angle, const string& vars,
+    float angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation = nullptr,
     size_t firstStateOverride = INVALID
 );

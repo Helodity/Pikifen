@@ -243,7 +243,8 @@ void Bridge::drawComponent(Mob* m) {
     );
     
     Bridge* briPtr = (Bridge*) m->links[0];
-    string side = m->scriptVM.vars["side"];
+    string side;
+    m->scriptVM.vars.getValue("side", side);
     ALLEGRO_BITMAP* texture =
         side == "left" ?
         briPtr->briType->bmpLeftRailTexture :
@@ -252,7 +253,8 @@ void Bridge::drawComponent(Mob* m) {
         briPtr->briType->bmpMainTexture;
     int textureH = al_get_bitmap_height(texture);
     int textureV0 = textureH / 2.0f - m->rectangularDim.y / 2.0f;
-    float textureOffset = s2f(m->scriptVM.vars["offset"]);
+    float textureOffset;
+    m->scriptVM.vars.getValue("offset", textureOffset);
     
     ALLEGRO_TRANSFORM angleTransform;
     al_identity_transform(&angleTransform);
@@ -333,12 +335,12 @@ Point Bridge::getStartPoint() {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Bridge::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Bridge::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
-    svr.get("chunks", totalChunksNeeded);
+    varsMgr.getValue("chunks", totalChunksNeeded);
 }
 
 

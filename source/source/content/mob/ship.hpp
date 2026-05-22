@@ -72,7 +72,7 @@ public:
     void healLeader(Leader* l) const;
     bool isLeaderOnCp(const Leader* l) const;
     void drawMob() override;
-    void readScriptVars(const ScriptVarReader& svr) override;
+    void readScriptVars(const ScriptVarManager& varsMgr) override;
     void tickClassSpecifics(float deltaT) override;
     
 };

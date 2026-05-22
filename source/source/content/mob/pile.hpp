@@ -46,7 +46,7 @@ public:
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
     int getMissionPoints(bool* applicableInThisMission) const override;
-    void readScriptVars(const ScriptVarReader& svr) override;
+    void readScriptVars(const ScriptVarManager& varsMgr) override;
     
 protected:
 
