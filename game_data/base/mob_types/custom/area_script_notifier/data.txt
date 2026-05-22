@@ -1,7 +1,7 @@
 name = Area script notifier
 description = Connect one power source here. Whenever the power changes, it sends a message to the area script.
 
-area_editor_recommend_links_from = true
+area_editor_recommend_links_to = true
 area_editor_tips = The message sent follows the format "power,1", where "power" is the default word but can be customized with the "message prefix" var, and "1" is the amount of power it received.
 custom_category_name = Misc.
 

@@ -355,7 +355,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             player->leaderPtr->group->curStandbyType &&
             !player->closestGroupMemberDistant
         ) {
-            switch (game.options.controls.autoThrowMode) {
+            switch(game.options.controls.autoThrowMode) {
             case AUTO_THROW_MODE_OFF: {
                 done = grabClosestGroupMember(player);
                 break;
@@ -386,7 +386,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
         }
         
     } else { //Button release.
-        switch (game.options.controls.autoThrowMode) {
+        switch(game.options.controls.autoThrowMode) {
         case AUTO_THROW_MODE_OFF: {
             player->leaderPtr->queueThrow();
             break;

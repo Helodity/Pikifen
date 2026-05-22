@@ -1521,7 +1521,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
 void GameplayState::drawOnionMenu() {
     ALLEGRO_SHADER* bgShader = game.shaders.getShader(SHADER_TYPE_ONION);
     
-    if (bgShader) {
+    if(bgShader) {
         al_use_shader(bgShader);
         al_set_shader_sampler(
             "colormap", onionMenu->nestPtr->nestType->menuColormap, 1

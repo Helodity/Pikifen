@@ -904,29 +904,30 @@ PATH_RESULT getPath(
 
 
 /**
-* @brief Returns the priority of a path result. Higher numbers indicate 
+* @brief Returns the priority of a path result. Higher numbers indicate
 * higher priority.
-* 
-* @param results Result to convert.
+*
+* @param result Result to convert.
 * @return The priority.
 */
-int getPathPriority(PATH_RESULT results) {
-    switch (results)
-    {
+int getPathPriority(PATH_RESULT result) {
+    switch(result) {
     case PATH_RESULT_NORMAL_PATH:
     case PATH_RESULT_PATH_WITH_SINGLE_STOP:
     case PATH_RESULT_DIRECT:
     case PATH_RESULT_DIRECT_NO_STOPS:
-    case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS:
-        //Currently accessible
+    case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS: {
+        //Currently accessible.
         return 2;
-    case PATH_RESULT_PATH_WITH_OBSTACLES:
-        //Can be accessed.
+        break;
+    } case PATH_RESULT_PATH_WITH_OBSTACLES: {
+        //Can be accessed if the obstacles are destroyed.
         return 1;
         break;
-    default:
-        //Inaccessible
+    } default: {
+        //Inaccessible.
         return 0;
+    }
     }
 }
 

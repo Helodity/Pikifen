@@ -817,7 +817,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     ) {
         //Mouse button down, inside the canvas.
         
-        switch (ev.mouse.button) {
+        switch(ev.mouse.button) {
         case 1: {
             isM1Pressed = true;
             break;

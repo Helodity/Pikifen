@@ -219,7 +219,7 @@ void AreaContentManager::loadAreaIntoVector(
     ContentManifest* manifest, AREA_TYPE type, bool fromBackup
 ) {
     Area* newArea = new Area();
-    if (
+    if(
         loadArea(
             newArea, manifest->path, manifest,
             CONTENT_LOAD_LEVEL_BASIC, fromBackup, nullptr

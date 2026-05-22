@@ -625,7 +625,7 @@ void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
         return;
     }
     
-    switch (type) {
+    switch(type) {
     case SCRIPT_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
         result = i2s(game.states.gameplay->dayMinutes);
         break;
@@ -718,7 +718,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         return;
     }
     
-    switch (type) {
+    switch(type) {
     case SCRIPT_ACTION_GET_EV_INFO_TYPE_BODY_PART: {
         if(
             data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_A_N ||
@@ -996,7 +996,7 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
         return;
     }
     
-    switch (type) {
+    switch(type) {
     case SCRIPT_ACTION_GET_MISC_INFO_TYPE_DAY_MINUTES: {
         result = i2s(game.states.gameplay->dayMinutes);
         break;

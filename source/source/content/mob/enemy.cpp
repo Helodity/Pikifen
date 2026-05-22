@@ -105,7 +105,7 @@ void Enemy::drawMob() {
 void Enemy::finishDyingClassSpecifics() {
     //Corpse.
     enableFlag(flags, MOB_FLAG_NON_HUNTABLE);
-    becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
+    becomeCarriable(CARRY_DESTINATION_ONION_ELSE_SHIP);
     scriptVM.fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     
     if(reviveTimer.duration > 0.0f) {

@@ -968,7 +968,7 @@ void ParticleEditor::processGuiPanelGenerator() {
             loadedGen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
             
             ImGui::Indent();
-            switch (loadedGen.emission.shape) {
+            switch(loadedGen.emission.shape) {
             case PARTICLE_EMISSION_SHAPE_CIRCLE: {
                 //Circle emission inner distance value.
                 ImGui::SetNextItemWidth(75);

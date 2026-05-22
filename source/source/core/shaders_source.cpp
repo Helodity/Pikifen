@@ -85,14 +85,14 @@ void main() {
 
 bool alpha_test_func(float x, int op, float compare)
 {
-  if (op == 0) return false;
-  else if (op == 1) return true;
-  else if (op == 2) return x < compare;
-  else if (op == 3) return x == compare;
-  else if (op == 4) return x <= compare;
-  else if (op == 5) return x > compare;
-  else if (op == 6) return x != compare;
-  else if (op == 7) return x >= compare;
+  if(op == 0) return false;
+  else if(op == 1) return true;
+  else if(op == 2) return x < compare;
+  else if(op == 3) return x == compare;
+  else if(op == 4) return x <= compare;
+  else if(op == 5) return x > compare;
+  else if(op == 6) return x != compare;
+  else if(op == 7) return x >= compare;
   return false;
 }
 

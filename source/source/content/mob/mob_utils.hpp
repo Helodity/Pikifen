@@ -663,7 +663,7 @@ struct Path {
     //Settings about how the path should be followed.
     PathFollowSettings settings;
 
-    //Total distance the path takes.
+    //Total distance traveled through this path.
     float totalDistance = FLT_MAX;
     
     

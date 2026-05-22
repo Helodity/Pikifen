@@ -139,7 +139,7 @@ void ParticleEditor::drawCanvas() {
     
     //Emission shapes.
     if(emissionShapeVisible) {
-        switch (loadedGen.emission.shape) {
+        switch(loadedGen.emission.shape) {
         case PARTICLE_EMISSION_SHAPE_CIRCLE: {
     
             if(loadedGen.emission.circleArc == TAU) {

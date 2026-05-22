@@ -1315,7 +1315,7 @@ void Leader::updateThrowVariables() {
     }
     
     float maxHeight;
-    switch (throwee->type->category->id) {
+    switch(throwee->type->category->id) {
     case MOB_CATEGORY_PIKMIN: {
         maxHeight = ((Pikmin*) throwee)->pikType->maxThrowHeight;
         break;

@@ -619,7 +619,7 @@ void Mob::tickPhysics(float deltaT) {
     HORIZ_MOVE_RESULT hMoveType =
         getPhysicsHorizontalMovement(deltaT, moveSpeedMult, &moveSpeed);
         
-    switch (hMoveType) {
+    switch(hMoveType) {
     case HORIZ_MOVE_RESULT_FAIL: {
         return;
     } case HORIZ_MOVE_RESULT_TELEPORTED: {

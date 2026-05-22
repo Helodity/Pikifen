@@ -693,7 +693,7 @@ void Mob::arachnorbPlanLogic(
     float minTurnAngle;
     scriptVM.vars.getValue("min_turn_angle", minTurnAngle);
     minTurnAngle = degToRad(minTurnAngle);
-
+    
     if(maxStepDistance == 0) {
         maxStepDistance = 100;
     }
@@ -989,7 +989,7 @@ bool Mob::calculateCarryingDestination(
         return false;
         break;
         
-    } case CARRY_DESTINATION_SHIP_NO_ONION: {
+    } case CARRY_DESTINATION_ONION_ELSE_SHIP: {
 
         //Go to the nearest Onion if possible.
         Onion* oniTarget = calculateCarryingOnion(outTargetType);
@@ -1013,11 +1013,11 @@ bool Mob::calculateCarryingDestination(
     } case CARRY_DESTINATION_LINKED_MOB: {
 
         //If it's towards a linked mob, just go to the closest one.
-        Mob* closestLink = calculateCarryingMob(links);
-
-        if(closestLink) {
-            *outTargetMob = closestLink;
-            *outTargetPoint = closestLink->center;
+        Mob* target = calculateCarryingMob(links);
+        
+        if(target) {
+            *outTargetMob = target;
+            *outTargetPoint = target->center;
             return true;
         }
         
@@ -1059,17 +1059,19 @@ bool Mob::calculateCarryingDestination(
         PikminType* decidedType = decideCarryPikminType(availableTypes);
         
         //Figure out which linked mob matches the decided type.
-        vector<Mob*> potentialLinks;
+        vector<Mob*> linkedMobsOfDecidedType;
         forIdx(m, mobsPerType) {
-            if(mobsPerType[m].second == decidedType) potentialLinks.push_back(mobsPerType[m].first);         
+            if(mobsPerType[m].second == decidedType) {
+                linkedMobsOfDecidedType.push_back(mobsPerType[m].first);
+            }
         }
-
+        
         //Calculate the target from those mobs
-        Mob* closestTarget = calculateCarryingMob(potentialLinks);
+        Mob* target = calculateCarryingMob(linkedMobsOfDecidedType);
         
         //Finally, set the destination data.
         *outTargetType = decidedType;
-        *outTargetMob = closestTarget;
+        *outTargetMob = target;
         *outTargetPoint = (*outTargetMob)->center;
         
         return true;
@@ -1111,13 +1113,11 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
     //Decide what type to go to.
     PikminType* decidedType = decideCarryPikminType(availableTypes);
     
+    //Make a list of the potential Onions that can be carried to.
     vector<Mob*> potentialOnions;
-
-    //Get the potential onions to carry to.
     forIdx(o, game.states.gameplay->mobs.onions) {
         Onion* oPtr = game.states.gameplay->mobs.onions[o];
         if(!oPtr->activated) continue;
-        bool hasType = false;
         forIdx(t, oPtr->oniType->nest->pikTypes) {
             if(oPtr->oniType->nest->pikTypes[t] == decidedType) {
                 potentialOnions.push_back(oPtr);
@@ -1128,7 +1128,7 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
     
     //Finish!
     *outTargetType = decidedType;
-    return (Onion*)calculateCarryingMob(potentialOnions);
+    return (Onion*) calculateCarryingMob(potentialOnions);
 }
 
 
@@ -1138,27 +1138,25 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
  * @return The ship.
  */
 Ship* Mob::calculateCarryingShip() {
-    vector<Mob*> castedArray;
+    vector<Mob*> shipMobList;
     forIdx(s, game.states.gameplay->mobs.ships) {
-        castedArray.push_back(game.states.gameplay->mobs.ships[s]);
+        shipMobList.push_back(game.states.gameplay->mobs.ships[s]);
     }
-    return (Ship*)calculateCarryingMob(castedArray);
+    return (Ship*) calculateCarryingMob(shipMobList);
 }
 
 
 /**
- * @brief Calculates to which mob Pikmin should carry something.
+ * @brief Calculates to which mob Pikmin should carry something, given a list.
  *
- * @param potentialMobs List of mobs that can be chosen
- * 
+ * @param potentialMobs List of mobs that can be chosen.
  * @return The mob.
  */
-Mob* Mob::calculateCarryingMob(const vector<Mob*> potentialMobs) {
-
+Mob* Mob::calculateCarryingMob(const vector<Mob*>& potentialMobs) {
     Mob* closestMob = nullptr;
     float closestDist = FLT_MAX;
-    float highestPathPriority = 0;
-
+    int highestPathPriority = 0;
+    
     forIdx(m, potentialMobs) {
         Mob* mPtr = potentialMobs[m];
         //Calculate expected path.
@@ -1166,19 +1164,32 @@ Mob* Mob::calculateCarryingMob(const vector<Mob*> potentialMobs) {
         settings.targetMob = mPtr;
         settings.targetPoint = mPtr->center;
         Path path = Path(this, settings);
-
-        //Get the path's priority
+        
+        //Get the path's priority.
         int pathPriority = getPathPriority(path.result);
-
-        if (!closestMob || //No current target, set this to target.
-            highestPathPriority < pathPriority || //Higher priority, set this to target.
-            (highestPathPriority == pathPriority && path.totalDistance < closestDist) //Same priority, set if closer.
-            ) {
+        bool isNewBest = false;
+        
+        if(!closestMob) {
+            //This is the first one, so it's the best so far.
+            isNewBest = true;
+        } else if(highestPathPriority < pathPriority) {
+            //This path has a higher priority, so it's better.
+            isNewBest = true;
+        } else if(
+            highestPathPriority == pathPriority &&
+            path.totalDistance < closestDist
+        ) {
+            //This path has the same priority but is shorter, so it's better.
+            isNewBest = true;
+        }
+        
+        if(isNewBest) {
             closestMob = mPtr;
             closestDist = path.totalDistance;
             highestPathPriority = pathPriority;
         }
     }
+    
     return closestMob;
 }
 
@@ -1732,7 +1743,7 @@ void Mob::doAttackEffects(
         );
     Point victimHPos =
         victimH->getCurPos(center, bottomZ, angle, nullptr);
-    
+        
     float edgesD;
     float aToVAngle;
     coordinatesToAngle(
@@ -2290,7 +2301,7 @@ void Mob::getHitboxHoldPoint(
     float actualHZ;
     Point actualHPos =
         hPtr->getCurPos(center, bottomZ, angleCos, angleSin, &actualHZ);
-    
+        
     Point posDif = mobToHold->center - actualHPos;
     coordinatesToAngle(posDif, offsetAngle, offsetDist);
     

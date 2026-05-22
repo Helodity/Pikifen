@@ -58,7 +58,7 @@ enum CARRY_DESTINATION {
     CARRY_DESTINATION_ONION,
     
     //To the Onion, or to the ship if there is none.
-    CARRY_DESTINATION_SHIP_NO_ONION,
+    CARRY_DESTINATION_ONION_ELSE_SHIP,
     
     //To the linked mob.
     CARRY_DESTINATION_LINKED_MOB,
@@ -73,7 +73,7 @@ enum CARRY_DESTINATION {
 buildEnumNames(carryDestinationINames, CARRY_DESTINATION)({
     { CARRY_DESTINATION_SHIP, "ship" },
     { CARRY_DESTINATION_ONION, "onion" },
-    { CARRY_DESTINATION_SHIP_NO_ONION, "ship_no_onion" },
+    { CARRY_DESTINATION_ONION_ELSE_SHIP, "ship_no_onion" },
     { CARRY_DESTINATION_LINKED_MOB, "linked_mob" },
     { CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE, "linked_mob_matching_type" },
 });

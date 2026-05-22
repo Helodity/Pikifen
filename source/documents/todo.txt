@@ -5,6 +5,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    It's not possible to rotate axis-aligned single edges (thanks Helodity)
+    Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
@@ -589,8 +591,6 @@ Misc things (so I don't forget)
         [NEEDS BRAINSTORMING] A traffic system? Here's my idea:
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.
             Be careful for Pikmin carrying things in opposite directions. Maybe have a tie-breaker in some way?
-        When there are multiple Onions or ships that something can be delivered to, choose the closest
-            If there is no path to that one, then choose the second closest, and so on (thanks Neo)
         Smoother turns when carrying
         Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
         Carried objects should be able to push other objects that are either carriable or have the pushable property

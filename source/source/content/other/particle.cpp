@@ -197,7 +197,7 @@ ParticleEmission::ParticleEmission(
  * @return The offset.
  */
 Point ParticleEmission::getEmissionOffset(float numberRatio) {
-    switch (shape) {
+    switch(shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
         if(evenlySpread) {
             return
@@ -410,7 +410,7 @@ void ParticleGenerator::loadFromDataNode(
     eRS.set("number_deviation", emission.numberDeviation);
     eRS.set("shape", shapeInt);
     
-    switch (shapeInt) {
+    switch(shapeInt) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
         eRS.set("circle_outer_dist", emission.circleOuterDist);
         eRS.set("circle_inner_dist", emission.circleInnerDist);
@@ -530,7 +530,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     eGW.write("interval_deviation", emission.intervalDeviation);
     eGW.write("shape", emission.shape);
     
-    switch (emission.shape) {
+    switch(emission.shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
         eGW.write("circle_outer_dist", emission.circleOuterDist);
         eGW.write("circle_inner_dist", emission.circleInnerDist);
