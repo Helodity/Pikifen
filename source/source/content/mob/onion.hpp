@@ -25,7 +25,7 @@ extern const float FADE_SPEED;
 extern const float GENERATION_DELAY;
 extern const float NEW_SEED_Z_OFFSET;
 extern const float NEXT_GENERATION_INTERVAL;
-extern const float SEETHROUGH_ALPHA;
+extern const float SEE_THROUGH_ALPHA;
 extern const float SPIT_ANGLE_SHIFT;
 extern const float SPIT_H_SPEED;
 extern const float SPIT_H_SPEED_DEVIATION;
@@ -82,7 +82,7 @@ public:
     ~Onion();
     void drawMob() override;
     void generate();
-    void readScriptVars(const ScriptVarReader& svr) override;
+    void readScriptVars(const ScriptVarManager& varsMgr) override;
     void spit(size_t typeIdx);
     void startGenerating();
     void stopGenerating();

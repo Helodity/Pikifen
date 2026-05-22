@@ -122,7 +122,7 @@ public:
     float getTaskRange() const;
     void handleStatusEffectGain(StatusType* s) override;
     void handleStatusEffectLoss(StatusType* s) override;
-    void readScriptVars(const ScriptVarReader& svr) override;
+    void readScriptVars(const ScriptVarManager& varsMgr) override;
     void finishDyingClassSpecifics() override;
     void startDyingClassSpecifics() override;
     

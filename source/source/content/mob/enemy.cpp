@@ -197,14 +197,14 @@ int Enemy::getMissionPoints(bool* applicableInThisMission) const {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Enemy::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Enemy::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
     bool bossVar;
     
-    if(svr.get("boss", bossVar)) {
+    if(varsMgr.getValue("boss", bossVar)) {
         isBoss = bossVar;
     }
 }

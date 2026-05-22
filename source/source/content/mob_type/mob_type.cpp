@@ -580,7 +580,7 @@ void MobType::loadFromDataNode(
         sRS.set("relative", newSpawn.relative);
         sRS.set("coordinates", coordsStr);
         sRS.set("angle", newSpawn.angle);
-        sRS.set("vars", newSpawn.vars);
+        sRS.set("vars", newSpawn.varsStr);
         sRS.set("link_object_to_spawn", newSpawn.linkObjectToSpawn);
         sRS.set("link_spawn_to_object", newSpawn.linkSpawnToObject);
         sRS.set("momentum", newSpawn.momentum);

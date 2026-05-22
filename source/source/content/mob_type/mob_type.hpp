@@ -106,8 +106,8 @@ public:
         //Angle of the spawned object. Could be relative or absolute.
         float angle = 0.0f;
         
-        //Script vars to give the spawned object.
-        string vars;
+        //String representation of the script vars to give the spawned object.
+        string varsStr;
         
         //Should the spawner link to the spawned?
         bool linkObjectToSpawn = false;

@@ -1992,17 +1992,82 @@ void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
 
 
 #pragma endregion
-#pragma region Script var reader
+#pragma region Script var manager
+
+
 
 
 /**
- * @brief Constructs a new script var reader object.
- *
- * @param vars Map of variables to read from.
+ * @brief Constructs a new script var manager object.
+ * 
+ * @param str String to load the vars from.
  */
-ScriptVarReader::ScriptVarReader(map<string, string>& vars) :
-    vars(vars) {
-    
+ScriptVarManager::ScriptVarManager(const string& str) {
+    fromString(str);
+}
+
+
+/**
+ * @brief Clears the list.
+ */
+void ScriptVarManager::clear() {
+    varsMap.clear();
+}
+
+
+/**
+ * @brief Returns whether the list is empty.
+ * 
+ * @return Whether it is empty.
+ */
+bool ScriptVarManager::empty() const {
+    return varsMap.empty();
+}
+
+/**
+ * @brief Returns whether the given script var exists in the list.
+ * 
+ * @param name Its name.
+ * @return Whether it exists.
+ */
+bool ScriptVarManager::contains(const string& name) const {
+    return varsMap.contains(name);
+}
+
+
+/**
+ * @brief Erases a var from the list, if it exists.
+ * 
+ * @param name Its name.
+ * @return 
+ */
+void ScriptVarManager::erase(const string& name) {
+    varsMap.erase(name);
+}
+
+
+/**
+ * @brief Loads the list from a string representation.
+ * 
+ * @param str String to load the vars from.
+ * @return Whether it managed to read anything.
+ */
+bool ScriptVarManager::fromString(const string& str) {
+    bool success = false;
+
+    clear();
+
+    vector<string> rawVars = semicolonListToVector(str);
+    forIdx(v, rawVars) {
+        vector<string> rawParts = split(rawVars[v], "=");
+        if(rawParts.size() < 2) {
+            continue;
+        }
+        varsMap[trimSpaces(rawParts[0])] = trimSpaces(rawParts[1]);
+        success = true;
+    }
+
+    return success;
 }
 
 
@@ -2010,13 +2075,13 @@ ScriptVarReader::ScriptVarReader(map<string, string>& vars) :
  * @brief Assigns an Allegro color to the value of a given variable,
  * if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, ALLEGRO_COLOR& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, ALLEGRO_COLOR& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = s2c(v->second);
@@ -2027,13 +2092,13 @@ bool ScriptVarReader::get(const string& name, ALLEGRO_COLOR& dest) const {
 /**
  * @brief Assigns a string to the value of a given variable, if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, string& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, string& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = v->second;
@@ -2044,13 +2109,13 @@ bool ScriptVarReader::get(const string& name, string& dest) const {
 /**
  * @brief Assigns a size_t to the value of a given variable, if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, size_t& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, size_t& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = s2i(v->second);
@@ -2061,13 +2126,13 @@ bool ScriptVarReader::get(const string& name, size_t& dest) const {
 /**
  * @brief Assigns an int to the value of a given variable, if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, int& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, int& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = s2i(v->second);
@@ -2079,13 +2144,13 @@ bool ScriptVarReader::get(const string& name, int& dest) const {
  * @brief Assigns an unsigned char to the value of a given variable,
  * if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, unsigned char& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, unsigned char& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = s2i(v->second);
@@ -2096,13 +2161,13 @@ bool ScriptVarReader::get(const string& name, unsigned char& dest) const {
 /**
  * @brief Assigns a bool to the value of a given variable, if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, bool& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, bool& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = s2b(v->second);
@@ -2113,13 +2178,13 @@ bool ScriptVarReader::get(const string& name, bool& dest) const {
 /**
  * @brief Assigns a float to the value of a given variable, if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, float& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, float& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = s2f(v->second);
@@ -2130,17 +2195,145 @@ bool ScriptVarReader::get(const string& name, float& dest) const {
 /**
  * @brief Assigns a point to the value of a given variable, if it exists.
  *
- * @param name Name of the variable to read.
+ * @param name Name of the script variable to read.
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string& name, Point& dest) const {
-    auto v = vars.find(name);
-    if(v == vars.end()) {
+bool ScriptVarManager::getValue(const string& name, Point& dest) const {
+    auto v = varsMap.find(name);
+    if(v == varsMap.end()) {
         return false;
     }
     dest = s2p(v->second);
     return true;
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(const string& name, const string& value) {
+    varsMap[name] = value;
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(const string& name, size_t value) {
+    varsMap[name] = i2s(value);
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(const string& name, int value) {
+    varsMap[name] = i2s(value);
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(const string& name, unsigned char value) {
+    varsMap[name] = i2s(value);
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(const string& name, bool value) {
+    varsMap[name] = b2s(value);
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(const string& name, float value) {
+    varsMap[name] = f2s(value);
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(
+    const string& name, const ALLEGRO_COLOR& value
+) {
+    varsMap[name] = c2s(value);
+}
+
+
+/**
+ * @brief Makes one of the script vars to have the specified value. The var
+ * will be created if it does not exist.
+ * 
+ * @param name Name of the script variable to write to.
+ * @param value Value to give it.
+ */
+void ScriptVarManager::setValue(const string& name, const Point& value) {
+    varsMap[name] = p2s(value);
+}
+
+
+/**
+ * @brief Returns a map with the var names as the map keys,
+ * and var values as the map values.
+ * 
+ * @return The map.
+ */
+const map<string, string>& ScriptVarManager::toMap() const {
+    return varsMap;
+}
+
+
+/**
+ * @brief Returns a string representation of the variables and their values.
+ * 
+ * @return The string.
+ */
+string ScriptVarManager::toString() const {
+    bool wroteFirst = false;
+    string result;
+    
+    for(const auto& v : varsMap) {
+        if(wroteFirst) result += ";";
+        result += v.first + "=" + v.second;
+        wroteFirst = true;
+    }
+
+    return result;
 }
 
 

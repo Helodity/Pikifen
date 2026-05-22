@@ -1147,17 +1147,14 @@ void AreaEditor::processGuiMenuBar() {
 void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     if(!mPtr->type) return;
     
-    map<string, string> varsMap = getVarMap(mPtr->vars);
-    map<string, string> newVarsMap;
+    ScriptVarManager vars(mPtr->varsStr);
     map<string, bool> varsInWidgets;
     
     //Start with the properties that apply to all objects.
     
     //Team property.
     string teamVar;
-    if(isInMap(varsMap, "team")) {
-        teamVar = varsMap["team"];
-    }
+    vars.getValue("team", teamVar);
     
     vector<string> teamNames = enumGetNames(mobTeamNames);
     teamNames.insert(teamNames.begin(), "(Default)");
@@ -1193,18 +1190,18 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         "(Variable name: \"team\".)"
     );
     
-    if(!teamVar.empty()) newVarsMap["team"] = teamVar;
+    if(teamVar.empty()) {
+        vars.erase("team");
+    } else {
+        vars.setValue("team", teamVar);
+    }
     varsInWidgets["team"] = true;
     
     //Health property.
     float maxHealth = mPtr->type->maxHealth;
-    if(isInMap(varsMap, "max_health")) {
-        maxHealth = s2f(varsMap["max_health"]);
-    }
+    vars.getValue("max_health", maxHealth);
     float health = maxHealth;
-    if(isInMap(varsMap, "health")) {
-        health = s2f(varsMap["health"]);
-    }
+    vars.getValue("health", health);
     
     if(ImGui::DragFloat("Health", &health, 0.25f, 0.0f, maxHealth)) {
         registerChange("script vars change");
@@ -1216,8 +1213,10 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         WIDGET_EXPLANATION_DRAG
     );
     
-    if(health != maxHealth) {
-        newVarsMap["health"] = f2s(health);
+    if(health == maxHealth) {
+        vars.erase("health");
+    } else {
+        vars.setValue("health", health);
     }
     varsInWidgets["health"] = true;
     
@@ -1233,8 +1232,10 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         WIDGET_EXPLANATION_DRAG
     );
     
-    if(maxHealth != mPtr->type->maxHealth) {
-        newVarsMap["max_health"] = f2s(maxHealth);
+    if(maxHealth == mPtr->type->maxHealth) {
+        vars.erase("max_health");
+    } else {
+        vars.setValue("max_health", maxHealth);
     }
     varsInWidgets["max_health"] = true;
     
@@ -1245,12 +1246,8 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         MobType::AreaEditorProp* pPtr =
             &mPtr->type->areaEditorProps[p];
             
-        string value;
-        if(!isInMap(varsMap, pPtr->var)) {
-            value = pPtr->defValue;
-        } else {
-            value = varsMap[pPtr->var];
-        }
+        string value = pPtr->defValue;
+        vars.getValue(pPtr->var, value);
         
         switch(pPtr->type) {
         case AEMP_TYPE_TEXT: {
@@ -1336,37 +1333,24 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
             WIDGET_EXPLANATION_NONE
         );
         
-        if(value != pPtr->defValue) {
-            newVarsMap[pPtr->var] = value;
+        if(value == pPtr->defValue) {
+            vars.erase(pPtr->var);
+        } else {
+            vars.setValue(pPtr->var, value);
         }
         
         varsInWidgets[pPtr->var] = true;
         
     }
     
-    string otherVarsStr;
-    for(auto const& v : varsMap) {
-        if(!varsInWidgets[v.first]) {
-            otherVarsStr += v.first + "=" + v.second + ";";
-        }
-    }
-    
-    mPtr->vars.clear();
-    for(auto const& v : newVarsMap) {
-        mPtr->vars += v.first + "=" + v.second + ";";
-    }
-    mPtr->vars += otherVarsStr;
-    
-    if(!mPtr->vars.empty() && mPtr->vars[mPtr->vars.size() - 1] == ';') {
-        mPtr->vars.pop_back();
-    }
+    mPtr->varsStr = vars.toString();
     
     //Finally, a widget for the entire list.
-    string mobVars = mPtr->vars;
+    string mobVars = mPtr->varsStr;
     ImGui::Spacer();
     if(monoInputText("Full list", &mobVars)) {
         registerChange("script vars change");
-        mPtr->vars = mobVars;
+        mPtr->varsStr = mobVars;
     }
     setTooltip(
         "This is the full list of script variables to use.\n"
@@ -1960,12 +1944,12 @@ void AreaEditor::processGuiPanelGameplay() {
     ImGui::Spacer();
     if(saveableTreeNode("gameplay", "Starting sprays")) {
     
-        map<string, string> sprayStrs =
-            getVarMap(game.curArea->sprayAmounts);
+        ScriptVarManager sprayData(game.curArea->sprayAmounts);
         forIdx(s, game.config.misc.sprayOrder) {
             string sprayInternalName =
                 game.config.misc.sprayOrder[s]->manifest->internalName;
-            int amount = s2i(sprayStrs[sprayInternalName]);
+            int amount = 0;
+            sprayData.getValue(sprayInternalName, amount);
             ImGui::SetNextItemWidth(50);
             if(
                 ImGui::DragInt(
@@ -1974,12 +1958,8 @@ void AreaEditor::processGuiPanelGameplay() {
                 )
             ) {
                 registerChange("area spray amounts change");
-                sprayStrs[sprayInternalName] = i2s(amount);
-                game.curArea->sprayAmounts.clear();
-                for(auto const& v : sprayStrs) {
-                    game.curArea->sprayAmounts +=
-                        v.first + "=" + v.second + ";";
-                }
+                sprayData.setValue(sprayInternalName, amount);
+                game.curArea->sprayAmounts = sprayData.toString();
             }
             setTooltip(
                 "Starting amount of spray dosages to give the player.", "",
@@ -5548,25 +5528,22 @@ void AreaEditor::processGuiPanelSector() {
             ) {
             
                 //Freezing point override.
+                ScriptVarManager vars(sPtr->varsStr);
                 int freezingPointVar = 0;
-                map<string, string> sectorVars = getVarMap(sPtr->vars);
-                if(!sPtr->vars.empty()) {
-                    auto var =
-                        sectorVars.find(LIQUID::FREEZING_POINT_SECTOR_VAR);
-                    if(var != sectorVars.end()) {
-                        freezingPointVar = s2i(var->second);
-                    }
-                }
+                vars.getValue(
+                    LIQUID::FREEZING_POINT_SECTOR_VAR, freezingPointVar
+                );
                 ImGui::SetNextItemWidth(50);
                 if(ImGui::DragInt("Freezing point", &freezingPointVar, 0.1f)) {
                     registerChange("sector vars change");
                     if(freezingPointVar <= 0) {
-                        sectorVars.erase(LIQUID::FREEZING_POINT_SECTOR_VAR);
+                        vars.erase(LIQUID::FREEZING_POINT_SECTOR_VAR);
                     } else {
-                        sectorVars[LIQUID::FREEZING_POINT_SECTOR_VAR] =
-                            i2s(freezingPointVar);
+                        vars.setValue(
+                            LIQUID::FREEZING_POINT_SECTOR_VAR, freezingPointVar
+                        );
                     }
-                    sPtr->vars = saveVarMap(sectorVars);
+                    sPtr->varsStr = vars.toString();
                 }
                 setTooltip(
                     "Normally, a liquid's freezing point is determined\n"

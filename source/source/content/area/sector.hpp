@@ -89,8 +89,8 @@ struct Sector {
     //Z coordinate of the floor.
     float floorZ = 0.0f;
     
-    //Extra information, if any.
-    string vars;
+    //String representation of the vars that hold extra information, if any.
+    string varsStr;
     
     //Brightness [0 - 255].
     unsigned char brightness = GEOMETRY::DEF_SECTOR_BRIGHTNESS;

@@ -555,24 +555,24 @@ bool Pikmin::processAttackMiss(HitboxInteraction* info) {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Pikmin::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Pikmin::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
     int maturityVar;
     bool sproutVar;
     bool followLinkVar;
     
-    if(svr.get("maturity", maturityVar)) {
+    if(varsMgr.getValue("maturity", maturityVar)) {
         maturity = std::clamp(maturityVar, 0, (int) (N_MATURITIES - 1));
     }
-    if(svr.get("sprout", sproutVar)) {
+    if(varsMgr.getValue("sprout", sproutVar)) {
         if(sproutVar) {
             scriptVM.fsm.firstStateOverride = PIKMIN_STATE_SPROUT;
         }
     }
-    if(svr.get("follow_link_as_leader", followLinkVar)) {
+    if(varsMgr.getValue("follow_link_as_leader", followLinkVar)) {
         if(followLinkVar) {
             mustFollowLinkAsLeader = true;
         }

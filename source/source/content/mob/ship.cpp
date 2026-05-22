@@ -239,12 +239,12 @@ bool Ship::isLeaderOnCp(const Leader* l) const {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Ship::readScriptVars(const ScriptVarReader& svr) {
-    Mob::readScriptVars(svr);
+void Ship::readScriptVars(const ScriptVarManager& varsMgr) {
+    Mob::readScriptVars(varsMgr);
     
-    nest->readScriptVars(svr);
+    nest->readScriptVars(varsMgr);
 }
 
 

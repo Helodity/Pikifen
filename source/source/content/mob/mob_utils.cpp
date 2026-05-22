@@ -1015,12 +1015,12 @@ bool PikminNest::hasPikminInside(size_t typeIdx) {
  * @brief Reads the provided script variables, if any, and does stuff with
  * any that are related to nests.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void PikminNest::readScriptVars(const ScriptVarReader& svr) {
+void PikminNest::readScriptVars(const ScriptVarManager& varsMgr) {
     string pikminInsideVar;
     
-    if(svr.get("pikmin_inside", pikminInsideVar)) {
+    if(varsMgr.getValue("pikmin_inside", pikminInsideVar)) {
         vector<string> pikminInsideVars = split(pikminInsideVar);
         size_t word = 0;
         
@@ -1282,7 +1282,7 @@ float calculateMobPhysicalSpan(
  * @param center Initial position.
  * @param type Type of the new mob.
  * @param angle Initial facing angle.
- * @param vars Script variables.
+ * @param vars String representation of the script variables.
  * @param codeAfterCreation Code to run right after the mob is created,
  * if any. This is run before any scripting takes place.
  * @param firstStateOverride If this is INVALID, use the first state
@@ -1292,40 +1292,35 @@ float calculateMobPhysicalSpan(
  */
 Mob* createMob(
     MobCategory* category, const Point& center, MobType* type,
-    float angle, const string& vars,
+    float angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation,
     size_t firstStateOverride
 ) {
+    //Create the mob from the category.
     Mob* mPtr = category->createMob(center, type, angle);
     
-    if(mPtr->type->walkable) {
-        game.states.gameplay->mobs.walkables.push_back(mPtr);
-    }
-    
+    //Immediate post-creation logic, if any.
     if(codeAfterCreation) {
         codeAfterCreation(mPtr);
     }
     
-    if(!vars.empty()) {
-        map<string, string> varsMap = getVarMap(vars);
-        ScriptVarReader svr(varsMap);
-        
-        mPtr->readScriptVars(svr);
+    //Setup that reads data from the script vars.
+    if(!varsStr.empty()) {
+        ScriptVarManager vars(varsStr);
+        mPtr->readScriptVars(vars);
     }
     
+    //Start the script VM and FSM.
     if(firstStateOverride != INVALID) {
         mPtr->scriptVM.fsm.firstStateOverride = firstStateOverride;
     }
     
     mPtr->scriptVM.init(&type->scriptDef, mPtr);
     
-    if(!vars.empty()) {
-        map<string, string> varsMap = getVarMap(vars);
-        for(auto& v : varsMap) {
-            mPtr->scriptVM.vars[v.first] = v.second;
-        }
-    }
+    //Fill the script VM's script vars.
+    mPtr->scriptVM.vars.fromString(varsStr);
     
+    //Spawn its children.
     forIdx(c, type->children) {
         MobType::Child* childInfo =
             &type->children[c];
@@ -1401,7 +1396,13 @@ Mob* createMob(
         }
     }
     
+    //Add it to the right vectors.
     game.states.gameplay->mobs.all.push_back(mPtr);
+    if(mPtr->type->walkable) {
+        game.states.gameplay->mobs.walkables.push_back(mPtr);
+    }
+    
+    //Done.
     return mPtr;
 }
 
@@ -1416,7 +1417,7 @@ Mob* createMob(MobGen* gen) {
     Mob* mPtr =
         createMob(
             gen->type->category, gen->center, gen->type,
-            gen->angle, gen->vars
+            gen->angle, gen->varsStr
         );
         
     return mPtr;

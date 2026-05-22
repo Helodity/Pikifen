@@ -1155,9 +1155,8 @@ void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
                 continue;
             }
             size_t amountInPile = pilType->maxAmount;
-            map<string, string> varMap = getVarMap(mPtr->vars);
-            ScriptVarReader sv(varMap);
-            sv.get("amount", amountInPile);
+            ScriptVarManager vars(mPtr->varsStr);
+            vars.getValue("amount", amountInPile);
             amountInPile =
                 std::clamp(amountInPile, (size_t) 0, pilType->maxAmount);
             amount += amountInPile;
@@ -1281,7 +1280,7 @@ void Area::loadGeometryFromDataNode(
         sRS.set("texture_trans", newSector->textureInfo.tf.trans);
         sRS.set("texture", newSector->textureInfo.bmpName);
         sRS.set("type", typeStr);
-        sRS.set("vars", newSector->vars);
+        sRS.set("vars", newSector->varsStr);
         sRS.set("z", newSector->floorZ);
         
         bool sectorTypeFound;
@@ -1337,7 +1336,7 @@ void Area::loadGeometryFromDataNode(
         
         mRS.set("p", newMob->center);
         mRS.set("angle", newMob->angle);
-        mRS.set("vars", newMob->vars);
+        mRS.set("vars", newMob->varsStr);
         mRS.set("type", typeStr);
         mRS.set("links", linksStr);
         mRS.set("stored_inside", newMob->storedInside);
@@ -1356,9 +1355,9 @@ void Area::loadGeometryFromDataNode(
         }
         
         if(isBossBool) {
-            vector<string> vars = semicolonListToVector(newMob->vars);
-            vars.push_back("boss=true");
-            newMob->vars = join(vars, ";");
+            ScriptVarManager vars(newMob->varsStr);
+            vars.setValue("boss", true);
+            newMob->varsStr = vars.toString();
         }
         
         bool valid =
@@ -2593,8 +2592,8 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(sPtr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
             sGW.write("brightness", sPtr->brightness);
         }
-        if(!sPtr->vars.empty()) {
-            sGW.write("vars", sPtr->vars);
+        if(!sPtr->varsStr.empty()) {
+            sGW.write("vars", sPtr->varsStr);
         }
         if(sPtr->fade) {
             sGW.write("fade", sPtr->fade);
@@ -2654,8 +2653,8 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(mPtr->angle != 0) {
             mGW.write("angle", mPtr->angle);
         }
-        if(!mPtr->vars.empty()) {
-            mGW.write("vars", mPtr->vars);
+        if(!mPtr->varsStr.empty()) {
+            mGW.write("vars", mPtr->varsStr);
         }
         
         string linksStr;
@@ -3072,7 +3071,7 @@ MobGen::MobGen(
     type(type),
     center(center),
     angle(angle),
-    vars(vars) {
+    varsStr(vars) {
     
 }
 
@@ -3088,7 +3087,7 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
     destination->angle = angle;
     if(includePosition) destination->center = center;
     destination->type = type;
-    destination->vars = vars;
+    destination->varsStr = varsStr;
     destination->linkIdxs = linkIdxs;
     destination->storedInside = storedInside;
 }

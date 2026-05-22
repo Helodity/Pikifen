@@ -599,8 +599,8 @@ void Mob::arachnorbFootMoveLogic() {
         return;
     }
     
-    float feetNormalDist =
-        s2f(parent->m->scriptVM.vars["feet_normal_distance"]);
+    float feetNormalDist;
+    parent->m->scriptVM.vars.getValue("feet_normal_distance", feetNormalDist);
     if(feetNormalDist == 0) {
         feetNormalDist = 175;
     }
@@ -613,8 +613,10 @@ void Mob::arachnorbFootMoveLogic() {
             )->center
         );
         
-    Point finalPos = s2p(parent->m->scriptVM.vars["_destination_pos"]);
-    float finalAngle = s2f(parent->m->scriptVM.vars["_destination_angle"]);
+    Point finalPos;
+    parent->m->scriptVM.vars.getValue("_destination_pos", finalPos);
+    float finalAngle;
+    parent->m->scriptVM.vars.getValue("_destination_angle", finalAngle);
     
     Point offset = Point(feetNormalDist, 0);
     offset = rotatePoint(offset, defaultAngle);
@@ -683,9 +685,15 @@ void Mob::arachnorbHeadTurnLogic() {
 void Mob::arachnorbPlanLogic(
     SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
-    float maxStepDistance = s2f(scriptVM.vars["max_step_distance"]);
-    float maxTurnAngle = degToRad(s2f(scriptVM.vars["max_turn_angle"]));
-    float minTurnAngle = degToRad(s2f(scriptVM.vars["min_turn_angle"]));
+    float maxStepDistance;
+    scriptVM.vars.getValue("max_step_distance", maxStepDistance);
+    float maxTurnAngle;
+    scriptVM.vars.getValue("max_turn_angle", maxTurnAngle);
+    maxTurnAngle = degToRad(maxTurnAngle);
+    float minTurnAngle;
+    scriptVM.vars.getValue("min_turn_angle", minTurnAngle);
+    minTurnAngle = degToRad(minTurnAngle);
+
     if(maxStepDistance == 0) {
         maxStepDistance = 100;
     }
@@ -737,8 +745,8 @@ void Mob::arachnorbPlanLogic(
     
     destinationPos += offset;
     
-    scriptVM.vars["_destination_pos"] = p2s(destinationPos);
-    scriptVM.vars["_destination_angle"] = f2s(destinationAngle);
+    scriptVM.vars.setValue("_destination_pos", destinationPos);
+    scriptVM.vars.setValue("_destination_angle", destinationAngle);
 }
 
 
@@ -1028,8 +1036,8 @@ bool Mob::calculateCarryingDestination(
         
         forIdx(l, links) {
             if(!links[l]) continue;
-            string typeName =
-                links[l]->scriptVM.vars["carry_destination_type"];
+            string typeName;
+            links[l]->scriptVM.vars.getValue("carry_destination_type", typeName);
             MobType* pikType =
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN)->
                 getType(typeName);
@@ -3241,12 +3249,12 @@ size_t Mob::playSound(size_t soundDataIdx) {
 /**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
- * @param svr Script var reader to use.
+ * @param varsMgr Script var manager to use.
  */
-void Mob::readScriptVars(const ScriptVarReader& svr) {
+void Mob::readScriptVars(const ScriptVarManager& varsMgr) {
     string teamVar;
     
-    if(svr.get("team", teamVar)) {
+    if(varsMgr.getValue("team", teamVar)) {
         bool found;
         setTeam(enumGetValue(mobTeamINames, teamVar, &found));
         if(!found) {
@@ -3258,12 +3266,12 @@ void Mob::readScriptVars(const ScriptVarReader& svr) {
         }
     }
     
-    if(svr.get("max_health", maxHealth)) {
+    if(varsMgr.getValue("max_health", maxHealth)) {
         maxHealth = std::max(1.0f, maxHealth);
         health = maxHealth;
     }
     
-    if(svr.get("health", health)) {
+    if(varsMgr.getValue("health", health)) {
         health = std::min(health, maxHealth);
     }
 }
@@ -3585,7 +3593,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
             newXY,
             typePtr,
             newAngle,
-            info->vars
+            info->varsStr
         );
         
     newMob->bottomZ = newZ;

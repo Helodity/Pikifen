@@ -9,7 +9,7 @@ pikmin_exit_speed = 2
 pikmin_types = red_pikmin; yellow_pikmin; blue_pikmin; rock_pikmin; winged_pikmin; ice_pikmin
 pushable = false
 pushes = false
-radius = 16
+radius = 24
 
 sounds {
     beam {

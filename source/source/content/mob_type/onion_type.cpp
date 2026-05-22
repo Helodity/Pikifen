@@ -80,6 +80,7 @@ void OnionType::loadCatProperties(DataNode* file) {
     DataNode* deliveryAnimNode;
     
     oRS.set("auto_eject", autoEject);
+    oRS.set("can_turn_see_through", canTurnSeeThrough);
     oRS.set("delivery_animation", deliveryAnimStr, &deliveryAnimNode);
     oRS.set("delivery_area_radius", deliveryAreaRadius);
     oRS.set("eject_grown_pikmin", ejectGrownPikmin);

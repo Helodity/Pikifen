@@ -714,29 +714,6 @@ unsigned char getThrowPreviewVertexes(
 
 
 /**
- * @brief Given a string representation of script variables,
- * returns a map, where every key is a variable, and every value is the
- * variable's value.
- *
- * @param varsString String with the variables.
- * @return The map.
- */
-map<string, string> getVarMap(const string& varsString) {
-    map<string, string> finalMap;
-    vector<string> rawVars = semicolonListToVector(varsString);
-    
-    forIdx(v, rawVars) {
-        vector<string> rawParts = split(rawVars[v], "=");
-        if(rawParts.size() < 2) {
-            continue;
-        }
-        finalMap[trimSpaces(rawParts[0])] = trimSpaces(rawParts[1]);
-    }
-    return finalMap;
-}
-
-
-/**
  * @brief Returns the color a wall's shadow should be.
  *
  * @param ePtr Edge with the wall.
@@ -1337,24 +1314,6 @@ void saveStatistics() {
     sGW.write("sprays_used", s.spraysUsed);
     
     statsFile.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
-}
-
-
-/**
- * @brief Saves a map of script variables onto a string.
- *
- * @param varsMap Map to save.
- * @return The string.
- */
-string saveVarMap(const map<string, string>& varsMap) {
-    string finalString;
-    for(const auto& v : varsMap) {
-        finalString += v.first + "=" + v.second + ";";
-    }
-    if(finalString.back() == ';') {
-        finalString.pop_back();
-    }
-    return finalString;
 }
 
 

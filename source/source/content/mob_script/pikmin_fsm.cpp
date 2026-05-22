@@ -3994,9 +3994,9 @@ void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
     if(!tooPtr) return;
     
     if(info1) {
-        tooPtr->scriptVM.setVar("gentle_release", "true");
+        tooPtr->scriptVM.vars.setValue("gentle_release", true);
     } else {
-        tooPtr->scriptVM.setVar("gentle_release", "false");
+        tooPtr->scriptVM.vars.setValue("gentle_release", false);
     }
     pikPtr->release(tooPtr);
     tooPtr->center = pikPtr->center;

@@ -72,12 +72,11 @@ Liquid::Liquid(Hazard* hazard, const vector<Sector*>& sectors) :
         
         forIdx(s, sectors) {
             totalSurfaceArea += sectors[s]->surfaceArea;
-            if(!sectors[s]->vars.empty()) {
-                map<string, string> vars = getVarMap(sectors[s]->vars);
-                auto var = vars.find(LIQUID::FREEZING_POINT_SECTOR_VAR);
-                if(var != vars.end()) {
+            if(!sectors[s]->varsStr.empty()) {
+                ScriptVarManager vars(sectors[s]->varsStr);
+                size_t value = 0;
+                if(vars.getValue(LIQUID::FREEZING_POINT_SECTOR_VAR, value)) {
                     freezingPointFromVars = true;
-                    size_t value = s2i(var->second);
                     highestVarValue = std::max(highestVarValue, value);
                 }
             }
