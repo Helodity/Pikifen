@@ -957,7 +957,7 @@ void Mob::calculateAttackKnockback(
  */
 bool Mob::calculateCarryingDestination(
     PikminType** outTargetType, Mob** outTargetMob, Point* outTargetPoint
-) const {
+) {
     *outTargetMob = nullptr;
     *outTargetPoint = center;
     if(!carryInfo) return false;
@@ -1013,18 +1013,8 @@ bool Mob::calculateCarryingDestination(
     } case CARRY_DESTINATION_LINKED_MOB: {
 
         //If it's towards a linked mob, just go to the closest one.
-        Mob* closestLink = nullptr;
-        Distance closestLinkDist;
-        
-        forIdx(s, links) {
-            Distance d(center, links[s]->center);
-            
-            if(!closestLink || d < closestLinkDist) {
-                closestLink = links[s];
-                closestLinkDist = d;
-            }
-        }
-        
+        Mob* closestLink = calculateCarryingMob(links);
+
         if(closestLink) {
             *outTargetMob = closestLink;
             *outTargetPoint = closestLink->center;
@@ -1069,21 +1059,17 @@ bool Mob::calculateCarryingDestination(
         PikminType* decidedType = decideCarryPikminType(availableTypes);
         
         //Figure out which linked mob matches the decided type.
-        size_t closestTargetIdx = INVALID;
-        Distance closestTargetDist;
+        vector<Mob*> potentialLinks;
         forIdx(m, mobsPerType) {
-            if(mobsPerType[m].second != decidedType) continue;
-            
-            Distance d(center, mobsPerType[m].first->center);
-            if(closestTargetIdx == INVALID || d < closestTargetDist) {
-                closestTargetDist = d;
-                closestTargetIdx = m;
-            }
+            if(mobsPerType[m].second == decidedType) potentialLinks.push_back(mobsPerType[m].first);         
         }
+
+        //Calculate the target from those mobs
+        Mob* closestTarget = calculateCarryingMob(potentialLinks);
         
         //Finally, set the destination data.
         *outTargetType = decidedType;
-        *outTargetMob = links[closestTargetIdx];
+        *outTargetMob = closestTarget;
         *outTargetPoint = (*outTargetMob)->center;
         
         return true;
@@ -1104,7 +1090,7 @@ bool Mob::calculateCarryingDestination(
  * @param outTargetType If not nullptr, the target Pikmin type is returned here.
  * @return The Onion, or nullptr if no valid one was found.
  */
-Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
+Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
     //First, check which Onion Pikmin types are even available.
     unordered_set<PikminType*> availableTypes;
     forIdx(o, game.states.gameplay->mobs.onions) {
@@ -1125,31 +1111,24 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
     //Decide what type to go to.
     PikminType* decidedType = decideCarryPikminType(availableTypes);
     
-    //Figure out where that type's closest Onion is.
-    size_t closestOnionIdx = INVALID;
-    Distance closestOnionDist;
+    vector<Mob*> potentialOnions;
+
+    //Get the potential onions to carry to.
     forIdx(o, game.states.gameplay->mobs.onions) {
         Onion* oPtr = game.states.gameplay->mobs.onions[o];
         if(!oPtr->activated) continue;
         bool hasType = false;
         forIdx(t, oPtr->oniType->nest->pikTypes) {
             if(oPtr->oniType->nest->pikTypes[t] == decidedType) {
-                hasType = true;
+                potentialOnions.push_back(oPtr);
                 break;
             }
-        }
-        if(!hasType) continue;
-        
-        Distance d(center, oPtr->center);
-        if(closestOnionIdx == INVALID || d < closestOnionDist) {
-            closestOnionDist = d;
-            closestOnionIdx = o;
         }
     }
     
     //Finish!
     *outTargetType = decidedType;
-    return game.states.gameplay->mobs.onions[closestOnionIdx];
+    return (Onion*)calculateCarryingMob(potentialOnions);
 }
 
 
@@ -1158,21 +1137,49 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
  *
  * @return The ship.
  */
-Ship* Mob::calculateCarryingShip() const {
-    //Go to the nearest ship.
-    Ship* closestShip = nullptr;
-    Distance closestShipDist;
-    
+Ship* Mob::calculateCarryingShip() {
+    vector<Mob*> castedArray;
     forIdx(s, game.states.gameplay->mobs.ships) {
-        Ship* sPtr = game.states.gameplay->mobs.ships[s];
-        Distance d(center, sPtr->controlPointFinalPos);
-        
-        if(!closestShip || d < closestShipDist) {
-            closestShip = sPtr;
-            closestShipDist = d;
+        castedArray.push_back(game.states.gameplay->mobs.ships[s]);
+    }
+    return (Ship*)calculateCarryingMob(castedArray);
+}
+
+
+/**
+ * @brief Calculates to which mob Pikmin should carry something.
+ *
+ * @param potentialMobs List of mobs that can be chosen
+ * 
+ * @return The mob.
+ */
+Mob* Mob::calculateCarryingMob(const vector<Mob*> potentialMobs) {
+
+    Mob* closestMob = nullptr;
+    float closestDist = FLT_MAX;
+    float highestPathPriority = 0;
+
+    forIdx(m, potentialMobs) {
+        Mob* mPtr = potentialMobs[m];
+        //Calculate expected path.
+        PathFollowSettings settings = PathFollowSettings();
+        settings.targetMob = mPtr;
+        settings.targetPoint = mPtr->center;
+        Path path = Path(this, settings);
+
+        //Get the path's priority
+        int pathPriority = getPathPriority(path.result);
+
+        if (!closestMob || //No current target, set this to target.
+            highestPathPriority < pathPriority || //Higher priority, set this to target.
+            (highestPathPriority == pathPriority && path.totalDistance < closestDist) //Same priority, set if closer.
+            ) {
+            closestMob = mPtr;
+            closestDist = path.totalDistance;
+            highestPathPriority = pathPriority;
         }
     }
-    return closestShip;
+    return closestMob;
 }
 
 

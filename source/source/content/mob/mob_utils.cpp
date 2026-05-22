@@ -812,7 +812,7 @@ Path::Path(
     result =
         getPath(
             m->center, settings.targetPoint, settings,
-            path, nullptr, nullptr, nullptr
+            path, &totalDistance, nullptr, nullptr
         );
 }
 

@@ -380,6 +380,7 @@ PATH_RESULT getPath(
     vector<PathStop*>& fullPath, float* outTotalDist,
     PathStop** outStartStop, PathStop** outEndStop
 );
+int getPathPriority(PATH_RESULT result);
 string pathBlockReasonToString(PATH_BLOCK_REASON reason);
 string pathResultToString(PATH_RESULT result);
 
