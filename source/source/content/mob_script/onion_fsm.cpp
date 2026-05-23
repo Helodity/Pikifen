@@ -184,6 +184,7 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
     
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
+    //Figure out how many nutrients to receive.
     size_t nutrients = 0;
     
     switch(delivery->type->category->id) {
@@ -210,17 +211,23 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
         break;
     }
     }
-    
-    size_t typeIdx = 0;
-    for(; typeIdx < oniPtr->oniType->nest->pikTypes.size(); typeIdx++) {
-        if(
-            oniPtr->oniType->nest->pikTypes[typeIdx] ==
-            delivery->deliveryInfo->intendedPikType
-        ) {
-            break;
-        }
+
+    //Either accept the nutrients or forward them.
+    Onion* nutrientReceiver = nullptr;
+    if(
+        oniPtr->oniType->sendNutrientsToLink &&
+        !oniPtr->links.empty() &&
+        oniPtr->links[0]->type->category->id == MOB_CATEGORY_ONIONS
+    ) {
+        nutrientReceiver = (Onion*) oniPtr->links[0];
+    } else {
+        nutrientReceiver = oniPtr;
     }
+    nutrientReceiver->receiveNutrients(
+        delivery->deliveryInfo->intendedPikType, nutrients
+    );
     
+    //Update the beaming status.
     oniPtr->mobsBeingBeamed--;
     
     if(oniPtr->mobsBeingBeamed == 0 && oniPtr->soundBeamId != 0) {
@@ -228,14 +235,7 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
         oniPtr->soundBeamId = 0;
     }
     
-    oniPtr->stopGenerating();
-    oniPtr->generationDelayTimer.start();
-    oniPtr->nutrients[typeIdx] += nutrients;
-    while(oniPtr->nutrients[typeIdx] >= oniPtr->oniType->nutrientsPerSeed) {
-        oniPtr->generationQueue[typeIdx]++;
-        oniPtr->nutrients[typeIdx] -= oniPtr->oniType->nutrientsPerSeed;
-    }
-    
+    //Particles and sounds.
     ParticleGenerator pg =
         standardParticleGenSetup(
             game.sysContentNames.parOnionInsertion, oniPtr

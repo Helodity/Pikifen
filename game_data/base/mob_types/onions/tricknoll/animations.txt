@@ -1,0 +1,91 @@
+name=Tricknoll animations
+description=Animations for the Tricknoll.
+maker=Helodity, Espyo
+version=2.0.0
+engine_version=1.2.0
+animations{
+	dead{
+		frames{
+			dead{
+				duration=0.1000
+			}
+		}
+	}
+	generating{
+		frames{
+			active{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			inactive{
+				duration=0.1000
+			}
+		}
+	}
+	idling_active{
+		frames{
+			active{
+				duration=0.1000
+			}
+		}
+	}
+	stopping_generation{
+		frames{
+			active{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	active{
+		file=onions/tricknoll
+		file_pos=0.0000 0.0000
+		file_size=110.0000 110.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+		}
+	}
+	dead{
+		file=onions/tricknoll
+		file_pos=222.0000 0.0000
+		file_size=110.0000 110.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	inactive{
+		file=onions/tricknoll
+		file_pos=111.0000 0.0000
+		file_size=110.0000 110.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+		}
+	}
+}
+body_parts{
+	body
+}

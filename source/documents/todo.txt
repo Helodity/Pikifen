@@ -33,11 +33,11 @@ Next tasks (roughly sorted most important first)
     New sounds
         Pikmin or enemy getting frozen
         Glow Pikmin teleport
+        Tricknoll activation
         Ice vent emitting vapor
         Leader swap sound, so swapping to the rookie isn't silent
         Swarming jingle
     Lumiknolls
-        Tricknolls
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Freezecake
     White and Purple Onions and pellets

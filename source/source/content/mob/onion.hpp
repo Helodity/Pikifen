@@ -83,6 +83,7 @@ public:
     void drawMob() override;
     void generate();
     void readScriptVars(const ScriptVarManager& varsMgr) override;
+    void receiveNutrients(PikminType* pikType, size_t nutrientAmount);
     void spit(size_t typeIdx);
     void startGenerating();
     void stopGenerating();

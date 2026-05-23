@@ -1,0 +1,50 @@
+init {
+    set_var active false
+    set_near_reach leader_activation
+}
+
+ready {
+    if $active = true
+        set_animation idling_active
+    else
+        set_animation idling
+    end_if
+}
+
+script {
+    idling {
+        on_enter {
+            custom_actions_after
+
+            if $active = true
+                set_animation idling_active
+            else
+                set_animation idling
+            end_if
+        }
+        on_object_in_reach {
+            if $active = false
+                get_mob_info temp trigger mob_category
+                if $temp = leader
+                    set_var active true
+                    start_particles tricknoll_activation 0 0 120
+                    set_animation idling_active
+                end_if
+            end_if
+        }
+    }
+
+    dead {
+        on_enter {
+            custom_actions_after
+
+            set_tangible false
+            start_dying
+            set_height 1
+
+            set_animation dead
+            start_particles tricknoll_destruction 0 0 1000
+            set_shadow_visibility false
+        }
+    }
+}

@@ -792,7 +792,7 @@ PATH_RESULT getPath(
     fullPath.clear();
     
     if(game.curArea->pathStops.empty()) {
-        if(outTotalDist) *outTotalDist = 0.0f;
+        if(outTotalDist) *outTotalDist = Distance(start, end).toFloat();
         return PATH_RESULT_DIRECT_NO_STOPS;
     }
     
@@ -851,6 +851,9 @@ PATH_RESULT getPath(
     
     //No valid start or end point could be found, return a direct path.
     if(!closestToStart || !closestToEnd) {
+        if(outTotalDist) {
+            *outTotalDist = Distance(startToUse, endToUse).toFloat();
+        }
         return PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS;
     }
     

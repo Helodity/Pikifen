@@ -199,6 +199,37 @@ void Onion::readScriptVars(const ScriptVarManager& varsMgr) {
 
 
 /**
+ * @brief Handles some nutrients being received, typically from
+ * a delivered mob.
+ *
+ * @param pikType Type of Pikmin that will benefit from these nutrients.
+ * @param nutrientAmount Amount of nutrients.
+ */
+void Onion::receiveNutrients(PikminType* pikType, size_t nutrientAmount) {
+    size_t pikTypeIdx = INVALID;
+    forIdx(t, oniType->nest->pikTypes) {
+        if(oniType->nest->pikTypes[t] == pikType) {
+            pikTypeIdx = t;
+            break;
+        }
+    }
+    
+    if(pikTypeIdx == INVALID) {
+        //This Onion doesn't manage this Pikmin type. Too bad.
+        return;
+    }
+    
+    stopGenerating();
+    generationDelayTimer.start();
+    nutrients[pikTypeIdx] += nutrientAmount;
+    while(nutrients[pikTypeIdx] >= oniType->nutrientsPerSeed) {
+        generationQueue[pikTypeIdx]++;
+        nutrients[pikTypeIdx] -= oniType->nutrientsPerSeed;
+    }
+}
+
+
+/**
  * @brief Spits a Pikmin seed right now.
  *
  * @param typeIdx Index of the Pikmin type in the nest's data.

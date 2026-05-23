@@ -85,6 +85,7 @@ void OnionType::loadCatProperties(DataNode* file) {
     oRS.set("delivery_area_radius", deliveryAreaRadius);
     oRS.set("eject_grown_pikmin", ejectGrownPikmin);
     oRS.set("nutrients_per_seed", nutrientsPerSeed);
+    oRS.set("send_nutrients_to_link", sendNutrientsToLink);
     
     if(deliveryAnimNode) {
         readEnumProp(

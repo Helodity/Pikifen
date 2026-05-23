@@ -93,6 +93,9 @@ public:
     //Whether it can turn see-through.
     bool canTurnSeeThrough = true;
     
+    //If true, nutrients received are sent to the linked Onion and then ignored.
+    bool sendNutrientsToLink = false;
+    
     
     //--- Public function declarations ---
     

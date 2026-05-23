@@ -1999,7 +1999,7 @@ void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
 
 /**
  * @brief Constructs a new script var manager object.
- * 
+ *
  * @param str String to load the vars from.
  */
 ScriptVarManager::ScriptVarManager(const string& str) {
@@ -2017,7 +2017,7 @@ void ScriptVarManager::clear() {
 
 /**
  * @brief Returns whether the list is empty.
- * 
+ *
  * @return Whether it is empty.
  */
 bool ScriptVarManager::empty() const {
@@ -2026,7 +2026,7 @@ bool ScriptVarManager::empty() const {
 
 /**
  * @brief Returns whether the given script var exists in the list.
- * 
+ *
  * @param name Its name.
  * @return Whether it exists.
  */
@@ -2037,9 +2037,8 @@ bool ScriptVarManager::contains(const string& name) const {
 
 /**
  * @brief Erases a var from the list, if it exists.
- * 
+ *
  * @param name Its name.
- * @return 
  */
 void ScriptVarManager::erase(const string& name) {
     varsMap.erase(name);
@@ -2047,16 +2046,15 @@ void ScriptVarManager::erase(const string& name) {
 
 
 /**
- * @brief Loads the list from a string representation.
- * 
+ * @brief Loads the list from a string representation, without clearing
+ * the existing script vars.
+ *
  * @param str String to load the vars from.
  * @return Whether it managed to read anything.
  */
 bool ScriptVarManager::fromString(const string& str) {
     bool success = false;
-
-    clear();
-
+    
     vector<string> rawVars = semicolonListToVector(str);
     forIdx(v, rawVars) {
         vector<string> rawParts = split(rawVars[v], "=");
@@ -2066,7 +2064,7 @@ bool ScriptVarManager::fromString(const string& str) {
         varsMap[trimSpaces(rawParts[0])] = trimSpaces(rawParts[1]);
         success = true;
     }
-
+    
     return success;
 }
 
@@ -2212,7 +2210,7 @@ bool ScriptVarManager::getValue(const string& name, Point& dest) const {
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2224,7 +2222,7 @@ void ScriptVarManager::setValue(const string& name, const string& value) {
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2236,7 +2234,7 @@ void ScriptVarManager::setValue(const string& name, size_t value) {
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2248,7 +2246,7 @@ void ScriptVarManager::setValue(const string& name, int value) {
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2260,7 +2258,7 @@ void ScriptVarManager::setValue(const string& name, unsigned char value) {
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2272,7 +2270,7 @@ void ScriptVarManager::setValue(const string& name, bool value) {
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2284,7 +2282,7 @@ void ScriptVarManager::setValue(const string& name, float value) {
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2298,7 +2296,7 @@ void ScriptVarManager::setValue(
 /**
  * @brief Makes one of the script vars to have the specified value. The var
  * will be created if it does not exist.
- * 
+ *
  * @param name Name of the script variable to write to.
  * @param value Value to give it.
  */
@@ -2310,7 +2308,7 @@ void ScriptVarManager::setValue(const string& name, const Point& value) {
 /**
  * @brief Returns a map with the var names as the map keys,
  * and var values as the map values.
- * 
+ *
  * @return The map.
  */
 const map<string, string>& ScriptVarManager::toMap() const {
@@ -2320,7 +2318,7 @@ const map<string, string>& ScriptVarManager::toMap() const {
 
 /**
  * @brief Returns a string representation of the variables and their values.
- * 
+ *
  * @return The string.
  */
 string ScriptVarManager::toString() const {
@@ -2332,7 +2330,7 @@ string ScriptVarManager::toString() const {
         result += v.first + "=" + v.second;
         wroteFirst = true;
     }
-
+    
     return result;
 }
 
