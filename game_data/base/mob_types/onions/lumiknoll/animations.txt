@@ -1,0 +1,602 @@
+name=Lumiknoll animations
+description=Animations for the Lumiknoll.
+maker=Helodity, Espyo
+version=2.0.0
+engine_version=1.2.0
+animations{
+	dead{
+		frames{
+			dead{
+				duration=0.1000
+			}
+		}
+	}
+	generating{
+		frames
+	}
+	generating_full{
+		frames{
+			full{
+				duration=0.0500
+				interpolate=true
+			}
+			full_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			full{
+				duration=0.0500
+				interpolate=true
+			}
+			full_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	generating_high{
+		frames{
+			high{
+				duration=0.0500
+				interpolate=true
+			}
+			high_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			high{
+				duration=0.0500
+				interpolate=true
+			}
+			high_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	generating_low{
+		frames{
+			low{
+				duration=0.0500
+				interpolate=true
+			}
+			low_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			low{
+				duration=0.0500
+				interpolate=true
+			}
+			low_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	generating_mid{
+		frames{
+			mid{
+				duration=0.0500
+				interpolate=true
+			}
+			mid_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			mid{
+				duration=0.0500
+				interpolate=true
+			}
+			mid_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	idling{
+		frames
+	}
+	idling_full{
+		frames{
+			full{
+				duration=0.1000
+			}
+		}
+	}
+	idling_high{
+		frames{
+			high{
+				duration=0.1000
+			}
+		}
+	}
+	idling_low{
+		frames{
+			low{
+				duration=0.1000
+			}
+		}
+	}
+	idling_mid{
+		frames{
+			mid{
+				duration=0.1000
+			}
+		}
+	}
+	stopping_generation{
+		frames
+	}
+	stopping_generation_full{
+		frames{
+			full{
+				duration=0.0500
+				interpolate=true
+			}
+			full_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			full{
+				duration=0.0500
+				interpolate=true
+			}
+			full_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	stopping_generation_high{
+		frames{
+			high{
+				duration=0.0500
+				interpolate=true
+			}
+			high_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			high{
+				duration=0.0500
+				interpolate=true
+			}
+			high_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	stopping_generation_low{
+		frames{
+			low{
+				duration=0.0500
+				interpolate=true
+			}
+			low_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			low{
+				duration=0.0500
+				interpolate=true
+			}
+			low_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	stopping_generation_mid{
+		frames{
+			mid{
+				duration=0.0500
+				interpolate=true
+			}
+			mid_larger{
+				duration=0.0500
+				interpolate=true
+			}
+			mid{
+				duration=0.0500
+				interpolate=true
+			}
+			mid_smaller{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	dead{
+		file=onions/lumiknoll
+		file_pos=924.0000 0.0000
+		file_size=230.0000 230.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=2
+				value=1.0000
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	full{
+		file=onions/lumiknoll
+		file_pos=0.0000 0.0000
+		file_size=230.0000 230.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	full_larger{
+		file=onions/lumiknoll
+		file_pos=0.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=1.0100 1.0100
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	full_smaller{
+		file=onions/lumiknoll
+		file_pos=0.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=0.9900 0.9900
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	high{
+		file=onions/lumiknoll
+		file_pos=231.0000 0.0000
+		file_size=230.0000 230.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	high_larger{
+		file=onions/lumiknoll
+		file_pos=231.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=1.0100 1.0100
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	high_smaller{
+		file=onions/lumiknoll
+		file_pos=231.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=0.9900 0.9900
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	low{
+		file=onions/lumiknoll
+		file_pos=693.0000 0.0000
+		file_size=230.0000 230.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	low_larger{
+		file=onions/lumiknoll
+		file_pos=693.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=1.0100 1.0100
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	low_smaller{
+		file=onions/lumiknoll
+		file_pos=693.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=0.9900 0.9900
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	mid{
+		file=onions/lumiknoll
+		file_pos=462.0000 0.0000
+		file_size=230.0000 230.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	mid_larger{
+		file=onions/lumiknoll
+		file_pos=462.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=1.0100 1.0100
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	mid_smaller{
+		file=onions/lumiknoll
+		file_pos=462.0000 0.0000
+		file_size=230.0000 230.0000
+		scale=0.9900 0.9900
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=220.0000
+				radius=115.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			hole{
+				coords=0.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=96.0000 0.0000 220.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	body
+	hole
+	hole_2
+}

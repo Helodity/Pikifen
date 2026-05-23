@@ -1,0 +1,50 @@
+name = Lumiknoll
+description = Lumiknolls are used to create new Glow Pikmin. They can be targeted by enemies!
+
+auto_eject = true
+blackout_radius = 64
+can_turn_see_through = false
+delivery_animation = toss
+delivery_area_radius = 130
+eject_grown_pikmin = true
+has_nest_menu = false
+height = 200
+inactive_logic = all_logic
+leg_body_parts = hole; hole_2
+max_health = 1000
+nutrients_per_seed = 3
+pikmin_enter_speed = 0.7
+pikmin_exit_spat = true
+pikmin_exit_speed = 2
+pikmin_types = glow_pikmin
+pushable = false
+pushes = true
+radius = 115
+show_health = false
+target_type = player
+team = player_1
+
+sounds {
+    pop {
+        sound = pikmin/seed_pop
+        volume = 40
+        speed_deviation = 5
+        stack_min_pos = 0.005
+    }
+    pikmin_exit {
+        sound = effects/pop
+        volume = 20
+        speed = 70
+        speed_deviation = 8
+        stack_min_pos = 0.02
+    }
+    reception {
+        sound = effects/poof
+        volume = 40
+        speed_deviation = 15
+    }
+}
+
+maker = Helodity, Espyo
+version = 2.0.0
+engine_version = 1.2.0

@@ -1,0 +1,73 @@
+script {
+    idling {
+        on_enter {
+            custom_actions_after
+            get_mob_info temp self health_ratio
+                
+            if $temp < 0.1
+                set_animation idling_low
+            else_if $temp < 0.5
+                set_animation idling_mid
+            else_if $temp < 0.95
+                set_animation idling_high
+            else
+                set_animation idling_full
+            end_if
+        }
+        on_damage {
+            custom_actions_after
+            get_mob_info temp self health_ratio
+                
+            if $temp < 0.1
+                set_animation idling_low
+            else_if $temp < 0.5
+                set_animation idling_mid
+            else_if $temp < 0.95
+                set_animation idling_high
+            else
+                set_animation idling_full
+            end_if
+        }
+    }
+
+    generating {
+        on_enter {
+            custom_actions_after
+            get_mob_info temp self health_ratio
+                
+            if $temp < 0.1
+                set_animation generating_low
+            else_if $temp < 0.5
+                set_animation generating_mid
+            else_if $temp < 0.95
+                set_animation generating_high
+            else
+                set_animation generating_full
+            end_if
+        }
+    }
+
+    stopping_generation {
+        on_enter {
+            custom_actions_after
+            get_mob_info temp self health_ratio
+                
+            if $temp < 0.1
+                set_animation stopping_generation_low
+            else_if $temp < 0.5
+                set_animation stopping_generation_mid
+            else_if $temp < 0.95
+                set_animation stopping_generation_high
+            else
+                set_animation stopping_generation_full
+            end_if
+        }
+    }
+
+    dead {
+        on_enter {
+            custom_actions_after
+            set_animation dead
+        }
+    }
+}

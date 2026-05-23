@@ -5,6 +5,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    You can't delete just a path link, since selecting one selects the stops too
+    Piles that hide when they have 0 left shouldn't show their amount via fraction numbers when the mouse is over them
     It's not possible to rotate axis-aligned single edges (thanks Helodity)
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
