@@ -21,6 +21,7 @@ send_nutrients_to_link = true
 show_health = false
 target_type = player
 team = player_1
+use_damage_squash_and_stretch = true
 
 area_editor_properties {
     Active {

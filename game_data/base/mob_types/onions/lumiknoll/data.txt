@@ -22,6 +22,7 @@ radius = 115
 show_health = false
 target_type = player
 team = player_1
+use_damage_squash_and_stretch = true
 
 sounds {
     pop {

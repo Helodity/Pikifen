@@ -40,6 +40,18 @@ area_editor_properties {
         def_value = false
         tooltip = Does it have a blue pellet?
     }
+    Purple {
+        var = purple
+        type = bool
+        def_value = false
+        tooltip = Does it have a purple pellet?
+    }
+    White {
+        var = white
+        type = bool
+        def_value = false
+        tooltip = Does it have a white pellet?
+    }
     Rock {
         var = rock
         type = bool
@@ -77,6 +89,20 @@ spawns {
     }
     blue {
         object = pellet_10_blue
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    purple {
+        object = pellet_10_purple
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    white {
+        object = pellet_10_white
         relative = true
         coordinates = 100 0 96
         angle = 270

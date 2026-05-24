@@ -78,6 +78,26 @@ animations{
 			}
 		}
 	}
+	idling_purple{
+		frames{
+			idling_01_purple{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_02_purple{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_03_purple{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_02_purple{
+				duration=0.3000
+				interpolate=true
+			}
+		}
+	}
 	idling_red{
 		frames{
 			idling_01_red{
@@ -113,6 +133,26 @@ animations{
 				interpolate=true
 			}
 			idling_02_rock{
+				duration=0.3000
+				interpolate=true
+			}
+		}
+	}
+	idling_white{
+		frames{
+			idling_01_white{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_02_white{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_03_white{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_02_white{
 				duration=0.3000
 				interpolate=true
 			}
@@ -406,6 +446,30 @@ sprites{
 			}
 		}
 	}
+	idling_01_purple{
+		file=other_mobs/pellet_posy_purple
+		file_pos=393.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=51.5000 0.0000
+		hitboxes{
+			pellet{
+				coords=60.0000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
 	idling_01_red{
 		file=other_mobs/pellet_posy_red
 		file_pos=393.0000 0.0000
@@ -432,6 +496,30 @@ sprites{
 	}
 	idling_01_rock{
 		file=other_mobs/pellet_posy_rock
+		file_pos=393.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=51.5000 0.0000
+		hitboxes{
+			pellet{
+				coords=60.0000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	idling_01_white{
+		file=other_mobs/pellet_posy_white
 		file_pos=393.0000 0.0000
 		file_size=116.0000 116.0000
 		offset=51.5000 0.0000
@@ -552,6 +640,31 @@ sprites{
 			}
 		}
 	}
+	idling_02_purple{
+		file=other_mobs/pellet_posy_purple
+		file_pos=393.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.1000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			pellet{
+				coords=60.4000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
 	idling_02_red{
 		file=other_mobs/pellet_posy_red
 		file_pos=393.0000 0.0000
@@ -579,6 +692,31 @@ sprites{
 	}
 	idling_02_rock{
 		file=other_mobs/pellet_posy_rock
+		file_pos=393.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.1000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			pellet{
+				coords=60.4000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	idling_02_white{
+		file=other_mobs/pellet_posy_white
 		file_pos=393.0000 0.0000
 		file_size=116.0000 116.0000
 		offset=52.1000 0.0000
@@ -702,6 +840,31 @@ sprites{
 			}
 		}
 	}
+	idling_03_purple{
+		file=other_mobs/pellet_posy_purple
+		file_pos=393.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.7000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=60.7000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
 	idling_03_red{
 		file=other_mobs/pellet_posy_red
 		file_pos=393.0000 0.0000
@@ -729,6 +892,31 @@ sprites{
 	}
 	idling_03_rock{
 		file=other_mobs/pellet_posy_rock
+		file_pos=393.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.7000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=60.7000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	idling_03_white{
+		file=other_mobs/pellet_posy_white
 		file_pos=393.0000 0.0000
 		file_size=116.0000 116.0000
 		offset=52.7000 0.0000

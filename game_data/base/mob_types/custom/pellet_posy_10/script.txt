@@ -1,10 +1,12 @@
-first_state = check_ok
+first_state = sprout
 death_state = destroyed
 
 init {
     set_var red false
     set_var yellow false
     set_var blue false
+    set_var purple false
+    set_var white false
     set_var rock false
     set_var winged false
     set_var ice false
@@ -12,33 +14,38 @@ init {
     set_var bloom_time 240
 }
 
+ready {
+    if $red = true
+        set_state sprout
+    end_if
+    if $yellow = true
+        set_state sprout
+    end_if
+    if $blue = true
+        set_state sprout
+    end_if
+    if $purple = true
+        set_state sprout
+    end_if
+    if $white = true
+        set_state sprout
+    end_if
+    if $rock = true
+        set_state sprout
+    end_if
+    if $winged = true
+        set_state sprout
+    end_if
+    if $ice = true
+        set_state sprout
+    end_if
+    
+    //If it got here, that means it has no chosen content. Pick red.
+    set_var red true
+    set_state sprout
+}
+
 script {
-    check_ok {
-        on_enter {
-            if $red = true
-                set_state sprout
-            end_if
-            if $yellow = true
-                set_state sprout
-            end_if
-            if $blue = true
-                set_state sprout
-            end_if
-            if $rock = true
-                set_state sprout
-            end_if
-            if $winged = true
-                set_state sprout
-            end_if
-            if $ice = true
-                set_state sprout
-            end_if
-            
-            //If it got here, that means it has no chosen content. Pick red.
-            set_var red true
-            set_state sprout
-        }
-    }
     sprout {
         on_enter {
             set_animation sprout
@@ -89,6 +96,10 @@ script {
             else_if $cur_color = yellow
                 set_var cur_color blue
             else_if $cur_color = blue
+                set_var cur_color purple
+            else_if $cur_color = purple
+                set_var cur_color white
+            else_if $cur_color = white
                 set_var cur_color rock
             else_if $cur_color = rock
                 set_var cur_color winged
@@ -108,6 +119,14 @@ script {
                 end_if
             else_if $cur_color = blue
                 if $blue != true
+                    goto try_next
+                end_if
+            else_if $cur_color = purple
+                if $purple != true
+                    goto try_next
+                end_if
+            else_if $cur_color = white
+                if $white != true
                     goto try_next
                 end_if
             else_if $cur_color = rock
@@ -135,6 +154,10 @@ script {
                 set_animation idling_yellow no_restart
             else_if $cur_color = blue
                 set_animation idling_blue no_restart
+            else_if $cur_color = purple
+                set_animation idling_purple no_restart
+            else_if $cur_color = white
+                set_animation idling_white no_restart
             else_if $cur_color = rock
                 set_animation idling_rock no_restart
             else_if $cur_color = winged
@@ -162,6 +185,10 @@ script {
                 spawn yellow
             else_if $cur_color = blue
                 spawn blue
+            else_if $cur_color = purple
+                spawn purple
+            else_if $cur_color = white
+                spawn white
             else_if $cur_color = rock
                 spawn rock
             else_if $cur_color = winged
