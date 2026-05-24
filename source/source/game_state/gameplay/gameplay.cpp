@@ -1101,7 +1101,7 @@ void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
             tryPause();
         }
     }
-
+    
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onionMenu) {
         onionMenu->handleAllegroEvent(ev);
@@ -1359,8 +1359,10 @@ void GameplayState::load() {
         vector<Sector*> liquidSectors;
         
         sPtr->getNeighborSectorsConditionally(
-        [] (Sector * s2) -> bool {
-            return s2->hazard && s2->hazard->associatedLiquid;
+        [sPtr] (Sector * s2) -> bool {
+            return
+            s2->hazard &&
+            s2->hazard->associatedLiquid == sPtr->hazard->associatedLiquid;
         },
         liquidSectors
         );
@@ -1468,7 +1470,7 @@ void GameplayState::load() {
     
     ScriptVarManager sprayVars(game.curArea->sprayAmounts);
     const map<string, string>& sprayVarMap = sprayVars.toMap();
-        
+    
     for(const auto& s : sprayVarMap) {
         size_t sprayIdx = 0;
         for(; sprayIdx < game.config.misc.sprayOrder.size(); sprayIdx++) {
@@ -1752,6 +1754,8 @@ void GameplayState::tryPause() {
     if(!loaded) return;
     if(pauseMenu) return;
     if(paused) return;
+    if(cutsceneMsgBox) return;
+    if(onionMenu) return;
     if(players.empty()) return;
     if(game.modal.responsive) return;
     doPlayerActionPause(&players[0], true, false);

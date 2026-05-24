@@ -434,6 +434,7 @@ AreaEditor::AreaEditor() :
     pathLinkSelection.itemsCanResize = false;
     pathLinkSelection.itemsCanRotate = true;
     pathLinkSelection.disableChanges = true;
+    pathLinkSelection.itemPadding = AREA_EDITOR::SELECTION_TW_PADDING;
     
     shadowSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
@@ -4293,18 +4294,6 @@ void AreaEditor::updateSelectionRequirements() {
     for(size_t eIdx : selectedEdges) {
         vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[0]);
         vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[1]);
-    }
-    
-    const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
-    for(size_t lIdx : selectedLinks) {
-        pathStopSelection.add(
-            game.curArea->findPathStopIdx(
-                game.curArea->editorPathLinks[lIdx].link1->startPtr
-            )
-        );
-        pathStopSelection.add(
-            game.curArea->editorPathLinks[lIdx].link1->endIdx
-        );
     }
 }
 

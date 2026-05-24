@@ -72,6 +72,9 @@ FRACTION_NR_VISIBILITY Pile::getFractionNumbersInfo(
     float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
     if(!pilType->showAmount) return FRACTION_NR_VISIBILITY_NONE;
+    if(pilType->hideWhenEmpty && amount == 0) {
+        return FRACTION_NR_VISIBILITY_NONE;
+    }
     
     *outValueNr = amount;
     *outReqNr = 0;

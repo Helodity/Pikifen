@@ -5837,8 +5837,7 @@ bool Editor::SelectionManager::applyDirectTransformation(
     const Rect& newRect, float newAngle
 ) {
     if(!enabled) return false;
-    if(preOpRect.size.x <= 0.0f) return false;
-    if(preOpRect.size.y <= 0.0f) return false;
+    if(preOpRect.size.x <= 0.0f && preOpRect.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
     const set<size_t>& list = selectedItems.getItemIdxs();
@@ -5867,8 +5866,7 @@ bool Editor::SelectionManager::applySharedTransformation(
 ) {
     //Setup.
     if(!enabled) return false;
-    if(preOpRect.size.x <= 0.0f) return false;
-    if(preOpRect.size.y <= 0.0f) return false;
+    if(preOpRect.size.x <= 0.0f && preOpRect.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
     RectCorners preOpRectCorners = rectToRectCorners(preOpRect);
@@ -5894,8 +5892,13 @@ bool Editor::SelectionManager::applySharedTransformation(
             Point preOpCenterRatio =
                 (preOpItemCenters[i] - preOpRectCorners.tl) /
                 preOpRect.size;
-            Point preOpSizeRatio =
-                preOpItemSizes[i] / preOpRect.size;
+            Point preOpSizeRatio(1.0f);
+            if(preOpRect.size.x > 0.0f) {
+                preOpSizeRatio.x = preOpItemSizes[i].x / preOpRect.size.x;
+            }
+            if(preOpRect.size.y > 0.0f) {
+                preOpSizeRatio.y = preOpItemSizes[i].y / preOpRect.size.y;
+            }
             iCenter =
                 newRectCorners.tl + preOpCenterRatio * newRect.size;
             iSize = preOpSizeRatio * newRect.size;

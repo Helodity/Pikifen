@@ -811,6 +811,9 @@ private:
     //Current layout mode selection filter.
     SELECTION_FILTER selectionFilter = SELECTION_FILTER_SECTORS;
     
+    //List of edges that have been deleted midway through latest operation.
+    unordered_set<Edge*> deletedEdges;
+    
     //Show blocking vs. non-blocking sectors?
     bool showBlockingSectors = false;
     

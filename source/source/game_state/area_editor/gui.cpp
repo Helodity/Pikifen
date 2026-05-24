@@ -4700,7 +4700,7 @@ void AreaEditor::processGuiPanelPaths() {
         );
         
         //Delete path button.
-        if(pathStopSelection.hasAny() || !pathLinkSelection.hasAny()) {
+        if(pathStopSelection.hasAny() || pathLinkSelection.hasAny()) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(

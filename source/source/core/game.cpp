@@ -219,7 +219,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         isGameRunning = false;
         
     } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
-
+        //Switching to another window.
         controls.releaseAll();
         
     } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {

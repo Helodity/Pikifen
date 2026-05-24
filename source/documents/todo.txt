@@ -5,9 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    You can't delete just a path link, since selecting one selects the stops too
-    Piles that hide when they have 0 left shouldn't show their amount via fraction numbers when the mouse is over them
-    It's not possible to rotate axis-aligned single edges (thanks Helodity)
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -39,6 +36,7 @@ Next tasks (roughly sorted most important first)
         Swarming jingle
     Lumiknolls
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
+        Piles should allow pellets...right?
     Freezecake
     White and Purple Onions and pellets
     Other mission tweaks
@@ -483,6 +481,7 @@ Small tasks (for when I'm feeling lazy)
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
+        Remove empty lines between a function's signature and its body
         Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
     

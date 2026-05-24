@@ -531,9 +531,6 @@ void Area::connectVertexEdges(Vertex* vPtr) {
  * @param eIdx Index number of the edge to delete.
  */
 void Area::deleteEdge(size_t eIdx) {
-    delete edges[eIdx];
-    edges.erase(edges.begin() + eIdx);
-    
     forIdx(v, vertexes) {
         Vertex* vPtr = vertexes[v];
         forIdx(e, vPtr->edges) {
@@ -553,6 +550,9 @@ void Area::deleteEdge(size_t eIdx) {
             );
         }
     }
+    
+    delete edges[eIdx];
+    edges.erase(edges.begin() + eIdx);
 }
 
 
@@ -577,9 +577,6 @@ void Area::deleteEdge(const Edge* ePtr) {
  * @param sIdx Index number of the sector to delete.
  */
 void Area::deleteSector(size_t sIdx) {
-    delete sectors[sIdx];
-    sectors.erase(sectors.begin() + sIdx);
-    
     forIdx(e, edges) {
         Edge* ePtr = edges[e];
         for(size_t s = 0; s < 2; s++) {
@@ -589,6 +586,9 @@ void Area::deleteSector(size_t sIdx) {
             );
         }
     }
+    
+    delete sectors[sIdx];
+    sectors.erase(sectors.begin() + sIdx);
 }
 
 
@@ -613,9 +613,6 @@ void Area::deleteSector(const Sector* sPtr) {
  * @param vIdx Index number of the vertex to delete.
  */
 void Area::deleteVertex(size_t vIdx) {
-    delete vertexes[vIdx];
-    vertexes.erase(vertexes.begin() + vIdx);
-    
     forIdx(e, edges) {
         Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
@@ -625,6 +622,9 @@ void Area::deleteVertex(size_t vIdx) {
             );
         }
     }
+    
+    delete vertexes[vIdx];
+    vertexes.erase(vertexes.begin() + vIdx);
 }
 
 

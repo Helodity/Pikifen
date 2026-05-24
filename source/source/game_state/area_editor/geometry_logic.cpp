@@ -483,6 +483,7 @@ void AreaEditor::deleteEdge(Edge* ePtr) {
     }
     
     //Finally, delete the edge proper.
+    deletedEdges.insert(ePtr);
     game.curArea->deleteEdge(ePtr);
 }
 
@@ -498,20 +499,27 @@ void AreaEditor::deleteEdge(Edge* ePtr) {
 bool AreaEditor::deleteSelectedEdges() {
     bool success = true;
     
-    const set<size_t>& selectedEdges = edgeSelection.getItemIdxs();
+    deletedEdges.clear();
     
+    const set<size_t>& selectedEdges = edgeSelection.getItemIdxs();
+    vector<Edge*> selectedEdgePtrs;
+    selectedEdgePtrs.reserve(selectedEdges.size());
     for(size_t eIdx : selectedEdges) {
-        Edge* ePtr = game.curArea->edges[eIdx];
+        selectedEdgePtrs.push_back(game.curArea->edges[eIdx]);
+    }
+    
+    forIdx(e, selectedEdgePtrs) {
+        Edge* ePtr = selectedEdgePtrs[e];
         
-        if(!ePtr->vertexes[0]) {
-            //Huh, looks like one of the edge deletion procedures already
-            //wiped this edge out. Skip it.
+        if(deletedEdges.contains(ePtr)) {
+            //One of the edge deletion procedures already wiped this edge out.
             continue;
         }
         
         success &= mergeSectors(ePtr->sectors[0], ePtr->sectors[1]);
     }
     
+    deletedEdges.clear();
     return success;
 }
 
