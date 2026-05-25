@@ -1095,6 +1095,13 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
  * @param ev Event to handle.
  */
 void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+
+    if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
+        if(game.options.advanced.pauseOnFocusLost) {
+            tryPause();
+        }
+    }
+
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onionMenu) {
         onionMenu->handleAllegroEvent(ev);

@@ -219,9 +219,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         isGameRunning = false;
         
     } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
-        if(options.advanced.pauseOnFocusLost) {
-            game.states.gameplay->tryPause();
-        }
+
         controls.releaseAll();
         
     } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
@@ -824,6 +822,7 @@ int Game::start() {
  */
 void Game::unloadLoadedState(GameState* loadedState) {
     loadedState->unload();
+    loadedState->loaded = false;
 }
 
 
