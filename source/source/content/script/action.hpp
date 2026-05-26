@@ -91,6 +91,30 @@ class ScriptActionBlockDef {
 
 public:
 
+    //--- Public misc. declarations ---
+    
+    //Ways to process the current action, mostly in regards to the block's flow.
+    enum PROCESS_TYPE {
+    
+        //Run the action. Then proceed to the next.
+        PROCESS_TYPE_NORMAL,
+        
+        //Run the action and check the condition. Then either proceed to
+        //the next or jump to another action accordingly.
+        PROCESS_TYPE_CHECK_CONDITION,
+        
+        //Do not run this action. Then jump to the end of the condition.
+        PROCESS_TYPE_JUMP_TO_END_CONDITION,
+        
+        //Do not run this action. Then jump to the corresponding label action.
+        PROCESS_TYPE_JUMP_TO_LABEL,
+        
+        //Do not run this action. Then proceed to the next.
+        PROCESS_TYPE_DO_NOTHING,
+        
+    };
+    
+    
     //--- Public members ---
     
     //Actions to run.
@@ -108,6 +132,20 @@ public:
         void* customData1 = nullptr, void* customData2 = nullptr
     );
     void unload();
+    
+    
+private:
+
+    //--- Private function declarations ---
+    
+    PROCESS_TYPE getActionProcessType(
+        size_t actionIdx, bool* mustProcessElseIfConditionPtr
+    ) const;
+    size_t processAction(
+        size_t actionIdx, ScriptActionBlockDef::PROCESS_TYPE processType,
+        bool* mustProcessElseIfConditionPtr, ScriptVM* scriptVM,
+        void* customData1 = nullptr, void* customData2 = nullptr
+    );
     
 };
 

@@ -167,6 +167,70 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
 
 
 /**
+ * @brief Returns the process type of the given action.
+ *
+ * @param actionIdx The action's index in the list.
+ * @param mustProcessElseIfConditionPtr Pointer to a variable that dictates
+ * whether the condition of an "else if" action should be processed.
+ * @return The type.
+ */
+ScriptActionBlockDef::PROCESS_TYPE
+ScriptActionBlockDef::getActionProcessType(
+    size_t actionIdx, bool* mustProcessElseIfConditionPtr
+) const {
+    ScriptActionDef* curAction = list[actionIdx];
+    PROCESS_TYPE result;
+    
+    switch(curAction->actionType->type) {
+    case SCRIPT_ACTION_IF: {
+        //We must check the condition and then decide where to go.
+        result = PROCESS_TYPE_CHECK_CONDITION;
+        break;
+        
+    } case SCRIPT_ACTION_ELSE_IF: {
+        if(*mustProcessElseIfConditionPtr) {
+            //We landed here after the "false" branch of the previous
+            //condition. We need to check this new condition.
+            result = PROCESS_TYPE_CHECK_CONDITION;
+            *mustProcessElseIfConditionPtr = false;
+        } else {
+            //We landed here after the "true" branch of the previous
+            //condition. We need to jump to the end of the condition.
+            result = PROCESS_TYPE_JUMP_TO_END_CONDITION;
+        }
+        break;
+        
+    } case SCRIPT_ACTION_ELSE: {
+        //We landed here either after the "true" or the "false" branch of
+        //the previous condition. Either way we don't need the "else" or
+        //its branch. We need to jump to the end of the condition.
+        result = PROCESS_TYPE_JUMP_TO_END_CONDITION;
+        break;
+        
+    } case SCRIPT_ACTION_GOTO: {
+        //Jump elsewhere.
+        result = PROCESS_TYPE_JUMP_TO_LABEL;
+        break;
+        
+    } case SCRIPT_ACTION_END_IF:
+    case SCRIPT_ACTION_LABEL: {
+        //Nothing to do here. These are just end points for other jumps.
+        result = PROCESS_TYPE_DO_NOTHING;
+        break;
+        
+    } default: {
+        //Normal action.
+        result = PROCESS_TYPE_NORMAL;
+        break;
+        
+    }
+    }
+    
+    return result;
+}
+
+
+/**
  * @brief Loads a block from a data node.
  *
  * @param node The node.
@@ -209,26 +273,19 @@ bool ScriptActionBlockDef::loadFromDataNode(
 void ScriptActionBlockDef::run(
     ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
-    enum FLOW_CODE {
-        FLOW_CODE_NONE,
-        FLOW_CODE_CONDITION,
-        FLOW_CODE_CONDITION_OTHER_BRANCH,
-        FLOW_CODE_JUMP,
-        FLOW_CODE_DO_NOTHING,
-    };
+    size_t curActionIdx = 0;
+    bool mustProcessElseIfCondition = false;
     
-    FLOW_CODE flowCodeToRun = FLOW_CODE_NONE;
-    bool processElseIfCondition = false;
-    
-    forIdx(a, list) {
-    
-        //Prevent infinite loops.
+    while(curActionIdx < list.size()) {
+        ScriptActionDef* curAction = list[curActionIdx];
+        
+        //First, check the infinite loop safeguard.
         game.nConsecutiveScriptActions++;
         if(
             game.nConsecutiveScriptActions >
             GAME::MAX_CONSECUTIVE_SCRIPT_ACTIONS
         ) [[unlikely]] {
-            ScriptActionInstRunData data(scriptVM, list[a]);
+            ScriptActionInstRunData data(scriptVM, curAction);
             ScriptActionRunners::reportActionError(
                 data,
                 "Failed to run action! Since the game already ran " +
@@ -240,142 +297,190 @@ void ScriptActionBlockDef::run(
             return;
         }
         
-        //Figure out the flow code to run.
-        switch(list[a]->actionType->type) {
-        case SCRIPT_ACTION_IF: {
-            flowCodeToRun = FLOW_CODE_CONDITION;
-            break;
-        } case SCRIPT_ACTION_ELSE_IF: {
-            if(processElseIfCondition) {
-                flowCodeToRun = FLOW_CODE_CONDITION;
-                processElseIfCondition = false;
-            } else {
-                flowCodeToRun = FLOW_CODE_CONDITION_OTHER_BRANCH;
-            }
-            break;
-        } case SCRIPT_ACTION_ELSE: {
-            flowCodeToRun = FLOW_CODE_CONDITION_OTHER_BRANCH;
-            break;
-        } case SCRIPT_ACTION_GOTO: {
-            flowCodeToRun = FLOW_CODE_JUMP;
-            break;
-        } case SCRIPT_ACTION_END_IF:
-        case SCRIPT_ACTION_LABEL: {
-            flowCodeToRun = FLOW_CODE_DO_NOTHING;
-            break;
-        } default: {
-            flowCodeToRun = FLOW_CODE_NONE;
-            break;
-        }
-        }
-        
-        //Run the flow code.
-        switch(flowCodeToRun) {
-        case FLOW_CODE_CONDITION: {
-            //Condition statement. Look out for its return value, and
-            //change the flow accordingly.
-            bool conditionValue =
-                list[a]->run(scriptVM, customData1, customData2);
-                
-            if(conditionValue) {
-                //Returned true. Execution continues as normal.
-            } else {
-                //Returned false. Skip to the "else", "else if",
-                //or "end if" actions.
-                size_t nextActionIdx = list.size();
-                size_t depth = 0;
-                
-                for(size_t a2 = a + 1; a2 < list.size(); a2++) {
-                    SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-                    if(a2Type == SCRIPT_ACTION_IF) {
-                        depth++;
-                    } else if(a2Type == SCRIPT_ACTION_ELSE) {
-                        if(depth == 0) {
-                            nextActionIdx = a2 + 1;
-                            break;
-                        }
-                    } else if(a2Type == SCRIPT_ACTION_ELSE_IF) {
-                        if(depth == 0) {
-                            processElseIfCondition = true;
-                            nextActionIdx = a2;
-                            break;
-                        }
-                    } else if(a2Type == SCRIPT_ACTION_END_IF) {
-                        if(depth == 0) {
-                            nextActionIdx = a2 + 1;
-                            break;
-                        } else {
-                            depth--;
-                        }
-                    }
-                }
-                a = nextActionIdx - 1;
-                
-            }
+        //Decide how to process it.
+        PROCESS_TYPE processType =
+            getActionProcessType(curActionIdx, &mustProcessElseIfCondition);
             
-            break;
+        //Process it.
+        curActionIdx =
+            processAction(
+                curActionIdx, processType, &mustProcessElseIfCondition,
+                scriptVM, customData1, customData2
+            );
+    }
+}
+
+
+/**
+ * @brief Processes an action in the list. This might or might not run
+ * the action's code, and then returns what the next action index should be.
+ *
+ * @param actionIdx Index of the action to process.
+ * @param processType Type of process.
+ * @param mustProcessElseIfConditionPtr Pointer to a variable that dictates
+ * whether the condition of an "else if" action should be processed.
+ * @param scriptVM Script VM in which these actions will be run.
+ * @param customData1 Custom data #1.
+ * @param customData2 Custom data #2.
+ * @return The next action's index.
+ */
+size_t ScriptActionBlockDef::processAction(
+    size_t actionIdx, ScriptActionBlockDef::PROCESS_TYPE processType,
+    bool* mustProcessElseIfConditionPtr, ScriptVM* scriptVM,
+    void* customData1, void* customData2
+) {
+    ScriptActionDef* curAction = list[actionIdx];
+    size_t nextActionIdx = actionIdx + 1;
+    
+    switch(processType) {
+    case PROCESS_TYPE_CHECK_CONDITION: {
+        //Run the action and check the condition. Then either proceed to
+        //the next or jump to another action accordingly.
+        bool conditionValue =
+            curAction->run(scriptVM, customData1, customData2);
             
-        } case FLOW_CODE_CONDITION_OTHER_BRANCH: {
-            //If we actually managed to read an "else" or "else if",
-            //that means we were running through the normal execution of some
-            //"then" section. Jump to the "end if".
-            size_t nextActionIdx = list.size();
+        if(conditionValue) {
+            //Returned true. Execution continues as normal
+            //to the next action, which is the start of the "true" branch.
+            
+        } else {
+            //Returned false. Search for the next "else", "else if",
+            //or "end if" action.
+            nextActionIdx = list.size();
             size_t depth = 0;
             
-            for(size_t a2 = a + 1; a2 < list.size(); a2++) {
+            for(size_t a2 = actionIdx + 1; a2 < list.size(); a2++) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-                if(a2Type == SCRIPT_ACTION_IF) {
+                bool foundNextAction = false;
+                
+                switch(a2Type) {
+                case SCRIPT_ACTION_IF: {
+                    //This is a different condition.
+                    //Update the current depth.
                     depth++;
-                } else if(a2Type == SCRIPT_ACTION_END_IF) {
+                    break;
+                    
+                } case SCRIPT_ACTION_ELSE: {
+                    //If this is our condition's "else", we want
+                    //to run the code after it.
                     if(depth == 0) {
                         nextActionIdx = a2 + 1;
-                        break;
+                        foundNextAction = true;
+                    }
+                    break;
+                    
+                } case SCRIPT_ACTION_ELSE_IF: {
+                    //If this is our condition's next "else if", we want
+                    //to check the condition and decide again based on that.
+                    if(depth == 0) {
+                        *mustProcessElseIfConditionPtr = true;
+                        nextActionIdx = a2;
+                        foundNextAction = true;
+                    }
+                    break;
+                    
+                } case SCRIPT_ACTION_END_IF: {
+                    //If this is our condition's "end if", we're done with
+                    //the condition. Execution continues like normal after.
+                    //If not, we just update the current depth.
+                    if(depth == 0) {
+                        nextActionIdx = a2 + 1;
+                        foundNextAction = true;
                     } else {
                         depth--;
                     }
+                    break;
+                    
+                } default: {
+                    break;
+                    
+                }
+                }
+                
+                if(foundNextAction) break;
+            }
+            
+        }
+        break;
+        
+    } case PROCESS_TYPE_JUMP_TO_END_CONDITION: {
+        //Do not run this action. Then jump to the end of the condition.
+        nextActionIdx = list.size();
+        size_t depth = 0;
+        
+        for(size_t a2 = actionIdx + 1; a2 < list.size(); a2++) {
+            SCRIPT_ACTION a2Type = list[a2]->actionType->type;
+            bool foundNextAction = false;
+            
+            switch(a2Type) {
+            case SCRIPT_ACTION_IF: {
+                //This is a different condition. Update the current depth.
+                depth++;
+                break;
+                
+            } case SCRIPT_ACTION_END_IF: {
+                //If this is our condition's "end if", we're done with
+                //the condition. Execution continues like normal after.
+                //If not, we just update the current depth.
+                if(depth == 0) {
+                    nextActionIdx = a2 + 1;
+                    foundNextAction = true;
+                } else {
+                    depth--;
+                }
+                break;
+                
+            } default: {
+                break;
+                
+            }
+            }
+            
+            if(foundNextAction) break;
+        }
+        break;
+        
+    } case PROCESS_TYPE_JUMP_TO_LABEL: {
+        //Do not run this action.
+        //Then jump to the corresponding label action.
+        nextActionIdx = list.size();
+        forIdx(a2, list) {
+            SCRIPT_ACTION a2Type = list[a2]->actionType->type;
+            if(a2Type == SCRIPT_ACTION_LABEL) {
+                if(curAction->args[0] == list[a2]->args[0]) {
+                    nextActionIdx = a2 + 1;
+                    break;
                 }
             }
-            a = nextActionIdx - 1;
-            break;
-            
-        } case FLOW_CODE_JUMP: {
-            //Find the label that matches.
-            size_t nextActionIdx = list.size();
-            forIdx(a2, list) {
-                SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-                if(a2Type == SCRIPT_ACTION_LABEL) {
-                    if(list[a]->args[0] == list[a2]->args[0]) {
-                        nextActionIdx = a2 + 1;
-                        break;
-                    }
-                }
-            }
-            a = nextActionIdx - 1;
-            break;
-            
-        } case FLOW_CODE_DO_NOTHING: {
-            //Nothing to do.
-            break;
-            
-        } case FLOW_CODE_NONE: {
-            //Normal action.
-            list[a]->run(scriptVM, customData1, customData2);
-            
-            //Reset the surrogate, if applicable.
-            if(
-                scriptVM->nextActionSurrogateMob &&
-                list[a]->actionType->type != SCRIPT_ACTION_RUN_NEXT_ACTION_AS
-            ) {
-                scriptVM->nextActionSurrogateMob = nullptr;
-            }
-            
-            //If the state got changed, jump out.
-            if(list[a]->actionType->type == SCRIPT_ACTION_SET_STATE) return;
-            
-            break;
         }
+        break;
+        
+    } case PROCESS_TYPE_DO_NOTHING: {
+        //Nothing to do.
+        break;
+        
+    } case PROCESS_TYPE_NORMAL: {
+        //Normal action.
+        curAction->run(scriptVM, customData1, customData2);
+        
+        //Reset the surrogate, if applicable.
+        if(
+            scriptVM->nextActionSurrogateMob &&
+            curAction->actionType->type != SCRIPT_ACTION_RUN_NEXT_ACTION_AS
+        ) {
+            scriptVM->nextActionSurrogateMob = nullptr;
         }
+        
+        //If the state got changed, jump out.
+        if(curAction->actionType->type == SCRIPT_ACTION_SET_STATE) {
+            return list.size();
+        }
+        
+        break;
     }
+    }
+    
+    return nextActionIdx;
 }
 
 
