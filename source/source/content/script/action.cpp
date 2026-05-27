@@ -341,13 +341,12 @@ size_t ScriptActionListDef::processAction(
     void* customData1, void* customData2
 ) {
     ScriptActionDef* curAction = list[actionIdx];
-    size_t nextActionIdx = actionIdx + 1;
     
     switch(processType) {
     case PROCESS_TYPE_CHECK_CONDITION: {
         //Run the action and check the condition. Then either proceed to
         //the next sequential action or jump to another action accordingly.
-        nextActionIdx =
+        return
             processActionCheckCondition(
                 actionIdx, mustProcessElseIfConditionPtr,
                 scriptVM, customData1, customData2
@@ -356,7 +355,7 @@ size_t ScriptActionListDef::processAction(
         
     } case PROCESS_TYPE_JUMP_TO_CONSTRUCT_END: {
         //Do not run this action. Then jump to the end of the condition.
-        nextActionIdx =
+        return
             processActionJumpToConstructEnd(
                 actionIdx, scriptVM, customData1, customData2
             );
@@ -365,7 +364,7 @@ size_t ScriptActionListDef::processAction(
     } case PROCESS_TYPE_JUMP_ELSEWHERE: {
         //Do not run this action.
         //Then jump to the corresponding label action.
-        nextActionIdx =
+        return
             processActionJumpToLabel(
                 actionIdx, scriptVM, customData1, customData2
             );
@@ -390,13 +389,16 @@ size_t ScriptActionListDef::processAction(
         //If the state got changed, jump out.
         if(curAction->actionType->type == SCRIPT_ACTION_SET_STATE) {
             return list.size();
+        } else {
+            return actionIdx + 1;
         }
         
         break;
     }
     }
     
-    return nextActionIdx;
+    //If anything goes wrong, quit the list.
+    return list.size();
 }
 
 
@@ -418,7 +420,6 @@ size_t ScriptActionListDef::processActionCheckCondition(
     ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
     ScriptActionDef* curAction = list[actionIdx];
-    size_t nextActionIdx = actionIdx + 1;
     
     bool conditionValue =
         curAction->run(scriptVM, customData1, customData2);
@@ -427,22 +428,21 @@ size_t ScriptActionListDef::processActionCheckCondition(
     case SCRIPT_ACTION_END_DO_WHILE: {
         if(conditionValue) {
             //Returned true. Go to the start of the loop for another go.
-            nextActionIdx = list.size();
-            
-            forIdx(a2, list) {
+            for(int a2 = actionIdx - 1; a2 > 0; a2--) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_DO_WHILE &&
                     depths[a2] == depths[actionIdx]
                 ) {
-                    nextActionIdx = a2 + 1;
-                    break;
+                    return a2 + 1;
                 }
             }
             
         } else {
             //Returned false. Leave the loop by letting execution
             //continue to the next sequential action.
+            return actionIdx + 1;
+            
         }
         
         break;
@@ -451,23 +451,20 @@ size_t ScriptActionListDef::processActionCheckCondition(
         if(conditionValue) {
             //Returned true. Execution continues as normal to the next
             //sequential action, which is the start of the "true" branch.
+            return actionIdx + 1;
             
         } else {
             //Returned false. Search for the next "else", "else_if",
             //or "end_if" action.
-            nextActionIdx = list.size();
-            
             for(size_t a2 = actionIdx + 1; a2 < list.size(); a2++) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-                bool foundNextAction = false;
                 
                 switch(a2Type) {
                 case SCRIPT_ACTION_ELSE: {
                     //If this is our condition's "else", we want
                     //to run the code after it.
                     if(depths[a2] == depths[actionIdx]) {
-                        nextActionIdx = a2 + 1;
-                        foundNextAction = true;
+                        return a2 + 1;
                     }
                     break;
                     
@@ -476,8 +473,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                     //to check the condition and decide again based on that.
                     if(depths[a2] == depths[actionIdx]) {
                         *mustProcessElseIfConditionPtr = true;
-                        nextActionIdx = a2;
-                        foundNextAction = true;
+                        return a2;
                     }
                     break;
                     
@@ -485,8 +481,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                     //If this is our condition's "end_if", we're done with
                     //the condition. Execution continues like normal after.
                     if(depths[a2] == depths[actionIdx]) {
-                        nextActionIdx = a2 + 1;
-                        foundNextAction = true;
+                        return a2 + 1;
                     }
                     break;
                     
@@ -507,19 +502,17 @@ size_t ScriptActionListDef::processActionCheckCondition(
         if(conditionValue) {
             //Returned true. Continue to the next sequential action
             //in order to enter the loop.
+            return actionIdx + 1;
             
         } else {
             //Returned false. Go to the end of the loop.
-            nextActionIdx = list.size();
-            
-            forIdx(a2, list) {
+            for(size_t a2 = actionIdx + 1; a2 < list.size(); a2++) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_END_WHILE_DO &&
                     depths[a2] == depths[actionIdx]
                 ) {
-                    nextActionIdx = a2 + 1;
-                    break;
+                    return a2 + 1;
                 }
             }
             
@@ -533,14 +526,14 @@ size_t ScriptActionListDef::processActionCheckCondition(
     }
     }
     
-    return nextActionIdx;
+    //If anything goes wrong, quit the list.
+    return list.size();
 }
 
 
 /**
  * @brief Processes an action in the list with the "jump to construct end"
- * processing type. This run's the action's code,
- * and then returns what the next action index should be.
+ * processing type. This returns what the next action index should be.
  *
  * @param actionIdx Index of the action to process.
  * @param scriptVM Script VM in which these actions will be run.
@@ -551,41 +544,22 @@ size_t ScriptActionListDef::processActionCheckCondition(
 size_t ScriptActionListDef::processActionJumpToConstructEnd(
     size_t actionIdx, ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
-    size_t nextActionIdx = list.size();
-    size_t depth = 0;
-    
     for(size_t a2 = actionIdx + 1; a2 < list.size(); a2++) {
         SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-        bool foundNextAction = false;
         
-        switch(a2Type) {
-        case SCRIPT_ACTION_IF: {
-            //This is a different condition. Update the current depth.
-            depth++;
-            break;
-            
-        } case SCRIPT_ACTION_END_IF: {
+        if(
+            a2Type == SCRIPT_ACTION_END_IF &&
+            depths[a2] == depths[actionIdx]
+        ) {
             //If this is our condition's "end_if", we're done with
             //the condition. Execution continues like normal after.
             //If not, we just update the current depth.
-            if(depth == 0) {
-                nextActionIdx = a2 + 1;
-                foundNextAction = true;
-            } else {
-                depth--;
-            }
-            break;
-            
-        } default: {
-            break;
-            
+            return a2 + 1;
         }
-        }
-        
-        if(foundNextAction) break;
     }
     
-    return nextActionIdx;
+    //If anything goes wrong, quit the list.
+    return list.size();
 }
 
 
@@ -603,7 +577,6 @@ size_t ScriptActionListDef::processActionJumpToLabel(
     size_t actionIdx, ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
     ScriptActionDef* curAction = list[actionIdx];
-    size_t nextActionIdx = list.size();
     
     switch(curAction->actionType->type) {
     case SCRIPT_ACTION_END_WHILE_DO: {
@@ -611,10 +584,9 @@ size_t ScriptActionListDef::processActionJumpToLabel(
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(
                 a2Type == SCRIPT_ACTION_WHILE_DO &&
-                depths[actionIdx] == depths[a2]
+                depths[a2] == depths[actionIdx]
             ) {
-                nextActionIdx = a2;
-                break;
+                return a2;
             }
         }
         break;
@@ -624,8 +596,7 @@ size_t ScriptActionListDef::processActionJumpToLabel(
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(a2Type == SCRIPT_ACTION_LABEL) {
                 if(curAction->args[0] == list[a2]->args[0]) {
-                    nextActionIdx = a2 + 1;
-                    break;
+                    return a2 + 1;
                 }
             }
         }
@@ -637,7 +608,8 @@ size_t ScriptActionListDef::processActionJumpToLabel(
     }
     }
     
-    return nextActionIdx;
+    //If anything goes wrong, quit the list.
+    return list.size();
 }
 
 
@@ -707,6 +679,11 @@ void ScriptActionListDef::saveDepthsCache() {
         case SCRIPT_ACTION_WHILE_DO: {
             depthToSave = depth;
             depth++;
+            break;
+            
+        } case SCRIPT_ACTION_ELSE:
+        case SCRIPT_ACTION_ELSE_IF: {
+            depthToSave = depth - 1;
             break;
             
         } case SCRIPT_ACTION_END_DO_WHILE:
