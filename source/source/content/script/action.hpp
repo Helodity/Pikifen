@@ -96,20 +96,20 @@ public:
     //Ways to process the current action, mostly in regards to the block's flow.
     enum PROCESS_TYPE {
     
-        //Run the action. Then proceed to the next.
+        //Run the action. Then proceed to the next sequential action.
         PROCESS_TYPE_NORMAL,
         
         //Run the action and check the condition. Then either proceed to
-        //the next or jump to another action accordingly.
+        //the next sequential action or jump to another action accordingly.
         PROCESS_TYPE_CHECK_CONDITION,
         
-        //Do not run this action. Then jump to the end of the condition.
-        PROCESS_TYPE_JUMP_TO_END_CONDITION,
+        //Do not run this action. Then jump to the end of the current construct.
+        PROCESS_TYPE_JUMP_TO_CONSTRUCT_END,
         
-        //Do not run this action. Then jump to the corresponding label action.
-        PROCESS_TYPE_JUMP_TO_LABEL,
+        //Do not run this action. Then jump to the appropriate label action.
+        PROCESS_TYPE_JUMP_ELSEWHERE,
         
-        //Do not run this action. Then proceed to the next.
+        //Do not run this action. Then proceed to the next sequential action.
         PROCESS_TYPE_DO_NOTHING,
         
     };
@@ -131,11 +131,18 @@ public:
         ScriptVM* scriptVM,
         void* customData1 = nullptr, void* customData2 = nullptr
     );
+    void saveDepthsCache();
     void unload();
     
     
 private:
 
+    //--- Private members ---
+    
+    //Depth of each action. Cache for convenience.
+    vector<size_t> depths;
+    
+    
     //--- Private function declarations ---
     
     PROCESS_TYPE getActionProcessType(
@@ -144,6 +151,19 @@ private:
     size_t processAction(
         size_t actionIdx, ScriptActionBlockDef::PROCESS_TYPE processType,
         bool* mustProcessElseIfConditionPtr, ScriptVM* scriptVM,
+        void* customData1 = nullptr, void* customData2 = nullptr
+    );
+    size_t processActionCheckCondition(
+        size_t actionIdx, bool* mustProcessElseIfConditionPtr,
+        ScriptVM* scriptVM,
+        void* customData1 = nullptr, void* customData2 = nullptr
+    );
+    size_t processActionJumpToConstructEnd(
+        size_t actionIdx, ScriptVM* scriptVM,
+        void* customData1 = nullptr, void* customData2 = nullptr
+    );
+    size_t processActionJumpToLabel(
+        size_t actionIdx, ScriptVM* scriptVM,
         void* customData1 = nullptr, void* customData2 = nullptr
     );
     

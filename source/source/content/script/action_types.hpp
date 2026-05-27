@@ -61,6 +61,9 @@ enum SCRIPT_ACTION {
     //Delete mob.
     SCRIPT_ACTION_DELETE,
     
+    //Do-while loop start.
+    SCRIPT_ACTION_DO_WHILE,
+    
     //Drain liquid.
     SCRIPT_ACTION_DRAIN_LIQUID,
     
@@ -73,8 +76,14 @@ enum SCRIPT_ACTION {
     //Conditional "else if" marker.
     SCRIPT_ACTION_ELSE_IF,
     
+    //Do-while loop end.
+    SCRIPT_ACTION_END_DO_WHILE,
+    
     //Conditional "end if" marker.
     SCRIPT_ACTION_END_IF,
+    
+    //While-do loop end.
+    SCRIPT_ACTION_END_WHILE_DO,
     
     //Finish the death procedure.
     SCRIPT_ACTION_FINISH_DYING,
@@ -381,6 +390,9 @@ enum SCRIPT_ACTION {
     
     //Unfocus.
     SCRIPT_ACTION_UNFOCUS,
+    
+    //While-do loop start.
+    SCRIPT_ACTION_WHILE_DO,
     
     //Total amount of script actions.
     N_SCRIPT_ACTIONS,
@@ -933,6 +945,7 @@ void clearVar(ScriptActionInstRunData& data);
 void deleteFunction(ScriptActionInstRunData& data);
 void drainLiquid(ScriptActionInstRunData& data);
 void easeNumber(ScriptActionInstRunData& data);
+void endDoWhile(ScriptActionInstRunData& data);
 void finishDying(ScriptActionInstRunData& data);
 void floorNumber(ScriptActionInstRunData& data);
 void focus(ScriptActionInstRunData& data);
@@ -1032,6 +1045,7 @@ void turnToAbsolute(ScriptActionInstRunData& data);
 void turnToRelative(ScriptActionInstRunData& data);
 void turnToTarget(ScriptActionInstRunData& data);
 void unfocus(ScriptActionInstRunData& data);
+void whileDo(ScriptActionInstRunData& data);
 
 SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
     const ScriptActionInstRunData& data, const string& name
@@ -1081,6 +1095,9 @@ bool turnToTarget(ScriptActionDef& call, MobType* mt);
 #pragma region Global functions
 
 
+bool doScriptCondition(
+    const string& lhs, SCRIPT_ACTION_IF_OP op, const string& rhs
+);
 Mob* getTriggerMob(ScriptActionInstRunData& data);
 Mob* getTargetMob(
     ScriptActionInstRunData& data, SCRIPT_ACTION_MOB_TARGET_TYPE type

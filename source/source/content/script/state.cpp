@@ -105,6 +105,7 @@ bool FsmStateDef::loadFromDataNode(
         newEvents.push_back(newEvent);
         newEventFlags.push_back(flags);
         newEvent->actions.assertActions(eventNode);
+        newEvent->actions.saveDepthsCache();
     }
     
     //Load global events.
@@ -120,6 +121,7 @@ bool FsmStateDef::loadFromDataNode(
         globalEvents.push_back(newEvent);
         globalEventFlags.push_back(flags);
         newEvent->actions.assertActions(eventNode);
+        newEvent->actions.saveDepthsCache();
     }
     
     //Merge global event actions with the dedicated event actions.

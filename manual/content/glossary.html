@@ -294,6 +294,10 @@
       <dt>Inactive</dt>
       <dd>See <a href="#active">Active</a>.</dd>
     </dl>
+    <dl id="infinite-loop">
+      <dt>Infinite loop</dt>
+      <dd>While a script is running actions, it may go back and forth on purpose. Either due to a loop like <code>do_while</code>, a jump like <code>goto</code>, or simply by swapping back and forth between states like <code>set_state</code>. If it's been running actions in a row seemingly infinitely, <i>Pikifen</i> will detect that it's not going anywhere and will eventually force the script to stop, with an error in the error log about how it found an <a href="https://en.wikipedia.org/wiki/Loop_(statement)#Infinite_loop">infinite loop</a>.</dd>
+    </dl>
     <dl id="ingredient">
       <dt>Ingredient</dt>
       <dd>An ingredient for concocting a spray. In the canon games, these are berries. After a certain number of ingredients of a certain type are collected, the player gains one more dosage of a certain spray.</dd>
@@ -401,6 +405,10 @@
       <dt>Number</dt>
       <dd>In <i>Pikifen</i>, any number identified as just a "number" or with a pound ("#") in the context of accessing a specific slot in a vector, array, list, or what have you, means the position number of that slot. It starts at 1, and 0 is not a valid slot number.</dd>
       <dd>See also: <a href="#id">ID</a>, <a href="#index">index</a>.</dd>
+    </dl>
+    <dl id="nutrient">
+      <dt>Nutrient</dt>
+      <dd>Whenever an <a href="mob_onion.html">Onion</a> receives an object, it absorbs it and generates some nutrients for the Pikmin type that benefits from it. Once there are enough nutrients to create a new Pikmin of that type, the required amount of nutrients are removed and go into the birth of the new Pikmin. For most Onions, the nutrient process is invisible since only 1 nutrient is required per Pikmin birth.</dd>
     </dl>
     
     <h2 id="O">O</h2>

@@ -1612,6 +1612,13 @@ void initScriptActionTypes() {
         ScriptActionRunners::ceilNumber
     );
     
+    //Start do-while loop.
+    commitAction(
+        SCRIPT_ACTION_DO_WHILE,
+        "do_while",
+        nullptr
+    );
+    
     //Ease number.
     queueParam("destination var name", ptString, pfConst);
     queueParam("number", ptFloat);
@@ -1639,10 +1646,27 @@ void initScriptActionTypes() {
         ScriptActionRunners::ifFunction
     );
     
+    //End do-while loop.
+    queueParam("comparand", ptString);
+    queueParam("operation", ptEnum, pfConst);
+    queueParam("value", ptString);
+    commitAction(
+        SCRIPT_ACTION_END_DO_WHILE,
+        "end_do_while",
+        ScriptActionRunners::endDoWhile
+    );
+    
     //End if.
     commitAction(
         SCRIPT_ACTION_END_IF,
         "end_if",
+        nullptr
+    );
+    
+    //End while-do loop.
+    commitAction(
+        SCRIPT_ACTION_END_WHILE_DO,
+        "end_while_do",
         nullptr
     );
     
@@ -2580,6 +2604,16 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_TURN_TO_TARGET,
         "turn_to_target",
         ScriptActionRunners::turnToTarget
+    );
+    
+    //Start while-do loop.
+    queueParam("comparand", ptString);
+    queueParam("operation", ptEnum, pfConst);
+    queueParam("value", ptString);
+    commitAction(
+        SCRIPT_ACTION_WHILE_DO,
+        "while_do",
+        ScriptActionRunners::whileDo
     );
 }
 

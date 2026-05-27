@@ -223,17 +223,34 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
+      <tr id="do-while">
+        <th><code>do_while</code></th>
+        <td>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-do-while"><code>end_do_while</code></a> action. After running the block once, if the condition at the end of the block (specified by the <code>end_do_while</code> action) is still true, then the script jumps back to the <code>do_while</code> action, and the whole process repeats.<br>
+          The condition works just like how the <a href="#if"><code>if</code></a> action works. Make sure the condition can eventually be false otherwise this will be an <a href="glossary.html#infinite-loop">infinite loop</a>!<br>
+          This is similar to a <a href="#while-do"><code>while_do</code></a> loop, except this type of loop always runs the block at least once and only then checks the condition, while that one has the condition at the start and so may never run the block.</td>
+      </tr>
       <tr id="else">
         <th><code>else</code></th>
-        <td>If the corresponding <code><a href="#if">if</a></code> action's check ends up being false, the script will run the actions after this <code>else</code>, until it reaches the matching <code>end_if</code>.</td>
+        <td>If the corresponding <code><a href="#if">if</a></code> action's check ends up being false, the script will run the block of actions after this <code>else</code>. The block ends with the matching <code>end_if</code> action.</td>
       </tr>
       <tr id="else-if">
         <th><code>else_if</code></th>
         <td>Same as if you had an <code><a href="#else">else</a></code> action followed by an <code><a href="#if">if</a></code> action, except it doesn't enter a new level of depth. In order words, you only have one <code><a href="#end-if">end_if</a></code> for this sequence. So something like: <code>if ... else_if ... else_if ... else_if ... else ... end_if</code>. If you have an <code>else</code> in the sequence, it must come after any <code>else_if</code>.</td>
       </tr>
+      <tr id="end-do-while">
+        <th><code>end_do_while</code></th>
+        <td><dl>
+          <dt><code><b>end_do_while</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
+          <dd>See <a href="do-while"><code>do_while</code></a>.</dd>
+        </dl></td>
+      </tr>
       <tr id="end-if">
         <th><code>end_if</code></th>
         <td>Closes a condition sequence started by an <code><a href="#if">if</a></code> action.</td>
+      </tr>
+      <tr id="end-while-do">
+        <th><code>end_while_do</code></th>
+        <td>See <a href="while"><code>while_do</code></a>.</td>
       </tr>
       <tr id="goto">
         <th><code>goto</code></th>
@@ -245,7 +262,7 @@
       <tr id="if">
         <th><code>if</code></th>
         <td>
-          Only executes the next actions, until an <code><a href="else">else</a></code> or <code><a href="end-if">end_if</a></code> action, if the condition you specify is true. If not, it jumps to the matching <code>else</code> or <code>end_if</code> action.
+          Only executes the next block of actions if the condition you specify is true. If not, it jumps to the next matching <code><a href="else">else</a></code>, <code><a href="else-if">else_if</a></code>, or <code><a href="end-if">end_if</a></code> action. The block to run goes between the <code>if</code> and the next matching <code>else</code>, <code>else_if</code>, or <code>end_if</code> action. 
           <dl><dt><code><b>if</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
           <dd>
             &lt;left&gt; and &lt;right&gt; are two values, and &lt;operator&gt; is how you want to compare them. As such, it makes sense to replace at least one of the values with a variable. Note that due to scripting limitations, only &lt;right&gt; may have spaces, if it is text. The possible operators are:
@@ -272,6 +289,15 @@
         <td><dl>
           <dt><code><b>set_state</b> &lt;state&gt;</code></dt>
           <dd>Instantly changes to the specified state. If it was meant to run any actions after this one, they will not be run.</dd>
+        </dl></td>
+      </tr>
+      <tr id="while-do">
+        <th><code>while_do</code></th>
+        <td><dl>
+          <dt><code><b>while_do</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
+          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-while-do"><code>end_while_do</code></a> action. The block is only run if the condition at the start (specified by the <code>while_do</code> action) is true. If the block is run, then at the end the script returns to the <code>while_do</code> action and the whole process repeats.<br>
+            The condition works just like how the <a href="#if"><code>if</code></a> action works. Make sure the condition can eventually be false otherwise this will be an <a href="glossary.html#infinite-loop">infinite loop</a>!<br>
+            This is similar to <a href="#do-while"><code>do_while</code></a> loop, except this type of loop has the condition at the start and so may never run the block, while that one always runs the block at least once and only then checks the condition.</dd>
         </dl></td>
       </tr>
     </table>

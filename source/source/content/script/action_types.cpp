@@ -345,6 +345,36 @@ void ScriptActionRunners::easeNumber(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the do-while loop condition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::endDoWhile(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& lhsArg = data.args[0];
+    const string& opArg = data.args[1];
+    string rhsArg = vectorTailToString(data.args, 2);
+    
+    //Main logic.
+    bool opFound;
+    SCRIPT_ACTION_IF_OP op =
+        enumGetValue(scriptActionIfOpINames, opArg, &opFound);
+    if(!opFound) {
+        reportActionError(
+            data,
+            "Unknown operator \"" + opArg + "\"!"
+        );
+        return;
+    }
+    
+    bool result = doScriptCondition(lhsArg, op, rhsArg);
+    
+    //Store the result.
+    data.returnValue = result;
+}
+
+
+/**
  * @brief Code for the death finish script action type.
  *
  * @param data Data about the action call.
@@ -1414,7 +1444,6 @@ void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
     string rhsArg = vectorTailToString(data.args, 2);
     
     //Main logic.
-    bool result = false;
     bool opFound;
     SCRIPT_ACTION_IF_OP op =
         enumGetValue(scriptActionIfOpINames, opArg, &opFound);
@@ -1426,41 +1455,7 @@ void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
         return;
     }
     
-    switch(op) {
-    case SCRIPT_ACTION_IF_OP_EQUAL: {
-        if(isNumber(lhsArg) && isNumber(rhsArg)) {
-            result = (s2f(lhsArg) == s2f(rhsArg));
-        } else {
-            result = (lhsArg == rhsArg);
-        }
-        break;
-        
-    } case SCRIPT_ACTION_IF_OP_NOT: {
-        if(isNumber(lhsArg) && isNumber(rhsArg)) {
-            result = (s2f(lhsArg) != s2f(rhsArg));
-        } else {
-            result = (lhsArg != rhsArg);
-        }
-        break;
-        
-    } case SCRIPT_ACTION_IF_OP_LESS: {
-        result = (s2f(lhsArg) < s2f(rhsArg));
-        break;
-        
-    } case SCRIPT_ACTION_IF_OP_MORE: {
-        result = (s2f(lhsArg) > s2f(rhsArg));
-        break;
-        
-    } case SCRIPT_ACTION_IF_OP_LESS_E: {
-        result = (s2f(lhsArg) <= s2f(rhsArg));
-        break;
-        
-    } case SCRIPT_ACTION_IF_OP_MORE_E: {
-        result = (s2f(lhsArg) >= s2f(rhsArg));
-        break;
-        
-    }
-    }
+    bool result = doScriptCondition(lhsArg, op, rhsArg);
     
     //Store the result.
     data.returnValue = result;
@@ -3133,6 +3128,36 @@ void ScriptActionRunners::unfocus(ScriptActionInstRunData& data) {
 }
 
 
+/**
+ * @brief Code for the while-do loop condition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::whileDo(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& lhsArg = data.args[0];
+    const string& opArg = data.args[1];
+    string rhsArg = vectorTailToString(data.args, 2);
+    
+    //Main logic.
+    bool opFound;
+    SCRIPT_ACTION_IF_OP op =
+        enumGetValue(scriptActionIfOpINames, opArg, &opFound);
+    if(!opFound) {
+        reportActionError(
+            data,
+            "Unknown operator \"" + opArg + "\"!"
+        );
+        return;
+    }
+    
+    bool result = doScriptCondition(lhsArg, op, rhsArg);
+    
+    //Store the result.
+    data.returnValue = result;
+}
+
+
 #pragma endregion
 #pragma region Action type param
 
@@ -3159,6 +3184,57 @@ ScriptActionTypeParam::ScriptActionTypeParam(
 
 #pragma endregion
 #pragma region Global functions
+
+
+/**
+ * @brief Returns whether a script condition is true or not.
+ *
+ * @param lhs The left-hand side comparand.
+ * @param op The operator.
+ * @param rhs The right-hand side value.
+ * @return Whether it is true.
+ */
+bool doScriptCondition(
+    const string& lhs, SCRIPT_ACTION_IF_OP op, const string& rhs
+) {
+    switch(op) {
+    case SCRIPT_ACTION_IF_OP_EQUAL: {
+        if(isNumber(lhs) && isNumber(rhs)) {
+            return s2f(lhs) == s2f(rhs);
+        } else {
+            return lhs == rhs;
+        }
+        break;
+        
+    } case SCRIPT_ACTION_IF_OP_NOT: {
+        if(isNumber(lhs) && isNumber(rhs)) {
+            return s2f(lhs) != s2f(rhs);
+        } else {
+            return lhs != rhs;
+        }
+        break;
+        
+    } case SCRIPT_ACTION_IF_OP_LESS: {
+        return s2f(lhs) < s2f(rhs);
+        break;
+        
+    } case SCRIPT_ACTION_IF_OP_MORE: {
+        return s2f(lhs) > s2f(rhs);
+        break;
+        
+    } case SCRIPT_ACTION_IF_OP_LESS_E: {
+        return s2f(lhs) <= s2f(rhs);
+        break;
+        
+    } case SCRIPT_ACTION_IF_OP_MORE_E: {
+        return s2f(lhs) >= s2f(rhs);
+        break;
+        
+    }
+    }
+    
+    return false;
+}
 
 
 /**
