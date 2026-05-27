@@ -15,6 +15,20 @@
 #include "script.hpp"
 
 
+
+#pragma region Script execution aux data
+
+
+/**
+ * @brief Reset everything for a new event (or init block, or so on).
+ */
+void ScriptExecutionAuxData::reset() {
+    nConsecutiveActions = 0;
+    forLoopEntryNeedsIncrement = false;
+}
+
+
+#pragma endregion
 #pragma region Script definition
 
 
@@ -147,7 +161,7 @@ void ScriptVM::init(ScriptDef* scriptDef, Mob* mobPtr) {
     this->scriptDef = scriptDef;
     mob = mobPtr;
     
-    game.nConsecutiveScriptActions = 0;
+    game.scriptExecAuxData.reset();
     scriptDef->initActions.run(this);
     fsm.init();
 }

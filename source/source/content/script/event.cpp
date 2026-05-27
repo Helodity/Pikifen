@@ -109,7 +109,7 @@ void FsmEventDef::run(
     bool resetNConsecutiveActions
 ) {
     if(resetNConsecutiveActions) {
-        game.nConsecutiveScriptActions = 0;
+        game.scriptExecAuxData.reset();
     }
 
     if(scriptVM->mob) {

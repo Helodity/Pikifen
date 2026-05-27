@@ -292,7 +292,7 @@ void ScriptActionRunners::ceilNumber(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::deleteFunction(ScriptActionInstRunData& data) {
+void ScriptActionRunners::deleteAction(ScriptActionInstRunData& data) {
     //Main logic.
     data.scriptVM->getRunnerMob()->toDelete = true;
 }
@@ -558,6 +558,46 @@ void ScriptActionRunners::followPathToAbsolute(ScriptActionInstRunData& data) {
         settings, data.scriptVM->getRunnerMob()->getBaseSpeed(),
         data.scriptVM->getRunnerMob()->type->acceleration
     );
+}
+
+
+/**
+ * @brief Code for the for loop condition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::forAction(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& iteratorVarArg = data.args[0];
+    const string& targetArg = data.args[1];
+    const string& startingValueArg = data.args[2];
+    const string& jumpArg = data.args[3];
+    
+    //Main logic.
+    int startingValue = s2i(startingValueArg);
+    int jump = s2i(jumpArg);
+    
+    int iterator = startingValue;
+    data.scriptVM->getRunnerScriptVM()->vars.getValue(iteratorVarArg, iterator);
+    if(game.scriptExecAuxData.forLoopEntryNeedsIncrement) {
+        iterator += jump;
+        game.scriptExecAuxData.forLoopEntryNeedsIncrement = false;
+    } else {
+        iterator = startingValue;
+    }
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(iteratorVarArg, iterator);
+    
+    bool result =
+        doScriptCondition(
+            i2s(iterator),
+            jump >= 0 ?
+            SCRIPT_ACTION_IF_OP_LESS_E :
+            SCRIPT_ACTION_IF_OP_MORE_E,
+            targetArg
+        );
+        
+    //Store the result.
+    data.returnValue = result;
 }
 
 
@@ -1437,7 +1477,7 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
+void ScriptActionRunners::ifAction(ScriptActionInstRunData& data) {
     //Get the arguments.
     const string& lhsArg = data.args[0];
     const string& opArg = data.args[1];

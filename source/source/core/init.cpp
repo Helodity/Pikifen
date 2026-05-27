@@ -1643,7 +1643,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ELSE_IF,
         "else_if",
-        ScriptActionRunners::ifFunction
+        ScriptActionRunners::ifAction
     );
     
     //End do-while loop.
@@ -1654,6 +1654,13 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_END_DO_WHILE,
         "end_do_while",
         ScriptActionRunners::endDoWhile
+    );
+    
+    //End for loop.
+    commitAction(
+        SCRIPT_ACTION_END_FOR,
+        "end_for",
+        nullptr
     );
     
     //End if.
@@ -1684,6 +1691,17 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_FOCUS_ON_ID,
         "focus_on_id",
         ScriptActionRunners::focusOnId
+    );
+    
+    //Start for loop.
+    queueParam("iterator variable", ptString, pfConst);
+    queueParam("target value", ptInt);
+    queueParam("starting value", ptInt, pfOpt, "1");
+    queueParam("jump", ptInt, pfOpt, "1");
+    commitAction(
+        SCRIPT_ACTION_FOR,
+        "for",
+        ScriptActionRunners::forAction
     );
     
     //Get angle.
@@ -1894,7 +1912,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_IF,
         "if",
-        ScriptActionRunners::ifFunction
+        ScriptActionRunners::ifAction
     );
     
     //Interpolate number.
@@ -2089,7 +2107,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_DELETE,
         "delete",
-        ScriptActionRunners::deleteFunction
+        ScriptActionRunners::deleteAction
     );
     
     //Drain liquid.

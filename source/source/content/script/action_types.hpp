@@ -79,6 +79,9 @@ enum SCRIPT_ACTION {
     //Do-while loop end.
     SCRIPT_ACTION_END_DO_WHILE,
     
+    //For loop end.
+    SCRIPT_ACTION_END_FOR,
+    
     //Conditional "end if" marker.
     SCRIPT_ACTION_END_IF,
     
@@ -105,6 +108,9 @@ enum SCRIPT_ACTION {
     
     //Follow a path towards an absolute position.
     SCRIPT_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
+    
+    //For loop begin.
+    SCRIPT_ACTION_FOR,
     
     //Get angle between two sets of coordinates.
     SCRIPT_ACTION_GET_ANGLE,
@@ -942,7 +948,7 @@ void beChomped(ScriptActionInstRunData& data);
 void calculate(ScriptActionInstRunData& data);
 void ceilNumber(ScriptActionInstRunData& data);
 void clearVar(ScriptActionInstRunData& data);
-void deleteFunction(ScriptActionInstRunData& data);
+void deleteAction(ScriptActionInstRunData& data);
 void drainLiquid(ScriptActionInstRunData& data);
 void easeNumber(ScriptActionInstRunData& data);
 void endDoWhile(ScriptActionInstRunData& data);
@@ -953,6 +959,7 @@ void focusOnId(ScriptActionInstRunData& data);
 void followMobAsLeader(ScriptActionInstRunData& data);
 void followPathRandomly(ScriptActionInstRunData& data);
 void followPathToAbsolute(ScriptActionInstRunData& data);
+void forAction(ScriptActionInstRunData& data);
 void getAngle(ScriptActionInstRunData& data);
 void getAngleCwDiff(ScriptActionInstRunData& data);
 void getAngleSmallestDiff(ScriptActionInstRunData& data);
@@ -974,7 +981,7 @@ void getRandomFloat(ScriptActionInstRunData& data);
 void getRandomInt(ScriptActionInstRunData& data);
 void getVarPresence(ScriptActionInstRunData& data);
 void holdFocus(ScriptActionInstRunData& data);
-void ifFunction(ScriptActionInstRunData& data);
+void ifAction(ScriptActionInstRunData& data);
 void interpolateNumber(ScriptActionInstRunData& data);
 void linkWithFocus(ScriptActionInstRunData& data);
 void loadFocusMemory(ScriptActionInstRunData& data);
@@ -1053,41 +1060,6 @@ SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
 void reportActionError(
     const ScriptActionInstRunData& data, const string& info
 );
-};
-
-
-namespace ScriptActionLoaders {
-bool addListItem(ScriptActionDef& call, MobType* mt);
-bool arachnorbPlanLogic(ScriptActionDef& call, MobType* mt);
-bool calculate(ScriptActionDef& call, MobType* mt);
-bool easeNumber(ScriptActionDef& call, MobType* mt);
-bool focus(ScriptActionDef& call, MobType* mt);
-bool followMobAsLeader(ScriptActionDef& call, MobType* mt);
-bool getAreaInfo(ScriptActionDef& call, MobType* mt);
-bool getEventInfo(ScriptActionDef& call, MobType* mt);
-bool getListItem(ScriptActionDef& call, MobType* mt);
-bool getListItemNumber(ScriptActionDef& call, MobType* mt);
-bool getListSize(ScriptActionDef& call, MobType* mt);
-bool getMiscInfo(ScriptActionDef& call, MobType* mt);
-bool getMobInfo(ScriptActionDef& call, MobType* mt);
-bool holdFocus(ScriptActionDef& call, MobType* mt);
-bool ifFunction(ScriptActionDef& call, MobType* mt);
-bool moveToTarget(ScriptActionDef& call, MobType* mt);
-bool playSound(ScriptActionDef& call, MobType* mt);
-bool receiveStatus(ScriptActionDef& call, MobType* mt);
-bool removeListItem(ScriptActionDef& call, MobType* mt);
-bool removeStatus(ScriptActionDef& call, MobType* mt);
-bool setAnimation(ScriptActionDef& call, MobType* mt);
-bool setFarReach(ScriptActionDef& call, MobType* mt);
-bool setHoldable(ScriptActionDef& call, MobType* mt);
-bool setListItem(ScriptActionDef& call, MobType* mt);
-bool setNearReach(ScriptActionDef& call, MobType* mt);
-bool setTeam(ScriptActionDef& call, MobType* mt);
-bool spawn(ScriptActionDef& call, MobType* mt);
-bool stabilizeZ(ScriptActionDef& call, MobType* mt);
-bool startChomping(ScriptActionDef& call, MobType* mt);
-bool startParticles(ScriptActionDef& call, MobType* mt);
-bool turnToTarget(ScriptActionDef& call, MobType* mt);
 };
 
 

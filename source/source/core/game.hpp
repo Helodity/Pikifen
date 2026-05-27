@@ -136,9 +136,9 @@ public:
     
     //A dummy FSM state for FSMs with no state to use.
     FsmStateDef* dummyFsmState = nullptr;
-
-    //Consecutive count of actions ran in a row. Used to detect infinite loops.
-    size_t nConsecutiveScriptActions = 0;
+    
+    //Auxiliary data used by the current script that is running.
+    ScriptExecutionAuxData scriptExecAuxData;
     
     //Error manager.
     ErrorManager errors;

@@ -118,3 +118,29 @@ public:
     string getMakerToolVarsStr() const;
     
 };
+
+
+/**
+ * @brief Auxiliary data for the execution of a script. To save on memory,
+ * this contains data that can and should be instantiated once, and then
+ * used globally.
+ */
+struct ScriptExecutionAuxData {
+
+    public:
+    
+    //--- Public members ---
+    
+    //Consecutive count of actions ran in a row. Used to detect infinite loops.
+    size_t nConsecutiveActions = 0;
+    
+    //When entering a for loop, are we meant to increment the iterator
+    //variable, or initialize it?
+    bool forLoopEntryNeedsIncrement = false;
+    
+    
+    //--- Public function declarations ---
+    
+    void reset();
+    
+};

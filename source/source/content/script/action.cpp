@@ -134,6 +134,36 @@ bool ScriptActionListDef::assertActions(DataNode* dn) {
         }
     }
     
+    //Check if the "for"-related actions are okay.
+    depth = 0;
+    forIdx(a, list) {
+        switch(list[a]->actionType->type) {
+        case SCRIPT_ACTION_FOR: {
+            depth++;
+            break;
+        } case SCRIPT_ACTION_END_FOR: {
+            if(depth == 0) {
+                game.errors.report(
+                    "Found an \"end_for\" action without a matching "
+                    "\"for\" action!", dn
+                );
+                return false;
+            }
+            depth--;
+            break;
+        } default: {
+            break;
+        }
+        }
+    }
+    if(depth > 0) {
+        game.errors.report(
+            "Some \"for\" actions don't have a matching \"end_for\" action!",
+            dn
+        );
+        return false;
+    }
+    
     //Check if the "goto"-related actions are okay.
     set<string> labels;
     forIdx(a, list) {
@@ -175,6 +205,9 @@ bool ScriptActionListDef::assertActions(DataNode* dn) {
             passedSetState = false;
             break;
         } case SCRIPT_ACTION_END_DO_WHILE: {
+            passedSetState = false;
+            break;
+        } case SCRIPT_ACTION_END_FOR: {
             passedSetState = false;
             break;
         } case SCRIPT_ACTION_END_IF: {
@@ -235,6 +268,7 @@ ScriptActionListDef::getActionProcessType(
     
     switch(curAction->actionType->type) {
     case SCRIPT_ACTION_END_DO_WHILE:
+    case SCRIPT_ACTION_FOR:
     case SCRIPT_ACTION_IF:
     case SCRIPT_ACTION_WHILE_DO: {
         //We must check the condition and then decide where to go.
@@ -261,8 +295,9 @@ ScriptActionListDef::getActionProcessType(
         result = PROCESS_TYPE_JUMP_TO_CONSTRUCT_END;
         break;
         
-    } case SCRIPT_ACTION_GOTO:
-    case SCRIPT_ACTION_END_WHILE_DO: {
+    } case SCRIPT_ACTION_END_FOR:
+    case SCRIPT_ACTION_END_WHILE_DO:
+    case SCRIPT_ACTION_GOTO: {
         //Jump elsewhere.
         result = PROCESS_TYPE_JUMP_ELSEWHERE;
         break;
@@ -490,8 +525,28 @@ size_t ScriptActionListDef::processActionCheckCondition(
                     
                 }
                 }
-                
-                if(foundNextAction) break;
+            }
+            
+        }
+        
+        break;
+        
+    } case SCRIPT_ACTION_FOR: {
+        if(conditionValue) {
+            //Returned true. Continue to the next sequential action
+            //in order to enter the loop.
+            return actionIdx + 1;
+            
+        } else {
+            //Returned false. Go to the end of the loop.
+            for(size_t a2 = actionIdx + 1; a2 < list.size(); a2++) {
+                SCRIPT_ACTION a2Type = list[a2]->actionType->type;
+                if(
+                    a2Type == SCRIPT_ACTION_END_FOR &&
+                    depths[a2] == depths[actionIdx]
+                ) {
+                    return a2 + 1;
+                }
             }
             
         }
@@ -579,7 +634,20 @@ size_t ScriptActionListDef::processActionJumpToLabel(
     ScriptActionDef* curAction = list[actionIdx];
     
     switch(curAction->actionType->type) {
-    case SCRIPT_ACTION_END_WHILE_DO: {
+    case SCRIPT_ACTION_END_FOR: {
+        for(int a2 = actionIdx - 1; a2 > 0; a2--) {
+            SCRIPT_ACTION a2Type = list[a2]->actionType->type;
+            if(
+                a2Type == SCRIPT_ACTION_FOR &&
+                depths[a2] == depths[actionIdx]
+            ) {
+                game.scriptExecAuxData.forLoopEntryNeedsIncrement = true;
+                return a2;
+            }
+        }
+        break;
+        
+    } case SCRIPT_ACTION_END_WHILE_DO: {
         for(int a2 = actionIdx - 1; a2 > 0; a2--) {
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(
@@ -632,16 +700,16 @@ void ScriptActionListDef::run(
         ScriptActionDef* curAction = list[curActionIdx];
         
         //First, check the infinite loop safeguard.
-        game.nConsecutiveScriptActions++;
+        game.scriptExecAuxData.nConsecutiveActions++;
         if(
-            game.nConsecutiveScriptActions >
+            game.scriptExecAuxData.nConsecutiveActions >
             GAME::MAX_CONSECUTIVE_SCRIPT_ACTIONS
         ) [[unlikely]] {
             ScriptActionInstRunData data(scriptVM, curAction);
             ScriptActionRunners::reportActionError(
                 data,
                 "Failed to run action! Since the game already ran " +
-                i2s(game.nConsecutiveScriptActions - 1) +
+                i2s(game.scriptExecAuxData.nConsecutiveActions - 1) +
                 " actions in a row, it's probably in an infinite loop. "
                 "Please correct the script to make sure "
                 "this doesn't happen!"
@@ -675,6 +743,7 @@ void ScriptActionListDef::saveDepthsCache() {
         
         switch(list[a]->actionType->type) {
         case SCRIPT_ACTION_DO_WHILE:
+        case SCRIPT_ACTION_FOR:
         case SCRIPT_ACTION_IF:
         case SCRIPT_ACTION_WHILE_DO: {
             depthToSave = depth;
@@ -687,6 +756,7 @@ void ScriptActionListDef::saveDepthsCache() {
             break;
             
         } case SCRIPT_ACTION_END_DO_WHILE:
+        case SCRIPT_ACTION_END_FOR:
         case SCRIPT_ACTION_END_IF:
         case SCRIPT_ACTION_END_WHILE_DO: {
             depthToSave = depth - 1;
