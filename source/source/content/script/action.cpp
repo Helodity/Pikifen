@@ -164,6 +164,37 @@ bool ScriptActionListDef::assertActions(DataNode* dn) {
         return false;
     }
     
+    //Check if the "for-each"-related actions are okay.
+    depth = 0;
+    forIdx(a, list) {
+        switch(list[a]->actionType->type) {
+        case SCRIPT_ACTION_FOR_EACH: {
+            depth++;
+            break;
+        } case SCRIPT_ACTION_END_FOR_EACH: {
+            if(depth == 0) {
+                game.errors.report(
+                    "Found an \"end_for_each\" action without a matching "
+                    "\"for_each\" action!", dn
+                );
+                return false;
+            }
+            depth--;
+            break;
+        } default: {
+            break;
+        }
+        }
+    }
+    if(depth > 0) {
+        game.errors.report(
+            "Some \"for_each\" actions don't have a matching "
+            "\"end_for_each\" action!",
+            dn
+        );
+        return false;
+    }
+    
     //Check if the "goto"-related actions are okay.
     set<string> labels;
     forIdx(a, list) {
@@ -208,6 +239,9 @@ bool ScriptActionListDef::assertActions(DataNode* dn) {
             passedSetState = false;
             break;
         } case SCRIPT_ACTION_END_FOR: {
+            passedSetState = false;
+            break;
+        } case SCRIPT_ACTION_END_FOR_EACH: {
             passedSetState = false;
             break;
         } case SCRIPT_ACTION_END_IF: {
@@ -269,6 +303,7 @@ ScriptActionListDef::getActionProcessType(
     switch(curAction->actionType->type) {
     case SCRIPT_ACTION_END_DO_WHILE:
     case SCRIPT_ACTION_FOR:
+    case SCRIPT_ACTION_FOR_EACH:
     case SCRIPT_ACTION_IF:
     case SCRIPT_ACTION_WHILE_DO: {
         //We must check the condition and then decide where to go.
@@ -296,6 +331,7 @@ ScriptActionListDef::getActionProcessType(
         break;
         
     } case SCRIPT_ACTION_END_FOR:
+    case SCRIPT_ACTION_END_FOR_EACH:
     case SCRIPT_ACTION_END_WHILE_DO:
     case SCRIPT_ACTION_GOTO: {
         //Jump elsewhere.
@@ -463,7 +499,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
     case SCRIPT_ACTION_END_DO_WHILE: {
         if(conditionValue) {
             //Returned true. Go to the start of the loop for another go.
-            for(int a2 = actionIdx - 1; a2 > 0; a2--) {
+            for(int a2 = actionIdx - 1; a2 >= 0; a2--) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_DO_WHILE &&
@@ -543,6 +579,28 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_END_FOR &&
+                    depths[a2] == depths[actionIdx]
+                ) {
+                    return a2 + 1;
+                }
+            }
+            
+        }
+        
+        break;
+        
+    } case SCRIPT_ACTION_FOR_EACH: {
+        if(conditionValue) {
+            //Returned true. Continue to the next sequential action
+            //in order to enter the loop.
+            return actionIdx + 1;
+            
+        } else {
+            //Returned false. Go to the end of the loop.
+            for(size_t a2 = actionIdx + 1; a2 < list.size(); a2++) {
+                SCRIPT_ACTION a2Type = list[a2]->actionType->type;
+                if(
+                    a2Type == SCRIPT_ACTION_END_FOR_EACH &&
                     depths[a2] == depths[actionIdx]
                 ) {
                     return a2 + 1;
@@ -635,7 +693,7 @@ size_t ScriptActionListDef::processActionJumpToLabel(
     
     switch(curAction->actionType->type) {
     case SCRIPT_ACTION_END_FOR: {
-        for(int a2 = actionIdx - 1; a2 > 0; a2--) {
+        for(int a2 = actionIdx - 1; a2 >= 0; a2--) {
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(
                 a2Type == SCRIPT_ACTION_FOR &&
@@ -647,8 +705,21 @@ size_t ScriptActionListDef::processActionJumpToLabel(
         }
         break;
         
+    } case SCRIPT_ACTION_END_FOR_EACH: {
+        for(int a2 = actionIdx - 1; a2 >= 0; a2--) {
+            SCRIPT_ACTION a2Type = list[a2]->actionType->type;
+            if(
+                a2Type == SCRIPT_ACTION_FOR_EACH &&
+                depths[a2] == depths[actionIdx]
+            ) {
+                game.scriptExecAuxData.forLoopEntryNeedsIncrement = true;
+                return a2;
+            }
+        }
+        break;
+        
     } case SCRIPT_ACTION_END_WHILE_DO: {
-        for(int a2 = actionIdx - 1; a2 > 0; a2--) {
+        for(int a2 = actionIdx - 1; a2 >= 0; a2--) {
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(
                 a2Type == SCRIPT_ACTION_WHILE_DO &&
@@ -744,6 +815,7 @@ void ScriptActionListDef::saveDepthsCache() {
         switch(list[a]->actionType->type) {
         case SCRIPT_ACTION_DO_WHILE:
         case SCRIPT_ACTION_FOR:
+        case SCRIPT_ACTION_FOR_EACH:
         case SCRIPT_ACTION_IF:
         case SCRIPT_ACTION_WHILE_DO: {
             depthToSave = depth;
@@ -757,6 +829,7 @@ void ScriptActionListDef::saveDepthsCache() {
             
         } case SCRIPT_ACTION_END_DO_WHILE:
         case SCRIPT_ACTION_END_FOR:
+        case SCRIPT_ACTION_END_FOR_EACH:
         case SCRIPT_ACTION_END_IF:
         case SCRIPT_ACTION_END_WHILE_DO: {
             depthToSave = depth - 1;

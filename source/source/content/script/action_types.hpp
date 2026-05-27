@@ -82,6 +82,9 @@ enum SCRIPT_ACTION {
     //For loop end.
     SCRIPT_ACTION_END_FOR,
     
+    //For-each loop end.
+    SCRIPT_ACTION_END_FOR_EACH,
+    
     //Conditional "end if" marker.
     SCRIPT_ACTION_END_IF,
     
@@ -111,6 +114,9 @@ enum SCRIPT_ACTION {
     
     //For loop begin.
     SCRIPT_ACTION_FOR,
+    
+    //For-each loop begin.
+    SCRIPT_ACTION_FOR_EACH,
     
     //Get angle between two sets of coordinates.
     SCRIPT_ACTION_GET_ANGLE,
@@ -960,6 +966,7 @@ void followMobAsLeader(ScriptActionInstRunData& data);
 void followPathRandomly(ScriptActionInstRunData& data);
 void followPathToAbsolute(ScriptActionInstRunData& data);
 void forAction(ScriptActionInstRunData& data);
+void forEach(ScriptActionInstRunData& data);
 void getAngle(ScriptActionInstRunData& data);
 void getAngleCwDiff(ScriptActionInstRunData& data);
 void getAngleSmallestDiff(ScriptActionInstRunData& data);

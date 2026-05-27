@@ -1663,6 +1663,13 @@ void initScriptActionTypes() {
         nullptr
     );
     
+    //End for-each loop.
+    commitAction(
+        SCRIPT_ACTION_END_FOR_EACH,
+        "end_for_each",
+        nullptr
+    );
+    
     //End if.
     commitAction(
         SCRIPT_ACTION_END_IF,
@@ -1694,7 +1701,7 @@ void initScriptActionTypes() {
     );
     
     //Start for loop.
-    queueParam("iterator variable", ptString, pfConst);
+    queueParam("iterator var name", ptString, pfConst);
     queueParam("target value", ptInt);
     queueParam("starting value", ptInt, pfOpt, "1");
     queueParam("jump", ptInt, pfOpt, "1");
@@ -1702,6 +1709,17 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_FOR,
         "for",
         ScriptActionRunners::forAction
+    );
+    
+    //Start for each loop.
+    queueParam("iterator var name", ptString, pfConst);
+    queueParam("item var name", ptInt);
+    queueParam("list or string", ptString);
+    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    commitAction(
+        SCRIPT_ACTION_FOR_EACH,
+        "for_each",
+        ScriptActionRunners::forEach
     );
     
     //Get angle.

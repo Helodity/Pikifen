@@ -241,12 +241,16 @@
         <th><code>end_do_while</code></th>
         <td><dl>
           <dt><code><b>end_do_while</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
-          <dd>See <a href="do-while"><code>do_while</code></a>.</dd>
+          <dd>See <a href="#do-while"><code>do_while</code></a>.</dd>
         </dl></td>
       </tr>
       <tr id="end-for">
         <th><code>end_for</code></th>
-        <td>See <a href="for"><code>for</code></a>.</td>
+        <td>See <a href="#for"><code>for</code></a>.</td>
+      </tr>
+      <tr id="end-for-each">
+        <th><code>end_for_each</code></th>
+        <td>See <a href="#for-each"><code>for_each</code></a>.</td>
       </tr>
       <tr id="end-if">
         <th><code>end_if</code></th>
@@ -254,17 +258,24 @@
       </tr>
       <tr id="end-while-do">
         <th><code>end_while_do</code></th>
-        <td>See <a href="while"><code>while_do</code></a>.</td>
+        <td>See <a href="#while-do"><code>while_do</code></a>.</td>
       </tr>
       <tr id="for">
         <th><code>for</code></th>
         <td><dl>
           <dt><code><b>for</b> &lt;iterator_variable_name&gt; &lt;target_amount&gt;</code></dt>
-          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-for"><code>end_for</code></a> action. The first time the <code>for</code> action is run in this loop, the variable &lt;iterator_variable_name&gt; receives the default value of 1, and every other time it adds + 1 to the value. The block is looped as many times as &lt;target_amount&gt;. The second that the iterator variable's value is higher than &lt;target_amount&gt; the loop ends and the script continues from after the <code>end_for</code> action. In other words, you can use this to loop a block of actions exactly &lt;target_amount&gt; times, and every iteration you can check the &lt;iterator_variable_name&gt; variable to know what loop you're on: 1 means the first loop, 2 means the second, etc. In programming languages like C++ this is the same as <code>for(int &lt;iterator_variable_name&gt; = 1; &lt;iterator_variable_name&gt; &lt;= &lt;target_amount&gt;; &lt;iterator_variable_name&gt;++)</code>.</dd>
+          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-for"><code>end_for</code></a> action. The first time the <code>for</code> action is run in this loop, the variable &lt;iterator_variable_name&gt; receives the default value of 1, and every other time it adds + 1 to the value. The block is looped as many times as &lt;target_amount&gt;. The second that the iterator variable's value is higher than &lt;target_amount&gt; the loop ends and the script continues from after the <code>end_for</code> action. In other words, you can use this to loop a block of actions exactly &lt;target_amount&gt; times, and every iteration you can check the &lt;iterator_variable_name&gt; variable to know what loop you're on: 1 means the first loop, 2 means the second, etc. Even if you don't need the iterator variable, it still needs to be present so the script knows how to continue between one loop and the next. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable! In programming languages like C++ this is the same as <code>for(int &lt;iterator_variable_name&gt; = 1; &lt;iterator_variable_name&gt; &lt;= &lt;target_amount&gt;; &lt;iterator_variable_name&gt;++)</code>.</dd>
           <dt><code><b>for</b> &lt;iterator_variable_name&gt; &lt;target_amount&gt; [&lt;starting_value&gt;]</code></dt>
           <dd>Same as above, but the iterator variable starts with the value &lt;starting_value&gt; instead of 1.</dd>
           <dt><code><b>for</b> &lt;iterator_variable_name&gt; &lt;target_amount&gt; [&lt;starting_value&gt;] [&lt;jump&gt;]</code></dt>
           <dd>Same as above, but you can specify how much each iteration makes the value jump. By default this is +1. You can use -1 to make it go backwards, +2 to make it skip every other number, etc.</dd>
+        </dl></td>
+      </tr>
+      <tr id="for-each">
+        <th><code>for_each</code></th>
+        <td><dl>
+          <dt><code><b>for_each</b> &lt;iterator_variable_name&gt; &lt;item_variable_name&gt; &lt;list_or_string&gt; [&lt;list_delimiter&gt;]</code></dt>
+          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-for-each"><code>end_for_each</code></a> action. The first time the <code>for</code> action is run in this loop, the variable &lt;iterator_variable_name&gt; receives the value of 1, and the variable &lt;item_variable_name&gt; receives the value of the first item in the list. Every other time it adds + 1 to the iterator variable and set the item variable to the next item over. Once the list has been combed through, the loop ends and the script continues from after the <code>end_for_each</code> action. In other words, you can use this to do something to each entry in a list. Even if you don't need the iterator variable or item variable, they still need to be present so the script knows how to continue between one loop and the next. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable! And careful that you aren't changing the list as you're going through it or you might end up confused!</dd>
         </dl></td>
       </tr>
       <tr id="goto">
@@ -277,7 +288,7 @@
       <tr id="if">
         <th><code>if</code></th>
         <td>
-          Only executes the next block of actions if the condition you specify is true. If not, it jumps to the next matching <code><a href="else">else</a></code>, <code><a href="else-if">else_if</a></code>, or <code><a href="end-if">end_if</a></code> action. The block to run goes between the <code>if</code> and the next matching <code>else</code>, <code>else_if</code>, or <code>end_if</code> action. 
+          Only executes the next block of actions if the condition you specify is true. If not, it jumps to the next matching <code><a href="#else">else</a></code>, <code><a href="#else-if">else_if</a></code>, or <code><a href="#end-if">end_if</a></code> action. The block to run goes between the <code>if</code> and the next matching <code>else</code>, <code>else_if</code>, or <code>end_if</code> action. 
           <dl><dt><code><b>if</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
           <dd>
             &lt;left&gt; and &lt;right&gt; are two values, and &lt;operator&gt; is how you want to compare them. As such, it makes sense to replace at least one of the values with a variable. Note that due to scripting limitations, only &lt;right&gt; may have spaces, if it is text. The possible operators are:
@@ -296,7 +307,7 @@
         <th><code>label</code></th>
         <td><dl>
           <dt><code><b>label</b> &lt;label_name&gt;</code></dt>
-          <dd>Labels this point of the script as &lt;label_name&gt;. You can then use the <code><a href="goto">goto</a></code> action to force the script to go to this point at will. Each label is only accessible to the event block it belongs to.</dd>
+          <dd>Labels this point of the script as &lt;label_name&gt;. You can then use the <code><a href="#goto">goto</a></code> action to force the script to go to this point at will. Each label is only accessible to the event block it belongs to.</dd>
         </dl></td>
       </tr>
       <tr id="set-state">

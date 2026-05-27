@@ -602,6 +602,60 @@ void ScriptActionRunners::forAction(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the for-each loop condition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::forEach(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& iteratorVarArg = data.args[0];
+    const string& itemVarArg = data.args[1];
+    const string& listArg = data.args[2];
+    const string& delArg = data.args[3];
+    
+    //Main logic.
+    bool delFound;
+    SCRIPT_ACTION_LIST_DELIMITER delType =
+        enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
+        
+    if(!delFound) {
+        reportActionError(
+            data,
+            "Unknown list delimiter \"" + delArg + "\"!"
+        );
+        return;
+    }
+    
+    int iterator = 1;
+    data.scriptVM->getRunnerScriptVM()->vars.getValue(iteratorVarArg, iterator);
+    if(game.scriptExecAuxData.forLoopEntryNeedsIncrement) {
+        iterator++;
+        game.scriptExecAuxData.forLoopEntryNeedsIncrement = false;
+    } else {
+        iterator = 1;
+    }
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(iteratorVarArg, iterator);
+    
+    string delChar = enumGetName(scriptActionListDelimiterChars, delType);
+    vector<string> items = split(listArg, delChar, true);
+    int idx = iterator - 1;
+    if(!isIdxValid(idx, items)) idx = items.size() - 1;
+    string item;
+    
+    if(isIdxValid(idx, items)) {
+        item = trimSpaces(items[(size_t) idx]);
+    }
+    
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(itemVarArg, item);
+    
+    bool result = iterator <= (int) items.size();
+    
+    //Store the result.
+    data.returnValue = result;
+}
+
+
+/**
  * @brief Code for the angle retrieval script action type.
  *
  * @param data Data about the action call.
