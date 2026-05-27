@@ -45,10 +45,10 @@ public:
     Area* area = nullptr;
     
     //Actions to run on script startup.
-    ScriptActionBlockDef initActions;
+    ScriptActionListDef initActions;
     
     //Actions to run when the area or mob is fully loaded and ready.
-    ScriptActionBlockDef readyActions;
+    ScriptActionListDef readyActions;
     
     //Definition of the finite-state machine.
     FsmDef fsm;

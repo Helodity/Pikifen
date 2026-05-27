@@ -85,15 +85,15 @@ public:
 
 
 /**
- * @brief Definition of a block of script actions.
+ * @brief Definition of a list of script actions.
  */
-class ScriptActionBlockDef {
+class ScriptActionListDef {
 
 public:
 
     //--- Public misc. declarations ---
     
-    //Ways to process the current action, mostly in regards to the block's flow.
+    //Ways to process the current action, mostly in regards to the list's flow.
     enum PROCESS_TYPE {
     
         //Run the action. Then proceed to the next sequential action.
@@ -149,7 +149,7 @@ private:
         size_t actionIdx, bool* mustProcessElseIfConditionPtr
     ) const;
     size_t processAction(
-        size_t actionIdx, ScriptActionBlockDef::PROCESS_TYPE processType,
+        size_t actionIdx, ScriptActionListDef::PROCESS_TYPE processType,
         bool* mustProcessElseIfConditionPtr, ScriptVM* scriptVM,
         void* customData1 = nullptr, void* customData2 = nullptr
     );

@@ -15,7 +15,7 @@
 #include "script_utils.hpp"
 
 
-#pragma region Script action block definition
+#pragma region Script action list definition
 
 
 /**
@@ -28,7 +28,7 @@
  * @param dn Data node from where these actions came.
  * @return Whether everything is okay.
  */
-bool ScriptActionBlockDef::assertActions(DataNode* dn) {
+bool ScriptActionListDef::assertActions(DataNode* dn) {
     //Check if the "if"-related actions are okay.
     int depth = 0;
     vector<bool> seenElseAction;
@@ -226,8 +226,8 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
  * whether the condition of an "else_if" action should be processed.
  * @return The type.
  */
-ScriptActionBlockDef::PROCESS_TYPE
-ScriptActionBlockDef::getActionProcessType(
+ScriptActionListDef::PROCESS_TYPE
+ScriptActionListDef::getActionProcessType(
     size_t actionIdx, bool* mustProcessElseIfConditionPtr
 ) const {
     ScriptActionDef* curAction = list[actionIdx];
@@ -287,7 +287,7 @@ ScriptActionBlockDef::getActionProcessType(
 
 
 /**
- * @brief Loads a block from a data node.
+ * @brief Loads a list from a data node.
  *
  * @param node The node.
  * @param scriptDef Script definition it belongs to, if any.
@@ -295,7 +295,7 @@ ScriptActionBlockDef::getActionProcessType(
  * returned here.
  * @return Whether everything succeeded.
  */
-bool ScriptActionBlockDef::loadFromDataNode(
+bool ScriptActionListDef::loadFromDataNode(
     DataNode* node, ScriptDef* scriptDef, Bitmask8* outFlags
 ) {
     if(outFlags) *outFlags = 0;
@@ -335,8 +335,8 @@ bool ScriptActionBlockDef::loadFromDataNode(
  * @param customData2 Custom data #2.
  * @return The next action's index.
  */
-size_t ScriptActionBlockDef::processAction(
-    size_t actionIdx, ScriptActionBlockDef::PROCESS_TYPE processType,
+size_t ScriptActionListDef::processAction(
+    size_t actionIdx, ScriptActionListDef::PROCESS_TYPE processType,
     bool* mustProcessElseIfConditionPtr, ScriptVM* scriptVM,
     void* customData1, void* customData2
 ) {
@@ -413,7 +413,7 @@ size_t ScriptActionBlockDef::processAction(
  * @param customData2 Custom data #2.
  * @return The next action's index.
  */
-size_t ScriptActionBlockDef::processActionCheckCondition(
+size_t ScriptActionListDef::processActionCheckCondition(
     size_t actionIdx, bool* mustProcessElseIfConditionPtr,
     ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
@@ -548,7 +548,7 @@ size_t ScriptActionBlockDef::processActionCheckCondition(
  * @param customData2 Custom data #2.
  * @return The next action's index.
  */
-size_t ScriptActionBlockDef::processActionJumpToConstructEnd(
+size_t ScriptActionListDef::processActionJumpToConstructEnd(
     size_t actionIdx, ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
     size_t nextActionIdx = list.size();
@@ -599,7 +599,7 @@ size_t ScriptActionBlockDef::processActionJumpToConstructEnd(
  * @param customData2 Custom data #2.
  * @return The next action's index.
  */
-size_t ScriptActionBlockDef::processActionJumpToLabel(
+size_t ScriptActionListDef::processActionJumpToLabel(
     size_t actionIdx, ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
     ScriptActionDef* curAction = list[actionIdx];
@@ -642,13 +642,13 @@ size_t ScriptActionBlockDef::processActionJumpToLabel(
 
 
 /**
- * @brief Runs a block of actions.
+ * @brief Runs a list of actions.
  *
  * @param scriptVM Script VM in which these actions will be run.
  * @param customData1 Custom data #1.
  * @param customData2 Custom data #2.
  */
-void ScriptActionBlockDef::run(
+void ScriptActionListDef::run(
     ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
     if(depths.empty()) saveDepthsCache();
@@ -694,7 +694,7 @@ void ScriptActionBlockDef::run(
 /**
  * @brief Saves the cache of depths.
  */
-void ScriptActionBlockDef::saveDepthsCache() {
+void ScriptActionListDef::saveDepthsCache() {
     depths.clear();
     
     size_t depth = 0;
@@ -728,9 +728,9 @@ void ScriptActionBlockDef::saveDepthsCache() {
 
 
 /**
- * @brief Unloads the action block definition and its contents from memory.
+ * @brief Unloads the action list definition and its contents from memory.
  */
-void ScriptActionBlockDef::unload() {
+void ScriptActionListDef::unload() {
     forIdx(a, list) {
         list[a]->unload();
         delete list[a];

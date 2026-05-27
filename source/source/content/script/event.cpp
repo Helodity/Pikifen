@@ -96,7 +96,7 @@ bool FsmEventDef::loadFromDataNode(
 
 
 /**
- * @brief Runs the block of actions in the event.
+ * @brief Runs the list of actions in the event.
  *
  * @param scriptVM Script VM in which these actions will be run.
  * @param customData1 Custom argument #1.

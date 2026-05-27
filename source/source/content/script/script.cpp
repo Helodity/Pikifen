@@ -212,7 +212,7 @@ ScriptVM* ScriptVM::getRunnerScriptVM() {
 
 
 /**
- * @brief Runs the block of actions that are meant to run when the
+ * @brief Runs the list of actions that are meant to run when the
  * mob or area are fully loaded and ready.
  */
 void ScriptVM::runReadyActions() {

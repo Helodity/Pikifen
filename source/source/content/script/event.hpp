@@ -35,13 +35,13 @@ public:
     
     //Type of event.
     FSM_EV type = FSM_EV_UNKNOWN;
-
-    //Block of actions to run.
-    ScriptActionBlockDef actions;
-
-
+    
+    //List of actions to run.
+    ScriptActionListDef actions;
+    
+    
     //--- Public function declarations ---
-
+    
     FsmEventDef(
         FSM_EV type = FSM_EV_UNKNOWN,
         const vector<ScriptActionDef*>& actions = vector<ScriptActionDef*>()
