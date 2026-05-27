@@ -1,4 +1,4 @@
-first_state = spawning_young
+first_state = exploring
 death_state = dying
 
 init {
@@ -7,31 +7,16 @@ init {
     get_mob_info home_y self y
 }
 
-script {
-    spawning_young {
-        on_enter {
-            set_timer 0.1
-        }
-        on_timer {
-            //We could spawn the young in the init block, but that would make
-            //the engine spawn the enemy and the young right away, taking up
-            //slots that may need to be used by the player's Pikmin. So let's
-            //wait with a timer, to make sure the player's Pikmin all spawn,
-            //and only then spawn the Bulbmin's young.
-            spawn young
-            spawn young
-            spawn young
-            spawn young
-            spawn young
-            spawn young
-            spawn young
-            spawn young
-            spawn young
-            spawn young
-            set_state exploring
-        }
-    }
+ready {
+    //We could have spawned the young in the init block, but that would make
+    //the engine spawn the enemy and the young right away, taking up
+    //slots that may need to be used by the player's Pikmin.
+    for temp 10
+        spawn young
+    end_for
+}
 
+script {
     exploring {
         on_enter {
             set_animation moving random_time_on_spawn true

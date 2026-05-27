@@ -443,6 +443,7 @@ size_t ScriptActionListDef::processAction(
         
     } case PROCESS_TYPE_DO_NOTHING: {
         //Do not run this action. Then proceed to the next sequential action.
+        return actionIdx + 1;
         break;
         
     } case PROCESS_TYPE_NORMAL: {
@@ -1086,6 +1087,7 @@ bool ScriptActionDef::run(
     data.args = args;
     forIdx(a, args) {
         if(argIsVar[a]) {
+            data.args[a].clear();
             scriptVM->vars.getValue(args[a], data.args[a]);
         }
     }

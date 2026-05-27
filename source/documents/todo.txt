@@ -19,9 +19,6 @@ Next tasks (roughly sorted most important first)
         New actions
             Typical programming things
                 An action that returns to the previous state. Useful for creating utility states that mimic functions
-                For loop
-                    After this is done, use the new list management actions to create id<->power maps for the logic gates, as well as allowing them to accept multiple inputs
-                While loop
                 Functions you'd find in a math library
                     Sin, cosine?
                     Degrees to radians and vice-versa?

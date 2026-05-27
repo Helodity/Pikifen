@@ -88,16 +88,14 @@ script {
 			else
 				set_var to_spawn 10
 			end_if
-			label A
-			if $to_absorb = true
-				spawn blob_to_absorb
-			else
-				spawn blob
-			end_if
-			if $to_spawn > 0
-				calculate to_spawn $to_spawn - 1
-				goto A
-			end_if
+			
+			for temp $to_spawn
+				if $to_absorb = true
+					spawn blob_to_absorb
+				else
+					spawn blob
+				end_if
+			end_for
         }
 		on_animation_end {
 			delete

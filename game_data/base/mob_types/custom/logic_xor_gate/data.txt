@@ -1,5 +1,5 @@
 name = Logic XOR gate
-description = Connect two power sources here. When JUST A OR JUST B are giving power, this mob will output power to devices.
+description = Connect one or more power sources here. When exactly ONE of them is giving power, this mob will output power to devices.
 
 area_editor_recommend_links_from = true
 area_editor_recommend_links_to = true

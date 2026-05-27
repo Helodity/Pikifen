@@ -1,11 +1,5 @@
 first_state = idling
 
-init {
-    set_var i1 0
-    set_var i2 0
-    set_var i1id none
-}
-
 script {
     idling {
         on_enter {
@@ -16,27 +10,29 @@ script {
             get_list_item temp $msg 1
 
             if $temp = power
-                get_list_item temp $msg 2
+                get_list_item input_power $msg 2
                 get_mob_info id trigger id
 
-                if $temp != 0
-                    set_var temp 1
-                end_if
-                
-                if $i1id = none
-                    set_var i1id $id
-                end_if
-                if $id = $i1id
-                    set_var i1 $temp
+                get_list_item_number temp $ids $id
+                if $temp = 0
+                    add_list_item ids $ids $id
+                    add_list_item powers $powers $input_power
                 else
-                    set_var i2 $temp
+                    set_list_item powers $powers $input_power $temp
                 end_if
 
+                set_var on_count true
+                for_each temp temp2 $powers
+                    if $temp2 > 0
+                        calculate on_count $on_count + 1
+                    end_if
+                end_for_each
+
                 set_var msg power
-                if $i1 = $i2
-                    add_list_item msg $msg 0
-                else
+                if $on_count = 1
                     add_list_item msg $msg 1
+                else
+                    add_list_item msg $msg 0
                 end_if
                 send_message_to_links $msg
             end_if

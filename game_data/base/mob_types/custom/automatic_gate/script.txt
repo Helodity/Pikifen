@@ -7,7 +7,6 @@ init {
     set_var z_open $z_closed
     calculate z_open $z_open + 150
     set_flying true
-    start_height_effect
 }
 
 global {
@@ -30,6 +29,7 @@ script {
         }
         on_receive_message {
             if $input_power > 0
+                start_height_effect
                 set_state opening
             end_if
         }
