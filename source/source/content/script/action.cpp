@@ -1046,7 +1046,7 @@ void ScriptActionListDef::run(
             GAME::MAX_CONSECUTIVE_SCRIPT_ACTIONS
         ) [[unlikely]] {
             ScriptActionInstRunData data(scriptVM, curAction);
-            ScriptActionRunners::reportActionError(
+            ScriptActionUtils::reportActionError(
                 data,
                 "Failed to run action! Since the game already ran " +
                 i2s(game.scriptExecAuxData.nConsecutiveActions - 1) +

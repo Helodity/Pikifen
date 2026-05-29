@@ -43,7 +43,7 @@ ScriptActionInstRunData::ScriptActionInstRunData(
 
 
 #pragma endregion
-#pragma region Action runners
+#pragma region Action runner functions
 
 
 /**
@@ -97,7 +97,7 @@ void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
         
     if(!delFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown list delimiter \"" + delArg + "\"!"
         );
@@ -156,7 +156,7 @@ void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData& data) {
         );
         
     if(!typeFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown arachnorb plan logic type \"" + typeArg + "\"!"
         );
@@ -201,7 +201,7 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionCalculateTypeINames, opArg, &opFound);
         
     if(!opFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown operator \"" + opArg + "\"!"
         );
@@ -330,7 +330,7 @@ void ScriptActionRunners::easeNumber(ScriptActionInstRunData& data) {
         enumGetValue(easeMethodINames, methodArg, &methodFound);
         
     if(!methodFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown easing method \"" + methodArg + "\"!"
         );
@@ -360,14 +360,14 @@ void ScriptActionRunners::endDoWhile(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_IF_OP op =
         enumGetValue(scriptActionIfOpINames, opArg, &opFound);
     if(!opFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown operator \"" + opArg + "\"!"
         );
         return;
     }
     
-    bool result = doScriptCondition(lhsArg, op, rhsArg);
+    bool result = ScriptActionUtils::doScriptCondition(lhsArg, op, rhsArg);
     
     //Store the result.
     data.returnValue = result;
@@ -414,8 +414,8 @@ void ScriptActionRunners::focus(ScriptActionInstRunData& data) {
     
     //Main logic.
     SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
-        getMobTargetType(data, targetTypeArg);
-    Mob* target = getTargetMob(data, targetType);
+        ScriptActionUtils::getMobTargetType(data, targetTypeArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
     
     if(!target) return;
     data.scriptVM->getRunnerScriptVM()->focusOnMob(target);
@@ -451,8 +451,8 @@ void ScriptActionRunners::followMobAsLeader(ScriptActionInstRunData& data) {
     
     //Main logic.
     SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
-        getMobTargetType(data, targetTypeArg);
-    Mob* target = getTargetMob(data, targetType);
+        ScriptActionUtils::getMobTargetType(data, targetTypeArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
     
     if(!target) return;
     if(target->health <= 0.0f) return;
@@ -593,7 +593,7 @@ void ScriptActionRunners::forAction(ScriptActionInstRunData& data) {
     data.scriptVM->getRunnerScriptVM()->vars.setValue(iteratorVarArg, iterator);
     
     bool result =
-        doScriptCondition(
+        ScriptActionUtils::doScriptCondition(
             i2s(iterator),
             jump >= 0 ?
             SCRIPT_ACTION_IF_OP_LESS_E :
@@ -624,7 +624,7 @@ void ScriptActionRunners::forEach(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
         
     if(!delFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown list delimiter \"" + delArg + "\"!"
         );
@@ -746,7 +746,7 @@ void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionGetAreaInfoTypeINames, typeArg, &typeFound);
         
     if(!typeFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?"
@@ -839,7 +839,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_GET_EV_INFO_TYPE type =
         enumGetValue(scriptActionGetEvInfoTypeINames, typeArg, &typeFound);
     if(!typeFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?"
@@ -1006,7 +1006,7 @@ void ScriptActionRunners::getListItem(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
         
     if(!delFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown list delimiter \"" + delArg + "\"!"
         );
@@ -1046,7 +1046,7 @@ void ScriptActionRunners::getListItemNumber(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
         
     if(!delFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown list delimiter \"" + delArg + "\"!"
         );
@@ -1086,7 +1086,7 @@ void ScriptActionRunners::getListSize(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
         
     if(!delFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown list delimiter \"" + delArg + "\"!"
         );
@@ -1117,7 +1117,7 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_GET_MISC_INFO_TYPE type =
         enumGetValue(scriptActionGetMiscInfoTypeINames, typeArg, &typeFound);
     if(!typeFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?"
@@ -1181,7 +1181,7 @@ void ScriptActionRunners::getMissionMetric(ScriptActionInstRunData& data) {
     MISSION_METRIC metric =
         enumGetValue(missionMetricINames, metricArg, &metricFound);
     if(!metricFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown mission metric \"" + metricArg + "\"!"
         );
@@ -1218,7 +1218,7 @@ void ScriptActionRunners::getMobIdsInRegion(
     vector<string> idsStrs;
     size_t regionIdx = s2i(regionNumberArg) - 1;
     if(regionIdx >= game.states.gameplay->areaRegions.size()) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Area region number " + regionNumberArg + " doesn't exist!"
         );
@@ -1292,8 +1292,8 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
     
     //Main logic.
     SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
-        getMobTargetType(data, targetArg);
-    Mob* target = getTargetMob(data, targetType);
+        ScriptActionUtils::getMobTargetType(data, targetArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
     
     if(!target) return;
     
@@ -1302,7 +1302,7 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_GET_MOB_INFO_TYPE type =
         enumGetValue(scriptActionGetMobInfoTypeINames, typeArg, &typeFound);
     if(!typeFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?"
@@ -1415,31 +1415,6 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Returns a mob script action mob target type from an action call.
- *
- * @param data Data about the action call.
- * @param name The type's name.
- * @return The type.
- */
-SCRIPT_ACTION_MOB_TARGET_TYPE ScriptActionRunners::getMobTargetType(
-    const ScriptActionInstRunData& data, const string& name
-) {
-    bool found;
-    SCRIPT_ACTION_MOB_TARGET_TYPE type =
-        enumGetValue(scriptActionMobTargetTypeINames, name, &found);
-        
-    if(!found) {
-        reportActionError(
-            data,
-            "Unknown mob target type \"" + name + "\"!"
-        );
-    }
-    
-    return type;
-}
-
-
-/**
  * @brief Code for the float number randomization script action type.
  *
  * @param data Data about the action call.
@@ -1518,7 +1493,7 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
     size_t partIdx =
         data.scriptVM->getRunnerMob()->anim.animDb->findBodyPart(bodyPartArg);
     if(partIdx == INVALID) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown body part \"" + bodyPartArg + "\"!"
         );
@@ -1550,14 +1525,14 @@ void ScriptActionRunners::ifAction(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_IF_OP op =
         enumGetValue(scriptActionIfOpINames, opArg, &opFound);
     if(!opFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown operator \"" + opArg + "\"!"
         );
         return;
     }
     
-    bool result = doScriptCondition(lhsArg, op, rhsArg);
+    bool result = ScriptActionUtils::doScriptCondition(lhsArg, op, rhsArg);
     
     //Store the result.
     data.returnValue = result;
@@ -1698,7 +1673,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_MOVE_TYPE targetType =
         enumGetValue(scriptActionMoveTypeINames, targetArg, &targetFound);
     if(!targetFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown target type \"" + targetArg + "\"!"
         );
@@ -1820,7 +1795,7 @@ void ScriptActionRunners::playSound(ScriptActionInstRunData& data) {
     }
     
     if(soundDataIdx == INVALID) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown sound info block \"" + soundArg + "\"!"
         );
@@ -1887,7 +1862,7 @@ void ScriptActionRunners::receiveStatus(ScriptActionInstRunData& data) {
     //Main logic.
     auto it = game.content.statusTypes.list.find(statusArg);
     if(it == game.content.statusTypes.list.end()) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown status effect \"" + statusArg + "\"!"
         );
@@ -1938,7 +1913,7 @@ void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
         
     if(!delFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown list delimiter \"" + delArg + "\"!"
         );
@@ -1972,7 +1947,7 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
     //Main logic.
     auto it = game.content.statusTypes.list.find(statusArg);
     if(it == game.content.statusTypes.list.end()) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown status effect \"" + statusArg + "\"!"
         );
@@ -1986,36 +1961,6 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
             data.scriptVM->getRunnerMob()->statuses[s].state =
                 STATUS_STATE_TO_DELETE;
         }
-    }
-}
-
-
-/**
- * @brief Reports an error with an action.
- *
- * @param data Data about the action call.
- * @param info What information to report.
- */
-void ScriptActionRunners::reportActionError(
-    const ScriptActionInstRunData& data, const string& info
-) {
-    string filePath;
-    if(data.actionDef->dataFileLine != 0) {
-        if(data.scriptVM->getRunnerMob()) {
-            filePath =
-                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
-                FILE_NAMES::MOB_TYPE_SCRIPT;
-        } else {
-            filePath =
-                game.curArea->manifest->path + "/" +
-                FILE_NAMES::AREA_SCRIPT;
-        }
-    }
-    
-    if(filePath.empty()) {
-        game.errors.report(info);
-    } else {
-        game.errors.report(info, filePath, data.actionDef->dataFileLine);
     }
 }
 
@@ -2049,8 +1994,8 @@ void ScriptActionRunners::runNextActionAs(ScriptActionInstRunData& data) {
     
     //Main logic.
     SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
-        getMobTargetType(data, targetTypeArg);
-    Mob* target = getTargetMob(data, targetType);
+        ScriptActionUtils::getMobTargetType(data, targetTypeArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
     
     data.scriptVM->nextActionSurrogateMob = target;
 }
@@ -2195,7 +2140,7 @@ void ScriptActionRunners::setAnimation(ScriptActionInstRunData& data) {
     size_t animIdx =
         data.scriptVM->getRunnerMob()->type->animDb->findAnimation(animArg);
     if(animIdx == INVALID) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown animation \"" + animArg + "\"!"
         );
@@ -2206,7 +2151,7 @@ void ScriptActionRunners::setAnimation(ScriptActionInstRunData& data) {
     START_ANIM_OPTION option =
         enumGetValue(startAnimOptionINames, optionArg, &optionFound);
     if(!optionFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown animation start option \"" + optionArg + "\"!"
         );
@@ -2256,7 +2201,7 @@ void ScriptActionRunners::setFarReach(ScriptActionInstRunData& data) {
     }
     
     if(reachIdx == INVALID) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown reach \"" + reachArg + "\"!"
         );
@@ -2399,7 +2344,7 @@ void ScriptActionRunners::setHoldable(ScriptActionInstRunData& data) {
             enumGetValue(holdabilityFlagINames, ruleArg, &flagFound);
             
         if(!flagFound) {
-            reportActionError(
+            ScriptActionUtils::reportActionError(
                 data,
                 "Unknown holdable rule \"" + ruleArg + "\"!"
             );
@@ -2485,7 +2430,7 @@ void ScriptActionRunners::setListItem(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
         
     if(!delFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown list delimiter \"" + delArg + "\"!"
         );
@@ -2545,7 +2490,7 @@ void ScriptActionRunners::setNearReach(ScriptActionInstRunData& data) {
     }
     
     if(reachIdx == INVALID) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown reach \"" + reachArg + "\"!"
         );
@@ -2635,7 +2580,7 @@ void ScriptActionRunners::setState(ScriptActionInstRunData& data) {
     }
     
     if(stateIdx == INVALID) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown state \"" + stateArg + "\"!"
         );
@@ -2679,7 +2624,7 @@ void ScriptActionRunners::setTeam(ScriptActionInstRunData& data) {
     bool teamFound;
     MOB_TEAM team = enumGetValue(mobTeamINames, teamArg, &teamFound);
     if(!teamFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown team \"" + teamArg + "\"!"
         );
@@ -2792,7 +2737,7 @@ void ScriptActionRunners::spawn(ScriptActionInstRunData& data) {
     }
     
     if(spawnIdx == INVALID) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown spawn info block \"" + spawnArg + "\"!"
         );
@@ -2847,7 +2792,7 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
         enumGetValue(scriptActionStabilizeZTypeINames, typeArg, &typeFound);
         
     if(!typeFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown stabilization reference \"" + typeArg + "\"!"
         );
@@ -2898,7 +2843,7 @@ void ScriptActionRunners::startChomping(ScriptActionInstRunData& data) {
             data.scriptVM->getRunnerMob()->type->animDb->findBodyPart(partArg);
             
         if(partIdx == INVALID) {
-            reportActionError(
+            ScriptActionUtils::reportActionError(
                 data,
                 "Unknown body part \"" + partArg + "\"!"
             );
@@ -2950,7 +2895,7 @@ void ScriptActionRunners::startParticles(ScriptActionInstRunData& data) {
     float offsetZ = s2f(zArg);
     
     if(!isInMap(game.content.particleGens.list, genArg)) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown particle generator \"" + genArg + "\"!"
         );
@@ -3251,7 +3196,7 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_TURN_TYPE target =
         enumGetValue(scriptActionTurnTypeINames, targetArg, &targetFound);
     if(!targetFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown target type \"" + targetArg + "\"!"
         );
@@ -3311,14 +3256,14 @@ void ScriptActionRunners::whileDo(ScriptActionInstRunData& data) {
     SCRIPT_ACTION_IF_OP op =
         enumGetValue(scriptActionIfOpINames, opArg, &opFound);
     if(!opFound) {
-        reportActionError(
+        ScriptActionUtils::reportActionError(
             data,
             "Unknown operator \"" + opArg + "\"!"
         );
         return;
     }
     
-    bool result = doScriptCondition(lhsArg, op, rhsArg);
+    bool result = ScriptActionUtils::doScriptCondition(lhsArg, op, rhsArg);
     
     //Store the result.
     data.returnValue = result;
@@ -3350,7 +3295,7 @@ ScriptActionTypeParam::ScriptActionTypeParam(
 
 
 #pragma endregion
-#pragma region Global functions
+#pragma region Action util functions
 
 
 /**
@@ -3361,7 +3306,7 @@ ScriptActionTypeParam::ScriptActionTypeParam(
  * @param rhs The right-hand side value.
  * @return Whether it is true.
  */
-bool doScriptCondition(
+bool ScriptActionUtils::doScriptCondition(
     const string& lhs, SCRIPT_ACTION_IF_OP op, const string& rhs
 ) {
     switch(op) {
@@ -3405,12 +3350,37 @@ bool doScriptCondition(
 
 
 /**
+ * @brief Returns a mob script action mob target type from an action call.
+ *
+ * @param data Data about the action call.
+ * @param name The type's name.
+ * @return The type.
+ */
+SCRIPT_ACTION_MOB_TARGET_TYPE ScriptActionUtils::getMobTargetType(
+    const ScriptActionInstRunData& data, const string& name
+) {
+    bool found;
+    SCRIPT_ACTION_MOB_TARGET_TYPE type =
+        enumGetValue(scriptActionMobTargetTypeINames, name, &found);
+        
+    if(!found) {
+        reportActionError(
+            data,
+            "Unknown mob target type \"" + name + "\"!"
+        );
+    }
+    
+    return type;
+}
+
+
+/**
  * @brief Returns the mob matching the mob target type.
  *
  * @param data Data about the action call.
  * @param type Type of target.
  */
-Mob* getTargetMob(
+Mob* ScriptActionUtils::getTargetMob(
     ScriptActionInstRunData& data, SCRIPT_ACTION_MOB_TARGET_TYPE type
 ) {
     switch (type) {
@@ -3453,7 +3423,7 @@ Mob* getTargetMob(
  * @param data Data about the action call.
  * @return The mob.
  */
-Mob* getTriggerMob(ScriptActionInstRunData& data) {
+Mob* ScriptActionUtils::getTriggerMob(ScriptActionInstRunData& data) {
     if(
         data.actionDef->parentEvent == FSM_EV_OBJECT_IN_REACH ||
         data.actionDef->parentEvent == FSM_EV_OPPONENT_IN_REACH ||
@@ -3485,6 +3455,36 @@ Mob* getTriggerMob(ScriptActionInstRunData& data) {
     }
     
     return nullptr;
+}
+
+
+/**
+ * @brief Reports an error with an action.
+ *
+ * @param data Data about the action call.
+ * @param info What information to report.
+ */
+void ScriptActionUtils::reportActionError(
+    const ScriptActionInstRunData& data, const string& info
+) {
+    string filePath;
+    if(data.actionDef->dataFileLine != 0) {
+        if(data.scriptVM->getRunnerMob()) {
+            filePath =
+                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
+                FILE_NAMES::MOB_TYPE_SCRIPT;
+        } else {
+            filePath =
+                game.curArea->manifest->path + "/" +
+                FILE_NAMES::AREA_SCRIPT;
+        }
+    }
+    
+    if(filePath.empty()) {
+        game.errors.report(info);
+    } else {
+        game.errors.report(info, filePath, data.actionDef->dataFileLine);
+    }
 }
 
 

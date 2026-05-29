@@ -941,7 +941,7 @@ struct ScriptActionType {
 
 
 #pragma endregion
-#pragma region Loaders and runners
+#pragma region Action runner functions
 
 
 namespace ScriptActionRunners {
@@ -1060,27 +1060,28 @@ void turnToRelative(ScriptActionInstRunData& data);
 void turnToTarget(ScriptActionInstRunData& data);
 void unfocus(ScriptActionInstRunData& data);
 void whileDo(ScriptActionInstRunData& data);
-
-SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
-    const ScriptActionInstRunData& data, const string& name
-);
-void reportActionError(
-    const ScriptActionInstRunData& data, const string& info
-);
 };
 
 
 #pragma endregion
-#pragma region Global functions
+#pragma region Action util functions
 
 
+namespace ScriptActionUtils {
 bool doScriptCondition(
     const string& lhs, SCRIPT_ACTION_IF_OP op, const string& rhs
 );
-Mob* getTriggerMob(ScriptActionInstRunData& data);
+SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
+    const ScriptActionInstRunData& data, const string& name
+);
 Mob* getTargetMob(
     ScriptActionInstRunData& data, SCRIPT_ACTION_MOB_TARGET_TYPE type
 );
+Mob* getTriggerMob(ScriptActionInstRunData& data);
+void reportActionError(
+    const ScriptActionInstRunData& data, const string& info
+);
+};
 
 
 #pragma endregion
