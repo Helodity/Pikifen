@@ -78,7 +78,7 @@
         <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code><a href="#get-event-info">get_event_info</a></code> action.</td>
       </tr>
       <tr id="on-ready">
-        <th style="text-align: left;"><code>on_ready</code></th>
+        <th style="text-align: left;"><del><code>on_ready</code></del></th>
         <td><b>Deprecated in 1.2.0!</b> Please use the <code>ready</code> block of the script file instead. Triggered when the object has been initialized and is ready to do things, like all of its links have been properly placed. The <code>init</code> block in the script file and the <code><a href="#on-enter">on_enter</a></code> event of the first state are triggered before this.</td>
       </tr>
     </table>
@@ -549,7 +549,7 @@
     <table>
       <tr><th>Action</th><th>Description</th></tr>
       <tr id="get-area-info">
-        <th><code>get_area_info</code></th>
+        <th><del><code>get_area_info</code></del></th>
         <td><dl>
           <dt><code><b>get_area_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
           <dd>
@@ -760,7 +760,7 @@
         </dl></td>
       </tr>
       <tr id="show-message-from-var">
-        <th><code>show_message_from_var</code></th>
+        <th><del><code>show_message_from_var</code></del></th>
         <td><dl>
           <dt><code><b>show_message_from_var</b> &lt;variable_name&gt;</code></dt>
           <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#show-cutscene-message">show_cutscene_message</a></code> instead. Pauses gameplay and shows a cutscene message on the HUD using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
@@ -979,8 +979,8 @@
         <td>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code><a href="#on-hitbox-touch-eat">on_hitbox_touch_eat</a></code> event.</td>
       </tr>
       <tr id="get-chomped">
-        <th><code>get_chomped</code></th>
-        <td><b>Deprecated in 1.2.0!</b> Please use <code>be_chomped</code> instead. Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code><a href="#on-hitbox-touch-eat">on_hitbox_touch_eat</a></code> event.</td>
+        <th><del><code>get_chomped</code></del></th>
+        <td><b>Deprecated in 1.2.0!</b> Please use <code>be_chomped</code> instead, which works the same.</td>
       </tr>
       <tr id="release">
         <th><code>release</code></th>
@@ -1020,14 +1020,14 @@
         <td>Establishes a link between this mob and its focused mob, but not the other way around. If that mob is already a linked mob, nothing happens.</td>
       </tr>
       <tr id="load-focused-mob-memory">
-        <th><code>load_focused_mob_memory</code></th>
+        <th><del><code>load_focused_mob_memory</code></del></th>
         <td><dl>
           <dt><code><b>load_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
           <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead. Obtains a saved mob from the "focused mob memory", and focuses on that one instead. Does nothing if there is no mob in the specified slot, or if that specified mob has already disappeared. See also: <code>save_focused_mob_memory</code>.</dd>
         </dl></td>
       </tr>
       <tr id="save-focused-mob-memory">
-        <th><code>save_focused_mob_memory</code></th>
+        <th><del><code>save_focused_mob_memory</code></del></th>
         <td><dl>
           <dt><code><b>save_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
           <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead.Saves the currently focused mob into the "focused mob memory", in the specified slot number. Does nothing if there is no currently focused mob. See also: <code>load_focused_mob_memory</code>.</dd>

@@ -32,6 +32,18 @@ body {
   margin: 0px;
 }
 
+del {
+  color: #952;
+}
+
+del::after {
+  content: "⚠️";
+}
+
+del::before {
+  content: "⚠️";
+}
+
 h1,
 h2,
 h3,

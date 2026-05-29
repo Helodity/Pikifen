@@ -1128,6 +1128,7 @@ void initFsmEventTypes() {
     contexts = getIdxBitmask(SCRIPT_CONTEXT_MOB);
     
     
+    //DEPRECATED in 1.2.0 by the "ready" block.
     //On ready.
     commitEvent(
         FSM_EV_ON_READY,
