@@ -254,22 +254,6 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the variable clearing script action type.
- *
- * @param data Data about the action call.
- */
-void ScriptActionRunners::clearVar(ScriptActionInstRunData& data) {
-    //Get the arguments.
-    const string& varArg = data.args[0];
-    
-    //Main logic.
-    if(data.scriptVM->getRunnerScriptVM()->vars.contains(varArg)) {
-        data.scriptVM->getRunnerScriptVM()->vars.setValue(varArg, "");
-    }
-}
-
-
-/**
  * @brief Code for the ceil number script action type.
  *
  * @param data Data about the action call.
@@ -284,6 +268,22 @@ void ScriptActionRunners::ceilNumber(ScriptActionInstRunData& data) {
     
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
+ * @brief Code for the variable clearing script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::clearVar(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& varArg = data.args[0];
+    
+    //Main logic.
+    if(data.scriptVM->getRunnerScriptVM()->vars.contains(varArg)) {
+        data.scriptVM->getRunnerScriptVM()->vars.setValue(varArg, "");
+    }
 }
 
 
@@ -460,7 +460,10 @@ void ScriptActionRunners::followMobAsLeader(ScriptActionInstRunData& data) {
     data.scriptVM->getRunnerMob()->leaveGroup();
     bool silent = s2b(silentArg);
     
-    if(data.scriptVM->getRunnerMob()->type->category->id == MOB_CATEGORY_PIKMIN) {
+    if(
+        data.scriptVM->getRunnerMob()->type->category->id ==
+        MOB_CATEGORY_PIKMIN
+    ) {
         data.scriptVM->getRunnerMob()->scriptVM.fsm.runEvent(
             FSM_EV_WHISTLED, (void*) target, (void*) silent
         );
@@ -508,8 +511,9 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
         while(!finalStop && tries < 5) {
             size_t c = game.rng.i(0, (int) choices.size() - 1);
             if(
-                Distance(choices[c]->center, data.scriptVM->getRunnerMob()->center) >
-                PATHS::DEF_CHASE_TARGET_DISTANCE
+                Distance(
+                    choices[c]->center, data.scriptVM->getRunnerMob()->center
+                ) > PATHS::DEF_CHASE_TARGET_DISTANCE
             ) {
                 finalStop = choices[c];
                 break;
@@ -522,7 +526,8 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
     //so it can emit the FSM_EV_REACHED_DESTINATION event, and hopefully
     //make it clear that there was an error.
     PathFollowSettings settings;
-    settings.targetPoint = finalStop ? finalStop->center : data.scriptVM->getRunnerMob()->center;
+    settings.targetPoint =
+        finalStop ? finalStop->center : data.scriptVM->getRunnerMob()->center;
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     settings.label = labelArg;
@@ -1412,6 +1417,7 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
 /**
  * @brief Returns a mob script action mob target type from an action call.
  *
+ * @param data Data about the action call.
  * @param name The type's name.
  * @return The type.
  */
@@ -1509,7 +1515,8 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
         return;
     }
     
-    size_t partIdx = data.scriptVM->getRunnerMob()->anim.animDb->findBodyPart(bodyPartArg);
+    size_t partIdx =
+        data.scriptVM->getRunnerMob()->anim.animDb->findBodyPart(bodyPartArg);
     if(partIdx == INVALID) {
         reportActionError(
             data,
@@ -1519,7 +1526,8 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
     }
     
     data.scriptVM->getRunnerMob()->hold(
-        data.scriptVM->getRunnerScriptVM()->focusedMob, HOLD_TYPE_PURPOSE_GENERAL,
+        data.scriptVM->getRunnerScriptVM()->focusedMob,
+        HOLD_TYPE_PURPOSE_GENERAL,
         partIdx, 0.0f, 0.0f, 0.5f, s2b(aboveArg),
         HOLD_ROTATION_METHOD_COPY_HOLDER
     );
@@ -1594,13 +1602,18 @@ void ScriptActionRunners::linkWithFocus(ScriptActionInstRunData& data) {
     }
     
     forIdx(l, data.scriptVM->getRunnerMob()->links) {
-        if(data.scriptVM->getRunnerMob()->links[l] == data.scriptVM->getRunnerScriptVM()->focusedMob) {
+        if(
+            data.scriptVM->getRunnerMob()->links[l] ==
+            data.scriptVM->getRunnerScriptVM()->focusedMob
+        ) {
             //Already linked.
             return;
         }
     }
     
-    data.scriptVM->getRunnerMob()->links.push_back(data.scriptVM->getRunnerScriptVM()->focusedMob);
+    data.scriptVM->getRunnerMob()->links.push_back(
+        data.scriptVM->getRunnerScriptVM()->focusedMob
+    );
 }
 
 
@@ -1664,7 +1677,8 @@ void ScriptActionRunners::moveToRelative(ScriptActionInstRunData& data) {
     float z = zArg.empty() ? 0.0f : s2f(zArg);
     Point p = rotatePoint(Point(x, y), data.scriptVM->getRunnerMob()->angle);
     data.scriptVM->getRunnerMob()->chase(
-        data.scriptVM->getRunnerMob()->center + p, data.scriptVM->getRunnerMob()->bottomZ + z,
+        data.scriptVM->getRunnerMob()->center + p,
+        data.scriptVM->getRunnerMob()->bottomZ + z,
         CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
     );
 }
@@ -1969,7 +1983,8 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
         if(data.scriptVM->getRunnerMob()->statuses[s].type == it->second) {
             data.scriptVM->getRunnerMob()->statuses[s].prevState =
                 data.scriptVM->getRunnerMob()->statuses[s].state;
-            data.scriptVM->getRunnerMob()->statuses[s].state = STATUS_STATE_TO_DELETE;
+            data.scriptVM->getRunnerMob()->statuses[s].state =
+                STATUS_STATE_TO_DELETE;
         }
     }
 }
@@ -1979,6 +1994,7 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
  * @brief Reports an error with an action.
  *
  * @param data Data about the action call.
+ * @param info What information to report.
  */
 void ScriptActionRunners::reportActionError(
     const ScriptActionInstRunData& data, const string& info
@@ -2023,6 +2039,24 @@ void ScriptActionRunners::roundNumber(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the run next action as script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::runNextActionAs(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& targetTypeArg = data.args[0];
+    
+    //Main logic.
+    SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
+        getMobTargetType(data, targetTypeArg);
+    Mob* target = getTargetMob(data, targetType);
+    
+    data.scriptVM->nextActionSurrogateMob = target;
+}
+
+
+/**
  * @brief Code for the save focused mob memory script action type.
  *
  * @param data Data about the action call.
@@ -2039,24 +2073,6 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
     string varName = "_focus_memory_" + slotArg;
     string varValue = i2s(data.scriptVM->getRunnerScriptVM()->focusedMob->id);
     data.scriptVM->getRunnerScriptVM()->vars.setValue(varName, varValue);
-}
-
-
-/**
- * @brief Code for the run next action as script action type.
- *
- * @param data Data about the action call.
- */
-void ScriptActionRunners::runNextActionAs(ScriptActionInstRunData& data) {
-    //Get the arguments.
-    const string& targetTypeArg = data.args[0];
-    
-    //Main logic.
-    SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
-        getMobTargetType(data, targetTypeArg);
-    Mob* target = getTargetMob(data, targetType);
-    
-    data.scriptVM->nextActionSurrogateMob = target;
 }
 
 
@@ -2090,7 +2106,8 @@ void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
     if(!data.scriptVM->getRunnerScriptVM()->focusedMob) return;
     string msgStr = msgArg;
     game.states.gameplay->sendScriptMessage(
-        data.scriptVM->getRunnerMob(), data.scriptVM->getRunnerScriptVM()->focusedMob, msgStr
+        data.scriptVM->getRunnerMob(),
+        data.scriptVM->getRunnerScriptVM()->focusedMob, msgStr
     );
 }
 
@@ -2106,11 +2123,20 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
     
     //Main logic.
     forIdx(l, data.scriptVM->getRunnerMob()->links) {
-        if(data.scriptVM->getRunnerMob()->links[l] == data.scriptVM->getRunnerMob()) continue;
-        if(!data.scriptVM->getRunnerMob()->links[l]) continue;
+        if(
+            data.scriptVM->getRunnerMob()->links[l] ==
+            data.scriptVM->getRunnerMob()
+        ) {
+            continue;
+        }
+        if(!data.scriptVM->getRunnerMob()->links[l]) {
+            continue;
+        }
+
         string msgStr = msgArg;
         game.states.gameplay->sendScriptMessage(
-            data.scriptVM->getRunnerMob(), data.scriptVM->getRunnerMob()->links[l], msgStr
+            data.scriptVM->getRunnerMob(),
+            data.scriptVM->getRunnerMob()->links[l], msgStr
         );
     }
 }
@@ -2130,7 +2156,10 @@ void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
     Distance d(s2f(distArg));
     
     forIdx(m2, game.states.gameplay->mobs.all) {
-        if(game.states.gameplay->mobs.all[m2] == data.scriptVM->getRunnerMob()) {
+        if(
+            game.states.gameplay->mobs.all[m2] ==
+            data.scriptVM->getRunnerMob()
+        ) {
             continue;
         }
         if(
@@ -2144,7 +2173,8 @@ void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
         
         string msgStr = msgArg;
         game.states.gameplay->sendScriptMessage(
-            data.scriptVM->getRunnerMob(), game.states.gameplay->mobs.all[m2], msgStr
+            data.scriptVM->getRunnerMob(),
+            game.states.gameplay->mobs.all[m2], msgStr
         );
     }
 }
@@ -2162,7 +2192,8 @@ void ScriptActionRunners::setAnimation(ScriptActionInstRunData& data) {
     const string& mobSpeedArg = data.args[2];
     
     //Main logic.
-    size_t animIdx = data.scriptVM->getRunnerMob()->type->animDb->findAnimation(animArg);
+    size_t animIdx =
+        data.scriptVM->getRunnerMob()->type->animDb->findAnimation(animArg);
     if(animIdx == INVALID) {
         reportActionError(
             data,
@@ -2248,9 +2279,13 @@ void ScriptActionRunners::setFlying(ScriptActionInstRunData& data) {
     
     //Main logic.
     if(s2b(valueArg)) {
-        enableFlag(data.scriptVM->getRunnerMob()->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+        enableFlag(
+            data.scriptVM->getRunnerMob()->flags, MOB_FLAG_CAN_MOVE_MIDAIR
+        );
     } else {
-        disableFlag(data.scriptVM->getRunnerMob()->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+        disableFlag(
+            data.scriptVM->getRunnerMob()->flags, MOB_FLAG_CAN_MOVE_MIDAIR
+        );
     }
 }
 
@@ -2318,7 +2353,9 @@ void ScriptActionRunners::setHeight(ScriptActionInstRunData& data) {
         forIdx(m, game.states.gameplay->mobs.all) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m];
             if(m2Ptr->standingOnMob == data.scriptVM->getRunnerMob()) {
-                m2Ptr->bottomZ = data.scriptVM->getRunnerMob()->bottomZ + data.scriptVM->getRunnerMob()->height;
+                m2Ptr->bottomZ =
+                    data.scriptVM->getRunnerMob()->bottomZ +
+                    data.scriptVM->getRunnerMob()->height;
             }
         }
     }
@@ -2387,9 +2424,13 @@ void ScriptActionRunners::setHuntable(ScriptActionInstRunData& data) {
     
     //Main logic.
     if(s2b(valueArg)) {
-        disableFlag(data.scriptVM->getRunnerMob()->flags, MOB_FLAG_NON_HUNTABLE);
+        disableFlag(
+            data.scriptVM->getRunnerMob()->flags, MOB_FLAG_NON_HUNTABLE
+        );
     } else {
-        enableFlag(data.scriptVM->getRunnerMob()->flags, MOB_FLAG_NON_HUNTABLE);
+        enableFlag(
+            data.scriptVM->getRunnerMob()->flags, MOB_FLAG_NON_HUNTABLE
+        );
     }
 }
 
@@ -2412,7 +2453,8 @@ void ScriptActionRunners::setLimbAnimation(ScriptActionInstRunData& data) {
     }
     
     size_t a =
-        data.scriptVM->getRunnerMob()->parent->limbAnim.animDb->findAnimation(animArg);
+        data.scriptVM->getRunnerMob()->parent->
+        limbAnim.animDb->findAnimation(animArg);
     if(a == INVALID) {
         return;
     }
@@ -2540,7 +2582,8 @@ void ScriptActionRunners::setSectorScroll(ScriptActionInstRunData& data) {
     const string& yArg = data.args[1];
     
     //Main logic.
-    Sector* sPtr = getSector(data.scriptVM->getRunnerMob()->center, nullptr, true);
+    Sector* sPtr =
+        getSector(data.scriptVM->getRunnerMob()->center, nullptr, true);
     if(!sPtr) return;
     
     sPtr->scroll.x = s2f(xArg);
@@ -2559,9 +2602,13 @@ void ScriptActionRunners::setShadowVisibility(ScriptActionInstRunData& data) {
     
     //Main logic.
     if(s2b(valueArg)) {
-        disableFlag(data.scriptVM->getRunnerMob()->flags, MOB_FLAG_SHADOW_INVISIBLE);
+        disableFlag(
+            data.scriptVM->getRunnerMob()->flags, MOB_FLAG_SHADOW_INVISIBLE
+        );
     } else {
-        enableFlag(data.scriptVM->getRunnerMob()->flags, MOB_FLAG_SHADOW_INVISIBLE);
+        enableFlag(
+            data.scriptVM->getRunnerMob()->flags, MOB_FLAG_SHADOW_INVISIBLE
+        );
     }
 }
 
@@ -2578,7 +2625,10 @@ void ScriptActionRunners::setState(ScriptActionInstRunData& data) {
     //Main logic.
     size_t stateIdx = INVALID;
     forIdx(s, data.scriptVM->getRunnerScriptVM()->scriptDef->fsm.states) {
-        if(data.scriptVM->getRunnerScriptVM()->scriptDef->fsm.states[s]->name == stateArg) {
+        if(
+            data.scriptVM->getRunnerScriptVM()->
+            scriptDef->fsm.states[s]->name == stateArg
+        ) {
             stateIdx = s;
             break;
         }
@@ -2681,7 +2731,9 @@ void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
     forIdx(p, game.states.gameplay->players) {
         Player* pPtr = &game.states.gameplay->players[p];
         float d =
-            Distance(data.scriptVM->getRunnerMob()->center, pPtr->view.cam.center).toFloat();
+            Distance(
+                data.scriptVM->getRunnerMob()->center, pPtr->view.cam.center
+            ).toFloat();
         float strengthMult =
             ::interpolateNumber(
                 d, 0.0f, DRAWING::CAM_SHAKE_DROPOFF_DIST, 1.0f, 0.0f
@@ -2782,7 +2834,10 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
     const string& offsetArg = data.args[1];
     
     //Main logic.
-    if(data.scriptVM->getRunnerMob()->links.empty() || !data.scriptVM->getRunnerMob()->links[0]) {
+    if(
+        data.scriptVM->getRunnerMob()->links.empty() ||
+        !data.scriptVM->getRunnerMob()->links[0]
+    ) {
         return;
     }
     
@@ -2996,7 +3051,9 @@ void ScriptActionRunners::storeFocusInside(ScriptActionInstRunData& data) {
         data.scriptVM->getRunnerScriptVM()->focusedMob &&
         !data.scriptVM->getRunnerScriptVM()->focusedMob->isStoredInsideMob()
     ) {
-        data.scriptVM->getRunnerMob()->storeMobInside(data.scriptVM->getRunnerScriptVM()->focusedMob);
+        data.scriptVM->getRunnerMob()->storeMobInside(
+            data.scriptVM->getRunnerScriptVM()->focusedMob
+        );
     }
 }
 
@@ -3090,8 +3147,13 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
         return;
     }
     
-    if(data.scriptVM->getRunnerScriptVM()->focusedMob->holder.m == data.scriptVM->getRunnerScriptVM()->getRunnerMob()) {
-        data.scriptVM->getRunnerMob()->release(data.scriptVM->getRunnerScriptVM()->focusedMob);
+    if(
+        data.scriptVM->getRunnerScriptVM()->focusedMob->holder.m ==
+        data.scriptVM->getRunnerScriptVM()->getRunnerMob()
+    ) {
+        data.scriptVM->getRunnerMob()->release(
+            data.scriptVM->getRunnerScriptVM()->focusedMob
+        );
     }
     
     float maxHeight = s2f(maxHeightArg);
@@ -3102,7 +3164,8 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
     
     data.scriptVM->getRunnerMob()->startHeightEffect();
     calculateThrow(
-        data.scriptVM->getRunnerScriptVM()->focusedMob->center, data.scriptVM->getRunnerScriptVM()->focusedMob->bottomZ,
+        data.scriptVM->getRunnerScriptVM()->focusedMob->center,
+        data.scriptVM->getRunnerScriptVM()->focusedMob->bottomZ,
         Point(s2f(xArg), s2f(yArg)), s2f(zArg),
         maxHeight, MOB::GRAVITY_ADDER,
         &data.scriptVM->getRunnerScriptVM()->focusedMob->speed,
@@ -3125,13 +3188,16 @@ void ScriptActionRunners::turnToAbsolute(ScriptActionInstRunData& data) {
     //Main logic.
     if(yArg.empty()) {
         //Turn to an absolute angle.
-        data.scriptVM->getRunnerMob()->face(degToRad(s2f(angleOrXArg)), nullptr);
+        data.scriptVM->getRunnerMob()->face(
+            degToRad(s2f(angleOrXArg)), nullptr
+        );
     } else {
         //Turn to some absolute coordinates.
         float x = s2f(angleOrXArg);
         float y = s2f(yArg);
         data.scriptVM->getRunnerMob()->face(
-            getAngle(data.scriptVM->getRunnerMob()->center, Point(x, y)), nullptr
+            getAngle(data.scriptVM->getRunnerMob()->center, Point(x, y)),
+            nullptr
         );
     }
 }
@@ -3158,9 +3224,13 @@ void ScriptActionRunners::turnToRelative(ScriptActionInstRunData& data) {
         //Turn to some relative coordinates.
         float x = s2f(angleOrXArg);
         float y = s2f(yArg);
-        Point p = rotatePoint(Point(x, y), data.scriptVM->getRunnerMob()->angle);
+        Point p =
+            rotatePoint(Point(x, y), data.scriptVM->getRunnerMob()->angle);
         data.scriptVM->getRunnerMob()->face(
-            getAngle(data.scriptVM->getRunnerMob()->center, data.scriptVM->getRunnerMob()->center + p),
+            getAngle(
+                data.scriptVM->getRunnerMob()->center,
+                data.scriptVM->getRunnerMob()->center + p
+            ),
             nullptr
         );
     }
@@ -3195,13 +3265,16 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
         
     } case SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB: {
         if(data.scriptVM->getRunnerScriptVM()->focusedMob) {
-            data.scriptVM->getRunnerMob()->face(0, &data.scriptVM->getRunnerScriptVM()->focusedMob->center);
+            data.scriptVM->getRunnerMob()->face(
+                0, &data.scriptVM->getRunnerScriptVM()->focusedMob->center
+            );
         }
         break;
         
     } case SCRIPT_ACTION_TURN_TYPE_HOME: {
         data.scriptVM->getRunnerMob()->face(
-            getAngle(data.scriptVM->getRunnerMob()->center, data.scriptVM->getRunnerMob()->home),
+            getAngle(data.scriptVM->getRunnerMob()->center,
+            data.scriptVM->getRunnerMob()->home),
             nullptr
         );
         break;
@@ -3360,7 +3433,10 @@ Mob* getTargetMob(
         }
         break;
     } case SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT: {
-        if(data.scriptVM->getRunnerMob() && data.scriptVM->getRunnerMob()->parent) {
+        if(
+            data.scriptVM->getRunnerMob() &&
+            data.scriptVM->getRunnerMob()->parent
+        ) {
             return data.scriptVM->getRunnerMob()->parent->m;
         }
         break;

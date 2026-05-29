@@ -11,6 +11,6 @@ def get_all_long_line_problems():
         path = output_line[:output_line.find(':')]
         remainder = output_line[output_line.find(':') + 1:]
         line_nr = remainder[:remainder.find(':')]
-        problems.append((path, 'Line longer than 80 char', line_nr))
+        problems.append((path, int(line_nr), 'Line longer than 80 char', ''))
     
     return problems

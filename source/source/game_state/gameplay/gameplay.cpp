@@ -599,7 +599,11 @@ void GameplayState::enter() {
         game.options.advanced.zoomMediumReach,
         game.config.rules.zoomFarthestReach
     };
-    float viewportReach = sqrt(players[0].view.windowRect.size.x * players[0].view.windowRect.size.y);
+    float viewportReach =
+        sqrt(
+            players[0].view.windowRect.size.x *
+            players[0].view.windowRect.size.y
+        );
     for(int z = 0; z < 3; z++) {
         zoomLevels[z] = viewportReach / zoomReaches[z];
     }
@@ -934,23 +938,6 @@ long GameplayState::getAmountOfTotalPikmin(
 
 
 /**
- * @brief Goes through all mobs and returns the mob has the given ID number.
- *
- * @param id The ID.
- * @return The mob.
- */
-Mob* GameplayState::getMobById(size_t id) const {
-    if(id == 0) return nullptr;
-    
-    forIdx(m, mobs.all) {
-        if(mobs.all[m]->id == id) return mobs.all[m];
-    }
-    
-    return nullptr;
-}
-
-
-/**
  * @brief Returns the closest group member of a given standby subgroup.
  * In the case all candidate members are out of reach,
  * this returns the closest. Otherwise, it returns the closest
@@ -1039,6 +1026,23 @@ Mob* GameplayState::getClosestGroupMember(
     }
     
     return result;
+}
+
+
+/**
+ * @brief Goes through all mobs and returns the mob has the given ID number.
+ *
+ * @param id The ID.
+ * @return The mob.
+ */
+Mob* GameplayState::getMobById(size_t id) const {
+    if(id == 0) return nullptr;
+    
+    forIdx(m, mobs.all) {
+        if(mobs.all[m]->id == id) return mobs.all[m];
+    }
+    
+    return nullptr;
 }
 
 

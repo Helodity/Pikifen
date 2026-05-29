@@ -168,6 +168,7 @@ size_t getSplitCount(
     return count;
 }
 
+
 /**
  * @brief Checks if the contents of a string are a number or not.
  *

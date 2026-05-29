@@ -75,14 +75,14 @@ const float TRANSITION_OUT_DURATION = 1.5f;
 
 namespace IN_WORLD_STATUS_BUILDUP {
 
+//Standard alpha [0 - 1].
+const float ALPHA = 0.85f;
+
 //Corner radius of each bar, in size ratio.
 const float CORNER_RADIUS = 0.20f;
 
 //Height of each bar.
 const float HEIGHT = 16.0f;
-
-//Standard alpha [0 - 1].
-const float ALPHA = 0.85f;
 
 //Size of the dark outline between the total bar and the filled portion.
 const float OUTLINE_SIZE = 2.0f;

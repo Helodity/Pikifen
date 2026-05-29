@@ -1023,9 +1023,13 @@ void TitleScreen::load() {
                 );
                 
             pik.angle = game.rng.f(0, TAU);
-            pik.speed = game.rng.f(wordmarkPikminMinSpeed, wordmarkPikminMaxSpeed);
+            pik.speed = game.rng.f(
+                wordmarkPikminMinSpeed, wordmarkPikminMaxSpeed
+            );
             pik.swaySpeed =
-                game.rng.f(wordmarkPikminSwayMinSpeed, wordmarkPikminSwayMaxSpeed);
+                game.rng.f(
+                    wordmarkPikminSwayMinSpeed, wordmarkPikminSwayMaxSpeed
+                );
             pik.swayVar = 0;
             pik.reachedDestination = false;
             wordmarkPikmin.push_back(pik);

@@ -212,7 +212,8 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         if(mod1) {
             m =
                 getNextMobNearCursor(
-                    game.states.gameplay->players[0].view, prevInspectedMob, false
+                    game.states.gameplay->players[0].view,
+                    prevInspectedMob, false
                 );
         } else if(mod2) {
             m = nullptr;

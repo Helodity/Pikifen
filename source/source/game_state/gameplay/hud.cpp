@@ -25,11 +25,11 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace HUD {
 
-//Delay before the control guide is allowed to appear.
-const float CONTROL_GUIDE_DELAY = 1.0f;
-
 //The control guide's alpha changes these many units per second.
 const float CONTROL_GUIDE_ALPHA_SPEED = 2.0f;
+
+//Delay before the control guide is allowed to appear.
+const float CONTROL_GUIDE_DELAY = 1.0f;
 
 //Smoothen the mission goal indicator's movement by this factor.
 const float GOAL_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;

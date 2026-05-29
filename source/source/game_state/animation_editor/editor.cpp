@@ -145,7 +145,8 @@ AnimationEditor::AnimationEditor() :
         } else {
             curSprite->hitboxes[idx].center.x = newCenter.x;
             curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
-            curSprite->hitboxes[idx].bottomZ = -(newCenter.y + newSize.y / 2.0f);
+            curSprite->hitboxes[idx].bottomZ =
+                -(newCenter.y + newSize.y / 2.0f);
             curSprite->hitboxes[idx].height = newSize.y;
         }
     };

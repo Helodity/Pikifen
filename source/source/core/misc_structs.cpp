@@ -412,16 +412,6 @@ void ErrorManager::emitInConsole(const string& s) {
 
 
 /**
- * @brief Logs an error to stdout.
- *
- * @param s Full error description.
- */
-void ErrorManager::logToStdOut(const string& s) {
-    std::cout << s << std::endl;
-}
-
-
-/**
  * @brief Logs an error to the log file.
  *
  * @param s Full error description.
@@ -473,6 +463,16 @@ void ErrorManager::logToFile(const string& s) {
         al_fwrite(fileO, prevErrorLog + output);
         al_fclose(fileO);
     }
+}
+
+
+/**
+ * @brief Logs an error to stdout.
+ *
+ * @param s Full error description.
+ */
+void ErrorManager::logToStdOut(const string& s) {
+    std::cout << s << std::endl;
 }
 
 
@@ -2016,15 +2016,6 @@ void ScriptVarManager::clear() {
 
 
 /**
- * @brief Returns whether the list is empty.
- *
- * @return Whether it is empty.
- */
-bool ScriptVarManager::empty() const {
-    return varsMap.empty();
-}
-
-/**
  * @brief Returns whether the given script var exists in the list.
  *
  * @param name Its name.
@@ -2032,6 +2023,16 @@ bool ScriptVarManager::empty() const {
  */
 bool ScriptVarManager::contains(const string& name) const {
     return varsMap.contains(name);
+}
+
+
+/**
+ * @brief Returns whether the list is empty.
+ *
+ * @return Whether it is empty.
+ */
+bool ScriptVarManager::empty() const {
+    return varsMap.empty();
 }
 
 
@@ -2754,28 +2755,6 @@ RectCorners Viewport::getWindowCorners() {
 
 
 /**
- * @brief Updates the viewport's visibility box,
- * based on the windowToWorldTransform transformation.
- */
-void Viewport::updateWorldCorners() {
-    worldCorners = getWindowCorners();
-    al_transform_coordinates(
-        &windowToWorldTransform,
-        &worldCorners.tl.x, &worldCorners.tl.y
-    );
-    al_transform_coordinates(
-        &windowToWorldTransform,
-        &worldCorners.br.x, &worldCorners.br.y
-    );
-    
-    worldCorners.tl.x -= boxMargin.x;
-    worldCorners.tl.y -= boxMargin.y;
-    worldCorners.br.x += boxMargin.x;
-    worldCorners.br.y += boxMargin.y;
-}
-
-
-/**
  * @brief Updates the mouse cursor position, given the game window
  * mouse cursor coordinates.
  *
@@ -2814,6 +2793,28 @@ void Viewport::updateTransformations() {
     //Window coordinates to world coordinates.
     windowToWorldTransform = worldToWindowTransform;
     al_invert_transform(&windowToWorldTransform);
+}
+
+
+/**
+ * @brief Updates the viewport's visibility box,
+ * based on the windowToWorldTransform transformation.
+ */
+void Viewport::updateWorldCorners() {
+    worldCorners = getWindowCorners();
+    al_transform_coordinates(
+        &windowToWorldTransform,
+        &worldCorners.tl.x, &worldCorners.tl.y
+    );
+    al_transform_coordinates(
+        &windowToWorldTransform,
+        &worldCorners.br.x, &worldCorners.br.y
+    );
+    
+    worldCorners.tl.x -= boxMargin.x;
+    worldCorners.tl.y -= boxMargin.y;
+    worldCorners.br.x += boxMargin.x;
+    worldCorners.br.y += boxMargin.y;
 }
 
 

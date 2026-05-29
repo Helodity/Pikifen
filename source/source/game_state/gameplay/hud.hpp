@@ -18,8 +18,8 @@
 
 
 namespace HUD {
-extern const float CONTROL_GUIDE_DELAY;
 extern const float CONTROL_GUIDE_ALPHA_SPEED;
+extern const float CONTROL_GUIDE_DELAY;
 extern const float GOAL_INDICATOR_SMOOTHNESS_FACTOR;
 extern const string GUI_FILE_NAME;
 extern const float HEALTH_SHAKE_MAX_OFFSET;

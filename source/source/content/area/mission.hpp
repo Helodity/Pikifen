@@ -1021,7 +1021,7 @@ protected:
 /**
  * @brief Represents the "enemy defeat points" metric type.
  */
-class MissionMetricTypeDefeatPts : public MissionMetricType {
+class MissionMetricTypeEnemyDefeatPts : public MissionMetricType {
 
 public:
 

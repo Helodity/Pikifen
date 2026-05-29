@@ -34,8 +34,8 @@ class StatusType;
 
 namespace LIQUID {
 extern const float DRAIN_DURATION;
-extern const float FREEZING_EFFECT_DURATION;
 extern const float FREEZING_ALPHA;
+extern const float FREEZING_EFFECT_DURATION;
 extern const float FREEZING_POINT_AREA_MULT;
 extern const string FREEZING_POINT_SECTOR_VAR;
 extern const float THAW_CRACKED_DURATION;

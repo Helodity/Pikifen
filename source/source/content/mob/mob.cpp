@@ -1037,7 +1037,9 @@ bool Mob::calculateCarryingDestination(
         forIdx(l, links) {
             if(!links[l]) continue;
             string typeName;
-            links[l]->scriptVM.vars.getValue("carry_destination_type", typeName);
+            links[l]->scriptVM.vars.getValue(
+                "carry_destination_type", typeName
+            );
             MobType* pikType =
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN)->
                 getType(typeName);
@@ -1082,6 +1084,54 @@ bool Mob::calculateCarryingDestination(
     }
     
     return false;
+}
+
+
+/**
+ * @brief Calculates to which mob Pikmin should carry something, given a list.
+ *
+ * @param potentialMobs List of mobs that can be chosen.
+ * @return The mob.
+ */
+Mob* Mob::calculateCarryingMob(const vector<Mob*>& potentialMobs) {
+    Mob* closestMob = nullptr;
+    float closestDist = FLT_MAX;
+    int highestPathPriority = 0;
+    
+    forIdx(m, potentialMobs) {
+        Mob* mPtr = potentialMobs[m];
+        //Calculate expected path.
+        PathFollowSettings settings = PathFollowSettings();
+        settings.targetMob = mPtr;
+        settings.targetPoint = mPtr->center;
+        Path path = Path(this, settings);
+        
+        //Get the path's priority.
+        int pathPriority = getPathPriority(path.result);
+        bool isNewBest = false;
+        
+        if(!closestMob) {
+            //This is the first one, so it's the best so far.
+            isNewBest = true;
+        } else if(highestPathPriority < pathPriority) {
+            //This path has a higher priority, so it's better.
+            isNewBest = true;
+        } else if(
+            highestPathPriority == pathPriority &&
+            path.totalDistance < closestDist
+        ) {
+            //This path has the same priority but is shorter, so it's better.
+            isNewBest = true;
+        }
+        
+        if(isNewBest) {
+            closestMob = mPtr;
+            closestDist = path.totalDistance;
+            highestPathPriority = pathPriority;
+        }
+    }
+    
+    return closestMob;
 }
 
 
@@ -1143,54 +1193,6 @@ Ship* Mob::calculateCarryingShip() {
         shipMobList.push_back(game.states.gameplay->mobs.ships[s]);
     }
     return (Ship*) calculateCarryingMob(shipMobList);
-}
-
-
-/**
- * @brief Calculates to which mob Pikmin should carry something, given a list.
- *
- * @param potentialMobs List of mobs that can be chosen.
- * @return The mob.
- */
-Mob* Mob::calculateCarryingMob(const vector<Mob*>& potentialMobs) {
-    Mob* closestMob = nullptr;
-    float closestDist = FLT_MAX;
-    int highestPathPriority = 0;
-    
-    forIdx(m, potentialMobs) {
-        Mob* mPtr = potentialMobs[m];
-        //Calculate expected path.
-        PathFollowSettings settings = PathFollowSettings();
-        settings.targetMob = mPtr;
-        settings.targetPoint = mPtr->center;
-        Path path = Path(this, settings);
-        
-        //Get the path's priority.
-        int pathPriority = getPathPriority(path.result);
-        bool isNewBest = false;
-        
-        if(!closestMob) {
-            //This is the first one, so it's the best so far.
-            isNewBest = true;
-        } else if(highestPathPriority < pathPriority) {
-            //This path has a higher priority, so it's better.
-            isNewBest = true;
-        } else if(
-            highestPathPriority == pathPriority &&
-            path.totalDistance < closestDist
-        ) {
-            //This path has the same priority but is shorter, so it's better.
-            isNewBest = true;
-        }
-        
-        if(isNewBest) {
-            closestMob = mPtr;
-            closestDist = path.totalDistance;
-            highestPathPriority = pathPriority;
-        }
-    }
-    
-    return closestMob;
 }
 
 

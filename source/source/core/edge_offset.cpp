@@ -636,7 +636,7 @@ void getNextOffsetEffectEdge(
  * onto a buffer image, so that sectors may then sample from it to draw
  * what effects they need.
  *
- * @param camTL Camera boundaries. The edges of any sector that is
+ * @param camera Camera boundaries. The edges of any sector that is
  * beyond these boundaries will be ignored.
  * @param caches List of caches to fetch edge info from.
  * @param buffer Buffer to draw to.

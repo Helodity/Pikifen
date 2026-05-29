@@ -72,6 +72,7 @@ def get_cramped_problems_in_file(file_path):
                         thing_name = 'using'
                     elif thing == CRAMPED_THING_CLOSE_BRACE:
                         thing_name = 'close brace'
-                    problems.append((file_path, 'Two newlines missing after ' + thing_name, pad(line_nr - empty_lines - 1, 4)))
+                    line_nr = line_nr - empty_lines - 1
+                    problems.append((file_path, line_nr, 'Two newlines missing after ' + thing_name, ''))
 
     return problems

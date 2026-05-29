@@ -115,6 +115,35 @@ GuiEditor::GuiEditor() :
 
 
 /**
+ * @brief Code to run for the add new custom GUI item command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::addNewCustomItemCmd(float inputValue) {
+    CustomGuiItemDef newItem;
+    
+    newItem.name =
+        incrementNameTillUnique(
+            "new_item",
+    [this] (const string& n) {
+        forIdx(i, allItems) {
+            if(allItems[i]->name == n) {
+                return false;
+            }
+        }
+        return true;
+    },
+    "_"
+        );
+        
+    setToDefaults(&newItem);
+    customItems.push_back(newItem);
+    rebuildAllItemsCache();
+    itemSelection.setSingle(allItems.size() - 1);
+}
+
+
+/**
  * @brief Changes to a new state, cleaning up whatever is needed.
  *
  * @param newState The new state.
@@ -430,35 +459,6 @@ GuiEditor::getSelectionControllerThatIsDragMoving() {
         return &itemSelCtrl;
     }
     return nullptr;
-}
-
-
-/**
- * @brief Code to run for the add new custom GUI item command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::addNewCustomItemCmd(float inputValue) {
-    CustomGuiItemDef newItem;
-    
-    newItem.name =
-        incrementNameTillUnique(
-            "new_item",
-    [this] (const string& n) {
-        forIdx(i, allItems) {
-            if(allItems[i]->name == n) {
-                return false;
-            }
-        }
-        return true;
-    },
-    "_"
-        );
-        
-    setToDefaults(&newItem);
-    customItems.push_back(newItem);
-    rebuildAllItemsCache();
-    itemSelection.setSingle(allItems.size() - 1);
 }
 
 
@@ -904,19 +904,6 @@ void GuiEditor::selectAllCmd(float inputValue) {
 
 
 /**
- * @brief Sets some of the GUI item's properties to some defaults.
- *
- * @param item Item to change.
- */
-void GuiEditor::setToDefaults(GuiItemDef* item) {
-    item->rect.center.x = 50.0f;
-    item->rect.center.y = 50.0f;
-    item->rect.size.x = 10.0f;
-    item->rect.size.y = 10.0f;
-}
-
-
-/**
  * @brief Sets the status text based on how many things are selected.
  */
 void GuiEditor::setSelectionStatusText() {
@@ -935,6 +922,19 @@ void GuiEditor::setSelectionStatusText() {
         
     }
     }
+}
+
+
+/**
+ * @brief Sets some of the GUI item's properties to some defaults.
+ *
+ * @param item Item to change.
+ */
+void GuiEditor::setToDefaults(GuiItemDef* item) {
+    item->rect.center.x = 50.0f;
+    item->rect.center.y = 50.0f;
+    item->rect.size.x = 10.0f;
+    item->rect.size.y = 10.0f;
 }
 
 

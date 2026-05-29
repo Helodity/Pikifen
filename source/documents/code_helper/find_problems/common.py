@@ -323,6 +323,16 @@ def pad(s, nr):
     return str(s)[:nr].ljust(nr)
 
 
+## Trims a string to fit a given size, if necessary.
+#  @param s The string.
+#  @param nr Number of characters.
+#  @return The trimmed string.
+def trim_to_size(s, nr):
+    if len(s) > nr:
+        return s[:nr]
+    return s
+
+
 ## Removes anything inside two tokens in the given string, as well as the tokens themselves.
 #  @param s String to process.
 #  @param l Token to the left of the text to remove.

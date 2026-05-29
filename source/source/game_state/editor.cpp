@@ -193,8 +193,10 @@ void Editor::centerCamera(const RectCorners& corners, bool instantaneous) {
     }
     
     Point size = finalCorners.br - finalCorners.tl;
-    game.editorsView.cam.targetCenter.x = floor(finalCorners.tl.x + size.x / 2.0f);
-    game.editorsView.cam.targetCenter.y = floor(finalCorners.tl.y + size.y / 2.0f);
+    game.editorsView.cam.targetCenter.x =
+        floor(finalCorners.tl.x + size.x / 2.0f);
+    game.editorsView.cam.targetCenter.y =
+        floor(finalCorners.tl.y + size.y / 2.0f);
     
     float z;
     if(size.x > size.y) z = game.editorsView.windowRect.size.x / size.x;
@@ -455,6 +457,30 @@ void Editor::drawSelectionAndTransformationThings(
 
 
 /**
+ * @brief Returns a string describing either an individual item's index,
+ * or the total amount of multiple items. Useful for things like the status bar.
+ *
+ * @param singleIdx Index of the single item, 0-indexed. This gets represented
+ * in the string as 1-indexed. INVALID if there are 0 or multiple items.
+ * @param amount Amount of items.
+ * @param singularTerm Term that designates the items, in singular.
+ * @param pluralTerm If the term in plural is different from the term in
+ * singular plus an 's', specify it here.
+ * @return The string.
+ */
+string Editor::getAmountOrIdxDescription(
+    size_t singleIdx, size_t amount,
+    const string& singularTerm, const string& pluralTerm
+) const {
+    if(singleIdx != INVALID && amount == 1) {
+        return singularTerm + " #" + i2s(singleIdx + 1);
+    } else {
+        return amountStr((int) amount, singularTerm, pluralTerm);
+    }
+}
+
+
+/**
  * @brief Returns the text that should be displayed on the Dear ImGui list
  * navigation count text widget.
  *
@@ -527,6 +553,46 @@ void Editor::getGuiNavCurText(
 
 
 /**
+ * @brief Returns the color that should be used to overlay on top of
+ * something that is currently highlighted.
+ *
+ * @return The color.
+ */
+ALLEGRO_COLOR Editor::getHighlightEffectOverlayColor() const {
+    const ALLEGRO_COLOR highlightEffectBaseColor =
+        game.options.editors.useCustomStyle ?
+        game.options.editors.highlightColor :
+        COLOR_WHITE;
+        
+    return changeAlpha(highlightEffectBaseColor, 0.10f * 255);
+}
+
+
+/**
+ * @brief Returns the color that should be used to color something
+ * that is currently highlighted.
+ *
+ * @param normalColor Normal, non-highlighted color of the item.
+ * @return The color.
+ */
+ALLEGRO_COLOR Editor::getHighlightEffectReplacementColor(
+    const ALLEGRO_COLOR& normalColor
+) const {
+    const ALLEGRO_COLOR highlightEffectBaseColor =
+        game.options.editors.useCustomStyle ?
+        game.options.editors.highlightColor :
+        COLOR_WHITE;
+        
+    return
+        interpolateColor(
+            0.30f, 0.0f, 1.0f,
+            normalColor,
+            changeAlpha(highlightEffectBaseColor, normalColor.a * 255)
+        );
+}
+
+
+/**
  * @brief Returns the maximum number of history entries for this editor.
  *
  * @return The size.
@@ -585,46 +651,6 @@ void Editor::getQuickPlayAreaList(
     };
     scanAreas(game.content.areas.list[AREA_TYPE_SIMPLE]);
     scanAreas(game.content.areas.list[AREA_TYPE_MISSION]);
-}
-
-
-/**
- * @brief Returns the color that should be used to overlay on top of
- * something that is currently highlighted.
- *
- * @return The color.
- */
-ALLEGRO_COLOR Editor::getHighlightEffectOverlayColor() const {
-    const ALLEGRO_COLOR highlightEffectBaseColor =
-        game.options.editors.useCustomStyle ?
-        game.options.editors.highlightColor :
-        COLOR_WHITE;
-        
-    return changeAlpha(highlightEffectBaseColor, 0.10f * 255);
-}
-
-
-/**
- * @brief Returns the color that should be used to color something
- * that is currently highlighted.
- *
- * @param normalColor Normal, non-highlighted color of the item.
- * @return The color.
- */
-ALLEGRO_COLOR Editor::getHighlightEffectReplacementColor(
-    const ALLEGRO_COLOR& normalColor
-) const {
-    const ALLEGRO_COLOR highlightEffectBaseColor =
-        game.options.editors.useCustomStyle ?
-        game.options.editors.highlightColor :
-        COLOR_WHITE;
-        
-    return
-        interpolateColor(
-            0.30f, 0.0f, 1.0f,
-            normalColor,
-            changeAlpha(highlightEffectBaseColor, normalColor.a * 255)
-        );
 }
 
 
@@ -1356,30 +1382,6 @@ void Editor::handleSelectionAndTransformationLmbUp(
 ) {
     selCtrl.handleMouseUp();
     if(!skipTraWid) traWid.handleMouseUp();
-}
-
-
-/**
- * @brief Returns a string describing either an individual item's index,
- * or the total amount of multiple items. Useful for things like the status bar.
- *
- * @param singleIdx Index of the single item, 0-indexed. This gets represented
- * in the string as 1-indexed. INVALID if there are 0 or multiple items.
- * @param amount Amount of items.
- * @param singularTerm Term that designates the items, in singular.
- * @param pluralTerm If the term in plural is different from the term in
- * singular plus an 's', specify it here.
- * @return The string.
- */
-string Editor::getAmountOrIdxDescription(
-    size_t singleIdx, size_t amount,
-    const string& singularTerm, const string& pluralTerm
-) const {
-    if(singleIdx != INVALID && amount == 1) {
-        return singularTerm + " #" + i2s(singleIdx + 1);
-    } else {
-        return amountStr((int) amount, singularTerm, pluralTerm);
-    }
 }
 
 
@@ -4866,201 +4868,6 @@ Editor::PickerItem::PickerItem(
 
 
 /**
- * @brief Adds an item to the selection.
- *
- * @param idx The item's index.
- * @return Whether the item was unselected.
- */
-bool Editor::SelectionList::add(size_t idx) {
-    if(list.contains(idx)) return false;
-    list.insert(idx);
-    return true;
-}
-
-
-/**
- * @brief Selects all items available.
- *
- * @param totalAmount How many items there are in total.
- * @return Whether we didn't already have all selected.
- */
-bool Editor::SelectionList::addAll(size_t totalAmount) {
-    size_t prevSelSize = list.size();
-    clear();
-    for(size_t i = 0; i < totalAmount; i++) {
-        add(i);
-    }
-    return list.size() > prevSelSize;
-}
-
-
-/**
- * @brief Clears the selection.
- *
- * @return Whether there were items to clear.
- */
-bool Editor::SelectionList::clear() {
-    if(list.empty()) return false;
-    list.clear();
-    return true;
-}
-
-
-/**
- * @brief Returns whether a given items is selected.
- *
- * @param idx The item's index.
- * @return Whether it is selected.
- */
-bool Editor::SelectionList::contains(size_t idx) const {
-    return list.contains(idx);
-}
-
-
-/**
- * @brief Returns the index of the first selected item, or INVALID if
- * none is selected.
- *
- * @return The index or INVALID.
- */
-size_t Editor::SelectionList::getFirstItemIdx() const {
-    if(list.size() == 0) {
-        return INVALID;
-    }
-    return *list.begin();
-}
-
-
-/**
- * @brief Returns the list of all selected items.
- *
- * @return The list.
- */
-const set<size_t>& Editor::SelectionList::getItemIdxs() const {
-    return list;
-}
-
-
-/**
- * @brief Returns how many items are selected.
- *
- * @return The amount.
- */
-size_t Editor::SelectionList::getCount() const {
-    return list.size();
-}
-
-
-/**
- * @brief Returns the index of the only selected item, or INVALID if
- * multiple or none are selected.
- *
- * @return The index or INVALID.
- */
-size_t Editor::SelectionList::getSingleItemIdx() const {
-    if(list.size() == 1) {
-        return *list.begin();
-    } else {
-        return INVALID;
-    }
-}
-
-
-/**
- * @brief Returns whether any items are selected.
- *
- * @return Whether any are selected.
- */
-bool Editor::SelectionList::hasAny() const {
-    return !list.empty();
-}
-
-
-/**
- * @brief Returns whether there is are multiple items selected.
- *
- * @return Whether there are multiple selected.
- */
-bool Editor::SelectionList::hasMultiple() const {
-    return list.size() > 1;
-}
-
-
-/**
- * @brief Returns whether there is only one item selected.
- *
- * @return Whether there is one selected.
- */
-bool Editor::SelectionList::hasOne() const {
-    return list.size() == 1;
-}
-
-
-/**
- * @brief Removes an item from the selection.
- *
- * @param idx The item's index.
- * @return Whether the item was selected.
- */
-bool Editor::SelectionList::remove(size_t idx) {
-    if(!list.contains(idx)) return false;
-    list.erase(idx);
-    return true;
-}
-
-
-/**
- * @brief Sets the selection to be the specified items.
- *
- * @param idxs The items to select.
- * @return Whether the selection size changed.
- */
-bool Editor::SelectionList::setItemIdxs(const set<size_t>& idxs) {
-    size_t oldSize = list.size();
-    list = idxs;
-    return list.size() != oldSize;
-}
-
-
-/**
- * @brief Sets the selection to be a single item only.
- *
- * @param idx The item to select.
- * @return Whether that item wasn't already selected.
- */
-bool Editor::SelectionList::setSingle(size_t idx) {
-    if(getSingleItemIdx() == idx) return false;
-    clear();
-    add(idx);
-    return true;
-}
-
-
-/**
- * @brief If drag-moving, updates the items' position.
- *
- * @param offset How much to move the items by, compared to the start
- * of the operation.
- * @return Whether it was drag-moving before this.
- */
-bool Editor::SelectionManager::applyDragMove(const Point& offset) {
-    if(!enabled) return false;
-    if(!onGetInfo || !onSetInfo) return false;
-    
-    const set<size_t>& list = selectedItems.getItemIdxs();
-    for(size_t i : list) {
-        Point origPos = preOpItemCenters[i];
-        Point iCenter, iSize;
-        float iAngle;
-        onGetInfo(i, &iCenter, &iSize, &iAngle);
-        onSetInfo(i, origPos + offset, iSize, iAngle);
-    }
-    
-    return true;
-}
-
-
-/**
  * @brief Applies a transformation the user performed on the geometry of
  * the selected items.
  *
@@ -5212,11 +5019,6 @@ bool Editor::SelectionController::disable(bool disableManagers) {
         }
     }
     return wasEnabled;
-}
-
-
-bool Editor::SelectionController::isIdle() const {
-    return state == STATE_IDLING;
 }
 
 
@@ -5389,59 +5191,6 @@ Point Editor::SelectionController::getPreOpPivotItemPos() const {
 
 
 /**
- * @brief Returns the total bounding box of every manager's selected items.
- *
- * @param outRect The box that delimits everything
- * is returned here.
- * @return Whether there are any selected items.
- */
-bool Editor::SelectionController::getTotalBBox(Rect* outRect) const {
-    Rect totalRect;
-    bool hasFirst = false;
-    
-    forIdx(m, managers) {
-        Rect mgrRect;
-        bool hasItems = managers[m]->getBBox(&mgrRect);
-        if(!hasItems) continue;
-        
-        if(!hasFirst) {
-            totalRect = mgrRect;
-            hasFirst = true;
-        } else {
-            totalRect = combineBBoxes(totalRect, mgrRect);
-        }
-    }
-    
-    *outRect = totalRect;
-    
-    return false;
-}
-
-
-/**
- * @brief Returns the info of the selected item, taking into account that
- * it is the only selected item, it is rectangular, and its angle
- * can be changed with the transformation widget.
- *
- * @param outCenter The item's center is returned here.
- * @param outSize The item's size is returned here.
- * @param outAngle The item's angle is returned here.
- */
-void Editor::SelectionController::getSingleRotatingItemInfo(
-    Point* outCenter, Point* outSize, float* outAngle
-) const {
-    forIdx(m, managers) {
-        if(!managers[m]->itemsCanRotate) continue;
-        size_t itemIdx = managers[m]->getSingleItemIdx();
-        if(itemIdx == INVALID) continue;
-        
-        managers[m]->getItemInfo(itemIdx, outCenter, outSize, outAngle);
-        return;
-    }
-}
-
-
-/**
  * @brief Returns the total number of selected items and some other information.
  *
  * @param outCanChange Whether the selected items can have their properties
@@ -5475,6 +5224,59 @@ size_t Editor::SelectionController::getSelectionTotalCount(
 
 
 /**
+ * @brief Returns the info of the selected item, taking into account that
+ * it is the only selected item, it is rectangular, and its angle
+ * can be changed with the transformation widget.
+ *
+ * @param outCenter The item's center is returned here.
+ * @param outSize The item's size is returned here.
+ * @param outAngle The item's angle is returned here.
+ */
+void Editor::SelectionController::getSingleRotatingItemInfo(
+    Point* outCenter, Point* outSize, float* outAngle
+) const {
+    forIdx(m, managers) {
+        if(!managers[m]->itemsCanRotate) continue;
+        size_t itemIdx = managers[m]->getSingleItemIdx();
+        if(itemIdx == INVALID) continue;
+        
+        managers[m]->getItemInfo(itemIdx, outCenter, outSize, outAngle);
+        return;
+    }
+}
+
+
+/**
+ * @brief Returns the total bounding box of every manager's selected items.
+ *
+ * @param outRect The box that delimits everything
+ * is returned here.
+ * @return Whether there are any selected items.
+ */
+bool Editor::SelectionController::getTotalBBox(Rect* outRect) const {
+    Rect totalRect;
+    bool hasFirst = false;
+    
+    forIdx(m, managers) {
+        Rect mgrRect;
+        bool hasItems = managers[m]->getBBox(&mgrRect);
+        if(!hasItems) continue;
+        
+        if(!hasFirst) {
+            totalRect = mgrRect;
+            hasFirst = true;
+        } else {
+            totalRect = combineBBoxes(totalRect, mgrRect);
+        }
+    }
+    
+    *outRect = totalRect;
+    
+    return false;
+}
+
+
+/**
  * @brief A shorthand for handling things to do when the left mouse
  * is released.
  *
@@ -5489,6 +5291,16 @@ bool Editor::SelectionController::handleMouseUp() {
 
 
 /**
+ * @brief Returns whether the user is currently creating a rubber band.
+ *
+ * @return Whether it is creating.
+ */
+bool Editor::SelectionController::isCreatingRubberBand() const {
+    return state == STATE_RUBBER_BAND;
+}
+
+
+/**
  * @brief Returns whether the user is currently moving the selected items
  * by dragging one of them.
  *
@@ -5496,6 +5308,16 @@ bool Editor::SelectionController::handleMouseUp() {
  */
 bool Editor::SelectionController::isDragMoving() const {
     return state == STATE_DRAG_MOVING;
+}
+
+
+/**
+ * @brief Returns whether the user is currently not doing any operation.
+ * 
+ * @return Whether it is idling.
+ */
+bool Editor::SelectionController::isIdle() const {
+    return state == STATE_IDLING;
 }
 
 
@@ -5555,16 +5377,6 @@ bool Editor::SelectionController::isTransforming() const {
 
 
 /**
- * @brief Returns whether the user is currently creating a rubber band.
- *
- * @return Whether it is creating.
- */
-bool Editor::SelectionController::isCreatingRubberBand() const {
-    return state == STATE_RUBBER_BAND;
-}
-
-
-/**
  * @brief Returns whether the controller has exactly one item selected,
  * it is rectangular, and its rotation can be changed
  * with the transformation widget.
@@ -5585,21 +5397,6 @@ bool Editor::SelectionController::shouldDoSingleRotatingItem() const {
     }
     
     return false;
-}
-
-
-/**
- * @brief Starts the creation of a rubber band selection box.
- *
- * @param cursorPos Position of the cursor.
- * @return Whether it was idling before this.
- */
-bool Editor::SelectionController::startRubberBand(const Point& cursorPos) {
-    if(!enabled) return false;
-    bool wasIdle = state == STATE_IDLING;
-    state = STATE_RUBBER_BAND;
-    preOpCursorPos = cursorPos;
-    return wasIdle;
 }
 
 
@@ -5635,6 +5432,21 @@ bool Editor::SelectionController::startDragMove(const Point& cursorPos) {
         }
     }
     
+    return wasIdle;
+}
+
+
+/**
+ * @brief Starts the creation of a rubber band selection box.
+ *
+ * @param cursorPos Position of the cursor.
+ * @return Whether it was idling before this.
+ */
+bool Editor::SelectionController::startRubberBand(const Point& cursorPos) {
+    if(!enabled) return false;
+    bool wasIdle = state == STATE_IDLING;
+    state = STATE_RUBBER_BAND;
+    preOpCursorPos = cursorPos;
     return wasIdle;
 }
 
@@ -5802,6 +5614,177 @@ bool Editor::SelectionController::updateRubberBand(
  * @param idx The item's index.
  * @return Whether the item was unselected.
  */
+bool Editor::SelectionList::add(size_t idx) {
+    if(list.contains(idx)) return false;
+    list.insert(idx);
+    return true;
+}
+
+
+/**
+ * @brief Selects all items available.
+ *
+ * @param totalAmount How many items there are in total.
+ * @return Whether we didn't already have all selected.
+ */
+bool Editor::SelectionList::addAll(size_t totalAmount) {
+    size_t prevSelSize = list.size();
+    clear();
+    for(size_t i = 0; i < totalAmount; i++) {
+        add(i);
+    }
+    return list.size() > prevSelSize;
+}
+
+
+/**
+ * @brief Clears the selection.
+ *
+ * @return Whether there were items to clear.
+ */
+bool Editor::SelectionList::clear() {
+    if(list.empty()) return false;
+    list.clear();
+    return true;
+}
+
+
+/**
+ * @brief Returns whether a given items is selected.
+ *
+ * @param idx The item's index.
+ * @return Whether it is selected.
+ */
+bool Editor::SelectionList::contains(size_t idx) const {
+    return list.contains(idx);
+}
+
+
+/**
+ * @brief Returns how many items are selected.
+ *
+ * @return The amount.
+ */
+size_t Editor::SelectionList::getCount() const {
+    return list.size();
+}
+
+
+/**
+ * @brief Returns the index of the first selected item, or INVALID if
+ * none is selected.
+ *
+ * @return The index or INVALID.
+ */
+size_t Editor::SelectionList::getFirstItemIdx() const {
+    if(list.size() == 0) {
+        return INVALID;
+    }
+    return *list.begin();
+}
+
+
+/**
+ * @brief Returns the list of all selected items.
+ *
+ * @return The list.
+ */
+const set<size_t>& Editor::SelectionList::getItemIdxs() const {
+    return list;
+}
+
+
+/**
+ * @brief Returns the index of the only selected item, or INVALID if
+ * multiple or none are selected.
+ *
+ * @return The index or INVALID.
+ */
+size_t Editor::SelectionList::getSingleItemIdx() const {
+    if(list.size() == 1) {
+        return *list.begin();
+    } else {
+        return INVALID;
+    }
+}
+
+
+/**
+ * @brief Returns whether any items are selected.
+ *
+ * @return Whether any are selected.
+ */
+bool Editor::SelectionList::hasAny() const {
+    return !list.empty();
+}
+
+
+/**
+ * @brief Returns whether there is are multiple items selected.
+ *
+ * @return Whether there are multiple selected.
+ */
+bool Editor::SelectionList::hasMultiple() const {
+    return list.size() > 1;
+}
+
+
+/**
+ * @brief Returns whether there is only one item selected.
+ *
+ * @return Whether there is one selected.
+ */
+bool Editor::SelectionList::hasOne() const {
+    return list.size() == 1;
+}
+
+
+/**
+ * @brief Removes an item from the selection.
+ *
+ * @param idx The item's index.
+ * @return Whether the item was selected.
+ */
+bool Editor::SelectionList::remove(size_t idx) {
+    if(!list.contains(idx)) return false;
+    list.erase(idx);
+    return true;
+}
+
+
+/**
+ * @brief Sets the selection to be the specified items.
+ *
+ * @param idxs The items to select.
+ * @return Whether the selection size changed.
+ */
+bool Editor::SelectionList::setItemIdxs(const set<size_t>& idxs) {
+    size_t oldSize = list.size();
+    list = idxs;
+    return list.size() != oldSize;
+}
+
+
+/**
+ * @brief Sets the selection to be a single item only.
+ *
+ * @param idx The item to select.
+ * @return Whether that item wasn't already selected.
+ */
+bool Editor::SelectionList::setSingle(size_t idx) {
+    if(getSingleItemIdx() == idx) return false;
+    clear();
+    add(idx);
+    return true;
+}
+
+
+/**
+ * @brief Adds an item to the selection.
+ *
+ * @param idx The item's index.
+ * @return Whether the item was unselected.
+ */
 bool Editor::SelectionManager::add(size_t idx) {
     if(!enabled) return false;
     if(!selectedItems.add(idx)) return false;
@@ -5843,6 +5826,30 @@ bool Editor::SelectionManager::applyDirectTransformation(
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
         onSetInfo(i, newRect.center, newRect.size, newAngle);
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief If drag-moving, updates the items' position.
+ *
+ * @param offset How much to move the items by, compared to the start
+ * of the operation.
+ * @return Whether it was drag-moving before this.
+ */
+bool Editor::SelectionManager::applyDragMove(const Point& offset) {
+    if(!enabled) return false;
+    if(!onGetInfo || !onSetInfo) return false;
+    
+    const set<size_t>& list = selectedItems.getItemIdxs();
+    for(size_t i : list) {
+        Point origPos = preOpItemCenters[i];
+        Point iCenter, iSize;
+        float iAngle;
+        onGetInfo(i, &iCenter, &iSize, &iAngle);
+        onSetInfo(i, origPos + offset, iSize, iAngle);
     }
     
     return true;
@@ -5960,6 +5967,36 @@ bool Editor::SelectionManager::applySharedTransformation(
 
 
 /**
+ * @brief If the manager's selection bounding box is part of a larger box,
+ * and said larger box has a new center or size, this can be used to determine
+ * which portion of the larger box's new dimensions apply to this manager,
+ * such that proportions are kept.
+ *
+ * @param largerPreOpRect The larger bounding box's pre-transformation
+ * rectangle.
+ * @param largerNewRect The larger bounding box's new rectangle.
+ * @return The manager's portion's new rectangle.
+ */
+Rect Editor::SelectionManager::calculateSelectionPortion(
+    const Rect& largerPreOpRect, const Rect& largerNewRect
+) const {
+    Rect portion;
+    
+    //The size is pretty easy.
+    Point sizeRatio = preOpRect.size / largerPreOpRect.size;
+    portion.size = largerNewRect.size * sizeRatio;
+    
+    //For the center, let's use corners instead.
+    Point posRatio =
+        getPointPosRatioInRectangle(preOpRect.center, largerPreOpRect);
+    RectCorners largerNewCorners = rectToRectCorners(largerNewRect);
+    portion.center = largerNewCorners.tl + largerNewRect.size * posRatio;
+    
+    return portion;
+}
+
+
+/**
  * @brief Clears the selection.
  *
  * @return Whether there were items to clear.
@@ -6059,94 +6096,6 @@ size_t Editor::SelectionManager::getCount() const {
 
 
 /**
- * @brief If the manager's selection bounding box is part of a larger box,
- * and said larger box has a new center or size, this can be used to determine
- * which portion of the larger box's new dimensions apply to this manager,
- * such that proportions are kept.
- *
- * @param largerPreOpRect The larger bounding box's pre-transformation
- * rectangle.
- * @param largerNewRect The larger bounding box's new rectangle.
- * @return The manager's portion's new rectangle.
- */
-Rect Editor::SelectionManager::calculateSelectionPortion(
-    const Rect& largerPreOpRect, const Rect& largerNewRect
-) const {
-    Rect portion;
-    
-    //The size is pretty easy.
-    Point sizeRatio = preOpRect.size / largerPreOpRect.size;
-    portion.size = largerNewRect.size * sizeRatio;
-    
-    //For the center, let's use corners instead.
-    Point posRatio =
-        getPointPosRatioInRectangle(preOpRect.center, largerPreOpRect);
-    RectCorners largerNewCorners = rectToRectCorners(largerNewRect);
-    portion.center = largerNewCorners.tl + largerNewRect.size * posRatio;
-    
-    return portion;
-}
-
-
-/**
- * @brief Returns which items are under the mouse cursor.
- *
- * @param cursorPos Cursor position.
- * @return The list.
- */
-vector<size_t> Editor::SelectionManager::getItemsUnderCursor(
-    const Point& cursorPos
-) const {
-    vector<size_t> result;
-    size_t nrTotalItems = getNrTotalItems();
-    
-    for(size_t i = 0; i < nrTotalItems; i++) {
-        if(!getItemIsEligible(i)) continue;
-        
-        bool isInside;
-        if(onCheckUnderCursor) {
-            isInside = onCheckUnderCursor(i, cursorPos);
-        } else {
-            Point iCenter, iSize;
-            float iAngle;
-            getItemInfo(i, &iCenter, &iSize, &iAngle);
-            
-            if(itemsAreRectangular) {
-                if(itemsCanRotate) {
-                    getClosestPointInRotatedRectangle(
-                        cursorPos, Rect(iCenter, iSize), iAngle, &isInside
-                    );
-                } else {
-                    isInside =
-                        isPointInRectangle(
-                            cursorPos, Rect(iCenter, iSize)
-                        );
-                }
-            } else {
-                isInside = (Distance(cursorPos, iCenter) <= iSize.x / 2.0f);
-            }
-        }
-        
-        if(isInside) {
-            result.push_back(i);
-        }
-    }
-    
-    return result;
-}
-
-
-/**
- * @brief Returns whether the selection has been homogenized by the user.
- *
- * @return Whether it was homogenized.
- */
-bool Editor::SelectionManager::isHomogenized() const {
-    return homogenized;
-}
-
-
-/**
  * @brief Returns the index of the first selected item, or INVALID if
  * none is selected.
  *
@@ -6201,6 +6150,54 @@ bool Editor::SelectionManager::getItemIsEligible(size_t idx) const {
         return onIsEligible(idx);
     }
     return true;
+}
+
+
+/**
+ * @brief Returns which items are under the mouse cursor.
+ *
+ * @param cursorPos Cursor position.
+ * @return The list.
+ */
+vector<size_t> Editor::SelectionManager::getItemsUnderCursor(
+    const Point& cursorPos
+) const {
+    vector<size_t> result;
+    size_t nrTotalItems = getNrTotalItems();
+    
+    for(size_t i = 0; i < nrTotalItems; i++) {
+        if(!getItemIsEligible(i)) continue;
+        
+        bool isInside;
+        if(onCheckUnderCursor) {
+            isInside = onCheckUnderCursor(i, cursorPos);
+        } else {
+            Point iCenter, iSize;
+            float iAngle;
+            getItemInfo(i, &iCenter, &iSize, &iAngle);
+            
+            if(itemsAreRectangular) {
+                if(itemsCanRotate) {
+                    getClosestPointInRotatedRectangle(
+                        cursorPos, Rect(iCenter, iSize), iAngle, &isInside
+                    );
+                } else {
+                    isInside =
+                        isPointInRectangle(
+                            cursorPos, Rect(iCenter, iSize)
+                        );
+                }
+            } else {
+                isInside = (Distance(cursorPos, iCenter) <= iSize.x / 2.0f);
+            }
+        }
+        
+        if(isInside) {
+            result.push_back(i);
+        }
+    }
+    
+    return result;
 }
 
 
@@ -6260,6 +6257,16 @@ bool Editor::SelectionManager::hasOne() const {
 
 
 /**
+ * @brief Returns whether the selection has been homogenized by the user.
+ *
+ * @return Whether it was homogenized.
+ */
+bool Editor::SelectionManager::isHomogenized() const {
+    return homogenized;
+}
+
+
+/**
  * @brief Removes an item from the selection.
  *
  * @param idx The item's index.
@@ -6270,6 +6277,19 @@ bool Editor::SelectionManager::remove(size_t idx) {
     bool changed = selectedItems.remove(idx);
     if(changed && onSelectionChanged) onSelectionChanged();
     return changed;
+}
+
+
+/**
+ * @brief Sets whether the selection was homogenized by the user.
+ *
+ * @param homogenized The new value.
+ * @return Whether that wasn't already the case.
+ */
+bool Editor::SelectionManager::setHomogenized(bool homogenized) {
+    if(this->homogenized == homogenized) return false;
+    this->homogenized = homogenized;
+    return true;
 }
 
 
@@ -6298,19 +6318,6 @@ bool Editor::SelectionManager::setSingle(size_t idx) {
     bool changed = selectedItems.setSingle(idx);
     if(changed && onSelectionChanged) onSelectionChanged();
     return changed;
-}
-
-
-/**
- * @brief Sets whether the selection was homogenized by the user.
- *
- * @param homogenized The new value.
- * @return Whether that wasn't already the case.
- */
-bool Editor::SelectionManager::setHomogenized(bool homogenized) {
-    if(this->homogenized == homogenized) return false;
-    this->homogenized = homogenized;
-    return true;
 }
 
 

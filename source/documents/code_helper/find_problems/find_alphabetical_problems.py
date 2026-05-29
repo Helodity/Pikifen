@@ -157,15 +157,19 @@ def get_unordered_problems_in_file(file_path):
     problems = []
     
     for f1, f2 in unordered_functions:
-        problems.append((file_path, 'Unordered functions', pad(f1.line, 4) + ' ' + pad(f1.get_full(), 40) + ' - ' + pad(f2.line, 4) + ' ' + pad(f2.name, 20)))
+        info = ':' + str(f1.line) + ' ' + trim_to_size(f1.get_full(), 30) + ' - :' + str(f2.line) + ' ' + trim_to_size(f2.name, 30)
+        problems.append((file_path, f1.line, 'Unordered functions', info))
     
     for f1, f2 in unordered_namespaces:
-        problems.append((file_path, 'Unordered namespaces', pad(f1.line, 4) + ' ' + pad(f1.namespace, 20) + ' - ' + pad(f2.line, 4) + ' ' + pad(f2.namespace, 20)))
+        info = ':' + str(f1.line) + ' ' + trim_to_size(f1.namespace, 20) + ' - :' + str(f2.line) + ' ' + trim_to_size(f2.namespace, 20)
+        problems.append((file_path, f1.line, 'Unordered namespaces', info))
     
     for i1, i2 in unordered_includes:
-        problems.append((file_path, 'Unordered includes', pad(i1.line, 4) + ' ' + pad(i1.name, 40) + ' - ' + pad(i2.line, 4) + ' ' + pad(i2.name, 40)))
+        info = ':' + str(i1.line) + ' ' + trim_to_size(i1.name, 30) + ' - :' + str(i2.line) + ' ' + trim_to_size(i2.name, 30)
+        problems.append((file_path, i1.line, 'Unordered includes', info))
     
     for c1, c2 in unordered_namespace_constants:
-        problems.append((file_path, 'Unordered namespace constants', pad(c1.line, 4) + ' ' + pad(c1.name, 20) + ' - ' + pad(c2.line, 4) + ' ' + pad(c2.name, 20)))
+        info = ':' + str(c1.line) + ' ' + trim_to_size(c1.name, 20) + ' - :' + str(c2.line) + ' ' + trim_to_size(c2.name, 20)
+        problems.append((file_path, c1.line, 'Unordered namespace constants', info))
     
     return problems

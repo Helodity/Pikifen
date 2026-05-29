@@ -3893,31 +3893,6 @@ void AreaEditor::snapModeCmd(float inputValue) {
 
 
 /**
- * @brief Procedure to start moving the selected path stops.
- */
-void AreaEditor::startPathStopMove() {
-    if(moving) return;
-    
-    preMovePivotStop = nullptr;
-    Distance closestDist;
-    
-    const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
-    for(size_t idx : selectedStops) {
-        Distance d(
-            game.editorsView.mouseCursorWorldPos,
-            game.curArea->pathStops[idx]->center
-        );
-        if(!preMovePivotStop || d < closestDist) {
-            preMovePivotStop = game.curArea->pathStops[idx];
-            closestDist = d;
-        }
-    }
-    
-    moving = true;
-}
-
-
-/**
  * @brief Procedure to start moving the selected vertexes.
  */
 void AreaEditor::startLayoutMoving() {
@@ -3936,6 +3911,31 @@ void AreaEditor::startLayoutMoving() {
         );
         if(!preMovePivotVertex || d < closestDist) {
             preMovePivotVertex = game.curArea->vertexes[idx];
+            closestDist = d;
+        }
+    }
+    
+    moving = true;
+}
+
+
+/**
+ * @brief Procedure to start moving the selected path stops.
+ */
+void AreaEditor::startPathStopMove() {
+    if(moving) return;
+    
+    preMovePivotStop = nullptr;
+    Distance closestDist;
+    
+    const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
+    for(size_t idx : selectedStops) {
+        Distance d(
+            game.editorsView.mouseCursorWorldPos,
+            game.curArea->pathStops[idx]->center
+        );
+        if(!preMovePivotStop || d < closestDist) {
+            preMovePivotStop = game.curArea->pathStops[idx];
             closestDist = d;
         }
     }
@@ -4279,8 +4279,10 @@ void AreaEditor::updateSectorTexture(
 }
 
 
-//Used when the user changed the selection, in order to select some
-//other things the managers may decide as requirements.
+/**
+ * @brief Used when the user changed the selection, in order to select some
+ * other things the managers may decide as requirements.
+ */
 void AreaEditor::updateSelectionRequirements() {
     const set<size_t>& selectedSectors = sectorSelection.getItemIdxs();
     for(size_t sIdx : selectedSectors) {

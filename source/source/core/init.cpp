@@ -1378,7 +1378,7 @@ void initMiscDatabases() {
         new MissionMetricTypeObjectCollectionPts(),
         new MissionMetricTypeTreasureCollectionPts(),
         new MissionMetricTypeEnemyCollectionPts(),
-        new MissionMetricTypeDefeatPts(),
+        new MissionMetricTypeEnemyDefeatPts(),
         new MissionMetricTypeScriptSlot(),
     };
     

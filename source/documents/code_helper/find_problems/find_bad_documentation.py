@@ -47,7 +47,7 @@ def get_documentation_problems_in_file(file_path):
                     finding_comment = False
 
         if comment_start == 0:
-            problems.append((file_path, 'Function without documentation', pad(f.line, 4)))
+            problems.append((file_path, f.line, 'Function without documentation', ''))
             continue
 
         comment_lines = lines[comment_start:f.line - 1]
@@ -60,10 +60,10 @@ def get_documentation_problems_in_file(file_path):
         
         for p in f.params:
             if p not in params_documented:
-                problems.append((file_path, 'Undocumented parameter', pad(f.line, 4) + ' ' + pad(p, 40)))
+                problems.append((file_path, f.line, 'Undocumented parameter', trim_to_size(p, 40)))
         
         for p in params_documented:
             if p not in f.params:
-                problems.append((file_path, 'Unknown documented parameter', pad(comment_start, 4) + ' ' + pad(p, 20)))
+                problems.append((file_path, f.line, 'Unknown documented parameter', trim_to_size(p, 20)))
     
     return problems

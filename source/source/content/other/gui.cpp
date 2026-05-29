@@ -485,7 +485,10 @@ Point GuiItem::getReferenceCenter() const {
         result.y -= parentS.y * parent->offset.y;
         return result;
     } else {
-        return Point(ratioRect.center.x * game.winW, ratioRect.center.y * game.winH);
+        return
+            Point(
+                ratioRect.center.x * game.winW, ratioRect.center.y * game.winH
+            );
     }
 }
 
@@ -1648,8 +1651,10 @@ bool GuiManager::tick(float deltaT) {
             );
     }
     
-    Point centerDelta = focusCursor.intendedRect.center - focusCursor.curRect.center;
-    Point sizeDelta = focusCursor.intendedRect.size - focusCursor.curRect.size;
+    Point centerDelta =
+        focusCursor.intendedRect.center - focusCursor.curRect.center;
+    Point sizeDelta =
+        focusCursor.intendedRect.size - focusCursor.curRect.size;
     focusCursor.curRect.center +=
         centerDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_FACTOR * deltaT);
     focusCursor.curRect.size +=
@@ -1779,7 +1784,8 @@ void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
     float childrenSpan = getChildrenSpan(horizontal);
     float* offsetPtr = !horizontal ? &offset.y : &offset.x;
-    float coord = !horizontal ? child->ratioRect.center.y : child->ratioRect.center.x;
+    float coord =
+        !horizontal ? child->ratioRect.center.y : child->ratioRect.center.x;
     
     if(childrenSpan <= 1.0f && *offsetPtr == 0.0f) return;
     targetOffset = std::clamp(coord - 0.5f, 0.0f, childrenSpan - 1.0f);

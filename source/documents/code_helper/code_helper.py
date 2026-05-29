@@ -63,23 +63,31 @@ def write_code_problems():
     
     problems_by_file = {}
     
-    for file, problem, info in problems:
+    for file, line, problem, info in problems:
         if not file in problems_by_file:
             problems_by_file[file] = []
-        problems_by_file[file].append((problem, info))
+        problems_by_file[file].append((line, problem, info))
     
-    for file, dummy in sorted(problems_by_file.items()):
+    problems_by_file = sorted(problems_by_file.items())
+    for file, file_problems in problems_by_file:
         if file.find('imgui/') != -1: continue
         if file.find('shaders_source.cpp') != -1: continue
         if file.find('code_debug.cpp') != -1: continue
-            
+
         has_problems = True
-        print(file)
         problem_file.write(file + '\n')
-        for problem, info in problems_by_file[file]:
-            problem_str = '  ' + problem + ': ' + info
-            print(problem_str)
-            problem_file.write(problem_str + '\n')
+        file_problems = sorted(file_problems, reverse=True)
+        for line, problem, info in file_problems:
+            problem_location_str = '' + file + ':' + str(line)
+            problem_description_str = '  ' + problem
+            if info != '':
+                problem_description_str += ' (' + info + ')'
+            print(problem_location_str)
+            print(problem_description_str)
+            problem_file.write(problem_location_str + '\n')
+            problem_file.write(problem_description_str + '\n')
+        
+        print('')
     
     if not has_problems:
         print('No problems found.')
@@ -199,11 +207,11 @@ if __name__ == '__main__':
         if not debug_mode:
             latest = system_call('git describe --abbrev=0 --tags')
         
-            aux = system_call('grep -oP "VERSION_MAJOR = .*;" source/source/core/const.h')
+            aux = system_call('grep -oP "VERSION_MAJOR = .*;" source/source/core/const.hpp')
             cur_major = aux[16:-1]
-            aux = system_call('grep -oP "VERSION_MINOR = .*;" source/source/core/const.h')
+            aux = system_call('grep -oP "VERSION_MINOR = .*;" source/source/core/const.hpp')
             cur_minor = aux[16:-1]
-            aux = system_call('grep -oP "VERSION_REV   = .*;" source/source/core/const.h')
+            aux = system_call('grep -oP "VERSION_REV   = .*;" source/source/core/const.hpp')
             cur_rev = aux[16:-1]
             current = cur_major + '.' + cur_minor + '.' + cur_rev
             

@@ -1368,7 +1368,7 @@ void drawSectorIce(
  * @param sPtr Pointer to the sector.
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
- * @param Alpha Draw the textures at this alpha [0 - 1].
+ * @param alpha Draw the textures at this alpha [0 - 1].
  */
 void drawSectorTexture(
     Sector* sPtr, const Point& where, float scale, float alpha

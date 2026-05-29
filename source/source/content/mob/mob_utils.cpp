@@ -1282,7 +1282,7 @@ float calculateMobPhysicalSpan(
  * @param center Initial position.
  * @param type Type of the new mob.
  * @param angle Initial facing angle.
- * @param vars String representation of the script variables.
+ * @param varsStr String representation of the script variables.
  * @param codeAfterCreation Code to run right after the mob is created,
  * if any. This is run before any scripting takes place.
  * @param firstStateOverride If this is INVALID, use the first state
@@ -1436,7 +1436,9 @@ Mob* createMob(MobGen* gen) {
  * and such, since everything is going to be destroyed.
  */
 void deleteMob(Mob* mPtr, bool completeDestruction) {
-    if(game.makerTools.inspectedMob == mPtr) game.makerTools.inspectedMob = nullptr;
+    if(game.makerTools.inspectedMob == mPtr) {
+        game.makerTools.inspectedMob = nullptr;
+    }
     
     if(!completeDestruction) {
         mPtr->leaveGroup();

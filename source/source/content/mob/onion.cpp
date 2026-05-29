@@ -242,7 +242,8 @@ void Onion::spit(size_t typeIdx) {
         return;
     }
     spitPikminSeed(
-        center, bottomZ + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[typeIdx],
+        center, bottomZ + ONION::NEW_SEED_Z_OFFSET,
+        oniType->nest->pikTypes[typeIdx],
         nSpits, ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
         ONION::SPIT_V_SPEED
     );

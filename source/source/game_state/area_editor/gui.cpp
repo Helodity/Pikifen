@@ -4721,7 +4721,8 @@ void AreaEditor::processGuiPanelPaths() {
         if(saveableTreeNode("paths", "Stop properties")) {
         
             bool okToEdit =
-                (pathStopSelection.hasOne()) || pathStopSelection.isHomogenized();
+                pathStopSelection.hasOne() ||
+                pathStopSelection.isHomogenized();
                 
             if(!pathStopSelection.hasAny()) {
             
@@ -5240,8 +5241,10 @@ void AreaEditor::processGuiPanelReview() {
         //Show cross-section checkbox.
         if(ImGui::Checkbox("Show cross-section", &showCrossSection)) {
             if(showCrossSection) {
-                crossSectionWindowStart = game.editorsView.getWindowCorners().tl;
-                crossSectionWindowEnd = game.editorsView.windowRect.size / 2.0f;
+                crossSectionWindowStart =
+                    game.editorsView.getWindowCorners().tl;
+                crossSectionWindowEnd =
+                    game.editorsView.windowRect.size / 2.0f;
                 crossSectionZWindowStart =
                     Point(
                         crossSectionWindowEnd.x,

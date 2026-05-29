@@ -1246,13 +1246,15 @@ void AreaEditor::findProblemsMobInsideWalls() {
                     
                 } else if(
                     ePtr->sectors[0] == mobSector &&
-                    ePtr->sectors[1]->floorZ > mobSector->floorZ + GEOMETRY::STEP_HEIGHT
+                    ePtr->sectors[1]->floorZ >
+                    mobSector->floorZ + GEOMETRY::STEP_HEIGHT
                 ) {
                     inWall = true;
                     
                 } else if(
                     ePtr->sectors[1] == mobSector &&
-                    ePtr->sectors[0]->floorZ > mobSector->floorZ + GEOMETRY::STEP_HEIGHT
+                    ePtr->sectors[0]->floorZ >
+                    mobSector->floorZ + GEOMETRY::STEP_HEIGHT
                 ) {
                     inWall = true;
                     
@@ -1354,6 +1356,44 @@ void AreaEditor::findProblemsNoMissionScoreCri() {
 
 
 /**
+ * @brief Checks for any non-simple sectors in the area, and fills the problem
+ * info if so.
+ */
+void AreaEditor::findProblemsNonSimpleSector() {
+    if(!game.curArea->problems.nonSimples.empty()) {
+        problemType = EPT_BAD_SECTOR;
+        problemTitle = "Non-simple sector!";
+        switch(game.curArea->problems.nonSimples.begin()->second) {
+        case TRIANGULATION_ERROR_LONE_EDGES: {
+            problemDescription =
+                "It contains lone edges. Try clearing them up."
+                "Check the included manual if you can't find a way to fix it.";
+            break;
+        } case TRIANGULATION_ERROR_NOT_CLOSED: {
+            problemDescription =
+                "It is not closed. Try closing it."
+                "Check the included manual if you can't find a way to fix it.";
+            break;
+        } case TRIANGULATION_ERROR_NO_EARS: {
+            problemDescription =
+                "There's been a triangulation error."
+                "Check the included manual if you can't find a way to fix it.";
+            break;
+        } case TRIANGULATION_ERROR_INVALID_ARGS: {
+            problemDescription =
+                "An unknown error has occurred with the sector."
+                "Check the included manual if you can't find a way to fix it.";
+            break;
+        } case TRIANGULATION_ERROR_NONE: {
+            problemDescription.clear();
+            break;
+        }
+        }
+    }
+}
+
+
+/**
  * @brief Checks for mission end conditions that use a time limit with none set,
  * and fills the problem info if so.
  */
@@ -1422,44 +1462,6 @@ void AreaEditor::findProblemsNoTimeLimitMissionScoreCri() {
                 "the mission time limit, but this mission does not have "
                 "a time limit set. Either set it or remove the criterion.";
             return;
-        }
-    }
-}
-
-
-/**
- * @brief Checks for any non-simple sectors in the area, and fills the problem
- * info if so.
- */
-void AreaEditor::findProblemsNonSimpleSector() {
-    if(!game.curArea->problems.nonSimples.empty()) {
-        problemType = EPT_BAD_SECTOR;
-        problemTitle = "Non-simple sector!";
-        switch(game.curArea->problems.nonSimples.begin()->second) {
-        case TRIANGULATION_ERROR_LONE_EDGES: {
-            problemDescription =
-                "It contains lone edges. Try clearing them up."
-                "Check the included manual if you can't find a way to fix it.";
-            break;
-        } case TRIANGULATION_ERROR_NOT_CLOSED: {
-            problemDescription =
-                "It is not closed. Try closing it."
-                "Check the included manual if you can't find a way to fix it.";
-            break;
-        } case TRIANGULATION_ERROR_NO_EARS: {
-            problemDescription =
-                "There's been a triangulation error."
-                "Check the included manual if you can't find a way to fix it.";
-            break;
-        } case TRIANGULATION_ERROR_INVALID_ARGS: {
-            problemDescription =
-                "An unknown error has occurred with the sector."
-                "Check the included manual if you can't find a way to fix it.";
-            break;
-        } case TRIANGULATION_ERROR_NONE: {
-            problemDescription.clear();
-            break;
-        }
         }
     }
 }
@@ -2018,6 +2020,31 @@ Edge* AreaEditor::getEdgeUnderPoint(
 
 
 /**
+ * @brief Returns the editor path link currently under a point.
+ *
+ * @param p The point to check against.
+ * @return The link.
+ */
+EditorPathLink* AreaEditor::getEditorPathLinkUnderPoint(const Point& p) const {
+    forIdx(l, game.curArea->editorPathLinks) {
+        EditorPathLink* elPtr = &game.curArea->editorPathLinks[l];
+        PathStop* s1Ptr = elPtr->link1->startPtr;
+        PathStop* s2Ptr = elPtr->link1->endPtr;
+        if(
+            circleIntersectsLineSeg(
+                p, 8.0f / game.editorsView.cam.zoom,
+                s1Ptr->center, s2Ptr->center
+            )
+        ) {
+            return elPtr;
+        }
+    }
+    
+    return nullptr;
+}
+
+
+/**
  * @brief Returns which edges are crossing against other edges, if any.
  *
  * @return The edges.
@@ -2080,7 +2107,8 @@ bool AreaEditor::getMobLinkUnderPoint(
             MobGen* m2Ptr = mPtr->links[l];
             if(
                 circleIntersectsLineSeg(
-                    p, 8 / game.editorsView.cam.zoom, mPtr->center, m2Ptr->center
+                    p, 8 / game.editorsView.cam.zoom,
+                    mPtr->center, m2Ptr->center
                 )
             ) {
                 *data1 = std::make_pair(mPtr, m2Ptr);
@@ -2123,30 +2151,6 @@ MobGen* AreaEditor::getMobUnderPoint(const Point& p, size_t* outIdx) const {
     }
     
     if(outIdx) *outIdx = INVALID;
-    return nullptr;
-}
-
-
-/**
- * @brief Returns the editor path link currently under a point.
- *
- * @param p The point to check against.
- * @return The link.
- */
-EditorPathLink* AreaEditor::getEditorPathLinkUnderPoint(const Point& p) const {
-    forIdx(l, game.curArea->editorPathLinks) {
-        EditorPathLink* elPtr = &game.curArea->editorPathLinks[l];
-        PathStop* s1Ptr = elPtr->link1->startPtr;
-        PathStop* s2Ptr = elPtr->link1->endPtr;
-        if(
-            circleIntersectsLineSeg(
-                p, 8.0f / game.editorsView.cam.zoom, s1Ptr->center, s2Ptr->center
-            )
-        ) {
-            return elPtr;
-        }
-    }
-    
     return nullptr;
 }
 

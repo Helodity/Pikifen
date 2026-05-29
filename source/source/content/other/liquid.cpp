@@ -27,11 +27,11 @@ namespace LIQUID {
 //Liquids drain for this long.
 const float DRAIN_DURATION = 2.0f;
 
-//How long the just-frozen flash effect lasts for.
-const float FREEZING_EFFECT_DURATION = 0.3f;
-
 //How opaque the sheet of ice is [0 - 1].
 const float FREEZING_ALPHA = 0.8f;
+
+//How long the just-frozen flash effect lasts for.
+const float FREEZING_EFFECT_DURATION = 0.3f;
 
 //Multiply the liquid's surface area by this to get the freezing point.
 const float FREEZING_POINT_AREA_MULT = 0.0003f;

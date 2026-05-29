@@ -244,7 +244,6 @@ void calculateThrow(
     float maxH, float gravity,
     Point* outSpeedXY, float* outSpeedZ, float* outHAngle
 );
-Rect combineBBoxes(const Rect& bBox1, const Rect& bBox2);
 bool circleIntersectsLineSeg(
     const Point& circle, float cr,
     const Point& lineP1, const Point& lineP2,
@@ -260,6 +259,7 @@ bool collinearLineSegsIntersect(
     const Point& a, const Point& b, const Point& c, const Point& d,
     RectCorners* outIntersection = nullptr
 );
+Rect combineBBoxes(const Rect& bBox1, const Rect& bBox2);
 void coordinatesToAngle(
     const Point& coordinates, float* angle, float* magnitude
 );

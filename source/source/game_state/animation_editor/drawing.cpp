@@ -111,7 +111,10 @@ void AnimationEditor::drawCanvas() {
     bool drawLeaderSilhouette = leaderSilhouetteVisible;
     float gridAlpha = gridVisible ? 0.33f : 0.0f;
     
-    if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_PIKMIN_TOP) {
+    if(
+        state == EDITOR_STATE_SPRITE_TRANSFORM ||
+        state == EDITOR_STATE_PIKMIN_TOP
+    ) {
         drawHitboxes = false;
     }
     
@@ -526,7 +529,8 @@ void AnimationEditor::drawTimeline() {
     );
     
     //Draw every frame as a rectangle.
-    float frameRectanglesCurX = canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING;
+    float frameRectanglesCurX =
+        canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING;
     float frameRectangleTop =
         canvasCorners.br.y -
         ANIM_EDITOR::TIMELINE_HEIGHT + ANIM_EDITOR::TIMELINE_HEADER_HEIGHT;
@@ -565,7 +569,8 @@ void AnimationEditor::drawTimeline() {
     
     //Draw a line indicating where we are in the animation.
     float curTimeLineX =
-        canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING + animCurTime * scale;
+        canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING +
+        animCurTime * scale;
     al_draw_line(
         curTimeLineX, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
         curTimeLineX, canvasCorners.br.y,
@@ -578,7 +583,8 @@ void AnimationEditor::drawTimeline() {
     
     while(
         nextMarkerX <
-        canvasCorners.br.x - canvasCorners.tl.x - ANIM_EDITOR::TIMELINE_PADDING * 2
+        canvasCorners.br.x - canvasCorners.tl.x -
+        ANIM_EDITOR::TIMELINE_PADDING * 2
     ) {
         float xToUse =
             nextMarkerX + canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING;
@@ -598,8 +604,10 @@ void AnimationEditor::drawTimeline() {
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
             );
             al_draw_line(
-                xToUse + 0.5, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-                xToUse + 0.5, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
+                xToUse + 0.5,
+                canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+                xToUse + 0.5,
+                canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT,
                 MILESTONE_COLOR, 1.0f
             );

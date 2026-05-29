@@ -686,7 +686,9 @@ void AnimationDatabase::saveToDataNode(
                     hitboxesNode->addNew(hitboxPtr->bodyPartName);
                 GetterWriter hGW(hitboxNode);
                 
-                hGW.write("coords", p2s(hitboxPtr->center, &hitboxPtr->bottomZ));
+                hGW.write(
+                    "coords", p2s(hitboxPtr->center, &hitboxPtr->bottomZ)
+                );
                 hGW.write("height", hitboxPtr->height);
                 hGW.write("radius", hitboxPtr->radius);
                 hGW.write("type", hitboxPtr->type);

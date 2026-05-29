@@ -133,9 +133,13 @@ void AreaEditor::drawCanvas() {
         
         for(size_t s = 1; s < game.curArea->sectors.size(); s++) {
             style.lowestSectorZ =
-                std::min(style.lowestSectorZ, game.curArea->sectors[s]->floorZ);
+                std::min(
+                    style.lowestSectorZ, game.curArea->sectors[s]->floorZ
+                );
             style.highestSectorZ =
-                std::max(style.highestSectorZ, game.curArea->sectors[s]->floorZ);
+                std::max(
+                    style.highestSectorZ, game.curArea->sectors[s]->floorZ
+                );
         }
     }
     

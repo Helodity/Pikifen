@@ -754,32 +754,6 @@ void calculateThrow(
 
 
 /**
- * @brief Combines two bounding boxes (or rectangles in general),
- * such that the result encompasses both.
- *
- * @param bBox1 First bounding box.
- * @param bBox2 Second bounding box.
- * @return The resulting combined bounding box.
- */
-Rect combineBBoxes(const Rect& bBox1, const Rect& bBox2) {
-    RectCorners bBox1Corners = rectToRectCorners(bBox1);
-    RectCorners bBox2Corners = rectToRectCorners(bBox2);
-    RectCorners resultCorners(
-        Point(
-            std::min(bBox1Corners.tl.x, bBox2Corners.tl.x),
-            std::min(bBox1Corners.tl.y, bBox2Corners.tl.y)
-        ),
-        Point(
-            std::max(bBox1Corners.br.x, bBox2Corners.br.x),
-            std::max(bBox1Corners.br.y, bBox2Corners.br.y)
-        )
-    );
-    
-    return rectCornersToRect(resultCorners);
-}
-
-
-/**
  * @brief Returns whether a circle is touching a line segment or not.
  *
  * @param circle Coordinates of the circle.
@@ -970,6 +944,32 @@ bool collinearLineSegsIntersect(
     }
     
     return false;
+}
+
+
+/**
+ * @brief Combines two bounding boxes (or rectangles in general),
+ * such that the result encompasses both.
+ *
+ * @param bBox1 First bounding box.
+ * @param bBox2 Second bounding box.
+ * @return The resulting combined bounding box.
+ */
+Rect combineBBoxes(const Rect& bBox1, const Rect& bBox2) {
+    RectCorners bBox1Corners = rectToRectCorners(bBox1);
+    RectCorners bBox2Corners = rectToRectCorners(bBox2);
+    RectCorners resultCorners(
+        Point(
+            std::min(bBox1Corners.tl.x, bBox2Corners.tl.x),
+            std::min(bBox1Corners.tl.y, bBox2Corners.tl.y)
+        ),
+        Point(
+            std::max(bBox1Corners.br.x, bBox2Corners.br.x),
+            std::max(bBox1Corners.br.y, bBox2Corners.br.y)
+        )
+    );
+    
+    return rectCornersToRect(resultCorners);
 }
 
 
@@ -1269,9 +1269,9 @@ Point getPointPosRatioInRectangle(const Point& point, const Rect& rect) {
  * @brief Returns a point's sign on a line segment,
  * used for detecting if it's inside a triangle.
  *
- * @param p The point to check.
- * @param lp1 Starting point of the line segment.
- * @param lp2 Ending point of the line segment.
+ * @param point The point to check.
+ * @param lineSegPoint1 Starting point of the line segment.
+ * @param lineSegPoint2 Ending point of the line segment.
  * @return The sign.
  */
 float getPointSign(
@@ -1592,7 +1592,7 @@ Point interpolatePoint(
 /**
  * @brief Returns whether a point is inside a rectangle or not.
  *
- * @param p The point to check.
+ * @param point The point to check.
  * @param rect The rectangle.
  * @return Whether it is inside.
  */
@@ -1723,8 +1723,8 @@ bool lineSegIntersectsRectangle(
  * @brief Returns whether a line segment intersects with a rotated rectangle
  * or not.
  *
- * @param lp1 First point of the line segment.
- * @param lp2 Second point of the line segment.
+ * @param lineSegPoint1 First point of the line segment.
+ * @param lineSegPoint2 Second point of the line segment.
  * @param rect Base coordinates of the rectangle.
  * @param rectAngle Angle of the rectangle.
  * @return Whether they intersect.
@@ -2120,9 +2120,9 @@ bool rectanglesIntersect(
  * rectangle or not. This includes being completely inside the rectangle.
  *
  * @param rect1 Coordinates of the first rectangle.
- * @param rectAngle1 Angle the first rectangle is facing.
+ * @param rect1Angle Angle the first rectangle is facing.
  * @param rect2 Coordinates of the second rectangle.
- * @param rectAngle2 Angle the second rectangle is facing.
+ * @param rect2Angle Angle the second rectangle is facing.
  * @param outOverlapDist If not nullptr, the amount of overlap is
  * returned here.
  * @param outOverlapAngle If not nullptr, the direction that rectangle 1 would

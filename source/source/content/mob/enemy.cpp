@@ -125,7 +125,9 @@ void Enemy::finishDyingClassSpecifics() {
                 ENEMY::SOUL_MAX_PITCH, ENEMY::SOUL_MIN_PITCH
             );
             
-        Particle par(center, LARGE_FLOAT, soulSize, 2, PARTICLE_PRIORITY_MEDIUM);
+        Particle par(
+            center, LARGE_FLOAT, soulSize, 2, PARTICLE_PRIORITY_MEDIUM
+        );
         par.bitmap = game.sysContent.bmpEnemySoul;
         par.friction = 0.5f;
         par.linearSpeed = KeyframeInterpolator<Point>(Point(-50, -50));

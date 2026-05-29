@@ -685,52 +685,6 @@ bool MissionEndCond::usesMetric() const {
  *
  * @return The information.
  */
-MissionEndCondType::Info MissionEndCondTypePauseMenu::getInfo() const {
-    return
-    Info {
-        .name =
-        "Pause menu end",
-        .description =
-        "Triggers when the player ends the mission early from the pause menu.",
-    };
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom
- * when the condition triggers.
- *
- * @param cond Condition being processed.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere in the first place.
- */
-bool MissionEndCondTypePauseMenu::getZoomData(
-    MissionEndCond* cond, Point* outCamPos, float* outCamZoom
-) const {
-    return false;
-}
-
-
-/**
- * @brief Checks if the condition has been met.
- *
- * @param cond Condition being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionEndCondTypePauseMenu::isMet(MissionEndCond* cond) const {
-    //The pause menu "end mission" logic is responsible for this one.
-    return false;
-}
-
-
-/**
- * @brief Retrieves editor information about the mission end condition type.
- *
- * @return The information.
- */
 MissionEndCondType::Info MissionEndCondTypeMetricOrLess::getInfo() const {
     return
     Info {
@@ -766,12 +720,11 @@ bool MissionEndCondTypeMetricOrLess::getZoomData(
  * @brief Checks if the condition has been met.
  *
  * @param cond Condition being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
 bool MissionEndCondTypeMetricOrLess::isMet(MissionEndCond* cond) const {
-    MissionMetricType* metricTypePtr = game.missionMetricTypes[cond->metricType];
+    MissionMetricType* metricTypePtr =
+        game.missionMetricTypes[cond->metricType];
     
     int amount =
         metricTypePtr->getAmount(cond->idxParam);
@@ -822,12 +775,11 @@ bool MissionEndCondTypeMetricOrMore::getZoomData(
  * @brief Checks if the condition has been met.
  *
  * @param cond Condition being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
 bool MissionEndCondTypeMetricOrMore::isMet(MissionEndCond* cond) const {
-    MissionMetricType* metricTypePtr = game.missionMetricTypes[cond->metricType];
+    MissionMetricType* metricTypePtr =
+        game.missionMetricTypes[cond->metricType];
     
     int amount =
         metricTypePtr->getAmount(cond->idxParam);
@@ -835,6 +787,50 @@ bool MissionEndCondTypeMetricOrMore::isMet(MissionEndCond* cond) const {
         metricTypePtr->getTarget(cond->idxParam, cond->matchAmount);
         
     return amount >= target;
+}
+
+
+/**
+ * @brief Retrieves editor information about the mission end condition type.
+ *
+ * @return The information.
+ */
+MissionEndCondType::Info MissionEndCondTypePauseMenu::getInfo() const {
+    return
+    Info {
+        .name =
+        "Pause menu end",
+        .description =
+        "Triggers when the player ends the mission early from the pause menu.",
+    };
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
+ *
+ * @param cond Condition being processed.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionEndCondTypePauseMenu::getZoomData(
+    MissionEndCond* cond, Point* outCamPos, float* outCamZoom
+) const {
+    return false;
+}
+
+
+/**
+ * @brief Checks if the condition has been met.
+ *
+ * @param cond Condition being processed.
+ * @return Whether it is met.
+ */
+bool MissionEndCondTypePauseMenu::isMet(MissionEndCond* cond) const {
+    //The pause menu "end mission" logic is responsible for this one.
+    return false;
 }
 
 
@@ -879,8 +875,6 @@ bool MissionEndCondTypeTakeDamage::getZoomData(
  * @brief Checks if the condition has been met.
  *
  * @param cond Condition being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
 bool MissionEndCondTypeTakeDamage::isMet(MissionEndCond* cond) const {
@@ -1059,137 +1053,7 @@ bool MissionMetricTypeEnemyCollectionPts::getZoomData(
  * @param idxParam Index parameter, if applicable.
  * @return The amount.
  */
-int MissionMetricTypeObjectCollectionPts::getAmount(size_t idxParam) const {
-    return
-        game.states.gameplay->treasurePointsObtained +
-        game.states.gameplay->enemyCollectionPointsObtained;
-}
-
-
-/**
- * @brief Returns the automatic target amount, if possible.
- *
- * @param idxParam Index parameter, if applicable.
- * @return The amount, or 0 if none.
- */
-int MissionMetricTypeObjectCollectionPts::getAutoTarget(size_t idxParam) const {
-    size_t treasurePoints = 0;
-    size_t enemyPoints = 0;
-    game.curArea->getTotalTreasureInfo(nullptr, &treasurePoints);
-    game.curArea->getTotalEnemyInfo(nullptr, &enemyPoints);
-    return treasurePoints + enemyPoints;
-}
-
-
-/**
- * @brief Returns static information about the type.
- *
- * @return The information.
- */
-MissionMetricType::Info MissionMetricTypeObjectCollectionPts::getInfo() const {
-    return
-    Info {
-        .name = "Object collection points",
-        .hasAutoTarget = true
-    };
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom
- * into something relevant to the metric.
- *
- * @param idxParam Index parameter, if applicable.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere in the first place.
- */
-bool MissionMetricTypeObjectCollectionPts::getZoomData(
-    size_t idxParam, Point* outCamPos, float* outCamZoom
-) const {
-    if(game.states.gameplay->lastCollectedTreasurePos.x != LARGE_FLOAT) {
-        *outCamPos = game.states.gameplay->lastCollectedTreasurePos;
-        *outCamZoom = game.states.gameplay->zoomLevels[0];
-        return true;
-    }
-    if(game.states.gameplay->lastCollectedEnemyPos.x != LARGE_FLOAT) {
-        *outCamPos = game.states.gameplay->lastCollectedEnemyPos;
-        *outCamZoom = game.states.gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief Returns the current amount.
- *
- * @param idxParam Index parameter, if applicable.
- * @return The amount.
- */
-int MissionMetricTypeTreasureCollectionPts::getAmount(size_t idxParam) const {
-    return game.states.gameplay->treasurePointsObtained;
-}
-
-
-/**
- * @brief Returns the automatic target amount, if possible.
- *
- * @param idxParam Index parameter, if applicable.
- * @return The amount, or 0 if none.
- */
-int MissionMetricTypeTreasureCollectionPts::getAutoTarget(
-    size_t idxParam
-) const {
-    size_t treasurePoints = 0;
-    game.curArea->getTotalTreasureInfo(nullptr, &treasurePoints);
-    return treasurePoints;
-}
-
-
-/**
- * @brief Returns static information about the type.
- *
- * @return The information.
- */
-MissionMetricType::Info
-MissionMetricTypeTreasureCollectionPts::getInfo() const {
-    return
-    Info {
-        .name = "Treasure collection points",
-        .hasAutoTarget = true
-    };
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom
- * into something relevant to the metric.
- *
- * @param idxParam Index parameter, if applicable.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere in the first place.
- */
-bool MissionMetricTypeTreasureCollectionPts::getZoomData(
-    size_t idxParam, Point* outCamPos, float* outCamZoom
-) const {
-    if(game.states.gameplay->lastCollectedTreasurePos.x != LARGE_FLOAT) {
-        *outCamPos = game.states.gameplay->lastCollectedTreasurePos;
-        *outCamZoom = game.states.gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief Returns the current amount.
- *
- * @param idxParam Index parameter, if applicable.
- * @return The amount.
- */
-int MissionMetricTypeDefeatPts::getAmount(size_t idxParam) const {
+int MissionMetricTypeEnemyDefeatPts::getAmount(size_t idxParam) const {
     return game.states.gameplay->enemyDefeatPointsObtained;
 }
 
@@ -1200,7 +1064,7 @@ int MissionMetricTypeDefeatPts::getAmount(size_t idxParam) const {
  * @param idxParam Index parameter, if applicable.
  * @return The amount, or 0 if none.
  */
-int MissionMetricTypeDefeatPts::getAutoTarget(size_t idxParam) const {
+int MissionMetricTypeEnemyDefeatPts::getAutoTarget(size_t idxParam) const {
     size_t enemyPoints = 0;
     game.curArea->getTotalEnemyInfo(nullptr, &enemyPoints);
     return enemyPoints;
@@ -1212,7 +1076,7 @@ int MissionMetricTypeDefeatPts::getAutoTarget(size_t idxParam) const {
  *
  * @return The information.
  */
-MissionMetricType::Info MissionMetricTypeDefeatPts::getInfo() const {
+MissionMetricType::Info MissionMetricTypeEnemyDefeatPts::getInfo() const {
     return
     Info {
         .name = "Enemy defeat points",
@@ -1230,7 +1094,7 @@ MissionMetricType::Info MissionMetricTypeDefeatPts::getInfo() const {
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionMetricTypeDefeatPts::getZoomData(
+bool MissionMetricTypeEnemyDefeatPts::getZoomData(
     size_t idxParam, Point* outCamPos, float* outCamZoom
 ) const {
     if(game.states.gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
@@ -1593,6 +1457,74 @@ bool MissionMetricTypeMobGroupHealth::getZoomData(
  * @param idxParam Index parameter, if applicable.
  * @return The amount.
  */
+int MissionMetricTypeObjectCollectionPts::getAmount(size_t idxParam) const {
+    return
+        game.states.gameplay->treasurePointsObtained +
+        game.states.gameplay->enemyCollectionPointsObtained;
+}
+
+
+/**
+ * @brief Returns the automatic target amount, if possible.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount, or 0 if none.
+ */
+int MissionMetricTypeObjectCollectionPts::getAutoTarget(size_t idxParam) const {
+    size_t treasurePoints = 0;
+    size_t enemyPoints = 0;
+    game.curArea->getTotalTreasureInfo(nullptr, &treasurePoints);
+    game.curArea->getTotalEnemyInfo(nullptr, &enemyPoints);
+    return treasurePoints + enemyPoints;
+}
+
+
+/**
+ * @brief Returns static information about the type.
+ *
+ * @return The information.
+ */
+MissionMetricType::Info MissionMetricTypeObjectCollectionPts::getInfo() const {
+    return
+    Info {
+        .name = "Object collection points",
+        .hasAutoTarget = true
+    };
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * into something relevant to the metric.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionMetricTypeObjectCollectionPts::getZoomData(
+    size_t idxParam, Point* outCamPos, float* outCamZoom
+) const {
+    if(game.states.gameplay->lastCollectedTreasurePos.x != LARGE_FLOAT) {
+        *outCamPos = game.states.gameplay->lastCollectedTreasurePos;
+        *outCamZoom = game.states.gameplay->zoomLevels[0];
+        return true;
+    }
+    if(game.states.gameplay->lastCollectedEnemyPos.x != LARGE_FLOAT) {
+        *outCamPos = game.states.gameplay->lastCollectedEnemyPos;
+        *outCamZoom = game.states.gameplay->zoomLevels[0];
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Returns the current amount.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount.
+ */
 int MissionMetricTypePikminBorn::getAmount(size_t idxParam) const {
     return game.states.gameplay->pikminBorn;
 }
@@ -1874,6 +1806,68 @@ MissionMetricType::Info MissionMetricTypeSecsPassed::getInfo() const {
 bool MissionMetricTypeSecsPassed::getZoomData(
     size_t idxParam, Point* outCamPos, float* outCamZoom
 ) const {
+    return false;
+}
+
+
+/**
+ * @brief Returns the current amount.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount.
+ */
+int MissionMetricTypeTreasureCollectionPts::getAmount(size_t idxParam) const {
+    return game.states.gameplay->treasurePointsObtained;
+}
+
+
+/**
+ * @brief Returns the automatic target amount, if possible.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount, or 0 if none.
+ */
+int MissionMetricTypeTreasureCollectionPts::getAutoTarget(
+    size_t idxParam
+) const {
+    size_t treasurePoints = 0;
+    game.curArea->getTotalTreasureInfo(nullptr, &treasurePoints);
+    return treasurePoints;
+}
+
+
+/**
+ * @brief Returns static information about the type.
+ *
+ * @return The information.
+ */
+MissionMetricType::Info
+MissionMetricTypeTreasureCollectionPts::getInfo() const {
+    return
+    Info {
+        .name = "Treasure collection points",
+        .hasAutoTarget = true
+    };
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * into something relevant to the metric.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionMetricTypeTreasureCollectionPts::getZoomData(
+    size_t idxParam, Point* outCamPos, float* outCamZoom
+) const {
+    if(game.states.gameplay->lastCollectedTreasurePos.x != LARGE_FLOAT) {
+        *outCamPos = game.states.gameplay->lastCollectedTreasurePos;
+        *outCamZoom = game.states.gameplay->zoomLevels[0];
+        return true;
+    }
     return false;
 }
 

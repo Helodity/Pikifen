@@ -811,7 +811,8 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         for(size_t mobIdx : origSelection) {
             MobGen* selMg = game.curArea->mobGenerators[mobIdx];
             MobGen* newMg = new MobGen(*selMg);
-            newMg->center = Point(hotspot + (selMg->center) - newSelectionCenter);
+            newMg->center =
+                Point(hotspot + (selMg->center) - newSelectionCenter);
             game.curArea->mobGenerators.push_back(newMg);
             mobSelection.add(game.curArea->mobGenerators.size() - 1);
         }

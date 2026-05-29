@@ -36,7 +36,10 @@ Mob* Mob::getMobToWalkOn() const {
         if(mPtr == this) {
             continue;
         }
-        if(fabs(bottomZ - (mPtr->bottomZ + mPtr->height)) > GEOMETRY::STEP_HEIGHT) {
+        if(
+            fabs(bottomZ - (mPtr->bottomZ + mPtr->height)) >
+            GEOMETRY::STEP_HEIGHT
+        ) {
             continue;
         }
         if(bestCandidate && mPtr->bottomZ <= bestCandidate->bottomZ) {

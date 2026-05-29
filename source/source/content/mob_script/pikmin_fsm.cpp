@@ -2800,7 +2800,8 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
                     pikPtr->center
                 );
         } else {
-            impactAngle = getAngle(scriptVM->focusedMob->center, pikPtr->center);
+            impactAngle =
+                getAngle(scriptVM->focusedMob->center, pikPtr->center);
         }
         impactSpeed = 200.0f;
     }
@@ -4320,7 +4321,9 @@ void PikminFsm::startImpactLunge(ScriptVM* scriptVM, void* info1, void* info2) {
         scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    pikPtr->chase(&scriptVM->focusedMob->center, &scriptVM->focusedMob->bottomZ);
+    pikPtr->chase(
+        &scriptVM->focusedMob->center, &scriptVM->focusedMob->bottomZ
+    );
     pikPtr->setAnimation(PIKMIN_ANIM_ATTACKING);
 }
 

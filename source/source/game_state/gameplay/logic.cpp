@@ -169,7 +169,8 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
         
     if(player->leaderCursorSector) {
         player->leaderCursorHeightDiffLight =
-            (player->leaderCursorSector->floorZ - player->leaderPtr->bottomZ) * 0.001;
+            (player->leaderCursorSector->floorZ - player->leaderPtr->bottomZ) *
+            0.001f;
         player->leaderCursorHeightDiffLight =
             std::clamp(player->leaderCursorHeightDiffLight, -0.1f, 0.1f);
     }
@@ -741,7 +742,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 &coords, &dummyAngle, &dummyMagnitude
             );
             player.view.cam.targetCenter =
-                player.view.cam.center + (coords * 120.0f / player.view.cam.zoom);
+                player.view.cam.center +
+                (coords * 120.0f / player.view.cam.zoom);
         }
         
         player.view.cam.tick(deltaT);
@@ -905,7 +907,9 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 //grand scheme of things, and don't really matter
                 //for a fun stat.
                 game.statistics.distanceWalked +=
-                    Distance(oldLeaderPos[p], player->leaderPtr->center).toFloat();
+                    Distance(
+                        oldLeaderPos[p], player->leaderPtr->center
+                    ).toFloat();
             }
         }
         
@@ -1187,8 +1191,10 @@ void GameplayState::doMenuLogic() {
             );
         string coordsStr =
             resizeString(
-                resizeString(f2s(game.makerTools.inspectedMob->center.x), 8) + " " +
-                resizeString(f2s(game.makerTools.inspectedMob->center.y), 8) + " " +
+                resizeString(f2s(game.makerTools.inspectedMob->center.x), 8) +
+                " " +
+                resizeString(f2s(game.makerTools.inspectedMob->center.y), 8) +
+                " " +
                 resizeString(f2s(game.makerTools.inspectedMob->bottomZ), 8),
                 26
             );

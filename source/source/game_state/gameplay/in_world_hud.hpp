@@ -41,9 +41,9 @@ extern const float TRANSITION_OUT_DURATION;
 
 
 namespace IN_WORLD_STATUS_BUILDUP {
+extern const float ALPHA;
 extern const float CORNER_RADIUS;
 extern const float HEIGHT;
-extern const float ALPHA;
 extern const float OUTLINE_SIZE;
 extern const float PADDING;
 extern const float WIDTH;

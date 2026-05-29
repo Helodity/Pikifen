@@ -719,21 +719,6 @@ size_t Area::findSectorIdx(const Sector* sPtr) const {
 
 
 /**
- * @brief Scans the list of vertexes and retrieves the index of
- * the specified vertex.
- *
- * @param vPtr Vertex to find.
- * @return The index, or INVALID if not found.
- */
-size_t Area::findVertexIdx(const Vertex* vPtr) const {
-    forIdx(v, vertexes) {
-        if(vertexes[v] == vPtr) return v;
-    }
-    return INVALID;
-}
-
-
-/**
  * @brief Scans the list of tree shadows and retrieves the index of
  * the specified tree shadow.
  *
@@ -743,6 +728,21 @@ size_t Area::findVertexIdx(const Vertex* vPtr) const {
 size_t Area::findTreeShadowIdx(const TreeShadow* sPtr) const {
     forIdx(s, treeShadows) {
         if(treeShadows[s] == sPtr) return s;
+    }
+    return INVALID;
+}
+
+
+/**
+ * @brief Scans the list of vertexes and retrieves the index of
+ * the specified vertex.
+ *
+ * @param vPtr Vertex to find.
+ * @return The index, or INVALID if not found.
+ */
+size_t Area::findVertexIdx(const Vertex* vPtr) const {
+    forIdx(v, vertexes) {
+        if(vertexes[v] == vPtr) return v;
     }
     return INVALID;
 }
@@ -1034,7 +1034,10 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
                     if(ePtr->sectors[0] && ePtr->sectors[1]) {
                         //If there's no change in height, why bother?
                         if(
-                            (ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ) &&
+                            (
+                                ePtr->sectors[0]->floorZ ==
+                                ePtr->sectors[1]->floorZ
+                            ) &&
                             ePtr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
                             ePtr->sectors[1]->type != SECTOR_TYPE_BLOCKING
                         ) {
