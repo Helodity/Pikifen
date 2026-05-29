@@ -21,6 +21,22 @@
 
 
 /**
+ * @brief Returns "a term" or "an term", depending on the term.
+ * 
+ * @param term The term.
+ * @param justArticle If true, it returns just the article ("a" or "an").
+ * @return The string.
+ */
+string aAn(const string& term, bool justArticle) {
+    if(!term.empty() && isVowel(term[0])) {
+        return justArticle ? "an" : ("an " + term);
+    } else {
+        return justArticle ? "a" : ("a " + term);
+    }
+}
+
+
+/**
  * @brief Returns a string representing an amount, and the unit, though the unit
  * is in either plural form or singular form, depending on the amount.
  *
@@ -183,6 +199,22 @@ bool isNumber(const string& s) {
         }
     }
     return true;
+}
+
+
+/**
+ * @brief Returns whether the given character is a vowel.
+ * 
+ * @param c The character.
+ * @return Whether it is a vowel.
+ */
+bool isVowel(char c) {
+    return
+        c == 'a' || c == 'A' ||
+        c == 'e' || c == 'E' ||
+        c == 'i' || c == 'I' ||
+        c == 'o' || c == 'O' ||
+        c == 'u' || c == 'U';
 }
 
 

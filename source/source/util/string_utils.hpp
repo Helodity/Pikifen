@@ -39,6 +39,7 @@ enum TIME_TO_STR_FLAG {
 //Converts an integer (or long) to a string.
 #define i2s(n) std::to_string((long long) (n))
 
+string aAn(const string& term, bool justTerm = false);
 string amountStr(
     int amount, const string& singularText,
     const string& pluralText = "", bool justWord = false
@@ -53,6 +54,7 @@ size_t getSplitCount(
     bool incDelimiters = false
 );
 bool isNumber(const string& s);
+bool isVowel(char c);
 string padString(const string& s, size_t size, char padding);
 string removeExtension(const string& s);
 string replaceAll(

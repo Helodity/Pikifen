@@ -37,6 +37,7 @@ void EasyFsmCreator::changeState(const string& newState) {
  */
 void EasyFsmCreator::commitEvent() {
     if(!curEvent) return;
+    curEvent->actions.compile(nullptr);
     curEvent = nullptr;
 }
 

@@ -4729,7 +4729,7 @@ void PikminFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
 
 
 /**
- * @brief When a Pikmin touches a "eat" hitbox.
+ * @brief When a Pikmin touches an "eat" hitbox.
  *
  * @param scriptVM The script VM responsible.
  * @param info1 Unused.

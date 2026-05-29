@@ -268,16 +268,145 @@ void ScriptActionDef::unload() {
 
 
 /**
- * @brief Confirms if the condition-related, loop-related, and jump-related
- * actions in a given vector of actions are all okay, and that there are no
+ * @brief Compiles some caches and confirms if the condition-related,
+ * loop-related, and jump-related actions are all okay, and that there are no
  * mismatches, like for instance, an "else" without an "if".
- * Also checks if there are actions past a "set_state" action.
+ * Also checks if there are actions past a "set_state" action, and more.
  * If something goes wrong, it throws the errors to the error log.
  *
- * @param dn Data node from where these actions came.
+ * @param dn Data node from where these actions came. Used for reporting errors.
  * @return Whether everything is okay.
  */
-bool ScriptActionListDef::assertActions(DataNode* dn) {
+bool ScriptActionListDef::compile(DataNode* dn) {
+    vector<SCRIPT_CONSTRUCT_TYPE> constructStack;
+    vector<bool> seenElseStack;
+
+    depthsCache.clear();
+
+    //Check if there are no depth mismatches.
+    //This also builds the depths cache.
+    forIdx(a, list) {
+        bool ok = true;
+        int depthToSave = constructStack.size();
+
+        const auto assertStack = [&constructStack, &ok, &dn, &a, this] (
+            SCRIPT_CONSTRUCT_TYPE curExpectedConstruct
+        ) {
+            if(
+                constructStack.empty() ||
+                constructStack.back() != curExpectedConstruct
+            ) {
+                string foundActionStr =
+                    list[a]->actionType->name;
+                string expectedBlockStr =
+                    enumGetName(
+                        constructTypeActionNames, curExpectedConstruct
+                    );
+                game.errors.report(
+                    "Found " + aAn(foundActionStr, true) + " \"" +
+                    foundActionStr + "\" action outside of " +
+                    aAn(expectedBlockStr, true) + " \"" +
+                    expectedBlockStr + "\" block!",
+                    dn
+                );
+                ok = false;
+            }
+        };
+        
+        switch(list[a]->actionType->type) {
+        case SCRIPT_ACTION_DO_WHILE: {
+            constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_DO_WHILE);
+            break;
+
+        } case SCRIPT_ACTION_FOR: {
+            constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_FOR);
+            break;
+
+        } case SCRIPT_ACTION_FOR_EACH: {
+            constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_FOR_EACH);
+            break;
+
+        } case SCRIPT_ACTION_IF: {
+            constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_IF);
+            seenElseStack.push_back(false);
+            break;
+
+        } case SCRIPT_ACTION_WHILE_DO: {
+            constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_WHILE_DO);
+            break;
+            
+        } case SCRIPT_ACTION_ELSE: {
+            assertStack(SCRIPT_CONSTRUCT_TYPE_IF);
+            seenElseStack.back() = true;
+            depthToSave = constructStack.size() - 1;
+            break;
+        }
+        case SCRIPT_ACTION_ELSE_IF: {
+            assertStack(SCRIPT_CONSTRUCT_TYPE_IF);
+            if(seenElseStack.back()) {
+                game.errors.report(
+                    "Found an \"else_if\" action after an \"else\" action!",
+                    dn
+                );
+                return false;
+            }
+            depthToSave = constructStack.size() - 1;
+            break;
+            
+        } case SCRIPT_ACTION_END_DO_WHILE: {
+            assertStack(SCRIPT_CONSTRUCT_TYPE_DO_WHILE);
+            constructStack.pop_back();
+            depthToSave = constructStack.size() - 1;
+            break;
+
+        } case SCRIPT_ACTION_END_FOR: {
+            assertStack(SCRIPT_CONSTRUCT_TYPE_FOR);
+            constructStack.pop_back();
+            depthToSave = constructStack.size() - 1;
+            break;
+
+        } case SCRIPT_ACTION_END_FOR_EACH: {
+            assertStack(SCRIPT_CONSTRUCT_TYPE_FOR_EACH);
+            constructStack.pop_back();
+            depthToSave = constructStack.size() - 1;
+            break;
+
+        } case SCRIPT_ACTION_END_IF: {
+            assertStack(SCRIPT_CONSTRUCT_TYPE_IF);
+            constructStack.pop_back();
+            depthToSave = constructStack.size() - 1;
+            break;
+
+        } case SCRIPT_ACTION_END_WHILE_DO: {
+            assertStack(SCRIPT_CONSTRUCT_TYPE_WHILE_DO);
+            constructStack.pop_back();
+            depthToSave = constructStack.size() - 1;
+            break;
+            
+        } default: {
+            break;
+            
+        }
+        }
+
+        if(!ok) return false;
+        depthsCache.push_back(depthToSave);
+    }
+
+    //Check if there are no blocks that started but never ended.
+    while(!constructStack.empty()) {
+        string foundBlockStr =
+            enumGetName(
+                constructTypeActionNames, constructStack.back()
+            );
+        game.errors.report(
+            "Found " + aAn(foundBlockStr, true) + " \"" +
+            foundBlockStr + "\" block that has no end!",
+            dn
+        );
+        return false;
+    }
+
     //Check if the "if"-related actions are okay.
     int depth = 0;
     vector<bool> seenElseAction;
@@ -332,113 +461,6 @@ bool ScriptActionListDef::assertActions(DataNode* dn) {
     if(depth > 0) {
         game.errors.report(
             "Some \"if\" actions don't have a matching \"end_if\" action!",
-            dn
-        );
-        return false;
-    }
-    
-    //Check if the "do-while"-related actions are okay.
-    depth = 0;
-    forIdx(a, list) {
-        switch(list[a]->actionType->type) {
-        case SCRIPT_ACTION_DO_WHILE: {
-            depth++;
-            break;
-        } case SCRIPT_ACTION_END_DO_WHILE: {
-            if(depth == 0) {
-                game.errors.report(
-                    "Found an \"end_do_while\" action without a matching "
-                    "\"do_while\" action!", dn
-                );
-                return false;
-            }
-            depth--;
-            break;
-        } default: {
-            break;
-        }
-        }
-    }
-    
-    //Check if the "while-do"-related actions are okay.
-    depth = 0;
-    forIdx(a, list) {
-        switch(list[a]->actionType->type) {
-        case SCRIPT_ACTION_WHILE_DO: {
-            depth++;
-            break;
-        } case SCRIPT_ACTION_END_WHILE_DO: {
-            if(depth == 0) {
-                game.errors.report(
-                    "Found an \"end_while_do\" action without a matching "
-                    "\"while_do\" action!", dn
-                );
-                return false;
-            }
-            depth--;
-            break;
-        } default: {
-            break;
-        }
-        }
-    }
-    
-    //Check if the "for"-related actions are okay.
-    depth = 0;
-    forIdx(a, list) {
-        switch(list[a]->actionType->type) {
-        case SCRIPT_ACTION_FOR: {
-            depth++;
-            break;
-        } case SCRIPT_ACTION_END_FOR: {
-            if(depth == 0) {
-                game.errors.report(
-                    "Found an \"end_for\" action without a matching "
-                    "\"for\" action!", dn
-                );
-                return false;
-            }
-            depth--;
-            break;
-        } default: {
-            break;
-        }
-        }
-    }
-    if(depth > 0) {
-        game.errors.report(
-            "Some \"for\" actions don't have a matching \"end_for\" action!",
-            dn
-        );
-        return false;
-    }
-    
-    //Check if the "for-each"-related actions are okay.
-    depth = 0;
-    forIdx(a, list) {
-        switch(list[a]->actionType->type) {
-        case SCRIPT_ACTION_FOR_EACH: {
-            depth++;
-            break;
-        } case SCRIPT_ACTION_END_FOR_EACH: {
-            if(depth == 0) {
-                game.errors.report(
-                    "Found an \"end_for_each\" action without a matching "
-                    "\"for_each\" action!", dn
-                );
-                return false;
-            }
-            depth--;
-            break;
-        } default: {
-            break;
-        }
-        }
-    }
-    if(depth > 0) {
-        game.errors.report(
-            "Some \"for_each\" actions don't have a matching "
-            "\"end_for_each\" action!",
             dn
         );
         return false;
@@ -635,8 +657,7 @@ bool ScriptActionListDef::loadFromDataNode(
         }
     }
     
-    bool assertOk = assertActions(node);
-    saveDepthsCache();
+    bool assertOk = compile(node);
     
     return assertOk;
 }
@@ -753,7 +774,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_DO_WHILE &&
-                    depths[a2] == depths[actionIdx]
+                    depthsCache[a2] == depthsCache[actionIdx]
                 ) {
                     return a2 + 1;
                 }
@@ -784,7 +805,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 case SCRIPT_ACTION_ELSE: {
                     //If this is our condition's "else", we want
                     //to run the code after it.
-                    if(depths[a2] == depths[actionIdx]) {
+                    if(depthsCache[a2] == depthsCache[actionIdx]) {
                         return a2 + 1;
                     }
                     break;
@@ -792,7 +813,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 } case SCRIPT_ACTION_ELSE_IF: {
                     //If this is our condition's next "else_if", we want
                     //to check the condition and decide again based on that.
-                    if(depths[a2] == depths[actionIdx]) {
+                    if(depthsCache[a2] == depthsCache[actionIdx]) {
                         *mustProcessElseIfConditionPtr = true;
                         return a2;
                     }
@@ -801,7 +822,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 } case SCRIPT_ACTION_END_IF: {
                     //If this is our condition's "end_if", we're done with
                     //the condition. Execution continues like normal after.
-                    if(depths[a2] == depths[actionIdx]) {
+                    if(depthsCache[a2] == depthsCache[actionIdx]) {
                         return a2 + 1;
                     }
                     break;
@@ -829,7 +850,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_END_FOR &&
-                    depths[a2] == depths[actionIdx]
+                    depthsCache[a2] == depthsCache[actionIdx]
                 ) {
                     return a2 + 1;
                 }
@@ -851,7 +872,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_END_FOR_EACH &&
-                    depths[a2] == depths[actionIdx]
+                    depthsCache[a2] == depthsCache[actionIdx]
                 ) {
                     return a2 + 1;
                 }
@@ -873,7 +894,7 @@ size_t ScriptActionListDef::processActionCheckCondition(
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(
                     a2Type == SCRIPT_ACTION_END_WHILE_DO &&
-                    depths[a2] == depths[actionIdx]
+                    depthsCache[a2] == depthsCache[actionIdx]
                 ) {
                     return a2 + 1;
                 }
@@ -912,7 +933,7 @@ size_t ScriptActionListDef::processActionJumpToConstructEnd(
         
         if(
             a2Type == SCRIPT_ACTION_END_IF &&
-            depths[a2] == depths[actionIdx]
+            depthsCache[a2] == depthsCache[actionIdx]
         ) {
             //If this is our condition's "end_if", we're done with
             //the condition. Execution continues like normal after.
@@ -947,7 +968,7 @@ size_t ScriptActionListDef::processActionJumpToLabel(
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(
                 a2Type == SCRIPT_ACTION_FOR &&
-                depths[a2] == depths[actionIdx]
+                depthsCache[a2] == depthsCache[actionIdx]
             ) {
                 game.scriptExecAuxData.forLoopEntryNeedsIncrement = true;
                 return a2;
@@ -960,7 +981,7 @@ size_t ScriptActionListDef::processActionJumpToLabel(
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(
                 a2Type == SCRIPT_ACTION_FOR_EACH &&
-                depths[a2] == depths[actionIdx]
+                depthsCache[a2] == depthsCache[actionIdx]
             ) {
                 game.scriptExecAuxData.forLoopEntryNeedsIncrement = true;
                 return a2;
@@ -973,7 +994,7 @@ size_t ScriptActionListDef::processActionJumpToLabel(
             SCRIPT_ACTION a2Type = list[a2]->actionType->type;
             if(
                 a2Type == SCRIPT_ACTION_WHILE_DO &&
-                depths[a2] == depths[actionIdx]
+                depthsCache[a2] == depthsCache[actionIdx]
             ) {
                 return a2;
             }
@@ -1012,8 +1033,6 @@ size_t ScriptActionListDef::processActionJumpToLabel(
 void ScriptActionListDef::run(
     ScriptVM* scriptVM, void* customData1, void* customData2
 ) {
-    if(depths.empty()) saveDepthsCache();
-    
     size_t curActionIdx = 0;
     bool mustProcessElseIfCondition = false;
     
@@ -1048,51 +1067,6 @@ void ScriptActionListDef::run(
                 curActionIdx, processType, &mustProcessElseIfCondition,
                 scriptVM, customData1, customData2
             );
-    }
-}
-
-
-/**
- * @brief Saves the cache of depths.
- */
-void ScriptActionListDef::saveDepthsCache() {
-    depths.clear();
-    
-    size_t depth = 0;
-    forIdx(a, list) {
-        size_t depthToSave = depth;
-        
-        switch(list[a]->actionType->type) {
-        case SCRIPT_ACTION_DO_WHILE:
-        case SCRIPT_ACTION_FOR:
-        case SCRIPT_ACTION_FOR_EACH:
-        case SCRIPT_ACTION_IF:
-        case SCRIPT_ACTION_WHILE_DO: {
-            depthToSave = depth;
-            depth++;
-            break;
-            
-        } case SCRIPT_ACTION_ELSE:
-        case SCRIPT_ACTION_ELSE_IF: {
-            depthToSave = depth - 1;
-            break;
-            
-        } case SCRIPT_ACTION_END_DO_WHILE:
-        case SCRIPT_ACTION_END_FOR:
-        case SCRIPT_ACTION_END_FOR_EACH:
-        case SCRIPT_ACTION_END_IF:
-        case SCRIPT_ACTION_END_WHILE_DO: {
-            depthToSave = depth - 1;
-            depth--;
-            break;
-            
-        } default: {
-            break;
-            
-        }
-        }
-        
-        depths.push_back(depthToSave);
     }
 }
 

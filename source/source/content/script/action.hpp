@@ -126,12 +126,11 @@ public:
     bool loadFromDataNode(
         DataNode* node, ScriptDef* scriptDef, Bitmask8* outFlags = nullptr
     );
-    bool assertActions(DataNode* dn);
+    bool compile(DataNode* dn);
     void run(
         ScriptVM* scriptVM,
         void* customData1 = nullptr, void* customData2 = nullptr
     );
-    void saveDepthsCache();
     void unload();
     
     
@@ -140,7 +139,7 @@ private:
     //--- Private members ---
     
     //Depth of each action. Cache for convenience.
-    vector<size_t> depths;
+    vector<size_t> depthsCache;
     
     
     //--- Private function declarations ---
