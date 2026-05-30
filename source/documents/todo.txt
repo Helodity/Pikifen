@@ -5,6 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    All animations still use deprecated latch and knockback type properties
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -31,11 +32,21 @@ Next tasks (roughly sorted most important first)
         Ice vent emitting vapor
         Leader swap sound, so swapping to the rookie isn't silent
         Swarming jingle
-    Lumiknolls
-        Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
+    Glow Pellets
+        Internally pellets, but only able to be received by Lumiknolls
         Piles should allow pellets...right?
     Freezecake
-    White and Purple Onions and pellets
+    Create a night expedition area?
+    Create an area that's good for people to pick up and play
+        It should be easy to play in, and showcase a lot of action right off the bat
+            You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
+            Respawning Pellet Posies
+            Onions immediately generate a new seed when you run out of Pikmin
+            No time limit
+            Easy elemental obstacles
+        It should be small and compact, so the player can, with little effort, see many Pikmin carrying many things around
+            Piles help a lot with this
+    White and Purple Onions
     Other mission tweaks
         If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
@@ -479,6 +490,7 @@ Small tasks (for when I'm feeling lazy)
         Try to refactor the mission strategy patterns to also work for the area editor logic
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
         Remove empty lines between a function's signature and its body
+        Prettier switch cases -- contiguous cases should still have the opening and closing braces for consistency, and the break;s of each case should be outside their braces
         Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
     
@@ -757,6 +769,8 @@ Misc things (so I don't forget)
         A tall grass mob
         A bunch more flowers and vegetation
         A turnstile mob
+        Plants
+            Neo took a bunch of pictures in https://discord.com/channels/459094367425134593/1509291234349289512/1510067525793353768
         Sounds
             Menus
                 https://fxbsky.app/profile/wafflesmogumogu.bsky.social/post/3l7atb5e2rd2h
@@ -796,6 +810,8 @@ Misc things (so I don't forget)
         An end event for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
+    Mission unlocking?
+        And mission sequences, where you have to beat a mission before playing the next in the sequence?
     Code cleanup
         Switch angles to vectors?
         Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class

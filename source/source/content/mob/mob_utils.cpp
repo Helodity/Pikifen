@@ -1310,15 +1310,17 @@ Mob* createMob(
         mPtr->readScriptVars(vars);
     }
     
-    //Start the script VM and FSM.
-    if(firstStateOverride != INVALID) {
-        mPtr->scriptVM.fsm.firstStateOverride = firstStateOverride;
-    }
-    
+    //Start the script VM.
     mPtr->scriptVM.init(&type->scriptDef, mPtr);
     
     //Fill the script VM's script vars.
     mPtr->scriptVM.vars.fromString(varsStr);
+    
+    //Start the FSM.
+    if(firstStateOverride != INVALID) {
+        mPtr->scriptVM.fsm.firstStateOverride = firstStateOverride;
+    }
+    mPtr->scriptVM.initFsm();
     
     //Spawn its children.
     forIdx(c, type->children) {

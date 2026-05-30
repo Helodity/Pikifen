@@ -280,17 +280,18 @@ void ScriptActionDef::unload() {
 bool ScriptActionListDef::compile(DataNode* dn) {
     vector<SCRIPT_CONSTRUCT_TYPE> constructStack;
     vector<bool> seenElseStack;
-
+    
     depthsCache.clear();
-
+    
     //Check if there are no depth mismatches.
     //This also builds the depths cache.
     forIdx(a, list) {
         bool ok = true;
         int depthToSave = constructStack.size();
-
-        const auto assertStack = [&constructStack, &ok, &dn, &a, this] (
-            SCRIPT_CONSTRUCT_TYPE curExpectedConstruct
+        
+        const auto assertStack =
+            [&constructStack, &ok, &dn, &a, this] (
+                SCRIPT_CONSTRUCT_TYPE curExpectedConstruct
         ) {
             if(
                 constructStack.empty() ||
@@ -317,20 +318,20 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         case SCRIPT_ACTION_DO_WHILE: {
             constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_DO_WHILE);
             break;
-
+            
         } case SCRIPT_ACTION_FOR: {
             constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_FOR);
             break;
-
+            
         } case SCRIPT_ACTION_FOR_EACH: {
             constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_FOR_EACH);
             break;
-
+            
         } case SCRIPT_ACTION_IF: {
             constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_IF);
             seenElseStack.push_back(false);
             break;
-
+            
         } case SCRIPT_ACTION_WHILE_DO: {
             constructStack.push_back(SCRIPT_CONSTRUCT_TYPE_WHILE_DO);
             break;
@@ -356,31 +357,31 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         } case SCRIPT_ACTION_END_DO_WHILE: {
             assertStack(SCRIPT_CONSTRUCT_TYPE_DO_WHILE);
             constructStack.pop_back();
-            depthToSave = constructStack.size() - 1;
+            depthToSave = constructStack.size();
             break;
-
+            
         } case SCRIPT_ACTION_END_FOR: {
             assertStack(SCRIPT_CONSTRUCT_TYPE_FOR);
             constructStack.pop_back();
-            depthToSave = constructStack.size() - 1;
+            depthToSave = constructStack.size();
             break;
-
+            
         } case SCRIPT_ACTION_END_FOR_EACH: {
             assertStack(SCRIPT_CONSTRUCT_TYPE_FOR_EACH);
             constructStack.pop_back();
-            depthToSave = constructStack.size() - 1;
+            depthToSave = constructStack.size();
             break;
-
+            
         } case SCRIPT_ACTION_END_IF: {
             assertStack(SCRIPT_CONSTRUCT_TYPE_IF);
             constructStack.pop_back();
-            depthToSave = constructStack.size() - 1;
+            depthToSave = constructStack.size();
             break;
-
+            
         } case SCRIPT_ACTION_END_WHILE_DO: {
             assertStack(SCRIPT_CONSTRUCT_TYPE_WHILE_DO);
             constructStack.pop_back();
-            depthToSave = constructStack.size() - 1;
+            depthToSave = constructStack.size();
             break;
             
         } default: {
@@ -388,11 +389,11 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             
         }
         }
-
+        
         if(!ok) return false;
         depthsCache.push_back(depthToSave);
     }
-
+    
     //Check if there are no blocks that started but never ended.
     while(!constructStack.empty()) {
         string foundBlockStr =
@@ -406,7 +407,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         );
         return false;
     }
-
+    
     //Check if the "if"-related actions are okay.
     int depth = 0;
     vector<bool> seenElseAction;
@@ -657,9 +658,7 @@ bool ScriptActionListDef::loadFromDataNode(
         }
     }
     
-    bool assertOk = compile(node);
-    
-    return assertOk;
+    return true;
 }
 
 
@@ -789,7 +788,8 @@ size_t ScriptActionListDef::processActionCheckCondition(
         
         break;
         
-    } case SCRIPT_ACTION_IF: {
+    } case SCRIPT_ACTION_ELSE_IF:
+    case SCRIPT_ACTION_IF: {
         if(conditionValue) {
             //Returned true. Execution continues as normal to the next
             //sequential action, which is the start of the "true" branch.

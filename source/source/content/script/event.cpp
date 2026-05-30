@@ -74,7 +74,7 @@ bool FsmEventDef::loadFromDataNode(
         );
         return false;
     }
-
+    
     //Check if this event is allowed in the current context.
     if(!scriptDef->checkContextFlags(evTypePtr->contexts)) {
         game.errors.report(
@@ -111,7 +111,7 @@ void FsmEventDef::run(
     if(resetNConsecutiveActions) {
         game.scriptExecAuxData.reset();
     }
-
+    
     if(scriptVM->mob) {
         if(scriptVM->mob->parent && scriptVM->mob->parent->relayEvents) {
             Mob* parentMob = scriptVM->mob->parent->m;

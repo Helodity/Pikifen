@@ -1513,6 +1513,7 @@ void GameplayState::load() {
             scriptDef.loadFromDataNode(&scriptFile);
             scriptVM.clear();
             scriptVM.init(&scriptDef);
+            scriptVM.initFsm();
         }
     }
     

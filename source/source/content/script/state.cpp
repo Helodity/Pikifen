@@ -104,7 +104,6 @@ bool FsmStateDef::loadFromDataNode(
         success &= newEvent->loadFromDataNode(eventNode, scriptDef, &flags);
         newEvents.push_back(newEvent);
         newEventFlags.push_back(flags);
-        newEvent->actions.compile(eventNode);
     }
     
     //Load global events.
@@ -119,7 +118,6 @@ bool FsmStateDef::loadFromDataNode(
         success &= newEvent->loadFromDataNode(eventNode, scriptDef, &flags);
         globalEvents.push_back(newEvent);
         globalEventFlags.push_back(flags);
-        newEvent->actions.compile(eventNode);
     }
     
     //Merge global event actions with the dedicated event actions.
@@ -157,6 +155,11 @@ bool FsmStateDef::loadFromDataNode(
     //Let the mob type do extra processing, if necessary.
     if(scriptDef->mobType) {
         scriptDef->mobType->handleLoadedFsmState(this);
+    }
+    
+    //Compile them.
+    for(size_t e = 0; e < N_FSM_EVENTS; e++) {
+        if(events[e]) events[e]->actions.compile(node);
     }
     
     return success;

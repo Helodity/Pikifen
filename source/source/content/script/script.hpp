@@ -107,6 +107,7 @@ public:
     
     ScriptVM();
     void init(ScriptDef* scriptDef, Mob* mobPtr = nullptr);
+    void initFsm();
     void tick(float deltaT);
     void clear();
     void runReadyActions();

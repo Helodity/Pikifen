@@ -80,19 +80,15 @@ bool ScriptDef::loadFromDataNode(DataNode* node) {
     bool success = true;
     
     //Init actions.
-    success &=
-        initActions.loadFromDataNode(
-            node->getChildByName("init"),
-            this
-        );
-        
+    DataNode* initNode = node->getChildByName("init");
+    success &= initActions.loadFromDataNode(initNode, this);
+    success &= initActions.compile(initNode);
+    
     //Ready actions.
-    success &=
-        readyActions.loadFromDataNode(
-            node->getChildByName("ready"),
-            this
-        );
-        
+    DataNode* readyNode = node->getChildByName("ready");
+    success &= readyActions.loadFromDataNode(readyNode, this);
+    success &= readyActions.compile(readyNode);
+    
     //The FSM.
     success &=
         fsm.loadFromDataNode(
@@ -221,6 +217,13 @@ void ScriptVM::init(ScriptDef* scriptDef, Mob* mobPtr) {
     
     game.scriptExecAuxData.reset();
     scriptDef->initActions.run(this);
+}
+
+
+/**
+ * @brief Initializes the FSM.
+ */
+void ScriptVM::initFsm() {
     fsm.init();
 }
 

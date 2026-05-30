@@ -606,10 +606,10 @@ reaches {
       <li>When you want to run something at the start of the object's life, it's important to pick where to place the actions. The order of operations is as follows, with the three possible choices in bold:
         <ol>
           <li>The object is created with some basic info.</li>
-          <li>The object's script vars are read for internal purposes (team, health, Pikmin maturity, bridge chunks, etc.).</li>
-          <li>The <b><code>init</code> block</b> of the script file is run. This is a good place for script var default values.</li>
-          <li>The first state is set and its <b><code>on_enter</code> event</b> is triggered.</li>
+          <li>The object's script vars are read for internal purposes (team, health, Pikmin maturity, bridge chunks, etc.). They are not saved in the object.</li>
+          <li>The <b><code>init</code> block</b> of the script file is run. This is a good place for giving script var their initial default values.</li>
           <li>The object's script vars are read for scripting purposes and saved in the object.</li>
+          <li>The first state is set and its <b><code>on_enter</code> event</b> is triggered.</li>
           <li>The object's children are spawned.</li>
           <li>The object's links are settled.</li>
           <li>The object is stored inside another, or gets other objects stored inside.</li>
