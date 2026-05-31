@@ -482,11 +482,6 @@ void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
         );
     }
     
-    if(game.curArea->type == AREA_TYPE_MISSION) {
-        forIdx(g, game.states.gameplay->missionMobGroups) {
-            game.states.gameplay->missionMobGroups[g].remove(scriptVM->mob);
-        }
-    }
     scriptVM->mob->toDelete = true;
 }
 

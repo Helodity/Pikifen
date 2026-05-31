@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Sometimes the mission object indicators in the radar stay at 0,0 (thanks Helodity)
     All animations still use deprecated latch and knockback type properties
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
