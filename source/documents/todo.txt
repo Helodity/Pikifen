@@ -5,6 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Sometimes the mission object indicators in the radar stay at 0,0 (thanks Helodity)
     All animations still use deprecated latch and knockback type properties
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
@@ -46,11 +47,9 @@ Next tasks (roughly sorted most important first)
             Easy elemental obstacles
         It should be small and compact, so the player can, with little effort, see many Pikmin carrying many things around
             Piles help a lot with this
-    White and Purple Onions
     Other mission tweaks
         If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
-    The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     
     --- 2.0.0 ---
     Update Dear ImGui to 1.92.8
@@ -71,6 +70,7 @@ Next tasks (roughly sorted most important first)
     New maker tools
         Fill the player's inventory with 99 of all possible inventory items
         Delete the mob under the cursor
+    The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Multiplayer co-op
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Menus
@@ -474,6 +474,8 @@ Next tasks (roughly sorted most important first)
             Revamp the scripting tutorial
                 Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
                 Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
+            Data file comments need to be saved
+                There are only two types: comment before next node, and comment at the end of current parent. The latter also encompasses empty nodes that have nothing except a comment
         Loose content editor
             Basically just a frontend for editing hazards, liquids, misc. configs, mob types, spike damage types, sprays, and statuses
     
@@ -740,8 +742,6 @@ Misc things (so I don't forget)
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     Areas should have an option that controls whether Onions should pop new seeds when an extinction happen or if they should let the extinction happen. But for this to make sense, they have to list which Pikmin type are crucial and which are just bonuses, right?
     The loading screen's elements could be controlled with a GUI definition
-    If you change a ship to accept an Onion-only Pikmin type, or vice-versa, the icons on the Onion/ship menu for storing inside will stop making sense
-        "Ships could have a single sprite, since they dont change depending on the color, and onions could reuse the radar's method for coloring onions" --Helodity
     The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing
         For leaders, rename active and inactive to controlled and not controlled
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine

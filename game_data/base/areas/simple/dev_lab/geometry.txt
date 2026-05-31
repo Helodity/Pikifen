@@ -143,8 +143,8 @@ vertexes{
 	v=-104.0000 -256.0000
 	v=-192.0000 -448.0000
 	v=-192.0000 -768.0000
-	v=-1888.0000 -768.0000
-	v=-1888.0000 -448.0000
+	v=-2240.0000 -768.0000
+	v=-2240.0000 -448.0000
 	v=-64.0000 -512.0000
 	v=-64.0000 -576.0000
 	v=-96.0000 -576.0000
@@ -12951,7 +12951,7 @@ mobs{
 	onion{
 		type=master_onion
 		p=-352.0000 -608.0000
-		vars=pikmin_inside=3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+		vars=pikmin_inside=3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
 	}
 	bouncer{
 		type=geyser
@@ -12978,12 +12978,12 @@ mobs{
 		vars=pikmin_inside=3 3 3
 	}
 	onion{
-		type=rock_onion
+		type=purple_onion
 		p=-992.0000 -608.0000
 		vars=pikmin_inside=3 3 3
 	}
 	onion{
-		type=winged_onion
+		type=white_onion
 		p=-1152.0000 -608.0000
 		vars=pikmin_inside=3 3 3
 	}
@@ -15120,7 +15120,7 @@ mobs{
 		vars=bloom_time=0.0000;ice=true
 	}
 	onion{
-		type=ice_onion
+		type=rock_onion
 		p=-1312.0000 -608.0000
 		vars=pikmin_inside=3 3 3
 	}
@@ -15206,11 +15206,11 @@ mobs{
 	}
 	onion{
 		type=lumiknoll
-		p=-1504.0000 -608.0000
+		p=-1856.0000 -608.0000
 	}
 	onion{
 		type=tricknoll
-		p=-1760.0000 -608.0000
+		p=-2112.0000 -608.0000
 		links=506
 	}
 	custom{
@@ -15284,6 +15284,16 @@ mobs{
 	pellet{
 		type=pellet_20_white
 		p=-2144.0000 -3168.0000
+	}
+	onion{
+		type=winged_onion
+		p=-1472.0000 -608.0000
+		vars=pikmin_inside=3 3 3
+	}
+	onion{
+		type=ice_onion
+		p=-1632.0000 -608.0000
+		vars=pikmin_inside=3 3 3
 	}
 }
 path_stops{
