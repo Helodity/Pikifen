@@ -423,9 +423,6 @@ public:
     ALLEGRO_BITMAP* bmpMaturityIcon[N_MATURITIES] =
     { nullptr, nullptr, nullptr };
     
-    //Icon for its Onion.
-    ALLEGRO_BITMAP* bmpOnionIcon = nullptr;
-    
     //Sound data index for each sound. Cache for performance.
     size_t soundDataIdxs[N_PIKMIN_SOUNDS];
     

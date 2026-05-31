@@ -1125,6 +1125,9 @@ void PikminNest::tick(float deltaT) {
  */
 PikminNestType::~PikminNestType() {
     al_destroy_bitmap(menuColormap);
+    if(bmpIcon) {
+        game.content.bitmaps.list.free(bmpIcon);
+    }
 }
 
 
@@ -1178,10 +1181,13 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     
     string pikTypesStr;
     string legsStr;
+    string iconStr;
     DataNode* pikTypesNode = nullptr;
     DataNode* legsNode = nullptr;
+    DataNode* iconNode = nullptr;
     
     nRS.set("has_nest_menu", hasMenu);
+    nRS.set("icon", iconStr, &iconNode);
     nRS.set("leg_body_parts", legsStr, &legsNode);
     nRS.set("pikmin_types", pikTypesStr, &pikTypesNode);
     nRS.set("pikmin_enter_speed", pikminEnterSpeed);
@@ -1212,6 +1218,11 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
         } else {
             pikTypes.push_back(game.content.mobTypes.list.pikmin[str]);
         }
+    }
+    
+    if(iconNode) {
+        bmpIcon =
+            game.content.bitmaps.list.get(iconStr, iconNode);
     }
     
     forIdx(s, mobType->sounds) {

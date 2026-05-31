@@ -271,12 +271,11 @@ OnionMenu::OnionMenu(
         GuiItem* onionIcon = new GuiItem(false);
         onionIcon->forceSquare = true;
         onionIcon->onDraw =
-        [this, t, onionIcon] (const DrawInfo & draw) {
-            OnionMenuPikminType* tPtr = &this->types[t];
-            if(tPtr->pikType->bmpOnionIcon) {
+        [this, nPtr, onionIcon] (const DrawInfo & draw) {
+            if(nPtr->nestType->bmpIcon) {
                 float juicyGrowAmount = onionIcon->getJuiceValue();
                 drawBitmapInBox(
-                    tPtr->pikType->bmpOnionIcon, draw.center,
+                    nPtr->nestType->bmpIcon, draw.center,
                     (draw.size * 0.8f) + juicyGrowAmount, true,
                     0.0f, draw.tint
                 );

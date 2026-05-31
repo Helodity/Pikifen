@@ -126,7 +126,7 @@ PikminType::PikminType() :
  */
 AnimConversionVector PikminType::getAnimConversions() const {
     AnimConversionVector v;
-
+    
     auto add = [&v] (size_t idx, const string& name) {
         v.push_back(std::make_pair(idx, name));
     };
@@ -262,18 +262,15 @@ void PikminType::loadCatResources(DataNode* file) {
     string iconLeafStr;
     string iconBudStr;
     string iconFlowerStr;
-    string iconOnionStr;
     DataNode* iconNode = nullptr;
     DataNode* iconLeafNode = nullptr;
     DataNode* iconBudNode = nullptr;
     DataNode* iconFlowerNode = nullptr;
-    DataNode* iconOnionNode = nullptr;
     
     pRS.set("icon", iconStr, &iconNode);
     pRS.set("icon_bud", iconBudStr, &iconBudNode);
     pRS.set("icon_flower", iconFlowerStr, &iconFlowerNode);
     pRS.set("icon_leaf", iconLeafStr, &iconLeafNode);
-    pRS.set("icon_onion", iconOnionStr, &iconOnionNode);
     
     bmpIcon = game.content.bitmaps.list.get(iconStr, iconNode);
     bmpMaturityIcon[0] =
@@ -282,11 +279,6 @@ void PikminType::loadCatResources(DataNode* file) {
         game.content.bitmaps.list.get(iconBudStr, iconBudNode);
     bmpMaturityIcon[2] =
         game.content.bitmaps.list.get(iconFlowerStr, iconFlowerNode);
-        
-    if(iconOnionNode) {
-        bmpOnionIcon =
-            game.content.bitmaps.list.get(iconOnionStr, iconOnionNode);
-    }
 }
 
 
@@ -301,7 +293,4 @@ void PikminType::unloadResources() {
     game.content.bitmaps.list.free(bmpTop[0]);
     game.content.bitmaps.list.free(bmpTop[1]);
     game.content.bitmaps.list.free(bmpTop[2]);
-    if(bmpOnionIcon) {
-        game.content.bitmaps.list.free(bmpOnionIcon);
-    }
 }

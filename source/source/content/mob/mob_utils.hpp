@@ -662,7 +662,7 @@ struct Path {
     
     //Settings about how the path should be followed.
     PathFollowSettings settings;
-
+    
     //Total distance traveled through this path.
     float totalDistance = FLT_MAX;
     
@@ -703,6 +703,9 @@ struct PikminNestType {
     
     //Whether it has a menu that can be interacted with by leaders.
     bool hasMenu = true;
+    
+    //Icon.
+    ALLEGRO_BITMAP* bmpIcon = nullptr;
     
     //Sound data index for the Pikmin entry sound. Cache for performance.
     size_t soundPikminEntryIdx = INVALID;

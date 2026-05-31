@@ -11,7 +11,6 @@ icon = pikmin/purple_icon
 icon_bud = pikmin/pink_bud_icon
 icon_flower = pikmin/pink_flower_icon
 icon_leaf = pikmin/leaf_icon
-icon_onion = other_mobs/hocotate_ship_icon
 main_color = 126 50 134
 max_health = 100
 max_throw_height = 210

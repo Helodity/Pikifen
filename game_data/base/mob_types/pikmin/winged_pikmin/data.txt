@@ -12,7 +12,6 @@ icon = pikmin/winged_icon
 icon_bud = pikmin/purple_bud_icon
 icon_flower = pikmin/purple_flower_icon
 icon_leaf = pikmin/leaf_icon
-icon_onion = onions/winged_icon
 main_color = 230 113 155
 max_health = 100
 max_throw_height = 260

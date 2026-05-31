@@ -100,8 +100,8 @@
         <ul>
           <li><span class="cl-a">Added</span> a mob type property: <code>health_regen_delay</code>.</li>
           <li><span class="cl-a">Added</span> a mob type vulnerability data entry word that controls sector blocking.</li>
-          <li><span class="cl-a">Added</span> some <a href="mob_onion.html">Onion type</a> properties: <code>auto_eject</code>, <code>can_turn_see_through</code>, <code>delivery_animation</code>, <code>eject_grown_pikmin</code>, <code>has_nest_menu</code>, <code>nutrients_per_seed</code>, <code>pikmin_exit_spat</code>, <code>send_nutrients_to_link</code>. These are useful for Lumiknolls.</li>
-          <li><span class="cl-a">Added</span> some <a href="mob_ship.html">ship type</a> properties: <code>has_nest_menu</code>, <code>pikmin_exit_spat</code>.</li>
+          <li><span class="cl-a">Added</span> some <a href="mob_onion.html">Onion type</a> properties: <code>auto_eject</code>, <code>can_turn_see_through</code>, <code>delivery_animation</code>, <code>eject_grown_pikmin</code>, <code>has_nest_menu</code>, <code>icon</code>, <code>nutrients_per_seed</code>, <code>pikmin_exit_spat</code>, <code>send_nutrients_to_link</code>. Most of these are useful for Lumiknolls.</li>
+          <li><span class="cl-a">Added</span> some <a href="mob_ship.html">ship type</a> properties: <code>has_nest_menu</code>, <code>icon</code>, <code>pikmin_exit_spat</code>.</li>
           <li><span class="cl-a">Added</span> a <a href="mob_pellet.html">pellet type</a> property: <code>draw_number</code>.</li>
           <li><span class="cl-a">Added</span> some <a href="mob_pikmin.html">Pikmin type</a> properties: <code>auto_maturate_interval</code>, <code>can_lose_maturity</code>, <code>chills_liquids</code>.</li>
           <li><span class="cl-a">Added</span> some <a href="mob_resource.html">resource type</a> property values: <code>onion</code> and <code>ship_no_onion</code>, for the <code>carrying_destination</code> property. These already existed, but were not available for usage in the resource type data files.</li>
@@ -176,7 +176,7 @@
         <a href="mob_type.html">Mob types</a>:
         <ul>
           <li><span class="cl-d">Deprecated</span> some <a href="mob_pellet.html">pellet type</a> properties: <code>match_seeds</code>, <code>non_match_seeds</code>. Please use <code>match_nutrients</code> and <code>non_match_nutrients</code> instead.</li>
-          <li><span class="cl-d">Deprecated</span> a <a href="script.html">script</a> event: <code>on_ready</code>. Please use the <code>ready</code> block in the script file instead.</li>
+          <li><span class="cl-r">Removed</span> a <a href="mob_pikmin.html">Pikmin type</a> property: <code>icon_onion</code>. Please use the new <code>icon</code> property of <a href="mob_onion.html">Onion types</a> and <a href="mob_ship.html">ship types</a>.</li>
         </ul>
       </li>
       <li>
