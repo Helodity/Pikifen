@@ -668,6 +668,9 @@ enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
     //Get list of linked mob IDs.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_LINK_IDS,
     
+    //Get max health.
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_MAX_HEALTH,
+    
     //Get category of mob that triggered the event.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY,
     
@@ -708,6 +711,7 @@ buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE
         "latched_pikmin_weight"
     },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_LINK_IDS, "link_ids" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MAX_HEALTH, "max_health" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY, "mob_category" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE, "mob_type" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE, "state" },

@@ -1364,6 +1364,10 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         result = i2s(target->getLatchedPikminWeight());
         break;
         
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MAX_HEALTH: {
+        result = i2s(target->maxHealth);
+        break;
+        
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
         result = target->type->category->internalName;
         break;
