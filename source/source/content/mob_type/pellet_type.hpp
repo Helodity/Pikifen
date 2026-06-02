@@ -57,6 +57,10 @@ public:
     //Number on the pellet, and hence, its weight.
     size_t number = 0;
     
+    //Family of nutrients it can receive. Onions that do not support this family
+    //cannot accept this pellet.
+    string nutrientFamily = "pellet";
+    
     //Number of nutrients given out if the pellet's taken to a matching Onion.
     size_t matchNutrients = 0;
     

@@ -92,6 +92,12 @@
         <td></td>
       </tr>
       <tr>
+        <td>nutrient_families</td>
+        <td>List of nutrient families that this Onion can receive. Objects that give nutrients of a family this Onion cannot receive cannot be delivered to the Onion. <a href="mob_enemy.html">Enemies</a> use the <code>enemy</code> family, and <a href="mob_pellet.html">pellets</a> use the <code>pellet</code> family by default. Custom names can be written to make sure an Onion can't receive objects that don't make sense, like how Lumiknolls only accept the <code>glow_pellet</code> family that Glow Pellets have.</td>
+        <td>List</td>
+        <td>pellet; enemy</td>
+      </tr>
+      <tr>
         <td>nutrients_per_seed</td>
         <td>How many nutrients (see <a href="mob_pellet.html">pellet</a>) are required to generate one Pikmin seed. This must be a whole number.</td>
         <td>Number</td>
@@ -106,16 +112,19 @@
       <tr>
         <td>pikmin_exit_spat</td>
         <td>If true, once Pikmin choose a leg to exit from, they are spat out (like if they were a seed). If false, they slide down the leg instead.</td>
+        <td>Boolean</td>
         <td>false</td>
       </tr>
       <tr>
         <td>pikmin_exit_speed</td>
         <td>Same as <code>pikmin_enter_speed</code>, but for sliding out of an Onion leg.</td>
+        <td>Number</td>
         <td>2</td>
       </tr>
       <tr>
         <td>send_nutrients_to_link</td>
         <td>If true, the nutrients obtained from received objects will not be used by this Onion and will instead be transferred to whatever Onion is linked.</td>
+        <td>Boolean</td>
         <td>false</td>
       </tr>
     </table>

@@ -22,6 +22,7 @@
 #include "../../util/general_utils.hpp"
 #include "../../util/geometry_utils.hpp"
 #include "../../util/string_utils.hpp"
+#include "pellet.hpp"
 #include "pikmin.hpp"
 #include "ship.hpp"
 #include "tool.hpp"
@@ -1143,11 +1144,48 @@ Mob* Mob::calculateCarryingMob(const vector<Mob*>& potentialMobs) {
  * @return The Onion, or nullptr if no valid one was found.
  */
 Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
+    vector<Onion*> possibleOnions = game.states.gameplay->mobs.onions;
+
+    string nutrientFamily;
+    switch(type->category->id) {
+    case MOB_CATEGORY_ENEMIES: {
+        nutrientFamily = "enemy";
+        break;
+        
+    } case MOB_CATEGORY_PELLETS: {
+        Pellet* pelPtr = (Pellet*) this;
+        nutrientFamily = pelPtr->pelType->nutrientFamily;
+        break;
+        
+    } default: {
+        break;
+        
+    }
+    }
+    
     //First, check which Onion Pikmin types are even available.
+    for(size_t o = 0; o < possibleOnions.size(); ) {
+        Onion* oPtr = possibleOnions[o];
+        bool valid = true;
+        
+        if(!oPtr->activated) {
+            valid = false;
+        }
+        if(!isInContainer(oPtr->oniType->nutrientFamilies, nutrientFamily)) {
+            valid = false;
+        }
+        
+        if(!valid) {
+            possibleOnions.erase(possibleOnions.begin() + o);
+        } else {
+            o++;
+        }
+    }
+    
+    //Get the combination of available Pikmin types.
     unordered_set<PikminType*> availableTypes;
-    forIdx(o, game.states.gameplay->mobs.onions) {
-        Onion* oPtr = game.states.gameplay->mobs.onions[o];
-        if(!oPtr->activated) continue;
+    forIdx(o, possibleOnions) {
+        Onion* oPtr = possibleOnions[o];
         availableTypes.insert(
             oPtr->oniType->nest->pikTypes.begin(),
             oPtr->oniType->nest->pikTypes.end()
@@ -1160,25 +1198,30 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
         return nullptr;
     }
     
-    //Decide what type to go to.
+    //Decide what Pikmin type will receive the object.
     PikminType* decidedType = decideCarryPikminType(availableTypes);
     
-    //Make a list of the potential Onions that can be carried to.
-    vector<Mob*> potentialOnions;
-    forIdx(o, game.states.gameplay->mobs.onions) {
-        Onion* oPtr = game.states.gameplay->mobs.onions[o];
-        if(!oPtr->activated) continue;
-        forIdx(t, oPtr->oniType->nest->pikTypes) {
-            if(oPtr->oniType->nest->pikTypes[t] == decidedType) {
-                potentialOnions.push_back(oPtr);
-                break;
-            }
+    //Filter out Onions that do not support this Pikmin type.
+    for(size_t o = 0; o < possibleOnions.size(); ) {
+        Onion* oPtr = possibleOnions[o];
+        bool valid =
+            isInContainer(oPtr->oniType->nest->pikTypes, decidedType);
+            
+        if(!valid) {
+            possibleOnions.erase(possibleOnions.begin() + o);
+        } else {
+            o++;
         }
     }
     
     //Finish!
     *outTargetType = decidedType;
-    return (Onion*) calculateCarryingMob(potentialOnions);
+    vector<Mob*> possibleOnionMobs;
+    possibleOnionMobs.reserve(possibleOnions.size());
+    forIdx(o, possibleOnions) {
+        possibleOnionMobs.push_back(possibleOnions[o]);
+    }
+    return (Onion*) calculateCarryingMob(possibleOnionMobs);
 }
 
 

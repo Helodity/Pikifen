@@ -12,6 +12,7 @@ height = 100
 inactive_logic = all_logic
 leg_body_parts = body; body
 max_health = 200
+nutrient_families = glow_pellet
 nutrients_per_seed = 3
 pikmin_types = glow_pikmin
 pushable = false

@@ -220,11 +220,17 @@ void Onion::receiveNutrients(PikminType* pikType, size_t nutrientAmount) {
     }
     
     stopGenerating();
-    generationDelayTimer.start();
     nutrients[pikTypeIdx] += nutrientAmount;
+    bool willGenerate = false;
+    
     while(nutrients[pikTypeIdx] >= oniType->nutrientsPerSeed) {
         generationQueue[pikTypeIdx]++;
         nutrients[pikTypeIdx] -= oniType->nutrientsPerSeed;
+        willGenerate = true;
+    }
+    
+    if(willGenerate) {
+        generationDelayTimer.start();
     }
 }
 

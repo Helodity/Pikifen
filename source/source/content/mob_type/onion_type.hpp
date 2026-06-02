@@ -72,6 +72,10 @@ public:
     //Whether it ejects seeds or fully-formed Pikmin.
     bool ejectGrownPikmin = false;
     
+    //Families of nutrients it can receive. Sources from an unsupported family
+    //cannot be accepted.
+    vector<string> nutrientFamilies = { "pellet", "enemy" };
+    
     //Number of nutrients required to form one Pikmin.
     size_t nutrientsPerSeed = 1;
     

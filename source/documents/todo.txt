@@ -605,8 +605,9 @@ Misc things (so I don't forget)
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.
             Be careful for Pikmin carrying things in opposite directions. Maybe have a tie-breaker in some way?
         Smoother turns when carrying
-        Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
         Carried objects should be able to push other objects that are either carriable or have the pushable property
+        Carrying destinations need to be re-thought
+            Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
     More powerful scripting
         Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
         Spawning
@@ -815,7 +816,11 @@ Misc things (so I don't forget)
         And mission sequences, where you have to beat a mission before playing the next in the sequence?
     Code cleanup
         Switch angles to vectors?
-        Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
+    Change some things to an entity component system
+        Bouncers, interactables, scales, and more could just be normal mobs but with the corresponding components
+        A defeated enemy becoming a carriable corpse, as well as any mob becoming carriable, could also be a component
+        Any mob should be able to receive a carried mob
+        Search for any places that compare "category->id" with something else, as those maybe should not exist
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?

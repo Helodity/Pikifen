@@ -76,16 +76,23 @@ void OnionType::loadCatProperties(DataNode* file) {
     nest->createColormap();
     
     ReaderSetter oRS(file);
+    string nutrientFamiliesStr;
     string deliveryAnimStr;
     DataNode* deliveryAnimNode;
+    DataNode* nutrientFamiliesNode;
     
     oRS.set("auto_eject", autoEject);
     oRS.set("can_turn_see_through", canTurnSeeThrough);
     oRS.set("delivery_animation", deliveryAnimStr, &deliveryAnimNode);
     oRS.set("delivery_area_radius", deliveryAreaRadius);
     oRS.set("eject_grown_pikmin", ejectGrownPikmin);
+    oRS.set("nutrient_families", nutrientFamiliesStr, &nutrientFamiliesNode);
     oRS.set("nutrients_per_seed", nutrientsPerSeed);
     oRS.set("send_nutrients_to_link", sendNutrientsToLink);
+    
+    if(nutrientFamiliesNode) {
+        nutrientFamilies = semicolonListToVector(nutrientFamiliesStr);
+    }
     
     if(deliveryAnimNode) {
         readEnumProp(

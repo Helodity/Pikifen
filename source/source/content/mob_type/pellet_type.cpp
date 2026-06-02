@@ -60,6 +60,7 @@ void PelletType::loadCatProperties(DataNode* file) {
     pRS.set("match_nutrients", matchNutrients);
     pRS.set("non_match_nutrients", nonMatchNutrients);
     pRS.set("number", number);
+    pRS.set("nutrient_family", nutrientFamily);
     pRS.set("pikmin_type", pikTypeStr, &pikTypeNode);
     
     if(!isInMap(game.content.mobTypes.list.pikmin, pikTypeStr)) {

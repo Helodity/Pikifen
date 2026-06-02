@@ -12,6 +12,7 @@ height = 200
 inactive_logic = all_logic
 leg_body_parts = hole; hole_2
 max_health = 1000
+nutrient_families = glow_pellet
 nutrients_per_seed = 3
 pikmin_exit_spat = true
 pikmin_exit_speed = 2

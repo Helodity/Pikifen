@@ -21,3 +21,7 @@ area_editor_properties {
         tooltip = Which number is face up. 0 for random.
     }
 }
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.2.0
