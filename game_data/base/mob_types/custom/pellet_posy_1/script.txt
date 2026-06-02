@@ -1,5 +1,6 @@
 first_state = sprout
-death_state = destroyed
+death_state = dying
+states_ignoring_death = reviving
 
 init {
     set_var red false
@@ -10,33 +11,28 @@ init {
     set_var rock false
     set_var winged false
     set_var ice false
+
     set_var cur_color none
     set_var bloom_time 240
+    set_var revival_time 0
 }
 
 ready {
     if $red = true
         set_state sprout
-    end_if
-    if $yellow = true
+    else_if $yellow = true
         set_state sprout
-    end_if
-    if $blue = true
+    else_if $blue = true
         set_state sprout
-    end_if
-    if $purple = true
+    else_if $purple = true
         set_state sprout
-    end_if
-    if $white = true
+    else_if $white = true
         set_state sprout
-    end_if
-    if $rock = true
+    else_if $rock = true
         set_state sprout
-    end_if
-    if $winged = true
+    else_if $winged = true
         set_state sprout
-    end_if
-    if $ice = true
+    else_if $ice = true
         set_state sprout
     end_if
     
@@ -49,31 +45,33 @@ script {
     sprout {
         on_enter {
             set_animation sprout
-            set_timer 1
             set_huntable false
+            calculate temp $bloom_time / 2
+            if $temp <= 1
+                set_var temp 1
+            end_if
+            set_timer $temp
         }
         on_timer {
-            set_timer 1
-            calculate bloom_time $bloom_time - 1
-            if $bloom_time <= 120
-                set_state sapling
-            end_if
+            set_state sapling
         }
     }
+
     sapling {
         on_enter {
             set_animation sapling
             start_particles sparks_small 15 0 150
-            set_timer 1
+            calculate temp $bloom_time / 2
+            if $temp <= 1
+                set_var temp 1
+            end_if
+            set_timer $temp
         }
         on_timer {
-            set_timer 1
-            calculate bloom_time $bloom_time - 1
-            if $bloom_time <= 0
-                set_state blooming
-            end_if
+            set_state blooming
         }
     }
+
     blooming {
         on_enter {
             set_animation blooming
@@ -85,6 +83,7 @@ script {
             set_state picking_next_color
         }
     }
+
     picking_next_color {
         on_enter {
             set_timer 3
@@ -146,6 +145,7 @@ script {
             set_state idling
         }
     }
+
     idling {
         on_enter {
             if $cur_color = red
@@ -173,9 +173,11 @@ script {
             set_state picking_next_color
         }
     }
-    destroyed {
+
+    dying {
         on_enter {
             set_animation dying
+            set_huntable false
             start_particles enemy_defeat 0 0 150
             start_particles pellet_posy_1_petals 40 0 150
             start_dying
@@ -198,7 +200,18 @@ script {
             end_if
         }
         on_animation_end {
-            delete
+            set_state reviving
+        }
+    }
+
+    reviving {
+        on_enter {
+            set_timer $revival_time
+        }
+        on_timer {
+            get_mob_info temp self max_health
+            set_health $temp
+            set_state sprout
         }
     }
 }

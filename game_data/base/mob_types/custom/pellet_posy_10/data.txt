@@ -20,7 +20,14 @@ area_editor_properties {
         type = float
         def_value = 240
         min_value = 0
-        tooltip = Time left until the posy blooms.
+        tooltip = Total amount of time it takes the posy to fully bloom.
+    }
+    Revival time {
+        var = revival_time
+        type = float
+        def_value = 0
+        min_value = 0
+        tooltip = Total amount of time it takes the posy to revive, or 0 if it does not revive.
     }
     Red {
         var = red

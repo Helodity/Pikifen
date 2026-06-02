@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Hitting a Beady Long Legs with an Ice Pikmin will make all feet show the freezing progress bar
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -34,9 +33,7 @@ Next tasks (roughly sorted most important first)
         Leader swap sound, so swapping to the rookie isn't silent
         Swarming jingle
     Glow Pellets
-        Internally pellets, but only able to be received by Lumiknolls
         Piles should allow pellets...right?
-    Pellet Posies should have properties that make them regrow
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies

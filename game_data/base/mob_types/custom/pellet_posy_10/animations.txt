@@ -16,6 +16,7 @@ animations{
 		}
 	}
 	dying{
+		loop_frame=5
 		frames{
 			dying_01{
 				duration=0.4000

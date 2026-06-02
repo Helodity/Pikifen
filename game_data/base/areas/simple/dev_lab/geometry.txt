@@ -13304,22 +13304,22 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-768.0000 -2784.0000
-		vars=bloom_time=0.0000;red=true
+		vars=bloom_time=5.0000;red=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_5
 		p=-768.0000 -2880.0000
-		vars=bloom_time=0.0000;red=true
+		vars=bloom_time=5.0000;red=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_10
 		p=-768.0000 -3008.0000
-		vars=bloom_time=0.0000;red=true
+		vars=bloom_time=5.0000;red=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_20
 		p=-768.0000 -3168.0000
-		vars=bloom_time=0.0000;red=true
+		vars=bloom_time=5.0000;red=true;revival_time=5.0000
 	}
 	pellet{
 		type=pellet_1_yellow
@@ -13340,22 +13340,22 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-1184.0000 -2784.0000
-		vars=bloom_time=0.0000;yellow=true
+		vars=bloom_time=5.0000;revival_time=5.0000;yellow=true
 	}
 	custom{
 		type=pellet_posy_5
 		p=-1184.0000 -2880.0000
-		vars=bloom_time=0.0000;yellow=true
+		vars=bloom_time=5.0000;revival_time=5.0000;yellow=true
 	}
 	custom{
 		type=pellet_posy_10
 		p=-1184.0000 -3008.0000
-		vars=bloom_time=0.0000;yellow=true
+		vars=bloom_time=5.0000;revival_time=5.0000;yellow=true
 	}
 	custom{
 		type=pellet_posy_20
 		p=-1184.0000 -3168.0000
-		vars=bloom_time=0.0000;yellow=true
+		vars=bloom_time=5.0000;revival_time=5.0000;yellow=true
 	}
 	pellet{
 		type=pellet_1_blue
@@ -13376,37 +13376,37 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-2432.0000 -2784.0000
-		vars=bloom_time=0.0000;white=true
+		vars=bloom_time=5.0000;revival_time=5.0000;white=true
 	}
 	custom{
 		type=pellet_posy_5
 		p=-2432.0000 -2880.0000
-		vars=bloom_time=0.0000;white=true
+		vars=bloom_time=5.0000;revival_time=5.0000;white=true
 	}
 	custom{
 		type=pellet_posy_10
 		p=-2432.0000 -3008.0000
-		vars=bloom_time=0.0000;white=true
+		vars=bloom_time=5.0000;revival_time=5.0000;white=true
 	}
 	custom{
 		type=pellet_posy_20
 		p=-2432.0000 -3168.0000
-		vars=bloom_time=0.0000;white=true
+		vars=bloom_time=5.0000;revival_time=5.0000;white=true
 	}
 	custom{
 		type=pellet_posy_5
 		p=-2848.0000 -2880.0000
-		vars=bloom_time=0.0000;rock=true
+		vars=bloom_time=5.0000;revival_time=5.0000;rock=true
 	}
 	custom{
 		type=pellet_posy_10
 		p=-2848.0000 -3008.0000
-		vars=bloom_time=0.0000;rock=true
+		vars=bloom_time=5.0000;revival_time=5.0000;rock=true
 	}
 	custom{
 		type=pellet_posy_20
 		p=-2848.0000 -3168.0000
-		vars=bloom_time=0.0000;rock=true
+		vars=bloom_time=5.0000;revival_time=5.0000;rock=true
 	}
 	pellet{
 		type=pellet_1_rock
@@ -13427,22 +13427,22 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-2848.0000 -2784.0000
-		vars=bloom_time=0.0000;rock=true
+		vars=bloom_time=5.0000;revival_time=5.0000;rock=true
 	}
 	custom{
 		type=pellet_posy_5
 		p=-3264.0000 -2880.0000
-		vars=bloom_time=0.0000;winged=true
+		vars=bloom_time=5.0000;revival_time=5.0000;winged=true
 	}
 	custom{
 		type=pellet_posy_10
 		p=-3264.0000 -3008.0000
-		vars=bloom_time=0.0000;winged=true
+		vars=bloom_time=5.0000;revival_time=5.0000;winged=true
 	}
 	custom{
 		type=pellet_posy_20
 		p=-3264.0000 -3168.0000
-		vars=bloom_time=0.0000;winged=true
+		vars=bloom_time=5.0000;revival_time=5.0000;winged=true
 	}
 	pellet{
 		type=pellet_1_winged
@@ -13463,27 +13463,27 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-3264.0000 -2784.0000
-		vars=bloom_time=0.0000;winged=true
+		vars=bloom_time=5.0000;revival_time=5.0000;winged=true
 	}
 	custom{
 		type=pellet_posy_5
 		p=-4000.0000 -2880.0000
-		vars=bloom_time=0.0000;blue=true;ice=true;purple=true;red=true;rock=true;white=true;winged=true;yellow=true
+		vars=bloom_time=5.0000;blue=true;ice=true;purple=true;red=true;revival_time=5.0000;rock=true;white=true;winged=true;yellow=true
 	}
 	custom{
 		type=pellet_posy_10
 		p=-4000.0000 -3008.0000
-		vars=bloom_time=0.0000;blue=true;ice=true;purple=true;red=true;rock=true;white=true;winged=true;yellow=true
+		vars=bloom_time=5.0000;blue=true;ice=true;purple=true;red=true;revival_time=5.0000;rock=true;white=true;winged=true;yellow=true
 	}
 	custom{
 		type=pellet_posy_20
 		p=-4000.0000 -3168.0000
-		vars=bloom_time=0.0000;blue=true;ice=true;purple=true;red=true;rock=true;white=true;winged=true;yellow=true
+		vars=bloom_time=5.0000;blue=true;ice=true;purple=true;red=true;revival_time=5.0000;rock=true;white=true;winged=true;yellow=true
 	}
 	custom{
 		type=pellet_posy_1
 		p=-4000.0000 -2784.0000
-		vars=bloom_time=0.0000;blue=true;ice=true;purple=true;red=true;rock=true;white=true;winged=true;yellow=true
+		vars=bloom_time=5.0000;blue=true;ice=true;purple=true;red=true;revival_time=5.0000;rock=true;white=true;winged=true;yellow=true
 	}
 	interactable{
 		type=orb_sign
@@ -15086,17 +15086,17 @@ mobs{
 	custom{
 		type=pellet_posy_5
 		p=-3680.0000 -2880.0000
-		vars=bloom_time=0.0000;ice=true
+		vars=bloom_time=5.0000;ice=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_10
 		p=-3680.0000 -3008.0000
-		vars=bloom_time=0.0000;ice=true
+		vars=bloom_time=5.0000;ice=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_20
 		p=-3680.0000 -3168.0000
-		vars=bloom_time=0.0000;ice=true
+		vars=bloom_time=5.0000;ice=true;revival_time=5.0000
 	}
 	pellet{
 		type=pellet_1_ice
@@ -15117,7 +15117,7 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-3680.0000 -2784.0000
-		vars=bloom_time=0.0000;ice=true
+		vars=bloom_time=5.0000;ice=true;revival_time=5.0000
 	}
 	onion{
 		type=rock_onion
@@ -15216,22 +15216,22 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-1600.0000 -2784.0000
-		vars=bloom_time=0.0000;blue=true
+		vars=bloom_time=5.0000;blue=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_5
 		p=-1600.0000 -2880.0000
-		vars=bloom_time=0.0000;blue=true
+		vars=bloom_time=5.0000;blue=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_10
 		p=-1600.0000 -3008.0000
-		vars=bloom_time=0.0000;blue=true
+		vars=bloom_time=5.0000;blue=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_20
 		p=-1600.0000 -3168.0000
-		vars=bloom_time=0.0000;blue=true
+		vars=bloom_time=5.0000;blue=true;revival_time=5.0000
 	}
 	pellet{
 		type=pellet_1_purple
@@ -15252,22 +15252,22 @@ mobs{
 	custom{
 		type=pellet_posy_1
 		p=-2016.0000 -2784.0000
-		vars=bloom_time=0.0000;purple=true
+		vars=bloom_time=5.0000;purple=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_5
 		p=-2016.0000 -2880.0000
-		vars=bloom_time=0.0000;purple=true
+		vars=bloom_time=5.0000;purple=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_10
 		p=-2016.0000 -3008.0000
-		vars=bloom_time=0.0000;purple=true
+		vars=bloom_time=5.0000;purple=true;revival_time=5.0000
 	}
 	custom{
 		type=pellet_posy_20
 		p=-2016.0000 -3168.0000
-		vars=bloom_time=0.0000;purple=true
+		vars=bloom_time=5.0000;purple=true;revival_time=5.0000
 	}
 	pellet{
 		type=pellet_1_white
