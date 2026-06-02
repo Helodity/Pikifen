@@ -259,7 +259,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -282,7 +282,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -441,7 +441,7 @@ sprites{
 				type=1
 				value=35.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=0.0100
 			}
 		}
@@ -466,7 +466,7 @@ sprites{
 				type=1
 				value=35.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=0.0100
 			}
 		}
@@ -491,7 +491,7 @@ sprites{
 				type=1
 				value=35.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=0.0100
 			}
 		}
@@ -516,7 +516,7 @@ sprites{
 				type=1
 				value=35.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=0.0100
 			}
 		}
@@ -533,7 +533,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -556,7 +556,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -579,7 +579,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -602,7 +602,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -625,7 +625,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -648,7 +648,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -671,7 +671,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -694,7 +694,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -717,7 +717,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=5.0000 0.0000 -0.0000
@@ -725,7 +725,7 @@ sprites{
 				radius=49.0000
 				type=1
 				value=5.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=0.4000
 				wither_chance=30
 			}
@@ -743,7 +743,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=3.0000 0.0000 -8.0000
@@ -751,7 +751,7 @@ sprites{
 				radius=60.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 				wither_chance=30
 			}
@@ -769,7 +769,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -793,7 +793,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -817,7 +817,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -840,7 +840,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -863,7 +863,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -887,7 +887,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -911,7 +911,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000

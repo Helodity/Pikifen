@@ -123,7 +123,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -131,7 +131,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -139,7 +139,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -147,7 +147,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -155,7 +155,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -171,7 +171,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -179,7 +179,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -187,7 +187,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -195,7 +195,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -203,7 +203,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -219,7 +219,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -227,7 +227,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -235,7 +235,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -243,7 +243,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -251,7 +251,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -266,7 +266,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -274,7 +274,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -282,7 +282,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -290,7 +290,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -298,7 +298,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -314,7 +314,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -322,7 +322,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -330,7 +330,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -338,7 +338,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -346,7 +346,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -362,7 +362,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -370,7 +370,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -378,7 +378,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -386,7 +386,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -394,7 +394,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -409,7 +409,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -417,7 +417,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -425,7 +425,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -433,7 +433,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -441,7 +441,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -457,7 +457,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -465,7 +465,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -473,7 +473,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -481,7 +481,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -489,7 +489,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -505,7 +505,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -513,7 +513,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -521,7 +521,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -529,7 +529,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -537,7 +537,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}

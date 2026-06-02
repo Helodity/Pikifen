@@ -81,7 +81,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -106,7 +106,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -131,7 +131,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -156,7 +156,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -182,7 +182,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -208,7 +208,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -234,7 +234,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -259,7 +259,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{

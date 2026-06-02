@@ -25,7 +25,7 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			finish{
@@ -34,7 +34,7 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}

@@ -5,7 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    All animations still use deprecated latch and knockback type properties
+    Hitting a Beady Long Legs with an Ice Pikmin will make all feet show the freezing progress bar
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -20,6 +20,7 @@ Next tasks (roughly sorted most important first)
         New actions
             Typical programming things
                 An action that returns to the previous state. Useful for creating utility states that mimic functions
+                    This needs a call stack
                 Functions you'd find in a math library
                     Sin, cosine?
                     Degrees to radians and vice-versa?
@@ -35,8 +36,7 @@ Next tasks (roughly sorted most important first)
     Glow Pellets
         Internally pellets, but only able to be received by Lumiknolls
         Piles should allow pellets...right?
-    Freezecake
-    Create a night expedition area?
+    Pellet Posies should have properties that make them regrow
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -51,6 +51,7 @@ Next tasks (roughly sorted most important first)
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     
     --- 2.0.0 ---
+    Freezecake
     Update Dear ImGui to 1.92.8
         > Made AddCallback() user data default to Null for convenience.
     Increase the size of all gates to 256? A lot of the larger enemies and treasures have a hard time squeezing through the 192-length gaps
@@ -69,6 +70,7 @@ Next tasks (roughly sorted most important first)
     New maker tools
         Fill the player's inventory with 99 of all possible inventory items
         Delete the mob under the cursor
+        Free camera
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Multiplayer co-op
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
@@ -785,10 +787,10 @@ Misc things (so I don't forget)
                 Item run-up ticking
                 Item run-up finished
                 Ka-ching for getting a medal
+        A Night Expedition area
     Base content to tweak
         Move the areas into their own pack, so people can disable it if they ever want to not have them (like if they installed another pack that changes Pikifen entirely and the base areas don't fit)
             Make sure the Tutorial Meadow prompt doesn't crash trying to access a non-existent area. The engine should probably read a property from the game config with the name of the tutorial area, and simply not show the prompt if it's empty
-        Pellet Posies could have properties that make them regrow
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
         Make Rock Pikmin colors darker (thanks Nataly171)

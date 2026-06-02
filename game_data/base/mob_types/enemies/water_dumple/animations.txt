@@ -2,7 +2,7 @@ name=Water Dumple animations
 description=Animations for the Water Dumple.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	attacking{
 		hit_rate=50
@@ -225,7 +225,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=25.0000 0.0000 0.0000
@@ -248,7 +248,7 @@ sprites{
 				radius=38.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=57.0000 0.0000 -20.0000
@@ -256,6 +256,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=20.0000
+				knockback_type=3
 				knockback=1.0000
 			}
 		}
@@ -272,7 +273,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=65.0000 0.0000 -20.0000
@@ -280,6 +281,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=20.0000
+				knockback_type=3
 				knockback=1.0000
 			}
 		}
@@ -466,7 +468,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=30.0000 0.0000 0.0000
@@ -489,7 +491,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=30.0000 0.0000 0.0000
@@ -511,7 +513,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=25.0000 0.0000 0.0000
@@ -534,7 +536,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=25.0000 0.0000 0.0000
@@ -557,7 +559,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=25.0000 0.0000 0.0000
@@ -580,7 +582,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=34.0000 0.0000 0.0000
@@ -603,7 +605,7 @@ sprites{
 				radius=33.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=40.0000 0.0000 0.0000
@@ -626,7 +628,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=25.0000 1.0000 0.0000
@@ -649,7 +651,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=25.0000 -1.0000 0.0000
@@ -672,7 +674,7 @@ sprites{
 				radius=42.0000
 				type=1
 				value=5.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 				wither_chance=5
 			}
@@ -697,7 +699,7 @@ sprites{
 				radius=42.0000
 				type=1
 				value=5.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 				wither_chance=5
 			}
@@ -722,7 +724,7 @@ sprites{
 				radius=29.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=25.0000 0.0000 0.0000

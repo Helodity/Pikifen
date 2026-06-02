@@ -49,7 +49,7 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 			}
 		}
@@ -68,7 +68,7 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 			}
 		}
@@ -87,7 +87,7 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 			}
 		}
@@ -106,7 +106,7 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 			}
 		}
@@ -125,7 +125,7 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 			}
 		}
@@ -144,7 +144,7 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 			}
 		}
@@ -162,7 +162,7 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 			}
 		}

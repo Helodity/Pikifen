@@ -178,7 +178,7 @@ sprites{
 				type=1
 				value=35.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=0.5000
 			}
 		}

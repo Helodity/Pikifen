@@ -3,9 +3,9 @@ description = A pink 10 pellet that can be used to grow more Pikmin. Generates m
 
 can_walk_on_others = true
 height = 64
-match_seeds = 10
+match_nutrients = 10
 max_carriers = 20
-non_match_seeds = 5
+non_match_nutrients = 5
 number = 10
 number_image = pellets/10
 pikmin_type = winged_pikmin

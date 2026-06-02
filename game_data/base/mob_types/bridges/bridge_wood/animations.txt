@@ -59,7 +59,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			left{
 				coords=0.0000 -60.0000 0.0000
@@ -67,7 +67,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			right{
 				coords=0.0000 60.0000 0.0000
@@ -75,7 +75,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}

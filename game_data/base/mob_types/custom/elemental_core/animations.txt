@@ -60,7 +60,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}
@@ -76,7 +76,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 		}
 	}

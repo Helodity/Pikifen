@@ -341,7 +341,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -365,7 +365,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -396,7 +396,7 @@ sprites{
 				radius=58.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=6.0000
 				wither_chance=30
 			}
@@ -422,7 +422,7 @@ sprites{
 				radius=58.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=6.0000
 				wither_chance=30
 			}
@@ -448,7 +448,7 @@ sprites{
 				radius=58.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=6.0000
 				wither_chance=30
 			}
@@ -474,7 +474,7 @@ sprites{
 				radius=58.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=6.0000
 				wither_chance=30
 			}
@@ -499,7 +499,7 @@ sprites{
 				radius=58.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=6.0000
 				wither_chance=30
 			}
@@ -517,7 +517,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -540,7 +540,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -563,7 +563,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -586,7 +586,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -609,7 +609,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -632,7 +632,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -656,7 +656,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -680,7 +680,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -704,7 +704,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -727,7 +727,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -750,7 +750,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -773,7 +773,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -796,7 +796,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -819,7 +819,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -842,7 +842,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -865,7 +865,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1064,7 +1064,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1088,7 +1088,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1112,7 +1112,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1135,7 +1135,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1159,7 +1159,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1182,7 +1182,7 @@ sprites{
 				radius=26.8817
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1205,7 +1205,7 @@ sprites{
 				radius=30.2881
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1228,7 +1228,7 @@ sprites{
 				radius=32.0773
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1251,7 +1251,7 @@ sprites{
 				radius=32.0773
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1274,7 +1274,7 @@ sprites{
 				radius=32.0773
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1297,7 +1297,7 @@ sprites{
 				radius=32.0773
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1320,7 +1320,7 @@ sprites{
 				radius=32.0773
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1343,7 +1343,7 @@ sprites{
 				radius=32.0773
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1366,7 +1366,7 @@ sprites{
 				radius=32.0773
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1389,7 +1389,7 @@ sprites{
 				radius=26.5181
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1412,7 +1412,7 @@ sprites{
 				radius=34.2498
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1435,7 +1435,7 @@ sprites{
 				radius=34.2498
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1458,7 +1458,7 @@ sprites{
 				radius=34.2498
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1481,7 +1481,7 @@ sprites{
 				radius=34.2498
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1504,7 +1504,7 @@ sprites{
 				radius=34.2498
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1527,7 +1527,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1550,7 +1550,7 @@ sprites{
 				radius=26.8614
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1573,7 +1573,7 @@ sprites{
 				radius=28.7026
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1596,7 +1596,7 @@ sprites{
 				radius=31.9495
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1619,7 +1619,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1642,7 +1642,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1666,7 +1666,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000
@@ -1689,7 +1689,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			attack{
 				coords=0.0000 0.0000 0.0000

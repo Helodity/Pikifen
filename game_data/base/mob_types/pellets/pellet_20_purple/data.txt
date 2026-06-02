@@ -3,9 +3,9 @@ description = A purple 20 pellet that can be used to grow more Pikmin. Generates
 
 can_walk_on_others = true
 height = 64
-match_seeds = 20
+match_nutrients = 20
 max_carriers = 50
-non_match_seeds = 10
+non_match_nutrients = 10
 number = 20
 number_image = pellets/20
 pikmin_type = purple_pikmin
