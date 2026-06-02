@@ -1,0 +1,40 @@
+init {
+    set_var color random
+    start_particles glow_pellet 0 0 0
+}
+
+
+script {
+    idle_waiting {
+        on_enter {
+            custom_actions_after
+            
+            if $color = random
+                get_random_int temp 1 5
+            
+                if $temp = 1
+                    set_var color Yellow
+                else_if $temp = 2
+                    set_var color Red
+                else_if $temp = 3
+                    set_var color Violet
+                else_if $temp = 4
+                    set_var color Cyan
+                else_if $temp = 5
+					set_var color Green
+				end_if
+            end_if
+            
+            //If the color is yellow, it will already be set by the hardcoded logic.
+            if $color = Red
+               set_animation idling_red no_restart
+            else_if $color = Violet
+               set_animation idling_violet no_restart
+            else_if $color = Cyan
+               set_animation idling_cyan no_restart
+            else_if $color = Green
+				set_animation idling_green no_restart
+			end_if
+        }
+    }
+}

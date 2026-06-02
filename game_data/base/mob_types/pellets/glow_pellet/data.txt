@@ -1,0 +1,30 @@
+name = Glow Pellet
+description = A glowing rock, used to propagate Glow Pikmin at a Lumiknoll.
+
+can_walk_on_others = true
+draw_number = false
+height = 32
+match_nutrients = 1
+max_carriers = 1
+non_match_nutrients = 1
+number = 1
+nutrient_family = glow_pellet
+pikmin_type = glow_pikmin
+pushable = false
+pushes = false
+radius = 16
+weight = 1
+
+area_editor_properties {
+    Color {
+        var = color
+        type = list
+        def_value = Random
+        list = Yellow; Red; Violet; Cyan; Green; Random
+        tooltip = Which color the die should be.
+    }
+}
+
+maker = Helodity, Espyo
+version = 1.0.0
+engine_version = 1.2.0

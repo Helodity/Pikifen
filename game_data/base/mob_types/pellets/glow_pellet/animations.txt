@@ -1,0 +1,67 @@
+name=Glow Pellet animations
+engine_version=1.2.0
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	idling_cyan{
+		frames{
+			idling_cyan{
+				duration=0.1000
+			}
+		}
+	}
+	idling_green{
+		frames{
+			idling_green{
+				duration=0.1000
+			}
+		}
+	}
+	idling_violet{
+		frames{
+			idling_violet{
+				duration=0.1000
+			}
+		}
+	}
+	idling_red{
+		frames{
+			idling_red{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=pellets/glow_pellet
+		file_pos=0.0000 0.0000
+		file_size=42.0000 42.0000
+	}
+	idling_cyan{
+		file=pellets/glow_pellet
+		file_pos=43.0000 0.0000
+		file_size=42.0000 42.0000
+	}
+	idling_green{
+		file=pellets/glow_pellet
+		file_pos=172.0000 0.0000
+		file_size=42.0000 42.0000
+	}
+	idling_violet{
+		file=pellets/glow_pellet
+		file_pos=129.0000 0.0000
+		file_size=42.0000 42.0000
+	}
+	idling_red{
+		file=pellets/glow_pellet
+		file_pos=86.0000 0.0000
+		file_size=42.0000 42.0000
+	}
+}
+body_parts

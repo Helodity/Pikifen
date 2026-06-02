@@ -15295,6 +15295,18 @@ mobs{
 		p=-1632.0000 -608.0000
 		vars=pikmin_inside=3 3 3
 	}
+	pellet{
+		type=glow_pellet
+		p=-2176.0000 -704.0000
+	}
+	pellet{
+		type=glow_pellet
+		p=-2112.0000 -704.0000
+	}
+	pellet{
+		type=glow_pellet
+		p=-2048.0000 -704.0000
+	}
 }
 path_stops{
 	s{
@@ -18585,6 +18597,7 @@ path_stops{
 		links{
 			l=436
 			l=438
+			l=539
 		}
 	}
 	s{
@@ -19321,6 +19334,19 @@ path_stops{
 		links{
 			l=412
 			l=536
+		}
+	}
+	s{
+		pos=-2080.0000 -704.0000
+		links{
+			l=437
+			l=540
+		}
+	}
+	s{
+		pos=-2144.0000 -704.0000
+		links{
+			l=539
 		}
 	}
 }
