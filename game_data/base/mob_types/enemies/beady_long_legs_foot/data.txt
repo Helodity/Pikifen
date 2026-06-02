@@ -15,6 +15,7 @@ pushes = true
 pushes_softly = true
 radius = 37.5
 rotation_speed = 200
+show_health = false
 target_type = none
 team = enemy_2
 
