@@ -2022,6 +2022,26 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the all mob script message sending script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::sendMessageToAllMobs(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& msgArg = data.args[0];
+    
+    //Main logic.
+    string msgStr = msgArg;
+    forIdx(m, game.states.gameplay->mobs.all) {
+        game.states.gameplay->sendScriptMessage(
+            data.scriptVM->getRunnerMob(),
+            game.states.gameplay->mobs.all[m], msgStr
+        );
+    }
+}
+
+
+/**
  * @brief Code for the area script message sending script action type.
  *
  * @param data Data about the action call.
@@ -2077,7 +2097,7 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
         if(!data.scriptVM->getRunnerMob()->links[l]) {
             continue;
         }
-
+        
         string msgStr = msgArg;
         game.states.gameplay->sendScriptMessage(
             data.scriptVM->getRunnerMob(),
@@ -3219,7 +3239,7 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
     } case SCRIPT_ACTION_TURN_TYPE_HOME: {
         data.scriptVM->getRunnerMob()->face(
             getAngle(data.scriptVM->getRunnerMob()->center,
-            data.scriptVM->getRunnerMob()->home),
+                     data.scriptVM->getRunnerMob()->home),
             nullptr
         );
         break;

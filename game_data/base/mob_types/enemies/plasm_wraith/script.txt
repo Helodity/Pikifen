@@ -474,7 +474,7 @@ script {
         on_animation_end {
             finish_dying
 			send_message_to_links plasm_break
-			send_message_to_nearby 200000 plasm_wraith_death
+			send_message_to_all_mobs plasm_wraith_death
 			delete
         }
     } 

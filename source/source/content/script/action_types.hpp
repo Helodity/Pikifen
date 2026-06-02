@@ -244,6 +244,9 @@ enum SCRIPT_ACTION {
     //Save focused mob into focused mobs memory.
     SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
     
+    //Send a script message to all mobs.
+    SCRIPT_ACTION_SEND_MESSAGE_TO_ALL_MOBS,
+    
     //Send a script message to area.
     SCRIPT_ACTION_SEND_MESSAGE_TO_AREA,
     
@@ -1006,6 +1009,7 @@ void removeStatus(ScriptActionInstRunData& data);
 void roundNumber(ScriptActionInstRunData& data);
 void runNextActionAs(ScriptActionInstRunData& data);
 void saveFocusMemory(ScriptActionInstRunData& data);
+void sendMessageToAllMobs(ScriptActionInstRunData& data);
 void sendMessageToArea(ScriptActionInstRunData& data);
 void sendMessageToFocus(ScriptActionInstRunData& data);
 void sendMessageToLinks(ScriptActionInstRunData& data);

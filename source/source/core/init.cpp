@@ -1991,6 +1991,14 @@ void initScriptActionTypes() {
         ScriptActionRunners::runNextActionAs
     );
     
+    //Send script message to all mobs.
+    queueParam("message", ptString);
+    commitAction(
+        SCRIPT_ACTION_SEND_MESSAGE_TO_ALL_MOBS,
+        "send_message_to_all_mobs",
+        ScriptActionRunners::sendMessageToAllMobs
+    );
+    
     //Send script message to area.
     queueParam("message", ptString);
     commitAction(
