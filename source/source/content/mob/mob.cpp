@@ -311,6 +311,14 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
         speedZ = MOB::KNOCKBACK_V_POWER;
         face(getAngle(speed) + TAU / 2, nullptr, true);
         startHeightEffect();
+        
+        forIdx(s, statuses) {
+            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
+            if(statuses[s].type->removeOnKnockDown) {
+                statuses[s].state = STATUS_STATE_TO_DELETE;
+            }
+        }
+        deleteOldStatusEffects();
     }
 }
 

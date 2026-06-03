@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
         https://github.com/Espyo/Pikifen/pull/91
-        Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
 
     --- 1.2.0 ---
     More powerful scripting
@@ -30,8 +29,6 @@ Next tasks (roughly sorted most important first)
         Ice vent emitting vapor
         Leader swap sound, so swapping to the rookie isn't silent
         Swarming jingle
-    Glow Pellets
-        Piles should allow pellets...right?
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -766,6 +763,7 @@ Misc things (so I don't forget)
         A tall grass mob
         A bunch more flowers and vegetation
         A turnstile mob
+        Glow Pellet piles
         Plants
             Neo took a bunch of pictures in https://discord.com/channels/459094367425134593/1509291234349289512/1510067525793353768
         Sounds

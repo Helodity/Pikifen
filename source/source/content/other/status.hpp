@@ -162,6 +162,9 @@ public:
     //Remove the status when the affected mob leaves the hazard causing it?
     bool removeOnHazardLeave = false;
     
+    //Remove the status when the affected mob is knocked down?
+    bool removeOnKnockDown = false;
+    
     //Remove the status when the affected mob is whistled?
     bool removeOnWhistle = false;
     

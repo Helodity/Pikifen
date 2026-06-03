@@ -7,6 +7,7 @@ causes_betrayal = true
 color = 210 88 140
 colorize = 140 50 144 192
 remove_on_whistle = false
+remove_on_knock_down = true
 top_replacement = pikmin/mushroom_top
 
 maker = Espyo

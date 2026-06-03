@@ -139,6 +139,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     sRS.set("colorize",                 colorize);
     sRS.set("affects",                  affectsStr);
     sRS.set("remove_on_hazard_leave",   removeOnHazardLeave);
+    sRS.set("remove_on_knock_down",     removeOnKnockDown);
     sRS.set("remove_on_whistle",        removeOnWhistle);
     sRS.set("auto_remove_time",         autoRemoveTime);
     sRS.set("reapply_rule",             reapplyRuleStr, &reapplyRuleNode);
