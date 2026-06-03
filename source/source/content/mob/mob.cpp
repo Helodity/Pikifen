@@ -1145,7 +1145,7 @@ Mob* Mob::calculateCarryingMob(const vector<Mob*>& potentialMobs) {
  */
 Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
     vector<Onion*> possibleOnions = game.states.gameplay->mobs.onions;
-
+    
     string nutrientFamily;
     switch(type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
@@ -2371,11 +2371,10 @@ void Mob::getHitboxHoldPoint(
  */
 size_t Mob::getLatchedPikminAmount() const {
     size_t total = 0;
-    forIdx(p, game.states.gameplay->mobs.pikmin) {
-        Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
-        if(pPtr->scriptVM.focusedMob != this) continue;
+    forIdx(m, holding) {
+        Mob* pPtr = holding[m];
         if(pPtr->holder.m != this) continue;
-        if(!pPtr->latched) continue;
+        if(pPtr->holder.type != HOLD_TYPE_LATCH) continue;
         total++;
     }
     return total;
@@ -2390,11 +2389,10 @@ size_t Mob::getLatchedPikminAmount() const {
  */
 float Mob::getLatchedPikminWeight() const {
     float total = 0;
-    forIdx(p, game.states.gameplay->mobs.pikmin) {
-        Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
-        if(pPtr->scriptVM.focusedMob != this) continue;
+    forIdx(m, holding) {
+        Mob* pPtr = holding[m];
         if(pPtr->holder.m != this) continue;
-        if(!pPtr->latched) continue;
+        if(pPtr->holder.type != HOLD_TYPE_LATCH) continue;
         total += pPtr->type->weight;
     }
     return total;
@@ -4596,7 +4594,7 @@ void Mob::tickScript(float deltaT) {
         bool savedByWhistle = false;
         forIdx(s, statuses) {
             if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->removableWithWhistle) {
+            if(statuses[s].type->removeOnWhistle) {
                 statuses[s].state = STATUS_STATE_TO_DELETE;
                 if(
                     statuses[s].type->healthChange < 0.0f ||

@@ -159,11 +159,11 @@ public:
     //Make affected mobs get colorized with this color.
     ALLEGRO_COLOR colorize = COLOR_EMPTY;
     
-    //Can the status effect be removed if the affected mob is whistled?
-    bool removableWithWhistle = false;
-    
     //Remove the status when the affected mob leaves the hazard causing it?
     bool removeOnHazardLeave = false;
+    
+    //Remove the status when the affected mob is whistled?
+    bool removeOnWhistle = false;
     
     //Remove the status automatically after these many seconds. 0 for never.
     float autoRemoveTime = 0.0f;

@@ -524,8 +524,6 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
         HOLD_ROTATION_METHOD_NEVER //PikminFsm::prepareToAttack handles it.
     );
     
-    latched = true;
-    
     playSound(pikType->soundDataIdxs[PIKMIN_SOUND_LATCH]);
 }
 
@@ -549,6 +547,8 @@ bool Pikmin::processAttackMiss(HitboxInteraction* info) {
     
     if(info->mob2->anim.curAnim->hitRate == 0) return false;
     if(info->mob2->anim.curAnim->hitRate == 100) return true;
+    
+    bool latched = holder.m && holder.type == HOLD_TYPE_LATCH;
     
     float enemyHitRateModifier =
         holder.m == info->mob2 && latched ?

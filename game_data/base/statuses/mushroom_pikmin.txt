@@ -6,7 +6,7 @@ auto_remove_time = 30
 causes_betrayal = true
 color = 210 88 140
 colorize = 140 50 144 192
-removable_with_whistle = false
+remove_on_whistle = false
 top_replacement = pikmin/mushroom_top
 
 maker = Espyo

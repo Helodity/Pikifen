@@ -43,14 +43,20 @@
         <td>0 0 0 0</td>
       </tr>
       <tr>
-        <td>removable_with_whistle</td>
-        <td>If <code>true</code>, the status effect can be removed if the object is whistled by a leader.</td>
+        <td><del>removable_with_whistle</del></td>
+        <td><b>Deprecated in 1.2.0!</b> Please use <code>remove_on_whistle</code> instead, which works the same.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
       <tr>
         <td>remove_on_hazard_leave</td>
         <td>If <code>true</code>, the status effect is removed if the object leaves the hazard that was emitting the status.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>remove_on_whistle</td>
+        <td>If <code>true</code>, the status effect is removed if the object is whistled by a leader.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>

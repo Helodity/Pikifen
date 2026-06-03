@@ -82,9 +82,6 @@ public:
     //Leader it is meant to return to after what it is doing, if any.
     Mob* leaderToReturnTo = nullptr;
     
-    //Is this Pikmin latched on to a mob?
-    bool latched = false;
-    
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool isToolPrimedForWhistle = false;
     

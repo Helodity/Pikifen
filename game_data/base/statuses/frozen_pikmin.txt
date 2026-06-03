@@ -13,7 +13,7 @@ particle_offset = 0 0 300
 particle_scale_reaches = true
 particle_scale_sizes = true
 reapply_rule = keep_time
-removable_with_whistle = true
+remove_on_whistle = true
 speed_multiplier = 0
 
 maker = Espyo

@@ -131,12 +131,15 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     DataNode* buildupNode = nullptr;
     DataNode* topReplacementNode = nullptr;
     
+    //DEPRECATED in 1.2.0 by "remove_on_whistle".
+    sRS.set("removable_with_whistle",   removeOnWhistle);
+    
     sRS.set("color",                    color);
     sRS.set("tint",                     tint);
     sRS.set("colorize",                 colorize);
     sRS.set("affects",                  affectsStr);
-    sRS.set("removable_with_whistle",   removableWithWhistle);
     sRS.set("remove_on_hazard_leave",   removeOnHazardLeave);
+    sRS.set("remove_on_whistle",        removeOnWhistle);
     sRS.set("auto_remove_time",         autoRemoveTime);
     sRS.set("reapply_rule",             reapplyRuleStr, &reapplyRuleNode);
     sRS.set("health_change",            healthChange);

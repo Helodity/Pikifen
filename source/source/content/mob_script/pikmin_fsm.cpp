@@ -5001,10 +5001,10 @@ void PikminFsm::tryHeldItemHotswap(
 void PikminFsm::unlatch(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(!scriptVM->focusedMob) return;
+    if(!pikPtr->holder.m) return;
+    if(pikPtr->holder.type != HOLD_TYPE_LATCH) return;
     
-    scriptVM->focusedMob->release(pikPtr);
-    pikPtr->latched = false;
+    pikPtr->holder.m->release(pikPtr);
 }
 
 
