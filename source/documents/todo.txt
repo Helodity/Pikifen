@@ -9,9 +9,7 @@ Next tasks (roughly sorted most important first)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
-        Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
         https://github.com/Espyo/Pikifen/pull/91
-        Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
         Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
 
     --- 1.2.0 ---

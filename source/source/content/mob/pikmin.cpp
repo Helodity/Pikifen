@@ -349,6 +349,14 @@ void Pikmin::handleStatusEffectGain(StatusType* staType) {
         scriptVM.fsm.setState(PIKMIN_STATE_PANICKING);
         break;
     }
+    case STATUS_STATE_CHANGE_WADING: {
+        if(followingGroup) {
+            scriptVM.fsm.setState(PIKMIN_STATE_WADING_IN_GROUP);
+        } else {
+            scriptVM.fsm.setState(PIKMIN_STATE_WADING);
+        }
+        break;
+    }
     default: {
         break;
     }
@@ -372,6 +380,8 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
     bool stillHasFlailing = false;
     bool stillHasHelplessness = false;
     bool stillHasPanic = false;
+    bool stillHasWading = false;
+    
     forIdx(s, statuses) {
         if(statuses[s].type == staType) continue;
         
@@ -388,7 +398,10 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
             stillHasPanic = true;
             break;
         }
-        default: {
+        case STATUS_STATE_CHANGE_WADING: {
+            stillHasWading = true;
+            break;
+        } default: {
             break;
         }
         }
@@ -424,6 +437,20 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
         scriptVM.fsm.setState(PIKMIN_STATE_IDLING);
         PikminFsm::standStill(&scriptVM, nullptr, nullptr);
         invulnPeriod.start();
+        
+    } else if(
+        staType->stateChangeType == STATUS_STATE_CHANGE_WADING &&
+        !stillHasWading &&
+        (
+            scriptVM.fsm.curState->id == PIKMIN_STATE_WADING ||
+            scriptVM.fsm.curState->id == PIKMIN_STATE_WADING_IN_GROUP
+        )
+    ) {
+        if(scriptVM.fsm.curState->id == PIKMIN_STATE_WADING) {
+            scriptVM.fsm.setState(PIKMIN_STATE_IDLING);
+        } else {
+            scriptVM.fsm.setState(PIKMIN_STATE_IN_GROUP_CHASING);
+        }
         
     }
     

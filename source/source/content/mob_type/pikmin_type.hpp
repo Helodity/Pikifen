@@ -146,6 +146,12 @@ enum PIKMIN_STATE {
     //Panicking.
     PIKMIN_STATE_PANICKING,
     
+    //Wading.
+    PIKMIN_STATE_WADING,
+    
+    //Wading, in group.
+    PIKMIN_STATE_WADING_IN_GROUP,
+    
     //Drinking a drop.
     PIKMIN_STATE_DRINKING,
     

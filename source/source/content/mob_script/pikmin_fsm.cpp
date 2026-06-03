@@ -1416,6 +1416,91 @@ void PikminFsm::createFsm(MobType* typ) {
         //pikmin::handleStatusEffectLoss();
     }
     
+    efc.newState("wading", PIKMIN_STATE_WADING); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
+            efc.run(PikminFsm::unlatch);
+            efc.run(PikminFsm::startWading);
+        }
+        efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
+            efc.run(PikminFsm::touchedHazard);
+        }
+        efc.newEvent(FSM_EV_LEFT_HAZARD); {
+            efc.run(PikminFsm::leftHazard);
+        }
+        efc.newEvent(FSM_EV_WHISTLED); {
+            efc.run(PikminFsm::called);
+            efc.run(PikminFsm::finishCalledAnim);
+            efc.changeState("wading_in_group");
+        }
+        efc.newEvent(FSM_EV_TOUCHED_ACTIVE_LEADER); {
+            efc.run(PikminFsm::called);
+            efc.run(PikminFsm::finishCalledAnim);
+            efc.run(PikminFsm::checkLeaderBump);
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(PikminFsm::checkIncomingAttack);
+        }
+        efc.newEvent(FSM_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(PikminFsm::beAttacked);
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
+            efc.run(PikminFsm::touchedEatHitbox);
+        }
+        efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
+            efc.run(PikminFsm::touchedSpray);
+        }
+        efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
+            efc.run(PikminFsm::fallDownPit);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dying");
+        }
+        
+        //The logic to stop wading is in
+        //pikmin::handleStatusEffectLoss();
+    }
+    
+    efc.newState("wading_in_group", PIKMIN_STATE_WADING_IN_GROUP); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
+            efc.run(PikminFsm::unlatch);
+            efc.run(PikminFsm::startChasingLeader);
+            efc.run(PikminFsm::startWading);
+        }
+        efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
+            efc.run(PikminFsm::touchedHazard);
+        }
+        efc.newEvent(FSM_EV_LEFT_HAZARD); {
+            efc.run(PikminFsm::leftHazard);
+        }
+        efc.newEvent(FSM_EV_SPOT_IS_FAR); {
+            efc.run(PikminFsm::updateInGroupChasing);
+        }
+        efc.newEvent(FSM_EV_DISMISSED); {
+            efc.changeState("wading");
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(PikminFsm::checkIncomingAttack);
+        }
+        efc.newEvent(FSM_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(PikminFsm::beAttacked);
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
+            efc.run(PikminFsm::touchedEatHitbox);
+        }
+        efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
+            efc.run(PikminFsm::touchedSpray);
+        }
+        efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
+            efc.run(PikminFsm::fallDownPit);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dying");
+        }
+        
+        //The logic to stop wading is in
+        //pikmin::handleStatusEffectLoss();
+    }
+    
     efc.newState("drinking", PIKMIN_STATE_DRINKING); {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(PikminFsm::startDrinking);
@@ -2527,6 +2612,8 @@ void PikminFsm::checkLeaderBump(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     if(pikPtr->getMobHeldInHand()) {
         scriptVM->fsm.setState(PIKMIN_STATE_CALLED_H, info1, info2);
+    } else if(scriptVM->fsm.curState->id == PIKMIN_STATE_WADING) {
+        scriptVM->fsm.setState(PIKMIN_STATE_WADING_IN_GROUP, info1, info2);
     } else {
         scriptVM->fsm.setState(PIKMIN_STATE_CALLED, info1, info2);
     }
@@ -4527,6 +4614,22 @@ void PikminFsm::startSeedParticles(
     }
     );
     pikPtr->particleGenerators.push_back(pg);
+}
+
+
+/**
+ * @brief When a Pikmin starts wading.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void PikminFsm::startWading(ScriptVM* scriptVM, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
+    
+    pikPtr->setAnimation(
+        PIKMIN_ANIM_ARMS_OUT, START_ANIM_OPTION_RANDOM_TIME, true
+    );
 }
 
 

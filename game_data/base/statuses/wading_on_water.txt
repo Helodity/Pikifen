@@ -1,0 +1,12 @@
+name = Wading on water
+description = Pikmin that are wading on the surface of the water, like Ice Pikmin.
+
+affects = pikmin
+color = 64 180 224
+remove_on_hazard_leave = true
+speed_multiplier = 0.9
+state_change_type = wading
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

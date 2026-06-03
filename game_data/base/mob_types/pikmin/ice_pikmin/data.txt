@@ -196,7 +196,7 @@ vulnerabilities {
     ice_pikmin = 0
     pikmin_attack = 200
     rock_pikmin = 200
-    water = 0 none false true
+    water = 100 wading_on_water true true
 }
 
 status_vulnerabilities {

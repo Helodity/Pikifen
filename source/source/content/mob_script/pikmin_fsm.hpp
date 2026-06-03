@@ -103,6 +103,7 @@ void startPickingUp(ScriptVM* scriptVM, void* info1, void* info2);
 void startReturning(ScriptVM* scriptVM, void* info1, void* info2);
 void startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2);
 void startSeedParticles(ScriptVM* scriptVM, void* info1, void* info2);
+void startWading(ScriptVM* scriptVM, void* info1, void* info2);
 void stopBeingIdle(ScriptVM* scriptVM, void* info1, void* info2);
 void stopBeingThrown(ScriptVM* scriptVM, void* info1, void* info2);
 void stopCarrying(ScriptVM* scriptVM, void* info1, void* info2);

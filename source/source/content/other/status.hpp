@@ -70,6 +70,9 @@ enum STATUS_STATE_CHANGE {
     //Pikmin panic state.
     STATUS_STATE_CHANGE_PANIC,
     
+    //Pikmin wading state.
+    STATUS_STATE_CHANGE_WADING,
+    
     //A custom state.
     STATUS_STATE_CHANGE_CUSTOM,
     
@@ -82,6 +85,7 @@ buildEnumNames(statusStateChangeINames, STATUS_STATE_CHANGE)({
     { STATUS_STATE_CHANGE_FLAILING, "flailing" },
     { STATUS_STATE_CHANGE_HELPLESS, "helpless" },
     { STATUS_STATE_CHANGE_PANIC, "panic" },
+    { STATUS_STATE_CHANGE_WADING, "wading" },
     { STATUS_STATE_CHANGE_CUSTOM, "custom" },
 });
 
