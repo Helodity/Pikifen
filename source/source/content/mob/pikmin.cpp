@@ -665,7 +665,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
     
     //Tick some timers.
     missedAttackTimer.tick(deltaT);
-    bumpLock = std::max(bumpLock - deltaT, 0.0f);
+    bumpLockTimer = std::max(bumpLockTimer - deltaT, 0.0f);
     autoMaturateTimer.tick(deltaT);
     
     //Forcefully follow another mob as a leader.

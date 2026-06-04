@@ -88,8 +88,9 @@ public:
     //Does this Pikmin have to follow its linked mob as its leader?
     bool mustFollowLinkAsLeader = false;
     
-    //Leader bump lock. Leaders close and timer running = timer resets.
-    float bumpLock = 0.0f;
+    //Leader bump lock timer. If a leader is close but the timer is running,
+    //the Pikmin won't be called and the timer will reset.
+    float bumpLockTimer = 0.0f;
     
     //Is it currently doing some boredom-related animation?
     bool inBoredAnimation = false;

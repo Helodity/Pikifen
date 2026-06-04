@@ -1430,12 +1430,6 @@ void PikminFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_WHISTLED); {
             efc.run(PikminFsm::called);
             efc.run(PikminFsm::finishCalledAnim);
-            efc.changeState("wading_in_group");
-        }
-        efc.newEvent(FSM_EV_TOUCHED_ACTIVE_LEADER); {
-            efc.run(PikminFsm::called);
-            efc.run(PikminFsm::finishCalledAnim);
-            efc.run(PikminFsm::checkLeaderBump);
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
             efc.run(PikminFsm::checkIncomingAttack);
@@ -1476,6 +1470,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::updateInGroupChasing);
         }
         efc.newEvent(FSM_EV_DISMISSED); {
+            efc.run(PikminFsm::setBumpLock);
             efc.changeState("wading");
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
@@ -2259,6 +2254,7 @@ void PikminFsm::beDismissed(ScriptVM* scriptVM, void* info1, void* info2) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
+    setBumpLock(scriptVM, info1, info2);
     pikPtr->chase(*((Point*) info1), pikPtr->bottomZ);
     
     pikPtr->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_IDLE]);
@@ -2606,8 +2602,11 @@ void PikminFsm::checkIncomingAttack(
 void PikminFsm::checkLeaderBump(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(game.options.misc.pikminBumpDist >= 0.0f && pikPtr->bumpLock > 0.0f) {
-        pikPtr->bumpLock = game.config.pikmin.idleBumpDelay;
+    if(
+        game.options.misc.pikminBumpDist >= 0.0f &&
+        pikPtr->bumpLockTimer > 0.0f
+    ) {
+        pikPtr->bumpLockTimer = game.config.pikmin.idleBumpDelay;
         return;
     }
     if(pikPtr->getMobHeldInHand()) {
@@ -2970,6 +2969,8 @@ void PikminFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
         }
         if(leaPtr->addToGroup(pikPtr)) {
             scriptVM->fsm.setState(
+                scriptVM->fsm.curState->id == PIKMIN_STATE_WADING ?
+                PIKMIN_STATE_WADING_IN_GROUP :
                 pikIsHolding ?
                 PIKMIN_STATE_IN_GROUP_CHASING_H :
                 PIKMIN_STATE_IN_GROUP_CHASING,
@@ -2978,6 +2979,8 @@ void PikminFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
         }
     }
     scriptVM->fsm.setState(
+        scriptVM->fsm.curState->id == PIKMIN_STATE_WADING ?
+        PIKMIN_STATE_WADING :
         pikIsHolding ?
         PIKMIN_STATE_IDLING_H :
         PIKMIN_STATE_IDLING,
@@ -4143,7 +4146,7 @@ void PikminFsm::seedLanded(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::setBumpLock(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    pikPtr->bumpLock = game.config.pikmin.idleBumpDelay;
+    pikPtr->bumpLockTimer = game.config.pikmin.idleBumpDelay;
 }
 
 
@@ -4643,7 +4646,7 @@ void PikminFsm::startWading(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::stopBeingIdle(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    pikPtr->bumpLock = 0.0f;
+    pikPtr->bumpLockTimer = 0.0f;
     pikPtr->inShakingAnimation = false;
 }
 
