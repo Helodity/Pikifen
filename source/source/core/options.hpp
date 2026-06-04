@@ -77,6 +77,7 @@ extern const size_t MAX_PARTICLES;
 extern const bool MIPMAPS_ENABLED;
 extern const bool PAUSE_ON_FOCUS_LOST;
 extern const bool SHADER_COMPATIBILITY_MODE;
+extern const bool SHOW_OS_MOUSE_CURSOR;
 extern const bool SMOOTH_SCALING;
 extern const unsigned int TARGET_FPS;
 extern const bool WINDOW_POS_HACK;
@@ -217,6 +218,9 @@ struct Options {
         
         //Shader compatibility mode, which simply disables failed shaders.
         bool shaderCompatMode = ADVANCED_D::SHADER_COMPATIBILITY_MODE;
+        
+        //Always show the operative system mouse cursor.
+        bool showOSMouseCursor = ADVANCED_D::SHOW_OS_MOUSE_CURSOR;
         
         //True to use interpolation when graphics are scaled up/down.
         bool smoothScaling = ADVANCED_D::SMOOTH_SCALING;

@@ -1177,6 +1177,7 @@ void LeaderPrompt::tick(float deltaT) {
  * @brief Hides the OS mouse in the game window.
  */
 void MouseCursor::hideInOS() const {
+    if(game.options.advanced.showOSMouseCursor) return;
     al_hide_mouse_cursor(game.display);
 }
 

@@ -56,6 +56,9 @@ const bool PAUSE_ON_FOCUS_LOST = true;
 //Default value for whether shader compatibility mode is enabled.
 const bool SHADER_COMPATIBILITY_MODE = false;
 
+//Default value for whether to always show the OS mouse cursor.
+const bool SHOW_OS_MOUSE_CURSOR = false;
+
 //Default value for whether to use smooth scaling.
 const bool SMOOTH_SCALING = true;
 
@@ -317,6 +320,7 @@ void Options::loadFromDataNode(DataNode* file) {
         aRS.set("mipmaps", advanced.mipmapsEnabled);
         aRS.set("pause_on_focus_lost", advanced.pauseOnFocusLost);
         aRS.set("shader_compatibility_mode", advanced.shaderCompatMode);
+        aRS.set("show_os_mouse_cursor", advanced.showOSMouseCursor);
         aRS.set("smooth_scaling", advanced.smoothScaling);
         aRS.set("window_position_hack", advanced.windowPosHack);
         aRS.set("zoom_medium_reach", advanced.zoomMediumReach);
@@ -618,6 +622,7 @@ void Options::saveToDataNode(DataNode* file) const {
         aGW.write("max_particles", advanced.maxParticles);
         aGW.write("mipmaps", advanced.mipmapsEnabled);
         aGW.write("pause_on_focus_lost", advanced.pauseOnFocusLost);
+        aGW.write("show_os_mouse_cursor", advanced.showOSMouseCursor);
         aGW.write("shader_compatibility_mode", advanced.shaderCompatMode);
         aGW.write("smooth_scaling", advanced.smoothScaling);
         aGW.write("window_position_hack", advanced.windowPosHack);
