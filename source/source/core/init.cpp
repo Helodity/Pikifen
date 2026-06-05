@@ -1623,7 +1623,7 @@ void initScriptActionTypes() {
     //Ease number.
     queueParam("destination var name", ptString, pfConst);
     queueParam("number", ptFloat);
-    queueParam("method", ptEnum, pfConst);
+    queueParam("method", ptEnum);
     commitAction(
         SCRIPT_ACTION_EASE_NUMBER,
         "ease_number",
@@ -1686,7 +1686,7 @@ void initScriptActionTypes() {
     );
     
     //Focus.
-    queueParam("target", ptEnum, pfConst);
+    queueParam("target", ptEnum);
     commitAction(
         SCRIPT_ACTION_FOCUS,
         "focus",
@@ -1758,7 +1758,7 @@ void initScriptActionTypes() {
     //DEPRECATED in 1.2.0 by "get_misc_info".
     //Get area info.
     queueParam("destination var name", ptString, pfConst);
-    queueParam("info", ptString, pfConst);
+    queueParam("info", ptString);
     commitAction(
         SCRIPT_ACTION_GET_AREA_INFO,
         "get_area_info",
@@ -1790,7 +1790,7 @@ void initScriptActionTypes() {
     
     //Get event info.
     queueParam("destination var name", ptString, pfConst);
-    queueParam("info", ptString, pfConst);
+    queueParam("info", ptString);
     commitAction(
         SCRIPT_ACTION_GET_EVENT_INFO,
         "get_event_info",
@@ -1840,7 +1840,7 @@ void initScriptActionTypes() {
     
     //Get misc. info.
     queueParam("destination var name", ptString, pfConst);
-    queueParam("info", ptString, pfConst);
+    queueParam("info", ptString);
     commitAction(
         SCRIPT_ACTION_GET_MISC_INFO,
         "get_misc_info",
@@ -1849,7 +1849,7 @@ void initScriptActionTypes() {
     
     //Get mission metric.
     queueParam("destination var name", ptString, pfConst);
-    queueParam("metric", ptEnum, pfConst);
+    queueParam("metric", ptEnum);
     queueParam("number data", ptInt, pfOpt, "1");
     queueParam("get auto target instead", ptBool, pfOpt, "false");
     commitAction(
@@ -1879,8 +1879,8 @@ void initScriptActionTypes() {
     
     //Get mob info.
     queueParam("destination var name", ptString, pfConst);
-    queueParam("target", ptString, pfConst);
-    queueParam("info", ptString, pfConst);
+    queueParam("target", ptString);
+    queueParam("info", ptString);
     commitAction(
         SCRIPT_ACTION_GET_MOB_INFO,
         "get_mob_info",
@@ -1917,7 +1917,7 @@ void initScriptActionTypes() {
     );
     
     //Goto.
-    queueParam("label name", ptString, pfConst);
+    queueParam("label name", ptString);
     commitAction(
         SCRIPT_ACTION_GOTO,
         "goto",
@@ -1984,7 +1984,7 @@ void initScriptActionTypes() {
     );
     
     //Run next action as.
-    queueParam("target", ptEnum, pfConst);
+    queueParam("target", ptEnum);
     commitAction(
         SCRIPT_ACTION_RUN_NEXT_ACTION_AS,
         "run_next_action_as",
@@ -2046,7 +2046,7 @@ void initScriptActionTypes() {
     );
     
     //Set state.
-    queueParam("state name", ptString, pfConst);
+    queueParam("state name", ptString);
     commitAction(
         SCRIPT_ACTION_SET_STATE,
         "set_state",
@@ -2116,7 +2116,7 @@ void initScriptActionTypes() {
     );
     
     //Arachnorb plan logic.
-    queueParam("goal", ptEnum, pfConst);
+    queueParam("goal", ptEnum);
     commitAction(
         SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
@@ -2161,7 +2161,7 @@ void initScriptActionTypes() {
     );
     
     //Follow mob as a leader.
-    queueParam("target", ptEnum, pfConst);
+    queueParam("target", ptEnum);
     queueParam("silent", ptBool, pfOpt, "false");
     commitAction(
         SCRIPT_ACTION_FOLLOW_MOB_AS_LEADER,
@@ -2206,7 +2206,7 @@ void initScriptActionTypes() {
     );
     
     //Hold focused mob.
-    queueParam("body part name", ptEnum, pfConst);
+    queueParam("body part name", ptEnum);
     queueParam("hold above", ptBool, pfOpt, "false");
     commitAction(
         SCRIPT_ACTION_HOLD_FOCUS,
@@ -2251,7 +2251,7 @@ void initScriptActionTypes() {
     );
     
     //Move to target.
-    queueParam("target", ptEnum, pfConst);
+    queueParam("target", ptEnum);
     commitAction(
         SCRIPT_ACTION_MOVE_TO_TARGET,
         "move_to_target",
@@ -2266,7 +2266,7 @@ void initScriptActionTypes() {
     );
     
     //Play sound.
-    queueParam("sound data", ptEnum, pfConst);
+    queueParam("sound data", ptEnum);
     queueParam("sound ID destination var name", ptString, pfOpt);
     commitAction(
         SCRIPT_ACTION_PLAY_SOUND,
@@ -2275,7 +2275,7 @@ void initScriptActionTypes() {
     );
     
     //Receive status.
-    queueParam("status name", ptEnum, pfConst);
+    queueParam("status name", ptEnum);
     commitAction(
         SCRIPT_ACTION_RECEIVE_STATUS,
         "receive_status",
@@ -2297,7 +2297,7 @@ void initScriptActionTypes() {
     );
     
     //Remove status.
-    queueParam("status name", ptEnum, pfConst);
+    queueParam("status name", ptEnum);
     commitAction(
         SCRIPT_ACTION_REMOVE_STATUS,
         "remove_status",
@@ -2331,7 +2331,7 @@ void initScriptActionTypes() {
     );
     
     //Set animation.
-    queueParam("animation name", ptString, pfConst);
+    queueParam("animation name", ptString);
     queueParam("options", ptEnum, pfOpt, "normal");
     queueParam("depend on mob speed", ptBool, pfOpt, "false");
     commitAction(
@@ -2349,7 +2349,7 @@ void initScriptActionTypes() {
     );
     
     //Set far reach.
-    queueParam("reach name", ptEnum, pfConst);
+    queueParam("reach name", ptEnum);
     commitAction(
         SCRIPT_ACTION_SET_FAR_REACH,
         "set_far_reach",
@@ -2413,7 +2413,7 @@ void initScriptActionTypes() {
     );
     
     //Set limb animation.
-    queueParam("animation name", ptString, pfConst);
+    queueParam("animation name", ptString);
     commitAction(
         SCRIPT_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
@@ -2421,7 +2421,7 @@ void initScriptActionTypes() {
     );
     
     //Set near reach.
-    queueParam("reach name", ptEnum, pfConst);
+    queueParam("reach name", ptEnum);
     commitAction(
         SCRIPT_ACTION_SET_NEAR_REACH,
         "set_near_reach",
@@ -2462,7 +2462,7 @@ void initScriptActionTypes() {
     );
     
     //Set team.
-    queueParam("team name", ptEnum, pfConst);
+    queueParam("team name", ptEnum);
     commitAction(
         SCRIPT_ACTION_SET_TEAM,
         "set_team",
@@ -2478,7 +2478,7 @@ void initScriptActionTypes() {
     );
     
     //Spawn.
-    queueParam("spawn data", ptEnum, pfConst);
+    queueParam("spawn data", ptEnum);
     commitAction(
         SCRIPT_ACTION_SPAWN,
         "spawn",
@@ -2486,7 +2486,7 @@ void initScriptActionTypes() {
     );
     
     //Stabilize Z.
-    queueParam("reference", ptEnum, pfConst);
+    queueParam("reference", ptEnum);
     queueParam("offset", ptFloat);
     commitAction(
         SCRIPT_ACTION_STABILIZE_Z,
@@ -2496,7 +2496,7 @@ void initScriptActionTypes() {
     
     //Start chomping.
     queueParam("victim max", ptInt);
-    queueParam("body part", ptEnum, pfConst);
+    queueParam("body part", ptEnum);
     queueParam("more body parts", ptEnum, pfOpt | pfVector);
     commitAction(
         SCRIPT_ACTION_START_CHOMPING,
@@ -2519,7 +2519,7 @@ void initScriptActionTypes() {
     );
     
     //Start particles.
-    queueParam("generator name", ptEnum, pfConst);
+    queueParam("generator name", ptEnum);
     queueParam("offset X", ptFloat, pfOpt, "0");
     queueParam("offset Y", ptFloat, pfOpt, "0");
     queueParam("offset Z", ptFloat, pfOpt, "0");
@@ -2644,7 +2644,7 @@ void initScriptActionTypes() {
     );
     
     //Turn to target.
-    queueParam("target", ptEnum, pfConst);
+    queueParam("target", ptEnum);
     commitAction(
         SCRIPT_ACTION_TURN_TO_TARGET,
         "turn_to_target",

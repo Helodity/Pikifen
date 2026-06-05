@@ -15196,7 +15196,7 @@ mobs{
 	}
 	enemy{
 		type=dwarf_red_bulborb
-		p=1504.0000 2784.0000
+		p=1536.0000 2784.0000
 		vars=dev_lab_kill_room=true
 	}
 	interactable{
@@ -15306,6 +15306,11 @@ mobs{
 	pellet{
 		type=glow_pellet
 		p=-2048.0000 -704.0000
+	}
+	enemy{
+		type=dwarf_red_bulborb
+		p=1456.0000 2832.0000
+		vars=dev_lab_kill_room=true
 	}
 }
 path_stops{
