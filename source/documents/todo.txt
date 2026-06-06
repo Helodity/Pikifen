@@ -5,6 +5,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Glow Pellets are the wrong colors from what they say they are
+    Adding and removing mob links is causing the linkIdxs vector to be filled with garbage
+    The auto-fading quick preview works weird with water
+    During quick preview, the yellow selection effect is still showing on sectors
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -29,6 +33,7 @@ Next tasks (roughly sorted most important first)
         Ice vent emitting vapor
         Leader swap sound, so swapping to the rookie isn't silent
         Swarming jingle
+    Reorganize the area editor's panels to make more sense, mostly in regards to what is "details" and "info" and such (thanks Helodity)
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -504,6 +509,7 @@ Misc things (so I don't forget)
         A way to add random variation to the knockback angle of a hitbox
         With the current Pikmin "missed hitbox" register, it's possible that an enemy will want to attack with the same hitbox multiple times in the same animation, but all those times will be ignored for 1.5 seconds (think the Man-at-Legs's shots)
         Maybe make it so that when a mob touches a hitbox, it sets a flag, and if the next frame it also touches a hitbox, ignore the event; repeat until there is a frame where the hitbox hasn't been touched -- this could stop the mob from getting hit multiple times by the same hitbox
+        Rectangular hitboxes -- sometimes Pikmin can attack elemental gates through the dips made by the circular hitboxes
     Aesthetic
         [NEEDS BRAINSTORMING] Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
             Or not -- most obstacles already show their progress visually rather than with a health wheel
@@ -814,6 +820,7 @@ Misc things (so I don't forget)
         A defeated enemy becoming a carriable corpse, as well as any mob becoming carriable, could also be a component
         Any mob should be able to receive a carried mob
         Search for any places that compare "category->id" with something else, as those maybe should not exist
+        Mobs could specify their drawing method from an enum. This way, something like an Onion could be drawn the standard mob way, or with some logic that turns all magic pink pixels to the color of the Onion. Same with Candypop Buds, pellets, and so on
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?

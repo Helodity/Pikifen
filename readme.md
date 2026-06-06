@@ -2,7 +2,7 @@
 
 ![Pikifen's wordmark](game_data/base/graphics/gui/wordmark.png)
 
-<img src="game_data/base/graphics/gui/icon.png" alt="drawing" height="16pt"/> _Pikifen_, an open-source _Pikmin_-based game/engine for fan-made content.  
+<img src="game_data/base/graphics/gui/icon.png" alt="drawing" height="16pt"/> _Pikifen_, a _Pikmin_-based game/engine for fan-made content.  
 Made with ♡ by Espyo.
 
 > **[⤓ Download for Windows! ⤓](#get-the-latest-version)**

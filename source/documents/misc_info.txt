@@ -496,6 +496,7 @@ Procedure for every version release
                 Author: André "Espyo" Silva
                 Keywords: Pikifen spritesheet
                 Description: Spritesheet for the <object name> in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
+        Place any changes made to the .vscode folder in source/vs_code folder
     Release candidate
         Compile it for Windows
             Use GitHub Actions

@@ -1,5 +1,5 @@
 name = Red Pikmin
-description = Red Pikmin are resistant to fire. They also cause more damage than normal when attacking.
+description = Red Pikmin are resistant to fire! They also cause more damage than normal when attacking.
 
 can_carry_tools = true
 can_walk_on_others = true

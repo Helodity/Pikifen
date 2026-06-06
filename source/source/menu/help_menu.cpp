@@ -228,7 +228,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     };
     manualButton->onGetTooltip = [] () {
         return
-            "Information on how to get more help.";
+            "Press here to get more help.";
     };
     gui.addItem(manualButton, "manual");
     

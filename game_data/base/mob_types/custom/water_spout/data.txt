@@ -2,6 +2,7 @@ name = Water spout
 description = A hole that occasionally spits out a spray of water, like a geyser.
 
 can_hurt = player; fragile
+casts_shadow = false
 custom_category_name = Obstacle, dangerous
 height = 23
 max_health = 150

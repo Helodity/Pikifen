@@ -273,7 +273,6 @@ void StatsMenu::populateStatsList() {
         FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
     );
     
-    size_t missionClears = 0;
     size_t missionPlatinums = 0;
     long missionScores = 0;
     
@@ -281,9 +280,6 @@ void StatsMenu::populateStatsList() {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         MissionRecord record;
         loadAreaMissionRecord(&missionRecordsFile, areaPtr, record, nullptr);
-        if(!record.date.empty()) {
-            missionClears++;
-        }
         if(record.isPlatinum(areaPtr->mission)) {
             missionPlatinums++;
         }
@@ -293,12 +289,6 @@ void StatsMenu::populateStatsList() {
     }
     
     addNewHeaderItem("Missions");
-    addNewStatItem(
-        "Cleared",
-        i2s(missionClears) + "/" +
-        i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
-        "Total amount of missions where the current record is a clear."
-    );
     addNewStatItem(
         "Platinum medals",
         i2s(missionPlatinums) + "/" +

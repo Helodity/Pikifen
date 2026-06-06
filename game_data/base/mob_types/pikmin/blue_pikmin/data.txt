@@ -1,5 +1,5 @@
 name = Blue Pikmin
-description = Blue Pikmin can swim and withstand any water-based attack.
+description = Blue Pikmin are resistant to water! They also move underwater like it's nothing.
 
 can_carry_tools = true
 can_walk_on_others = true

@@ -1,5 +1,5 @@
 name = Bulbmin
-description = Bulbmin are immune to every single hazard!
+description = Bulbmin are resistant to every single hazard! They don't have an Onion though...
 
 can_carry_tools = true
 can_walk_on_others = true

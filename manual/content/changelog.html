@@ -43,7 +43,7 @@
           <li><span class="cl-a">Added</span> a "mushroom spores" hazard. This is emitted by a new enemy, the Puffstool. The spores change a Pikmin's appearance to a mushroom form and make it attack the player.</li>
           <li><span class="cl-a">Added</span> an ice hazard. This is emitted by two new obstacles, the ice wall and the ice vent. Vulnerable Pikmin immediately freeze on their tracks when touching ice.</li>
           <li><span class="cl-a">Added</span> a water spout obstacle.</li>
-          <li><span class="cl-c">Changed</span> the electrical wire to use non-lethal electricity. This way all elemental hazard obstacles are non-lethal.</li>
+          <li><span class="cl-c">Changed</span> the electrical wire to use non-lethal electricity. This way all elemental hazard obstacles are not immediately lethal.</li>
         </ul>
       </li>
       <li>
@@ -52,7 +52,8 @@
           <li><span class="cl-a">Added</span> a new <a href="mob_leader.html">leader</a>: the rookie Rescue Officer.</li>
           <li><span class="cl-a">Added</span> some new <a href="mob_treasure.html">treasures</a>: Four Sided Die, Playing Card, Poker Chip, Red Die, and White Die. (Thanks Helodity)</li>
           <li><span class="cl-a">Added</span> the ability for Pellet Posies to revive.</li>
-          <li><span class="cl-c">Changed</span> the ultra-bitter spray's effects. Now it last longer (8 seconds) but substantially increase the enemy's defense (20&times;). The Ice Pikmin's freezing ability now takes the role of a short-but-combat-effective stasis effect.</li>
+          <li><span class="cl-c">Changed</span> the hot water geyser to be an air geyser. It's otherwise the same.</li>
+          <li><span class="cl-c">Changed</span> the ultra-bitter spray's effects. Now it lasts longer (8 seconds) but substantially increase the enemy's defense (20&times;). The Ice Pikmin's freezing ability now takes the role of a short-but-combat-effective stasis effect.</li>
           <li><span class="cl-c">Changed</span> the logo for a nicer look.</li>
         </ul>
       </li>
@@ -65,7 +66,7 @@
           <li><span class="cl-a">Added</span> an advanced option to always show the operative system's mouse cursor. This is useful for recording footage without the HUD, but still knowing where you're aiming.</li>
           <li><span class="cl-a">Added</span> a system notification for when a screenshot is taken.</li>
           <li><span class="cl-c">Changed</span> how mission medals work. Now, whether a mission was cleared or failed is not recorded, and instead only the medal is. Different missions control whether a medal can be received or not depending on what happens inside the mission. This, along with other internal mission system changes, makes playing and making missions more intuitive. Please enter the area selection menu in 1.2.0 to automatically port your mission records file from the old format to the new format.</li>
-          <li><span class="cl-c">Changed</span> how a carrying target is decided. Before, it one was closer but blocked behind obstacles and another was farther but free, Pikmin would want to go to the closer one. Now they opt for the one that is free. (Thanks Helodity)</li>
+          <li><span class="cl-c">Changed</span> how a carrying target is decided. Before, if one was closer but blocked behind obstacles and another was farther but free, Pikmin would want to go to the closer one. Now they opt for the one that is free. (Thanks Helodity)</li>
         </ul>
       </li>
     </ul>
@@ -94,7 +95,7 @@
           <li><span class="cl-a">Added</span> other actions: <code>focus_on_id</code>, <code>follow_mob_as_leader</code>, <code>get_misc_info</code>, <code>get_mob_ids_in_region</code>, <code>get_mob_ids_with_var</code>, <code>run_next_action_as</code>, <code>send_message_to_all_mobs</code>, <code>send_message_to_area</code>, <code>unfocus</code>.</li>
           <li><span class="cl-a">Added</span> data to the <code>get_mob_info</code> action: <code>animation</code>, <code>link_ids</code>, <code>max_health</code>.</li>
           <li><span class="cl-a">Added</span> the <code>ready</code> block, that works like the <code>init</code> block but only when everything is ready.</li>
-          <li><span class="cl-c">Changed</span> how script processing works. Instead of a more <a href="https://en.wikipedia.org/wiki/Compiler">compiler</a>-based approach, the system is now more <a href="https://en.wikipedia.org/wiki/Interpreter_(computing)">interpreter</a>-based. This allows for more powerful scripting logic behind-the-scenes and is necessary for some of the new actions, but now an action's data is only really processed when it is run. So now, if you write a script and want to go in-game to check for any error reports, you must have the object run the relevant actions mid-gameplay, instead of simply loading the area the object is in.</li>
+          <li><span class="cl-c">Changed</span> how script processing works. Instead of a more <a href="https://en.wikipedia.org/wiki/Compiler">compiler</a>-based approach, the system is now more <a href="https://en.wikipedia.org/wiki/Interpreter_(computing)">interpreter</a>-based. This allows for more powerful scripting logic behind-the-scenes and is necessary for some of the new actions, but now part of an action's data is only processed when it is run. Some data is still processed when the action is loaded, however. So now, if you write a script and want to go in-game to check for all error reports, you should have the object run the relevant actions mid-gameplay, not just load the area the object is in.</li>
         </ul>
       </li>
       <li>
@@ -222,6 +223,7 @@
       <li>
         Base content:
         <ul>
+          <li><span class="cl-c">Changed</span> the electrical wire to use non-lethal electricity.</li>
           <li><span class="cl-c">Changed</span> the <code>gameplay_message_char.ogg</code> sound to <code>cutscene_message_char.ogg</code>.</li>
         </ul>
       </li>

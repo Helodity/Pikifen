@@ -1,5 +1,5 @@
 name = Ice Pikmin
-description = Ice Pikmin resist the bitter cold. They can freeze enemies with enough attacks or if enough are swallowed. While they can't swim, if enough are floating on the surface of a body of water, they will freeze it!
+description = Ice Pikmin are resistant to ice! They also freeze enemies with enough attacks or if enough are swallowed. While they can't swim, if enough are floating on the surface of a body of water, they will freeze it too!
 
 can_carry_tools = true
 can_walk_on_others = true

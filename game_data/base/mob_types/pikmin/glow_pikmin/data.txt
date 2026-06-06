@@ -1,5 +1,5 @@
 name = Glow Pikmin
-description = Glow Pikmin are immune to every single hazard!
+description = Glow Pikmin are resistant to every single hazard! They also teleport right into your group, if they're not busy. Unlike other Pikmin, they are born from Lumiknolls.
 
 auto_maturate_interval = 32
 blackout_radius = 20
