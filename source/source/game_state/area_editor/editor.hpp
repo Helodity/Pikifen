@@ -394,15 +394,6 @@ private:
         //Main menu.
         EDITOR_STATE_MAIN,
         
-        //Area info editing.
-        EDITOR_STATE_INFO,
-        
-        //Area gameplay settings editing.
-        EDITOR_STATE_GAMEPLAY,
-        
-        //Mission settings editing.
-        EDITOR_STATE_MISSION,
-        
         //Layout editing.
         EDITOR_STATE_LAYOUT,
         
@@ -414,6 +405,15 @@ private:
         
         //Detail editing.
         EDITOR_STATE_DETAILS,
+        
+        //Area general data editing.
+        EDITOR_STATE_INFO,
+        
+        //Gameplay settings editing.
+        EDITOR_STATE_GAMEPLAY,
+        
+        //Mission settings editing.
+        EDITOR_STATE_MISSION,
         
         //Review.
         EDITOR_STATE_REVIEW,
@@ -798,6 +798,9 @@ private:
     
     //Selection controller for the details state.
     SelectionController detailsSelCtrl;
+    
+    //Selection controller for the gameplay state.
+    SelectionController gameplaySelCtrl;
     
     //Selection controller for the review state.
     SelectionController reviewSelCtrl;
@@ -1212,13 +1215,6 @@ private:
         size_t* idxParamVar, size_t* targetParamVar,
         const string& descriptor, bool targetIsMatch
     );
-    void handleLmbDownDetails(const ALLEGRO_EVENT& ev);
-    void handleLmbDownLayout(const ALLEGRO_EVENT& ev);
-    void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev);
-    void handleLmbDownMobs(const ALLEGRO_EVENT& ev);
-    void handleLmbDownPaths(const ALLEGRO_EVENT& ev);
-    void handleLmbDownReview(const ALLEGRO_EVENT& ev);
-    void handleLmbDownTools(const ALLEGRO_EVENT& ev);
     void handleKeyCharAnywhere(const ALLEGRO_EVENT& ev) override;
     void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;
     void handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) override;
@@ -1226,6 +1222,14 @@ private:
     void handleKeyUpAnywhere(const ALLEGRO_EVENT& ev) override;
     void handleLmbDoubleClick(const ALLEGRO_EVENT& ev) override;
     void handleLmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDownDetails(const ALLEGRO_EVENT& ev);
+    void handleLmbDownGameplay(const ALLEGRO_EVENT& ev);
+    void handleLmbDownLayout(const ALLEGRO_EVENT& ev);
+    void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev);
+    void handleLmbDownMobs(const ALLEGRO_EVENT& ev);
+    void handleLmbDownPaths(const ALLEGRO_EVENT& ev);
+    void handleLmbDownReview(const ALLEGRO_EVENT& ev);
+    void handleLmbDownTools(const ALLEGRO_EVENT& ev);
     void handleLmbDrag(const ALLEGRO_EVENT& ev) override;
     void handleLmbUp(const ALLEGRO_EVENT& ev) override;
     void handleMmbDoubleClick(const ALLEGRO_EVENT& ev) override;

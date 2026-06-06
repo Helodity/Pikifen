@@ -187,7 +187,7 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 subState = EDITOR_SUB_STATE_NONE;
                 setStatus();
             } else if(subState == EDITOR_SUB_STATE_MISSION_MOBS) {
-                changeState(EDITOR_STATE_GAMEPLAY);
+                changeState(EDITOR_STATE_MISSION);
             } else if(!clearSelections()) {
                 changeState(EDITOR_STATE_MAIN);
             }
@@ -207,6 +207,19 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
             } else if(!clearSelections()) {
                 changeState(EDITOR_STATE_MAIN);
             }
+            
+        } else if(state == EDITOR_STATE_GAMEPLAY) {
+            if(!clearSelections()) {
+                changeState(EDITOR_STATE_MAIN);
+            }
+            
+        } else if(
+            state == EDITOR_STATE_INFO ||
+            state == EDITOR_STATE_MISSION ||
+            state == EDITOR_STATE_REVIEW ||
+            state == EDITOR_STATE_TOOLS
+        ) {
+            changeState(EDITOR_STATE_MAIN);
             
         } else if(state == EDITOR_STATE_MAIN) {
             quitCmd(1.0f);
@@ -526,12 +539,39 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         handleLmbDownDetails(ev);
         break;
         
+    } case EDITOR_STATE_GAMEPLAY: {
+        handleLmbDownGameplay(ev);
+        break;
+        
     } case EDITOR_STATE_TOOLS: {
         handleLmbDownTools(ev);
         break;
         
     } case EDITOR_STATE_REVIEW: {
         handleLmbDownReview(ev);
+        break;
+        
+    }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the gameplay mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT& ev) {
+    switch(subState) {
+    case EDITOR_SUB_STATE_NONE: {
+
+        handleSelectionAndTransformationLmbDown(
+            gameplaySelCtrl, curTransformationWidget, false
+        );
+        
+        regionSelection.setHomogenized(false);
+        
         break;
         
     }
@@ -575,7 +615,6 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         );
         
         shadowSelection.setHomogenized(false);
-        regionSelection.setHomogenized(false);
         
         break;
         
@@ -1323,6 +1362,16 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         
         break;
         
+    } case EDITOR_STATE_GAMEPLAY: {
+
+        handleSelectionAndTransformationLmbDrag(
+            gameplaySelCtrl, curTransformationWidget, false,
+            snapPoint(game.editorsView.mouseCursorWorldPos),
+            [this] { registerChange("region movement"); }
+        );
+        
+        break;
+        
     } case EDITOR_STATE_TOOLS: {
 
         //Move reference handle.
@@ -1396,6 +1445,9 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     );
     handleSelectionAndTransformationLmbUp(
         detailsSelCtrl, curTransformationWidget, false
+    );
+    handleSelectionAndTransformationLmbUp(
+        gameplaySelCtrl, curTransformationWidget, false
     );
     handleSelectionAndTransformationLmbUp(
         reviewSelCtrl, curTransformationWidget,

@@ -247,9 +247,13 @@ void AreaEditor::drawCanvas() {
     
     if(state == EDITOR_STATE_DETAILS) {
         drawTreeShadows(style);
-        drawRegions(style);
         drawSelectionAndTransformationThings(
             detailsSelCtrl, curTransformationWidget, false
+        );
+    } else if(state == EDITOR_STATE_GAMEPLAY) {
+        drawRegions(style);
+        drawSelectionAndTransformationThings(
+            gameplaySelCtrl, curTransformationWidget, false
         );
     }
     
@@ -1657,7 +1661,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
 void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR REGION_OUTLINE_COLOR = al_map_rgb(192, 128, 64);
     
-    if(state == EDITOR_STATE_DETAILS) {
+    if(state == EDITOR_STATE_GAMEPLAY) {
         forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
             

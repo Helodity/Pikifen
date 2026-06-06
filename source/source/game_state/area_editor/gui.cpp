@@ -182,15 +182,6 @@ void AreaEditor::processGuiControlPanel() {
     case EDITOR_STATE_MAIN: {
         processGuiPanelMain();
         break;
-    } case EDITOR_STATE_INFO: {
-        processGuiPanelInfo();
-        break;
-    } case EDITOR_STATE_GAMEPLAY: {
-        processGuiPanelGameplay();
-        break;
-    } case EDITOR_STATE_MISSION: {
-        processGuiPanelMission();
-        break;
     } case EDITOR_STATE_LAYOUT: {
         processGuiPanelLayout();
         break;
@@ -202,6 +193,15 @@ void AreaEditor::processGuiControlPanel() {
         break;
     } case EDITOR_STATE_DETAILS: {
         processGuiPanelDetails();
+        break;
+    } case EDITOR_STATE_INFO: {
+        processGuiPanelInfo();
+        break;
+    } case EDITOR_STATE_GAMEPLAY: {
+        processGuiPanelGameplay();
+        break;
+    } case EDITOR_STATE_MISSION: {
+        processGuiPanelMission();
         break;
     } case EDITOR_STATE_REVIEW: {
         processGuiPanelReview();
@@ -1580,127 +1580,285 @@ void AreaEditor::processGuiPanelDetails() {
             
         }
         
+        //Ambiance node.
         ImGui::Spacer();
+        if(saveableTreeNode("details", "Ambiance")) {
         
-        //Regions node.
-        if(saveableTreeNode("details", "Regions")) {
-        
-            //Nav box start.
-            size_t curRegionIdx = regionSelection.getSingleItemIdx();
-            processGuiNavBoxStart(
-                "region", "Region", "", &curRegionIdx,
-            [this] () { return game.curArea->regions.size(); },
-            [this] () { return regionSelection.getCount(); }
-            );
+            //Preview song button.
+            bool validSongSelected =
+                !game.curArea->songName.empty() &&
+                game.curArea->songName != NONE_OPTION;
+            bool previewing =
+                !previewSong.empty();
+            bool canPreviewSelectedSong =
+                validSongSelected &&
+                previewSong != game.curArea->songName;
+            bool canStopPreviewing =
+                previewing &&
+                (
+                    !validSongSelected ||
+                    previewSong == game.curArea->songName
+                );
+            bool previewButtonValid =
+                canPreviewSelectedSong || canStopPreviewing;
+                
+            if(!previewButtonValid) ImGui::BeginDisabled();
             
-            //Previous region button.
-            if(processGuiNavBoxPrev()) {
-                regionSelection.setSingle(curRegionIdx);
-            }
-            
-            //Current region text.
-            processGuiNavBoxCur();
-            
-            //Next region button.
-            if(processGuiNavBoxNext()) {
-                regionSelection.setSingle(curRegionIdx);
-            }
-            
-            //Nav box second line setup.
-            processGuiNavBoxSecondLine(2);
-            
-            //New region button.
             if(
-                processGuiNavWidgetNew(
-                    &curRegionIdx, game.curArea->regions.size()
+                ImGui::ImageButton(
+                    "previewSongButton",
+                    canStopPreviewing ?
+                    editorIcons[EDITOR_ICON_STOP] :
+                    editorIcons[EDITOR_ICON_PLAY],
+                    Point(ImGui::GetTextLineHeight())
                 )
             ) {
-                addNewRegionCmd(1.0f);
-            }
-            setTooltip("Create a new area region.");
-            
-            //Delete region button.
-            ImGui::SameLine();
-            if(regionSelection.getCount() > 0) {
-                if(
-                    processGuiNavWidgetDel(
-                        &curRegionIdx, game.curArea->regions.size()
-                    )
-                ) {
-                    deleteRegionCmd(1.0f);
+                if(canPreviewSelectedSong) {
+                    previewSong = game.curArea->songName;
+                    game.audio.setCurrentSong(previewSong);
+                    previewing = true;
+                } else if(canStopPreviewing) {
+                    game.audio.setCurrentSong(
+                        game.sysContentNames.sngEditors, false
+                    );
+                    previewSong.clear();
+                    previewing = false;
                 }
-                setTooltip("Delete the selected area region.", "Delete");
+            }
+            
+            if(!previewButtonValid) ImGui::EndDisabled();
+            
+            string previewTooltipStr;
+            if(previewing) {
+                previewTooltipStr +=
+                    "Currently previewing the song \"" +
+                    game.content.songs.list[previewSong].name +
+                    "\".\n";
+            }
+            if(canPreviewSelectedSong) {
+                previewTooltipStr +=
+                    "Press here to preview the song \"" +
+                    game.content.songs.list[game.curArea->songName].name +
+                    "\".";
+            } else if(canStopPreviewing) {
+                previewTooltipStr +=
+                    "Press here to stop.";
             } else {
-                processGuiNavBoxPlaceholder();
+                previewTooltipStr +=
+                    "If you select a song, you can press here to preview it.";
             }
+            setTooltip(previewTooltipStr);
             
-            //End the nav box.
-            processGuiNavBoxEnd();
+            //Music combobox.
+            ImGui::SameLine();
+            vector<string> songInternals;
+            vector<string> songNames;
+            songInternals.push_back("");
+            songNames.push_back(NONE_OPTION);
+            for(auto& s : game.content.songs.list) {
+                songInternals.push_back(s.first);
+                songNames.push_back(s.second.name);
+            }
+            string songName = game.curArea->songName;
+            if(ImGui::Combo("Song", &songName, songInternals, songNames, 15)) {
+                registerChange("area song change");
+                game.curArea->songName = songName;
+            }
+            setTooltip(
+                "What song to play."
+            );
             
-            if(regionSelection.hasOne()) {
+            //Area weather combobox.
+            vector<string> weatherCondInternals;
+            vector<string> weatherCondNames;
+            weatherCondInternals.push_back("");
+            weatherCondNames.push_back(NONE_OPTION);
+            for(auto& w : game.content.weatherConditions.list) {
+                weatherCondInternals.push_back(w.first);
+                weatherCondNames.push_back(w.second.name);
+            }
+            string weatherName = game.curArea->weatherName;
+            if(
+                ImGui::Combo(
+                    "Weather", &weatherName,
+                    weatherCondInternals, weatherCondNames, 15
+                )
+            ) {
+                registerChange("area weather change");
+                game.curArea->weatherName = weatherName;
+            }
+            setTooltip(
+                "The weather condition to use."
+            );
             
-                AreaRegion* curRegion =
-                    game.curArea->regions[
-                        regionSelection.getSingleItemIdx()
-                    ];
-                    
-                //Region type combobox.
-                int typeInt = curRegion->type;
-                if(
-                    ImGui::Combo(
-                        "Type", &typeInt, enumGetNames(areaRegionTypeNames), 15
-                    )
-                ) {
-                    registerChange("region type change");
-                    curRegion->type = (AREA_REGION_TYPE) typeInt;
+            ImGui::Spacer();
+            
+            bool hasTimeLimit = false;
+            float missionMin = 0;
+            if(game.curArea->type == AREA_TYPE_MISSION) {
+                hasTimeLimit = game.curArea->mission.timeLimit != 0;
+                if(hasTimeLimit) {
+                    missionMin = game.curArea->mission.timeLimit / 60.0f;
                 }
-                setTooltip("The type and purpose of the region.");
-                
-                //Region center value.
-                Point regionCenter = curRegion->pose.pos;
+            }
+            int dayStartMin = (int) game.curArea->dayTimeStart;
+            dayStartMin = wrapFloat(dayStartMin, 0, 60 * 24);
+            float daySpeed = game.curArea->dayTimeSpeed;
+            int dayEndMin = (int) (dayStartMin + missionMin * daySpeed);
+            dayEndMin = wrapFloat(dayEndMin, 0, 60 * 24);
+            
+            //Area day time at start value.
+            if(
+                ImGui::DragTime2(
+                    "Start day time", &dayStartMin, "h", "m", 23, 59
+                )
+            ) {
+                registerChange("day time change");
+                game.curArea->dayTimeStart = dayStartMin;
+                if(hasTimeLimit) {
+                    daySpeed =
+                        calculateDaySpeed(
+                            dayStartMin, dayEndMin, missionMin
+                        );
+                    game.curArea->dayTimeSpeed = daySpeed;
+                }
+            }
+            setTooltip(
+                "Point of the (game world) day at which gameplay starts.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            if(hasTimeLimit) {
+                //Area day time at end value.
                 if(
-                    ImGui::DragFloat2("Center", (float*) &regionCenter)
-                ) {
-                    registerChange("region center change");
-                    curRegion->pose.pos = regionCenter;
-                };
-                setTooltip(
-                    "Center coordinates of the region.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-                //Region size value.
-                Point regionSize = curRegion->pose.size;
-                if(
-                    ImGui::DragFloat2("Size", (float*) &regionSize)
-                ) {
-                    registerChange("region size change");
-                    curRegion->pose.size = regionSize;
-                };
-                setTooltip(
-                    "Width and height of the region.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-                //Region angle value.
-                float regionAngle = curRegion->pose.angle;
-                if(
-                    ImGui::SliderAngleWithContext(
-                        "Angle", &regionAngle, 0, 360, "%.2f"
+                    ImGui::DragTime2(
+                        "End day time", &dayEndMin, "h", "m", 23, 59
                     )
                 ) {
-                    registerChange("region angle change");
-                    curRegion->pose.angle = regionAngle;
-                };
+                    registerChange("day time change");
+                    daySpeed =
+                        calculateDaySpeed(
+                            dayStartMin, dayEndMin, missionMin
+                        );
+                    game.curArea->dayTimeSpeed = daySpeed;
+                }
                 setTooltip(
-                    "Angle of the region.",
-                    "", WIDGET_EXPLANATION_SLIDER
+                    "Point of the (game world) day at which gameplay ends.\n"
+                    "Only applicable in missions with time limits.\n"
+                    "Set this to the same as the area start time to make\n"
+                    "the day time frozen.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+            } else {
+            
+                //Area day time speed value.
+                ImGui::SetNextItemWidth(165);
+                if(
+                    ImGui::DragFloat(
+                        "Day time speed", &daySpeed, 0.1f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    registerChange("day time change");
+                    game.curArea->dayTimeSpeed = daySpeed;
+                }
+                setTooltip(
+                    "Speed at which the (game world) day passes.\n"
+                    "60 means 1 game-world-hour goes by in 1 real-world-minute.\n"
+                    "0 means it's stopped.",
+                    "", WIDGET_EXPLANATION_DRAG
                 );
                 
             }
             
             ImGui::TreePop();
+        }
+        
+        //Background node.
+        ImGui::Spacer();
+        if(saveableTreeNode("details", "Background")) {
+        
+            //Remove background texture button.
+            float remBgAlpha = game.curArea->bgBmpName.empty() ? 0.20f : 1.0f;
+            if(
+                ImGui::ImageButton(
+                    "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
+                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                    COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
+                ) &&
+                !game.curArea->bgBmpName.empty()
+            ) {
+                registerChange("area background removal");
+                game.curArea->bgBmpName.clear();
+                setStatus("Removed the background image successfully.");
+            }
+            setTooltip(
+                "Remove the background image for the area."
+            );
             
+            //Choose background texture button.
+            ImGui::SameLine();
+            if(ImGui::Button("Choose image...")) {
+                openBitmapDialog(
+                [this] (const string& bmp) {
+                    registerChange("area background change");
+                    game.curArea->bgBmpName = bmp;
+                    setStatus("Picked a background image successfully.");
+                },
+                FOLDER_NAMES::TEXTURES
+                );
+            }
+            setTooltip(
+                "Choose which background image to use from the game's content.\n"
+                "This repeating texture can be seen when looking at the void."
+            );
+            
+            //Background image name text.
+            ImGui::SameLine();
+            monoText("%s", game.curArea->bgBmpName.c_str());
+            setTooltip("Internal name:\n" + game.curArea->bgBmpName);
+            
+            //Background color value.
+            ALLEGRO_COLOR bgColor = game.curArea->bgColor;
+            if(
+                ImGui::ColorEdit4(
+                    "Void color", (float*) &bgColor,
+                    ImGuiColorEditFlags_NoInputs
+                )
+            ) {
+                registerChange("area background color change");
+                game.curArea->bgColor = bgColor;
+            }
+            setTooltip(
+                "Set the color of the void. If you have a background image,\n"
+                "this will appear below it."
+            );
+            
+            //Background distance value.
+            float bgDist = game.curArea->bgDist;
+            if(ImGui::DragFloat("Distance", &bgDist)) {
+                registerChange("area background distance change");
+                game.curArea->bgDist = bgDist;
+            }
+            setTooltip(
+                "How far away the background texture is. "
+                "Affects parallax scrolling.\n"
+                "2 is a good value.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Background zoom value.
+            float bgBmpZoom = game.curArea->bgBmpZoom;
+            if(ImGui::DragFloat("Zoom", &bgBmpZoom, 0.01)) {
+                registerChange("area background zoom change");
+                game.curArea->bgBmpZoom = bgBmpZoom;
+            }
+            setTooltip(
+                "Scale the texture by this amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            ImGui::TreePop();
         }
         
     }
@@ -2043,6 +2201,128 @@ void AreaEditor::processGuiPanelGameplay() {
         ImGui::TreePop();
     }
     
+    //Regions node.
+    ImGui::Spacer();
+    if(saveableTreeNode("gameplay", "Regions")) {
+    
+        //Nav box start.
+        size_t curRegionIdx = regionSelection.getSingleItemIdx();
+        processGuiNavBoxStart(
+            "region", "Region", "", &curRegionIdx,
+        [this] () { return game.curArea->regions.size(); },
+        [this] () { return regionSelection.getCount(); }
+        );
+        
+        //Previous region button.
+        if(processGuiNavBoxPrev()) {
+            regionSelection.setSingle(curRegionIdx);
+        }
+        
+        //Current region text.
+        processGuiNavBoxCur();
+        
+        //Next region button.
+        if(processGuiNavBoxNext()) {
+            regionSelection.setSingle(curRegionIdx);
+        }
+        
+        //Nav box second line setup.
+        processGuiNavBoxSecondLine(2);
+        
+        //New region button.
+        if(
+            processGuiNavWidgetNew(
+                &curRegionIdx, game.curArea->regions.size()
+            )
+        ) {
+            addNewRegionCmd(1.0f);
+        }
+        setTooltip("Create a new area region.");
+        
+        //Delete region button.
+        ImGui::SameLine();
+        if(regionSelection.getCount() > 0) {
+            if(
+                processGuiNavWidgetDel(
+                    &curRegionIdx, game.curArea->regions.size()
+                )
+            ) {
+                deleteRegionCmd(1.0f);
+            }
+            setTooltip("Delete the selected area region.", "Delete");
+        } else {
+            processGuiNavBoxPlaceholder();
+        }
+        
+        //End the nav box.
+        processGuiNavBoxEnd();
+        
+        if(regionSelection.hasOne()) {
+        
+            AreaRegion* curRegion =
+                game.curArea->regions[
+                    regionSelection.getSingleItemIdx()
+                ];
+                
+            //Region type combobox.
+            int typeInt = curRegion->type;
+            if(
+                ImGui::Combo(
+                    "Type", &typeInt, enumGetNames(areaRegionTypeNames), 15
+                )
+            ) {
+                registerChange("region type change");
+                curRegion->type = (AREA_REGION_TYPE) typeInt;
+            }
+            setTooltip("The type and purpose of the region.");
+            
+            //Region center value.
+            Point regionCenter = curRegion->pose.pos;
+            if(
+                ImGui::DragFloat2("Center", (float*) &regionCenter)
+            ) {
+                registerChange("region center change");
+                curRegion->pose.pos = regionCenter;
+            };
+            setTooltip(
+                "Center coordinates of the region.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Region size value.
+            Point regionSize = curRegion->pose.size;
+            if(
+                ImGui::DragFloat2("Size", (float*) &regionSize)
+            ) {
+                registerChange("region size change");
+                curRegion->pose.size = regionSize;
+            };
+            setTooltip(
+                "Width and height of the region.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Region angle value.
+            float regionAngle = curRegion->pose.angle;
+            if(
+                ImGui::SliderAngleWithContext(
+                    "Angle", &regionAngle, 0, 360, "%.2f"
+                )
+            ) {
+                registerChange("region angle change");
+                curRegion->pose.angle = regionAngle;
+            };
+            setTooltip(
+                "Angle of the region.",
+                "", WIDGET_EXPLANATION_SLIDER
+            );
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
     //Script node.
     ImGui::Spacer();
     if(saveableTreeNode("gameplay", "Script")) {
@@ -2234,199 +2514,6 @@ void AreaEditor::processGuiPanelInfo() {
         ImGui::TreePop();
     }
     
-    //Ambiance node.
-    ImGui::Spacer();
-    if(saveableTreeNode("info", "Ambiance")) {
-    
-        //Preview song button.
-        bool validSongSelected =
-            !game.curArea->songName.empty() &&
-            game.curArea->songName != NONE_OPTION;
-        bool previewing =
-            !previewSong.empty();
-        bool canPreviewSelectedSong =
-            validSongSelected &&
-            previewSong != game.curArea->songName;
-        bool canStopPreviewing =
-            previewing &&
-            (
-                !validSongSelected ||
-                previewSong == game.curArea->songName
-            );
-        bool previewButtonValid =
-            canPreviewSelectedSong || canStopPreviewing;
-            
-        if(!previewButtonValid) ImGui::BeginDisabled();
-        
-        if(
-            ImGui::ImageButton(
-                "previewSongButton",
-                canStopPreviewing ?
-                editorIcons[EDITOR_ICON_STOP] :
-                editorIcons[EDITOR_ICON_PLAY],
-                Point(ImGui::GetTextLineHeight())
-            )
-        ) {
-            if(canPreviewSelectedSong) {
-                previewSong = game.curArea->songName;
-                game.audio.setCurrentSong(previewSong);
-                previewing = true;
-            } else if(canStopPreviewing) {
-                game.audio.setCurrentSong(
-                    game.sysContentNames.sngEditors, false
-                );
-                previewSong.clear();
-                previewing = false;
-            }
-        }
-        
-        if(!previewButtonValid) ImGui::EndDisabled();
-        
-        string previewTooltipStr;
-        if(previewing) {
-            previewTooltipStr +=
-                "Currently previewing the song \"" +
-                game.content.songs.list[previewSong].name +
-                "\".\n";
-        }
-        if(canPreviewSelectedSong) {
-            previewTooltipStr +=
-                "Press here to preview the song \"" +
-                game.content.songs.list[game.curArea->songName].name +
-                "\".";
-        } else if(canStopPreviewing) {
-            previewTooltipStr +=
-                "Press here to stop.";
-        } else {
-            previewTooltipStr +=
-                "If you select a song, you can press here to preview it.";
-        }
-        setTooltip(previewTooltipStr);
-        
-        //Music combobox.
-        ImGui::SameLine();
-        vector<string> songInternals;
-        vector<string> songNames;
-        songInternals.push_back("");
-        songNames.push_back(NONE_OPTION);
-        for(auto& s : game.content.songs.list) {
-            songInternals.push_back(s.first);
-            songNames.push_back(s.second.name);
-        }
-        string songName = game.curArea->songName;
-        if(ImGui::Combo("Song", &songName, songInternals, songNames, 15)) {
-            registerChange("area song change");
-            game.curArea->songName = songName;
-        }
-        setTooltip(
-            "What song to play."
-        );
-        
-        //Area weather combobox.
-        vector<string> weatherCondInternals;
-        vector<string> weatherCondNames;
-        weatherCondInternals.push_back("");
-        weatherCondNames.push_back(NONE_OPTION);
-        for(auto& w : game.content.weatherConditions.list) {
-            weatherCondInternals.push_back(w.first);
-            weatherCondNames.push_back(w.second.name);
-        }
-        string weatherName = game.curArea->weatherName;
-        if(
-            ImGui::Combo(
-                "Weather", &weatherName,
-                weatherCondInternals, weatherCondNames, 15
-            )
-        ) {
-            registerChange("area weather change");
-            game.curArea->weatherName = weatherName;
-        }
-        setTooltip(
-            "The weather condition to use."
-        );
-        
-        ImGui::Spacer();
-        
-        bool hasTimeLimit = false;
-        float missionMin = 0;
-        if(game.curArea->type == AREA_TYPE_MISSION) {
-            hasTimeLimit = game.curArea->mission.timeLimit != 0;
-            if(hasTimeLimit) {
-                missionMin = game.curArea->mission.timeLimit / 60.0f;
-            }
-        }
-        int dayStartMin = (int) game.curArea->dayTimeStart;
-        dayStartMin = wrapFloat(dayStartMin, 0, 60 * 24);
-        float daySpeed = game.curArea->dayTimeSpeed;
-        int dayEndMin = (int) (dayStartMin + missionMin * daySpeed);
-        dayEndMin = wrapFloat(dayEndMin, 0, 60 * 24);
-        
-        //Area day time at start value.
-        if(
-            ImGui::DragTime2(
-                "Start day time", &dayStartMin, "h", "m", 23, 59
-            )
-        ) {
-            registerChange("day time change");
-            game.curArea->dayTimeStart = dayStartMin;
-            if(hasTimeLimit) {
-                daySpeed =
-                    calculateDaySpeed(
-                        dayStartMin, dayEndMin, missionMin
-                    );
-                game.curArea->dayTimeSpeed = daySpeed;
-            }
-        }
-        setTooltip(
-            "Point of the (game world) day at which gameplay starts.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        if(hasTimeLimit) {
-            //Area day time at end value.
-            if(
-                ImGui::DragTime2(
-                    "End day time", &dayEndMin, "h", "m", 23, 59
-                )
-            ) {
-                registerChange("day time change");
-                daySpeed =
-                    calculateDaySpeed(
-                        dayStartMin, dayEndMin, missionMin
-                    );
-                game.curArea->dayTimeSpeed = daySpeed;
-            }
-            setTooltip(
-                "Point of the (game world) day at which gameplay ends.\n"
-                "Only applicable in missions with time limits.\n"
-                "Set this to the same as the area start time to make\n"
-                "the day time frozen.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-        } else {
-        
-            //Area day time speed value.
-            ImGui::SetNextItemWidth(165);
-            if(
-                ImGui::DragFloat(
-                    "Day time speed", &daySpeed, 0.1f, 0.0f, FLT_MAX
-                )
-            ) {
-                registerChange("day time change");
-                game.curArea->dayTimeSpeed = daySpeed;
-            }
-            setTooltip(
-                "Speed at which the (game world) day passes.\n"
-                "60 means 1 game-world-hour goes by in 1 real-world-minute.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-        }
-        
-        ImGui::TreePop();
-    }
-    
     //Thumbnail node.
     ImGui::Spacer();
     if(saveableTreeNode("info", "Thumbnail")) {
@@ -2499,93 +2586,6 @@ void AreaEditor::processGuiPanelInfo() {
                 );
             ImGui::Image(game.curArea->thumbnail.get(), size);
         }
-        
-        ImGui::TreePop();
-    }
-    
-    //Background node.
-    ImGui::Spacer();
-    if(saveableTreeNode("info", "Background")) {
-    
-        //Remove background texture button.
-        float remBgAlpha = game.curArea->bgBmpName.empty() ? 0.20f : 1.0f;
-        if(
-            ImGui::ImageButton(
-                "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
-                Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
-            ) &&
-            !game.curArea->bgBmpName.empty()
-        ) {
-            registerChange("area background removal");
-            game.curArea->bgBmpName.clear();
-            setStatus("Removed the background image successfully.");
-        }
-        setTooltip(
-            "Remove the background image for the area."
-        );
-        
-        //Choose background texture button.
-        ImGui::SameLine();
-        if(ImGui::Button("Choose image...")) {
-            openBitmapDialog(
-            [this] (const string& bmp) {
-                registerChange("area background change");
-                game.curArea->bgBmpName = bmp;
-                setStatus("Picked a background image successfully.");
-            },
-            FOLDER_NAMES::TEXTURES
-            );
-        }
-        setTooltip(
-            "Choose which background image to use from the game's content.\n"
-            "This repeating texture can be seen when looking at the void."
-        );
-        
-        //Background image name text.
-        ImGui::SameLine();
-        monoText("%s", game.curArea->bgBmpName.c_str());
-        setTooltip("Internal name:\n" + game.curArea->bgBmpName);
-        
-        //Background color value.
-        ALLEGRO_COLOR bgColor = game.curArea->bgColor;
-        if(
-            ImGui::ColorEdit4(
-                "Void color", (float*) &bgColor,
-                ImGuiColorEditFlags_NoInputs
-            )
-        ) {
-            registerChange("area background color change");
-            game.curArea->bgColor = bgColor;
-        }
-        setTooltip(
-            "Set the color of the void. If you have a background image,\n"
-            "this will appear below it."
-        );
-        
-        //Background distance value.
-        float bgDist = game.curArea->bgDist;
-        if(ImGui::DragFloat("Distance", &bgDist)) {
-            registerChange("area background distance change");
-            game.curArea->bgDist = bgDist;
-        }
-        setTooltip(
-            "How far away the background texture is. "
-            "Affects parallax scrolling.\n"
-            "2 is a good value.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        //Background zoom value.
-        float bgBmpZoom = game.curArea->bgBmpZoom;
-        if(ImGui::DragFloat("Zoom", &bgBmpZoom, 0.01)) {
-            registerChange("area background zoom change");
-            game.curArea->bgBmpZoom = bgBmpZoom;
-        }
-        setTooltip(
-            "Scale the texture by this amount.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
         
         ImGui::TreePop();
     }
@@ -2970,7 +2970,7 @@ void AreaEditor::processGuiPanelMain() {
         changeState(EDITOR_STATE_PATHS);
     }
     setTooltip(
-        "Draw movement paths, and their stops."
+        "Draw movement paths by plotting down the stops and their links."
     );
     
     //Details button.
@@ -2985,10 +2985,10 @@ void AreaEditor::processGuiPanelMain() {
         changeState(EDITOR_STATE_DETAILS);
     }
     setTooltip(
-        "Edit misc. details, like tree shadows."
+        "Edit miscellaneous details to make the area really shine!"
     );
     
-    //Area info button.
+    //Info button.
     if(
         ImGui::ImageButtonAndText(
             "infoButton", editorIcons[EDITOR_ICON_INFO],
@@ -2999,10 +2999,10 @@ void AreaEditor::processGuiPanelMain() {
         changeState(EDITOR_STATE_INFO);
     }
     setTooltip(
-        "Set the area's name, weather, and other basic information here."
+        "Set the area's name and other basic information here."
     );
     
-    //Area gameplay settings button.
+    //Gameplay settings button.
     if(
         ImGui::ImageButtonAndText(
             "gameplayButton", editorIcons[EDITOR_ICON_GAMEPLAY],

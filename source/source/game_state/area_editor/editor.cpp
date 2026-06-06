@@ -492,7 +492,7 @@ AreaEditor::AreaEditor() :
     };
     regionSelection.onIsEligible =
     [this] (size_t idx) {
-        return state == EDITOR_STATE_DETAILS;
+        return state == EDITOR_STATE_GAMEPLAY;
     };
     regionSelection.itemsAreRectangular = true;
     regionSelection.itemsCanResize = true;
@@ -555,7 +555,6 @@ AreaEditor::AreaEditor() :
     pathsSelCtrl.allowSelectionRotation = true;
     
     detailsSelCtrl.managers.push_back(&shadowSelection);
-    detailsSelCtrl.managers.push_back(&regionSelection);
     detailsSelCtrl.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
     detailsSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
@@ -563,6 +562,15 @@ AreaEditor::AreaEditor() :
     detailsSelCtrl.overlapsCycle = true;
     detailsSelCtrl.clickingSelectedUnselectsOthers = false;
     detailsSelCtrl.allowSelectionRotation = false;
+    
+    gameplaySelCtrl.managers.push_back(&regionSelection);
+    gameplaySelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    gameplaySelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
+    gameplaySelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
+    gameplaySelCtrl.overlapsCycle = true;
+    gameplaySelCtrl.clickingSelectedUnselectsOthers = false;
+    gameplaySelCtrl.allowSelectionRotation = false;
     
     reviewSelCtrl.managers.push_back(&reminderSelection);
     reviewSelCtrl.onSnapPoint =
@@ -577,6 +585,7 @@ AreaEditor::AreaEditor() :
     selectionControllers.push_back(&mobsSelCtrl);
     selectionControllers.push_back(&pathsSelCtrl);
     selectionControllers.push_back(&detailsSelCtrl);
+    selectionControllers.push_back(&gameplaySelCtrl);
     selectionControllers.push_back(&reviewSelCtrl);
 }
 
@@ -806,6 +815,9 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
         break;
     } case EDITOR_STATE_DETAILS: {
         detailsSelCtrl.enable(true);
+        break;
+    } case EDITOR_STATE_GAMEPLAY: {
+        gameplaySelCtrl.enable(true);
         break;
     } case EDITOR_STATE_REVIEW: {
         reviewSelCtrl.enable(true);
@@ -3508,6 +3520,8 @@ void AreaEditor::selectAllCmd(float inputValue) {
             
         } else if(state == EDITOR_STATE_DETAILS) {
             shadowSelection.addAll(game.curArea->treeShadows.size());
+            
+        } else if(state == EDITOR_STATE_GAMEPLAY) {
             regionSelection.addAll(game.curArea->regions.size());
             
         } else if(state == EDITOR_STATE_REVIEW) {
@@ -3712,7 +3726,11 @@ void AreaEditor::setSelectionStatusText() {
                     shadowSelection.getCount(), "tree shadow"
                 ) + "."
             );
-        } else if(regionSelection.hasAny()) {
+        }
+        break;
+        
+    } case EDITOR_STATE_GAMEPLAY: {
+        if(regionSelection.hasAny()) {
             setStatus(
                 "Selected " +
                 getAmountOrIdxDescription(
