@@ -22,16 +22,16 @@ animations{
 			}
 		}
 	}
-	idling_violet{
+	idling_red{
 		frames{
-			idling_violet{
+			idling_red{
 				duration=0.1000
 			}
 		}
 	}
-	idling_red{
+	idling_violet{
 		frames{
-			idling_red{
+			idling_violet{
 				duration=0.1000
 			}
 		}
@@ -45,7 +45,7 @@ sprites{
 	}
 	idling_cyan{
 		file=pellets/glow_pellet
-		file_pos=43.0000 0.0000
+		file_pos=129.0000 0.0000
 		file_size=42.0000 42.0000
 	}
 	idling_green{
@@ -53,12 +53,12 @@ sprites{
 		file_pos=172.0000 0.0000
 		file_size=42.0000 42.0000
 	}
-	idling_violet{
+	idling_red{
 		file=pellets/glow_pellet
-		file_pos=129.0000 0.0000
+		file_pos=43.0000 0.0000
 		file_size=42.0000 42.0000
 	}
-	idling_red{
+	idling_violet{
 		file=pellets/glow_pellet
 		file_pos=86.0000 0.0000
 		file_size=42.0000 42.0000

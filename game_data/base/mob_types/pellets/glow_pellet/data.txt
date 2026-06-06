@@ -21,7 +21,7 @@ area_editor_properties {
         type = list
         def_value = Random
         list = Yellow; Red; Violet; Cyan; Green; Random
-        tooltip = Which color the die should be.
+        tooltip = Which color the Glow Pellet should be.
     }
 }
 

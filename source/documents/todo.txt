@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Glow Pellets are the wrong colors from what they say they are
     Adding and removing mob links is causing the linkIdxs vector to be filled with garbage
     The auto-fading quick preview works weird with water
     During quick preview, the yellow selection effect is still showing on sectors
