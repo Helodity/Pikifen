@@ -294,7 +294,10 @@ bool Game::globalHandleSystemPlayerAction(const Inpution::Action& action) {
  * after the state's logic.
  */
 void Game::globalLogicPost() {
-    if(mouseCursor.movedThisFrame) {
+    if(
+        mouseCursor.movedThisFrame ||
+        !game.options.advanced.hideStoppedMouseCursor
+    ) {
         mouseCursor.stoppedTimer = MOUSE_CURSOR::HIDE_TIMER_DURATION;
         mouseCursor.intendedAlpha = 1.0f;
     } else {
