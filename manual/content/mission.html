@@ -41,12 +41,12 @@
       <dt><b>You can have multiple end conditions.</b></dt>
       <dd>Whichever one triggers first determines how the mission ends. If multiple conditions are met at the exact same time, the game will prioritize the end condition that appears earliest in this list, so feel free to sort it accordingly.</dd>
       <dt><b>Missions must always end in a clear or fail, but the mood can be neutral.</b></dt>
-      <dd>Some end conditions obviously make the player fail while others obviously make the player fully complete the mission. But some are a bit less certain. If the player is <a href="#score-criterion">scored</a> based how many treasures they can get before the time limit is over, the time limit itself is neither positive or negative, it's just an aspect of the mission. When the time limit is reached, the player is neither happy nor sad specifically, since it all depends on the score. By marking the mood as neutral, the jingle and effects that play will be more neutral-sounding instead of positive-sounding or negative-sounding.</dd>
+      <dd>Some end conditions obviously make the player fail while others obviously make the player fully complete the mission. But some are a bit less certain. If the player is <a href="#score-criterion">scored</a> based how many treasures they can get before the time limit is over, the time limit itself is neither positive or negative, it's just an aspect of the mission. When the time limit is reached, the player is neither happy nor sad because of it specifically, since that all depends on the score. By marking the mood as neutral, the jingle and effects that play will be more neutral-sounding instead of positive-sounding or negative-sounding.</dd>
       <dt><b>Some conditions should clear the time remaining so the player doesn't get an unfair score.</b></dt>
       <dd>Imagine a mission that requires defeating all enemies, but ends if the player takes damage, and the player's <a href="#score-criterion">score</a> receives a bonus depending on how much time was still in the clock. If the player starts the mission, beelines for an enemy, and gets hurt, their time remaining bonus will be gigantic! To stop that from happening, you can use the "Zero time for score" checkbox.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
-        <li>If you don't specify an end condition for when the player ends early from the pause menu, the game will just assume the mission was failed.</li>
+        <li>If you don't specify an end condition for when the player ends early from the pause menu, when the player does so the game will just assume the mission was failed.</li>
       </ul></dd>
     </dl>
 
@@ -73,7 +73,7 @@
       <dt><b>There are four HUD item slots.</b></dt>
       <dd>The HUD has to look nice and be organized as a part of the <a href="gui.html">GUI</a> system, so the HUD's GUI definition determines the space and position for four items. This means you can't have dozens of arbitrary HUD items since it'd be unreasonable to place them all with <i>Pikifen</i>'s GUI system. But of these four, you can choose what to place on which one. Standard convention dictates one is usually where things related to the mission's goal get placed, another is where the score ruler gets placed, another is where the clock is placed, and the other is for miscellaneous information. But you don't need to specifically follow this convention. In addition, any slot can also be lacking an item entirely if you so choose.</dd>
       <dt><b>Most HUD items obtain their information from a metric.</b></dt>
-      <dd>HUD items typically show the player the status of something related to the mission, and so, you can choose which <a href="#metric">metric</a> it obtains the information from. Some HUD items decide this automatically, like the time limit obviously drawing from the number of seconds remaining. One HUD item type even contains static text that you write yourself.</dd>
+      <dd>HUD items typically show the player the status of something related to the mission, and so, you can choose which <a href="#metric">metric</a> it obtains the information from. Some HUD items decide this automatically, like the time limit obviously drawing from the number of seconds remaining. One HUD item type doesn't even use metrics and instead contains static text that you write yourself.</dd>
       <dt><b>How the HUD item displays its information can be chosen from a list.</b></dt>
       <dd>The score is best shown in a score ruler. The time remaining is best shown with a clock. And so on. For most of the metric-related HUD items, you can choose to display the current amount, the remaining amount, or the total amount, as well as optionally a slash and the total amount afterwards. Pick whichever one you feel is most appropriate for the type of information you want the player to know.</dd>
     </dl>
@@ -84,9 +84,9 @@
 
     <dl>
       <dt><b>Some metrics need a mob group or area region number.</b></dt>
-      <dd>The metric that tells you how many leaders are currently inside of an area region needs to know the number of the area region. The metrics that need to check how many objects in a <a href="mob-group">mob group</a> have been cleared also needs to know the number of the mob group. When you select these metrics in an end condition, score criterion, or HUD item, you will also be asked to provide the mob group or area region number.</dd>
+      <dd>The metric that tells you how many leaders are currently inside of an area region needs to know the number of the area region. The metrics that need to check how many objects in a <a href="#mob-group">mob group</a> have been cleared also needs to know the number of the mob group. When you select these metrics in an end condition, score criterion, or HUD item, you will also be asked to provide the mob group or area region number.</dd>
       <dt><b>The "target" amount of a metric can be set manually, but some can figure it out automatically.</b></dt>
-      <dd>Using the current amount of something that a metric tracks is simple enough. But more often than not you want to be able to specify a "target" amount too. For end conditions you'll want to specify the match amount that triggers the condition, and for HUD items, you may want to show a grand total to the player. In these cases you can specify this amount manually. But a number of metrics can also suggest a number for you! For instance, a metric for how many objects in a mob group have been cleared can suggest a "target" amount that's just the total amount of objects in that group. The metric for how much time is left can automatically recommend the time limit's amount.</dd>
+      <dd>Using the current amount of something that a metric tracks is simple enough. But more often than not you want to be able to specify a "target" amount too. For end conditions you'll want to specify the match amount that triggers the condition, and for HUD items, you may want to show a grand total to the player. In these cases you can specify this amount manually, but a number of metrics can also suggest a number for you! For instance, a metric for how many objects in a mob group have been cleared can suggest a "target" amount that's just the total amount of objects in that group. The metric for how much time is left can automatically recommend the time limit's amount. And so on.</dd>
     </dl>
 
     <h2 id="mob-group">Mob group</h2>
@@ -95,25 +95,40 @@
 
     <dl>
       <dt><b>The objects in a mob group can belong to a given pattern, or be completely custom.</b></dt>
-      <dd>For ease of use, you can select one of the mob group types, and this will include all objects that match into the group. This is a great way to, for instance, keep track of all treasures in the stage. Otherwise, you can pick the "custom" type and choose which objects you want, one by one.</dd>
+      <dd>For ease of use, you can select one of the mob group types, and this will include all objects that match into the group. This is a great way to, for instance, keep track of all treasures in the mission. Otherwise, you can pick the "custom" type and choose which objects you want, one by one.</dd>
       <dt><b>An object is "cleared" when it's killed or collected.</b></dt>
       <dd>For treasures, they count as "cleared" when they are collected. For enemies, they count as "cleared" when defeated, or if the "Enemies need collection" checkbox is active, when they are collected. Everything else counts as "cleared" when killed.</dd>
       <dt><b>Objects you think the player should keep track of can be highlighted in the radar.</b></dt>
-      <dd>The "Highlight on radar" makes all objects that belong to this group (and have not yet been "cleared") receive a highlight icon in the radar.</dd>
+      <dd>The "Highlight on radar" property makes all objects that belong to this group (and have not yet been "cleared") receive a highlight icon in the radar.</dd>
     </dl>
 
     <h2 id="other">Other information</h2>
 
     <dl>
       <dt><b>Use the mission briefing to succinctly tell the player how the mission works.</b></dt>
-      <dd>The mission briefing objective textbox is where you write down a summary of the mission, in around one or two sentences. The mission briefing notes is a list of bullet points that can have any size, and each bullet point should describe one important aspect for the player to keep in mind. Examples include describing the failure conditions, bonus points, or any changes to the normal game rules. The player can find mission briefing information in the area selection menu and in the pause menu.
+      <dd>The mission briefing objective textbox is where you write down a summary of the mission, in around one or two sentences. The mission briefing notes is a list of bullet points, where each bullet point should describe one important aspect for the player to keep in mind. Examples include describing the failure conditions, bonus points, or any changes to the normal game rules. The player can find mission briefing information in the area selection menu and in the pause menu.
       </dd>
       <dt><b>Treasure collection points, enemy collection points, and enemy defeat points are not associated with mob groups.</b></dt>
-      <dd>If you just want to keep track of the treasure collection points, enemy collection points, or enemy defeat points, you don't need to create a mob group. On the flip side, you also cannot filter for the points only within a certain group of objects. Keep this in mind when working with these points.</dd>
+      <dd>If you just want to keep track of the treasure collection points, enemy collection points, or enemy defeat points, you don't need to create a mob group. On the flip side, you also cannot filter for the points that are only within a certain group of objects. Keep this in mind when working with these points.</dd>
       <dt><b>Add your score record to drive competition.</b></dt>
       <dd>Try your best at your own mission, and if you get a good score, write it down in the mission's data! This will give players something to aim for if they want to go beyond a platinum medal.</dd>
       <dt><b>To achieve more complex missions, use scripts.</b></dt>
       <dd>Writing an area <a href="script.html">script</a> can let you have more complex <a href="#end-condition">end conditions</a>, <a href="#score-criterion">score criteria</a>, <a href="#hud-item">HUD items</a>, and more!</dd>
+    </dl>
+
+    <h2 id="record">Record</h2>
+
+    <dl>
+      <dt><b>Every time the player gets a new best result, that record will be saved.</b></dt>
+      <dd>A player's best score or completion in a mission always gets saved, and the player can see them all in the area selection menu.</dd>
+      <dt><b>Old records on the same mission are replaced.</b></dt>
+      <dd>If the player plays the exact same mission again and gets a better score or completion, the old attempt will be replaced by this new record.</dd>
+      <dt><b>Deleted missions or old versions are still saved.</b></dt>
+      <dd>If a player deletes an area (or an area's pack), their record on that mission will remain, it just won't be visible in the area selection menu because the area won't appear there. Bringing the area back will restore the record just fine. If an area update makes it "<i>too different</i>"", the record on that version is also kept forever, and the player will need to play on the new version for a record on that latest version.</dd>
+      <dt><b>A mission is considered "too different" depending on the version number.</b></dt>
+      <dd>An area's version ideally has three numbers, separated by dots, like "1.2.3". If the first or second numbers change from one version to the next, that means the area's maker considers the new version "too different" from the old one and the player will need to play on the new version in order to get a new record, since their old record, while kept, will not be considered valid. If only the third (or fourth, fifth, ...) numbers change, that's because the changes are probably just aesthetic or otherwise not important, and the player's old record will still be used. If the version numbers don't match that format, they will likely always be considered "too different".</dd>
+      <dt><b>Different names, subtitles, or makers count as different missions.</b></dt>
+      <dd>If two different makers create a remake of <i>Pikmin 3</i>'s Tropical Forest (Collect Treasure!) mission, those two will be considered different missions by the engine, with two different records. The same applies to two missions with different names, or to two missions with different subtitles (e.g. "Collect Treasure!" and "Battle Enemies!"). If an area's update changes one of these and you can't see your old record, that's probably why.</dd>
     </dl>
 
     <h2 id="see-also">See also</h2>

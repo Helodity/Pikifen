@@ -112,7 +112,6 @@ ALLEGRO_COLOR getLedgeSmoothingColor(Edge* ePtr);
 ALLEGRO_COLOR getLiquidLimitColor(Edge* ePtr);
 float getLedgeSmoothingLength(Edge* ePtr);
 float getLiquidLimitLength(Edge* ePtr);
-string getMissionRecordEntryName(Area* areaPtr);
 void getNextEdge(
     Vertex* vPtr, float pivotAngle, bool clockwise,
     const Edge* ignore, Edge** outEdge, float* outAngle, float* outDiff

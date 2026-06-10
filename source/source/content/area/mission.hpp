@@ -656,6 +656,18 @@ struct MissionRecord {
 
     //--- Public members ---
     
+    //The area's name.
+    string areaName;
+    
+    //The area's subtitle.
+    string areaSubtitle;
+    
+    //The area's maker.
+    string areaMaker;
+    
+    //The area's version.
+    string areaVersion;
+    
     //Score obtained.
     int score = 0;
     
@@ -665,10 +677,49 @@ struct MissionRecord {
     
     //--- Public function declarations ---
     
+    MissionRecord() = default;
+    MissionRecord(
+        const string& keyStr, const string& dataStr, bool* ported = nullptr
+    );
     void clear();
-    bool loadFromDataNode(DataNode* node, bool* ported = nullptr);
-    bool saveToDataNode(DataNode* node);
-    bool isPlatinum(const MissionData& mission);
+    bool fromStrings(
+        const string& keyStr, const string& dataStr, bool* ported = nullptr
+    );
+    void toStrings(string* outKeyStr, string* outDataStr) const;
+    bool isPlatinum(const MissionData& mission) const;
+    
+};
+
+
+struct Area;
+
+
+/**
+ * @brief Database of all of the player's mission records.
+ */
+struct MissionRecords {
+
+    //--- Public members ---
+    
+    //The full list.
+    vector<MissionRecord> list;
+    
+    //Whether any of the loaded records had to be ported from an older
+    //version of the engine.
+    bool hasPortedRecords = false;
+    
+    
+    //--- Public function declarations ---
+    
+    MissionRecords() = default;
+    MissionRecords(DataNode* file);
+    MissionRecord getBestCompatibleRecord(Area* areaPtr) const;
+    bool isAreaVersionCompatible(
+        const string& currentVersion, const string& checkVersion
+    ) const;
+    void addOrUpdate(const MissionRecord& newRecord);
+    void loadFromDataNode(DataNode* file);
+    void saveToDataNode(DataNode* file) const;
     
 };
 

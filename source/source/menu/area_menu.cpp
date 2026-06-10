@@ -731,26 +731,18 @@ void AreaMenu::initGuiMain() {
 void AreaMenu::load() {
     //Mission records.
     if(areaType == AREA_TYPE_MISSION) {
-        DataNode missionRecords;
-        missionRecords.loadFile(
-            FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
-        );
+        DataNode missionRecordsFile;
+        loadMissionRecords(&missionRecordsFile);
+        MissionRecords records(&missionRecordsFile);
+        
+        if(records.hasPortedRecords) {
+            records.saveToDataNode(&missionRecordsFile);
+            saveMissionRecords(&missionRecordsFile);
+        }
         
         forIdx(a, game.content.areas.list[AREA_TYPE_MISSION]) {
             Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
-            MissionRecord record;
-            bool ported;
-            loadAreaMissionRecord(&missionRecords, areaPtr, record, &ported);
-            
-            if(ported) {
-                string missionRecordEntryName =
-                    getMissionRecordEntryName(areaPtr);
-                record.saveToDataNode(
-                    missionRecords.getChildByName(missionRecordEntryName)
-                );
-                saveMissionRecords(&missionRecords);
-            }
-            
+            MissionRecord record = records.getBestCompatibleRecord(areaPtr);
             areaRecords.push_back(record);
         }
     }

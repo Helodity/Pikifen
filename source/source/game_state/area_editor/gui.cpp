@@ -2612,8 +2612,17 @@ void AreaEditor::processGuiPanelInfo() {
             game.curArea->version = version;
         }
         setTooltip(
-            "Version of the area, preferably in the \"X.Y.Z\" format. "
-            "Optional."
+            "Version of the area, optional.\n"
+            "Preferably, use a \"X.Y.Z\" format, since the engine will\n"
+            "use that to support old version mission records.\n"
+            "For instance, a player gets a mission record on the area with\n"
+            "version \"1.2.3\". When you update the area, if you change\n"
+            "the version to \"1.2.4\" it will signal that only tiny changes\n"
+            "have been made, and the player's record will still be considered\n"
+            "valid. But change it to \"1.3.0\" or \"2.0.0\", and that will\n"
+            "signal that the area suffered too many changes and\n"
+            "the player's record will no longer be valid; they'll have to\n"
+            "play the mission again."
         );
         
         //Maker notes input.

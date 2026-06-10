@@ -269,17 +269,17 @@ void StatsMenu::populateStatsList() {
     );
     
     DataNode missionRecordsFile;
-    missionRecordsFile.loadFile(
-        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
-    );
+    loadMissionRecords(&missionRecordsFile);
+    MissionRecords records(&missionRecordsFile);
     
     size_t missionPlatinums = 0;
     long missionScores = 0;
     
     forIdx(a, game.content.areas.list[AREA_TYPE_MISSION]) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
-        MissionRecord record;
-        loadAreaMissionRecord(&missionRecordsFile, areaPtr, record, nullptr);
+        MissionRecord record = records.getBestCompatibleRecord(areaPtr);
+        if(record.date.empty()) continue;
+        
         if(record.isPlatinum(areaPtr->mission)) {
             missionPlatinums++;
         }

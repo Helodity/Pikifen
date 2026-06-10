@@ -5,6 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Starting Olympian Ruins immediately triggers a medal obtaining sound
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -38,9 +39,6 @@ Next tasks (roughly sorted most important first)
             Easy elemental obstacles
         It should be small and compact, so the player can, with little effort, see many Pikmin carrying many things around
             Piles help a lot with this
-    Other mission tweaks
-        If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
-        Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     
     --- 2.0.0 ---
     Freezecake
@@ -748,7 +746,10 @@ Misc things (so I don't forget)
     The ability for areas to have multiple bases, and for the player to move the ship and Onion between them [PIKMIN 4]
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
-    Some way to import your friends' records (and dates) in missions
+    Mission record improvements
+        Save the best 3 or 5 or 20 records in each mission
+        Some way to import your friends' records (and dates) in missions
+        Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this
         Check if this would have a large performance impact
@@ -808,7 +809,7 @@ Misc things (so I don't forget)
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Mission unlocking?
-        And mission sequences, where you have to beat a mission before playing the next in the sequence?
+        And mission sequences, where you have to beat a mission before playing the next in the sequence? Or have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
     Code cleanup
         Switch angles to vectors?
     Change some things to an entity component system
@@ -936,8 +937,6 @@ Tasks for later on (I might never implement these)
         When something contributes to something in the mission that's reflected in a HUD item, it should fly into said item
     The ability for particle generators to consist of multiple particle generators
     A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
-    Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
-    Save all (or up to 20 or something) the previous scores on a mission, and in the results screen, show a graph with your evolution over time (thanks Helodity)
     Observation spot
         An interactable that makes the camera zoom out a lot for a few seconds, so you can get a good overview of the surrounding location
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey
@@ -990,13 +989,13 @@ Tasks for later on (I might never implement these)
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
             One mission might make getting 1000 points very easy while another might make getting 50 points very hard, so this might not work...
         If a mission mob group enemy is killed, but is later revived, it won't be re-added to the group. Maybe it should, maybe it shouldn't
-            Try to move more colors into game config
-        Maybe have an "accent color" property that's green
-            Colors for "system" feel; basically the blue tones used throughout
-            Enemy spirit?
-            Whistle faint filled circle
-            Whistle dot colors?
-            The medal colors
+        Try to move more colors into game config
+            Maybe have an "accent color" property that's green
+                Colors for "system" feel; basically the blue tones used throughout
+                Enemy spirit?
+                Whistle faint filled circle
+                Whistle dot colors?
+                The medal colors
     Possible solutions to known issues
         Regarding true fullscreen crashing when a operative system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

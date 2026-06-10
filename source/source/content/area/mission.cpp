@@ -725,7 +725,7 @@ bool MissionEndCondTypeMetricOrLess::getZoomData(
 bool MissionEndCondTypeMetricOrLess::isMet(MissionEndCond* cond) const {
     MissionMetricType* metricTypePtr =
         game.missionMetricTypes[cond->metricType];
-    
+        
     int amount =
         metricTypePtr->getAmount(cond->idxParam);
     int target =
@@ -780,7 +780,7 @@ bool MissionEndCondTypeMetricOrMore::getZoomData(
 bool MissionEndCondTypeMetricOrMore::isMet(MissionEndCond* cond) const {
     MissionMetricType* metricTypePtr =
         game.missionMetricTypes[cond->metricType];
-    
+        
     int amount =
         metricTypePtr->getAmount(cond->idxParam);
     int target =
@@ -1982,10 +1982,33 @@ float MissionMobGroup::calculateTotalHealth() const {
 }
 
 
+#pragma endregion
+#pragma region Mission record
+
+
+/**
+ * @brief Constructs a new mission record object.
+ *
+ * @param key Key information string to read from.
+ * @param data Record information string to read from.
+ * @param ported If not nullptr, whether the record needed to be ported from
+ * an older version's format is returned here.
+ */
+MissionRecord::MissionRecord(
+    const string& key, const string& data, bool* ported
+) {
+    fromStrings(key, data, ported);
+}
+
+
 /**
  * @brief Clears the data inside.
  */
 void MissionRecord::clear() {
+    areaName.clear();
+    areaSubtitle.clear();
+    areaMaker.clear();
+    areaVersion.clear();
     score = 0;
     date.clear();
 }
@@ -1997,7 +2020,7 @@ void MissionRecord::clear() {
  * @param mission Mission data to get info from.
  * @return Whether it is platinum.
  */
-bool MissionRecord::isPlatinum(const MissionData& mission) {
+bool MissionRecord::isPlatinum(const MissionData& mission) const {
     if(date.empty()) return false;
     
     switch(mission.medalAwardMode) {
@@ -2014,18 +2037,28 @@ bool MissionRecord::isPlatinum(const MissionData& mission) {
 
 
 /**
- * @brief Loads a record from a data node.
+ * @brief Loads a record from a key string and a data string.
  *
- * @param node The record's node.
+ * @param keyStr Key information string to read from.
+ * @param dataStr Record information string to read from.
  * @param ported If not nullptr, whether the record needed to be ported from
  * an older version's format is returned here.
  * @return Whether it succeeded.
  */
-bool MissionRecord::loadFromDataNode(
-    DataNode* node, bool* ported
+bool MissionRecord::fromStrings(
+    const string& keyStr, const string& dataStr, bool* ported
 ) {
+    //Key.
+    vector<string> keyParts = split(keyStr, ";", true);
+    if(keyParts.size() != 4) return false;
+    areaName = keyParts[0];
+    areaSubtitle = keyParts[1];
+    areaMaker = keyParts[2];
+    areaVersion = keyParts[3];
+    
+    //Data.
     if(ported) *ported = false;
-    vector<string> parts = split(node->value, ";", true);
+    vector<string> parts = split(dataStr, ";", true);
     
     if(parts.size() == 3) {
         //DEPRECATED by the medal-only system in 1.2.0.
@@ -2047,14 +2080,179 @@ bool MissionRecord::loadFromDataNode(
 
 
 /**
- * @brief Saves a record onto a data node.
+ * @brief Saves a record onto a key string and a data string.
  *
- * @param node The record's node.
- * @return Whether it succeeded.
+ * @param outKeyStr Pointer to the key string to fill.
+ * @param outDataStr Pointer to the data string to fill.
  */
-bool MissionRecord::saveToDataNode(DataNode* node) {
-    node->value = i2s(score) + ";" + date;
+void MissionRecord::toStrings(string* outKeyStr, string* outDataStr) const {
+    *outKeyStr =
+        areaName + ";" + areaSubtitle + ";" +
+        areaMaker + ";" + areaVersion;
+    *outDataStr =
+        i2s(score) + ";" + date;
+}
+
+
+/**
+ * @brief Constructs a new mission records object.
+ *
+ * @param file Data file to load from.
+ */
+MissionRecords::MissionRecords(DataNode* file) {
+    loadFromDataNode(file);
+}
+
+
+/**
+ * @brief Adds a new mission record to the list, or updates
+ * an existing one that has the same key.
+ *
+ * @param newRecord The new record.
+ */
+void MissionRecords::addOrUpdate(const MissionRecord& newRecord) {
+    //Let's search backwards so we return the most recent record, on the
+    //off-chance we have records with identical keys.
+    for(int r = list.size() - 1; r >= 0; r--) {
+        MissionRecord& record = list[r];
+        if(
+            newRecord.areaName == record.areaName &&
+            newRecord.areaSubtitle == record.areaSubtitle &&
+            newRecord.areaMaker == record.areaMaker &&
+            newRecord.areaVersion == record.areaVersion
+        ) {
+            record = newRecord;
+            return;
+        }
+    }
+    
+    list.push_back(newRecord);
+}
+
+
+/**
+ * @brief Goes through the list and returns the record that is most compatible
+ * with the given area. This means that if there are multiple records in
+ * different versions of the area, it finds the most recent one where the
+ * version numbers can be considered compatible enough with the current
+ * version of the area.
+ *
+ * @param areaPtr Area to check against.
+ * @return The record, or an empty record in the case of an error.
+ */
+MissionRecord MissionRecords::getBestCompatibleRecord(Area* areaPtr) const {
+    //Let's search backwards so we return the most recent record, which will
+    //help in cases where multiple records are compatible.
+    for(int r = list.size() - 1; r >= 0; r--) {
+        const MissionRecord& record = list[r];
+        
+        if(record.areaName != areaPtr->name) {
+            //Different name? Obviously a different area.
+            continue;
+        }
+        if(record.areaSubtitle != areaPtr->subtitle) {
+            //We might have two areas with the same name, but different missions
+            //since they have different goals. Like in Pikmin 3, we have
+            //Tropical Forest (Collect Treasure!) and
+            //Tropical Forest (Battle Enemies!).
+            continue;
+        }
+        if(record.areaMaker != areaPtr->maker) {
+            //If they were made by different people, it's probably a different
+            //area, even if the rest is the same. Maybe two different people's
+            //approaches to the same canon area.
+            continue;
+        }
+        if(!isAreaVersionCompatible(areaPtr->version, record.areaVersion)) {
+            //If the versions are considered too different, let's not use
+            //this player record. The mission is considered as having changed
+            //too much since the last time the player played, and their score
+            //probably does not make sense now.
+            continue;
+        }
+        
+        //Found it.
+        return record;
+    }
+    
+    //Couldn't find it.
+    return MissionRecord {};
+}
+
+
+/**
+ * @brief Returns whether a given area version is compatible with the current
+ * area version, for the sake of accepting a mission record as having been
+ * played on a version of the area that's similar enough to the current one.
+ * If either version string isn't in a format where this can be easily deduced,
+ * it's assumed they're not compatible.
+ *
+ * @param currentVersion The current version of the area.
+ * @param checkVersion The version of the area to check.
+ * @return Whether they're compatible.
+ */
+bool MissionRecords::isAreaVersionCompatible(
+    const string& currentVersion, const string& checkVersion
+) const {
+    vector<string> curParts = split(currentVersion, ".");
+    vector<string> checkParts = split(checkVersion, ".");
+    
+    //If there aren't enough parts, let's add imaginary .0 parts until we
+    //get enough.
+    while(curParts.size() < 2) {
+        curParts.push_back("0");
+    }
+    while(checkParts.size() < 2) {
+        checkParts.push_back("0");
+    }
+    
+    if(curParts[0] != checkParts[0] || curParts[1] != checkParts[1]) {
+        //Major number or minor number are different, so the area is
+        //considered too different. Not compatible.
+        return false;
+    }
+    
+    //Major and minor match! Even if the other numbers don't match, we're
+    //considering that as the area not having changed enough to matter.
     return true;
+}
+
+
+/**
+ * @brief Reads the list from a data file.
+ *
+ * @param file The file.
+ */
+void MissionRecords::loadFromDataNode(DataNode* file) {
+    hasPortedRecords = false;
+    list.clear();
+    
+    size_t nRecords = file->getNrOfChildren();
+    for(size_t r = 0; r < nRecords; r++) {
+        DataNode* recordNode = file->getChild(r);
+        bool ported = false;
+        MissionRecord record(recordNode->name, recordNode->value, &ported);
+        hasPortedRecords |= ported;
+        if(record.date.empty()) {
+            continue;
+        }
+        list.push_back(record);
+    }
+}
+
+
+/**
+ * @brief Saves the list to a data file.
+ *
+ * @param file The file.
+ */
+void MissionRecords::saveToDataNode(DataNode* file) const {
+    file->clearChildren();
+    forIdx(r, list) {
+        string key, data;
+        list[r].toStrings(&key, &data);
+        file->addNew(key, data);
+    }
 }
 
 

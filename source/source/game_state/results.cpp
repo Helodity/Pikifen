@@ -12,6 +12,7 @@
 
 #include "../core/drawing.hpp"
 #include "../core/game.hpp"
+#include "../core/load.hpp"
 #include "../core/misc_functions.hpp"
 #include "../util/allegro_utils.hpp"
 #include "../util/general_utils.hpp"
@@ -1033,18 +1034,19 @@ void Results::load() {
     }
     
     //Record loading and saving logic.
-    DataNode missionRecords;
-    missionRecords.loadFile(
-        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
-    );
-    string recordEntryName = getMissionRecordEntryName(game.curArea);
-    DataNode* entryNode;
-    if(missionRecords.getNrOfChildrenByName(recordEntryName) > 0) {
-        entryNode = missionRecords.getChildByName(recordEntryName);
-        oldRecord.loadFromDataNode(entryNode);
-    } else {
-        entryNode = missionRecords.addNew(recordEntryName, "");
-    }
+    DataNode missionRecordsFile;
+    loadMissionRecords(&missionRecordsFile);
+    MissionRecords records(&missionRecordsFile);
+    
+    oldRecord = records.getBestCompatibleRecord(game.curArea);
+    
+    MissionRecord curRecord;
+    curRecord.areaName = game.curArea->name;
+    curRecord.areaSubtitle = game.curArea->subtitle;
+    curRecord.areaMaker = game.curArea->maker;
+    curRecord.areaVersion = game.curArea->version;
+    curRecord.score = finalMissionScore;
+    curRecord.date = getCurrentTime(false);
     
     if(
         oldRecord.date.empty() && game.states.gameplay->missionWasCleared
@@ -1066,12 +1068,9 @@ void Results::load() {
         !game.options.advanced.expoMode &&
         !game.states.gameplay->afterHours
     ) {
-        MissionRecord newRecord;
-        newRecord.score = finalMissionScore;
-        newRecord.date = getCurrentTime(false);
-        
-        newRecord.saveToDataNode(entryNode);
-        savedSuccessfully = saveMissionRecords(&missionRecords);
+        records.addOrUpdate(curRecord);
+        records.saveToDataNode(&missionRecordsFile);
+        savedSuccessfully = saveMissionRecords(&missionRecordsFile);
         
         if(!savedSuccessfully) {
             showOSMessageBox(

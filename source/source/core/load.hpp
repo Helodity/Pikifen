@@ -23,9 +23,7 @@
 using std::string;
 
 
-void loadAreaMissionRecord(
-    DataNode* file, Area* areaPtr, MissionRecord& record, bool* ported
-);
+bool loadMissionRecords(DataNode* file);
 ALLEGRO_AUDIO_STREAM* loadAudioStream(
     const string& fileName, DataNode* node = nullptr,
     bool reportErrors = true

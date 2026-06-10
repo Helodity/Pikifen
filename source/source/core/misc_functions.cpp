@@ -495,20 +495,6 @@ float getLiquidLimitLength(Edge* ePtr) {
 
 
 /**
- * @brief Returns the name of the entry in a player records data file that
- * refers to the given area.
- *
- * @param areaPtr The area.
- * @return The entry name.
- */
-string getMissionRecordEntryName(Area* areaPtr) {
-    return
-        areaPtr->name + ";" + areaPtr->subtitle + ";" +
-        areaPtr->maker + ";" + areaPtr->version;
-}
-
-
-/**
  * @brief Scans a circle of radius 8 around the mouse cursor, and finds the mob
  * that comes after this one. i.e. the one with the next
  * highest ID number. If it's already the highest, it loops back around
@@ -558,7 +544,7 @@ Mob* getNextMobNearCursor(
 /**
  * @brief Returns data about how a Pikmin should be spat out, normally from
  * an Onion or converter.
- * 
+ *
  * @param spitNr Number of this spit. This gets hashed and used to determine the
  * angle and horizontal speed of the spit.
  * @param baseHorizontalSpeed Horizontal speed sans deviation.
@@ -1407,12 +1393,12 @@ void spitPikminSeed(
 ) {
     float angle;
     Point horizontalSpeed;
-
+    
     getPikminSpitData(
         spitNr, baseHorizontalSpeed, maxHorizontalSpeedDeviation,
         &angle, &horizontalSpeed
     );
-        
+    
     Pikmin* newPikmin =
         (
             (Pikmin*)

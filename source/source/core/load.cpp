@@ -30,21 +30,17 @@ using std::set;
 
 
 /**
- * @brief Loads a mission's record.
+ * @brief Loads the player's mission records file onto a data file.
  *
- * @param file File data node to load from.
- * @param areaPtr The area's data.
- * @param record Record object to fill.
- * @param ported If not nullptr, whether the record needed to be ported from
- * an older version's format is returned here.
+ * @param file Data file to load into.
+ * @return Whether it succeeded.
  */
-void loadAreaMissionRecord(
-    DataNode* file, Area* areaPtr, MissionRecord& record, bool* ported
-) {
-    string missionRecordEntryName = getMissionRecordEntryName(areaPtr);
-    record.loadFromDataNode(
-        file->getChildByName(missionRecordEntryName), ported
+bool loadMissionRecords(DataNode* file) {
+    bool success = false;
+    file->loadFile(
+        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, &success, true, false, true
     );
+    return success;
 }
 
 
