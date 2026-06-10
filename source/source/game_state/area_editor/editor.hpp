@@ -242,6 +242,9 @@ private:
         //Mob alpha, [0 - 1].
         float mobAlpha = 1.0f;
         
+        //Selection, error, etc. effect alpha, [0 - 1].
+        float overlayAlpha = 1.0f;
+        
         //Z of the lowest sector.
         float lowestSectorZ = 0.0f;
         

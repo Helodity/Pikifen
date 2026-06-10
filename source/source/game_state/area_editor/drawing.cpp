@@ -121,7 +121,8 @@ void AreaEditor::drawCanvas() {
         .textureAlpha = 0.4f,
         .wallShadowAlpha = 0.0f,
         .edgeAlpha = 0.25f,
-        .mobAlpha = 0.15f
+        .mobAlpha = 0.15f,
+        .overlayAlpha = 1.0f,
     };
     
     if(
@@ -170,6 +171,7 @@ void AreaEditor::drawCanvas() {
         style.edgeAlpha = 0.0f;
         style.gridAlpha = 0.0f;
         style.mobAlpha = 0.0f;
+        style.overlayAlpha = 0.0f;
     } else if(subState == EDITOR_SUB_STATE_OCTEE) {
         quickPreviewTimer.start();
     }
@@ -199,6 +201,11 @@ void AreaEditor::drawCanvas() {
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
                 style.gridAlpha, 0.0f
+            );
+        style.overlayAlpha =
+            interpolateNumber(
+                t, 0.0f, quickPreviewTimer.duration / 2.0f,
+                style.overlayAlpha, 0.0f
             );
         style.mobAlpha =
             interpolateNumber(
@@ -1781,7 +1788,11 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                         hasLiquid = true;
                     }
                 }
-                if(!hasLiquid) {
+                if(hasLiquid) {
+                    drawSectorEdgeOffsets(
+                        sPtr, game.liquidLimitEffectBuffer, 1.0f, game.editorsView
+                    );
+                } else {
                     drawSectorTexture(sPtr, Point(), 1.0, style.textureAlpha);
                 }
             } else {
@@ -1789,9 +1800,6 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
             }
             
             if(style.wallShadowAlpha > 0.0f) {
-                drawSectorEdgeOffsets(
-                    sPtr, game.liquidLimitEffectBuffer, 1.0f, game.editorsView
-                );
                 drawSectorEdgeOffsets(
                     sPtr, game.wallOffsetEffectBuffer, style.wallShadowAlpha,
                     game.editorsView
@@ -1846,8 +1854,10 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                 tintColor(HEIGHT_MAP_COLOR, mapGray(h * 255));
         } else if(isSelected) {
             color = getSelectionEffectOverlayColor();
+            color = multAlpha(color, style.overlayAlpha);
         } else if(isHighlighted) {
             color = getHighlightEffectOverlayColor();
+            color = multAlpha(color, style.overlayAlpha);
         } else {
             color = COLOR_EMPTY;
         }

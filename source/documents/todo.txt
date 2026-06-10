@@ -5,9 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Adding and removing mob links is causing the linkIdxs vector to be filled with garbage
-    The auto-fading quick preview works weird with water
-    During quick preview, the yellow selection effect is still showing on sectors
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -256,6 +253,7 @@ Next tasks (roughly sorted most important first)
                 If a given item can suddenly be worth double or triple the normal amount (like in Dandori Battles)
                 If a Pikmin sees enemy Pikmin carrying something, whether they try to attack them (P2/P3), or overpower them (P4)
                 If collected objects and defeated enemies eventually respawn [PIKMIN 4]
+                If the Onion can generate new Pikmin or if you're stuck with the starting amount
             A special "random" ruleset, included with the engine, and that cannot be deleted. Picking this will pick a ruleset at random after every match
                 Maybe add a way for this feature to exclude certain rulesets? Some people can make meme rulesets to use once or twice, and don't want them to be picked during a chill everyday "random ruleset" session
             A handful of rulesets for basic battles, Pikmin 2 battles, Pikmin 3 Bingo Battles, Pikmin 4 Dandori Battles, etc.
