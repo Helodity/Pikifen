@@ -158,6 +158,15 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         usedHelpingTools = true;
         break;
         
+    } case PLAYER_ACTION_TYPE_MT_DELETE_MOB: {
+
+        if(inspectedMob) {
+            inspectedMob->toDelete = true;
+        }
+        
+        usedHelpingTools = true;
+        break;
+        
     } case PLAYER_ACTION_TYPE_MT_FILL_INVENTORY: {
 
         size_t newAmount = mod1 ? 0 : 99;

@@ -42,6 +42,9 @@ enum MAKER_TOOL_TYPE {
     //Show collision box.
     MAKER_TOOL_TYPE_COLLISION,
     
+    //Delete mob.
+    MAKER_TOOL_TYPE_DELETE_MOB,
+    
     //Fill inventory.
     MAKER_TOOL_TYPE_FILL_INVENTORY,
     

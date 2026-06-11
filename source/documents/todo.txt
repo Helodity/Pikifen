@@ -18,6 +18,7 @@ Next tasks (roughly sorted most important first)
             Typical programming things
                 An action that returns to the previous state. Useful for creating utility states that mimic functions
                     This needs a call stack
+                    What if the function contains an action to swap states?
                 Functions you'd find in a math library
                     Sin, cosine?
                     Degrees to radians and vice-versa?
@@ -58,8 +59,6 @@ Next tasks (roughly sorted most important first)
         Smooth scrolling in/out animation
         Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
     New maker tools
-        Fill the player's inventory with 99 of all possible inventory items
-        Delete the mob under the cursor
         Free camera
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Multiplayer co-op

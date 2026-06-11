@@ -651,6 +651,14 @@ void initControls() {
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_DELETE_MOB,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Delete mob",
+        "Delete the inspected mob.",
+        "mt_delete_mob", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_FILL_INVENTORY,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Fill inventory",
