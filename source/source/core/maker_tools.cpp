@@ -158,6 +158,20 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         usedHelpingTools = true;
         break;
         
+    } case PLAYER_ACTION_TYPE_MT_FILL_INVENTORY: {
+
+        size_t newAmount = mod1 ? 0 : 99;
+        
+        for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
+            PlayerTeam* tPtr = &game.states.gameplay->playerTeams[t];
+            forIdx(s, tPtr->sprayStats) {
+                tPtr->sprayStats[s].nrSprays = newAmount;
+            }
+        }
+        
+        usedHelpingTools = true;
+        break;
+        
     } case PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE: {
 
         if(mod1) {

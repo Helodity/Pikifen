@@ -42,6 +42,9 @@ enum MAKER_TOOL_TYPE {
     //Show collision box.
     MAKER_TOOL_TYPE_COLLISION,
     
+    //Fill inventory.
+    MAKER_TOOL_TYPE_FILL_INVENTORY,
+    
     //Frame advance.
     MAKER_TOOL_TYPE_FRAME_ADVANCE,
     

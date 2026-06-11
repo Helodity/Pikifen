@@ -651,6 +651,15 @@ void initControls() {
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_FILL_INVENTORY,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Fill inventory",
+        "Set the amount of all sprays to 99. "
+        "Use \"modifier 1\" to set to 0.",
+        "mt_fill_inventory", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Frame advance",

@@ -222,6 +222,9 @@ enum PLAYER_ACTION_TYPE {
     //Change speed.
     PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
     
+    //Fill inventory.
+    PLAYER_ACTION_TYPE_MT_FILL_INVENTORY,
+    
     //Frame advance.
     PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
     
