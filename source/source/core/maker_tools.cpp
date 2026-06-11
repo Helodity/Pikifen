@@ -162,6 +162,8 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
 
         if(inspectedMob) {
             inspectedMob->toDelete = true;
+        } else {
+            game.console.write("No mob is being inspected.", 3.0f);
         }
         
         usedHelpingTools = true;

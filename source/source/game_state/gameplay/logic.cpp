@@ -1004,7 +1004,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     game.curArea->mission.getScoreMedal(oldMissionScore);
                 MISSION_MEDAL newMedal =
                     game.curArea->mission.getScoreMedal(missionScore);
-                if(oldMedal < newMedal) {
+                if(oldMedal < newMedal && interlude.get() == INTERLUDE_NONE) {
                     medalGotItJuiceTimer = 0.0f;
                     game.audio.addNewUiSoundSource(
                         game.sysContent.sndMedalGotIt,

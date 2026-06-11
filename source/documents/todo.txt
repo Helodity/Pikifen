@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Starting Olympian Ruins immediately triggers a medal obtaining sound
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
@@ -498,6 +497,7 @@ Misc things (so I don't forget)
         Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
         Collision checks with walls don't happen while falling. On the structure at DEV Lab at 1465, 370, if you're on one of the higher sectors and try to fall into the upside-down V, you only collide with the upside-down V's walls (and hence, you only land on it) if you're holding a direction to move horizontally. Not holding anything makes you slip right through those walls and fall to the floor below
         If you go from holding a modifier (Alt) to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
+        Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
     Attack improvements
         A way to add random variation to the knockback angle of a hitbox
         With the current Pikmin "missed hitbox" register, it's possible that an enemy will want to attack with the same hitbox multiple times in the same animation, but all those times will be ignored for 1.5 seconds (think the Man-at-Legs's shots)
@@ -510,7 +510,6 @@ Misc things (so I don't forget)
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the leader cursor goes over them
         The ability for any object to fade when the leader's cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
         The sparkle particles on treasures need to be more obvious
-        Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
         There should be some petal particle effects when a Pikmin loses their maturity
             Each Pikmin type needs to specify its own petal color
@@ -995,6 +994,7 @@ Tasks for later on (I might never implement these)
                 Whistle faint filled circle
                 Whistle dot colors?
                 The medal colors
+        If the last leader is lying down and gets deleted, the "Get up" prompt will persist
     Possible solutions to known issues
         Regarding true fullscreen crashing when a operative system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features
