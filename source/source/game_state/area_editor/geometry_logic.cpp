@@ -1682,7 +1682,7 @@ void AreaEditor::findProblemsUnknownTreeShadow() {
 
 
 /**
- * @brief Checks for mission score criteria that have a zero point multipler,
+ * @brief Checks for mission score criteria that have a zero point multiplier,
  * and fills the problem info if so.
  */
 void AreaEditor::findProblemsZeroPointMissionScoreCri() {

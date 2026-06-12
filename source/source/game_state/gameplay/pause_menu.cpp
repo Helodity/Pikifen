@@ -2363,11 +2363,11 @@ void PauseMenu::initStatusPage() {
             game.states.gameplay->getAmountOfOnionPikmin(ptPtr);
         long total = (long) onField + inOnion;
         
-        long newPiks = 0;
+        long nrNewPikmin = 0;
         auto newIt =
             game.states.gameplay->pikminBornPerType.find(ptPtr);
         if(newIt != game.states.gameplay->pikminBornPerType.end()) {
-            newPiks = newIt->second;
+            nrNewPikmin = newIt->second;
         }
         long lost = 0;
         auto lostIt =
@@ -2376,7 +2376,7 @@ void PauseMenu::initStatusPage() {
             lost = lostIt->second;
         }
         
-        if(total + newPiks + lost > 0) {
+        if(total + nrNewPikmin + lost > 0) {
             addNewPikminStatusLine(
                 pikminList,
                 ptPtr,
@@ -2385,7 +2385,7 @@ void PauseMenu::initStatusPage() {
                 i2s(onField),
                 i2s(inOnion),
                 i2s(total),
-                i2s(newPiks),
+                i2s(nrNewPikmin),
                 i2s(lost),
                 false, false
             );
@@ -2396,7 +2396,7 @@ void PauseMenu::initStatusPage() {
         totalOnField += onField;
         totalInOnion += inOnion;
         grandTotal += total;
-        totalNew += newPiks;
+        totalNew += nrNewPikmin;
         totalLost += lost;
     }
     

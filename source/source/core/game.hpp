@@ -244,7 +244,7 @@ public:
     //Viewport for the editor canvases.
     Viewport editorsView;
     
-    //Buffer with the wall shadows and ledge smoothings.
+    //Buffer with the wall shadows and ledge smoothing effects.
     ALLEGRO_BITMAP* wallOffsetEffectBuffer = nullptr;
     
     //Info on every edge's wall shadow offset effect. Cache for performance.
