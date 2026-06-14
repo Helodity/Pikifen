@@ -117,7 +117,7 @@ void GameplayState::doPlayerActionSwitchLeader(
 ) {
     if(!isDown) return;
     
-    changeToNextLeader(player, isNext, false, false);
+    changeToNextLeader(player, isNext, false, false, false);
 }
 
 

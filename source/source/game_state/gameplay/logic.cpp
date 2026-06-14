@@ -247,7 +247,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     if(player->leaderPtr->toDelete) {
         game.states.gameplay->updateAvailableLeaders();
-        changeToNextLeader(player, true, true, true);
+        changeToNextLeader(player, true, true, true, false);
     }
     
     /********************
@@ -2286,7 +2286,7 @@ void GameplayState::processMobTouches(
                         m2Ptr->center, m2Ptr->bottomZ,
                         m2Ptr->angleCos, m2Ptr->angleSin, &m2HZ
                     );
-                
+                    
                 bool collided = false;
                 
                 if(

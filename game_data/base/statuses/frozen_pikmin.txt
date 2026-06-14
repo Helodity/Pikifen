@@ -16,6 +16,13 @@ reapply_rule = keep_time
 remove_on_whistle = true
 speed_multiplier = 0
 
+sound_start {
+    sound = nature/frozen_mob
+    type = gameplay_pos
+    speed = 120
+    speed_deviation = 10
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.2.0

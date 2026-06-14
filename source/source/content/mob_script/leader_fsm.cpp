@@ -1998,7 +1998,7 @@ void LeaderFsm::getKod(ScriptVM* scriptVM, void* info1, void* info2) {
     
     game.states.gameplay->updateAvailableLeaders();
     if(leaPtr->player) {
-        changeToNextLeader(leaPtr->player, true, true, true);
+        changeToNextLeader(leaPtr->player, true, true, true, false);
     }
     
     LeaderFsm::release(scriptVM, info1, info2);

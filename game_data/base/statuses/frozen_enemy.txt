@@ -21,6 +21,12 @@ shaking_effect = 1.5
 shaking_effect_on_end = 1.5
 speed_multiplier = 0
 
+sound_start {
+    sound = nature/frozen_mob
+    type = gameplay_pos
+    speed_deviation = 10
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.2.0

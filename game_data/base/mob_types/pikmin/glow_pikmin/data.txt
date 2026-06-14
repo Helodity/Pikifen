@@ -189,6 +189,16 @@ sounds {
     thrown {
         sound = pikmin/pikmin_thrown
     }
+    teleport_in {
+        sound = pikmin/glow_pikmin_teleport_in
+        volume = 5
+        speed_deviation = 5
+    }
+    teleport_out {
+        sound = pikmin/glow_pikmin_teleport_out
+        volume = 5
+        speed_deviation = 5
+    }
 }
 
 vulnerabilities {

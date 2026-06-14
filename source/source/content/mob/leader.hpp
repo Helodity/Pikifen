@@ -215,6 +215,7 @@ private:
 
 
 void changeToNextLeader(
-    Player* player, bool forward, bool forceSuccess, bool keepIdx
+    Player* player, bool forward, bool forceSuccess, bool keepIdx,
+    bool silent
 );
 bool grabClosestGroupMember(Player* player);

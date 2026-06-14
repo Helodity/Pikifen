@@ -12,7 +12,12 @@ target_type = strong_plain_obstacle
 team = obstacle
 
 sounds {
-    
+    ice {
+        sound = nature/wind_icy
+        volume = 30
+        speed_deviation = 10
+        loop = true
+    }
 }
 
 maker = Espyo

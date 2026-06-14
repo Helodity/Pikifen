@@ -1411,7 +1411,7 @@ void GameplayState::load() {
         player.leaderPtr = nullptr;
         
         if(!mobs.leaders.empty()) {
-            changeToNextLeader(&player, true, false, false);
+            changeToNextLeader(&player, true, false, false, true);
         }
         
         player.whistle.nextDotTimer.start();

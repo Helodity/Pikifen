@@ -30,6 +30,32 @@ animations{
 			}
 		}
 	}
+	starting{
+		loop_frame=1
+		frames{
+			safe{
+				duration=0.0500
+				interpolate=true
+			}
+			shooting_mid{
+				duration=0.4000
+				interpolate=true
+			}
+		}
+	}
+	stopping{
+		loop_frame=1
+		frames{
+			shooting_mid{
+				duration=0.4000
+				interpolate=true
+			}
+			safe{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
 }
 sprites{
 	destroyed{
@@ -85,7 +111,7 @@ sprites{
 				height=128.0000
 				radius=80.0000
 				type=1
-				value=20.0000
+				value=5.0000
 				hazard=ice
 				knockback_type=1
 			}
@@ -110,7 +136,7 @@ sprites{
 				height=128.0000
 				radius=80.0000
 				type=1
-				value=20.0000
+				value=5.0000
 				hazard=ice
 				knockback_type=1
 			}
@@ -122,6 +148,30 @@ sprites{
 				value=1.0000
 				surface_type=0
 				hazard=ice
+			}
+		}
+	}
+	shooting_mid{
+		file=other_mobs/ice_vent
+		file_pos=0.0000 0.0000
+		file_size=40.0000 40.0000
+		hitboxes{
+			ice{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=1
+				value=5.0000
+				hazard=ice
+				knockback_type=1
+			}
+			mound{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=20.0000
+				type=0
+				value=1.0000
+				surface_type=0
 			}
 		}
 	}

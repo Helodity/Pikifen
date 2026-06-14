@@ -6,27 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
-    Vulnerability things
-        Ice vent is hitting frozen Pikmin multiple times and eventually killing them
-            Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
-        https://github.com/Espyo/Pikifen/pull/91
 
     --- 1.2.0 ---
-    More powerful scripting
-        New actions
-            Typical programming things
-                Functions you'd find in a math library
-                    Sin, cosine?
-                    Degrees to radians and vice-versa?
-                    Bitmask set, unset, test?
-                    Min and max?
-    New sounds
-        Pikmin or enemy getting frozen
-        Glow Pikmin teleport
-        Tricknoll activation
-        Ice vent emitting vapor
-        Leader swap sound, so swapping to the rookie isn't silent
-        Swarming jingle
+    Min and max number actions
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -772,6 +754,7 @@ Misc things (so I don't forget)
                 Mission failure item going up
                 Mission failure item going down
                 Score ruler ticking after the player got (or lost?) some points
+                Swarming jingle
             Results screen
                 Item run-up ticking
                 Item run-up finished
@@ -985,6 +968,10 @@ Tasks for later on (I might never implement these)
                 Whistle dot colors?
                 The medal colors
         If the last leader is lying down and gets deleted, the "Get up" prompt will persist
+        Script actions
+            Sin, cosine
+            Degrees to radians and vice-versa
+            Bitmask set, unset, test, and all of the boolean logic operations
     Possible solutions to known issues
         Regarding true fullscreen crashing when a operative system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

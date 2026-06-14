@@ -1369,9 +1369,11 @@ void Leader::updateThrowVariables() {
  * @param keepIdx If true, swap to a leader that has the same index in the
  * list of available leaders as the current one does.
  * Usually this is used because the current leader is no longer available.
+ * @param silent Whether to make a sound.
  */
 void changeToNextLeader(
-    Player* player, bool forward, bool forceSuccess, bool keepIdx
+    Player* player, bool forward, bool forceSuccess, bool keepIdx,
+    bool silent
 ) {
     if(game.states.gameplay->availableLeaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.
@@ -1463,6 +1465,11 @@ void changeToNextLeader(
         game.states.gameplay->updateClosestGroupMembers(player);
         player->leaderPtr->swarmArrows.clear();
         if(originalLeaderPtr) originalLeaderPtr->player = nullptr;
+        if(!silent) {
+            game.audio.addNewUiSoundSource(
+                game.sysContent.sndSwitchPikmin, { .speed = 0.95f }
+            );
+        }
     }
 }
 

@@ -54,6 +54,7 @@ script {
             set_animation teleport_start
             stop_particles
             start_particles glow_pikmin_teleport_out
+            play_sound teleport_out
         }
         on_animation_end {
             //Check if the focus is valid.
@@ -80,6 +81,7 @@ script {
             set_animation teleport_end
             stop_particles
             start_particles glow_pikmin_teleport_in
+            play_sound teleport_in
         }
         on_animation_end {
             set_shadow_visibility true

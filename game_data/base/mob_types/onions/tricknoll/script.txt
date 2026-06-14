@@ -28,6 +28,7 @@ script {
                 if $temp = leader
                     set_var active true
                     start_particles tricknoll_activation 0 0 120
+                    play_sound activation
                     set_animation idling_active
                 end_if
             end_if
