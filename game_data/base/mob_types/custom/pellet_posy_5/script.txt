@@ -57,9 +57,7 @@ script {
             set_animation sprout
             set_huntable false
             calculate temp $bloom_time / 2
-            if $temp <= 1
-                set_var temp 1
-            end_if
+            max_number temp $temp 1
             set_timer $temp
         }
         on_timer {
@@ -72,9 +70,7 @@ script {
             set_animation sapling
             start_particles sparks_small 15 0 150
             calculate temp $bloom_time / 2
-            if $temp <= 1
-                set_var temp 1
-            end_if
+            max_number temp $temp 1
             set_timer $temp
         }
         on_timer {

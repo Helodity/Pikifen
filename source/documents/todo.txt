@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     Scaling a sector can crush some edges without going through the proper procedure (thanks Helodity)
 
     --- 1.2.0 ---
-    Min and max number actions
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies

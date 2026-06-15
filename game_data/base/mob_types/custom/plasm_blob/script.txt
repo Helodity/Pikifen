@@ -14,9 +14,7 @@ global {
 			if $misc_timer > 0
 				calculate misc_timer $misc_timer - $temp
 			end_if
-			if $misc_timer <= 0
-				set_var misc_timer 0
-			end_if
+			max_number misc_timer $misc_timer 0
 		end_if
 		calculate time_alive $time_alive + $temp
 		set_timer $temp

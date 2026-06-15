@@ -87,7 +87,7 @@ buildEnumNames(easeMethodINames, EASE_METHOD)({
 #define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
 
 //Returns the sign (1 or -1) of a number.
-#define sign(n) (((n) >= 0) ? 1 : -1)
+#define sign(n) (((n) == 0) ? 0 : ((n) > 0) ? 1 : -1)
 
 float ease(float n, EASE_METHOD method);
 float expSmoothing(

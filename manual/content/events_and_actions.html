@@ -350,7 +350,14 @@
         <th><code>ceil_number</code></th>
         <td><dl>
           <dt><code><b>ceil_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceil</a> of the given number. In other words, it rounds the number's decimal places up integer.</dd>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceil</a> of the given number. In other words, it rounds the number's decimal places up integer. Using this on a positive number like 6.3 returns 7, and on a negative number like -6.3 it returns -6; if you want to just get rid of the decimal part, see <code><a href="#truncate-number">truncate_number</a></code>.</dd>
+        </dl></td>
+      </tr>
+      <tr id="clamp-number">
+        <th><code>clamp_number</code></th>
+        <td><dl>
+          <dt><code><b>clamp_number</b> &lt;destination_variable_name&gt; &lt;number&gt; &lt;lower_bound&gt; &lt;upper_bound</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to whatever &lt;number&gt; is, unless it goes under the lower bound or above the upper bound, in which case it stays at the number of the bound.</dd>
         </dl></td>
       </tr>
       <tr id="ease-number">
@@ -378,7 +385,7 @@
         <th><code>floor_number</code></th>
         <td><dl>
           <dt><code><b>floor_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> of the given number. In other words, it rounds the number's decimal places down to an integer.</dd>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> of the given number. In other words, it rounds the number's decimal places down to an integer. Using this on a positive number like 6.3 returns 6, but on a negative number like -6.3 it returns -7; if you want to just get rid of the decimal part, see <code><a href="#truncate-number">truncate_number</a></code>.</dd>
         </dl></td>
       </tr>
       <tr id="get-angle">
@@ -437,6 +444,20 @@
           <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a> of the given values. In other words, it gets a number that's somewhere between the given values. When the &lt;input_number&gt; matches &lt;input_start&gt;, the result matches &lt;output_start&gt;. And when it matches &lt;input_end&gt;, the result matches &lt;output_end&gt;. In-between input values result in in-between output values.</dd>
         </dl></td>
       </tr>
+      <tr id="max-number">
+        <th><code>max_number</code></th>
+        <td><dl>
+          <dt><code><b>max_number</b> &lt;destination_variable_name&gt; &lt;first_number&gt; &lt;second_number&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the highest of the two given numbers.</dd>
+        </dl></td>
+      </tr>
+      <tr id="min-number">
+        <th><code>min_number</code></th>
+        <td><dl>
+          <dt><code><b>min_number</b> &lt;destination_variable_name&gt; &lt;first_number&gt; &lt;second_number&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the lowest of the two given numbers.</dd>
+        </dl></td>
+      </tr>
       <tr id="round-number">
         <th><code>round_number</code></th>
         <td><dl>
@@ -444,11 +465,25 @@
           <dd><a href="https://en.wikipedia.org/wiki/Rounding">Rounds</a> the given number. In other words, it rounds the number's decimal places up or down to an integer, depending on whichever integer is closest.</dd>
         </dl></td>
       </tr>
+      <tr id="sign-number">
+        <th><code>sign_number</code></th>
+        <td><dl>
+          <dt><code><b>sign_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to -1 if the given number is negative, 1 if positive, or 0 if it's zero. This is useful if you want to turn a different positive number into the same sign (positive or negative) as the number in this action, by multiplying that one by whatever this action returns.</dd>
+        </dl></td>
+      </tr>
       <tr id="square-root-number">
         <th><code>square_root_number</code></th>
         <td><dl>
           <dt><code><b>square_root_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
           <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Square_root">square root</a> of the given number.</dd>
+        </dl></td>
+      </tr>
+      <tr id="truncate-number">
+        <th><code>truncate_number</code></th>
+        <td><dl>
+          <dt><code><b>truncate_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the integer portion of the given number. For instance, if the number is 6.3, the result is 6. This works differently from <code><a href="#floor-number">floor_number</a></code> and <code><a href="#ceil-number">ceil_number</a></code> because of negative numbers &ndash; <code>floor_number</code> on -6.3 will return -7 whereas <code>truncate_number</code> will return -6.</dd>
         </dl></td>
       </tr>
     </table>

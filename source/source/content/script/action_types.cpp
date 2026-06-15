@@ -272,6 +272,29 @@ void ScriptActionRunners::ceilNumber(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the clamp number script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::clampNumber(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+    const string& lowerArg = data.args[2];
+    const string& upperArg = data.args[3];
+    
+    //Main logic.
+    float lower = s2f(lowerArg);
+    float upper = s2f(upperArg);
+    if(lower > upper) std::swap(lower, upper);
+    float result = std::clamp((float) s2f(numberArg), lower, upper);
+        
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the variable clearing script action type.
  *
  * @param data Data about the action call.
@@ -1618,6 +1641,44 @@ void ScriptActionRunners::loadFocusMemory(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the max number script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::maxNumber(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& firstNrArg = data.args[1];
+    const string& secondNrArg = data.args[2];
+    
+    //Main logic.
+    float result = std::max(s2f(firstNrArg), s2f(secondNrArg));
+        
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
+ * @brief Code for the min number script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::minNumber(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& firstNrArg = data.args[1];
+    const string& secondNrArg = data.args[2];
+    
+    //Main logic.
+    float result = std::min(s2f(firstNrArg), s2f(secondNrArg));
+        
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the move to absolute coordinates script action type.
  *
  * @param data Data about the action call.
@@ -2743,6 +2804,24 @@ void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the sign number script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::signNumber(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+    
+    //Main logic.
+    float result = sign(s2f(numberArg));
+        
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the spawning script action type.
  *
  * @param data Data about the action call.
@@ -3141,6 +3220,24 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
         &data.scriptVM->getRunnerScriptVM()->focusedMob->speedZ,
         nullptr
     );
+}
+
+
+/**
+ * @brief Code for the truncate number script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::truncateNumber(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+    
+    //Main logic.
+    int result = s2i(numberArg);
+        
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
 
 

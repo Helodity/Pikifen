@@ -52,6 +52,9 @@ enum SCRIPT_ACTION {
     //Perform a numeric calculation.
     SCRIPT_ACTION_CALCULATE,
     
+    //Clamp a number.
+    SCRIPT_ACTION_CLAMP_NUMBER,
+    
     //Clear a variable.
     SCRIPT_ACTION_CLEAR_VAR,
     
@@ -202,6 +205,12 @@ enum SCRIPT_ACTION {
     //Load focused mob from focused mobs memory.
     SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
     
+    //Max of two numbers.
+    SCRIPT_ACTION_MAX_NUMBER,
+    
+    //Min of two numbers.
+    SCRIPT_ACTION_MIN_NUMBER,
+    
     //Move to absolute coordinates.
     SCRIPT_ACTION_MOVE_TO_ABSOLUTE,
     
@@ -337,6 +346,9 @@ enum SCRIPT_ACTION {
     //Show a cutscene message that is inside a script variable.
     SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
     
+    //Sign a float number.
+    SCRIPT_ACTION_SIGN_NUMBER,
+    
     //Spawn something.
     SCRIPT_ACTION_SPAWN,
     
@@ -393,6 +405,9 @@ enum SCRIPT_ACTION {
     
     //Throw focused mob.
     SCRIPT_ACTION_THROW_FOCUS,
+    
+    //Truncate a float number.
+    SCRIPT_ACTION_TRUNCATE_NUMBER,
     
     //Turn towards an absolute angle.
     SCRIPT_ACTION_TURN_TO_ABSOLUTE,
@@ -960,6 +975,7 @@ void arachnorbPlanLogic(ScriptActionInstRunData& data);
 void beChomped(ScriptActionInstRunData& data);
 void calculate(ScriptActionInstRunData& data);
 void ceilNumber(ScriptActionInstRunData& data);
+void clampNumber(ScriptActionInstRunData& data);
 void clearVar(ScriptActionInstRunData& data);
 void deleteAction(ScriptActionInstRunData& data);
 void drainLiquid(ScriptActionInstRunData& data);
@@ -999,6 +1015,8 @@ void ifAction(ScriptActionInstRunData& data);
 void interpolateNumber(ScriptActionInstRunData& data);
 void linkWithFocus(ScriptActionInstRunData& data);
 void loadFocusMemory(ScriptActionInstRunData& data);
+void maxNumber(ScriptActionInstRunData& data);
+void minNumber(ScriptActionInstRunData& data);
 void moveToAbsolute(ScriptActionInstRunData& data);
 void moveToRelative(ScriptActionInstRunData& data);
 void moveToTarget(ScriptActionInstRunData& data);
@@ -1044,6 +1062,7 @@ void setVar(ScriptActionInstRunData& data);
 void shakeCamera(ScriptActionInstRunData& data);
 void showCutsceneMessage(ScriptActionInstRunData& data);
 void showMessageFromVar(ScriptActionInstRunData& data);
+void signNumber(ScriptActionInstRunData& data);
 void spawn(ScriptActionInstRunData& data);
 void squareRootNumber(ScriptActionInstRunData& data);
 void stabilizeZ(ScriptActionInstRunData& data);
@@ -1063,6 +1082,7 @@ void swallowAll(ScriptActionInstRunData& data);
 void teleportToAbsolute(ScriptActionInstRunData& data);
 void teleportToRelative(ScriptActionInstRunData& data);
 void throwFocus(ScriptActionInstRunData& data);
+void truncateNumber(ScriptActionInstRunData& data);
 void turnToAbsolute(ScriptActionInstRunData& data);
 void turnToRelative(ScriptActionInstRunData& data);
 void turnToTarget(ScriptActionInstRunData& data);

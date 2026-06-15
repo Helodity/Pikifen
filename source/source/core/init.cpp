@@ -1630,6 +1630,17 @@ void initScriptActionTypes() {
         ScriptActionRunners::ceilNumber
     );
     
+    //Clamp number.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
+    queueParam("lower bound", ptFloat);
+    queueParam("upper bound", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_CLAMP_NUMBER,
+        "clamp_number",
+        ScriptActionRunners::clampNumber
+    );
+    
     //Start do-while loop.
     commitAction(
         SCRIPT_ACTION_DO_WHILE,
@@ -1972,6 +1983,26 @@ void initScriptActionTypes() {
         nullptr
     );
     
+    //Max number.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("first number", ptFloat);
+    queueParam("second number", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_MAX_NUMBER,
+        "max_number",
+        ScriptActionRunners::maxNumber
+    );
+    
+    //Min number.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("first number", ptFloat);
+    queueParam("second number", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_MIN_NUMBER,
+        "min_number",
+        ScriptActionRunners::minNumber
+    );
+    
     //Print.
     queueParam("text", ptString, pfVector);
     commitAction(
@@ -2104,6 +2135,15 @@ void initScriptActionTypes() {
         ScriptActionRunners::showMessageFromVar
     );
     
+    //Sign number.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_SIGN_NUMBER,
+        "sign_number",
+        ScriptActionRunners::signNumber
+    );
+    
     //Square root number.
     queueParam("destination var name", ptString, pfConst);
     queueParam("number", ptFloat);
@@ -2111,6 +2151,15 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_SQUARE_ROOT_NUMBER,
         "square_root_number",
         ScriptActionRunners::squareRootNumber
+    );
+    
+    //Truncate number.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_TRUNCATE_NUMBER,
+        "truncate_number",
+        ScriptActionRunners::truncateNumber
     );
     
     //Unfocus.
