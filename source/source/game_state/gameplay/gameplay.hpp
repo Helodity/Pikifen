@@ -56,6 +56,8 @@ extern const float CAMERA_SMOOTHNESS_FACTOR;
 extern const float COLLISION_ALPHA;
 extern const float ENEMY_MIX_DISTANCE;
 extern const int FOG_BITMAP_SIZE;
+extern const float FREE_CAM_ACCELERATION;
+extern const float FREE_CAM_MAX_SPEED;
 extern const float LEADER_LAND_PART_MAX_SIZE;
 extern const float LEADER_LAND_PART_SIZE_MULT;
 extern const float LEADER_MOVEMENT_MAGNITUDE_THRESHOLD;

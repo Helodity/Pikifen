@@ -984,7 +984,7 @@ void Area::generateBlockmap() {
                 continue;
             }
             
-            Point corner = bmap.getTopLeftCorner(bx, by);
+            Point corner = bmap.getCellTopLeftCorner(bx, by);
             corner += GEOMETRY::BLOCKMAP_BLOCK_SIZE * 0.5;
             bmap.sectors[bx][by].insert(
                 getSector(corner, nullptr, false)
@@ -1018,7 +1018,7 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
             for(size_t by = bMinY; by <= bMaxY; by++) {
             
                 //Get the block's coordinates.
-                Point corner = bmap.getTopLeftCorner(bx, by);
+                Point corner = bmap.getCellTopLeftCorner(bx, by);
                 
                 //Check if the edge is inside this blockmap.
                 if(
@@ -2974,6 +2974,20 @@ void Blockmap::clear() {
 
 
 /**
+ * @brief Returns the bottom-right corner of the area.
+ * 
+ * @return 
+ */
+Point Blockmap::getBottomRightCorner() const {
+    return
+        Point(
+            topLeftCorner.x + nCols * GEOMETRY::BLOCKMAP_BLOCK_SIZE,
+            topLeftCorner.y + nRows * GEOMETRY::BLOCKMAP_BLOCK_SIZE
+        );
+}
+
+
+/**
  * @brief Returns the block column in which an X coordinate is contained.
  *
  * @param x X coordinate.
@@ -3041,13 +3055,13 @@ size_t Blockmap::getRow(float y) const {
 
 
 /**
- * @brief Returns the top-left coordinates for the specified column and row.
+ * @brief Returns the top-left coordinates for the specified cell.
  *
- * @param col Column to check.
- * @param row Row to check.
+ * @param col Column of the cell.
+ * @param row Row of the cell.
  * @return The top-left coordinates.
  */
-Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
+Point Blockmap::getCellTopLeftCorner(size_t col, size_t row) const {
     return
         Point(
             col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + topLeftCorner.x,

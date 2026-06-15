@@ -99,6 +99,12 @@ const float ENEMY_MIX_DISTANCE = 150.0f;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
 
+//Change in camera speed in free cam mode, in zoom pixels per second per second.
+extern const float FREE_CAM_ACCELERATION = 1750.0f;
+
+//Maximum speed the camera can move in free cam mode, in zoom pixels per second.
+extern const float FREE_CAM_MAX_SPEED = 500.0f;
+
 //When a leader lands, this is the maximum size of the particles.
 extern const float LEADER_LAND_PART_MAX_SIZE = 64.0f;
 
@@ -514,8 +520,8 @@ bool GameplayState::endMission(
     if(!silent) {
         //Zoom in on the reason, if possible.
         for(Player& player : players) {
-            Point newCamPos = player.view.cam.targetCenter;
-            float newCamZoom = player.view.cam.targetZoom;
+            Point newCamPos = player.view.cam.centerTarget;
+            float newCamZoom = player.view.cam.zoomTarget;
             
             if(cond) {
                 MissionEndCondType* condTypePtr =
@@ -525,8 +531,8 @@ bool GameplayState::endMission(
                         cond, &newCamPos, &newCamZoom
                     )
                 ) {
-                    player.view.cam.targetCenter = newCamPos;
-                    player.view.cam.targetZoom = newCamZoom;
+                    player.view.cam.centerTarget = newCamPos;
+                    player.view.cam.zoomTarget = newCamZoom;
                 }
             }
         }
@@ -1156,7 +1162,9 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
     } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
         if(game.quickPlay.areaPath.empty()) {
             game.states.annexScreen->areaMenuAreaType =
-                game.curArea->type;
+                game.curArea ?
+                game.curArea->type :
+                AREA_TYPE_SIMPLE;
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_AREA_SELECTION;
             game.changeState(game.states.annexScreen);

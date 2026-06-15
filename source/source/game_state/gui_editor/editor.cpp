@@ -1069,9 +1069,9 @@ void GuiEditor::zoomAndPosResetCmd(float inputValue) {
 void GuiEditor::zoomInCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoomTarget +
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
@@ -1086,9 +1086,9 @@ void GuiEditor::zoomInCmd(float inputValue) {
 void GuiEditor::zoomOutCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoomTarget -
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );

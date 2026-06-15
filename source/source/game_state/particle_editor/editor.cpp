@@ -731,7 +731,7 @@ void ParticleEditor::reloadPartGens() {
  * @brief Resets the camera's X and Y coordinates.
  */
 void ParticleEditor::resetCamXY() {
-    game.editorsView.cam.targetCenter = Point();
+    game.editorsView.cam.centerTarget = Point();
 }
 
 
@@ -856,10 +856,10 @@ void ParticleEditor::unload() {
 void ParticleEditor::zoomAndPosResetCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetCenter = Point();
+    if(game.editorsView.cam.zoomTarget == 1.0f) {
+        game.editorsView.cam.centerTarget = Point();
     } else {
-        game.editorsView.cam.targetZoom = 1.0f;
+        game.editorsView.cam.zoomTarget = 1.0f;
     }
 }
 
@@ -872,9 +872,9 @@ void ParticleEditor::zoomAndPosResetCmd(float inputValue) {
 void ParticleEditor::zoomInCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoomTarget +
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
@@ -889,9 +889,9 @@ void ParticleEditor::zoomInCmd(float inputValue) {
 void ParticleEditor::zoomOutCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoomTarget -
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );

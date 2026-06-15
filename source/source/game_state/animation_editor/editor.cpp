@@ -222,13 +222,13 @@ void AnimationEditor::centerCameraOnSpriteBitmap(bool instant) {
         Point spriteSize = getBitmapDimensions(curSprite->parentBmp);
         centerCamera(RectCorners(spriteSize / (-2.0f), spriteSize / 2.0f));
     } else {
-        game.editorsView.cam.targetZoom = 1.0f;
-        game.editorsView.cam.targetCenter = Point();
+        game.editorsView.cam.zoomTarget = 1.0f;
+        game.editorsView.cam.centerTarget = Point();
     }
     
     if(instant) {
-        game.editorsView.cam.center = game.editorsView.cam.targetCenter;
-        game.editorsView.cam.zoom = game.editorsView.cam.targetZoom;
+        game.editorsView.cam.center = game.editorsView.cam.centerTarget;
+        game.editorsView.cam.zoom = game.editorsView.cam.zoomTarget;
     }
     game.editorsView.updateTransformations();
 }
@@ -1394,7 +1394,7 @@ void AnimationEditor::renameSprite(
  * @brief Resets the camera's X and Y coordinates.
  */
 void AnimationEditor::resetCamXY() {
-    game.editorsView.cam.targetCenter = Point();
+    game.editorsView.cam.centerTarget = Point();
 }
 
 
@@ -2115,10 +2115,10 @@ void AnimationEditor::updateHitboxes() {
 void AnimationEditor::zoomAndPosResetCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetCenter = Point();
+    if(game.editorsView.cam.zoomTarget == 1.0f) {
+        game.editorsView.cam.centerTarget = Point();
     } else {
-        game.editorsView.cam.targetZoom = 1.0f;
+        game.editorsView.cam.zoomTarget = 1.0f;
     }
 }
 
@@ -2172,9 +2172,9 @@ void AnimationEditor::zoomEverythingCmd(float inputValue) {
 void AnimationEditor::zoomInCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoomTarget +
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
@@ -2189,9 +2189,9 @@ void AnimationEditor::zoomInCmd(float inputValue) {
 void AnimationEditor::zoomOutCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoomTarget -
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );

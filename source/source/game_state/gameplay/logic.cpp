@@ -325,7 +325,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         leaderCursorWeight /= weightSums;
         groupWeight /= weightSums;
         
-        player->view.cam.targetCenter =
+        player->view.cam.centerTarget =
             player->leaderPtr->center * leaderWeight +
             player->leaderCursorWorld * leaderCursorWeight +
             groupCenter * groupWeight;
@@ -729,21 +729,60 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::doGameplayLogic(float deltaT) {
-
     for(Player& player : players) {
-        //Manual camera movement.
-        if(!player.leaderPtr) {
-            //If there's no leader being controlled,
-            //might as well move the camera.
-            Point coords;
+        //Free camera movement.
+        bool useFreeCam = !player.leaderPtr;
+        
+        if(useFreeCam) {
+            player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_LINEAR;
+            
+            //Get movement info.
+            Point movCoords;
             float dummyAngle;
             float dummyMagnitude;
             player.leaderMovement.getInfo(
-                &coords, &dummyAngle, &dummyMagnitude
+                &movCoords, &dummyAngle, &dummyMagnitude
             );
-            player.view.cam.targetCenter =
-                player.view.cam.center +
-                (coords * 120.0f / player.view.cam.zoom);
+            
+            //Figure out the movement speed.
+            Point targetSpeed(
+                GAMEPLAY::FREE_CAM_MAX_SPEED *
+                movCoords.x / player.view.cam.zoom,
+                GAMEPLAY::FREE_CAM_MAX_SPEED *
+                movCoords.y / player.view.cam.zoom
+            );
+            player.view.cam.centerSpeed.x =
+                inchTowards(
+                    player.view.cam.centerSpeed.x, targetSpeed.x,
+                    GAMEPLAY::FREE_CAM_ACCELERATION / player.view.cam.zoom *
+                    deltaT
+                );
+            player.view.cam.centerSpeed.y =
+                inchTowards(
+                    player.view.cam.centerSpeed.y, targetSpeed.y,
+                    GAMEPLAY::FREE_CAM_ACCELERATION / player.view.cam.zoom *
+                    deltaT
+                );
+            
+            //Clamp to the blockmap bounds.
+            RectCorners areaBounds(
+                game.curArea->bmap.topLeftCorner,
+                game.curArea->bmap.getBottomRightCorner()
+            );
+
+            player.view.cam.center.x =
+                std::clamp(
+                    player.view.cam.center.x, areaBounds.tl.x, areaBounds.br.x
+                );
+            player.view.cam.center.y =
+                std::clamp(
+                    player.view.cam.center.y, areaBounds.tl.y, areaBounds.br.y
+                );
+                
+        } else {
+            player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
+            player.view.cam.centerSpeed = 0.0f;
+            
         }
         
         player.view.cam.tick(deltaT);

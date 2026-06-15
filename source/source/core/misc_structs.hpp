@@ -140,6 +140,19 @@ enum ENGINE_FONT {
 };
 
 
+//Ways to control the speed of a camera's coordinate.
+enum CAMERA_SPEED_MODE {
+
+    //Use the speed class members, linearly. Acceleration must be
+    //controlled elsewhere.
+    CAMERA_SPEED_MODE_LINEAR,
+    
+    //Exponentially smoothen the speed based on the distance to the target.
+    CAMERA_SPEED_MODE_EXP_SMOOTH,
+    
+};
+
+
 //Engine font enum naming (internal names).
 buildEnumNames(engineFontINames, ENGINE_FONT)({
     { ENGINE_FONT_AREA_NAME, "area_name" },
@@ -166,14 +179,26 @@ struct Camera {
     //Current center coordinates.
     Point center;
     
-    //Center coordinates it wants to be at.
-    Point targetCenter;
-    
     //Current zoom.
     float zoom = 1.0f;
     
-    //Zoom it wants to be at.
-    float targetZoom = 1.0f;
+    //Speed control mode for the center.
+    CAMERA_SPEED_MODE centerSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
+    
+    //Speed control mode for the zoom.
+    CAMERA_SPEED_MODE zoomSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
+    
+    //Center coordinate target, in exponential smoothing mode.
+    Point centerTarget;
+    
+    //Zoom target, in exponential smoothing mode.
+    float zoomTarget = 1.0f;
+    
+    //Horizontal movement speed, in linear mode.
+    Point centerSpeed;
+    
+    //Zoom change speed, in linear mode.
+    float zoomSpeed = 0.0f;
     
     
     //--- Public function declarations ---
@@ -181,6 +206,10 @@ struct Camera {
     void setPos(const Point& newPos);
     void setZoom(float newZoom);
     void tick(float deltaT);
+    void updateCoordinate(
+        float* coord, CAMERA_SPEED_MODE speedMode, float target, float speed,
+        float deltaT
+    );
     
 };
 
@@ -623,10 +652,10 @@ struct ReaderSetter {
 struct ScriptVarManager {
 
     //--- Public functions ---
-
+    
     ScriptVarManager() = default;
     ScriptVarManager(const string& str);
-
+    
     bool fromString(const string& str);
     string toString() const;
     const map<string, string>& toMap() const;
@@ -650,12 +679,12 @@ struct ScriptVarManager {
     void erase(const string& name);
     void clear();
     bool empty() const;
-
+    
     //--- Private members ---
     
     //The list proper.
     map<string, string> varsMap;
-
+    
 };
 
 

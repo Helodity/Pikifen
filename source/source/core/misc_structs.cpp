@@ -256,7 +256,8 @@ void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
  */
 void Camera::setPos(const Point& newPos) {
     center = newPos;
-    targetCenter = newPos;
+    centerTarget = newPos;
+    centerSpeed = 0.0f;
 }
 
 
@@ -267,7 +268,8 @@ void Camera::setPos(const Point& newPos) {
  */
 void Camera::setZoom(float newZoom) {
     zoom = newZoom;
-    targetZoom = newZoom;
+    zoomTarget = newZoom;
+    zoomSpeed = 0.0f;
 }
 
 
@@ -277,18 +279,59 @@ void Camera::setZoom(float newZoom) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Camera::tick(float deltaT) {
-    center.x =
-        expSmoothing(
-            center.x, targetCenter.x, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
-        );
-    center.y =
-        expSmoothing(
-            center.y, targetCenter.y, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
-        );
-    zoom =
-        expSmoothing(
-            zoom, targetZoom, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
-        );
+    const float SNAP_THRESHOLD = 0.001f;
+
+    //Update each coordinate.
+    updateCoordinate(
+        &center.x, centerSpeedMode, centerTarget.x, centerSpeed.x, deltaT
+    );
+    updateCoordinate(
+        &center.y, centerSpeedMode, centerTarget.y, centerSpeed.y, deltaT
+    );
+    updateCoordinate(
+        &zoom, zoomSpeedMode, zoomTarget, zoomSpeed, deltaT
+    );
+    
+    //If we're close enough, just snap.
+    if(fabs(center.x - centerTarget.x) < SNAP_THRESHOLD) {
+        center.x = centerTarget.x;
+    }
+    if(fabs(center.y - centerTarget.y) < SNAP_THRESHOLD) {
+        center.y = centerTarget.y;
+    }
+    if(fabs(zoom - zoomTarget) < SNAP_THRESHOLD) {
+        zoom = zoomTarget;
+    }
+}
+
+
+/**
+ * @brief Updates one of the camera's coordinates for this tick,
+ * depending on the movement mode.
+ *
+ * @param coord Pointer to the coordinate to update.
+ * @param speedMode Speed control mode.
+ * @param target Target value, in exponential smoothing mode.
+ * @param speed Speed value, in linear mode.
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void Camera::updateCoordinate(
+    float* coord, CAMERA_SPEED_MODE speedMode, float target, float speed,
+    float deltaT
+) {
+    switch(speedMode) {
+    case CAMERA_SPEED_MODE_EXP_SMOOTH: {
+        *coord =
+            expSmoothing(
+                *coord, target,
+                GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
+            );
+        break;
+    } case CAMERA_SPEED_MODE_LINEAR: {
+        *coord = *coord + speed * deltaT;
+        break;
+    }
+    }
 }
 
 

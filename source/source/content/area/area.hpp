@@ -98,8 +98,9 @@ struct Blockmap {
     
     size_t getCol(float x) const;
     size_t getRow(float y) const;
+    Point getBottomRightCorner() const;
     bool getEdgesInRect(const RectCorners& corners, set<Edge*>& edges) const;
-    Point getTopLeftCorner(size_t col, size_t row) const;
+    Point getCellTopLeftCorner(size_t col, size_t row) const;
     void clear();
     
 };

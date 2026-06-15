@@ -193,21 +193,21 @@ void Editor::centerCamera(const RectCorners& corners, bool instantaneous) {
     }
     
     Point size = finalCorners.br - finalCorners.tl;
-    game.editorsView.cam.targetCenter.x =
+    game.editorsView.cam.centerTarget.x =
         floor(finalCorners.tl.x + size.x / 2.0f);
-    game.editorsView.cam.targetCenter.y =
+    game.editorsView.cam.centerTarget.y =
         floor(finalCorners.tl.y + size.y / 2.0f);
-    
+        
     float z;
     if(size.x > size.y) z = game.editorsView.windowRect.size.x / size.x;
     else z = game.editorsView.windowRect.size.y / size.y;
     z -= z * 0.1;
     
-    game.editorsView.cam.targetZoom = z;
+    game.editorsView.cam.zoomTarget = z;
     
     if(instantaneous) {
-        game.editorsView.cam.center = game.editorsView.cam.targetCenter;
-        game.editorsView.cam.zoom = game.editorsView.cam.targetZoom;
+        game.editorsView.cam.center = game.editorsView.cam.centerTarget;
+        game.editorsView.cam.zoom = game.editorsView.cam.zoomTarget;
     }
     
     game.editorsView.updateTransformations();
@@ -5313,7 +5313,7 @@ bool Editor::SelectionController::isDragMoving() const {
 
 /**
  * @brief Returns whether the user is currently not doing any operation.
- * 
+ *
  * @return Whether it is idling.
  */
 bool Editor::SelectionController::isIdle() const {

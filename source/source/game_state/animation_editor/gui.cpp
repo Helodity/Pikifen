@@ -2155,8 +2155,8 @@ void AnimationEditor::processGuiPanelSprite() {
     
     //Sprite bitmap button.
     if(ImGui::Button("Bitmap", modeButtonsSize)) {
-        preSpriteBmpCamPos = game.editorsView.cam.targetCenter;
-        preSpriteBmpCamZoom = game.editorsView.cam.targetZoom;
+        preSpriteBmpCamPos = game.editorsView.cam.centerTarget;
+        preSpriteBmpCamZoom = game.editorsView.cam.zoomTarget;
         matchingSpriteBmpPos = curSprite->bmpPos;
         matchingSpriteBmpSize = curSprite->bmpSize;
         centerCameraOnSpriteBitmap(true);

@@ -415,18 +415,18 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
 void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
     if(!isDown) return;
     
-    if(player->view.cam.targetZoom < zoomLevels[1]) {
-        player->view.cam.targetZoom = zoomLevels[0];
-    } else if(player->view.cam.targetZoom > zoomLevels[1]) {
-        player->view.cam.targetZoom = zoomLevels[1];
+    if(player->view.cam.zoomTarget < zoomLevels[1]) {
+        player->view.cam.zoomTarget = zoomLevels[0];
+    } else if(player->view.cam.zoomTarget > zoomLevels[1]) {
+        player->view.cam.zoomTarget = zoomLevels[1];
     } else {
         if(
             game.options.advanced.zoomMediumReach ==
             game.config.rules.zoomFarthestReach
         ) {
-            player->view.cam.targetZoom = zoomLevels[0];
+            player->view.cam.zoomTarget = zoomLevels[0];
         } else {
-            player->view.cam.targetZoom = zoomLevels[2];
+            player->view.cam.zoomTarget = zoomLevels[2];
         }
     }
     
@@ -474,29 +474,29 @@ void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
 void GameplayState::doPlayerActionZoom(
     Player* player, float inputValue, bool zoomIn
 ) {
-    if(player->view.cam.targetZoom >= zoomLevels[0] && zoomIn) {
+    if(player->view.cam.zoomTarget >= zoomLevels[0] && zoomIn) {
         return;
     }
     
-    if(player->view.cam.targetZoom <= zoomLevels[2] && !zoomIn) {
+    if(player->view.cam.zoomTarget <= zoomLevels[2] && !zoomIn) {
         return;
     }
     
     float flooredPos = floor(inputValue);
     
     if(zoomIn) {
-        player->view.cam.targetZoom =
-            player->view.cam.targetZoom + 0.1 * flooredPos;
+        player->view.cam.zoomTarget =
+            player->view.cam.zoomTarget + 0.1 * flooredPos;
     } else {
-        player->view.cam.targetZoom =
-            player->view.cam.targetZoom - 0.1 * flooredPos;
+        player->view.cam.zoomTarget =
+            player->view.cam.zoomTarget - 0.1 * flooredPos;
     }
     
-    if(player->view.cam.targetZoom > zoomLevels[0]) {
-        player->view.cam.targetZoom = zoomLevels[0];
+    if(player->view.cam.zoomTarget > zoomLevels[0]) {
+        player->view.cam.zoomTarget = zoomLevels[0];
     }
-    if(player->view.cam.targetZoom < zoomLevels[2]) {
-        player->view.cam.targetZoom = zoomLevels[2];
+    if(player->view.cam.zoomTarget < zoomLevels[2]) {
+        player->view.cam.zoomTarget = zoomLevels[2];
     }
     
     game.audio.addNewUiSoundSource(

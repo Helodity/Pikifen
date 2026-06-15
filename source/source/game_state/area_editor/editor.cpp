@@ -3331,7 +3331,7 @@ void AreaEditor::removeThumbnail() {
  * @brief Resets the camera's X and Y coordinates.
  */
 void AreaEditor::resetCamXY() {
-    game.editorsView.cam.targetCenter = Point();
+    game.editorsView.cam.centerTarget = Point();
 }
 
 
@@ -4379,10 +4379,10 @@ void AreaEditor::updateUndoHistory() {
 void AreaEditor::zoomAndPosResetCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetCenter = Point();
+    if(game.editorsView.cam.zoomTarget == 1.0f) {
+        game.editorsView.cam.centerTarget = Point();
     } else {
-        game.editorsView.cam.targetZoom = 1.0f;
+        game.editorsView.cam.zoomTarget = 1.0f;
     }
 }
 
@@ -4463,9 +4463,9 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
 void AreaEditor::zoomInCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoomTarget +
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
@@ -4480,9 +4480,9 @@ void AreaEditor::zoomInCmd(float inputValue) {
 void AreaEditor::zoomOutCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.targetZoom =
+    game.editorsView.cam.zoomTarget =
         std::clamp(
-            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoomTarget -
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
