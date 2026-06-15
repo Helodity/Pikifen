@@ -9,8 +9,8 @@ script {
     exploring {
         on_enter {
             set_animation moving random_time_on_spawn true
-            get_random_float t 0.8 1.2
-            set_timer $t
+            get_random_float temp 0.8 1.2
+            set_timer $temp
             set_near_reach search
             get_random_float x -1000 1000
             get_random_float y -1000 1000
@@ -23,8 +23,8 @@ script {
             get_random_float x -1000 1000
             get_random_float y -1000 1000
             move_to_relative $x $y
-            get_random_float t 0.8 1.2
-            set_timer $t
+            get_random_float temp 0.8 1.2
+            set_timer $temp
         }
         on_opponent_in_reach {
             focus trigger
@@ -66,8 +66,8 @@ script {
         }
         on_animation_end {
             stop_chomping
-            get_mob_info t self chomped_pikmin
-            if $t > 0
+            get_mob_info temp self chomped_pikmin
+            if $temp > 0
                 set_state eating
             else
                 set_state exploring

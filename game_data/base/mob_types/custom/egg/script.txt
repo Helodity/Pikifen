@@ -6,10 +6,10 @@ init {
 }
 
 ready {
-    get_mob_info t self health_ratio
-    if $t < 0.33
+    get_mob_info temp self health_ratio
+    if $temp < 0.33
         set_state stage_3_idling
-    else_if $t < 0.66
+    else_if $temp < 0.66
         set_state stage_2_idling
     end_if
 }
@@ -20,10 +20,10 @@ script {
             set_animation stage_1_idling
         }
         on_damage {
-            get_mob_info t self health_ratio
-            if $t < 0.33
+            get_mob_info temp self health_ratio
+            if $temp < 0.33
                 set_state stage_3_idling
-            else_if $t < 0.66
+            else_if $temp < 0.66
                 set_state stage_2_idling
             end_if
         }
@@ -36,8 +36,8 @@ script {
             set_animation stage_2_idling
         }
         on_damage {
-            get_mob_info t self health_ratio
-            if $t < 0.33
+            get_mob_info temp self health_ratio
+            if $temp < 0.33
                 set_state stage_3_idling
             end_if
         }
@@ -61,12 +61,12 @@ script {
             play_sound crack
             
             if $contents = random
-                get_random_float c 1 100
-                if $c < 55
+                get_random_float temp 1 100
+                if $temp < 55
                     set_var contents nectar
-                else_if $c < 90
+                else_if $temp < 90
                     set_var contents nectar_2
-                else_if $c < 95
+                else_if $temp < 95
                     set_var contents spicy_drop
                 else
                     set_var contents bitter_drop

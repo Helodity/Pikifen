@@ -29,8 +29,8 @@ script {
         }
         on_damage {
             play_sound hit
-            get_mob_info t self health_ratio
-            if $t < 0.85
+            get_mob_info temp self health_ratio
+            if $temp < 0.85
                 set_state stage_2_shaking
             end_if
             set_state stage_1_shaking
@@ -46,8 +46,8 @@ script {
         }
         on_damage {
             play_sound hit
-            get_mob_info t self health_ratio
-            if $t < 0.85
+            get_mob_info temp self health_ratio
+            if $temp < 0.85
                 set_state stage_2_shaking
             end_if
         }

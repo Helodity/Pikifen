@@ -72,7 +72,7 @@ script {
             get_mob_info y self y
             get_mob_info fx focus x
             get_mob_info fy focus y
-            get_angle a $x $y $fx $fy
+            get_angle angle $x $y $fx $fy
         }
         on_far_from_home {
             stop
@@ -86,7 +86,7 @@ script {
         }
         on_timer {
             //Periodically update the position compared to the opponent.
-            get_coordinates_from_angle x y $a 400
+            get_coordinates_from_angle x y $angle 400
             get_mob_info fx focus x
             get_mob_info fy focus y
             calculate x $fx - $x
@@ -159,8 +159,8 @@ script {
     shaking {
         on_enter {
             stop
-            get_mob_info t self latched_pikmin_weight
-            if $t > 15
+            get_mob_info temp self latched_pikmin_weight
+            if $temp > 15
                 set_state falling
             else
                 set_animation shaking
@@ -214,8 +214,8 @@ script {
             set_animation dying
         }
         on_frame_signal {
-            get_event_info t frame_signal
-            if $t = 0
+            get_event_info temp frame_signal
+            if $temp = 0
                 set_flying false
                 set_shadow_visibility false
                 set_tangible false

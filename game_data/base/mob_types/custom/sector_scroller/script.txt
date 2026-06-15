@@ -7,8 +7,8 @@ init {
 script {
     idling {
         on_enter {
-            get_mob_info a self angle
-            get_coordinates_from_angle x y $a $speed
+            get_mob_info temp self angle
+            get_coordinates_from_angle x y $temp $speed
             set_sector_scroll $x $y
         }
     }

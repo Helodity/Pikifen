@@ -25,8 +25,8 @@ script {
         }
         on_object_in_reach {
             if $ignoring = false
-                get_mob_info t trigger mob_type
-                if $t = crystal_nodule
+                get_mob_info temp trigger mob_type
+                if $temp = crystal_nodule
                     focus trigger
                     get_mob_info nodule_id trigger id
                     set_state chasing_nodule
@@ -41,8 +41,8 @@ script {
             get_random_float y -1000 1000
             move_to_relative $x $y
             set_animation walking normal true
-            get_random_float t 1.5 2.5
-            set_timer $t
+            get_random_float temp 1.5 2.5
+            set_timer $temp
             set_near_reach nodule_search
         }
         on_itch {
@@ -83,8 +83,8 @@ script {
             set_state shaking
         }
         on_object_in_reach {
-            get_mob_info t trigger mob_type
-            if $t = crystal_nodule
+            get_mob_info temp trigger mob_type
+            if $temp = crystal_nodule
                 set_state picking_up
             end_if
         }
@@ -140,8 +140,8 @@ script {
             get_random_float y -1000 1000
             move_to_relative $x $y
             set_animation walking normal true
-            get_random_float t 1.5 2.5
-            set_timer $t
+            get_random_float temp 1.5 2.5
+            set_timer $temp
             set_near_reach target_search
         }
         on_reach_destination {

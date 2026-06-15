@@ -14,8 +14,8 @@ script {
             set_animation idling random_time_on_spawn
             stop
             set_near_reach search
-            get_random_float t 2 6
-            set_timer $t
+            get_random_float temp 2 6
+            set_timer $temp
         }
         on_leave {
             set_timer 0
@@ -87,8 +87,8 @@ script {
     squatting {
         on_enter {
             stop
-            get_mob_info t self latched_pikmin_weight
-            if $t >= 30
+            get_mob_info temp self latched_pikmin_weight
+            if $temp >= 30
                 set_state struggling
             else
                 set_animation squatting

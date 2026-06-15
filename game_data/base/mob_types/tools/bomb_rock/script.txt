@@ -17,8 +17,8 @@ script {
             set_state primed
         }
         on_held {
-            get_mob_info h trigger mob_category
-            if $h = pikmin
+            get_mob_info temp trigger mob_category
+            if $temp = pikmin
                 set_state held_by_pikmin
             end_if
         }

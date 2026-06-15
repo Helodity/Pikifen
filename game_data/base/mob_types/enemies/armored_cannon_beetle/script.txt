@@ -15,8 +15,8 @@ script {
         on_enter {
             stop
             set_animation idling random_time_on_spawn
-            get_random_float t 1.5 2.5
-            set_timer $t
+            get_random_float temp 1.5 2.5
+            set_timer $temp
             set_near_reach search
         }
         on_timer {
@@ -27,8 +27,8 @@ script {
                 set_state exploring
             end_if
             
-            get_random_float t 1.5 2.5
-            set_timer $t
+            get_random_float temp 1.5 2.5
+            set_timer $temp
         }
         on_opponent_in_reach {
             focus trigger
@@ -51,8 +51,8 @@ script {
     exploring {
         on_enter {
             set_animation moving normal true
-            get_random_float t 1.5 2.5
-            set_timer $t
+            get_random_float temp 1.5 2.5
+            set_timer $temp
             get_random_float x -1000 1000
             get_random_float y -1000 1000
             move_to_relative $x $y
@@ -112,8 +112,8 @@ script {
             stop_particles
         }
         on_tick {
-            get_mob_info t self chomped_pikmin
-            if $t > 0
+            get_mob_info temp self chomped_pikmin
+            if $temp > 0
                 set_state catching
             end_if
         }

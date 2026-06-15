@@ -14,14 +14,14 @@ script {
             play_sound rock_hit
         }
         on_touch_hazard {
-            get_event_info h hazard
-            if $h = water
+            get_event_info temp hazard
+            if $temp = water
                 set_var in_water true
             end_if
         }
         on_leave_hazard {
-            get_event_info h hazard
-            if $h = water
+            get_event_info temp hazard
+            if $temp = water
                 set_var in_water false
             end_if
         }

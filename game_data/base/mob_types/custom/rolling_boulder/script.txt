@@ -38,9 +38,9 @@ script {
             set_state destroying
         }
         on_touch_object {
-            get_mob_info t trigger mob_category
-            if $t != pikmin
-                if $t != decoration
+            get_mob_info temp trigger mob_category
+            if $temp != pikmin
+                if $temp != decoration
                     set_state destroying
                 end_if
             end_if
@@ -50,8 +50,8 @@ script {
         }
         on_opponent_in_reach {
             if $homing = true
-                get_mob_info t trigger mob_category
-                if $t = leader
+                get_mob_info temp trigger mob_category
+                if $temp = leader
                     if $has_target = false
                         focus trigger
                         move_to_target focused_mob

@@ -2,10 +2,10 @@ first_state = stage_1_idling
 death_state = destroyed
 
 ready {
-    get_mob_info t self health_ratio
-    if $t < 0.33
+    get_mob_info temp self health_ratio
+    if $temp < 0.33
         set_state stage_3_idling
-    else_if $t < 0.66
+    else_if $temp < 0.66
         set_state stage_2_idling
     end_if
 }
@@ -17,10 +17,10 @@ script {
         }
         on_damage {
             play_sound hit
-            get_mob_info t self health_ratio
-            if $t < 0.33
+            get_mob_info temp self health_ratio
+            if $temp < 0.33
                 set_state stage_3_shaking
-            else_if $t < 0.66
+            else_if $temp < 0.66
                 set_state stage_2_shaking
             end_if
             set_state stage_1_shaking
@@ -35,10 +35,10 @@ script {
         }
         on_damage {
             play_sound hit
-            get_mob_info t self health_ratio
-            if $t < 0.33
+            get_mob_info temp self health_ratio
+            if $temp < 0.33
                 set_state stage_3_shaking
-            else_if $t < 0.66
+            else_if $temp < 0.66
                 set_state stage_2_shaking
             end_if
         }
@@ -49,8 +49,8 @@ script {
         }
         on_damage {
             play_sound hit
-            get_mob_info t self health_ratio
-            if $t < 0.33
+            get_mob_info temp self health_ratio
+            if $temp < 0.33
                 set_state stage_3_shaking
             end_if
             set_state stage_2_shaking
@@ -65,8 +65,8 @@ script {
         }
         on_damage {
             play_sound hit
-            get_mob_info t self health_ratio
-            if $t < 0.33
+            get_mob_info temp self health_ratio
+            if $temp < 0.33
                 set_state stage_3_shaking
             end_if
         }

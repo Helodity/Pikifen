@@ -10,8 +10,8 @@ script {
             set_animation up
         }
         on_weight_added {
-            get_mob_info t self weight
-            if $t >= $goal_number
+            get_mob_info temp self weight
+            if $temp >= $goal_number
                 set_state crushed_1
             end_if
             play_sound crumple

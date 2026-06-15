@@ -43,10 +43,10 @@ script {
         on_enter {
             set_animation pulled
 
-            get_mob_info p self group_task_power
-            if $p <= 3
+            get_mob_info temp self group_task_power
+            if $temp <= 3
                 set_timer 1.5
-            else_if $p = 4
+            else_if $temp = 4
                 set_timer 1.25
             else
                 set_timer 1
@@ -55,10 +55,10 @@ script {
         on_timer {
             add_health -20
 
-            get_mob_info p self group_task_power
-            if $p <= 3
+            get_mob_info temp self group_task_power
+            if $temp <= 3
                 set_timer 1.5
-            else_if $p = 4
+            else_if $temp = 4
                 set_timer 1.25
             else
                 set_timer 1
