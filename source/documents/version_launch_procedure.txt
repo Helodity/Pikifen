@@ -1,0 +1,108 @@
+1. Before everything
+    Confirm that there are no more tasks in the todo document, open bug reports, etc.
+    Confirm that there are no staged or unstaged changes on git
+    Make sure the documentation is up-to-date, especially the following:
+        Main tutorials
+        Quick start guide
+        Glossary
+        FAQ
+        Roadmap
+    Update the changelog
+        Particularly the update's version number, release day, and nickname
+        Double-check that it's organized, or if it could be sorted differently
+        In order for the main changelog file to keep the most recent major/minor version (i.e. revisions are ignored for this count) plus the in-dev version, move older versions to the older changelog document if needed
+2. Final cleanup
+    Pass all code files through AStyle (works best on 3.2.1)
+        for f in $(find . -type f | egrep '.+\.(cpp|h)'); do astyle --options=../documents/astyle.txt -n $f; done
+    Code cleanup
+        Use the helper tool, or:
+        Confirm that no line goes over 80 characters
+            grep -Enr --include="*.cpp" ^.\{81,\}$
+        Confirm that all function definitions are sorted alphabetically, and by namespace
+        Confirm that all includes are sorted alphabetically
+        Confirm that all functions have documentation, and that it has no missing/extra parameters
+        Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
+    Fix up all changed images since the last release
+        Use the helper tool to get the list, or run:
+            git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'
+        Confirm that the most recent ground textures are a power of 2
+        PNGCrush the png files
+        This might help (make sure filelist.txt has LF linebreaks):
+            cat filelist.txt | while read line; do pngcrush -brute $line $line.new; done;
+    Fix up all changed SVG files
+        Use the helper tool to get the list, or run:
+            git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
+        Remove large reference images and screenshots
+        Use the cleanup document tool in Inkscape
+        Make sure they have a license
+            https://opensource.org/licenses/MIT
+        Make sure they have metadata
+            Title: <Object name> spritesheet
+            Author: André "Espyo" Silva
+            Keywords: Pikifen spritesheet
+            Description: Spritesheet for the <object name> in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
+    Place any changes made to the .vscode folder in the source/vs_code folder
+3. Release candidate
+    Compile it for Windows
+        Use GitHub Actions
+        Or use Visual Studio
+            Confirm that the subsystem option in the release build's linker options is set to Windows
+            Compile it on Windows with a release x64 target build
+    Point down all changes that were necessary for it to compile
+    Create a zip file (see below)
+    Send it to beta testers so they can check for stuff that's immediately wrong
+    After they're done, tell them to confirm that error_log.txt reported nothing
+4. Final preparations
+    Change version information in the code
+        In-development is false, apply the correct release date
+        Use the helper tool, or edit const.h and the *.rc files
+    Update all area version numbers and engine version numbers
+    Update the Allegro version number on the Compiling page of the manual, if it changed
+    Check any changes made on Windows in order to compile, and port them over
+5. Final build
+    Compile it once more on Linux just to be sure (full build)
+    Delete error_log.txt
+    Make sure the title screen shows the right version
+    Test it out by playing a bit
+    Confirm that error_log.txt reported no errors
+6. Release
+    Commit all changes made in preparation for the next version, and push
+    Compile it on Windows with a release x64 target build
+    Create a zip (see below)
+    Tag the commit (format "X.X.X") and push it
+    Release the new version on GitHub
+7. Starting the next
+    Change version information in the code for the planned new version
+        In-development is true, leave the old release date
+        Use the helper tool, or edit const.h and the *.rc files
+    Add to the todo for the start of the next version:
+        Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
+        Remove deprecated things that have been around for too long (search the entire project for the word DEPRECATED)
+        If this is a big release:
+            Compile with -Wall and correct all problems
+            Use cppcheck on the code and correct the problems
+                cd source/source
+                cppcheck . -iutil/code_debug.cpp -ilib/imgui --config-exclude=lib/imgui --suppressions-list="../documents/cppcheck_suppressions.txt" -U_WIN32 -U_MSC_VER -U__APPLE__ -U__linux__ --std=c++17 --enable=all --template=gcc 2>~/Desktop/cppcheck_errors.txt
+            Use Valgrind and correct problems
+                valgrind --leak-check=yes ./pikifen 2> valgrind.txt
+            Use clang analyze and correct problems
+                make CXX=clang++ -f source/gnu_make/makefile analyze
+            Use Infer and correct problems
+                infer run -o ~/Desktop/infer-out --report-block-list-files-containing "lib/imgui" -- make -f source/gnu_make/makefile debug
+            Confirm that there are no superfluous #includes (how?)
+        
+
+When creating a zip
+    The folder should be named "Pikifen_X.X" (or "Pikifen_X.X.X" if there are revision changes, or "Pikifen_X.X_RC" if it's a release candidate)
+    Content
+        Executable for Windows
+        manual folder
+        game_data folder
+            Sans testing areas
+        readme.md file
+        license.txt file
+        manual.html file
+    Zip the folder, not the content inside
+    Name the zip file the same as the folder
+    The file format is .zip, not .7z
+    After it's zipped, re-open the folder and give it a test-run, to see if it boots and the version number is correct

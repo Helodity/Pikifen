@@ -558,29 +558,6 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
 
 /**
  * @brief Handles the left mouse button being pressed in the canvas exclusively,
- * while in the gameplay mode.
- *
- * @param ev Event to handle.
- */
-void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT& ev) {
-    switch(subState) {
-    case EDITOR_SUB_STATE_NONE: {
-
-        handleSelectionAndTransformationLmbDown(
-            gameplaySelCtrl, curTransformationWidget, false
-        );
-        
-        regionSelection.setHomogenized(false);
-        
-        break;
-        
-    }
-    }
-}
-
-
-/**
- * @brief Handles the left mouse button being pressed in the canvas exclusively,
  * while in the details mode.
  *
  * @param ev Event to handle.
@@ -615,6 +592,29 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         );
         
         shadowSelection.setHomogenized(false);
+        
+        break;
+        
+    }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the gameplay mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT& ev) {
+    switch(subState) {
+    case EDITOR_SUB_STATE_NONE: {
+
+        handleSelectionAndTransformationLmbDown(
+            gameplaySelCtrl, curTransformationWidget, false
+        );
+        
+        regionSelection.setHomogenized(false);
         
         break;
         

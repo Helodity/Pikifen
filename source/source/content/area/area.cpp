@@ -2988,6 +2988,22 @@ Point Blockmap::getBottomRightCorner() const {
 
 
 /**
+ * @brief Returns the top-left coordinates for the specified cell.
+ *
+ * @param col Column of the cell.
+ * @param row Row of the cell.
+ * @return The top-left coordinates.
+ */
+Point Blockmap::getCellTopLeftCorner(size_t col, size_t row) const {
+    return
+        Point(
+            col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + topLeftCorner.x,
+            row * GEOMETRY::BLOCKMAP_BLOCK_SIZE + topLeftCorner.y
+        );
+}
+
+
+/**
  * @brief Returns the block column in which an X coordinate is contained.
  *
  * @param x X coordinate.
@@ -3051,22 +3067,6 @@ size_t Blockmap::getRow(float y) const {
     float finalY = (y - topLeftCorner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(finalY >= nRows) return INVALID;
     return finalY;
-}
-
-
-/**
- * @brief Returns the top-left coordinates for the specified cell.
- *
- * @param col Column of the cell.
- * @param row Row of the cell.
- * @return The top-left coordinates.
- */
-Point Blockmap::getCellTopLeftCorner(size_t col, size_t row) const {
-    return
-        Point(
-            col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + topLeftCorner.x,
-            row * GEOMETRY::BLOCKMAP_BLOCK_SIZE + topLeftCorner.y
-        );
 }
 
 

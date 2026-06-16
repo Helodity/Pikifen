@@ -2015,28 +2015,6 @@ void MissionRecord::clear() {
 
 
 /**
- * @brief Returns whether or not this record is a platinum medal.
- *
- * @param mission Mission data to get info from.
- * @return Whether it is platinum.
- */
-bool MissionRecord::isPlatinum(const MissionData& mission) const {
-    if(date.empty()) return false;
-    
-    switch(mission.medalAwardMode) {
-    case MISSION_MEDAL_AWARD_MODE_POINTS: {
-        return score >= mission.platinumReq;
-    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
-        return true;
-    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
-        return true;
-    }
-    }
-    return false;
-}
-
-
-/**
  * @brief Loads a record from a key string and a data string.
  *
  * @param keyStr Key information string to read from.
@@ -2076,6 +2054,28 @@ bool MissionRecord::fromStrings(
     }
     
     return true;
+}
+
+
+/**
+ * @brief Returns whether or not this record is a platinum medal.
+ *
+ * @param mission Mission data to get info from.
+ * @return Whether it is platinum.
+ */
+bool MissionRecord::isPlatinum(const MissionData& mission) const {
+    if(date.empty()) return false;
+    
+    switch(mission.medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
+        return score >= mission.platinumReq;
+    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
+        return true;
+    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
+        return true;
+    }
+    }
+    return false;
 }
 
 

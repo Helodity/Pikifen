@@ -30,21 +30,6 @@ using std::set;
 
 
 /**
- * @brief Loads the player's mission records file onto a data file.
- *
- * @param file Data file to load into.
- * @return Whether it succeeded.
- */
-bool loadMissionRecords(DataNode* file) {
-    bool success = false;
-    file->loadFile(
-        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, &success, true, false, true
-    );
-    return success;
-}
-
-
-/**
  * @brief Loads an audio stream from the game's content.
  *
  * @param filePath Name of the file to load.
@@ -473,6 +458,21 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndMenuFocus);
     game.sysContent.sndSwitchPikmin =
         game.content.sounds.list.get(game.sysContentNames.sndSwitchPikmin);
+}
+
+
+/**
+ * @brief Loads the player's mission records file onto a data file.
+ *
+ * @param file Data file to load into.
+ * @return Whether it succeeded.
+ */
+bool loadMissionRecords(DataNode* file) {
+    bool success = false;
+    file->loadFile(
+        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, &success, true, false, true
+    );
+    return success;
 }
 
 

@@ -1764,7 +1764,8 @@ void AreaEditor::processGuiPanelDetails() {
                 }
                 setTooltip(
                     "Speed at which the (game world) day passes.\n"
-                    "60 means 1 game-world-hour goes by in 1 real-world-minute.\n"
+                    "60 means 1 game-world-hour goes by "
+                    "in 1 real-world-minute.\n"
                     "0 means it's stopped.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
@@ -1809,8 +1810,10 @@ void AreaEditor::processGuiPanelDetails() {
                 );
             }
             setTooltip(
-                "Choose which background image to use from the game's content.\n"
-                "This repeating texture can be seen when looking at the void."
+                "Choose which background image to "
+                "use from the game's content.\n"
+                "This repeating texture can be "
+                "seen when looking at the void."
             );
             
             //Background image name text.

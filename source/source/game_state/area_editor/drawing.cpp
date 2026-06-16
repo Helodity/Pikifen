@@ -1790,7 +1790,8 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                 }
                 if(hasLiquid) {
                     drawSectorEdgeOffsets(
-                        sPtr, game.liquidLimitEffectBuffer, 1.0f, game.editorsView
+                        sPtr, game.liquidLimitEffectBuffer,
+                        1.0f, game.editorsView
                     );
                 } else {
                     drawSectorTexture(sPtr, Point(), 1.0, style.textureAlpha);
