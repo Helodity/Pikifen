@@ -1198,7 +1198,9 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
     case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_3_LEADER_ID:
     case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_4_LEADER_ID: {
         int playerNr =
-            (int) type - (int) SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID;
+            (int) type -
+            (int) SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID +
+            1;
         result = "0";
         forIdx(p, game.states.gameplay->players) {
             Player& player = game.states.gameplay->players[p];

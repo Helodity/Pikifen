@@ -688,7 +688,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Move the leader with the mouse.
     if(
         readyForInput && isInputAllowed && interlude.get() == INTERLUDE_NONE &&
-        game.options.controls.mouseMovesLeader[player->playerNr]
+        game.options.controls.mouseMovesLeader[player->playerNr - 1]
     ) {
         float leaderToMouseCursorDist =
             Distance(
@@ -1706,7 +1706,7 @@ void GameplayState::markAreaCellsActive(
  */
 void GameplayState::processLeaderCursor(Player* player, float deltaT) {
     //Move the leader cursor freely, using the current control scheme.
-    if(game.options.controls.mouseMovesLeaderCursor[player->playerNr]) {
+    if(game.options.controls.mouseMovesLeaderCursor[player->playerNr - 1]) {
         player->leaderCursorWorld = player->view.mouseCursorWorldPos;
     } else {
         Point leaderCursorSpeed;

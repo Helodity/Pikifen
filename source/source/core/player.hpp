@@ -66,7 +66,7 @@ struct Player {
 
     //--- Public members ---
     
-    //Player number.
+    //Player number, starting at 1.
     unsigned char playerNr = 0;
     
     //Viewport during gameplay.

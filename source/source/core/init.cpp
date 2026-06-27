@@ -1363,7 +1363,7 @@ void initMisc() {
     game.rng.init();
     
     game.states.gameplay->players.push_back(Player());
-    game.states.gameplay->players[0].playerNr = 0;
+    game.states.gameplay->players[0].playerNr = 1;
     
     game.states.gameplay->particles =
         ParticleManager(game.options.advanced.maxParticles);
