@@ -1538,17 +1538,20 @@ void startCutsceneMessage(const string& text, ALLEGRO_BITMAP* speakerBmp) {
         string finalText = unescapeString(text);
         game.states.gameplay->cutsceneMsgBox =
             new CutsceneMessageBox(finalText, speakerBmp);
-        for(Player& player : game.states.gameplay->players) {
+        forIdx(p, game.states.gameplay->players) {
+            Player& player = game.states.gameplay->players[p];
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
             player.inventory->close();
         }
+        
     } else {
         delete game.states.gameplay->cutsceneMsgBox;
         game.states.gameplay->cutsceneMsgBox = nullptr;
-        for(Player& player : game.states.gameplay->players) {
+        forIdx(p, game.states.gameplay->players) {
+            Player& player = game.states.gameplay->players[p];
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_OUT_TO_IN,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME

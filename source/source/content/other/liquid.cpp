@@ -181,22 +181,22 @@ Point Liquid::getChillHotspot() const {
 Point Liquid::getCursorOn() const {
     Point cursorPos(FLT_MAX);
     forIdx(p, game.states.gameplay->players) {
-        Player* pPtr = &game.states.gameplay->players[p];
+        Player& player = game.states.gameplay->players[p];
         Pikmin* throwee = nullptr;
-        if(!pPtr->leaderCursorSector) continue;
-        if(pPtr->leaderCursorSector->liquid != this) continue;
-        if(!pPtr->leaderPtr) continue;
-        if(!pPtr->leaderPtr->throwee) continue;
+        if(!player.leaderCursorSector) continue;
+        if(player.leaderCursorSector->liquid != this) continue;
+        if(!player.leaderPtr) continue;
+        if(!player.leaderPtr->throwee) continue;
         if(
-            pPtr->leaderPtr->throwee->type->category->id ==
+            player.leaderPtr->throwee->type->category->id ==
             MOB_CATEGORY_PIKMIN
         ) {
-            throwee = (Pikmin*) pPtr->leaderPtr->throwee;
+            throwee = (Pikmin*) player.leaderPtr->throwee;
         }
         if(!throwee) continue;
         if(!throwee->pikType->chillsLiquids) continue;
         
-        cursorPos = pPtr->leaderCursorWorld;
+        cursorPos = player.leaderCursorWorld;
     }
     return cursorPos;
 }

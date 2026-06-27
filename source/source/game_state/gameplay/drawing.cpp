@@ -986,13 +986,15 @@ void GameplayState::drawInGameText(Player* player) {
                 vector<Point> rectVertices {
                     rotatePoint(mobCorners.tl, mobPtr->angle) +
                     mobPtr->center,
-                    rotatePoint(Point(mobCorners.tl.x, mobCorners.br.y),
-                    mobPtr->angle) +
+                    rotatePoint(
+                        Point(mobCorners.tl.x, mobCorners.br.y), mobPtr->angle
+                    ) +
                     mobPtr->center,
                     rotatePoint(mobCorners.br, mobPtr->angle) +
                     mobPtr->center,
-                    rotatePoint(Point(mobCorners.br.x, mobCorners.tl.y),
-                    mobPtr->angle) +
+                    rotatePoint(
+                        Point(mobCorners.br.x, mobCorners.tl.y), mobPtr->angle
+                    ) +
                     mobPtr->center
                 };
                 float vertices[] {

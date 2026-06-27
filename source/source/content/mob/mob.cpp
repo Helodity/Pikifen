@@ -4363,7 +4363,8 @@ void Mob::tickMiscLogic(float deltaT) {
     
     //Fraction numbers.
     bool isCursorOn = false;
-    for(const Player& player : game.states.gameplay->players) {
+    forIdx(p, game.states.gameplay->players) {
+        Player& player = game.states.gameplay->players[p];
         if(!player.leaderPtr) continue;
         isCursorOn |=
             bBoxCheck(
@@ -4589,7 +4590,8 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Check if it got whistled.
-    for(const Player& player : game.states.gameplay->players) {
+    forIdx(p, game.states.gameplay->players) {
+        Player& player = game.states.gameplay->players[p];
         if(!player.leaderPtr) continue;
         if(!player.whistle.whistling) continue;
         if(!player.leaderPtr->isViableLeader(this)) continue;

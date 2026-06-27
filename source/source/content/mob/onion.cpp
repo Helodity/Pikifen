@@ -294,7 +294,8 @@ void Onion::tickClassSpecifics(float deltaT) {
     if(oniType->canTurnSeeThrough) {
         float finalAlpha = 1.0f;
         
-        for(const Player& player : game.states.gameplay->players) {
+        forIdx(p, game.states.gameplay->players) {
+            Player& player = game.states.gameplay->players[p];
             if(!player.leaderPtr) continue;
             if(
                 bBoxCheck(

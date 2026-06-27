@@ -288,7 +288,7 @@ void ScriptActionRunners::clampNumber(ScriptActionInstRunData& data) {
     float upper = s2f(upperArg);
     if(lower > upper) std::swap(lower, upper);
     float result = std::clamp((float) s2f(numberArg), lower, upper);
-        
+    
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
@@ -1692,7 +1692,7 @@ void ScriptActionRunners::maxNumber(ScriptActionInstRunData& data) {
     
     //Main logic.
     float result = std::max(s2f(firstNrArg), s2f(secondNrArg));
-        
+    
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
@@ -1711,7 +1711,7 @@ void ScriptActionRunners::minNumber(ScriptActionInstRunData& data) {
     
     //Main logic.
     float result = std::min(s2f(firstNrArg), s2f(secondNrArg));
-        
+    
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
@@ -2798,16 +2798,16 @@ void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
     
     //Main logic.
     forIdx(p, game.states.gameplay->players) {
-        Player* pPtr = &game.states.gameplay->players[p];
+        Player& player = game.states.gameplay->players[p];
         float d =
             Distance(
-                data.scriptVM->getRunnerMob()->center, pPtr->view.cam.center
+                data.scriptVM->getRunnerMob()->center, player.view.cam.center
             ).toFloat();
         float strengthMult =
             ::interpolateNumber(
                 d, 0.0f, DRAWING::CAM_SHAKE_DROPOFF_DIST, 1.0f, 0.0f
             );
-        pPtr->view.shaker.shake(s2f(amountArg) / 100.0f * strengthMult);
+        player.view.shaker.shake(s2f(amountArg) / 100.0f * strengthMult);
     }
 }
 
@@ -2854,7 +2854,7 @@ void ScriptActionRunners::signNumber(ScriptActionInstRunData& data) {
     
     //Main logic.
     float result = sign(s2f(numberArg));
-        
+    
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }
@@ -3274,7 +3274,7 @@ void ScriptActionRunners::truncateNumber(ScriptActionInstRunData& data) {
     
     //Main logic.
     int result = s2i(numberArg);
-        
+    
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
 }

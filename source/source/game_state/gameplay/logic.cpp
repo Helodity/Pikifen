@@ -212,7 +212,9 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::doAestheticLogic(float deltaT) {
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
+
         //Leader stuff.
         doAestheticLeaderLogic(&player, deltaT);
         
@@ -729,7 +731,9 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::doGameplayLogic(float deltaT) {
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
+        
         //Free camera movement.
         bool useFreeCam = !player.leaderPtr;
         
@@ -746,9 +750,9 @@ void GameplayState::doGameplayLogic(float deltaT) {
             
             //Figure out the movement speed.
             Point targetSpeed(
-                GAMEPLAY::FREE_CAM_MAX_SPEED *
+                GAMEPLAY::FREE_CAM_MAX_SPEED*
                 movCoords.x / player.view.cam.zoom,
-                GAMEPLAY::FREE_CAM_MAX_SPEED *
+                GAMEPLAY::FREE_CAM_MAX_SPEED*
                 movCoords.y / player.view.cam.zoom
             );
             player.view.cam.centerSpeed.x =
@@ -763,13 +767,13 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     GAMEPLAY::FREE_CAM_ACCELERATION / player.view.cam.zoom *
                     deltaT
                 );
-            
+                
             //Clamp to the blockmap bounds.
             RectCorners areaBounds(
                 game.curArea->bmap.topLeftCorner,
                 game.curArea->bmap.getBottomRightCorner()
             );
-
+            
             player.view.cam.center.x =
                 std::clamp(
                     player.view.cam.center.x, areaBounds.tl.x, areaBounds.br.x
@@ -875,23 +879,24 @@ void GameplayState::doGameplayLogic(float deltaT) {
         Point oldLeaderPos[MAX_PLAYERS];
         bool oldLeaderWasWalking[MAX_PLAYERS];
         forIdx(p, players) {
-            Player* player = &players[p];
+            Player& player = players[p];
+            
             //Some setup to calculate how far the leader walks.
-            oldLeaders[p] = player->leaderPtr;
+            oldLeaders[p] = player.leaderPtr;
             oldLeaderWasWalking[p] = false;
-            if(player->leaderPtr) {
-                oldLeaderPos[p] = player->leaderPtr->center;
+            if(player.leaderPtr) {
+                oldLeaderPos[p] = player.leaderPtr->center;
                 oldLeaderWasWalking[p] =
-                    player->leaderPtr->player &&
+                    player.leaderPtr->player &&
                     !hasFlag(
-                        player->leaderPtr->chaseInfo.flags,
+                        player.leaderPtr->chaseInfo.flags,
                         CHASE_FLAG_TELEPORT
                     ) &&
                     !hasFlag(
-                        player->leaderPtr->chaseInfo.flags,
+                        player.leaderPtr->chaseInfo.flags,
                         CHASE_FLAG_TELEPORTS_CONSTANTLY
                     ) &&
-                    player->leaderPtr->chaseInfo.state == CHASE_STATE_CHASING;
+                    player.leaderPtr->chaseInfo.state == CHASE_STATE_CHASING;
             }
         }
         
@@ -930,11 +935,12 @@ void GameplayState::doGameplayLogic(float deltaT) {
         }
         
         forIdx(p, players) {
-            Player* player = &players[p];
-            doGameplayLeaderLogic(player, deltaT);
+            Player& player = players[p];
+            
+            doGameplayLeaderLogic(&player, deltaT);
             
             if(
-                player->leaderPtr && player->leaderPtr == oldLeaders[p] &&
+                player.leaderPtr && player.leaderPtr == oldLeaders[p] &&
                 oldLeaderWasWalking[p]
             ) {
                 //This more or less tells us how far the leader walked in this
@@ -947,7 +953,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 //for a fun stat.
                 game.statistics.distanceWalked +=
                     Distance(
-                        oldLeaderPos[p], player->leaderPtr->center
+                        oldLeaderPos[p], player.leaderPtr->center
                     ).toFloat();
             }
         }
@@ -1180,7 +1186,8 @@ void GameplayState::doMenuLogic() {
     }
     game.modal.tick(game.deltaT);
     
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         player.hud->tick(game.deltaT);
         player.inventory->tick(game.deltaT);
     }
@@ -1542,7 +1549,8 @@ void GameplayState::doMenuLogic() {
         if(interlude.getTime() >= GAMEPLAY::BIG_MSG_READY_DUR) {
             interlude.set(INTERLUDE_NONE, false);
             deltaTMult = 1.0f;
-            for(Player& player : players) {
+            forIdx(p, players) {
+                Player& player = players[p];
                 player.hud->gui.startAnimation(
                     GUI_MANAGER_ANIM_OUT_TO_IN,
                     GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
@@ -1603,7 +1611,8 @@ void GameplayState::doScriptLogic() {
 void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
     bool foundEnemy = false;
     bool foundBoss = false;
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         if(!player.leaderPtr) continue;
         forIdx(e, game.states.gameplay->mobs.enemies) {
             Enemy* ePtr = game.states.gameplay->mobs.enemies[e];
@@ -1934,7 +1943,8 @@ void GameplayState::processMobMiscInteractions(
     FsmEventDef* touchLeEv =
         mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_ACTIVE_LEADER);
     if(touchLeEv) {
-        for(Player& player : players) {
+        forIdx(p, players) {
+            Player& player = players[p];
             if(!player.leaderPtr) continue;
             if(m2Ptr != player.leaderPtr) continue;
             if(!m2Ptr->isViableLeader(mPtr)) continue;
@@ -2569,7 +2579,8 @@ void GameplayState::updateAreaActiveCells() {
     }
     
     //Mark the region in-camera (plus padding) as active.
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         markAreaCellsActive(player.view.worldCorners);
     }
 }

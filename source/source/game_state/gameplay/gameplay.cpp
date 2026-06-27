@@ -457,8 +457,8 @@ void GameplayState::doLogic() {
         }
     }
     
-    for(Player& player : players) {
-        player.view.updateMouseCursor(game.mouseCursor.winPos);
+    forIdx(p, players) {
+        players[p].view.updateMouseCursor(game.mouseCursor.winPos);
     }
     
     //Controls.
@@ -513,13 +513,14 @@ bool GameplayState::endMission(
     interlude.set(INTERLUDE_MISSION_END, false);
     deltaTMult = 0.5f;
     stopAllLeaders();
-    for(Player& player : players) {
-        player.inventory->close();
+    forIdx(p, players) {
+        players[p].inventory->close();
     }
     
     if(!silent) {
         //Zoom in on the reason, if possible.
-        for(Player& player : players) {
+        forIdx(p, players) {
+            Player& player = players[p];
             Point newCamPos = player.view.cam.centerTarget;
             float newCamZoom = player.view.cam.zoomTarget;
             
@@ -558,7 +559,8 @@ bool GameplayState::endMission(
             sndToPlay = game.sysContent.sndMissionFailed;
         }
         
-        for(Player& player : players) {
+        forIdx(p, players) {
+            Player& player = players[p];
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -590,7 +592,8 @@ bool GameplayState::endMission(
 void GameplayState::enter() {
     particles.viewports.clear();
     
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         player.view.windowRect.size.x = game.winW;
         player.view.windowRect.size.y = game.winH;
         player.view.windowRect.center.x = game.winW / 2.0f;
@@ -614,7 +617,8 @@ void GameplayState::enter() {
         zoomLevels[z] = viewportReach / zoomReaches[z];
     }
     
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         if(player.leaderPtr) {
             player.view.cam.setPos(player.leaderPtr->center);
         } else {
@@ -662,7 +666,8 @@ void GameplayState::enter() {
     readyForInput = false;
     game.mouseCursor.reset();
     
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         player.hud->gui.hideItems();
         player.inventory->close();
         player.leaderPrompt.reset();
@@ -1121,7 +1126,8 @@ void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     game.modal.handleAllegroEvent(ev);
     
     //Finally, let the HUD handle events.
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         player.hud->gui.handleAllegroEvent(ev);
         player.inventory->gui.handleAllegroEvent(ev);
     }
@@ -1414,7 +1420,8 @@ void GameplayState::load() {
     updateAvailableLeaders();
     startingNrOfLeaders = mobs.leaders.size();
     
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         player.leaderIdx = INVALID;
         player.leaderPtr = nullptr;
         
@@ -1472,7 +1479,8 @@ void GameplayState::load() {
     
     pathMgr.handleAreaLoad();
     
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         player.hud = new Hud();
         player.hud->player = &player;
         player.inventory = new Inventory(&player);
@@ -1752,7 +1760,8 @@ void GameplayState::startLeaving(const GAMEPLAY_LEAVE_TARGET target) {
  * are concerned.
  */
 void GameplayState::stopAllLeaders() {
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         player.leaderMovement.reset();
         player.swarmMovement.reset();
         player.leaderCursorMov.reset();
@@ -1781,7 +1790,8 @@ void GameplayState::tryPause() {
 void GameplayState::unload() {
     unloading = true;
     
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         if(player.hud) {
             player.hud->gui.destroy();
             delete player.hud;
@@ -1919,7 +1929,8 @@ void GameplayState::updateAvailableLeaders() {
     );
     
     //Update the current leader's index, which could've changed.
-    for(Player& player : players) {
+    forIdx(p, players) {
+        Player& player = players[p];
         forIdx(l, availableLeaders) {
             if(availableLeaders[l] == player.leaderPtr) {
                 player.leaderIdx = l;
