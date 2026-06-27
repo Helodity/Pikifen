@@ -1470,6 +1470,19 @@ void changeToNextLeader(
                 game.sysContent.sndSwitchPikmin, { .speed = 0.95f }
             );
         }
+
+        if(originalLeaderPtr) {
+            forIdx(m, originalLeaderPtr->group->members) {
+                Mob* mPtr = originalLeaderPtr->group->members[m];
+                FsmEventDef* activeLeaderChangedEv =
+                    mPtr->scriptVM.fsm.getEvent(FSM_EV_ACTIVE_LEADER_CHANGED);
+                if(activeLeaderChangedEv) {
+                    activeLeaderChangedEv->run(
+                        &mPtr->scriptVM, (void*) player->leaderPtr
+                    );
+                }
+            }
+        }
     }
 }
 

@@ -332,6 +332,7 @@ struct Group {
     void sort(SubgroupType* leadingType);
     void changeStandbyTypeIfNeeded();
     size_t getAmountByType(const MobType* type) const;
+    size_t getAmountByType(const string& typeIName) const;
     Point getAverageMemberPos() const;
     vector<Hazard*> getGroupInvulnerabilities(
         Mob* includeLeader = nullptr

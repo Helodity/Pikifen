@@ -305,7 +305,7 @@ void ScriptActionRunners::clearVar(ScriptActionInstRunData& data) {
     
     //Main logic.
     if(data.scriptVM->getRunnerScriptVM()->vars.contains(varArg)) {
-        data.scriptVM->getRunnerScriptVM()->vars.setValue(varArg, "");
+        data.scriptVM->getRunnerScriptVM()->vars.setValue(varArg, string());
     }
 }
 
@@ -1012,6 +1012,38 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the leader Pikmin count retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getLeaderPikminCount(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& targetArg = data.args[1];
+    const string& typeArg = data.args[2];
+    
+    //Main logic.
+    SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
+        ScriptActionUtils::getMobTargetType(data, targetArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
+    
+    if(!target) return;
+    
+    size_t result;
+    if(!target->group) {
+        result = 0;
+    } else if(typeArg.empty()) {
+        result = target->group->members.size();
+    } else {
+        result = target->group->getAmountByType(typeArg);
+    }
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the list item retrieval script action type.
  *
  * @param data Data about the action call.
@@ -1165,13 +1197,16 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
     case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_2_LEADER_ID:
     case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_3_LEADER_ID:
     case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_4_LEADER_ID: {
-        int playerIdx =
+        int playerNr =
             (int) type - (int) SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID;
-        size_t leaderId =
-            game.states.gameplay->players[playerIdx].leaderPtr ?
-            game.states.gameplay->players[playerIdx].leaderPtr->id :
-            0;
-        result = i2s(leaderId);
+        result = "0";
+        forIdx(p, game.states.gameplay->players) {
+            Player& player = game.states.gameplay->players[p];
+            if(player.playerNr != playerNr) continue;
+            if(!player.leaderPtr) continue;
+            result = i2s(player.leaderPtr->id);
+            break;
+        }
         break;
         
     }
@@ -1413,6 +1448,10 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE: {
         result = target->scriptVM.fsm.curState->name;
+        break;
+        
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_TEAM: {
+        result = enumGetName(mobTeamINames, target->team);
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {

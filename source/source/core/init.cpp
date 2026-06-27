@@ -1834,6 +1834,16 @@ void initScriptActionTypes() {
         ScriptActionRunners::getFocusVar
     );
     
+    //Get leader Pikmin count var.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("target", ptString);
+    queueParam("Pikmin type", ptString, pfOpt);
+    commitAction(
+        SCRIPT_ACTION_GET_LEADER_PIKMIN_COUNT,
+        "get_leader_pikmin_count",
+        ScriptActionRunners::getLeaderPikminCount
+    );
+    
     //Get list item.
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);

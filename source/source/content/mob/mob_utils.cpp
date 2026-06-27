@@ -307,6 +307,23 @@ size_t Group::getAmountByType(const MobType* type) const {
 
 
 /**
+ * @brief Returns how many members of the given type exist in the group.
+ *
+ * @param typeIName Internal name of the type to check.
+ * @return The amount.
+ */
+size_t Group::getAmountByType(const string& typeIName) const {
+    size_t amount = 0;
+    forIdx(m, members) {
+        if(members[m]->type->manifest->internalName == typeIName) {
+            amount++;
+        }
+    }
+    return amount;
+}
+
+
+/**
  * @brief Returns the average position of the members.
  *
  * @return The average position.

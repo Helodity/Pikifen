@@ -151,6 +151,9 @@ enum SCRIPT_ACTION {
     //Get a script variable's value from the focused mob.
     SCRIPT_ACTION_GET_FOCUS_VAR,
     
+    //Get how many Pikmin a leader has, optionally of a given type.
+    SCRIPT_ACTION_GET_LEADER_PIKMIN_COUNT,
+    
     //Get an item of a list (split string).
     SCRIPT_ACTION_GET_LIST_ITEM,
     
@@ -695,6 +698,9 @@ enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
     //Get name of current state.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE,
     
+    //Get internal name of current team.
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_TEAM,
+    
     //Get current weight on top of it.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_WEIGHT,
     
@@ -730,6 +736,7 @@ buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY, "mob_category" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE, "mob_type" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE, "state" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_TEAM, "team" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_WEIGHT, "weight" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_X, "x" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_Y, "y" },
@@ -993,11 +1000,13 @@ void forEach(ScriptActionInstRunData& data);
 void getAngle(ScriptActionInstRunData& data);
 void getAngleCwDiff(ScriptActionInstRunData& data);
 void getAngleSmallestDiff(ScriptActionInstRunData& data);
+void getAreaInfo(ScriptActionInstRunData& data);
 void getCoordinatesFromAngle(ScriptActionInstRunData& data);
 void getDistance(ScriptActionInstRunData& data);
 void getEventInfo(ScriptActionInstRunData& data);
-void getAreaInfo(ScriptActionInstRunData& data);
 void getFloorZ(ScriptActionInstRunData& data);
+void getFocusVar(ScriptActionInstRunData& data);
+void getLeaderPikminCount(ScriptActionInstRunData& data);
 void getListItem(ScriptActionInstRunData& data);
 void getListItemNumber(ScriptActionInstRunData& data);
 void getListSize(ScriptActionInstRunData& data);
@@ -1006,7 +1015,6 @@ void getMissionMetric(ScriptActionInstRunData& data);
 void getMobIdsInRegion(ScriptActionInstRunData& data);
 void getMobIdsWithVar(ScriptActionInstRunData& data);
 void getMobInfo(ScriptActionInstRunData& data);
-void getFocusVar(ScriptActionInstRunData& data);
 void getRandomFloat(ScriptActionInstRunData& data);
 void getRandomInt(ScriptActionInstRunData& data);
 void getVarPresence(ScriptActionInstRunData& data);
@@ -1052,9 +1060,9 @@ void setListItem(ScriptActionInstRunData& data);
 void setMissionMetricScriptSlot(ScriptActionInstRunData& data);
 void setNearReach(ScriptActionInstRunData& data);
 void setRadius(ScriptActionInstRunData& data);
-void setState(ScriptActionInstRunData& data);
 void setSectorScroll(ScriptActionInstRunData& data);
 void setShadowVisibility(ScriptActionInstRunData& data);
+void setState(ScriptActionInstRunData& data);
 void setTangible(ScriptActionInstRunData& data);
 void setTeam(ScriptActionInstRunData& data);
 void setTimer(ScriptActionInstRunData& data);

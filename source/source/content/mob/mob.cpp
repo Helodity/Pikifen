@@ -4636,23 +4636,6 @@ void Mob::tickScript(float deltaT) {
         }
     }
     
-    //Check if the active leader is different from the current leader.
-    FsmEventDef* activeLeaderChangedEv =
-        scriptVM.fsm.getEvent(FSM_EV_ACTIVE_LEADER_CHANGED);
-    if(activeLeaderChangedEv) {
-        forIdx(p, game.states.gameplay->players) {
-            Leader* candidateLeader =
-                game.states.gameplay->players[p].leaderPtr;
-            if(!candidateLeader) continue;
-            if(candidateLeader->team != team) continue;
-            if(followingGroup == candidateLeader) {
-                //This mob is fine with its leader.
-                break;
-            }
-            activeLeaderChangedEv->run(&scriptVM, (void*) candidateLeader);
-        }
-    }
-    
     //Far away from home.
     FsmEventDef* farFromHomeEv = scriptVM.fsm.getEvent(FSM_EV_FAR_FROM_HOME);
     if(farFromHomeEv) {

@@ -42,7 +42,8 @@ enum FSM_EV {
     
     //Script file stuff.
     
-    //When the player's active leader is not the mob's current leader.
+    //When the player was controlling this mob's leader, but is now controlling
+    //a different leader.
     FSM_EV_ACTIVE_LEADER_CHANGED,
     
     //When the current animation ends.

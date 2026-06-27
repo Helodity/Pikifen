@@ -320,7 +320,7 @@ public:
     //Possible teams for the players.
     PlayerTeam playerTeams[MAX_PLAYER_TEAMS];
     
-    //Players that are participating.
+    //Players that are actively participating.
     vector<Player> players;
     
     //All droplets of precipitation.
