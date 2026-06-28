@@ -449,7 +449,7 @@ public:
     void chase(
         Point* origCoords, float* origZ,
         const Point& offset = Point(), float offsetZ = 0.0f,
-        unsigned char flags = 0,
+        Bitmask8 flags = 0,
         float targetDistance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         float speed = LARGE_FLOAT, float acceleration = LARGE_FLOAT
     );

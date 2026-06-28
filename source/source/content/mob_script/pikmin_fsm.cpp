@@ -16,6 +16,7 @@
 #include "../../core/misc_functions.hpp"
 #include "../../util/general_utils.hpp"
 #include "../../util/string_utils.hpp"
+#include "../mob/bouncer.hpp"
 #include "../mob/bridge.hpp"
 #include "../mob/drop.hpp"
 #include "../mob/group_task.hpp"
@@ -2428,9 +2429,19 @@ void PikminFsm::beThrownByBouncer(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
+    Bouncer* bouPtr = (Bouncer*) info1;
     
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    pikPtr->setAnimation(PIKMIN_ANIM_THROWN);
+    
+    switch(bouPtr->bouType->ridingPose) {
+    case BOUNCER_RIDING_POSE_SOMERSAULT: {
+        pikPtr->setAnimation(PIKMIN_ANIM_THROWN);
+        break;
+    } case BOUNCER_RIDING_POSE_STOPPED: {
+        pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
+        break;
+    }
+    }
     
     pikPtr->startThrowTrail();
 }

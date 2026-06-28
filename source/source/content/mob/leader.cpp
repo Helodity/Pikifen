@@ -319,15 +319,18 @@ bool Leader::checkThrowOk() const {
  * The group is then organized in subgroups, by type,
  * and is dismissed close to the leader.
  *
+ * @param forceDismissAll If true, force every subgroup to be dismissed.
+ * If false, the current subgroup may still follow the leader, if set to do so
+ * in the options.
  * @param subtle If true, no sounds or particles will happen.
  */
-void Leader::dismiss(bool subtle) {
+void Leader::dismiss(bool forceDismissAll, bool subtle) {
     setAnimation(LEADER_ANIM_DISMISSING);
     if(!subtle) {
         dismissDetails();
     }
     if(!group->members.empty()) {
-        dismissLogic();
+        dismissLogic(forceDismissAll);
     }
 }
 
@@ -397,8 +400,12 @@ void Leader::dismissDetails() {
 /**
  * @brief Runs the logic to actually separate, position, and disband
  * the group for a dismiss action.
+ * 
+ * @param forceDismissAll If true, force every subgroup to be dismissed.
+ * If false, the current subgroup may still follow the leader, if set to do so
+ * in the options.
  */
-void Leader::dismissLogic() {
+void Leader::dismissLogic(bool forceDismissAll) {
     if(!player) return;
     
     //They are dismissed towards this angle.
@@ -490,6 +497,7 @@ void Leader::dismissLogic() {
     } while(curType != firstType);
     
     bool keepCurType =
+        !forceDismissAll &&
         !game.options.misc.dismissAll &&
         subgroupsInfo.size() > 1;
         
@@ -1470,7 +1478,7 @@ void changeToNextLeader(
                 game.sysContent.sndSwitchPikmin, { .speed = 0.95f }
             );
         }
-
+        
         if(originalLeaderPtr) {
             forIdx(m, originalLeaderPtr->group->members) {
                 Mob* mPtr = originalLeaderPtr->group->members[m];

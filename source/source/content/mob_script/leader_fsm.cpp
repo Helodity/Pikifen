@@ -17,6 +17,7 @@
 #include "../../game_state/gameplay/gameplay.hpp"
 #include "../../util/general_utils.hpp"
 #include "../../util/string_utils.hpp"
+#include "../mob/bouncer.hpp"
 #include "../mob/drop.hpp"
 #include "../mob/leader.hpp"
 #include "../mob/track.hpp"
@@ -1507,9 +1508,25 @@ void LeaderFsm::beThrownByBouncer(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
+    Bouncer* bouPtr = (Bouncer*) info1;
+    
+    if(!hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN)) {
+        //Pikmin can't follow the leader up, so dismiss.
+        leaPtr->dismiss(true, true);
+    }
+    
+    switch(bouPtr->bouType->ridingPose) {
+    case BOUNCER_RIDING_POSE_SOMERSAULT: {
+        leaPtr->setAnimation(LEADER_ANIM_THROWN);
+        break;
+    } case BOUNCER_RIDING_POSE_STOPPED: {
+        leaPtr->setAnimation(LEADER_ANIM_IDLING);
+        break;
+    }
+    }
     
     leaPtr->startThrowTrail();
-    leaPtr->setAnimation(LEADER_ANIM_THROWN);
+    
     if(!leaPtr->player) {
         leaPtr->leaveGroup();
     }
@@ -1701,7 +1718,7 @@ void LeaderFsm::decidePluckAction(
 void LeaderFsm::dismiss(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    leaPtr->dismiss(info1 != nullptr);
+    leaPtr->dismiss(false, info1 != nullptr);
 }
 
 

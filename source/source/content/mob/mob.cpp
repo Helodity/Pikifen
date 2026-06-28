@@ -1432,7 +1432,7 @@ void Mob::chase(
  */
 void Mob::chase(
     const Point& coords, float coordsZ,
-    unsigned char flags,
+    Bitmask8 flags,
     float targetDistance, float speed, float acceleration
 ) {
     chase(

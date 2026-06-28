@@ -164,7 +164,7 @@ public:
     Leader(const Point& pos, LeaderType* type, float angle);
     bool checkThrowOk() const;
     bool canGrabGroupMember(Mob* m) const;
-    void dismiss(bool subtle = false);
+    void dismiss(bool forceDismissAll, bool subtle = false);
     size_t getAmountOfGroupPikmin(const PikminType* filter);
     bool hasOpponentPikminLatched() const;
     bool orderPikminToOnion(
@@ -204,7 +204,7 @@ private:
     //--- Private function declarations ---
     
     void dismissDetails();
-    void dismissLogic();
+    void dismissLogic(bool forceDismissAll);
     size_t getDismissRows(size_t nMembers) const;
     void specificDismiss(
         const vector<Mob*>& members,

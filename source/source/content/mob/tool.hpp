@@ -50,7 +50,7 @@ public:
     ToolType* tooType = nullptr;
     
     //Flags indicating if and how the mob can be held by other mobs.
-    unsigned char holdabilityFlags = 0;
+    Bitmask8 holdabilityFlags = 0;
     
     //If a Pikmin is already reserved to get this tool, this points to it.
     Pikmin* reserved = nullptr;

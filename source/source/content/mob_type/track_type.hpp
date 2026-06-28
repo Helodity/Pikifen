@@ -88,7 +88,7 @@ public:
     //--- Public members ---
     
     //Flags representing possible riders.
-    unsigned char riders = TRACK_RIDER_FLAG_PIKMIN;
+    Bitmask8 riders = TRACK_RIDER_FLAG_PIKMIN;
     
     //Pose that riders must take.
     TRACK_RIDING_POSE ridingPose = TRACK_RIDING_POSE_STOPPED;
