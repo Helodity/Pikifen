@@ -7,7 +7,7 @@ max_carriers = 4
 points = 50
 pushable = false
 pushes = true
-radius = 25
+radius = 30
 rectangular_dimensions = 50 50
 weight = 2
 
