@@ -199,6 +199,35 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         usedHelpingTools = true;
         break;
         
+    } case PLAYER_ACTION_TYPE_MT_FREE_CAM: {
+
+        bool freeCamControlWasOn = freeCamControl;
+        
+        if(mod1) {
+            if(freeCamView) {
+                freeCamControl = !freeCamControl;
+            } else {
+                freeCamView = true;
+                freeCamControl = false;
+            }
+        } else {
+            if(freeCamView) {
+                freeCamView = false;
+                freeCamControl = false;
+            } else {
+                freeCamView = true;
+                freeCamControl = true;
+            }
+        }
+        
+        if(!freeCamControlWasOn && freeCamControl) {
+            //Stop the leaders, otherwise they'll keep moving out of control.
+            game.states.gameplay->stopAllLeaders();
+        }
+        
+        usedHelpingTools = true;
+        break;
+        
     } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
 
         geometryInfo = !geometryInfo;

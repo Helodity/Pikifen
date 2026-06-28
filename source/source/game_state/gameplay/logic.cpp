@@ -214,7 +214,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
 void GameplayState::doAestheticLogic(float deltaT) {
     forIdx(p, players) {
         Player& player = players[p];
-
+        
         //Leader stuff.
         doAestheticLeaderLogic(&player, deltaT);
         
@@ -735,16 +735,33 @@ void GameplayState::doGameplayLogic(float deltaT) {
         Player& player = players[p];
         
         //Free camera movement.
-        bool useFreeCam = !player.leaderPtr;
-        
-        if(useFreeCam) {
-            player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_LINEAR;
+        bool freeCamControl =
+            !player.leaderPtr || game.makerTools.freeCamControl;
+        bool freeCamView =
+            !player.leaderPtr || game.makerTools.freeCamView;
             
+        if(freeCamView) {
+            player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_LINEAR;
+        } else {
+            player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
+            player.view.cam.centerSpeed = Point(0.0f);
+        }
+        
+        if(freeCamControl) {
             //Get movement info.
+            MovementInfo mov;
+            mov.right =
+                game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_RIGHT);
+            mov.down =
+                game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_DOWN);
+            mov.left =
+                game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_LEFT);
+            mov.up =
+                game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
             Point movCoords;
             float dummyAngle;
             float dummyMagnitude;
-            player.leaderMovement.getInfo(
+            mov.getInfo(
                 &movCoords, &dummyAngle, &dummyMagnitude
             );
             
@@ -782,11 +799,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 std::clamp(
                     player.view.cam.center.y, areaBounds.tl.y, areaBounds.br.y
                 );
-                
-        } else {
-            player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
-            player.view.cam.centerSpeed = 0.0f;
-            
         }
         
         player.view.cam.tick(deltaT);
@@ -1705,6 +1717,8 @@ void GameplayState::markAreaCellsActive(
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::processLeaderCursor(Player* player, float deltaT) {
+    if(game.makerTools.freeCamControl) return;
+    
     //Move the leader cursor freely, using the current control scheme.
     if(game.options.controls.mouseMovesLeaderCursor[player->playerNr - 1]) {
         player->leaderCursorWorld = player->view.mouseCursorWorldPos;

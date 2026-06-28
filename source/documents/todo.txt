@@ -34,8 +34,6 @@ Next tasks (roughly sorted most important first)
         Move somewhere the logic that is common between this system and the existing script action parsing/running system
         Smooth scrolling in/out animation
         Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
-    New maker tools
-        Free camera
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Multiplayer co-op
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.

@@ -505,6 +505,7 @@ public:
     void showInventoryUpdateDisplay(
         Player* player, const string& itemIName, int change
     );
+    void stopAllLeaders();
     void load() override;
     void unload() override;
     void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
@@ -614,7 +615,6 @@ private:
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance& d
     );
     bool shouldIgnorePlayerAction(const Inpution::Action& action);
-    void stopAllLeaders();
     void tickAreaScript(float deltaT);
     void unloadGameContent();
     void updateAreaActiveCells();

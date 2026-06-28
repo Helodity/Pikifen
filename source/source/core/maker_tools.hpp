@@ -51,6 +51,9 @@ enum MAKER_TOOL_TYPE {
     //Frame advance.
     MAKER_TOOL_TYPE_FRAME_ADVANCE,
     
+    //Free camera.
+    MAKER_TOOL_TYPE_FREE_CAM,
+    
     //Geometry info beneath mouse cursor.
     MAKER_TOOL_TYPE_GEOMETRY_INFO,
     
@@ -139,6 +142,12 @@ struct MakerTools {
     //Are we currently paused for frame advance?
     bool frameAdvanceMode = false;
     
+    //Allow the player to control the free camera.
+    bool freeCamControl = false;
+    
+    //Make the camera follow the free camera data.
+    bool freeCamView = false;
+    
     //Do we have to advance one game frame on the next processing frame?
     bool mustAdvanceOneFrame = false;
     
@@ -183,7 +192,7 @@ struct MakerTools {
     
     //Show the reaches of the currently inspected mob?
     bool reaches = false;
-
+    
     //Mouse cursor world coordinates when the latest maker tool was started.
     Point toolStartCursor;
     

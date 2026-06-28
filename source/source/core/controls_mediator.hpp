@@ -231,6 +231,9 @@ enum PLAYER_ACTION_TYPE {
     //Frame advance.
     PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
     
+    //Free camera.
+    PLAYER_ACTION_TYPE_MT_FREE_CAM,
+    
     //Geometry info.
     PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
     
@@ -245,7 +248,7 @@ enum PLAYER_ACTION_TYPE {
     
     //New Pikmin.
     PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
-
+    
     //New area maker reminder.
     PLAYER_ACTION_TYPE_MT_NEW_REMINDER,
     

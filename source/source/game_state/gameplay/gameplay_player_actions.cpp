@@ -746,6 +746,7 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
  */
 bool GameplayState::shouldIgnorePlayerAction(const Inpution::Action& action) {
     if(game.modal.responsive) return true;
+    if(game.makerTools.freeCamControl) return true;
     
     const vector<int> actionsAllowedDuringInterludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,

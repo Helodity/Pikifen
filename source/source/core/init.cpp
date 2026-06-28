@@ -677,6 +677,15 @@ void initControls() {
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_FREE_CAM,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Free camera",
+        "Allows control of the camera. "
+        "Use \"modifier 1\" to fix the camera and keep playing.",
+        "mt_free_cam", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Geometry info",
