@@ -96,16 +96,22 @@ void Game::changeState(
 
 /**
  * @brief Draws the framerate chart for the system information visualizer.
+ *
+ * @param y Y coordinate to draw at.
  */
-void Game::drawFramerateChart() const {
+void Game::drawFramerateChart(int y) const {
     const ALLEGRO_COLOR CHART_BG_COLOR = al_map_rgba(0, 0, 0, 192);
     const ALLEGRO_COLOR CHART_FRAME_COLOR = al_map_rgba(24, 96, 192, 192);
     const ALLEGRO_COLOR TARGET_FPS_COLOR = al_map_rgba(128, 224, 128, 48);
+    
+    int startX = winW - GAME::FRAMERATE_HISTORY_SIZE - CONSOLE::PADDING * 2;
+    int startY = y + CONSOLE::PADDING;
     if(showSystemInfo && !framerateHistory.empty()) {
         //Draw the framerate chart.
         al_draw_filled_rectangle(
-            winW - GAME::FRAMERATE_HISTORY_SIZE, 0,
-            winW, 100, CHART_BG_COLOR
+            startX, startY,
+            startX + GAME::FRAMERATE_HISTORY_SIZE, startY + 100,
+            CHART_BG_COLOR
         );
         double chartMin = 1.0f; //1 FPS.
         double chartMax =
@@ -117,15 +123,10 @@ void Game::drawFramerateChart() const {
                     (float) (1.0f / framerateHistory[f]),
                     (float) options.advanced.targetFps
                 );
-            float fpsY =
-                interpolateNumber(
-                    fps,
-                    chartMin, chartMax,
-                    0, 100
-                );
+            float fpsY = interpolateNumber(fps, chartMin, chartMax, 0, 100);
             al_draw_line(
-                winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
-                winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, fpsY,
+                startX + f + 0.5, startY,
+                startX + f + 0.5, startY + fpsY,
                 CHART_FRAME_COLOR, 1
             );
         }
@@ -136,8 +137,8 @@ void Game::drawFramerateChart() const {
                 0, 100
             );
         al_draw_line(
-            winW - GAME::FRAMERATE_HISTORY_SIZE, targetFpsY,
-            winW, targetFpsY,
+            startX, startY + targetFpsY,
+            startX + GAME::FRAMERATE_HISTORY_SIZE, startY + targetFpsY,
             TARGET_FPS_COLOR, 1
         );
     }
@@ -171,10 +172,9 @@ void Game::globalDrawing() {
     }
     
     //Console.
-    console.draw();
-    int consoleHeight = console2.draw(0);
+    int consoleHeight = console.draw(0);
     makerDisplay.draw(consoleHeight + CONSOLE::PADDING);
-    drawFramerateChart();
+    drawFramerateChart(consoleHeight + CONSOLE::PADDING);
     
     //Fade manager.
     if(!debug.showDearImGuiDemo) {
@@ -249,9 +249,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
         
         if(!line.empty()) {
-            console.addToLog(line);
-            console.writeLog();
-            console2.write(line, false, 0.0f);
+            console.write(line, false, 5.0f);
         }
     }
     
@@ -342,10 +340,7 @@ void Game::globalLogicPre() {
                 str += " | ";
             }
         }
-        str += "\n";
-        console.addToLog(str);
-        console.writeLog();
-        console2.write(str, false, 0.0f);
+        console.write(str, false, 5.0f);
     }
     
     //Player action handling.
@@ -372,7 +367,6 @@ void Game::globalLogicPre() {
     
     //Console.
     console.tick(deltaT);
-    console2.tick(deltaT);
     makerDisplay.tick(deltaT);
     
     //System things.
@@ -611,37 +605,6 @@ void Game::processSystemInfo() {
         nActiveMobs = i2s(activeMobCount);
     }
     
-    console.write(
-        headerStr +
-        "\n" +
-        fpsStr +
-        "\n" +
-        fpsUncappedStr +
-        "\n" +
-        frameTimeStr +
-        "\n"
-        "\n"
-        "Area version " + areaVersionStr + ", by " + areaMakerStr +
-        "\n"
-        "Mobs: " + nMobsStr + " (" + nActiveMobs + " active) | "
-        "Particles: " + nParticlesStr +
-        "\n"
-        "\n"
-        "Bitmaps: " + nBitmapsLoaded + " (" + nBitmapUses + " uses) | " +
-        "Sounds: " + nSoundsLoaded + " (" + nSoundUses + " uses) | " +
-        "Sound sources: " + nSoundSources +
-        "\n"
-        "\n"
-        "Resolution: " + resolutionStr +
-        "\n"
-        "Pikifen version " + getEngineVersionString(true, true) + " | "
-        "Game version " + gameVersionStr +
-        "\n"
-        "Allegro version " + allegroVersionStr + " | "
-        "Dear ImGui version " + dearImGuiVersionStr,
-        1.0f, 1.0f
-    );
-    
     makerDisplay.write(
         headerStr +
         "\n" +
@@ -669,8 +632,7 @@ void Game::processSystemInfo() {
         "Game version " + gameVersionStr +
         "\n"
         "Allegro version " + allegroVersionStr + " | "
-        "Dear ImGui version " + dearImGuiVersionStr,
-        1.0f
+        "Dear ImGui version " + dearImGuiVersionStr
     );
 }
 

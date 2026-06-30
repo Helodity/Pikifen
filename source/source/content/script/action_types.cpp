@@ -1927,33 +1927,14 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
     string textArg = vectorTailToString(data.args, 0);
     
     //Main logic.
-    size_t seconds = floor(game.states.gameplay->gameplayTimePassed);
-    size_t centiseconds =
-        (game.states.gameplay->gameplayTimePassed - seconds) * 100;
-    string timestamp =
-        resizeString(i2s(seconds), 4, true, true, true, ' ') + "." +
-        resizeString(i2s(centiseconds), 2, true, true, true, '0');
-        
     string speaker =
         data.scriptVM->getRunnerMob() ?
         data.scriptVM->getRunnerMob()->type->name :
         "Area";
     string line =
-        "[@" + timestamp + "s " + speaker + " said:] " + textArg;
-    game.states.gameplay->printActionLogLines.push_back(line);
-    if(game.states.gameplay->printActionLogLines.size() > 10) {
-        game.states.gameplay->printActionLogLines.erase(
-            game.states.gameplay->printActionLogLines.begin()
-        );
-    }
-    
-    string log;
-    forIdx(l, game.states.gameplay->printActionLogLines) {
-        log += "\n" + game.states.gameplay->printActionLogLines[l];
-    }
-    
-    game.console.write("=== DEBUG SCRIPT PRINTS ===" + log, 15.0f);
-    game.console2.write(line, false);
+        "(" + speaker + " said:) " + textArg;
+        
+    game.console.write(line, false);
 }
 
 

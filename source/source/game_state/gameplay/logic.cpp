@@ -1231,12 +1231,6 @@ void GameplayState::doMenuLogic() {
             &stateStr, &prevStatesStr, &timerStr
         );
         
-        game.console.write(
-            "Timer: " + timerStr + "\n"
-            "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
-            game.states.gameplay->scriptVM.getMakerToolVarsStr(),
-            5.0f, 3.0f
-        );
         game.makerDisplay.write(
             "Timer: " + timerStr + "\n"
             "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
@@ -1284,15 +1278,6 @@ void GameplayState::doMenuLogic() {
                 23, true, true
             );
             
-        game.console.write(
-            "Mob: " + nameStr + "\n"
-            "Coords: " + coordsStr + " | Angle: " + angleStr + "\n"
-            "Health: " + healthStr + "\n"
-            "Animation: " + animStr + " | Timer: " + timerStr + "\n"
-            "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
-            game.makerTools.inspectedMob->scriptVM.getMakerToolVarsStr(),
-            5.0f, 3.0f
-        );
         game.makerDisplay.write(
             "Mob: " + nameStr + "\n"
             "Coords: " + coordsStr + " | Angle: " + angleStr + "\n"
@@ -1352,16 +1337,6 @@ void GameplayState::doMenuLogic() {
             
             string blockStr = pathBlockReasonToString(path->blockReason);
             
-            game.console.write(
-                "Path calculation result: " + resultStr +
-                "\n" +
-                "Heading to stop " + stopsStr +
-                "\n" +
-                "Settings: " + settingsStr +
-                "\n" +
-                "Block reason: " + blockStr,
-                5.0f, 3.0f
-            );
             game.makerDisplay.write(
                 "Path calculation result: " + resultStr +
                 "\n" +
@@ -1375,7 +1350,6 @@ void GameplayState::doMenuLogic() {
             
         } else {
         
-            game.console.write("Mob is not following any path.", 5.0f, 3.0f);
             game.makerDisplay.write(
                 "Inspected mob is not following any path.", 5.0f
             );
@@ -1531,7 +1505,6 @@ void GameplayState::doMenuLogic() {
             "Vertex closest to mouse: " + mouseVertexStr + "\n"
             "Blockmap block under mouse: " + blockmapStr;
             
-        game.console.write(str, 1.0f, 1.0f);
         game.makerDisplay.write(str);
     }
     

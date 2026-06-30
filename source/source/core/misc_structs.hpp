@@ -466,7 +466,7 @@ struct MakerDisplay {
     void clear();
     int draw(int y) const;
     void tick(float deltaT);
-    void write(const string& text, float duration = 1.0f);
+    void write(const string& text, float duration = 0.1f);
     void open(bool instant = false);
     void close(bool instant = false);
     

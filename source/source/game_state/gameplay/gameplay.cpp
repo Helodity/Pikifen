@@ -1247,7 +1247,6 @@ void GameplayState::load() {
     lastCarryingTieBreaker = nullptr;
     pikminBornPerType.clear();
     pikminDeathsPerType.clear();
-    printActionLogLines.clear();
     
     game.framerateLastAvgPoint = 0;
     game.framerateHistory.clear();
@@ -1606,10 +1605,7 @@ void GameplayState::load() {
         game.perfMon->setAreaName(game.curArea->name);
         game.perfMon->leaveState();
         game.console.write(
-            "The performance monitor maker tool is running.", 10
-        );
-        game.console2.write(
-            "The performance monitor maker tool is running.", false
+            "Note: the performance monitor maker tool is running.", false
         );
     }
     
@@ -1865,7 +1861,6 @@ void GameplayState::unload() {
         pauseMenu = nullptr;
     }
     game.console.clear();
-    game.console2.clear();
     game.makerDisplay.clear();
     
     unloading = false;

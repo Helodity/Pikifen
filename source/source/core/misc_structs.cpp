@@ -44,7 +44,7 @@ const ALLEGRO_COLOR COLOR_ERROR = al_map_rgba(255, 128, 128, 192);
 const ALLEGRO_COLOR COLOR_MAIN = al_map_rgba(255, 255, 255, 192);
 
 //Muted text color, alpha included.
-const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 96);
+const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
 
 //Size of the control bind icon.
 const float INPUT_SIZE = 24.0f;
@@ -62,7 +62,7 @@ const size_t OUTPUT_MAX_SIZE = 100;
 const int PADDING = 8;
 
 //How much the visibility value [0 - 1] changes per second, when opening
-//or closing the console.
+//or closing something from the console.
 const float VISIBILITY_CHANGE_SPEED = 3.5f;
 
 }
@@ -792,6 +792,7 @@ void MakerConsoleTerminal::clear() {
     outputErrors.clear();
     input.clear();
     visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    visibility = 0.0f;
 }
 
 
@@ -868,8 +869,11 @@ int MakerConsoleTerminal::draw(int y) const {
         int entryY = getLineY(l);
         
         //Timestamp.
-        string timestamp = resizeString(f2s(outputTimestamps[entryIdx]), 8);
-        timestamp = "[" + timestamp + "] ";
+        string timestamp =
+            resizeString(f2s(outputTimestamps[entryIdx]), 8, true, false);
+        timestamp =
+            resizeString(f2s(outputTimestamps[entryIdx]), 8, false, true, true);
+        timestamp = "[" + timestamp + "]";
         int timestampWidth = al_get_text_width(FONT, timestamp.c_str());
         drawText(
             timestamp, FONT,
@@ -1100,7 +1104,7 @@ int MakerDisplay::draw(int y) const {
             lines[l], FONT,
             Point(textX, lineY),
             Point(textW, fontHeight),
-            CONSOLE::COLOR_MAIN,
+            multAlpha(CONSOLE::COLOR_MAIN, alpha),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
             TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
         );
@@ -1194,17 +1198,15 @@ void MakerDisplay::write(
 
 
 /**
- * @brief Emits an error in the console.
+ * @brief Emits an error in the maker console.
  *
  * @param s Full error description.
  */
 void ErrorManager::emitInConsole(const string& s) {
     string infoStr =
-        "\n\n\n"
-        "ERROR: " + s + "\n\n"
-        "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
-    game.console.write(infoStr, 30.0f, 3.0f);
-    game.console2.write(infoStr, true);
+        s + "\n(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)";
+        
+    game.console.write(infoStr, true);
 }
 
 
@@ -1340,16 +1342,14 @@ void ErrorManager::reportAreaLoadErrors() {
         nrSessionErrors - nrErrorsOnAreaLoad;
         
     string infoStr =
-        "\n\n\n"
-        "ERROR: " + firstAreaLoadError + "\n\n";
+        firstAreaLoadError + "\n";
     if(nrErrorsFound > 1) {
         infoStr += "(+" + i2s(nrErrorsFound - 1) + " more) ";
     }
     infoStr +=
-        "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
+        "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)";
         
-    game.console.write(infoStr, 30.0f, 3.0f);
-    game.console2.write(infoStr, true);
+    game.console.write(infoStr, true);
 }
 
 

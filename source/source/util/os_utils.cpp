@@ -55,9 +55,9 @@ string getCurrentTime(bool fileNameFriendly) {
         leadingZero(t.tm_mday) +
         (fileNameFriendly ? "_" : " ") +
         leadingZero(t.tm_hour) +
-        (fileNameFriendly ? "." : ":") +
+        (fileNameFriendly ? "-" : ":") +
         leadingZero(t.tm_min) +
-        (fileNameFriendly ? "." : ":") +
+        (fileNameFriendly ? "-" : ":") +
         leadingZero(t.tm_sec);
 }
 

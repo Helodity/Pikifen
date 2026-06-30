@@ -47,8 +47,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
                 "normal gameplay.\n"
                 "Are you sure? Quickly press a maker tool button three times "
                 "to confirm.";
-            game.console.write(info, 15);
-            game.console2.write(info, false);
+            game.console.write(info, false);
             playConfirmationTimer = MAKER_TOOLS::PLAY_CONFIRMATION_TIMER;
             playConfirmationPresses++;
             return false;
@@ -58,8 +57,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
                 "Maker tools are now allowed till you next enter an area.\n"
                 "Check the options to always allow maker tools in normal "
                 "gameplay.";
-            game.console.write(info, 15);
-            game.console2.write(info, false);
+            game.console.write(info, false);
             allowedInPlayNow = true;
             return false;
             
@@ -120,8 +118,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                 " with the name \"" + fileName + "\"!"
             );
         } else {
-            game.console.write("Saved area image \"" + fileName + "\".");
-            game.console2.write(
+            game.console.write(
                 "Saved area image \"" + fileName + "\".", false, 5.0f
             );
         }
@@ -133,7 +130,6 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
 
         inspectingArea = !inspectingArea;
         if(!inspectingArea) {
-            game.console.write("No longer inspecting area.", 2.0f, 2.0f);
             game.makerDisplay.write("No longer inspecting area.", 5.0f);
         }
         usedHelpingTools = true;
@@ -170,7 +166,6 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         if(inspectedMob) {
             inspectedMob->toDelete = true;
         } else {
-            game.console.write("No mob is being inspected.", 3.0f);
             game.makerDisplay.write("No mob is being inspected.", 5.0f);
         }
         
@@ -291,7 +286,6 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
             prevInspectedMob != nullptr &&
             inspectedMob == nullptr
         ) {
-            game.console.write("Mob: None.", 2.0f, 2.0f);
             game.makerDisplay.write("No longer inspecting mob.", 5.0f);
         }
         usedHelpingTools = true;
@@ -351,8 +345,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
             game.modal.onBack =
             [] () {
                 game.controls.ignoreMenuCloseActions();
-                game.console.write("Cancelled reminder.", 3.0f);
-                game.console2.write("Cancelled reminder.", false, 5.0f);
+                game.console.write("Cancelled reminder.", false, 5.0f);
             };
             game.modal.extraButtons.push_back(
             ModalGuiManager::Button {
@@ -366,8 +359,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                     game.content.areas.saveAreaReminders(game.curArea);
                     game.modal.close();
                     game.controls.ignoreMenuCloseActions();
-                    game.console.write("Created reminder!", 3.0f);
-                    game.console2.write("Created reminder!", false, 5.0f);
+                    game.console.write("Created reminder!", false, 5.0f);
                 }
             }
             );
@@ -475,7 +467,7 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
 
         if(action.value < 0.5f) return false;
         
-        game.console2.toggleTerminal();
+        game.console.toggleTerminal();
         break;
         
     } case PLAYER_ACTION_TYPE_MT_AUTO_START: {
@@ -509,8 +501,7 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
         }
         saveMakerTools();
         if(autoStartState.empty()) {
-            game.console.write("Reset Pikifen's auto-start.");
-            game.console2.write("Reset Pikifen's auto-start.", false, 5.0f);
+            game.console.write("Reset Pikifen's auto-start.", false, 5.0f);
         } else {
             string msg =
                 "Set Pikifen to auto-start in the \"" + autoStartState +
@@ -520,8 +511,7 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
             } else {
                 msg += ", option \"" + autoStartOption + "\".";
             }
-            game.console.write(msg);
-            game.console2.write(msg, false, 5.0f);
+            game.console.write(msg, false, 5.0f);
         }
         
         usedHelpingTools = true;

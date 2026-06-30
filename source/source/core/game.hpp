@@ -113,11 +113,8 @@ public:
     //Hardware mediator.
     HardwareMediator hardware;
     
-    //Console.
-    Console console;
-    
     //Maker console.
-    MakerConsole console2;
+    MakerConsole console;
     
     //Maker display.
     MakerDisplay makerDisplay;
@@ -298,7 +295,7 @@ public:
         //Show which area cells are active in the radar.
         bool showAreaActiveCells = false;
         
-        //Show all Allegro game controller events on the in-game console.
+        //Show all Allegro game controller events on the maker console.
         bool showControllerEvents = false;
         
         //Show and operate on a Dear ImGui demo window.
@@ -307,7 +304,7 @@ public:
         //Show visual information about the leader's group.
         bool showGroupInfo = false;
         
-        //Show each frame's player actions on the in-game console.
+        //Show each frame's player actions on the maker console.
         bool showPlayerActions = false;
         
     } debug;
@@ -346,7 +343,7 @@ private:
     
     //--- Private function declarations ---
     
-    void drawFramerateChart() const;
+    void drawFramerateChart(int y) const;
     void globalDrawing();
     void globalLogicPost();
     void globalLogicPre();
