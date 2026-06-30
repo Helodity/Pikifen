@@ -134,6 +134,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         inspectingArea = !inspectingArea;
         if(!inspectingArea) {
             game.console.write("No longer inspecting area.", 2.0f, 2.0f);
+            game.makerDisplay.write("No longer inspecting area.", 5.0f);
         }
         usedHelpingTools = true;
         break;
@@ -170,6 +171,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
             inspectedMob->toDelete = true;
         } else {
             game.console.write("No mob is being inspected.", 3.0f);
+            game.makerDisplay.write("No mob is being inspected.", 5.0f);
         }
         
         usedHelpingTools = true;
@@ -290,6 +292,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
             inspectedMob == nullptr
         ) {
             game.console.write("Mob: None.", 2.0f, 2.0f);
+            game.makerDisplay.write("No longer inspecting mob.", 5.0f);
         }
         usedHelpingTools = true;
         break;

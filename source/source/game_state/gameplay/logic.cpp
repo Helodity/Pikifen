@@ -1237,6 +1237,12 @@ void GameplayState::doMenuLogic() {
             game.states.gameplay->scriptVM.getMakerToolVarsStr(),
             5.0f, 3.0f
         );
+        game.makerDisplay.write(
+            "Timer: " + timerStr + "\n"
+            "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
+            game.states.gameplay->scriptVM.getMakerToolVarsStr(),
+            8.0f
+        );
     }
     
     //Print info on the inspected mob.
@@ -1286,6 +1292,15 @@ void GameplayState::doMenuLogic() {
             "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
             game.makerTools.inspectedMob->scriptVM.getMakerToolVarsStr(),
             5.0f, 3.0f
+        );
+        game.makerDisplay.write(
+            "Mob: " + nameStr + "\n"
+            "Coords: " + coordsStr + " | Angle: " + angleStr + "\n"
+            "Health: " + healthStr + "\n"
+            "Animation: " + animStr + " | Timer: " + timerStr + "\n"
+            "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
+            game.makerTools.inspectedMob->scriptVM.getMakerToolVarsStr(),
+            8.0f
         );
     }
     
@@ -1347,10 +1362,23 @@ void GameplayState::doMenuLogic() {
                 "Block reason: " + blockStr,
                 5.0f, 3.0f
             );
+            game.makerDisplay.write(
+                "Path calculation result: " + resultStr +
+                "\n" +
+                "Heading to stop " + stopsStr +
+                "\n" +
+                "Settings: " + settingsStr +
+                "\n" +
+                "Block reason: " + blockStr,
+                8.0f
+            );
             
         } else {
         
             game.console.write("Mob is not following any path.", 5.0f, 3.0f);
+            game.makerDisplay.write(
+                "Inspected mob is not following any path.", 5.0f
+            );
             
         }
     }
@@ -1504,6 +1532,7 @@ void GameplayState::doMenuLogic() {
             "Blockmap block under mouse: " + blockmapStr;
             
         game.console.write(str, 1.0f, 1.0f);
+        game.makerDisplay.write(str);
     }
     
     //Big message.

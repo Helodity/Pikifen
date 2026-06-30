@@ -172,7 +172,8 @@ void Game::globalDrawing() {
     
     //Console.
     console.draw();
-    console2.draw(0);
+    int consoleHeight = console2.draw(0);
+    makerDisplay.draw(consoleHeight + CONSOLE::PADDING);
     drawFramerateChart();
     
     //Fade manager.
@@ -233,7 +234,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
     //Controller event debugging.
     if(debug.showControllerEvents) {
         string line;
-
+        
         if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
             line =
                 "Controller event: stick " + i2s(ev.joystick.stick) + " "
@@ -246,7 +247,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
             line =
                 "Controller event: button up " + i2s(ev.joystick.button);
         }
-
+        
         if(!line.empty()) {
             console.addToLog(line);
             console.writeLog();
@@ -372,6 +373,7 @@ void Game::globalLogicPre() {
     //Console.
     console.tick(deltaT);
     console2.tick(deltaT);
+    makerDisplay.tick(deltaT);
     
     //System things.
     processSystemInfo();
@@ -638,6 +640,37 @@ void Game::processSystemInfo() {
         "Allegro version " + allegroVersionStr + " | "
         "Dear ImGui version " + dearImGuiVersionStr,
         1.0f, 1.0f
+    );
+    
+    makerDisplay.write(
+        headerStr +
+        "\n" +
+        fpsStr +
+        "\n" +
+        fpsUncappedStr +
+        "\n" +
+        frameTimeStr +
+        "\n"
+        "\n"
+        "Area version " + areaVersionStr + ", by " + areaMakerStr +
+        "\n"
+        "Mobs: " + nMobsStr + " (" + nActiveMobs + " active) | "
+        "Particles: " + nParticlesStr +
+        "\n"
+        "\n"
+        "Bitmaps: " + nBitmapsLoaded + " (" + nBitmapUses + " uses) | " +
+        "Sounds: " + nSoundsLoaded + " (" + nSoundUses + " uses) | " +
+        "Sound sources: " + nSoundSources +
+        "\n"
+        "\n"
+        "Resolution: " + resolutionStr +
+        "\n"
+        "Pikifen version " + getEngineVersionString(true, true) + " | "
+        "Game version " + gameVersionStr +
+        "\n"
+        "Allegro version " + allegroVersionStr + " | "
+        "Dear ImGui version " + dearImGuiVersionStr,
+        1.0f
     );
 }
 

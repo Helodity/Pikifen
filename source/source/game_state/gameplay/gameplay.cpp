@@ -1866,6 +1866,7 @@ void GameplayState::unload() {
     }
     game.console.clear();
     game.console2.clear();
+    game.makerDisplay.clear();
     
     unloading = false;
 }

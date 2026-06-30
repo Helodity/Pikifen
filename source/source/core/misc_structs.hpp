@@ -456,6 +456,42 @@ struct MakerConsole {
 
 
 /**
+ * @brief Represents the non-interactive display that shows up at the top of
+ * the screen, allowing makers to debug their content.
+ */
+struct MakerDisplay {
+
+    //--- Public function declarations ---
+    
+    void clear();
+    int draw(int y) const;
+    void tick(float deltaT);
+    void write(const string& text, float duration = 1.0f);
+    void open(bool instant = false);
+    void close(bool instant = false);
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //Visibility state.
+    OPEN_CLOSE_STATE visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    
+    //How much of it is visible [0 - 1].
+    //Used when fading it in and out of view.
+    float visibility = 0.0f;
+    
+    //Text that is currently being shown.
+    string text;
+    
+    //How long until the display is closed automatically.
+    float timeLeft = 0.0f;
+    
+};
+
+
+/**
  * @brief Manages any errors that occur with the engine's content or logic.
  */
 struct ErrorManager {

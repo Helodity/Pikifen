@@ -116,8 +116,11 @@ public:
     //Console.
     Console console;
     
-    //Console.
+    //Maker console.
     MakerConsole console2;
+    
+    //Maker display.
+    MakerDisplay makerDisplay;
     
     //Total amount of time the current frame took to process, in seconds.
     double curFrameProcessTime = 0.0f;
