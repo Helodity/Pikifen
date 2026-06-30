@@ -172,6 +172,7 @@ void Game::globalDrawing() {
     
     //Console.
     console.draw();
+    console2.draw(0);
     drawFramerateChart();
     
     //Fade manager.
@@ -231,23 +232,25 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
     
     //Controller event debugging.
     if(debug.showControllerEvents) {
+        string line;
+
         if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
-            console.addToLog(
+            line =
                 "Controller event: stick " + i2s(ev.joystick.stick) + " "
                 " axis " + i2s(ev.joystick.axis) + " "
-                " pos " + f2s(ev.joystick.pos)
-            );
-            console.writeLog();
+                " pos " + f2s(ev.joystick.pos);
         } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) {
-            console.addToLog(
-                "Controller event: button down " + i2s(ev.joystick.button)
-            );
-            console.writeLog();
+            line =
+                "Controller event: button down " + i2s(ev.joystick.button);
         } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP) {
-            console.addToLog(
-                "Controller event: button up " + i2s(ev.joystick.button)
-            );
+            line =
+                "Controller event: button up " + i2s(ev.joystick.button);
+        }
+
+        if(!line.empty()) {
+            console.addToLog(line);
             console.writeLog();
+            console2.write(line, false, 0.0f);
         }
     }
     
@@ -341,6 +344,7 @@ void Game::globalLogicPre() {
         str += "\n";
         console.addToLog(str);
         console.writeLog();
+        console2.write(str, false, 0.0f);
     }
     
     //Player action handling.
@@ -367,6 +371,7 @@ void Game::globalLogicPre() {
     
     //Console.
     console.tick(deltaT);
+    console2.tick(deltaT);
     
     //System things.
     processSystemInfo();

@@ -45,6 +45,20 @@ using std::vector;
 #pragma region Constants
 
 
+namespace CONSOLE {
+extern const ALLEGRO_COLOR COLOR_BG;
+extern const ALLEGRO_COLOR COLOR_ERROR;
+extern const ALLEGRO_COLOR COLOR_MAIN;
+extern const ALLEGRO_COLOR COLOR_MUTED;
+extern const float INPUT_SIZE;
+extern const int LINE_PADDING;
+extern const size_t OUTPUT_MAX_VISIBLE_LINES;
+extern const size_t OUTPUT_MAX_SIZE;
+extern const int PADDING;
+extern const float VISIBILITY_CHANGE_SPEED;
+}
+
+
 namespace CUTSCENE_MSG_BOX {
 extern const float ADVANCE_BUTTON_FADE_SPEED;
 extern const float BUTTON_OFFSET_MULT;
@@ -162,6 +176,24 @@ buildEnumNames(engineFontINames, ENGINE_FONT)({
     { ENGINE_FONT_STANDARD, "standard" },
     { ENGINE_FONT_VALUE, "value" },
 });
+
+
+//Possible states for something that opens and closes gradually.
+enum OPEN_CLOSE_STATE {
+
+    //Closed.
+    OPEN_CLOSE_STATE_CLOSED,
+    
+    //Open.
+    OPEN_CLOSE_STATE_OPEN,
+    
+    //Closing.
+    OPEN_CLOSE_STATE_CLOSING,
+    
+    //Opening.
+    OPEN_CLOSE_STATE_OPENING,
+    
+};
 
 
 #pragma endregion
@@ -299,6 +331,126 @@ struct Console {
     
     //Text it is showing, if any.
     string text;
+    
+    //Lines of text it contains.
+    vector<string> textLines;
+    
+};
+
+
+/**
+ * @brief Represents the interactive terminal portion of the maker toolkit
+ * console. Users can use this to write commands and see previous outputs.
+ */
+struct MakerConsoleTerminal {
+
+    //--- Public function declarations ---
+    
+    void clear();
+    int draw(int y) const;
+    void tick(float deltaT);
+    void write(const string& text, bool error);
+    void open(bool instant = false);
+    void close(bool instant = false);
+    void toggle(bool instant = false);
+    OPEN_CLOSE_STATE getVisibilityState() const;
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //Visibility state.
+    OPEN_CLOSE_STATE visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    
+    //How much of it is visible [0 - 1].
+    //Used when scrolling it in and out of view.
+    float visibility = 0.0f;
+    
+    //Text that had been written out, in chronological order.
+    vector<string> output;
+    
+    //Timestamp for each output line.
+    vector<float> outputTimestamps;
+    
+    //Whether each output line is an error or just informational.
+    vector<bool> outputErrors;
+    
+    //Currently written input text.
+    string input;
+    
+};
+
+
+/**
+ * @brief Represents a small window at the top of the screen that shows
+ * any important warnings, errors, or other outputs, informing the user
+ * to open the terminal for more information.
+ */
+struct MakerConsoleNotifier {
+
+    //--- Public function declarations ---
+    
+    void clear();
+    int draw(int y) const;
+    void tick(float deltaT);
+    void write(const string& text, bool error, float duration);
+    void open(bool instant = false);
+    void close(bool instant = false);
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //Visibility state.
+    OPEN_CLOSE_STATE visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    
+    //How much of it is visible [0 - 1].
+    //Used when fading it in and out of view.
+    float visibility = 0.0f;
+    
+    //Text that is currently being shown.
+    string text;
+    
+    //Whether the current text is an error or just informational.
+    bool error = false;
+    
+    //How long until the notifier is closed automatically.
+    float timeLeft = 0.0f;
+    
+};
+
+
+/**
+ * @brief Represents the interactive console that shows up at the top of
+ * the screen, allowing makers to debug their content.
+ */
+struct MakerConsole {
+
+    //--- Public function declarations ---
+    
+    void clear();
+    int draw(int y) const;
+    void tick(float deltaT);
+    void write(
+        const string& text, bool error,
+        float notificationDuration = 10.0f
+    );
+    void openTerminal(bool instant = false);
+    void closeTerminal(bool instant = false);
+    void toggleTerminal(bool instant = false);
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //The terminal.
+    MakerConsoleTerminal terminal;
+    
+    //The notifier.
+    MakerConsoleNotifier notifier;
     
 };
 

@@ -1938,9 +1938,9 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
         data.scriptVM->getRunnerMob() ?
         data.scriptVM->getRunnerMob()->type->name :
         "Area";
-    game.states.gameplay->printActionLogLines.push_back(
-        "[@" + timestamp + "s " + speaker + " said:] " + textArg
-    );
+    string line =
+        "[@" + timestamp + "s " + speaker + " said:] " + textArg;
+    game.states.gameplay->printActionLogLines.push_back(line);
     if(game.states.gameplay->printActionLogLines.size() > 10) {
         game.states.gameplay->printActionLogLines.erase(
             game.states.gameplay->printActionLogLines.begin()
@@ -1953,6 +1953,7 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
     }
     
     game.console.write("=== DEBUG SCRIPT PRINTS ===" + log, 15.0f);
+    game.console2.write(line, false);
 }
 
 

@@ -593,6 +593,14 @@ void initControls() {
     
     //General maker tool things.
     game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_CONSOLE,
+        PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
+        "Console",
+        "Open or close the maker toolkit's console.",
+        "mt_console", "k_70", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_AUTO_START,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Auto-start",

@@ -1608,6 +1608,9 @@ void GameplayState::load() {
         game.console.write(
             "The performance monitor maker tool is running.", 10
         );
+        game.console2.write(
+            "The performance monitor maker tool is running.", false
+        );
     }
     
     enter();
@@ -1862,6 +1865,7 @@ void GameplayState::unload() {
         pauseMenu = nullptr;
     }
     game.console.clear();
+    game.console2.clear();
     
     unloading = false;
 }

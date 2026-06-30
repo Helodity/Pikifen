@@ -199,6 +199,9 @@ enum PLAYER_ACTION_TYPE {
     
     //General maker tool things.
     
+    //Toggle console.
+    PLAYER_ACTION_TYPE_MT_CONSOLE,
+    
     //Auto-start.
     PLAYER_ACTION_TYPE_MT_AUTO_START,
     
