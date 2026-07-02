@@ -11,6 +11,8 @@ bg_color=0 0 0
 bg_dist=2.0000
 bg_zoom=3.0000
 song=areas/red_alert
+boss_song
+boss_victory_song
 weather=red_alert
 day_time_start=0
 day_time_speed=600.0000

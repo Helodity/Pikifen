@@ -115,6 +115,93 @@ void AreaEditor::openOptionsDialog() {
 }
 
 
+void AreaEditor::createSongPicker(const string label, string& destVar) {
+    //Preview song button.
+    bool validSongSelected =
+        !destVar.empty() &&
+        destVar != NONE_OPTION;
+    bool previewing =
+        !previewSong.empty();
+    bool canPreviewSelectedSong =
+        validSongSelected &&
+        previewSong != destVar;
+    bool canStopPreviewing =
+        previewing &&
+        (
+            !validSongSelected ||
+            previewSong == destVar
+        );
+    bool previewButtonValid =
+        canPreviewSelectedSong || canStopPreviewing;
+        
+    if(!previewButtonValid) ImGui::BeginDisabled();
+    
+    if(
+        ImGui::ImageButton(
+            "previewSongButton_" + label,
+            canStopPreviewing ?
+            editorIcons[EDITOR_ICON_STOP] :
+            editorIcons[EDITOR_ICON_PLAY],
+            Point(ImGui::GetTextLineHeight())
+        )
+    ) {
+        if(canPreviewSelectedSong) {
+            previewSong = destVar;
+            game.audio.setCurrentSong(previewSong);
+            previewing = true;
+        } else if(canStopPreviewing) {
+            game.audio.setCurrentSong(
+                game.sysContentNames.sngEditors, false
+            );
+            previewSong.clear();
+            previewing = false;
+        }
+    }
+    
+    if(!previewButtonValid) ImGui::EndDisabled();
+    
+    string previewTooltipStr;
+    if(previewing) {
+        previewTooltipStr +=
+            "Currently previewing the song \"" +
+            game.content.songs.list[previewSong].name +
+            "\".\n";
+    }
+    if(canPreviewSelectedSong) {
+        previewTooltipStr +=
+            "Press here to preview the song \"" +
+            game.content.songs.list[destVar].name +
+            "\".";
+    } else if(canStopPreviewing) {
+        previewTooltipStr +=
+            "Press here to stop.";
+    } else {
+        previewTooltipStr +=
+            "If you select a song, you can press here to preview it.";
+    }
+    setTooltip(previewTooltipStr);  
+
+    //Music combobox.
+    ImGui::SameLine();
+    vector<string> songInternals;
+    vector<string> songNames;
+    songInternals.push_back("");
+    songNames.push_back(NONE_OPTION);
+    for(auto& s : game.content.songs.list) {
+        songInternals.push_back(s.first);
+        songNames.push_back(s.second.name);
+    }
+    string songName = destVar;
+    if(ImGui::Combo(label, &songName, songInternals, songNames, 15)) {
+        registerChange("area song change");
+        destVar = songName;
+    }
+    setTooltip(
+        "What song to play."
+    );
+}
+
+
 /**
  * @brief Processes Dear ImGui for this frame.
  */
@@ -1584,90 +1671,10 @@ void AreaEditor::processGuiPanelDetails() {
         ImGui::Spacer();
         if(saveableTreeNode("details", "Ambiance")) {
         
-            //Preview song button.
-            bool validSongSelected =
-                !game.curArea->songName.empty() &&
-                game.curArea->songName != NONE_OPTION;
-            bool previewing =
-                !previewSong.empty();
-            bool canPreviewSelectedSong =
-                validSongSelected &&
-                previewSong != game.curArea->songName;
-            bool canStopPreviewing =
-                previewing &&
-                (
-                    !validSongSelected ||
-                    previewSong == game.curArea->songName
-                );
-            bool previewButtonValid =
-                canPreviewSelectedSong || canStopPreviewing;
-                
-            if(!previewButtonValid) ImGui::BeginDisabled();
-            
-            if(
-                ImGui::ImageButton(
-                    "previewSongButton",
-                    canStopPreviewing ?
-                    editorIcons[EDITOR_ICON_STOP] :
-                    editorIcons[EDITOR_ICON_PLAY],
-                    Point(ImGui::GetTextLineHeight())
-                )
-            ) {
-                if(canPreviewSelectedSong) {
-                    previewSong = game.curArea->songName;
-                    game.audio.setCurrentSong(previewSong);
-                    previewing = true;
-                } else if(canStopPreviewing) {
-                    game.audio.setCurrentSong(
-                        game.sysContentNames.sngEditors, false
-                    );
-                    previewSong.clear();
-                    previewing = false;
-                }
-            }
-            
-            if(!previewButtonValid) ImGui::EndDisabled();
-            
-            string previewTooltipStr;
-            if(previewing) {
-                previewTooltipStr +=
-                    "Currently previewing the song \"" +
-                    game.content.songs.list[previewSong].name +
-                    "\".\n";
-            }
-            if(canPreviewSelectedSong) {
-                previewTooltipStr +=
-                    "Press here to preview the song \"" +
-                    game.content.songs.list[game.curArea->songName].name +
-                    "\".";
-            } else if(canStopPreviewing) {
-                previewTooltipStr +=
-                    "Press here to stop.";
-            } else {
-                previewTooltipStr +=
-                    "If you select a song, you can press here to preview it.";
-            }
-            setTooltip(previewTooltipStr);
-            
-            //Music combobox.
-            ImGui::SameLine();
-            vector<string> songInternals;
-            vector<string> songNames;
-            songInternals.push_back("");
-            songNames.push_back(NONE_OPTION);
-            for(auto& s : game.content.songs.list) {
-                songInternals.push_back(s.first);
-                songNames.push_back(s.second.name);
-            }
-            string songName = game.curArea->songName;
-            if(ImGui::Combo("Song", &songName, songInternals, songNames, 15)) {
-                registerChange("area song change");
-                game.curArea->songName = songName;
-            }
-            setTooltip(
-                "What song to play."
-            );
-            
+            createSongPicker("Song", game.curArea->songName);
+            createSongPicker("Boss Song", game.curArea->bossSongName);
+            createSongPicker("Boss Song (Victory)", game.curArea->bossVictorySongName);
+
             //Area weather combobox.
             vector<string> weatherCondInternals;
             vector<string> weatherCondNames;
@@ -1692,7 +1699,7 @@ void AreaEditor::processGuiPanelDetails() {
             );
             
             ImGui::Spacer();
-            
+
             bool hasTimeLimit = false;
             float missionMin = 0;
             if(game.curArea->type == AREA_TYPE_MISSION) {
