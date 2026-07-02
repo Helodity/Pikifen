@@ -3373,8 +3373,6 @@ void SystemContentNames::load(DataNode* file) {
     
     ReaderSetter sngRS(file->getChildByName("songs"));
     
-    sngRS.set("boss", sngBoss);
-    sngRS.set("boss_victory", sngBossVictory);
     sngRS.set("editors", sngEditors);
     sngRS.set("menus", sngMenus);
     sngRS.set("results", sngResults);
