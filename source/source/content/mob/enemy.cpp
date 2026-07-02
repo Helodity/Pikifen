@@ -243,10 +243,10 @@ void Enemy::startDyingClassSpecifics() {
         case BOSS_MUSIC_STATE_PLAYING: {
             bool nearBoss;
             game.states.gameplay->isNearEnemyAndBoss(nullptr, &nearBoss);
-            if(!nearBoss) {
+            if(!nearBoss && !game.curArea->bossVictorySongName.empty()) {
                 //Only play the victory fanfare if they're not near another one.
                 game.audio.setCurrentSong(
-                    game.sysContentNames.sngBossVictory, true, false, false
+                    game.curArea->bossVictorySongName, true, false, false
                 );
                 game.states.gameplay->bossMusicState =
                     BOSS_MUSIC_STATE_VICTORY;
