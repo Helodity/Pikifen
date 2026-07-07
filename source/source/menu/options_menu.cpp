@@ -1169,7 +1169,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     fullscreenCheck->onActivate =
     [this, fullscreenCheck] (const Point&) {
         fullscreenCheck->defActivateCode();
-        triggerRestartWarning();
+        updateRestartWarning();
     };
     fullscreenCheck->onGetTooltip =
     [] () {
@@ -1201,7 +1201,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     resolutionPicker->afterChange = [this] () {
         game.options.graphics.intendedWinW = curResolutionOption.first;
         game.options.graphics.intendedWinH = curResolutionOption.second;
-        triggerRestartWarning();
+        updateRestartWarning();
     };
     resolutionPicker->valueToString = [] (const std::pair<int, int>& v) {
         return i2s(v.first) + "x" + i2s(v.second);
@@ -1225,8 +1225,8 @@ void OptionsMenu::initGuiGraphicsPage() {
     //Warning text.
     warningText =
         new TextGuiItem(
-        "Please leave this menu and then restart for the "
-        "changes to take effect.",
+        "The game will restart after leaving "
+        "the menu with your changes applied.",
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
     );
     warningText->visible = false;
@@ -1995,11 +1995,20 @@ void OptionsMenu::tick(float deltaT) {
 
 
 /**
- * @brief Triggers the restart warning.
+ * @brief Updates the visibility of the restart warning.
  */
-void OptionsMenu::triggerRestartWarning() {
-    if(!warningText->visible) {
-        warningText->visible = true;
+void OptionsMenu::updateRestartWarning() {
+    //These options require a restart to apply, so only check these.
+    //Never restart in expo mode.
+    bool shouldBeVisible = 
+        !game.options.advanced.expoMode &&
+        (al_get_display_height(game.display) != game.options.graphics.intendedWinH ||
+        al_get_display_width(game.display) != game.options.graphics.intendedWinW ||
+        hasFlag(al_get_display_flags(game.display), ALLEGRO_FULLSCREEN | ALLEGRO_FULLSCREEN_WINDOW) 
+            != game.options.graphics.intendedWinFullscreen);
+
+    if(warningText->visible != shouldBeVisible) {
+        warningText->visible = shouldBeVisible;
         warningText->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
@@ -2018,8 +2027,12 @@ void OptionsMenu::unload() {
     }
     
     Menu::unload();
-    
     shortcutButtons.clear();
+    if(warningText->visible) {
+        //Force a restart of the game to update required settings.
+        game.shouldRestart = true;
+        game.isGameRunning = false;
+    }
 }
 
 

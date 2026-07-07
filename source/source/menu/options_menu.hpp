@@ -374,7 +374,7 @@ private:
     void initGuiMiscPage();
     void initGuiShortcutsPage();
     void initGuiTopPage();
-    void triggerRestartWarning();
+    void updateRestartWarning();
     void chooseInput(
         const PLAYER_ACTION_TYPE actionType, size_t bindIdx
     );
