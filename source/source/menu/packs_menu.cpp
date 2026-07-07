@@ -135,7 +135,6 @@ void PacksMenu::initGuiMain() {
 
         game.options.packs.order = packOrder;
         game.options.packs.disabled = packsDisabled;
-
         saveOptions(false, needsRestart);
         leave();
     };
