@@ -2035,6 +2035,7 @@ void OptionsMenu::unload() {
     }
     
     Menu::unload();
+    
     shortcutButtons.clear();
 }
 
