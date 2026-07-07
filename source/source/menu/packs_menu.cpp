@@ -195,7 +195,7 @@ void PacksMenu::initGuiMain() {
             } else {
                 packsDisabled.push_back(packOrder[p]);
             }
-            triggerRestartWarning();
+            updateRestartWarning();
         };
         check->onFocused = [p, this] () { changeInfo((int) p); };
         check->onGetTooltip =
@@ -232,7 +232,7 @@ void PacksMenu::initGuiMain() {
                 packBullets[p - 1]->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
-                triggerRestartWarning();
+                updateRestartWarning();
                 populatePacksList();
             };
             upButton->onFocused = [p, this] () { changeInfo((int) p); };
@@ -270,7 +270,7 @@ void PacksMenu::initGuiMain() {
                 packBullets[p + 1]->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
-                triggerRestartWarning();
+                updateRestartWarning();
                 populatePacksList();
             };
             downButton->onFocused = [p, this] () { changeInfo((int) p); };
@@ -440,17 +440,25 @@ void PacksMenu::populatePacksList() {
 
 
 /**
- * @brief Triggers the restart warning.
+ * @brief Updates the visibility of the restart warning.
  */
-void PacksMenu::triggerRestartWarning() {
-    if(!warningText->visible) {
-        warningText->visible = true;
+void PacksMenu::updateRestartWarning() {
+    bool shouldBeVisible = 
+        packsDisabled != game.options.packs.disabled ||
+        packOrder != game.options.packs.order;
+       
+    if(shouldBeVisible != warningText->visible) {
+        warningText->visible = shouldBeVisible;
         warningText->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
 }
 
+
+/**
+ * @brief Leaves the menu.
+ */
 void PacksMenu::leave() {
     if(!loaded) return;
     active = false;

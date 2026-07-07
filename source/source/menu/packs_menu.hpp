@@ -99,7 +99,7 @@ private:
     void changeInfo(int idx);
     void initGuiMain();
     void populatePacksList();
-    void triggerRestartWarning();
+    void updateRestartWarning();
     void leave() override;
     
 };
