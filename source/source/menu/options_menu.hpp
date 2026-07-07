@@ -389,4 +389,5 @@ private:
     void updateControlsPage();
     void updateShortcutsPage();
     
+    bool changesRequireRestart();
 };

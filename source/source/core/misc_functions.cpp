@@ -1188,8 +1188,9 @@ bool saveMissionRecords(DataNode* fileNode) {
  *
  * @param showNotification Whether to show a system notification with
  * the result.
+ * @param showNotification Whether to restart the game after a successful save.
  */
-void saveOptions(bool showNotification) {
+void saveOptions(bool showNotification, bool requireRestart) {
     if(game.options.advanced.expoMode) {
         if(showNotification) {
             game.systemNotifications.add(
@@ -1204,6 +1205,10 @@ void saveOptions(bool showNotification) {
     file.getChildOrAddNew("engine_version")->value =
         getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
+    if(requireRestart) {
+        game.isGameRunning = false;
+        game.shouldRestart = true;
+    }
     if(showNotification) {
         game.systemNotifications.add("Options saved.", false, false);
     }

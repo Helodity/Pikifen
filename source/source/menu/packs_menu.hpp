@@ -100,6 +100,7 @@ private:
     void initGuiMain();
     void populatePacksList();
     void updateRestartWarning();
-    void leave() override;
+
+    bool changesRequireRestart();
     
 };

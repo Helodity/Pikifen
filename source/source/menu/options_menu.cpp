@@ -540,6 +540,19 @@ void OptionsMenu::addNewShortcutItems(unsigned char index) {
 
 
 /**
+ * @brief Returns whether changes have been made that need an
+ * engine restart to take effect.
+ */
+bool OptionsMenu::changesRequireRestart() {
+    return !game.options.advanced.expoMode &&
+        (al_get_display_height(game.display) != game.options.graphics.intendedWinH ||
+        al_get_display_width(game.display) != game.options.graphics.intendedWinW ||
+        hasFlag(al_get_display_flags(game.display), ALLEGRO_FULLSCREEN | ALLEGRO_FULLSCREEN_WINDOW) 
+            != game.options.graphics.intendedWinFullscreen);
+}
+
+
+/**
  * @brief Chooses the input for a given action type's bind.
  * If the bind index is greater than the number of existing binds for this
  * action type, then a new one gets created.
@@ -1539,7 +1552,7 @@ void OptionsMenu::initGuiTopPage() {
     );
     topGui.backItem->onActivate =
     [this] (const Point&) {
-        saveOptions(true);
+        saveOptions(true, warningText->visible);
         leave();
     };
     topGui.backItem->onGetTooltip =
@@ -2000,12 +2013,7 @@ void OptionsMenu::tick(float deltaT) {
 void OptionsMenu::updateRestartWarning() {
     //These options require a restart to apply, so only check these.
     //Never restart in expo mode.
-    bool shouldBeVisible = 
-        !game.options.advanced.expoMode &&
-        (al_get_display_height(game.display) != game.options.graphics.intendedWinH ||
-        al_get_display_width(game.display) != game.options.graphics.intendedWinW ||
-        hasFlag(al_get_display_flags(game.display), ALLEGRO_FULLSCREEN | ALLEGRO_FULLSCREEN_WINDOW) 
-            != game.options.graphics.intendedWinFullscreen);
+    bool shouldBeVisible = changesRequireRestart();
 
     if(warningText->visible != shouldBeVisible) {
         warningText->visible = shouldBeVisible;
@@ -2028,11 +2036,6 @@ void OptionsMenu::unload() {
     
     Menu::unload();
     shortcutButtons.clear();
-    if(warningText->visible) {
-        //Force a restart of the game to update required settings.
-        game.shouldRestart = true;
-        game.isGameRunning = false;
-    }
 }
 
 

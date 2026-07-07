@@ -190,7 +190,7 @@ bool openManual(const string& page);
 void reportFatalError(const string& s, const DataNode* dn = nullptr);
 void saveMakerTools();
 bool saveMissionRecords(DataNode* fileNode);
-void saveOptions(bool showNotification = false);
+void saveOptions(bool showNotification = false, bool requireRestart = false);
 void saveScreenshot();
 void saveStatistics();
 void setStringTokenWidths(

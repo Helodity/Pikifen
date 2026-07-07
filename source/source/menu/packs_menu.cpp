@@ -29,6 +29,13 @@ const string GUI_FILE_NAME = "packs_menu";
 }
 
 
+bool PacksMenu::changesRequireRestart(){
+    return
+        !game.options.advanced.expoMode &&
+        (game.options.packs.order != packOrder ||
+        game.options.packs.disabled != packsDisabled);
+}
+
 /**
  * @brief Changes the info that's being shown about the currently-selected
  * pack.
@@ -123,9 +130,13 @@ void PacksMenu::initGuiMain() {
     );
     gui.backItem->onActivate =
     [this] (const Point&) {
+        //Save in advance to prevent overwriting.
+        bool needsRestart = changesRequireRestart();
+
         game.options.packs.order = packOrder;
         game.options.packs.disabled = packsDisabled;
-        saveOptions();
+
+        saveOptions(false, needsRestart);
         leave();
     };
     gui.backItem->onGetTooltip =
@@ -444,8 +455,7 @@ void PacksMenu::populatePacksList() {
  */
 void PacksMenu::updateRestartWarning() {
     bool shouldBeVisible = 
-        packsDisabled != game.options.packs.disabled ||
-        packOrder != game.options.packs.order;
+        changesRequireRestart();
        
     if(shouldBeVisible != warningText->visible) {
         warningText->visible = shouldBeVisible;
@@ -453,21 +463,6 @@ void PacksMenu::updateRestartWarning() {
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
-}
-
-
-/**
- * @brief Leaves the menu.
- */
-void PacksMenu::leave() {
-    if(!loaded) return;
-    active = false;
-    if(warningText->visible) {
-        //Force a restart of the game to update the packs.
-        game.shouldRestart = true;
-        game.isGameRunning = false;
-    }
-    if(leaveCallback) leaveCallback();
 }
 
 
