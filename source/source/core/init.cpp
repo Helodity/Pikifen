@@ -82,6 +82,7 @@ void destroyEventThings(
     al_destroy_event_queue(eventQueue);
     al_destroy_timer(mainTimer);
     al_destroy_display(game.display);
+    al_set_new_display_flags(0);
 }
 
 
