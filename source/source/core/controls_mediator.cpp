@@ -217,6 +217,16 @@ vector<Inpution::Bind>& ControlsMediator::binds() {
 
 
 /**
+ * @brief Resets the state to reinitialize.
+ */
+void ControlsMediator::cleanup() {
+    releaseAll();
+    playerActionTypes.clear();
+    binds().clear();
+}
+
+
+/**
  * @brief Finds the first registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
  *

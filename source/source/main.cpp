@@ -20,14 +20,18 @@
  * @return 0 if everything went well, or an error number otherwise.
  */
 int main(int argc, char** argv) {
-    int gameStartResult = game.start();
-    if(gameStartResult != 0) {
-        return gameStartResult;
+    while(true) {
+        int gameStartResult = game.start();
+        if(gameStartResult != 0) {
+            return gameStartResult;
+        }
+        
+        game.mainLoop();
+        
+        game.shutdown();
+
+        if(!game.shouldRestart) {
+            return 0;
+        }
     }
-    
-    game.mainLoop();
-    
-    game.shutdown();
-    
-    return 0;
 }

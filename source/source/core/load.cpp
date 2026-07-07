@@ -338,8 +338,6 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalPlatinum);
     game.sysContent.bmpMedalSilver =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalSilver);
-    game.sysContent.bmpMenuIcons =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpMenuIcons);
     game.sysContent.bmpMissionMob =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMissionMob);
     game.sysContent.bmpMore =

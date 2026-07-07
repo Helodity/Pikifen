@@ -170,6 +170,9 @@ public:
     //Set to false to stop program execution next frame.
     bool isGameRunning = true;
     
+    //Set to true to relauch the game when it ends.
+    bool shouldRestart = false;
+
     //Auto-repeater settings for leader auto-throws.
     AutoRepeaterSettings autoThrowSettings{
         LEADER::AUTO_THROW_SLOWEST_INTERVAL,

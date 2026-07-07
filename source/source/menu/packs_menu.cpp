@@ -362,8 +362,7 @@ void PacksMenu::initGuiMain() {
     //Restart warning text.
     warningText =
         new TextGuiItem(
-        "You may need to leave this menu and then restart for some of "
-        "the changes to take effect.",
+        "Leaving this menu will restart the game with your changes applied.",
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     warningText->visible = false;
@@ -450,6 +449,17 @@ void PacksMenu::triggerRestartWarning() {
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
+}
+
+void PacksMenu::leave() {
+    if(!loaded) return;
+    active = false;
+    if(warningText->visible) {
+        //Force a restart of the game to update the packs.
+        game.shouldRestart = true;
+        game.isGameRunning = false;
+    }
+    if(leaveCallback) leaveCallback();
 }
 
 

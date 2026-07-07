@@ -101,6 +101,8 @@ void destroyMisc() {
         delete game.missionEndCondTypes[e];
     }
     game.missionEndCondTypes.clear();
+
+    game.controls.cleanup();
 }
 
 
@@ -1391,6 +1393,10 @@ void initMisc() {
     game.editorsView.boxMargin = GAMEPLAY::CAMERA_BOX_MARGIN;
     
     game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
+
+    //Reset variables that could have been changed from restarting
+    game.shouldRestart = false;
+    game.isGameRunning = true;
 }
 
 

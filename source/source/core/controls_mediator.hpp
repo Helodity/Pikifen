@@ -430,6 +430,7 @@ struct ControlsMediator {
     bool actionTypesShareInputSource(
         const vector<PLAYER_ACTION_TYPE> actionTypes
     );
+    void cleanup();
     
     
     //--- Public members ---

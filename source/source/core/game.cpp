@@ -661,6 +661,7 @@ void Game::shutdown() {
     
     if(curState) {
         curState->unload();
+        curState = nullptr;
     }
     
     modal.destroy();
@@ -683,7 +684,10 @@ void Game::shutdown() {
     states.destroy();
     destroyMisc();
     destroyEventThings(mainTimer, eventQueue);
-    destroyAllegro();
+    if(!game.shouldRestart){
+        //We are restarting, don't reinitialize Allegro
+        destroyAllegro();
+    }
 }
 
 
@@ -694,8 +698,13 @@ void Game::shutdown() {
  * program with.
  */
 int Game::start() {
-    //Allegro initializations.
-    initAllegro();
+    bool is_restart = game.shouldRestart;
+
+    //If we are restarting, we may have already init'd Allegro
+    if(!is_restart){
+        //Allegro initializations.
+        initAllegro();
+    }
     
     //Panic check: is there a game_data folder?
     if(folderToVector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true).empty()) {
@@ -751,7 +760,9 @@ int Game::start() {
     al_flip_display();
     
     //Init Dear ImGui.
-    initDearImGui();
+    if(!is_restart){
+        initDearImGui();
+    }
     
     //Init and load some engine things.
     initFsmEventTypes();

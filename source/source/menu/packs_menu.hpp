@@ -100,5 +100,6 @@ private:
     void initGuiMain();
     void populatePacksList();
     void triggerRestartWarning();
+    void leave() override;
     
 };
