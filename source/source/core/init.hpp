@@ -20,7 +20,7 @@ void initDearImGui();
 void initDearImGuiColors();
 void initDebugConfig();
 void initErrorBitmap();
-void initEssentials();
+void initSignalHandlers();
 void initEventThings(ALLEGRO_TIMER*& timer, ALLEGRO_EVENT_QUEUE*& queue);
 void initFsmEventTypes();
 void initInventoryItems();
@@ -31,5 +31,6 @@ void initMobCategories();
 
 void destroyAllegro();
 void destroyEventThings(ALLEGRO_TIMER*& timer, ALLEGRO_EVENT_QUEUE*& queue);
+void destroyImGui();
 void destroyMisc();
 void destroyMobCategories();

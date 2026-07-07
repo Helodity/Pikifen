@@ -166,7 +166,8 @@ void Game::globalDrawing() {
     }
     ImGui::Render();
     if(!skipDearImGuiFrame) {
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+        ImDrawData* data = ImGui::GetDrawData();
+        ImGui_ImplAllegro5_RenderDrawData(data);
     } else {
         skipDearImGuiFrame = false;
     }
@@ -684,6 +685,7 @@ void Game::shutdown() {
     states.destroy();
     destroyMisc();
     destroyEventThings(mainTimer, eventQueue);
+    destroyImGui();
     if(!game.shouldRestart){
         //We are restarting, don't reinitialize Allegro
         destroyAllegro();
@@ -722,7 +724,7 @@ int Game::start() {
     }
     
     //Essentials.
-    initEssentials();
+    initSignalHandlers();
     states.init();
     
     //Controls and options.
@@ -759,10 +761,7 @@ int Game::start() {
     drawLoadingScreen("", "", "", 1.0);
     al_flip_display();
     
-    //Init Dear ImGui.
-    if(!is_restart){
-        initDearImGui();
-    }
+    initDearImGui();
     
     //Init and load some engine things.
     initFsmEventTypes();

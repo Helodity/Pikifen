@@ -87,6 +87,15 @@ void destroyEventThings(
 
 
 /**
+ * @brief Destroys ImGUI's context.
+ */
+void destroyImGui() {
+    ImGui_ImplAllegro5_Shutdown();
+    ImGui::DestroyContext();
+}
+
+
+/**
  * @brief Destroys miscellaneous things.
  */
 void destroyMisc() {
@@ -1002,9 +1011,9 @@ void initErrorBitmap() {
 
 
 /**
- * @brief Initializes some essential things.
+ * @brief Initializes signal handlers.
  */
-void initEssentials() {
+void initSignalHandlers() {
     //Signal handlers.
     signal(SIGFPE,  signalHandler);
     signal(SIGILL,  signalHandler);
