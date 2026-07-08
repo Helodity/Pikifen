@@ -1614,6 +1614,12 @@ void Area::loadMainDataFromDataNode(
     aRS.set("onions_auto_eject", onionsAutoEject);
     aRS.set("onions_eject_grown_pikmin", onionsEjectGrownPikmin);
     
+    //Pre 1.2 areas use the default boss track. Set it here.
+    if(Version(engineVersion) < Version(1,2,0)){
+        bossSongName = game.sysContentNames.sngBoss;
+        bossVictorySongName = game.sysContentNames.sngBossVictory;
+    }
+
     //Weather.
     if(level > CONTENT_LOAD_LEVEL_BASIC) {
         if(weatherName.empty()) {

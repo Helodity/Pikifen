@@ -1483,7 +1483,17 @@ struct SystemContentNames {
     
     //Switching standby Pikmin type.
     string sndSwitchPikmin = "gui/switch_pikmin";
-    
+
+    //Songs.
+
+    //DEPRECATED in 1.2.0 by "area" > "bossSongName".
+    //Boss theme.
+    string sngBoss = "others/boss";
+
+    //DEPRECATED in 1.2.0 by "area" > "bossVictorySongName".
+    //Boss victory theme.
+    string sngBossVictory = "others/boss_victory";
+
     //Editors.
     string sngEditors = "others/editors";
     
@@ -2294,6 +2304,73 @@ protected:
     ) override;
     void doUnload(ALLEGRO_SAMPLE* asset) override;
     
+};
+
+
+/**
+ * @brief Struct that allows comparing between versions.
+ */
+struct Version {
+
+    //--- Public members ---
+
+    //Major release number
+    int majorVersion;
+
+    //Minor release number
+    int minorVersion;
+
+    //Patch release number
+    int patchVersion;
+
+    
+    //--- Public misc. declarations ---
+    
+    //How close a version matches with another one.
+    //Closer matches evaluate to higher integers.
+    enum VERSION_MATCH {
+    
+        //The version's major version differs
+        VERSION_MATCH_NONE,
+
+        //The version's major version matches, 
+        //but minor or patch version differs.
+        VERSION_MATCH_MAJOR,
+        
+        //The version's major and minor versions match, 
+        //but the patch version differs.
+        VERSION_MATCH_MINOR,
+        
+        //The versions share major, minor, and patch versions.
+        VERSION_MATCH_PATCH,
+        
+    };
+    
+
+    //--- Public function declarations ---
+    
+    Version(int majorVersion, int minorVersion, int patchVersion);
+    Version(string versionStr);
+    string getAsString();
+
+    //Comparison operators
+    bool operator<(const Version &other);
+    bool operator<=(const Version &other);
+    bool operator>(const Version &other);
+    bool operator>=(const Version &other);
+    bool operator==(const Version &other);
+    bool operator!=(const Version &other);
+
+    VERSION_MATCH compareVersion(const Version other);
+
+private:
+
+    //--- Private function declarations ---
+
+    bool opCheck(
+        const Version &other, 
+        bool allowGreaterThan, bool allowLessThan, bool allowEqual
+    );
 };
 
 

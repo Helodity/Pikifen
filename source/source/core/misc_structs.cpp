@@ -3373,6 +3373,11 @@ void SystemContentNames::load(DataNode* file) {
     
     ReaderSetter sngRS(file->getChildByName("songs"));
     
+    //DEPRECATED in 1.2.0 by area > "bossSongName".
+    sngRS.set("boss", sngBoss);
+    //DEPRECATED in 1.2.0 by area > "bossVictorySongName".
+    sngRS.set("boss_victory", sngBossVictory);
+    
     sngRS.set("editors", sngEditors);
     sngRS.set("menus", sngMenus);
     sngRS.set("results", sngResults);
@@ -3527,6 +3532,117 @@ void SystemNotificationManager::tick(float deltaT) {
     }
 }
 
+
+#pragma endregion
+#pragma region Version
+
+
+/**
+ * @brief Constructs a new version object from version numbers
+ */
+Version::Version(int maj, int min, int patch) {
+    majorVersion = maj;
+    minorVersion = min;
+    patchVersion = patch;
+}
+
+
+/**
+ * @brief Constructs a new version objects from a version string such as 1.0.2
+ */
+Version::Version(string versionStr) {
+    vector<string> parts = split(versionStr, ".");
+    
+    //If there aren't enough parts, let's add imaginary .0 parts until we
+    //get enough.
+    while(parts.size() < 2) {
+        parts.push_back("0");
+    }
+
+    majorVersion = isNumber(parts[0]) ? s2i(parts[0]) : 0;
+    minorVersion = isNumber(parts[1]) ? s2i(parts[1]) : 0;
+    patchVersion = isNumber(parts[2]) ? s2i(parts[2]) : 0;
+}
+
+bool Version::operator<(const Version &other)
+{
+    return opCheck(other, false, true, false);
+}
+
+bool Version::operator<=(const Version &other)
+{
+    return opCheck(other, false, true, true);
+}
+
+bool Version::operator>(const Version &other)
+{
+    return opCheck(other, true, false, false);
+}
+
+bool Version::operator>=(const Version &other)
+{
+    return opCheck(other, true, false, true);
+}
+bool Version::operator==(const Version &other)
+{
+    return opCheck(other, false, false, true);
+}
+
+bool Version::operator!=(const Version &other)
+{
+    return opCheck(other, true, true, false);
+}
+
+bool Version::opCheck(const Version &other, 
+    bool allowGreaterThan, bool allowLessThan, bool allowEqual
+) {
+    //Start with major versions.
+    if(majorVersion > other.majorVersion){
+        return allowGreaterThan;
+    } 
+    if(majorVersion < other.majorVersion){
+        return allowLessThan;
+    } 
+
+    //Both major versions must be identical.
+    //Ditto for minor versions
+    if(minorVersion > other.minorVersion){
+        return allowGreaterThan;
+    } 
+    if(minorVersion < other.minorVersion){
+        return allowLessThan;
+    } 
+
+    //Ditto for patch versions
+    if(patchVersion > other.patchVersion){
+        return allowGreaterThan;
+    } 
+    if(patchVersion < other.patchVersion){
+        return allowLessThan;
+    } 
+
+    //All numbers are the same, they're equal
+    return allowEqual;
+}
+
+/**
+ * @brief Returns how well two versions match.
+ *
+ * @param other The version to check against.
+ * @return How similar the versions are.
+ */
+Version::VERSION_MATCH Version::compareVersion(const Version other) {
+    if(majorVersion != other.majorVersion){
+        return Version::VERSION_MATCH::VERSION_MATCH_NONE;
+    }
+    if(minorVersion != other.minorVersion){
+        return Version::VERSION_MATCH::VERSION_MATCH_MAJOR;
+    }
+    if(patchVersion != other.patchVersion){
+        return Version::VERSION_MATCH::VERSION_MATCH_MINOR;
+    }
+    return Version::VERSION_MATCH::VERSION_MATCH_PATCH;
+}
 
 #pragma endregion
 #pragma region Viewport
