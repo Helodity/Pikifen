@@ -1484,8 +1484,6 @@ struct SystemContentNames {
     //Switching standby Pikmin type.
     string sndSwitchPikmin = "gui/switch_pikmin";
     
-    //Songs.
-    
     //Editors.
     string sngEditors = "others/editors";
     
