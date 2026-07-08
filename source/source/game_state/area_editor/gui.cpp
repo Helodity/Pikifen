@@ -127,7 +127,8 @@ void AreaEditor::songPicker(const string label, string& destVar) {
         !destVar.empty() &&
         destVar != NONE_OPTION;
     bool previewing =
-        !previewSong.empty();
+        !previewSong.empty() &&
+        previewSong == destVar;
     bool canPreviewSelectedSong =
         validSongSelected &&
         previewSong != destVar;
@@ -1679,7 +1680,7 @@ void AreaEditor::processGuiPanelDetails() {
         
             songPicker("Song", game.curArea->songName);
             songPicker("Boss Song", game.curArea->bossSongName);
-            songPicker("Boss Song (Victory)", game.curArea->bossVictorySongName);
+            songPicker("Boss (Victory)", game.curArea->bossVictorySongName);
 
             //Area weather combobox.
             vector<string> weatherCondInternals;
