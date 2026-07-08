@@ -115,7 +115,13 @@ void AreaEditor::openOptionsDialog() {
 }
 
 
-void AreaEditor::createSongPicker(const string label, string& destVar) {
+/**
+ * @brief Processes a Dear ImGui song picker for this frame.
+ * 
+ * @param label Label the song picker with this. Also controls the component ids.
+ * @param destVar Pointer to the variable the picker controls.
+ */
+void AreaEditor::songPicker(const string label, string& destVar) {
     //Preview song button.
     bool validSongSelected =
         !destVar.empty() &&
@@ -1671,9 +1677,9 @@ void AreaEditor::processGuiPanelDetails() {
         ImGui::Spacer();
         if(saveableTreeNode("details", "Ambiance")) {
         
-            createSongPicker("Song", game.curArea->songName);
-            createSongPicker("Boss Song", game.curArea->bossSongName);
-            createSongPicker("Boss Song (Victory)", game.curArea->bossVictorySongName);
+            songPicker("Song", game.curArea->songName);
+            songPicker("Boss Song", game.curArea->bossSongName);
+            songPicker("Boss Song (Victory)", game.curArea->bossVictorySongName);
 
             //Area weather combobox.
             vector<string> weatherCondInternals;
@@ -1699,7 +1705,7 @@ void AreaEditor::processGuiPanelDetails() {
             );
             
             ImGui::Spacer();
-
+            
             bool hasTimeLimit = false;
             float missionMin = 0;
             if(game.curArea->type == AREA_TYPE_MISSION) {

@@ -1126,7 +1126,7 @@ private:
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
-    void createSongPicker(const string label, string& destVar);
+    void songPicker(const string label, string& destVar);
     void pickAreaFolder(
         const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
