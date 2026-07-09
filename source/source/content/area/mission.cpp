@@ -2194,12 +2194,27 @@ MissionRecord MissionRecords::getBestCompatibleRecord(Area* areaPtr) const {
 bool MissionRecords::isAreaVersionCompatible(
     const string& currentVersion, const string& checkVersion
 ) const {
-    Version cur = Version(currentVersion);
-    Version check = Version(checkVersion);
-
-    //Require major and minor versions to be identical. If the patch version differs, 
-    // we're considering that as the area not having changed enough to matter.
-    return cur.compareVersion(check) >= Version::VERSION_MATCH::VERSION_MATCH_MINOR;
+    vector<string> curParts = split(currentVersion, ".");
+    vector<string> checkParts = split(checkVersion, ".");
+    
+    //If there aren't enough parts, let's add imaginary .0 parts until we
+    //get enough.
+    while(curParts.size() < 2) {
+        curParts.push_back("0");
+    }
+    while(checkParts.size() < 2) {
+        checkParts.push_back("0");
+    }
+    
+    if(curParts[0] != checkParts[0] || curParts[1] != checkParts[1]) {
+        //Major number or minor number are different, so the area is
+        //considered too different. Not compatible.
+        return false;
+    }
+    
+    //Major and minor match! Even if the other numbers don't match, we're
+    //considering that as the area not having changed enough to matter.
+    return true;
 }
 
 
