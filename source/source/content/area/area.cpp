@@ -1617,7 +1617,7 @@ void Area::loadMainDataFromDataNode(
     aRS.set("max_pikmin_in_field", maxPikminInField);
     aRS.set("onions_auto_eject", onionsAutoEject);
     aRS.set("onions_eject_grown_pikmin", onionsEjectGrownPikmin);
-
+    
     //Weather.
     if(level > CONTENT_LOAD_LEVEL_BASIC) {
         if(weatherName.empty()) {

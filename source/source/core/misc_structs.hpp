@@ -1485,13 +1485,13 @@ struct SystemContentNames {
     string sndSwitchPikmin = "gui/switch_pikmin";
 
     //Songs.
-
+    
     //Default boss theme.
     string sngBoss = "others/boss";
-
+    
     //Default boss victory theme.
     string sngBossVictory = "others/boss_victory";
-
+    
     //Editors.
     string sngEditors = "others/editors";
     

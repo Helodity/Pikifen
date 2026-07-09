@@ -3372,7 +3372,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("switch_pikmin", sndSwitchPikmin);
     
     ReaderSetter sngRS(file->getChildByName("songs"));
-
+    
     sngRS.set("boss", sngBoss);
     sngRS.set("boss_victory", sngBossVictory);
     sngRS.set("editors", sngEditors);
