@@ -1483,7 +1483,7 @@ struct SystemContentNames {
     
     //Switching standby Pikmin type.
     string sndSwitchPikmin = "gui/switch_pikmin";
-
+    
     //Songs.
     
     //Default boss theme.

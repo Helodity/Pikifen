@@ -1677,11 +1677,11 @@ void AreaEditor::processGuiPanelDetails() {
         //Ambiance node.
         ImGui::Spacer();
         if(saveableTreeNode("details", "Ambiance")) {
-        
+            
             songPicker("Song", game.curArea->songName);
             songPicker("Boss Song", game.curArea->bossSongName);
             songPicker("Boss (Victory)", game.curArea->bossVictorySongName);
-
+            
             //Area weather combobox.
             vector<string> weatherCondInternals;
             vector<string> weatherCondNames;
