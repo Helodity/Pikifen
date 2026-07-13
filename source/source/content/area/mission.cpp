@@ -646,6 +646,7 @@ bool MissionData::isPauseMenuEndClear() const {
 void MissionData::reset() {
     medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
     startingPoints = 0;
+    pointsCanBeNegative = true;
     bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
     silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
     goldReq = MISSION::DEF_MEDAL_REQ_GOLD;

@@ -420,6 +420,7 @@ void Area::clone(Area& other) {
     other.mission.timeLimit = mission.timeLimit;
     other.mission.medalAwardMode = mission.medalAwardMode;
     other.mission.startingPoints = mission.startingPoints;
+    other.mission.pointsCanBeNegative = mission.pointsCanBeNegative;
     other.mission.bronzeReq = mission.bronzeReq;
     other.mission.silverReq = mission.silverReq;
     other.mission.goldReq = mission.goldReq;
@@ -1662,6 +1663,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_time_limit", mission.timeLimit);
     mRS.set("mission_medal_award_mode", medalAwardModeStr, &medalAwardModeNode);
     mRS.set("mission_starting_points", mission.startingPoints);
+    mRS.set("mission_points_can_be_negative", mission.pointsCanBeNegative);
     mRS.set("mission_bronze_req", mission.bronzeReq);
     mRS.set("mission_silver_req", mission.silverReq);
     mRS.set("mission_gold_req", mission.goldReq);
@@ -2799,6 +2801,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         enumGetName(missionMedalAwardModeNames, mission.medalAwardMode)
     );
     mGW.write("mission_starting_points", mission.startingPoints);
+    mGW.write("mission_points_can_be_negative", mission.pointsCanBeNegative);
     mGW.write("mission_bronze_req", mission.bronzeReq);
     mGW.write("mission_silver_req", mission.silverReq);
     mGW.write("mission_gold_req", mission.goldReq);
@@ -2975,8 +2978,8 @@ void Blockmap::clear() {
 
 /**
  * @brief Returns the bottom-right corner of the area.
- * 
- * @return 
+ *
+ * @return The bottom-right corner.
  */
 Point Blockmap::getBottomRightCorner() const {
     return

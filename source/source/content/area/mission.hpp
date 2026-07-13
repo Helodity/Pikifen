@@ -606,6 +606,9 @@ struct MissionData {
     //Starting number of points.
     int startingPoints = 0;
     
+    //Whether the score can go into the negatives or be capped at 0.
+    bool pointsCanBeNegative = true;
+    
     //Bronze medal point requirement.
     int bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
     

@@ -56,6 +56,10 @@ int GameplayState::calculateMissionScore(bool forHud) {
         score += value;
     }
     
+    if(!game.curArea->mission.pointsCanBeNegative) {
+        score = std::max(0, score);
+    }
+    
     return score;
 }
 

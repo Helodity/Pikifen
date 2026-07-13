@@ -3716,12 +3716,24 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
             int startingPoints = game.curArea->mission.startingPoints;
             ImGui::SetNextItemWidth(60);
             if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
-                registerChange("mission medal award change");
+                registerChange("mission starting points change");
                 game.curArea->mission.startingPoints = startingPoints;
             }
             setTooltip(
                 "Starting amount of points. It can be positive or negative.",
                 "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Can be negative checkbox.
+            bool canBeNegative = game.curArea->mission.pointsCanBeNegative;
+            if(ImGui::Checkbox("Can be negative", &canBeNegative)) {
+                registerChange("mission points option change");
+                game.curArea->mission.pointsCanBeNegative = canBeNegative;
+            }
+            setTooltip(
+                "Whether the amount of points can go into the negatives,\n"
+                "or stay at 0. Useful if you don't want to discourage\n"
+                "the player with a constantly-decreasing negative number."
             );
             
             //Medal point requirements text.
