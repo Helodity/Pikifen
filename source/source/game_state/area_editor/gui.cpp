@@ -116,27 +116,32 @@ void AreaEditor::openOptionsDialog() {
 
 
 /**
- * @brief Processes a Dear ImGui song picker for this frame.
- * 
- * @param label Label the song picker with this. Also controls the component ids.
- * @param destVar Pointer to the variable the picker controls.
+ * @brief Processes the Dear ImGui widgets regarding a song
+ * for this frame.
+ *
+ * @param songNamePtr Points to the song name.
+ * @param widgetLabel Label for the widgets.
+ * @param widgetDescription Description for the widget.
  */
-void AreaEditor::songPicker(const string label, string& destVar) {
+void AreaEditor::processGuiWidgetsSong(
+    string* songNamePtr, const string& widgetLabel,
+    const string& widgetDescription
+) {
     //Preview song button.
     bool validSongSelected =
-        !destVar.empty() &&
-        destVar != NONE_OPTION;
+        !songNamePtr->empty() &&
+        *songNamePtr != NONE_OPTION;
     bool previewing =
         !previewSong.empty() &&
-        previewSong == destVar;
+        previewSong == *songNamePtr;
     bool canPreviewSelectedSong =
         validSongSelected &&
-        previewSong != destVar;
+        previewSong != *songNamePtr;
     bool canStopPreviewing =
         previewing &&
         (
             !validSongSelected ||
-            previewSong == destVar
+            previewSong == *songNamePtr
         );
     bool previewButtonValid =
         canPreviewSelectedSong || canStopPreviewing;
@@ -145,7 +150,7 @@ void AreaEditor::songPicker(const string label, string& destVar) {
     
     if(
         ImGui::ImageButton(
-            "previewSongButton_" + label,
+            "previewSongButton" + widgetLabel,
             canStopPreviewing ?
             editorIcons[EDITOR_ICON_STOP] :
             editorIcons[EDITOR_ICON_PLAY],
@@ -153,7 +158,7 @@ void AreaEditor::songPicker(const string label, string& destVar) {
         )
     ) {
         if(canPreviewSelectedSong) {
-            previewSong = destVar;
+            previewSong = *songNamePtr;
             game.audio.setCurrentSong(previewSong);
             previewing = true;
         } else if(canStopPreviewing) {
@@ -177,7 +182,7 @@ void AreaEditor::songPicker(const string label, string& destVar) {
     if(canPreviewSelectedSong) {
         previewTooltipStr +=
             "Press here to preview the song \"" +
-            game.content.songs.list[destVar].name +
+            game.content.songs.list[*songNamePtr].name +
             "\".";
     } else if(canStopPreviewing) {
         previewTooltipStr +=
@@ -186,9 +191,9 @@ void AreaEditor::songPicker(const string label, string& destVar) {
         previewTooltipStr +=
             "If you select a song, you can press here to preview it.";
     }
-    setTooltip(previewTooltipStr);  
-
-    //Music combobox.
+    setTooltip(previewTooltipStr);
+    
+    //Song combobox.
     ImGui::SameLine();
     vector<string> songInternals;
     vector<string> songNames;
@@ -198,14 +203,17 @@ void AreaEditor::songPicker(const string label, string& destVar) {
         songInternals.push_back(s.first);
         songNames.push_back(s.second.name);
     }
-    string songName = destVar;
-    if(ImGui::Combo(label, &songName, songInternals, songNames, 15)) {
+    string songName = *songNamePtr;
+    if(
+        ImGui::Combo(
+            widgetLabel,
+            &songName, songInternals, songNames, 15
+        )
+    ) {
         registerChange("area song change");
-        destVar = songName;
+        *songNamePtr = songName;
     }
-    setTooltip(
-        "What song to play."
-    );
+    setTooltip(widgetDescription);
 }
 
 
@@ -1677,10 +1685,27 @@ void AreaEditor::processGuiPanelDetails() {
         //Ambiance node.
         ImGui::Spacer();
         if(saveableTreeNode("details", "Ambiance")) {
+        
+            //Area song widgets.
+            processGuiWidgetsSong(
+                &game.curArea->songName, "Area theme",
+                "Song to play in the area."
+            );
             
-            songPicker("Song", game.curArea->songName);
-            songPicker("Boss Song", game.curArea->bossSongName);
-            songPicker("Boss (Victory)", game.curArea->bossVictorySongName);
+            //Boss theme override widgets.
+            processGuiWidgetsSong(
+                &game.curArea->bossSongOverrideName, "Boss theme override",
+                "If you want boss encounters to play a different theme\n"
+                "from the game's default, specify it here."
+            );
+            
+            //Boss victory theme override widgets.
+            processGuiWidgetsSong(
+                &game.curArea->bossVictoryOverrideSongName,
+                "Boss victory theme override",
+                "If you want boss defeats to play a different fanfare\n"
+                "from the game's default, specify it here."
+            );
             
             //Area weather combobox.
             vector<string> weatherCondInternals;

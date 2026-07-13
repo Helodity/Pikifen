@@ -1126,7 +1126,6 @@ private:
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
-    void songPicker(const string label, string& destVar);
     void pickAreaFolder(
         const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
@@ -1218,6 +1217,10 @@ private:
         MISSION_METRIC* metricTypeVar,
         size_t* idxParamVar, size_t* targetParamVar,
         const string& descriptor, bool targetIsMatch
+    );
+    void processGuiWidgetsSong(
+        string* songNamePtr, const string& widgetLabel,
+        const string& widgetDescription
     );
     void handleKeyCharAnywhere(const ALLEGRO_EVENT& ev) override;
     void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;

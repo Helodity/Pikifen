@@ -679,19 +679,26 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         if(nearBoss) {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_NEVER_PLAYED: {
-                game.audio.setCurrentSong(
-                    game.curArea->bossSongName, true, false
-                );
+                string bossSongName = game.curArea->bossSongOverrideName;
+                if(bossSongName.empty()) {
+                    bossSongName = game.sysContentNames.sngBoss;
+                }
+                game.audio.setCurrentSong(bossSongName, true, false);
                 bossMusicState = BOSS_MUSIC_STATE_PLAYING;
                 break;
             } case BOSS_MUSIC_STATE_PAUSED: {
             } case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.setCurrentSong(game.curArea->bossSongName, false);
+                string bossSongName = game.curArea->bossSongOverrideName;
+                if(bossSongName.empty()) {
+                    bossSongName = game.sysContentNames.sngBoss;
+                }
+                game.audio.setCurrentSong(bossSongName, false);
                 bossMusicState = BOSS_MUSIC_STATE_PLAYING;
             } default: {
                 break;
             }
             }
+            
         } else {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_PLAYING: {
@@ -702,6 +709,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 break;
             }
             }
+            
         }
     }
     

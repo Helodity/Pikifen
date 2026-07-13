@@ -151,11 +151,11 @@ void Area::cleanup(bool* outDeletedSectors) {
     if(songName == NONE_OPTION) {
         songName.clear();
     }
-    if(bossSongName == NONE_OPTION) {
-        bossSongName.clear();
+    if(bossSongOverrideName == NONE_OPTION) {
+        bossSongOverrideName.clear();
     }
-    if(bossVictorySongName == NONE_OPTION) {
-        bossVictorySongName.clear();
+    if(bossVictoryOverrideSongName == NONE_OPTION) {
+        bossVictoryOverrideSongName.clear();
     }
     if(weatherName == NONE_OPTION) {
         weatherName.clear();
@@ -216,8 +216,8 @@ void Area::clear() {
     difficulty = AREA::DEF_DIFFICULTY;
     sprayAmounts.clear();
     songName.clear();
-    bossSongName.clear();
-    bossVictorySongName.clear();
+    bossSongOverrideName.clear();
+    bossVictoryOverrideSongName.clear();
     weatherName.clear();
     dayTimeStart = AREA::DEF_DAY_TIME_START;
     dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
@@ -414,8 +414,8 @@ void Area::clone(Area& other) {
     other.makerNotes = makerNotes;
     other.sprayAmounts = sprayAmounts;
     other.songName = songName;
-    other.bossSongName = bossSongName;
-    other.bossVictorySongName = bossVictorySongName;
+    other.bossSongOverrideName = bossSongOverrideName;
+    other.bossVictoryOverrideSongName = bossVictoryOverrideSongName;
     other.weatherName = weatherName;
     other.weatherCondition = weatherCondition;
     other.dayTimeStart = dayTimeStart;
@@ -1595,19 +1595,18 @@ void Area::loadMainDataFromDataNode(
     
     DataNode* weatherNode = nullptr;
     DataNode* songNode = nullptr;
-    DataNode* bossSongNode = nullptr;
-    DataNode* bossVictorySongNode = nullptr;
+    DataNode* bossSongOverrideNode = nullptr;
+    DataNode* bossVictorySongOverrideNode = nullptr;
     
-    //Default song names
-    bossSongName = game.sysContentNames.sngBoss;
-    bossVictorySongName = game.sysContentNames.sngBossVictory;
-
     aRS.set("subtitle", subtitle);
     aRS.set("difficulty", difficulty);
     aRS.set("spray_amounts", sprayAmounts);
     aRS.set("song", songName, &songNode);
-    aRS.set("boss_song", bossSongName, &bossSongNode);
-    aRS.set("boss_victory_song", bossVictorySongName, &bossVictorySongNode);
+    aRS.set("boss_song", bossSongOverrideName, &bossSongOverrideNode);
+    aRS.set(
+        "boss_victory_song",
+        bossVictoryOverrideSongName, &bossVictorySongOverrideNode
+    );
     aRS.set("weather", weatherName, &weatherNode);
     aRS.set("day_time_start", dayTimeStart);
     aRS.set("day_time_speed", dayTimeSpeed);
@@ -1637,23 +1636,33 @@ void Area::loadMainDataFromDataNode(
                 
         }
         
-        //Song.
-        if(!songName.empty() && !isInMap(game.content.songs.list, songName)) {
+        //Songs.
+        if(
+            !songName.empty() &&
+            !isInMap(game.content.songs.list, songName)
+        ) {
             game.errors.report(
                 "Unknown song \"" + songName + "\"!",
                 songNode
             );
         }
-        if(!bossSongName.empty() && !isInMap(game.content.songs.list, bossSongName)) {
+        if(
+            !bossSongOverrideName.empty() &&
+            !isInMap(game.content.songs.list, bossSongOverrideName)
+        ) {
             game.errors.report(
-                "Unknown song \"" + bossSongName + "\"!",
-                bossSongNode
+                "Unknown boss song \"" + bossSongOverrideName + "\"!",
+                bossSongOverrideNode
             );
         }
-        if(!bossVictorySongName.empty() && !isInMap(game.content.songs.list, bossVictorySongName)) {
+        if(
+            !bossVictoryOverrideSongName.empty() &&
+            !isInMap(game.content.songs.list, bossVictoryOverrideSongName)
+        ) {
             game.errors.report(
-                "Unknown song \"" + bossVictorySongName + "\"!",
-                bossVictorySongNode
+                "Unknown boss victory song \"" +
+                bossVictoryOverrideSongName + "\"!",
+                bossVictorySongOverrideNode
             );
         }
     }
@@ -2794,8 +2803,8 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     aGW.write("bg_dist", bgDist);
     aGW.write("bg_zoom", bgBmpZoom);
     aGW.write("song", songName);
-    aGW.write("boss_song", bossSongName);
-    aGW.write("boss_victory_song", bossVictorySongName);
+    aGW.write("boss_song", bossSongOverrideName);
+    aGW.write("boss_victory_song", bossVictoryOverrideSongName);
     aGW.write("weather", weatherName);
     aGW.write("day_time_start", dayTimeStart);
     aGW.write("day_time_speed", dayTimeSpeed);

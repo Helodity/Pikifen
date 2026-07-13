@@ -287,12 +287,12 @@ struct Area : public Content {
     
     //Name of the song to play.
     string songName;
-
-    //Name of the song to play when facing a boss.
-    string bossSongName;
-
-    //Name of the song to play when beating a boss.
-    string bossVictorySongName;
+    
+    //If not empty, override the boss battle theme with this.
+    string bossSongOverrideName;
+    
+    //If not empty, override the boss defeat fanfare with this.
+    string bossVictoryOverrideSongName;
     
     //Weather condition to use.
     Weather weatherCondition;

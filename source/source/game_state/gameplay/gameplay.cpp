@@ -1253,7 +1253,11 @@ void GameplayState::load() {
     bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     game.audio.setCurrentSong("");
     game.audio.onSongFinished = [this] (const string& name) {
-        if(name == game.curArea->bossVictorySongName) {
+        string bossVictorySongName = game.curArea->bossVictoryOverrideSongName;
+        if(bossVictorySongName.empty()) {
+            bossVictorySongName = game.sysContentNames.sngBossVictory;
+        }
+        if(name == bossVictorySongName) {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_VICTORY: {
                 game.audio.setCurrentSong(game.curArea->songName, false);
