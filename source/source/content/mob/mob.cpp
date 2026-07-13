@@ -1459,10 +1459,15 @@ void Mob::chaseNextPathStop(float speed, float acceleration) {
     if(hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
         nextStopZ += PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
     }
+    Bitmask8 chaseFlags = CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED;
+    
+    if(hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_ANY_ANGLE)){
+        chaseFlags |= CHASE_FLAG_ANY_ANGLE;
+    }
     
     chase(
         nextStop->center, nextStopZ,
-        CHASE_FLAG_ANY_ANGLE | CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED,
+        chaseFlags,
         PATHS::DEF_CHASE_TARGET_DISTANCE,
         speed, acceleration
     );
@@ -2028,6 +2033,8 @@ bool Mob::followPath(
     PathFollowSettings finalSettings = settings;
     
     if(carryInfo) {
+        enableFlag(finalSettings.flags, PATH_FOLLOW_FLAG_ANY_ANGLE);
+
         //Check if this carriable is considered light load.
         if(type->weight == 1) {
             enableFlag(finalSettings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
@@ -3261,6 +3268,11 @@ void Mob::leaveGroup() {
  */
 void Mob::moveToPathEnd(float speed, float acceleration) {
     if(!pathInfo) return;
+
+    Bitmask8 chaseFlags = 0;
+    if(hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_ANY_ANGLE)){
+        chaseFlags |= CHASE_FLAG_ANY_ANGLE;
+    }
     if(
         (
             pathInfo->settings.flags&
@@ -3272,7 +3284,7 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
             &(pathInfo->settings.targetMob->center),
             &(pathInfo->settings.targetMob->bottomZ),
             Point(), 0.0f,
-            CHASE_FLAG_ANY_ANGLE,
+            chaseFlags,
             pathInfo->settings.finalTargetDistance,
             speed, acceleration
         );
@@ -3281,7 +3293,7 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
         chase(
             pathInfo->settings.targetPoint,
             targetSector ? targetSector->floorZ : 0,
-            CHASE_FLAG_ANY_ANGLE,
+            chaseFlags,
             pathInfo->settings.finalTargetDistance,
             speed, acceleration
         );

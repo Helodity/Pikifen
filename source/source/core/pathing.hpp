@@ -88,6 +88,9 @@ enum PATH_FOLLOW_FLAG {
     //The mob can fly.
     PATH_FOLLOW_FLAG_AIRBORNE = 1 << 7,
     
+    //The mob can move in any angle instead of just where it's facing.
+    PATH_FOLLOW_FLAG_ANY_ANGLE = 1 << 8,
+    
 };
 
 
@@ -192,7 +195,7 @@ struct PathFollowSettings {
     float finalTargetDistance = PATHS::DEF_CHASE_TARGET_DISTANCE;
     
     //Some flags. Use PATH_FOLLOW_FLAG.
-    Bitmask8 flags = 0;
+    Bitmask16 flags = 0;
     
     //Invulnerabilities of the mob/carriers.
     vector<Hazard*> invulnerabilities;
