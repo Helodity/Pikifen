@@ -1486,10 +1486,10 @@ struct SystemContentNames {
     
     //Songs.
     
-    //Boss theme.
+    //Default boss theme.
     string sngBoss = "others/boss";
     
-    //Boss victory theme.
+    //Default boss victory theme.
     string sngBossVictory = "others/boss_victory";
     
     //Editors.

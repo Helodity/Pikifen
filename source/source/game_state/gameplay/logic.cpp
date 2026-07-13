@@ -680,13 +680,13 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_NEVER_PLAYED: {
                 game.audio.setCurrentSong(
-                    game.sysContentNames.sngBoss, true, false
+                    game.curArea->bossSongName, true, false
                 );
                 bossMusicState = BOSS_MUSIC_STATE_PLAYING;
                 break;
             } case BOSS_MUSIC_STATE_PAUSED: {
             } case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.setCurrentSong(game.sysContentNames.sngBoss, false);
+                game.audio.setCurrentSong(game.curArea->bossSongName, false);
                 bossMusicState = BOSS_MUSIC_STATE_PLAYING;
             } default: {
                 break;

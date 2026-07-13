@@ -287,6 +287,12 @@ struct Area : public Content {
     
     //Name of the song to play.
     string songName;
+
+    //Name of the song to play when facing a boss.
+    string bossSongName;
+
+    //Name of the song to play when beating a boss.
+    string bossVictorySongName;
     
     //Weather condition to use.
     Weather weatherCondition;

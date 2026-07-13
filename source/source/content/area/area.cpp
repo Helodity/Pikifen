@@ -151,6 +151,12 @@ void Area::cleanup(bool* outDeletedSectors) {
     if(songName == NONE_OPTION) {
         songName.clear();
     }
+    if(bossSongName == NONE_OPTION) {
+        bossSongName.clear();
+    }
+    if(bossVictorySongName == NONE_OPTION) {
+        bossVictorySongName.clear();
+    }
     if(weatherName == NONE_OPTION) {
         weatherName.clear();
     }
@@ -210,6 +216,8 @@ void Area::clear() {
     difficulty = AREA::DEF_DIFFICULTY;
     sprayAmounts.clear();
     songName.clear();
+    bossSongName.clear();
+    bossVictorySongName.clear();
     weatherName.clear();
     dayTimeStart = AREA::DEF_DAY_TIME_START;
     dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
@@ -406,6 +414,8 @@ void Area::clone(Area& other) {
     other.makerNotes = makerNotes;
     other.sprayAmounts = sprayAmounts;
     other.songName = songName;
+    other.bossSongName = bossSongName;
+    other.bossVictorySongName = bossVictorySongName;
     other.weatherName = weatherName;
     other.weatherCondition = weatherCondition;
     other.dayTimeStart = dayTimeStart;
@@ -1585,11 +1595,19 @@ void Area::loadMainDataFromDataNode(
     
     DataNode* weatherNode = nullptr;
     DataNode* songNode = nullptr;
+    DataNode* bossSongNode = nullptr;
+    DataNode* bossVictorySongNode = nullptr;
     
+    //Default song names
+    bossSongName = game.sysContentNames.sngBoss;
+    bossVictorySongName = game.sysContentNames.sngBossVictory;
+
     aRS.set("subtitle", subtitle);
     aRS.set("difficulty", difficulty);
     aRS.set("spray_amounts", sprayAmounts);
     aRS.set("song", songName, &songNode);
+    aRS.set("boss_song", bossSongName, &bossSongNode);
+    aRS.set("boss_victory_song", bossVictorySongName, &bossVictorySongNode);
     aRS.set("weather", weatherName, &weatherNode);
     aRS.set("day_time_start", dayTimeStart);
     aRS.set("day_time_speed", dayTimeSpeed);
@@ -1624,6 +1642,18 @@ void Area::loadMainDataFromDataNode(
             game.errors.report(
                 "Unknown song \"" + songName + "\"!",
                 songNode
+            );
+        }
+        if(!bossSongName.empty() && !isInMap(game.content.songs.list, bossSongName)) {
+            game.errors.report(
+                "Unknown song \"" + bossSongName + "\"!",
+                bossSongNode
+            );
+        }
+        if(!bossVictorySongName.empty() && !isInMap(game.content.songs.list, bossVictorySongName)) {
+            game.errors.report(
+                "Unknown song \"" + bossVictorySongName + "\"!",
+                bossVictorySongNode
             );
         }
     }
@@ -2764,6 +2794,8 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     aGW.write("bg_dist", bgDist);
     aGW.write("bg_zoom", bgBmpZoom);
     aGW.write("song", songName);
+    aGW.write("boss_song", bossSongName);
+    aGW.write("boss_victory_song", bossVictorySongName);
     aGW.write("weather", weatherName);
     aGW.write("day_time_start", dayTimeStart);
     aGW.write("day_time_speed", dayTimeSpeed);
