@@ -150,6 +150,12 @@ script {
     dying {
         on_enter {
             start_dying
+            get_mob_info links self link_ids
+            for_each temp id $links
+                focus_on_id $id
+                run_next_action_as focus
+                receive_status panicked
+            end_for_each
             set_animation dying
         }
         on_animation_end {

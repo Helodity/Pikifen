@@ -1,0 +1,11 @@
+name = Panicked
+description = Pikmin that are running around in a panic until they are whistled.
+
+affects = pikmin
+color = 240 32 128
+remove_on_whistle = true
+state_change_type = panic
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0
