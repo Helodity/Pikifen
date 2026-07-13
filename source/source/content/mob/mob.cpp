@@ -2248,7 +2248,7 @@ FRACTION_NR_VISIBILITY Mob::getFractionNumbersInfo(
     float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
     if(!carryInfo) return FRACTION_NR_VISIBILITY_NONE;
-    if(storedInsideAnother) return FRACTION_NR_VISIBILITY_NONE;
+    if(!isGenerallyAvailable()) return FRACTION_NR_VISIBILITY_NONE;
     
     *outValueNr = carryInfo->curCarryingStrength;
     *outReqNr = type->weight;
@@ -3090,6 +3090,46 @@ void Mob::hold(
 }
 
 
+/**
+ * @brief Returns whether the mob is, in a general sense, really available
+ * in the area. This is useful for general cases where you don't want
+ * mobs that are stored away, deleted, etc. to count.
+ *
+ * @return Whether it's available.
+ */
+bool Mob::isGenerallyAvailable() const {
+    if(toDelete) return false;
+    if(isMobOrParentStoredInside()) return false;
+    if(!scriptVM.fsm.curState) return false;
+    return true;
+}
+
+
+/**
+ * @brief Returns whether the mob is, in a general sense, really visible
+ * in the area. This is useful for general cases where you don't want
+ * mobs that are stored away, deleted, hidden, etc. to count.
+ *
+ * @return Whether it's visible.
+ */
+bool Mob::isGenerallyVisible() const {
+    if(!isGenerallyAvailable()) return false;
+    if(hasFlag(flags, MOB_FLAG_HIDDEN)) return false;
+    return true;
+}
+
+
+/**
+ * @brief Checks if a mob or its parent is stored inside another mob.
+ *
+ * @return Whether it is stored.
+ */
+bool Mob::isMobOrParentStoredInside() const {
+    if(storedInside) return true;
+    if(parent && parent->m->isMobOrParentStoredInside()) return true;
+    return false;
+}
+
 
 /**
  * @brief Checks if a mob is completely off-camera.
@@ -3164,18 +3204,6 @@ bool Mob::isResistantToHazards(const vector<Hazard*>& hazards) const {
         }
     }
     return true;
-}
-
-
-/**
- * @brief Checks if a mob or its parent is stored inside another mob.
- *
- * @return Whether it is stored.
- */
-bool Mob::isStoredInsideMob() const {
-    if(storedInsideAnother) return true;
-    if(parent && parent->m->storedInsideAnother) return true;
-    return false;
 }
 
 
@@ -3391,7 +3419,7 @@ void Mob::releaseChompedPikmin() {
 void Mob::releaseStoredMobs() {
     forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
-        if(mPtr->storedInsideAnother == this) {
+        if(mPtr->storedInside == this) {
             release(mPtr);
             mPtr->stopBeingStored();
         }
@@ -3757,7 +3785,7 @@ void Mob::startHeightEffect() {
  * @brief Makes a mob stop being stored inside the mob it is stored.
  */
 void Mob::stopBeingStored() {
-    storedInsideAnother = nullptr;
+    storedInside = nullptr;
     timeAlive = 0.0f;
     float a = game.rng.f(0, TAU);
     const float momentum = 100.0f;
@@ -3879,14 +3907,14 @@ void Mob::storeMobInside(Mob* m) {
     Mob* temp = this;
     while(temp) {
         if(temp == m) return;
-        temp = temp->storedInsideAnother;
+        temp = temp->storedInside;
     }
     
     hold(
         m, HOLD_TYPE_STORED, INVALID, 0.0f, 0.0f, 0.5f,
         false, HOLD_ROTATION_METHOD_NEVER
     );
-    m->storedInsideAnother = this;
+    m->storedInside = this;
 }
 
 

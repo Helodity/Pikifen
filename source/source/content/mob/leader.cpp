@@ -225,6 +225,7 @@ Leader::Leader(const Point& center, LeaderType* type, float angle) :
         return newColor;
     }
     );
+    antennaPG.canEmit = false;
     antennaPG.id = MOB_PARTICLE_GENERATOR_ID_ANTENNA;
     particleGenerators.push_back(antennaPG);
 }
@@ -400,7 +401,7 @@ void Leader::dismissDetails() {
 /**
  * @brief Runs the logic to actually separate, position, and disband
  * the group for a dismiss action.
- * 
+ *
  * @param forceDismissAll If true, force every subgroup to be dismissed.
  * If false, the current subgroup may still follow the leader, if set to do so
  * in the options.
@@ -771,7 +772,7 @@ void Leader::drawMob() {
     }
     antennaPG->canEmit = false;
     
-    if(curSPtr->topVisible && leaType->bmpLight) {
+    if(curSPtr->topVisible && leaType->bmpLight && isGenerallyVisible()) {
         Point lightCoords;
         float lightAngle;
         Point lightSize;

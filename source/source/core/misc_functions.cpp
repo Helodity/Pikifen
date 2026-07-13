@@ -395,8 +395,7 @@ Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth) {
         
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
         if(mustHaveHealth && !hasHealth) continue;
-        if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->scriptVM.fsm.curState) continue;
+        if(!mPtr->isGenerallyAvailable()) continue;
         
         Distance d = Distance(view.mouseCursorWorldPos, mPtr->center);
         if(!closestMobToCursor || d < closestMobToCursorDist) {
@@ -517,8 +516,7 @@ Mob* getNextMobNearCursor(
         
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
         if(mustHaveHealth && !hasHealth) continue;
-        if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->scriptVM.fsm.curState) continue;
+        if(!mPtr->isGenerallyAvailable()) continue;
         
         Distance d(view.mouseCursorWorldPos, mPtr->center);
         if(d < 8.0f) {

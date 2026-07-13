@@ -703,18 +703,13 @@ Pikmin* getClosestSprout(
     Distance closestDist;
     Pikmin* closestPikmin = nullptr;
     
-    size_t nPikmin = game.states.gameplay->mobs.pikmin.size();
-    for(size_t p = 0; p < nPikmin; p++) {
-        if(
-            game.states.gameplay->mobs.pikmin[p]->scriptVM.fsm.curState->id !=
-            PIKMIN_STATE_SPROUT
-        ) {
-            continue;
-        }
+    forIdx(p, game.states.gameplay->mobs.pikmin) {
+        Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
+        if(pPtr->scriptVM.fsm.curState->id != PIKMIN_STATE_SPROUT) continue;
+        if(!pPtr->isGenerallyAvailable()) continue;
         
         Distance dis(pos, game.states.gameplay->mobs.pikmin[p]->center);
         if(closestPikmin == nullptr || dis < closestDist) {
-        
             if(
                 !(
                     ignoreReserved ||

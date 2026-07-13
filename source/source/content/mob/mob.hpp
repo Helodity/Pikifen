@@ -254,7 +254,7 @@ public:
     vector<Mob*> holding;
     
     //If it's stored inside another mob, this indicates which mob it is.
-    Mob* storedInsideAnother = nullptr;
+    Mob* storedInside = nullptr;
     
     //List of body parts that will chomp Pikmin.
     vector<int> chompBodyParts;
@@ -407,7 +407,9 @@ public:
         const Mob* attacker, const Hitbox* attackH, const Hitbox* victimH,
         float damage, float knockback
     );
-    bool isStoredInsideMob() const;
+    bool isGenerallyAvailable() const;
+    bool isGenerallyVisible() const;
+    bool isMobOrParentStoredInside() const;
     bool isOffCamera(const Viewport& viewport) const;
     bool isPointOn(const Point& p) const;
     bool isViableLeader(Mob* whom) const;

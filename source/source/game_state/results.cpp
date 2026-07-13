@@ -1229,7 +1229,7 @@ void Results::populateScoringList() {
         if(name.empty()) name = typePtr->getInfo().name;
         addNewBulletPoint(
             scoringList,
-            name + " x" + i2s(cPtr->points),
+            name + " x " + i2s(cPtr->points),
             i2s(value),
             red ? game.config.guiColors.bad : COLOR_WHITE
         );

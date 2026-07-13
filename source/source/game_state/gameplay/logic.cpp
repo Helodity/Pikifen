@@ -452,7 +452,6 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->closeToShipToHeal = nullptr;
         forIdx(s, mobs.ships) {
             Ship* sPtr = mobs.ships[s];
-            d = Distance(player->leaderPtr->center, sPtr->center);
             if(!sPtr->isLeaderOnCp(player->leaderPtr)) {
                 continue;
             }
@@ -462,6 +461,10 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             if(!sPtr->shiType->canHeal) {
                 continue;
             }
+            if(!sPtr->isGenerallyAvailable()) {
+                continue;
+            }
+            d = Distance(player->leaderPtr->center, sPtr->center);
             if(d < closestD || !player->closeToShipToHeal) {
                 player->closeToShipToHeal = sPtr;
                 closestD = d;
@@ -484,15 +487,16 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->closeToInteractableToUse = nullptr;
         if(!leaderPromptDone) {
             forIdx(i, mobs.interactables) {
-                d =
-                    Distance(
-                        player->leaderPtr->center, mobs.interactables[i]->center
-                    );
-                if(d > mobs.interactables[i]->intType->triggerRange) {
+                Interactable* iPtr = mobs.interactables[i];
+                if(!iPtr->isGenerallyAvailable()) {
+                    continue;
+                }
+                d = Distance(player->leaderPtr->center, iPtr->center);
+                if(d > iPtr->intType->triggerRange) {
                     continue;
                 }
                 if(d < closestD || !player->closeToInteractableToUse) {
-                    player->closeToInteractableToUse = mobs.interactables[i];
+                    player->closeToInteractableToUse = iPtr;
                     closestD = d;
                     player->leaderPrompt.setEnabled(true);
                     player->leaderPrompt.setContents(
@@ -536,11 +540,19 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->closeToNestToOpen = nullptr;
         if(!leaderPromptDone) {
             forIdx(o, mobs.onions) {
-                if(!mobs.onions[o]->nest->nestType->hasMenu) continue;
-                d = Distance(player->leaderPtr->center, mobs.onions[o]->center);
-                if(d > game.config.leaders.onionOpenRange) continue;
+                Onion* oPtr = mobs.onions[o];
+                if(!oPtr->nest->nestType->hasMenu) {
+                    continue;
+                }
+                if(!oPtr->isGenerallyAvailable()) {
+                    continue;
+                }
+                d = Distance(player->leaderPtr->center, oPtr->center);
+                if(d > game.config.leaders.onionOpenRange) {
+                    continue;
+                }
                 if(d < closestD || !player->closeToNestToOpen) {
-                    player->closeToNestToOpen = mobs.onions[o]->nest;
+                    player->closeToNestToOpen = oPtr->nest;
                     closestD = d;
                     player->leaderPrompt.setEnabled(true);
                     player->leaderPrompt.setContents(
@@ -555,15 +567,19 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 }
             }
             forIdx(s, mobs.ships) {
-                d = Distance(player->leaderPtr->center, mobs.ships[s]->center);
-                if(!mobs.ships[s]->isLeaderOnCp(player->leaderPtr)) {
+                Ship* sPtr = mobs.ships[s];
+                if(!sPtr->isGenerallyAvailable()) {
                     continue;
                 }
-                if(mobs.ships[s]->shiType->nest->pikTypes.empty()) {
+                if(!sPtr->isLeaderOnCp(player->leaderPtr)) {
                     continue;
                 }
+                if(sPtr->shiType->nest->pikTypes.empty()) {
+                    continue;
+                }
+                d = Distance(player->leaderPtr->center, sPtr->center);
                 if(d < closestD || !player->closeToNestToOpen) {
-                    player->closeToNestToOpen = mobs.ships[s]->nest;
+                    player->closeToNestToOpen = sPtr->nest;
                     closestD = d;
                     player->leaderPrompt.setEnabled(true);
                     player->leaderPrompt.setContents(
@@ -930,7 +946,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             }
             
             mPtr->tick(deltaT);
-            if(!mPtr->isStoredInsideMob()) {
+            if(mPtr->isGenerallyAvailable()) {
                 processMobInteractions(mPtr, m);
             }
         }
@@ -1787,8 +1803,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
         ) {
             continue;
         }
-        if(m2Ptr->toDelete) continue;
-        if(m2Ptr->isStoredInsideMob()) continue;
+        if(!m2Ptr->isGenerallyAvailable()) continue;
         
         Distance d(mPtr->center, m2Ptr->center);
         Distance dBetween = mPtr->getDistanceBetween(m2Ptr, &d);

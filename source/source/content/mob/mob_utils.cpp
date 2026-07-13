@@ -1510,7 +1510,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
                     l--;
                 }
             }
-            if(m2Ptr->storedInsideAnother == mPtr) {
+            if(m2Ptr->storedInside == mPtr) {
                 mPtr->release(m2Ptr);
                 m2Ptr->stopBeingStored();
             }

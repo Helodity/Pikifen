@@ -1082,8 +1082,7 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
     forIdx(m, mobs.all) {
         Mob* mPtr = mobs.all[m];
         
-        if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->scriptVM.fsm.curState) continue;
+        if(!mPtr->isGenerallyAvailable()) continue;
         
         Distance d(player->leaderCursorWorld, mPtr->center);
         if(d > mPtr->radius) continue;
@@ -1900,8 +1899,7 @@ void GameplayState::updateAvailableLeaders() {
     availableLeaders.clear();
     forIdx(l, mobs.leaders) {
         if(mobs.leaders[l]->health <= 0.0f) continue;
-        if(mobs.leaders[l]->toDelete) continue;
-        if(mobs.leaders[l]->isStoredInsideMob()) continue;
+        if(!mobs.leaders[l]->isGenerallyAvailable()) continue;
         availableLeaders.push_back(mobs.leaders[l]);
     }
     

@@ -2080,8 +2080,7 @@ void GameplayState::drawWorldComponents(
             continue;
         }
         
-        if(hasFlag(mobPtr->flags, MOB_FLAG_HIDDEN)) continue;
-        if(mobPtr->isStoredInsideMob()) continue;
+        if(!mobPtr->isGenerallyVisible()) continue;
         
         //Shadows.
         if(
