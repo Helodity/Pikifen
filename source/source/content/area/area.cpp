@@ -152,10 +152,10 @@ void Area::cleanup(bool* outDeletedSectors) {
         songName.clear();
     }
     if(bossSongName == NONE_OPTION) {
-        songName.clear();
+        bossSongName.clear();
     }
     if(bossVictorySongName == NONE_OPTION) {
-        songName.clear();
+        bossVictorySongName.clear();
     }
     if(weatherName == NONE_OPTION) {
         weatherName.clear();
