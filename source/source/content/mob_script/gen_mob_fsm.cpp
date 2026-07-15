@@ -622,15 +622,6 @@ void GenMobFsm::leaveHazard(ScriptVM* scriptVM, void* info1, void* info2) {
 }
 
 
-
-/**
- * @brief Generic handler for a mob leaving a hazard.
- *
- * @param scriptVM The script VM responsible.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-
 /**
  * @brief Generic handler for a mob touching a spray.
  *
