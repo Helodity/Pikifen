@@ -151,6 +151,15 @@ ContentTypeManager* ContentManager::getMgrPtr(CONTENT_TYPE type) {
 void ContentManager::loadAll(
     const vector<CONTENT_TYPE>& types, CONTENT_LOAD_LEVEL level
 ) {
+
+    const vector<CONTENT_TYPE> hardTypes = {
+        CONTENT_TYPE_MOB_ANIMATION, 
+        CONTENT_TYPE_MOB_TYPE, 
+    };
+
+    vector<CONTENT_TYPE> toLoadMainThread;
+    vector<CONTENT_TYPE> toLoadSecondaryThread;
+
     //Fill in all manifests first. This is because some content may rely on
     //another's manifest.
     forIdx(t, types) {
@@ -161,11 +170,25 @@ void ContentManager::loadAll(
             " even though it's already loaded!"
         );
         mgrPtr->fillManifests();
+
+        if(isInContainer(hardTypes, types[t])) {
+            toLoadSecondaryThread.push_back(types[t]);
+        } else {
+            toLoadMainThread.push_back(types[t]);
+        }
     }
     
+    loadThreadArgs args = loadThreadArgs();
+    args.mgr = this;
+    args.level = level;
+    args.types = toLoadSecondaryThread;
+
+    loadThread = al_create_thread(loadStateThreaded, &args);
+    al_start_thread(loadThread);
+    
     //Now load the content.
-    forIdx(t, types) {
-        ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
+    forIdx(t, toLoadMainThread) {
+        ContentTypeManager* mgrPtr = getMgrPtr(toLoadMainThread[t]);
         const string& perfMonName = mgrPtr->getPerfMonMeasurementName();
         if(!perfMonName.empty() && game.perfMon) {
             game.perfMon->startMeasurement(perfMonName);
@@ -174,9 +197,48 @@ void ContentManager::loadAll(
         if(!perfMonName.empty() && game.perfMon) {
             game.perfMon->finishMeasurement();
         }
-        loadLevels[types[t]] = level;
+        loadLevels[toLoadMainThread[t]] = level;
     }
-    
+    al_join_thread(loadThread, nullptr);
+    al_convert_memory_bitmaps();
+}
+
+
+/**
+ * @brief Loads all pieces of game content of some type using multithreading
+ *
+ * @param thread Thread object to run on.
+ * @param arg loadThreadArgs
+ */
+void* ContentManager::loadStateThreaded(ALLEGRO_THREAD *thread, void* arg) {
+    //Since we're on a new thread, we need to reset the bitmap flags
+    int newBitmapFlags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
+    if(game.options.advanced.smoothScaling) {
+        enableFlag(newBitmapFlags, ALLEGRO_MAG_LINEAR);
+        enableFlag(newBitmapFlags, ALLEGRO_MIN_LINEAR);
+    }
+    if(game.options.advanced.mipmapsEnabled) {
+        enableFlag(newBitmapFlags, ALLEGRO_MIPMAP);
+    }
+    al_add_new_bitmap_flag(newBitmapFlags);
+
+    loadThreadArgs* args = (loadThreadArgs*)arg;
+
+    //Now load the content.
+    forIdx(t, args->types) {
+        ContentTypeManager* mgrPtr = args->mgr->getMgrPtr(args->types[t]);
+        const string& perfMonName = mgrPtr->getPerfMonMeasurementName();
+        if(!perfMonName.empty() && game.perfMon) {
+            game.perfMon->startMeasurement(perfMonName);
+        }
+        mgrPtr->loadAll(args->level);
+        if(!perfMonName.empty() && game.perfMon) {
+            game.perfMon->finishMeasurement();
+        }
+        args->mgr->loadLevels[args->types[t]] = args->level;
+    }
+
+    return NULL;
 }
 
 

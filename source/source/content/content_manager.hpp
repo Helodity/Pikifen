@@ -137,9 +137,21 @@ struct ContentManager {
     
     CONTENT_LOAD_LEVEL loadLevels[N_CONTENT_TYPES];
     
+    ALLEGRO_THREAD* loadThread;
     
     //--- Private function declarations ---
     
     ContentTypeManager* getMgrPtr(CONTENT_TYPE type);
-    
+
+
+    struct loadThreadArgs {
+        ContentManager* mgr;
+
+        vector<CONTENT_TYPE> types; 
+        
+        CONTENT_LOAD_LEVEL level;
+    };
+
+    static void *loadStateThreaded(ALLEGRO_THREAD* thread, void* arg);
+
 };
