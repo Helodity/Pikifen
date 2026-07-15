@@ -344,7 +344,6 @@ private:
     bool resetDeltaT = true;
     
     
-    
     //--- Private function declarations ---
     
     void drawFramerateChart(int y) const;

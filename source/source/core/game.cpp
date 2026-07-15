@@ -867,7 +867,7 @@ void* Game::loadStateThreaded(ALLEGRO_THREAD *thread, void *arg) {
         enableFlag(newBitmapFlags, ALLEGRO_MIPMAP);
     }
     al_add_new_bitmap_flag(newBitmapFlags);
-
+    
     GameState* curState = (GameState*)arg;
     curState->load(); //Loads the state 
     curState->loaded = true;

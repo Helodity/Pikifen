@@ -1610,7 +1610,7 @@ void GameplayState::load() {
     }
     
     enter();
-
+    
     loading = false;
 }
 
