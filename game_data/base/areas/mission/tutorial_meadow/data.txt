@@ -21,6 +21,7 @@ mission_preset=Custom
 mission_time_limit=0
 mission_medal_award_mode=Clear
 mission_starting_points=0
+mission_points_can_be_negative=true
 mission_bronze_req=1000
 mission_silver_req=2000
 mission_gold_req=3000

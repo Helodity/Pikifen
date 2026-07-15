@@ -21,12 +21,13 @@ mission_preset=Custom
 mission_time_limit=0
 mission_medal_award_mode=Clear
 mission_starting_points=0
+mission_points_can_be_negative=true
 mission_bronze_req=1000
 mission_silver_req=2000
 mission_gold_req=3000
 mission_platinum_req=4000
-mission_briefing_objective=Get to the exit!
-mission_briefing_notes=Don't let any Pikmin die!
+mission_briefing_objective
+mission_briefing_notes
 mission_maker_record=0
 mission_maker_record_date
 mission_end_conditions{

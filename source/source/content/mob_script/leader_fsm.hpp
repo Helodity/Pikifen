@@ -55,7 +55,6 @@ void grabMob(ScriptVM* scriptVM, void* info1, void* info2);
 void idleOrRejoin(ScriptVM* scriptVM, void* info1, void* info2);
 void joinGroup(ScriptVM* scriptVM, void* info1, void* info2);
 void land(ScriptVM* scriptVM, void* info1, void* info2);
-void leftHazard(ScriptVM* scriptVM, void* info1, void* info2);
 void loseMomentum(ScriptVM* scriptVM, void* info1, void* info2);
 void move(ScriptVM* scriptVM, void* info1, void* info2);
 void notifyPikminRelease(ScriptVM* scriptVM, void* info1, void* info2);

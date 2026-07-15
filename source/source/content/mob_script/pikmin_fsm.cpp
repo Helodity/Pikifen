@@ -4864,19 +4864,18 @@ void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(info2) {
-        Mob* hitboxMob = nullptr;
         //This is an attack.
         HitboxInteraction* hInfo = (HitboxInteraction*) info2;
-        hitboxMob = hInfo->mob2;
         if(!pikPtr->processAttackMiss(hInfo)) {
             //It has been decided that this attack missed.
             return;
         }
     }
+    
     //Run default code beyond this.
     GenMobFsm::touchHazard(scriptVM, info1, info2);
 }

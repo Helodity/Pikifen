@@ -29,9 +29,9 @@ void goToDyingState(ScriptVM* scriptVM, void* info1, void* info2);
 void handleCarrierAdded(ScriptVM* scriptVM, void* info1, void* info2);
 void handleCarrierRemoved(ScriptVM* scriptVM, void* info1, void* info2);
 void handleDelivery(ScriptVM* scriptVM, void* info1, void* info2);
+void leaveHazard(ScriptVM* scriptVM, void* info1, void* info2);
 void loseMomentum(ScriptVM* scriptVM, void* info1, void* info2);
 void startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2);
 void touchHazard(ScriptVM* scriptVM, void* info1, void* info2);
-void leaveHazard(ScriptVM* scriptVM, void* info1, void* info2);
 void touchSpray(ScriptVM* scriptVM, void* info1, void* info2);
 }
