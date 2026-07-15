@@ -136,7 +136,7 @@ void MobType::handleLoadedFsmState(FsmStateDef* state) {
         );
     }
     
-    //Inject a hazard event.
+    //Inject hazard events.
     if(
         !state->events[FSM_EV_TOUCHED_HAZARD] &&
         !isInContainer(statesIgnoringHazard, state->name)
@@ -147,6 +147,18 @@ void MobType::handleLoadedFsmState(FsmStateDef* state) {
         );
         newEvents.push_back(
             new FsmEventDef(FSM_EV_TOUCHED_HAZARD, haActions)
+        );
+    }
+    if(
+        !state->events[FSM_EV_LEFT_HAZARD] &&
+        !isInContainer(statesIgnoringHazard, state->name)
+    ) {
+        vector<ScriptActionDef*> haActions;
+        haActions.push_back(
+            new ScriptActionDef(GenMobFsm::leaveHazard)
+        );
+        newEvents.push_back(
+            new FsmEventDef(FSM_EV_LEFT_HAZARD, haActions)
         );
     }
     

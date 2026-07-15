@@ -81,10 +81,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -108,10 +108,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("ko");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -183,10 +183,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("shaking");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -237,10 +237,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -283,10 +283,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -335,10 +335,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("ko");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -388,10 +388,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -428,10 +428,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_DROP); {
             efc.changeState("drinking");
@@ -500,10 +500,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("knocked_down");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_BOUNCER); {
             efc.run(LeaderFsm::beThrownByBouncer);
@@ -526,10 +526,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("inactive_knocked_down");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_BOUNCER); {
             efc.run(LeaderFsm::beThrownByBouncer);
@@ -555,10 +555,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_BOUNCER); {
             efc.run(LeaderFsm::beThrownByBouncer);
@@ -590,10 +590,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_BOUNCER); {
             efc.run(LeaderFsm::beThrownByBouncer);
@@ -618,10 +618,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
             efc.run(LeaderFsm::fallDownPit);
@@ -644,10 +644,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
             efc.run(LeaderFsm::fallDownPit);
@@ -700,10 +700,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("inactive_thrown");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -757,10 +757,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("inactive_riding_track");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -800,10 +800,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -874,10 +874,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -945,10 +945,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -994,10 +994,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startGoHere);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -1030,10 +1030,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -1057,10 +1057,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startWakingUp);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -1087,10 +1087,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::startWakingUp);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -1131,10 +1131,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("ko");
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -1153,10 +1153,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::land);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -1178,10 +1178,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::land);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -1209,10 +1209,10 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
+            efc.run(GenMobFsm::touchHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
@@ -2184,25 +2184,6 @@ void LeaderFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
 
 
 /**
- * @brief When a leader leaves a hazardous sector.
- *
- * @param scriptVM The script VM responsible.
- * @param info1 Points to the hazard.
- * @param info2 Unused.
- */
-void LeaderFsm::leftHazard(ScriptVM* scriptVM, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) scriptVM->mob;
-    Hazard* h = (Hazard*) info1;
-    
-    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
-    
-    if(h->associatedLiquid) {
-        leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
-    }
-}
-
-
-/**
  * @brief When a leader should lose his momentum and stand still.
  *
  * @param scriptVM The script VM responsible.
@@ -2986,62 +2967,6 @@ void LeaderFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
             scriptVM->fsm.setState(LEADER_STATE_ACTIVE, nullptr, nullptr);
         } else {
             scriptVM->fsm.setState(LEADER_STATE_IDLING, nullptr, nullptr);
-        }
-    }
-}
-
-
-/**
- * @brief When a leader touches a hazard.
- *
- * @param scriptVM The script VM responsible.
- * @param info1 Pointer to the hazard.
- * @param info2 Pointer to the hitbox that caused this, if any.
- */
-void LeaderFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) scriptVM->mob;
-    Hazard* hazPtr = (Hazard*) info1;
-    
-    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
-    
-    HitboxInteraction* hitboxInfo = (HitboxInteraction*) info2;
-    MobType::Vulnerability vuln = leaPtr->getHazardVulnerability(hazPtr);
-    Mob* hitboxMob = nullptr;
-    if(hitboxInfo) hitboxMob = hitboxInfo->mob2;
-    
-    if(!vuln.statusToApply || !vuln.statusOverrides) {
-        forIdx(e, hazPtr->effects) {
-            leaPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
-        }
-    }
-    if(vuln.statusToApply) {
-        leaPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
-    }
-    
-    if(hazPtr->associatedLiquid) {
-        bool alreadyGenerating = false;
-        forIdx(g, leaPtr->particleGenerators) {
-            if(
-                leaPtr->particleGenerators[g].id ==
-                MOB_PARTICLE_GENERATOR_ID_WAVE_RING
-            ) {
-                alreadyGenerating = true;
-                break;
-            }
-        }
-        
-        if(!alreadyGenerating) {
-            ParticleGenerator pg =
-                standardParticleGenSetup(
-                    game.sysContentNames.parWaveRing, leaPtr
-                );
-            pg.followZOffset = 1.0f;
-            adjustKeyframeInterpolatorValues<float>(
-                pg.baseParticle.size,
-            [ = ] (const float & f) { return f * leaPtr->radius; }
-            );
-            pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
-            leaPtr->particleGenerators.push_back(pg);
         }
     }
 }

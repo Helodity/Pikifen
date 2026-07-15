@@ -86,7 +86,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
             efc.run(PikminFsm::fallDownPit);
@@ -148,7 +148,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -211,7 +211,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -274,7 +274,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -347,7 +347,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -384,7 +384,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -422,7 +422,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -461,7 +461,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -515,7 +515,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -587,7 +587,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -627,7 +627,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -669,7 +669,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -714,7 +714,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -763,7 +763,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -805,7 +805,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -851,7 +851,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -890,7 +890,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -927,7 +927,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -970,7 +970,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -995,7 +995,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
     }
     
@@ -1031,7 +1031,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1070,7 +1070,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1109,7 +1109,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1152,7 +1152,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1190,7 +1190,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1228,7 +1228,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1264,7 +1264,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1289,7 +1289,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1319,7 +1319,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1341,7 +1341,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::becomeHelpless);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1372,7 +1372,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::flailToLeader);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1401,7 +1401,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::panicNewChase);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1426,7 +1426,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_WHISTLED); {
             efc.run(PikminFsm::called);
@@ -1465,7 +1465,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_SPOT_IS_FAR); {
             efc.run(PikminFsm::updateInGroupChasing);
@@ -1520,7 +1520,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1554,7 +1554,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1608,7 +1608,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1660,7 +1660,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1719,7 +1719,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1778,7 +1778,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1819,7 +1819,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1859,7 +1859,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1911,7 +1911,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1955,7 +1955,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -1989,7 +1989,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
-            efc.run(PikminFsm::leftHazard);
+            efc.run(GenMobFsm::leaveHazard);
         }
         efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
             efc.run(PikminFsm::touchedSpray);
@@ -3862,25 +3862,6 @@ void PikminFsm::leaveOnion(ScriptVM* scriptVM, void* info1, void* info2) {
 
 
 /**
- * @brief When a Pikmin leaves a hazardous sector.
- *
- * @param scriptVM The script VM responsible.
- * @param info1 Points to the hazard.
- * @param info2 Unused.
- */
-void PikminFsm::leftHazard(ScriptVM* scriptVM, void* info1, void* info2) {
-    Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-    Hazard* h = (Hazard*) info1;
-    
-    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
-    
-    if(h->associatedLiquid) {
-        pikPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
-    }
-}
-
-
-/**
  * @brief When the mob the Pikmin is latched on to disappears.
  *
  * @param scriptVM The script VM responsible.
@@ -4883,13 +4864,11 @@ void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-    Hazard* hazPtr = (Hazard*) info1;
-    
+
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    Mob* hitboxMob = nullptr;
-    
     if(info2) {
+        Mob* hitboxMob = nullptr;
         //This is an attack.
         HitboxInteraction* hInfo = (HitboxInteraction*) info2;
         hitboxMob = hInfo->mob2;
@@ -4898,46 +4877,8 @@ void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
             return;
         }
     }
-    
-    if(hazPtr->associatedLiquid) {
-        bool alreadyGenerating = false;
-        forIdx(g, pikPtr->particleGenerators) {
-            if(
-                pikPtr->particleGenerators[g].id ==
-                MOB_PARTICLE_GENERATOR_ID_WAVE_RING
-            ) {
-                alreadyGenerating = true;
-                break;
-            }
-        }
-        
-        if(!alreadyGenerating) {
-            ParticleGenerator pg =
-                standardParticleGenSetup(
-                    game.sysContentNames.parWaveRing, pikPtr
-                );
-            pg.followZOffset = 1.0f;
-            adjustKeyframeInterpolatorValues<float>(
-                pg.baseParticle.size,
-            [ = ] (const float & f) { return f * pikPtr->radius; }
-            );
-            pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
-            pikPtr->particleGenerators.push_back(pg);
-        }
-    }
-    
-    if(pikPtr->invulnPeriod.timeLeft > 0) return;
-    MobType::Vulnerability vuln = pikPtr->getHazardVulnerability(hazPtr);
-    if(vuln.effectMult == 0.0f) return;
-    
-    if(!vuln.statusToApply || !vuln.statusOverrides) {
-        forIdx(e, hazPtr->effects) {
-            pikPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
-        }
-    }
-    if(vuln.statusToApply) {
-        pikPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
-    }
+    //Run default code beyond this.
+    GenMobFsm::touchHazard(scriptVM, info1, info2);
 }
 
 

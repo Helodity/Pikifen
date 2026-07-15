@@ -89,7 +89,6 @@ void stopInGroup(ScriptVM* scriptVM, void* info1, void* info2);
 void stopWhistle(ScriptVM* scriptVM, void* info1, void* info2);
 void tickActiveState(ScriptVM* scriptVM, void* info1, void* info2);
 void tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2);
-void touchedHazard(ScriptVM* scriptVM, void* info1, void* info2);
 void touchedSpray(ScriptVM* scriptVM, void* info1, void* info2);
 void trySetCorrectStandingAnim(ScriptVM* scriptVM, void* info1, void* info2);
 void updateInGroupChasing(ScriptVM* scriptVM, void* info1, void* info2);
