@@ -980,7 +980,7 @@ void drawLoadingScreen(
             drawBitmap(
                 game.sysContent.bmpIcon, iconPos,
                 Point(-1, textBox.y),
-                0, mapAlpha(alpha * 255)
+                game.timePassed * 3, mapAlpha(alpha * 255)
             );
         }
         
