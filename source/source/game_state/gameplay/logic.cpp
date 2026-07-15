@@ -876,7 +876,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         
         //Tick all status effect animations.
         for(auto& s : game.content.statusTypes.list) {
-            s.second->overlayAnim.tick(deltaT);
+            s.second.overlayAnim.tick(deltaT);
         }
         
         

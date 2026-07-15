@@ -514,14 +514,13 @@ void LiquidType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     lRS.set("shine_min_threshold", shineMinThreshold);
     
     if(freezeMobStatusNode) {
-        auto s = game.content.statusTypes.list.find(freezeMobStatusStr);
-        if(s != game.content.statusTypes.list.end()) {
-            freezeMobStatus = s->second;
-        } else {
+        if(!isInMap(game.content.statusTypes.manifests, freezeMobStatusStr)) {
             game.errors.report(
                 "Unknown status type \"" + freezeMobStatusStr + "\"!",
                 freezeMobStatusNode
             );
+        } else {
+            freezeMobStatus = &game.content.statusTypes.list[freezeMobStatusStr];
         }
     }
 }

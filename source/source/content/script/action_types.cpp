@@ -1957,7 +1957,7 @@ void ScriptActionRunners::receiveStatus(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->getRunnerMob()->applyStatus(it->second, false, false);
+    data.scriptVM->getRunnerMob()->applyStatus(&it->second, false, false);
 }
 
 
@@ -2043,7 +2043,7 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
     }
     
     forIdx(s, data.scriptVM->getRunnerMob()->statuses) {
-        if(data.scriptVM->getRunnerMob()->statuses[s].type == it->second) {
+        if(data.scriptVM->getRunnerMob()->statuses[s].type == &it->second) {
             data.scriptVM->getRunnerMob()->statuses[s].prevState =
                 data.scriptVM->getRunnerMob()->statuses[s].state;
             data.scriptVM->getRunnerMob()->statuses[s].state =

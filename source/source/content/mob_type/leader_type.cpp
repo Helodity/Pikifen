@@ -124,22 +124,18 @@ void LeaderType::loadCatProperties(DataNode* file) {
     }
     
     if(sleepingStatusNode) {
-        auto statusIt = game.content.statusTypes.list.find(sleepingStatusStr);
-        if(statusIt != game.content.statusTypes.list.end()) {
-            sleepingStatus = statusIt->second;
-        } else {
+        if(!isInMap(game.content.statusTypes.manifests, sleepingStatusStr)) {
             game.errors.report(
                 "Unknown status type \"" + sleepingStatusStr + "\"!",
                 sleepingStatusNode
             );
+        } else {
+            sleepingStatus = &game.content.statusTypes.list[sleepingStatusStr];
         }
     }
     
     if(lightPGNode) {
-        if(
-            game.content.particleGens.list.find(lightParticleGenIName) ==
-            game.content.particleGens.list.end()
-        ) {
+        if(!isInMap(game.content.particleGens.manifests, lightParticleGenIName)) {
             game.errors.report(
                 "Unknown particle generator \"" + lightParticleGenIName + "\"!",
                 lightPGNode

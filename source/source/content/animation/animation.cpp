@@ -520,14 +520,13 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             newHitbox.knockbackType = (KNOCKBACK_TYPE) knockbackTypeInt;
             newHitbox.surfaceType = (HITBOX_SURFACE_TYPE) surfaceTypeInt;
             if(!hazardStr.empty()) {
-                auto hazardIt = game.content.hazards.list.find(hazardStr);
-                if(hazardIt != game.content.hazards.list.end()) {
-                    newHitbox.hazard = &(hazardIt->second);
-                } else {
+                if(!isInMap(game.content.hazards.manifests, hazardStr)){
                     game.errors.report(
                         "Unknown hazard \"" + hazardStr + "\"!",
                         hazardNode
                     );
+                } else {
+                    newHitbox.hazard = &game.content.hazards.list[hazardStr];
                 }
             }
             

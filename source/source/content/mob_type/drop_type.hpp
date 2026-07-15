@@ -123,7 +123,7 @@ public:
     int increaseAmount = 2;
     
     //If it increases a spray type count, this specifies the spray type index.
-    size_t sprayTypeToIncrease = INVALID;
+    SprayType* sprayTypeToIncrease = nullptr;
     
     //If it gives a status effect, this points to the status type.
     StatusType* statusToGive = nullptr;

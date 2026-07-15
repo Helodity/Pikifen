@@ -847,9 +847,9 @@ void LiquidContentManager::loadLiquid(
     DataNode file = loadDataFile(manifest->path, &fileWasOpened);
     if(!fileWasOpened) return;
     
-    LiquidType* newL = new LiquidType();
-    newL->manifest = manifest;
-    newL->loadFromDataNode(&file, level);
+    LiquidType newL = LiquidType();
+    newL.manifest = manifest;
+    newL.loadFromDataNode(&file, level);
     list[manifest->internalName] = newL;
 }
 
@@ -893,9 +893,6 @@ void LiquidContentManager::pathToManifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void LiquidContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-    for(const auto& l : list) {
-        delete l.second;
-    }
     list.clear();
 }
 
@@ -2238,10 +2235,10 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     
     for(auto& s : list) {
-        if(!s.second->replacementOnTimeoutStr.empty()) {
-            typesWithReplacements.push_back(s.second);
+        if(!s.second.replacementOnTimeoutStr.empty()) {
+            typesWithReplacements.push_back(&s.second);
             typesWithReplacementsNames.push_back(
-                s.second->replacementOnTimeoutStr
+                s.second.replacementOnTimeoutStr
             );
         }
     }
@@ -2252,7 +2249,7 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         for(auto& s2 : list) {
             if(s2.first == rn) {
                 typesWithReplacements[s]->replacementOnTimeout =
-                    s2.second;
+                    &s2.second;
                 found = true;
                 break;
             }
@@ -2282,9 +2279,9 @@ void StatusTypeContentManager::loadStatusType(
     DataNode file = loadDataFile(manifest->path, &fileWasOpened);
     if(!fileWasOpened) return;
     
-    StatusType* newT = new StatusType();
-    newT->manifest = manifest;
-    newT->loadFromDataNode(&file, level);
+    StatusType newT = StatusType();
+    newT.manifest = manifest;
+    newT.loadFromDataNode(&file, level);
     list[manifest->internalName] = newT;
 }
 
@@ -2329,7 +2326,7 @@ void StatusTypeContentManager::pathToManifest(
  */
 void StatusTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     for(auto s : list) {
-        delete s.second;
+        //delete s.second;
     }
     list.clear();
 }

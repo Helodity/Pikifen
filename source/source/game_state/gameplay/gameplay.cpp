@@ -403,11 +403,11 @@ void CutsceneMessageBox::tick(float deltaT) {
  * @param amount Amount to change by.
  */
 void GameplayState::changeSprayCount(
-    PlayerTeam* team, size_t typeIdx, signed int amount
+    PlayerTeam* team, SprayType* stPtr, signed int amount
 ) {
-    team->sprayStats[typeIdx].nrSprays =
+    team->sprayStats[stPtr].nrSprays =
         std::max(
-            (signed int) team->sprayStats[typeIdx].nrSprays + amount,
+            (signed int) team->sprayStats[stPtr].nrSprays + amount,
             (signed int) 0
         );
 }
@@ -1203,8 +1203,8 @@ void GameplayState::load() {
     
     //Initialize some important things.
     for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
-        forIdx(s, game.content.sprayTypes.list) {
-            playerTeams[t].sprayStats.push_back(SprayStats());
+        for(auto &s : game.content.sprayTypes.list){
+            playerTeams[t].sprayStats[&s.second] = SprayStats();
         }
     }
     players[0].team = &playerTeams[0];
@@ -1491,26 +1491,18 @@ void GameplayState::load() {
     const map<string, string>& sprayVarMap = sprayVars.toMap();
     
     for(const auto& s : sprayVarMap) {
-        size_t sprayIdx = 0;
-        for(; sprayIdx < game.config.misc.sprayOrder.size(); sprayIdx++) {
-            if(
-                game.config.misc.sprayOrder[sprayIdx]->manifest->internalName ==
-                s.first
-            ) {
-                break;
-            }
-        }
-        if(sprayIdx == game.content.sprayTypes.list.size()) {
+        if(!isInMap(game.content.sprayTypes.manifests, s.first)){
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
                 "area \"" + game.curArea->name + "\"!", nullptr
             );
-            continue;
-        }
-        
-        for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
-            playerTeams[t].sprayStats[sprayIdx].nrSprays = s2i(s.second);
+        } else {
+            SprayType* stPtr = &game.content.sprayTypes.list[s.first];
+            for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
+                SprayStats* stats = &playerTeams[t].sprayStats[stPtr];
+                stats->nrSprays = s2i(s.second);
+            }
         }
     }
     
@@ -1631,6 +1623,8 @@ void GameplayState::loadGameContent() {
         CONTENT_TYPE_HAZARD,
         CONTENT_TYPE_WEATHER_CONDITION,
         CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+        CONTENT_TYPE_MOB_ANIMATION,
+        CONTENT_TYPE_MOB_TYPE,
     },
     CONTENT_LOAD_LEVEL_FULL
     );
@@ -1641,15 +1635,6 @@ void GameplayState::loadGameContent() {
         CONTENT_TYPE_AREA,
     },
     CONTENT_LOAD_LEVEL_BASIC
-    );
-    
-    //Mob types.
-    game.content.loadAll(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_MOB_ANIMATION,
-        CONTENT_TYPE_MOB_TYPE,
-    },
-    CONTENT_LOAD_LEVEL_FULL
     );
     
     //Register leader sub-group types.

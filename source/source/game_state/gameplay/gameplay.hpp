@@ -471,7 +471,7 @@ public:
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
     int calculateMissionScore(bool forHud);
-    void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
+    void changeSprayCount(PlayerTeam* team, SprayType* stPtr, signed int amount);
     bool endMission(
         bool clear, bool zeroTime, bool neutralMood = false,
         bool showTimesUpMsg = false, MissionEndCond* cond = nullptr,

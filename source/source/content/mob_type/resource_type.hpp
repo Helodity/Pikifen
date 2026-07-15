@@ -114,7 +114,7 @@ public:
     float damageMobAmount = 1.0f;
     
     //If it concocts a spray when delivered, this is the spray type index.
-    size_t sprayToConcoct = INVALID;
+    SprayType* sprayToConcoct = nullptr;
     
     //If it adds points when delivered, this is the amount.
     float pointAmount = 1.0f;

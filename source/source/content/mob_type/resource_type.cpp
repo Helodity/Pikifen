@@ -84,20 +84,14 @@ void ResourceType::loadCatProperties(DataNode* file) {
     }
     
     if(deliveryResult == RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS) {
-        forIdx(s, game.config.misc.sprayOrder) {
-            if(
-                game.config.misc.sprayOrder[s]->manifest->internalName ==
-                sprayToConcoctStr
-            ) {
-                sprayToConcoct = s;
-                break;
-            }
-        }
-        if(sprayToConcoct == INVALID) {
+
+        if(!isInMap(game.content.sprayTypes.manifests, sprayToConcoctStr)) {
             game.errors.report(
                 "Unknown spray type \"" + sprayToConcoctStr + "\"!",
                 sprayToConcoctNode
             );
+        } else {
+            sprayToConcoct = &game.content.sprayTypes.list[sprayToConcoctStr];
         }
     }
 }

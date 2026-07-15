@@ -1882,7 +1882,7 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
         );
         game.states.gameplay->showInventoryUpdateDisplay(
             &game.states.gameplay->playerTeams[playerTeamIdx],
-            game.config.misc.sprayOrder[droPtr->droType->sprayTypeToIncrease]->
+            droPtr->droType->sprayTypeToIncrease->
             manifest->internalName,
             droPtr->droType->increaseAmount
         );
@@ -2506,27 +2506,27 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     size_t sprayIdx = *((size_t*) info1);
     
-    SprayType& sprayTypeRef = *game.config.misc.sprayOrder[sprayIdx];
+    SprayType* stPtr = game.config.misc.sprayOrder[sprayIdx];
     
-    if(leaPtr->player->team->sprayStats[sprayIdx].nrSprays == 0) {
+    if(leaPtr->player->team->sprayStats[stPtr].nrSprays == 0) {
         scriptVM->fsm.setState(LEADER_STATE_ACTIVE);
         return;
     }
     
     float shootAngle =
-        leaPtr->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
+        leaPtr->angle + ((stPtr->angle) ? TAU / 2.0f : 0.0f);
         
     unordered_set<Mob*> affectedMobs;
-    if(sprayTypeRef.affectsUser) {
+    if(stPtr->affectsUser) {
         affectedMobs.insert(leaPtr);
     }
     
-    if(sprayTypeRef.group) {
+    if(stPtr->group) {
         forIdx(gm, leaPtr->group->members) {
             Mob* gmPtr = leaPtr->group->members[gm];
             if(
                 gmPtr->type->category->id != MOB_CATEGORY_PIKMIN &&
-                sprayTypeRef.groupPikminOnly
+                stPtr->groupPikminOnly
             ) {
                 continue;
             }
@@ -2546,7 +2546,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
             
             if(
                 Distance(leaPtr->center, amPtr->center) >
-                sprayTypeRef.distanceRange + amPtr->radius
+                stPtr->distanceRange + amPtr->radius
             ) {
                 continue;
             }
@@ -2556,7 +2556,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
                     shootAngle,
                     getAngle(leaPtr->center, amPtr->center)
                 );
-            if(angleDiff > sprayTypeRef.angleRange / 2) continue;
+            if(angleDiff > stPtr->angleRange / 2) continue;
             
             affectedMobs.insert(amPtr);
         }
@@ -2571,8 +2571,8 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
     
     Point particleSpeedVector =
         rotatePoint(
-            Point(sprayTypeRef.distanceRange * 0.8, 0),
-            sprayTypeRef.angle
+            Point(stPtr->distanceRange * 0.8, 0),
+            stPtr->angle
         );
     ParticleGenerator pg =
         standardParticleGenSetup(
@@ -2586,22 +2586,22 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
         pg.baseParticle.color,
     [ = ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR newColor = c;
-        newColor.r *= sprayTypeRef.mainColor.r;
-        newColor.g *= sprayTypeRef.mainColor.g;
-        newColor.b *= sprayTypeRef.mainColor.b;
-        newColor.a *= sprayTypeRef.mainColor.a;
+        newColor.r *= stPtr->mainColor.r;
+        newColor.g *= stPtr->mainColor.g;
+        newColor.b *= stPtr->mainColor.b;
+        newColor.a *= stPtr->mainColor.a;
         return newColor;
     }
     );
-    pg.linearSpeedAngleDeviation = sprayTypeRef.angleRange / 2.0f;
-    pg.linearSpeedDeviation.x = sprayTypeRef.distanceRange * 0.4;
+    pg.linearSpeedAngleDeviation = stPtr->angleRange / 2.0f;
+    pg.linearSpeedDeviation.x = stPtr->distanceRange * 0.4;
     pg.baseParticle.priority = PARTICLE_PRIORITY_HIGH;
     leaPtr->particleGenerators.push_back(pg);
     
-    game.states.gameplay->changeSprayCount(leaPtr->player->team, sprayIdx, -1);
+    game.states.gameplay->changeSprayCount(leaPtr->player->team, stPtr, -1);
     game.states.gameplay->showInventoryUpdateDisplay(
         leaPtr->player->team,
-        game.config.misc.sprayOrder[sprayIdx]->manifest->internalName,
+        stPtr->manifest->internalName,
         -1
     );
     

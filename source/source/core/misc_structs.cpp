@@ -1775,14 +1775,14 @@ void InventoryItemDatabase::init() {
     
     //All sprays.
     forIdx(s, game.config.misc.sprayOrder) {
-        SprayType& sprayTypeRef = *game.config.misc.sprayOrder[s];
+        SprayType** stPtr = &game.config.misc.sprayOrder[s];
         InventoryItem item;
-        item.iName = sprayTypeRef.manifest->internalName;
-        item.icon = game.content.bitmaps.list.get(sprayTypeRef.bmpIcon);
-        item.name = sprayTypeRef.name;
+        item.iName = (*stPtr)->manifest->internalName;
+        item.icon = game.content.bitmaps.list.get((*stPtr)->bmpIcon);
+        item.name = (*stPtr)->name;
         item.onGetAmount =
-        [this, s] (Player * player) {
-            return player->team->sprayStats[s].nrSprays;
+        [this, stPtr] (Player * player) {
+            return player->team->sprayStats[(*stPtr)].nrSprays;
         };
         item.onUse =
         [this, s] (Player * player) {
@@ -1792,13 +1792,13 @@ void InventoryItemDatabase::init() {
             );
         };
         item.onGetExtraInfo =
-        [this, s] (Player * player) -> string {
+        [this, stPtr] (Player * player) -> string {
             size_t ingredientsNeeded =
-            game.config.misc.sprayOrder[s]->ingredientsNeeded;
+            (*stPtr)->ingredientsNeeded;
             if(ingredientsNeeded == 0) return "";
             return
-            game.config.misc.sprayOrder[s]->ingredientName + ": " +
-            i2s(player->team->sprayStats[s].nrIngredients) + "/" +
+            (*stPtr)->ingredientName + ": " +
+            i2s(player->team->sprayStats[(*stPtr)].nrIngredients) + "/" +
             i2s(ingredientsNeeded);
         };
         items.push_back(item);

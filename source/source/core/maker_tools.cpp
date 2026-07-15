@@ -178,8 +178,8 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         
         for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
             PlayerTeam* tPtr = &game.states.gameplay->playerTeams[t];
-            forIdx(s, tPtr->sprayStats) {
-                tPtr->sprayStats[s].nrSprays = newAmount;
+            for(auto &s : game.content.sprayTypes.list) {
+                tPtr->sprayStats[&s.second].nrSprays = newAmount;
             }
         }
         

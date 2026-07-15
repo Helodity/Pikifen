@@ -73,7 +73,6 @@ AnimConversionVector OnionType::getAnimConversions() const {
  */
 void OnionType::loadCatProperties(DataNode* file) {
     nest->loadProperties(file, this);
-    nest->createColormap();
     
     ReaderSetter oRS(file);
     string nutrientFamiliesStr;
@@ -131,4 +130,5 @@ void OnionType::loadCatResources(DataNode* file) {
             );
         }
     }
+    nest->createColormap();
 }

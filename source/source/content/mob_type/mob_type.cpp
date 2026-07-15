@@ -361,71 +361,15 @@ void MobType::loadFromDataNode(
     
     rotationSpeed = degToRad(rotationSpeed);
     
-    //Vulnerabilities.
-    DataNode* vulnerabilitiesNode =
-        node->getChildByName("vulnerabilities");
-    for(size_t h = 0; h < vulnerabilitiesNode->getNrOfChildren(); h++) {
-    
-        DataNode* vulnNode = vulnerabilitiesNode->getChild(h);
-        auto hazardIt = game.content.hazards.list.find(vulnNode->name);
-        vector<string> words = split(vulnNode->value);
-        float percentage = defaultVulnerability;
-        string statusName;
-        bool statusOverrides = false;
-        bool invulnBlockedBySectors = false;
-        if(!words.empty()) {
-            percentage = s2f(words[0]);
-        }
-        if(words.size() >= 2) {
-            if(words[1] != "none") {
-                statusName = words[1];
-            }
-        }
-        if(words.size() >= 3) {
-            statusOverrides = s2b(words[2]);
-        }
-        if(words.size() >= 4) {
-            invulnBlockedBySectors = s2b(words[3]);
-        }
-        auto statusIt = game.content.statusTypes.list.find(statusName);
-        
-        if(hazardIt == game.content.hazards.list.end()) {
-            game.errors.report(
-                "Unknown hazard \"" + vulnNode->name + "\"!",
-                vulnNode
-            );
-            
-        } else if(
-            !statusName.empty() &&
-            statusIt == game.content.statusTypes.list.end()
-        ) {
-            game.errors.report(
-                "Unknown status type \"" + statusName + "\"!",
-                vulnNode
-            );
-            
-        } else {
-            MobType::Vulnerability& vuln =
-                hazardVulnerabilities[&(hazardIt->second)];
-            vuln.effectMult = percentage / 100.0f;
-            if(!statusName.empty()) {
-                vuln.statusToApply = statusIt->second;
-            }
-            vuln.statusOverrides = statusOverrides;
-            vuln.invulnBlockedBySectors = invulnBlockedBySectors;
-        }
-    }
-    
     //Spike damage.
-    auto sdIt = game.content.spikeDamageTypes.list.find(spikeDamageStr);
     if(spikeDamageNode) {
-        if(sdIt == game.content.spikeDamageTypes.list.end()) {
+        if(!isInMap(game.content.spikeDamageTypes.manifests, spikeDamageStr)){
             game.errors.report(
                 "Unknown spike damage type \"" + spikeDamageStr + "\"!",
                 spikeDamageNode
             );
         } else {
-            spikeDamage = &(sdIt->second);
+            spikeDamage = &game.content.spikeDamageTypes.list[spikeDamageStr];
         }
     }
     
@@ -459,6 +403,59 @@ void MobType::loadFromDataNode(
         }
     }
     
+    //Vulnerabilities.
+    DataNode* vulnerabilitiesNode =
+        node->getChildByName("vulnerabilities");
+    for(size_t h = 0; h < vulnerabilitiesNode->getNrOfChildren(); h++) {
+    
+        DataNode* vulnNode = vulnerabilitiesNode->getChild(h);
+        vector<string> words = split(vulnNode->value);
+        float percentage = defaultVulnerability;
+        string additionalStatusName;
+        bool statusOverrides = false;
+        bool invulnBlockedBySectors = false;
+        if(!words.empty()) {
+            percentage = s2f(words[0]);
+        }
+        if(words.size() >= 2) {
+            if(words[1] != "none") {
+                additionalStatusName = words[1];
+            }
+        }
+        if(words.size() >= 3) {
+            statusOverrides = s2b(words[2]);
+        }
+        if(words.size() >= 4) {
+            invulnBlockedBySectors = s2b(words[3]);
+        }
+        
+        if(!isInMap(game.content.hazards.manifests, vulnNode->name)) {
+            game.errors.report(
+                "Unknown hazard \"" + vulnNode->name + "\"!",
+                vulnNode
+            );
+            
+        } else if(
+            !additionalStatusName.empty() &&
+            !isInMap(game.content.statusTypes.manifests, additionalStatusName)
+        ) {
+            game.errors.report(
+                "Unknown status type \"" + additionalStatusName + "\"!",
+                vulnNode
+            );
+
+        } else {
+            MobType::Vulnerability& vuln =
+                hazardVulnerabilities[&game.content.hazards.list[vulnNode->name]];
+            vuln.effectMult = percentage / 100.0f;
+            if(!additionalStatusName.empty()) {
+                vuln.statusToApply = &game.content.statusTypes.list[additionalStatusName];
+            }
+            vuln.statusOverrides = statusOverrides;
+            vuln.invulnBlockedBySectors = invulnBlockedBySectors;
+        }
+    }
+
     //Spike damage vulnerabilities.
     DataNode* spikeDamageVulnNode =
         node->getChildByName("spike_damage_vulnerabilities");
@@ -467,38 +464,36 @@ void MobType::loadFromDataNode(
     for(size_t v = 0; v < nSdVuln; v++) {
     
         DataNode* vulNode = spikeDamageVulnNode->getChild(v);
-        auto sdvIt = game.content.spikeDamageTypes.list.find(vulNode->name);
         vector<string> words = split(vulNode->value);
         float percentage = 1.0f;
-        string statusName;
+        string additionalStatusName;
         if(!words.empty()) {
             percentage = s2f(words[0]);
         }
         if(words.size() >= 2) {
-            statusName = words[1];
+            additionalStatusName = words[1];
         }
-        auto statusIt = game.content.statusTypes.list.find(statusName);
         
-        if(sdvIt == game.content.spikeDamageTypes.list.end()) {
+        if(!isInMap(game.content.spikeDamageTypes.manifests, vulNode->name)){
             game.errors.report(
                 "Unknown spike damage type \"" + vulNode->name + "\"!",
                 vulNode
             );
             
         } else if(
-            !statusName.empty() &&
-            statusIt == game.content.statusTypes.list.end()
+            !additionalStatusName.empty() &&
+            !isInMap(game.content.statusTypes.manifests, additionalStatusName)
         ) {
-            game.errors.report(
-                "Unknown status type \"" + statusName + "\"!",
+             game.errors.report(
+                "Unknown status type \"" + additionalStatusName + "\"!",
                 vulNode
             );
-            
+
         } else {
-            auto& s = spikeDamageVulnerabilities[&(sdvIt->second)];
+            auto& s = spikeDamageVulnerabilities[&game.content.spikeDamageTypes.list[vulNode->name]];
             s.effectMult = percentage / 100.0f;
-            s.statusToApply = statusIt->second;
-            
+            s.statusToApply = &game.content.statusTypes.list[additionalStatusName];
+
         }
     }
     
@@ -510,7 +505,6 @@ void MobType::loadFromDataNode(
     for(size_t v = 0; v < nSVuln; v++) {
     
         DataNode* vulNode = statusVulnNode->getChild(v);
-        auto svIt = game.content.statusTypes.list.find(vulNode->name);
         vector<string> words = split(vulNode->value);
         float percentage = 1.0f;
         string statusOverrideName;
@@ -519,11 +513,9 @@ void MobType::loadFromDataNode(
         }
         if(words.size() >= 2) {
             statusOverrideName = words[1];
-        }
-        auto statusOverrideIt =
-            game.content.statusTypes.list.find(statusOverrideName);
-            
-        if(svIt == game.content.statusTypes.list.end()) {
+        }    
+        
+        if(!isInMap(game.content.statusTypes.manifests, vulNode->name)){
             game.errors.report(
                 "Unknown status type \"" + vulNode->name + "\"!",
                 vulNode
@@ -531,18 +523,18 @@ void MobType::loadFromDataNode(
             
         } else if(
             !statusOverrideName.empty() &&
-            statusOverrideIt == game.content.statusTypes.list.end()
+            !isInMap(game.content.statusTypes.manifests, statusOverrideName)
         ) {
-            game.errors.report(
+             game.errors.report(
                 "Unknown status type \"" + statusOverrideName + "\"!",
                 vulNode
             );
             
         } else {
-            auto& s = statusVulnerabilities[svIt->second];
+            auto& s = statusVulnerabilities[&game.content.statusTypes.list[vulNode->name]];
             s.effectMult = percentage / 100.0f;
-            if(statusOverrideIt != game.content.statusTypes.list.end()) {
-                s.statusToApply = statusOverrideIt->second;
+            if(isInMap(game.content.statusTypes.manifests, statusOverrideName)) {
+                s.statusToApply = &game.content.statusTypes.list[statusOverrideName];
             }
             s.statusOverrides = true;
         }

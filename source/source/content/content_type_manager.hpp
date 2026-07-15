@@ -274,7 +274,7 @@ public:
     //--- Public members ---
     
     //List of liquid types.
-    map<string, LiquidType*> list;
+    map<string, LiquidType> list;
     
     //Manifests.
     map<string, ContentManifest> manifests;
@@ -676,7 +676,7 @@ public:
     //--- Public members ---
     
     //List of status types.
-    map<string, StatusType*> list;
+    map<string, StatusType> list;
     
     //Manifests.
     map<string, ContentManifest> manifests;

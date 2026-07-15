@@ -51,7 +51,7 @@ struct PlayerTeam {
     //--- Public members ---
     
     //How many of each spray/ingredients the player has.
-    vector<SprayStats> sprayStats;
+    map<SprayType*, SprayStats> sprayStats;
     
     //List of players in this team. Cache for convenience.
     vector<Player*> players;

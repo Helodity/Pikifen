@@ -44,27 +44,27 @@ void Hazard::loadFromDataNode(DataNode* node) {
         vector<string> effectsStrs = semicolonListToVector(effectsStr);
         forIdx(e, effectsStrs) {
             string effectName = effectsStrs[e];
-            if(!isInMap(game.content.statusTypes.list, effectName)) {
+            if(!isInMap(game.content.statusTypes.manifests, effectName)) {
                 game.errors.report(
                     "Unknown status effect \"" + effectName + "\"!",
                     effectsNode
                 );
             } else {
                 effects.push_back(
-                    game.content.statusTypes.list[effectName]
+                    &game.content.statusTypes.list[effectName]
                 );
             }
         }
     }
     
     if(liquidNode) {
-        if(!isInMap(game.content.liquids.list, liquidStr)) {
+        if(!isInMap(game.content.liquids.manifests, liquidStr)) {
             game.errors.report(
                 "Unknown liquid \"" + liquidStr + "\"!",
                 liquidNode
             );
         } else {
-            associatedLiquid = game.content.liquids.list[liquidStr];
+            associatedLiquid = &game.content.liquids.list[liquidStr];
         }
     }
 }

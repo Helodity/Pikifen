@@ -82,32 +82,25 @@ void DropType::loadCatProperties(DataNode* file) {
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        forIdx(s, game.config.misc.sprayOrder) {
-            if(
-                game.config.misc.sprayOrder[s]->manifest->internalName ==
-                sprayNameStr
-            ) {
-                sprayTypeToIncrease = s;
-                break;
-            }
-        }
-        if(sprayTypeToIncrease == INVALID) {
+
+        if(!isInMap(game.content.sprayTypes.manifests, sprayNameStr)) {
             game.errors.report(
                 "Unknown spray type \"" + sprayNameStr + "\"!",
                 sprayNameNode
             );
+        } else {
+            sprayTypeToIncrease = &game.content.sprayTypes.list[sprayNameStr];
         }
     }
     
     if(statusNameNode) {
-        auto s = game.content.statusTypes.list.find(statusNameStr);
-        if(s != game.content.statusTypes.list.end()) {
-            statusToGive = s->second;
-        } else {
+        if(!isInMap(game.content.statusTypes.manifests, statusNameStr)) {
             game.errors.report(
                 "Unknown status type \"" + statusNameStr + "\"!",
                 statusNameNode
             );
+        } else {
+            statusToGive = &game.content.statusTypes.list[statusNameStr];
         }
     }
     

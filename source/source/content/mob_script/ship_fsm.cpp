@@ -101,18 +101,18 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
                     &game.states.gameplay->playerTeams[
                         resPtr->deliveryInfo->playerTeamIdx
                     ];
-                size_t typeIdx = resPtr->resType->sprayToConcoct;
-                team->sprayStats[typeIdx].nrIngredients++;
+                SprayType* stPtr = resPtr->resType->sprayToConcoct;
+                team->sprayStats[stPtr].nrIngredients++;
                 if(
-                    team->sprayStats[typeIdx].nrIngredients >=
-                    game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded
+                    team->sprayStats[stPtr].nrIngredients >=
+                    resPtr->resType->sprayToConcoct->ingredientsNeeded
                 ) {
-                    team->sprayStats[typeIdx].nrIngredients -=
-                        game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded;
-                    game.states.gameplay->changeSprayCount(team, typeIdx, 1);
+                    team->sprayStats[stPtr].nrIngredients -=
+                        resPtr->resType->sprayToConcoct->ingredientsNeeded;
+                    game.states.gameplay->changeSprayCount(team, stPtr, 1);
                     game.states.gameplay->showInventoryUpdateDisplay(
                         team,
-                        game.config.misc.sprayOrder[typeIdx]->
+                        stPtr->
                         manifest->internalName,
                         1
                     );
