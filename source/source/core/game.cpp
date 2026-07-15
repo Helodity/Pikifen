@@ -465,7 +465,7 @@ void Game::mainLoop() {
                     curState->doLogic();
                     globalLogicPost();
                     
-                    if(curState == prevState) {
+                    if(curState == prevState && curState->loaded) {
                         //Only draw if we didn't change states in the meantime.
                         curState->doDrawing();
                         globalDrawing();
