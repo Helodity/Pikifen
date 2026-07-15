@@ -72,7 +72,6 @@ void landOnMob(ScriptVM* scriptVM, void* info1, void* info2);
 void landOnMobWhileHolding(ScriptVM* scriptVM, void* info1, void* info2);
 void landWhileHolding(ScriptVM* scriptVM, void* info1, void* info2);
 void leaveOnion(ScriptVM* scriptVM, void* info1, void* info2);
-void leftHazard(ScriptVM* scriptVM, void* info1, void* info2);
 void loseLatchedMob(ScriptVM* scriptVM, void* info1, void* info2);
 void notifyLeaderRelease(ScriptVM* scriptVM, void* info1, void* info2);
 void panicNewChase(ScriptVM* scriptVM, void* info1, void* info2);

@@ -548,19 +548,88 @@ void GenMobFsm::startBeingDelivered(
  * @brief Generic handler for a mob touching a hazard.
  *
  * @param scriptVM The script VM responsible.
- * @param info1 Unused.
- * @param info2 Unused.
+ * @param info1 Pointer to the hazard.
+ * @param info2 Pointer to the hitbox that caused this, if any.
  */
 void GenMobFsm::touchHazard(ScriptVM* scriptVM, void* info1, void* info2) {
+    Mob* mPtr = scriptVM->mob;
+    Hazard* hazPtr = (Hazard*) info1;
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    Hazard* h = (Hazard*) info1;
+    HitboxInteraction* hitboxInfo = (HitboxInteraction*) info2;
+    MobType::Vulnerability vuln = mPtr->getHazardVulnerability(hazPtr);
+    Mob* hitboxMob = nullptr;
+    if(hitboxInfo) hitboxMob = hitboxInfo->mob2;
     
-    forIdx(e, h->effects) {
-        scriptVM->mob->applyStatus(h->effects[e], false, true);
+    if(hazPtr->associatedLiquid) {
+        bool alreadyGenerating = false;
+        forIdx(g, mPtr->particleGenerators) {
+            if(
+                mPtr->particleGenerators[g].id ==
+                MOB_PARTICLE_GENERATOR_ID_WAVE_RING
+            ) {
+                alreadyGenerating = true;
+                break;
+            }
+        }
+        
+        if(!alreadyGenerating) {
+            ParticleGenerator pg =
+                standardParticleGenSetup(
+                    game.sysContentNames.parWaveRing, mPtr
+                );
+            pg.followZOffset = 1.0f;
+            adjustKeyframeInterpolatorValues<float>(
+                pg.baseParticle.size,
+            [ = ] (const float & f) { return f * mPtr->radius; }
+            );
+            pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
+            mPtr->particleGenerators.push_back(pg);
+        }
+    }
+
+    if(mPtr->invulnPeriod.timeLeft > 0) return;
+    if(vuln.effectMult == 0.0f) return;
+
+    if(!vuln.statusToApply || !vuln.statusOverrides) {
+        forIdx(e, hazPtr->effects) {
+            mPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
+        }
+    }
+    if(vuln.statusToApply) {
+        mPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
     }
 }
 
+
+/**
+ * @brief Generic handler for a mob leaving a hazard.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Points to the hazard.
+ * @param info2 Unused.
+ */
+void GenMobFsm::leaveHazard(ScriptVM* scriptVM, void* info1, void* info2) {
+    Mob* mPtr = scriptVM->mob;
+    Hazard* h = (Hazard*) info1;
+    
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
+    
+    if(h->associatedLiquid) {
+        mPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
+    }
+}
+
+
+
+/**
+ * @brief Generic handler for a mob leaving a hazard.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
 
 /**
  * @brief Generic handler for a mob touching a spray.
