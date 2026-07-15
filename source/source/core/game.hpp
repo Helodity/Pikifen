@@ -314,7 +314,7 @@ public:
     
     void changeState(
         GameState* newState,
-        bool unloadCurrent = true, bool loadNew = true
+        bool unloadCurrent = true
     );
     string getCurStateName() const;
     void unloadLoadedState(GameState* loadedState);
@@ -334,11 +334,15 @@ private:
     //Queue of Allegro events.
     ALLEGRO_EVENT_QUEUE* eventQueue = nullptr;
     
+    //Thread for loading states asynchronously
+    ALLEGRO_THREAD* loadingThread;
+
     //Timer for the main frame logic.
     ALLEGRO_TIMER* mainTimer = nullptr;
     
     //Is deltaT meant to be reset for the next frame?
     bool resetDeltaT = true;
+    
     
     
     //--- Private function declarations ---
@@ -350,7 +354,8 @@ private:
     void globalHandleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool globalHandleSystemPlayerAction(const Inpution::Action& action);
     void processSystemInfo();
-    
+    bool handleStateLoading();
+    static void *stateLoadingThread(ALLEGRO_THREAD *thread, void *arg);
 };
 
 

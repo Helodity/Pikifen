@@ -35,6 +35,8 @@ public:
     //Is it currently loaded?
     bool loaded = false;
     
+    //Is it currently loading?
+    bool loading = false;
     
     //--- Public function declarations ---
     

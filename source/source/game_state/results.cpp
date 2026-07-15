@@ -286,7 +286,7 @@ void Results::continuePlaying() {
         game.states.gameplay->afterHours = true;
         game.states.gameplay->missionEndCondIdx = INVALID;
         game.audio.setCurrentSong("");
-        game.changeState(game.states.gameplay, true, false);
+        game.changeState(game.states.gameplay);
         game.states.gameplay->enter();
     });
 }

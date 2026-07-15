@@ -1196,9 +1196,6 @@ void GameplayState::load() {
     game.errors.prepareAreaLoad();
     wentToResults = false;
     
-    drawLoadingScreen("", "", "", 1.0f);
-    al_flip_display();
-    
     game.statistics.areaEntries++;
     
     //Game content.
@@ -1613,7 +1610,7 @@ void GameplayState::load() {
     }
     
     enter();
-    
+
     loading = false;
 }
 

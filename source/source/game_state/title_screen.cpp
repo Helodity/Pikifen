@@ -919,9 +919,6 @@ void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
  * @brief Loads the title screen into memory.
  */
 void TitleScreen::load() {
-    drawLoadingScreen("", "", "", 1.0);
-    al_flip_display();
-    
     //Game content.
     game.content.reloadPacks();
     game.content.loadAll(

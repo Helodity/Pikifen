@@ -67,12 +67,11 @@ const size_t MAX_CONSECUTIVE_SCRIPT_ACTIONS = 1000;
  *
  * @param newState State to change to.
  * @param unloadCurrent If true, the current state is unloaded from memory.
- * @param loadNew If true, the new state is loaded to memory.
  * If you try to change to that state when it is not loaded,
  * things will go wrong.
  */
 void Game::changeState(
-    GameState* newState, bool unloadCurrent, bool loadNew
+    GameState* newState, bool unloadCurrent
 ) {
     if(curState && unloadCurrent) {
         curState->unload();
@@ -80,11 +79,6 @@ void Game::changeState(
     }
     
     curState = newState;
-    
-    if(loadNew) {
-        curState->load();
-        curState->loaded = true;
-    }
     
     //Because during the loading screens there is no activity, on the
     //next frame, the game will assume the time between that and the last
@@ -262,6 +256,41 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
 
 
 /**
+ * @brief Handles loading the current state.
+ *
+ * @return Whether gameplay logic can run this frame.
+ */
+bool Game::handleStateLoading() {
+    //We need to load the current state. Start the loading thread.
+    if(!curState->loading && !curState->loaded) {
+        curState->loading = true;
+        loadingThread = al_create_thread(stateLoadingThread, curState);
+        al_start_thread(loadingThread);
+    }
+
+    //We have finished loading. Destroy the loading thread.
+    if(curState->loaded && curState->loading) {
+        curState->loading = false;
+        al_join_thread(loadingThread, NULL);
+        al_convert_memory_bitmaps();
+        al_destroy_thread(loadingThread);
+    }
+
+    //Currently loading. Draw a loading screen.
+    if(curState->loading) {
+        if(game.curArea == nullptr) {
+            drawLoadingScreen("", "", "", 1.0);
+        } else {
+            drawLoadingScreen(game.curArea->name, game.curArea->subtitle, game.curArea->maker, 1.0);
+        }
+        al_flip_display();
+        return false;
+    }
+    return true;
+}
+
+
+/**
  * @brief Handles a system player action, if possible.
  *
  * @param action The action.
@@ -401,7 +430,9 @@ void Game::mainLoop() {
         al_wait_for_event(eventQueue, &ev);
         
         globalHandleAllegroEvent(ev);
-        curState->handleAllegroEvent(ev);
+        if(curState->loaded){
+            curState->handleAllegroEvent(ev);
+        }
         controls.handleAllegroEvent(ev);
         
         switch(ev.type) {
@@ -423,24 +454,27 @@ void Game::mainLoop() {
                 
                 //Anti speed-burst cap.
                 deltaT = std::min(realDeltaT, 0.2f);
-                
                 timePassed += deltaT;
                 GameState* prevState = curState;
+
                 
-                controls.newFrame(deltaT);
-                globalLogicPre();
-                curState->doLogic();
-                globalLogicPost();
-                
-                if(curState == prevState) {
-                    //Only draw if we didn't change states in the meantime.
-                    curState->doDrawing();
-                    globalDrawing();
-                    al_flip_display();
-                } else {
-                    ImGui::EndFrame();
+                //Currently loading, break because we cannot run any other logic.
+                if(handleStateLoading()) {
+                    controls.newFrame(deltaT);
+                    globalLogicPre();
+                    curState->doLogic();
+                    globalLogicPost();
+                    
+                    if(curState == prevState) {
+                        //Only draw if we didn't change states in the meantime.
+                        curState->doDrawing();
+                        globalDrawing();
+                        al_flip_display();
+                    } else {
+                        ImGui::EndFrame();
+                    }
                 }
-                
+
                 double curFrameEndTime = al_get_time();
                 curFrameProcessTime =
                     curFrameEndTime - curFrameStartTime;
@@ -813,6 +847,26 @@ int Game::start() {
     }
     
     return 0;
+}
+
+
+void* Game::stateLoadingThread(ALLEGRO_THREAD *thread, void *arg) {
+    //Since we're on a new thread, we need to reset the bitmap flags
+    int newBitmapFlags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
+    if(game.options.advanced.smoothScaling) {
+        enableFlag(newBitmapFlags, ALLEGRO_MAG_LINEAR);
+        enableFlag(newBitmapFlags, ALLEGRO_MIN_LINEAR);
+    }
+    if(game.options.advanced.mipmapsEnabled) {
+        enableFlag(newBitmapFlags, ALLEGRO_MIPMAP);
+    }
+    al_add_new_bitmap_flag(newBitmapFlags);
+
+    GameState* curState = (GameState*)arg;
+    curState->load(); //Loads the state 
+    curState->loaded = true;
+
+    return NULL;
 }
 
 
