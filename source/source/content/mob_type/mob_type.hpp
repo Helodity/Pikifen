@@ -218,8 +218,11 @@ public:
         //Maximum value.
         float maxValue = LARGE_FLOAT;
         
-        //If it's a list, this list the values.
-        vector<string> valueList;
+        //If it's a list, this list the values to show to the user.
+        vector<string> displayValueList;
+        
+        //If it's a list, this lists the internal values to use.
+        vector<string> internalValueList;
         
         //Tooltip to show on the widget, if any.
         string tooltip;

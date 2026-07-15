@@ -89,9 +89,9 @@ PikminType::PikminType() :
     aepMaturity.var = "maturity";
     aepMaturity.type = AEMP_TYPE_NR_LIST;
     aepMaturity.defValue = "2";
-    aepMaturity.valueList.push_back("Leaf");
-    aepMaturity.valueList.push_back("Bud");
-    aepMaturity.valueList.push_back("Flower");
+    aepMaturity.displayValueList.push_back("Leaf");
+    aepMaturity.displayValueList.push_back("Bud");
+    aepMaturity.displayValueList.push_back("Flower");
     aepMaturity.tooltip = "The Pikmin's starting maturity.";
     areaEditorProps.push_back(aepMaturity);
     

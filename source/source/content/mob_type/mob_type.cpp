@@ -688,6 +688,7 @@ void MobType::loadFromDataNode(
         
         string typeStr;
         string listStr;
+        string listInternalStr;
         DataNode* typeNode = nullptr;
         
         newProp.name = propNode->name;
@@ -698,6 +699,7 @@ void MobType::loadFromDataNode(
         pRS.set("min_value", newProp.minValue);
         pRS.set("max_value", newProp.maxValue);
         pRS.set("list", listStr);
+        pRS.set("list_internal", listInternalStr);
         pRS.set("tooltip", newProp.tooltip);
         
         if(newProp.var.empty()) {
@@ -722,13 +724,33 @@ void MobType::loadFromDataNode(
             newProp.type == AEMP_TYPE_LIST ||
             newProp.type == AEMP_TYPE_NR_LIST
         ) {
-            if(listStr.empty()) {
+            if(listStr.empty() && listInternalStr.empty()) {
                 game.errors.report(
                     "For this area editor property type, you need to specify "
                     "a list of values!", propNode
                 );
-            } else {
-                newProp.valueList = semicolonListToVector(listStr);
+            }
+            
+            if(listStr.empty() && !listInternalStr.empty()) {
+                listStr = listInternalStr;
+            }
+            if(listInternalStr.empty() && !listStr.empty()) {
+                listInternalStr = listStr;
+            }
+            
+            newProp.displayValueList =
+                semicolonListToVector(listStr);
+            newProp.internalValueList =
+                semicolonListToVector(listInternalStr);
+                
+            if(
+                newProp.displayValueList.size() !=
+                newProp.internalValueList.size()
+            ) {
+                game.errors.report(
+                    "The list of display values and the list of internal "
+                    "values are different sizes!", propNode
+                );
             }
         }
         

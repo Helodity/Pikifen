@@ -1404,10 +1404,23 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
             
         } case AEMP_TYPE_LIST: {
     
-            string valueS = value;
-            if(ImGui::Combo(pPtr->name, &valueS, pPtr->valueList, 15)) {
+            string displayValueS;
+            forIdx(v, pPtr->internalValueList) {
+                if(pPtr->internalValueList[v] == value) {
+                    displayValueS = pPtr->displayValueList[v];
+                }
+            }
+            if(
+                ImGui::Combo(
+                    pPtr->name, &displayValueS, pPtr->displayValueList, 15
+                )
+            ) {
                 registerChange("script vars change");
-                value = valueS;
+                forIdx(v, pPtr->displayValueList) {
+                    if(pPtr->displayValueList[v] == displayValueS) {
+                        value = pPtr->internalValueList[v];
+                    }
+                }
             }
             
             break;
@@ -1415,7 +1428,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         } case AEMP_TYPE_NR_LIST: {
     
             int itemIdx = s2i(value);
-            if(ImGui::Combo(pPtr->name, &itemIdx, pPtr->valueList, 15)) {
+            if(ImGui::Combo(pPtr->name, &itemIdx, pPtr->displayValueList, 15)) {
                 registerChange("script vars change");
                 value = i2s(itemIdx);
             }

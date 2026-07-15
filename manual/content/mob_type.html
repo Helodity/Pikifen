@@ -823,7 +823,13 @@
       </tr>
       <tr>
         <td>list</td>
-        <td>For list widgets, this is the list of choices. If the variable is meant to be an integer, the first option maps to 0, the second to 1, etc.</td>
+        <td>For list widgets, this is the list of choices that will be shown to the user. If the variable is meant to be an integer, the first option maps to 0, the second to 1, etc. If you also have a <code>list_internal</code> property, the values placed into the script variable will correspond with what that property lists (the first choice shown in <code>list</code> places the first choice of <code>list_internal</code>, the second places the second, and so on), so make sure both lists have the same size. Of the two, if you only have the <code>list_internal</code> property, then this one will just copy that one.</td>
+        <td>List</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>list_internal</td>
+        <td>For list widgets, this is the list of possible values that will be placed in the script variable. If you also have a <code>list</code> property, the values shown to the user in the editor will correspond with what that property lists (the first value of <code>list_internal</code> will be shown as the first choice of <code>list</code>, the second will be shown as the second, and so on), so make sure both lists have the same size. Of the two, if you only have the <code>list</code> property, then this one will just copy that one.</td>
         <td>List</td>
         <td></td>
       </tr>

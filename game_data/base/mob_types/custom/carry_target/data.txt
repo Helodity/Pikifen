@@ -19,7 +19,8 @@ area_editor_properties {
     Pikmin type {
         var = carry_destination_type
         type = list
-        list = Red Pikmin;Yellow Pikmin;Blue Pikmin;Purple Pikmin;White Pikmin;Rock Pikmin;Winged Pikmin;Bulbmin
+        list = Red Pikmin; Yellow Pikmin; Blue Pikmin; Purple Pikmin; White Pikmin; Rock Pikmin; Winged Pikmin; Bulbmin
+        list_internal = red_pikmin; yellow_pikmin; blue_pikmin; purple_pikmin; white_pikmin; rock_pikmin; winged_pikmin; bulbmin
         tooltip = If you have an object that can only be delivered to targets with a Pikmin type matching the type decided by the carriers, choose a type here.
     }
 }
