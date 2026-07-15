@@ -73,7 +73,6 @@ AnimConversionVector OnionType::getAnimConversions() const {
  */
 void OnionType::loadCatProperties(DataNode* file) {
     nest->loadProperties(file, this);
-    nest->createColormap();
     
     ReaderSetter oRS(file);
     string nutrientFamiliesStr;
@@ -119,8 +118,8 @@ void OnionType::loadCatProperties(DataNode* file) {
  * @param file File to read from.
  */
 void OnionType::loadCatResources(DataNode* file) {
-    //We don't actually need to load any, but we know that if this function
-    //is run, then the animations are definitely loaded.
+    nest->createColormap();
+    //If this function is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
     forIdx(b, nest->legBodyParts) {
         if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {

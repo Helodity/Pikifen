@@ -77,7 +77,6 @@ void ShipType::loadCatProperties(DataNode* file) {
     sRS.set("receptacle_offset", receptacleOffset);
     
     nest->loadProperties(file, this);
-    nest->createColormap();
     
     forIdx(s, sounds) {
         if(sounds[s].name == "beam") {
@@ -95,8 +94,8 @@ void ShipType::loadCatProperties(DataNode* file) {
  * @param file File to read from.
  */
 void ShipType::loadCatResources(DataNode* file) {
-    //We don't actually need to load any, but we know that if this function
-    //is run, then the animations are definitely loaded.
+    nest->createColormap();
+    //If this function is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
     forIdx(b, nest->legBodyParts) {
         if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {
