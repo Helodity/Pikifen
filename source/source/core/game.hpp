@@ -355,7 +355,7 @@ private:
     bool globalHandleSystemPlayerAction(const Inpution::Action& action);
     void processSystemInfo();
     bool handleStateLoading();
-    static void *stateLoadingThread(ALLEGRO_THREAD *thread, void *arg);
+    static void *loadStateThreaded(ALLEGRO_THREAD *thread, void *arg);
 };
 
 

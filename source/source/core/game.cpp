@@ -264,7 +264,7 @@ bool Game::handleStateLoading() {
     //We need to load the current state. Start the loading thread.
     if(!curState->loading && !curState->loaded) {
         curState->loading = true;
-        loadingThread = al_create_thread(stateLoadingThread, curState);
+        loadingThread = al_create_thread(loadStateThreaded, curState);
         al_start_thread(loadingThread);
     }
 
@@ -454,9 +454,9 @@ void Game::mainLoop() {
                 
                 //Anti speed-burst cap.
                 deltaT = std::min(realDeltaT, 0.2f);
+                
                 timePassed += deltaT;
                 GameState* prevState = curState;
-
                 
                 //Currently loading, break because we cannot run any other logic.
                 if(handleStateLoading()) {
@@ -474,7 +474,7 @@ void Game::mainLoop() {
                         ImGui::EndFrame();
                     }
                 }
-
+                
                 double curFrameEndTime = al_get_time();
                 curFrameProcessTime =
                     curFrameEndTime - curFrameStartTime;
@@ -850,7 +850,13 @@ int Game::start() {
 }
 
 
-void* Game::stateLoadingThread(ALLEGRO_THREAD *thread, void *arg) {
+/**
+ * @brief Loads a state using multithreading
+ *
+ * @param thread Thread object to run on.
+ * @param arg the state to load.
+ */
+void* Game::loadStateThreaded(ALLEGRO_THREAD *thread, void *arg) {
     //Since we're on a new thread, we need to reset the bitmap flags
     int newBitmapFlags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
     if(game.options.advanced.smoothScaling) {
