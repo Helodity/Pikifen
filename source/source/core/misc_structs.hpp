@@ -292,53 +292,6 @@ struct Viewport {
 
 
 /**
- * @brief Represents the non-interactive "console" that shows up at the
- * top of the screen, mostly in maker tool and system contexts.
- */
-struct Console {
-
-    //--- Public function declarations ---
-    
-    Console();
-    void addToLog(const string& text);
-    void clear();
-    void draw() const;
-    void tick(float deltaT);
-    void write(
-        const string& text,
-        float totalDuration = 5.0f, float fadeDuration = 3.0f
-    );
-    void writeLog(
-        float totalDuration = 5.0f, float fadeDuration = 3.0f
-    );
-    
-    
-    private:
-    
-    //--- Private members ---
-    
-    //Timer that controls visibility.
-    Timer visibilityTimer;
-    
-    //If it's visible, this is how long it stays visible for.
-    float visibilityDuration = 5.0f;
-    
-    //How long its fade period lasts.
-    float fadeDuration = 3.0f;
-    
-    //Log buffer, if any.
-    vector<string> log;
-    
-    //Text it is showing, if any.
-    string text;
-    
-    //Lines of text it contains.
-    vector<string> textLines;
-    
-};
-
-
-/**
  * @brief Represents the interactive terminal portion of the maker toolkit
  * console. Users can use this to write commands and see previous outputs.
  */

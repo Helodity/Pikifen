@@ -372,107 +372,6 @@ void Camera::updateCoordinate(
 
 
 #pragma endregion
-#pragma region Console
-
-
-/**
- * @brief Constructs a new console object.
- */
-Console::Console() {
-    visibilityTimer = Timer(1.0f, [this] () { clear(); });
-}
-
-
-/**
- * @brief Adds a log entry to the log buffer.
- *
- * @param text Text to add.
- */
-void Console::addToLog(const string& text) {
-    log.push_back("[" + f2s(game.timePassed) + "] " + text);
-    while(log.size() > 8) {
-        log.erase(log.begin());
-    }
-}
-
-
-/**
- * @brief Clears the contents of the console instantly.
- */
-void Console::clear() {
-    text.clear();
-}
-
-
-/**
- * @brief Draws the console onto the game window.
- */
-void Console::draw() const {
-    const ALLEGRO_COLOR CONSOLE_BG_COLOR = al_map_rgba(0, 0, 0, 160);
-    if(text.empty()) return;
-    
-    float alphaMult = 1;
-    if(visibilityTimer.timeLeft < fadeDuration) {
-        alphaMult = visibilityTimer.timeLeft / fadeDuration;
-    }
-    
-    size_t nLines = split(text, "\n", true).size();
-    int fh = al_get_font_line_height(game.sysContent.fntBuiltin);
-    //We add nLines - 1 because there is a 1px gap between each line.
-    int totalHeight = (int) nLines * fh + (int) (nLines - 1);
-    
-    al_draw_filled_rectangle(
-        0, 0, game.winW, totalHeight + 16,
-        multAlpha(CONSOLE_BG_COLOR, alphaMult)
-    );
-    drawTextLines(
-        text, game.sysContent.fntBuiltin,
-        Point(8.0f), Point(LARGE_FLOAT), mapAlpha(128 * alphaMult),
-        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
-    );
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void Console::tick(float deltaT) {
-    visibilityTimer.tick(game.deltaT);
-}
-
-
-/**
- * @brief Prints some text onto the console for some seconds.
- *
- * @param text Text to print. Can use line breaks.
- * @param totalDuration Total amount of time in which the text is present.
- * @param fadeDuration When closing, fade out in the last N seconds.
- */
-void Console::write(
-    const string& text, float totalDuration, float fadeDuration
-) {
-    this->text = text;
-    this->visibilityDuration = totalDuration;
-    this->fadeDuration = fadeDuration;
-    this->visibilityTimer.start(totalDuration);
-}
-
-
-/**
- * @brief Prints the contents of the log buffer onto the console
- * for some seconds.
- *
- * @param totalDuration Total amount of time in which the text is present.
- * @param fadeDuration When closing, fade out in the last N seconds.
- */
-void Console::writeLog(float totalDuration, float fadeDuration) {
-    this->write(join(log, "\n"), totalDuration, fadeDuration);
-}
-
-
-#pragma endregion
 #pragma region Maker console
 
 
@@ -833,7 +732,7 @@ int MakerConsoleTerminal::draw(int y) const {
     //Setup.
     const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
     const size_t nLines =
-        CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 2; //+ line and input.
+        CONSOLE::OUTPUT_MAX_VISIBLE_LINES;
     const int fontHeight = al_get_font_line_height(FONT);
     
     int textW = game.winW - CONSOLE::PADDING * 2;
@@ -873,7 +772,7 @@ int MakerConsoleTerminal::draw(int y) const {
             resizeString(f2s(outputTimestamps[entryIdx]), 8, true, false);
         timestamp =
             resizeString(f2s(outputTimestamps[entryIdx]), 8, false, true, true);
-        timestamp = "[" + timestamp + "]";
+        timestamp = "[" + timestamp + "] ";
         int timestampWidth = al_get_text_width(FONT, timestamp.c_str());
         drawText(
             timestamp, FONT,
@@ -894,6 +793,8 @@ int MakerConsoleTerminal::draw(int y) const {
         );
     }
     
+    //TODO
+    /*
     //Divisor line between output and input.
     int lineY = getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) + fontHeight / 2.0f;
     al_draw_line(
@@ -909,6 +810,7 @@ int MakerConsoleTerminal::draw(int y) const {
         CONSOLE::COLOR_MAIN, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
         TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
     );
+    */
     
     return boxH + yOffset;
 }
