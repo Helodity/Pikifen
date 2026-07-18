@@ -112,20 +112,52 @@ extern const float RINGS_INTERVAL;
 }
 
 
-//Types of string token.
-enum STRING_TOKEN {
+//Ways to control the speed of a camera's coordinate.
+enum CAMERA_SPEED_MODE {
 
-    //None.
-    STRING_TOKEN_NONE,
+    //Use the speed class members, linearly. Acceleration must be
+    //controlled elsewhere.
+    CAMERA_SPEED_MODE_LINEAR,
     
-    //A regular character.
-    STRING_TOKEN_CHAR,
+    //Exponentially smoothen the speed based on the distance to the target.
+    CAMERA_SPEED_MODE_EXP_SMOOTH,
     
-    //A line break.
-    STRING_TOKEN_LINE_BREAK,
+};
+
+
+//Types of variables that a command-like parameter can use.
+enum COMMAND_PARAM_TYPE {
+
+    //Signed integer.
+    COMMAND_PARAM_TYPE_INT,
     
-    //A control bind icon.
-    STRING_TOKEN_BIND_INPUT,
+    //Float.
+    COMMAND_PARAM_TYPE_FLOAT,
+    
+    //Boolean.
+    COMMAND_PARAM_TYPE_BOOL,
+    
+    //STL string.
+    COMMAND_PARAM_TYPE_STRING,
+    
+    //STL string that gets turned into an int.
+    COMMAND_PARAM_TYPE_ENUM,
+    
+};
+
+
+//Flags for any command-like parameters.
+enum COMMAND_PARAM_FLAG {
+
+    //The argument has to be a constant, cannot be a variable.
+    COMMAND_PARAM_FLAG_CONST = 1 << 0,
+    
+    //If the argument is not specified, a default value will be used.
+    COMMAND_PARAM_FLAG_OPTIONAL = 1 << 1,
+    
+    //This argument and any other ones after are considered to belong to
+    //this parameter.
+    COMMAND_PARAM_FLAG_VECTOR = 1 << 2,
     
 };
 
@@ -150,19 +182,6 @@ enum ENGINE_FONT {
     
     //Value.
     ENGINE_FONT_VALUE,
-    
-};
-
-
-//Ways to control the speed of a camera's coordinate.
-enum CAMERA_SPEED_MODE {
-
-    //Use the speed class members, linearly. Acceleration must be
-    //controlled elsewhere.
-    CAMERA_SPEED_MODE_LINEAR,
-    
-    //Exponentially smoothen the speed based on the distance to the target.
-    CAMERA_SPEED_MODE_EXP_SMOOTH,
     
 };
 
@@ -192,6 +211,24 @@ enum OPEN_CLOSE_STATE {
     
     //Opening.
     OPEN_CLOSE_STATE_OPENING,
+    
+};
+
+
+//Types of string token.
+enum STRING_TOKEN {
+
+    //None.
+    STRING_TOKEN_NONE,
+    
+    //A regular character.
+    STRING_TOKEN_CHAR,
+    
+    //A line break.
+    STRING_TOKEN_LINE_BREAK,
+    
+    //A control bind icon.
+    STRING_TOKEN_BIND_INPUT,
     
 };
 
@@ -287,6 +324,37 @@ struct Viewport {
     void updateWorldCorners();
     void updateMouseCursor(const Point& windowPos);
     void updateTransformations();
+    
+};
+
+
+/**
+ * @brief Info about a parameter that a command-like thing
+ * can receive.
+ */
+struct CommandParam {
+
+    //--- Public members ---
+    
+    //Name of the parameter.
+    string name;
+    
+    //Type of variable it's meant to hold.
+    COMMAND_PARAM_TYPE type = COMMAND_PARAM_TYPE_STRING;
+    
+    //Flags. Use COMMAND_PARAM_FLAG.
+    Bitmask8 flags = 0;
+    
+    //If this is optional, specify its default value here.
+    string defValue;
+    
+    
+    //--- Public function declarations ---
+    
+    CommandParam(
+        const string& name, const COMMAND_PARAM_TYPE type,
+        Bitmask8 flags = 0, const string& defValue = ""
+    );
     
 };
 

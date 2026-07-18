@@ -3415,30 +3415,6 @@ void ScriptActionRunners::whileDo(ScriptActionInstRunData& data) {
 
 
 #pragma endregion
-#pragma region Action type param
-
-
-/**
- * @brief Constructs a new script action type parameter object.
- *
- * @param name Name of the parameter.
- * @param type Type of parameter.
- * @param flags Flags. Use SCRIPT_ACTION_PARAM_FLAG.
- * @param defValue If this is optional, specify its default value here.
- */
-ScriptActionTypeParam::ScriptActionTypeParam(
-    const string& name, const SCRIPT_ACTION_PARAM_TYPE type,
-    Bitmask8 flags, const string& defValue
-):
-    name(name),
-    type(type),
-    flags(flags),
-    defValue(defValue) {
-    
-}
-
-
-#pragma endregion
 #pragma region Action util functions
 
 

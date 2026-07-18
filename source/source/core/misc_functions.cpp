@@ -1695,6 +1695,54 @@ string unescapeString(const string& s) {
 
 
 /**
+ * @brief Given a series of command-like parameters, validates that everything
+ * is okay with them. If not, the engine trips an assert.
+ *
+ * @param params The list.
+ * @param context Description for the context of what is holding
+ * these parameters, to show in the error message.
+ * @return Whether everything is okay.
+ */
+bool validateCommandParams(
+    const vector<CommandParam>& params, const string& context
+) {
+    bool seenOptional = false;
+    forIdx(p, params) {
+        if(
+            hasFlag(params[p].flags, COMMAND_PARAM_FLAG_VECTOR) &&
+            p != params.size() - 1
+        ) {
+            engineAssert(
+                false,
+                context +
+                " has a vector parameter that is not the last parameter."
+            );
+            return false;
+        }
+        if(
+            !hasFlag(params[p].flags, COMMAND_PARAM_FLAG_OPTIONAL) &&
+            seenOptional
+        ) {
+            engineAssert(
+                false,
+                context +
+                " has a mandatory parameter that comes after "
+                "an optional parameter."
+            );
+            return false;
+        }
+        if(
+            hasFlag(params[p].flags, COMMAND_PARAM_FLAG_OPTIONAL)
+        ) {
+            seenOptional = true;
+        }
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Converts a vertex to a point.
  *
  * @param v Vertex to convert.

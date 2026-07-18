@@ -1504,17 +1504,17 @@ void initMobCategories() {
  */
 void initScriptActionTypes() {
     game.scriptActionTypes.assign(N_SCRIPT_ACTIONS, ScriptActionType());
-    vector<ScriptActionTypeParam> params;
+    vector<CommandParam> params;
     Bitmask8 contexts = 0;
     
     //Convenient lambdas and aliases.
     auto queueParam =
         [&params] (
-            const string& paramName, SCRIPT_ACTION_PARAM_TYPE paramType,
+            const string& paramName, COMMAND_PARAM_TYPE paramType,
             Bitmask8 paramFlags = 0, const string& paramDefValue = ""
     ) {
         params.push_back(
-            ScriptActionTypeParam(
+            CommandParam(
                 paramName, paramType, paramFlags, paramDefValue
             )
         );
@@ -1525,35 +1525,9 @@ void initScriptActionTypes() {
             SCRIPT_ACTION actionType, const string& actionName,
             ScriptActionTypeCode * actionRunCode
     ) {
-        bool seenOptional = false;
-        forIdx(p, params) {
-            if(
-                hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_VECTOR) &&
-                p != params.size() - 1
-            ) {
-                engineAssert(
-                    false,
-                    "Script action type \"" + actionName +
-                    "\" has a vector parameter that is not the last parameter."
-                );
-            }
-            if(
-                !hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL) &&
-                seenOptional
-            ) {
-                engineAssert(
-                    false,
-                    "Script action type \"" + actionName +
-                    "\" has a mandatory parameter that comes after "
-                    "an optional parameter."
-                );
-            }
-            if(
-                hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL)
-            ) {
-                seenOptional = true;
-            }
-        }
+        validateCommandParams(
+            params, "Script action type \"" + actionName + "\""
+        );
         
         ScriptActionType* actionTypePtr;
         actionTypePtr = &(game.scriptActionTypes[actionType]);
@@ -1565,14 +1539,14 @@ void initScriptActionTypes() {
         params.clear();
     };
     
-    const SCRIPT_ACTION_PARAM_TYPE ptInt = SCRIPT_ACTION_PARAM_TYPE_INT;
-    const SCRIPT_ACTION_PARAM_TYPE ptFloat = SCRIPT_ACTION_PARAM_TYPE_FLOAT;
-    const SCRIPT_ACTION_PARAM_TYPE ptBool = SCRIPT_ACTION_PARAM_TYPE_BOOL;
-    const SCRIPT_ACTION_PARAM_TYPE ptString = SCRIPT_ACTION_PARAM_TYPE_STRING;
-    const SCRIPT_ACTION_PARAM_TYPE ptEnum = SCRIPT_ACTION_PARAM_TYPE_ENUM;
-    const SCRIPT_ACTION_PARAM_FLAG pfConst = SCRIPT_ACTION_PARAM_FLAG_CONST;
-    const SCRIPT_ACTION_PARAM_FLAG pfOpt = SCRIPT_ACTION_PARAM_FLAG_OPTIONAL;
-    const SCRIPT_ACTION_PARAM_FLAG pfVector = SCRIPT_ACTION_PARAM_FLAG_VECTOR;
+    const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
+    const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
+    const COMMAND_PARAM_TYPE ptBool = COMMAND_PARAM_TYPE_BOOL;
+    const COMMAND_PARAM_TYPE ptString = COMMAND_PARAM_TYPE_STRING;
+    const COMMAND_PARAM_TYPE ptEnum = COMMAND_PARAM_TYPE_ENUM;
+    const COMMAND_PARAM_FLAG pfConst = COMMAND_PARAM_FLAG_CONST;
+    const COMMAND_PARAM_FLAG pfOpt = COMMAND_PARAM_FLAG_OPTIONAL;
+    const COMMAND_PARAM_FLAG pfVector = COMMAND_PARAM_FLAG_VECTOR;
     
     
     //-Common actions-

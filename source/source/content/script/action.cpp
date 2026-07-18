@@ -125,13 +125,13 @@ bool ScriptActionDef::loadFromDataNode(
     size_t nFixedParams = 0;
     bool hasVectorParam = false;
     forIdx(p, actionType->parameters) {
-        ScriptActionTypeParam* pPtr = &actionType->parameters[p];
-        if(hasFlag(pPtr->flags, SCRIPT_ACTION_PARAM_FLAG_VECTOR)) {
+        CommandParam* pPtr = &actionType->parameters[p];
+        if(hasFlag(pPtr->flags, COMMAND_PARAM_FLAG_VECTOR)) {
             hasVectorParam = true;
         } else {
             nFixedParams++;
         }
-        if(!hasFlag(pPtr->flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL)) {
+        if(!hasFlag(pPtr->flags, COMMAND_PARAM_FLAG_OPTIONAL)) {
             nMandatoryParams++;
         }
     }
@@ -178,7 +178,7 @@ bool ScriptActionDef::loadFromDataNode(
             if(
                 hasFlag(
                     actionType->parameters[paramIdx].flags,
-                    SCRIPT_ACTION_PARAM_FLAG_CONST
+                    COMMAND_PARAM_FLAG_CONST
                 )
             ) {
                 game.errors.report(

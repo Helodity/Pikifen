@@ -228,6 +228,9 @@ void updateOffsetEffectCaches (
     OffsetEffectLengthGetter lengthGetter,
     OffsetEffectColorGetter colorGetter
 );
+bool validateCommandParams(
+    const vector<CommandParam>& params, const string& context
+);
 Point v2p(const Vertex* v);
 
 

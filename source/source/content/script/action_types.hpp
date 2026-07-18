@@ -12,6 +12,7 @@
 #pragma once
 
 
+#include "../../core/misc_structs.hpp"
 #include "../../util/general_utils.hpp"
 
 
@@ -864,76 +865,8 @@ buildEnumNames(scriptActionListDelimiterChars, SCRIPT_ACTION_LIST_DELIMITER)({
 });
 
 
-//Types of variables that a parameter can use.
-enum SCRIPT_ACTION_PARAM_TYPE {
-
-    //Signed integer.
-    SCRIPT_ACTION_PARAM_TYPE_INT,
-    
-    //Float.
-    SCRIPT_ACTION_PARAM_TYPE_FLOAT,
-    
-    //Boolean.
-    SCRIPT_ACTION_PARAM_TYPE_BOOL,
-    
-    //STL string.
-    SCRIPT_ACTION_PARAM_TYPE_STRING,
-    
-    //STL string that gets turned into an int.
-    SCRIPT_ACTION_PARAM_TYPE_ENUM,
-    
-};
-
-
-//Flags for the parameters.
-enum SCRIPT_ACTION_PARAM_FLAG {
-
-    //The argument has to be a constant, cannot be a variable.
-    SCRIPT_ACTION_PARAM_FLAG_CONST = 1 << 0,
-    
-    //If the argument is not specified, a default value will be used.
-    SCRIPT_ACTION_PARAM_FLAG_OPTIONAL = 1 << 1,
-    
-    //This argument and any other ones after are considered to belong to
-    //this parameter.
-    SCRIPT_ACTION_PARAM_FLAG_VECTOR = 1 << 2,
-    
-};
-
-
 #pragma endregion
 #pragma region Classes
-
-
-/**
- * @brief Info about a parameter that a script action type
- * can receive.
- */
-struct ScriptActionTypeParam {
-
-    //--- Public members ---
-    
-    //Name of the parameter.
-    string name;
-    
-    //Type of variable it's meant to hold.
-    SCRIPT_ACTION_PARAM_TYPE type = SCRIPT_ACTION_PARAM_TYPE_STRING;
-    
-    //Flags. Use SCRIPT_ACTION_PARAM_FLAG.
-    Bitmask8 flags = 0;
-    
-    //If this is optional, specify its default value here.
-    string defValue;
-    
-    
-    //--- Public function declarations ---
-    
-    ScriptActionTypeParam(
-        const string& name, const SCRIPT_ACTION_PARAM_TYPE type,
-        Bitmask8 flags = 0, const string& defValue = ""
-    );
-    
-};
 
 
 /**
@@ -961,7 +894,7 @@ struct ScriptActionType {
     ScriptActionTypeCode* code = nullptr;
     
     //Parameters that it can take.
-    vector<ScriptActionTypeParam> parameters;
+    vector<CommandParam> parameters;
     
     //Flags for the contexts in which it can be run. Use SCRIPT_CONTEXT.
     Bitmask8 contexts = 0;

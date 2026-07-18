@@ -372,6 +372,30 @@ void Camera::updateCoordinate(
 
 
 #pragma endregion
+#pragma region Command param
+
+
+/**
+ * @brief Constructs a new command-like parameter object.
+ *
+ * @param name Name of the parameter.
+ * @param type Type of parameter.
+ * @param flags Flags. Use COMMAND_PARAM_FLAG.
+ * @param defValue If this is optional, specify its default value here.
+ */
+CommandParam::CommandParam(
+    const string& name, const COMMAND_PARAM_TYPE type,
+    Bitmask8 flags, const string& defValue
+):
+    name(name),
+    type(type),
+    flags(flags),
+    defValue(defValue) {
+    
+}
+
+
+#pragma endregion
 #pragma region Maker console
 
 
