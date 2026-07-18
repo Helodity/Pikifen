@@ -702,10 +702,10 @@ void initControls() {
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_HUD,
+        PLAYER_ACTION_TYPE_MT_HIDE_HUD,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "HUD",
-        "Toggle the HUD.",
+        "Hide HUD",
+        "Toggle the visibility of the HUD.",
         "mt_hud", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
@@ -1348,6 +1348,209 @@ void initInventoryItems() {
         CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_PARTICLE_GEN,
     }
+    );
+}
+
+
+/**
+ * @brief Initializes the list of maker tool types.
+ */
+void initMakerToolTypes() {
+    game.makerTools.types.assign(N_MAKER_TOOLS, MakerToolType());
+    vector<CommandParam> params;
+    Bitmask8 contexts = 0;
+    
+    //Convenient lambdas and aliases.
+    auto queueParam =
+        [&params] (
+            const string& paramName, COMMAND_PARAM_TYPE paramType,
+            Bitmask8 paramFlags = 0, const string& paramDefValue = ""
+    ) {
+        params.push_back(
+            CommandParam(
+                paramName, paramType, paramFlags, paramDefValue
+            )
+        );
+    };
+    
+    auto commitTool =
+        [&params, &contexts] (
+            MAKER_TOOL_TYPE toolType, const string& toolName,
+            bool helpful, MakerToolTypeCode * toolRunCode
+    ) {
+        validateCommandParams(
+            params, "Maker tool type \"" + toolName + "\""
+        );
+        
+        MakerToolType* toolTypePtr;
+        toolTypePtr = &(game.makerTools.types[toolType]);
+        toolTypePtr->type = toolType;
+        toolTypePtr->name = toolName;
+        toolTypePtr->code = toolRunCode;
+        toolTypePtr->parameters = params;
+        toolTypePtr->contexts = contexts;
+        toolTypePtr->helpful = helpful;
+        params.clear();
+    };
+    
+    const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
+    const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
+    const COMMAND_PARAM_TYPE ptBool = COMMAND_PARAM_TYPE_BOOL;
+    const COMMAND_PARAM_TYPE ptString = COMMAND_PARAM_TYPE_STRING;
+    const COMMAND_PARAM_TYPE ptEnum = COMMAND_PARAM_TYPE_ENUM;
+    const COMMAND_PARAM_FLAG pfConst = COMMAND_PARAM_FLAG_CONST;
+    const COMMAND_PARAM_FLAG pfOpt = COMMAND_PARAM_FLAG_OPTIONAL;
+    const COMMAND_PARAM_FLAG pfVector = COMMAND_PARAM_FLAG_VECTOR;
+    
+    
+    //-Anywhere tools-
+    contexts =
+        getIdxBitmask(MAKER_TOOL_CONTEXT_ANYWHERE) |
+        getIdxBitmask(MAKER_TOOL_CONTEXT_GAMEPLAY);
+        
+    //Unknown.
+    commitTool(
+        MAKER_TOOL_TYPE_NONE,
+        "none", false,
+        nullptr
+    );
+    
+    //Set auto-start data.
+    commitTool(
+        MAKER_TOOL_TYPE_SET_AUTO_START,
+        "set_auto_start", false,
+        MakerToolRunners::setAutoStart
+    );
+    
+    
+    //-Gameplay tools-
+    contexts =
+        getIdxBitmask(MAKER_TOOL_CONTEXT_GAMEPLAY);
+        
+    //Area image.
+    commitTool(
+        MAKER_TOOL_TYPE_AREA_IMAGE,
+        "area_image", true,
+        MakerToolRunners::areaImage
+    );
+    
+    //Area inspector.
+    commitTool(
+        MAKER_TOOL_TYPE_AREA_INSPECTOR,
+        "area_inspector", true,
+        MakerToolRunners::areaInspector
+    );
+    
+    //Change speed.
+    commitTool(
+        MAKER_TOOL_TYPE_CHANGE_SPEED,
+        "change_speed", true,
+        MakerToolRunners::changeSpeed
+    );
+    
+    //Delete mob.
+    commitTool(
+        MAKER_TOOL_TYPE_DELETE_MOB,
+        "delete_mob", true,
+        MakerToolRunners::deleteMob
+    );
+    
+    //Fill inventory.
+    commitTool(
+        MAKER_TOOL_TYPE_FILL_INVENTORY,
+        "fill_inventory", true,
+        MakerToolRunners::fillInventory
+    );
+    
+    //Frame advance.
+    commitTool(
+        MAKER_TOOL_TYPE_FRAME_ADVANCE,
+        "frame_advance", true,
+        MakerToolRunners::frameAdvance
+    );
+    
+    //Free cam.
+    commitTool(
+        MAKER_TOOL_TYPE_FREE_CAM,
+        "free_cam", true,
+        MakerToolRunners::freeCam
+    );
+    
+    //Geometry info.
+    commitTool(
+        MAKER_TOOL_TYPE_GEOMETRY_INFO,
+        "geometry_info", true,
+        MakerToolRunners::geometryInfo
+    );
+    
+    //Hide HUD.
+    commitTool(
+        MAKER_TOOL_TYPE_HIDE_HUD,
+        "hide_hud", false,
+        MakerToolRunners::hideHud
+    );
+    
+    //Hurt mob.
+    commitTool(
+        MAKER_TOOL_TYPE_HURT_MOB,
+        "hurt_mob", true,
+        MakerToolRunners::hurtMob
+    );
+    
+    //Mob inspector.
+    commitTool(
+        MAKER_TOOL_TYPE_MOB_INSPECTOR,
+        "mob_inspector", true,
+        MakerToolRunners::mobInspector
+    );
+    
+    //New Pikmin.
+    commitTool(
+        MAKER_TOOL_TYPE_NEW_PIKMIN,
+        "new_pikmin", true,
+        MakerToolRunners::newPikmin
+    );
+    
+    //New reminder.
+    commitTool(
+        MAKER_TOOL_TYPE_NEW_REMINDER,
+        "new_reminder", false,
+        MakerToolRunners::newReminder
+    );
+    
+    //Path info.
+    commitTool(
+        MAKER_TOOL_TYPE_PATH_INFO,
+        "path_info", true,
+        MakerToolRunners::pathInfo
+    );
+    
+    //Show collision.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_COLLISION,
+        "show_collision", true,
+        MakerToolRunners::showCollision
+    );
+    
+    //Show hitboxes.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_HITBOXES,
+        "show_hitboxes", true,
+        MakerToolRunners::showHitboxes
+    );
+    
+    //Show reaches.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_REACHES,
+        "show_reaches", true,
+        MakerToolRunners::showReaches
+    );
+    
+    //Teleport.
+    commitTool(
+        MAKER_TOOL_TYPE_TELEPORT,
+        "teleport", true,
+        MakerToolRunners::teleport
     );
 }
 

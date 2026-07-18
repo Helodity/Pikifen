@@ -24,6 +24,580 @@ const float PLAY_CONFIRMATION_TIMER = 1.0f;
 }
 
 
+#pragma region Tool runner functions
+
+
+/**
+ * @brief Code for the area image maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::areaImage(
+    MakerTools& mgr, const vector<string>& args
+) {
+    unsigned char settingIdx = mgr.getMakerToolSettingIdx();
+    ALLEGRO_BITMAP* bmp =
+        game.states.gameplay->drawToBitmap(
+            mgr.areaImageSettings[settingIdx]
+        );
+    string fileName =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
+        game.curArea->manifest->internalName +
+        "_" + getCurrentTime(true) + ".png";
+        
+    if(!al_save_bitmap(fileName.c_str(), bmp)) {
+        game.errors.report(
+            "Could not save the area onto an image,"
+            " with the name \"" + fileName + "\"!"
+        );
+    } else {
+        game.console.write(
+            "Saved area image \"" + fileName + "\".", false, 5.0f
+        );
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the area inspector maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::areaInspector(
+    MakerTools& mgr, const vector<string>& args
+) {
+    mgr.inspectingArea = !mgr.inspectingArea;
+    if(!mgr.inspectingArea) {
+        game.makerDisplay.write("No longer inspecting area.", 5.0f);
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the change speed maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::changeSpeed(
+    MakerTools& mgr, const vector<string>& args
+) {
+    if(mgr.frameAdvanceMode) {
+        mgr.frameAdvanceMode = false;
+        mgr.mustAdvanceOneFrame = false;
+    } else {
+        unsigned char settingIdx = mgr.getMakerToolSettingIdx();
+        bool finalState = false;
+        if(!mgr.changeSpeed) {
+            finalState = true;
+        } else {
+            if(mgr.changeSpeedSettingIdx != settingIdx) {
+                finalState = true;
+            }
+        }
+        
+        if(finalState) {
+            mgr.changeSpeedSettingIdx = settingIdx;
+        }
+        mgr.changeSpeed = finalState;
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the delete mob maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::deleteMob(
+    MakerTools& mgr, const vector<string>& args
+) {
+    if(mgr.inspectedMob) {
+        mgr.inspectedMob->toDelete = true;
+    } else {
+        game.makerDisplay.write("No mob is being inspected.", 5.0f);
+        return false;
+    }
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the fill inventory maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::fillInventory(
+    MakerTools& mgr, const vector<string>& args
+) {
+    size_t newAmount = mgr.mod1 ? 0 : 99;
+    for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
+        PlayerTeam* tPtr = &game.states.gameplay->playerTeams[t];
+        forIdx(s, tPtr->sprayStats) {
+            tPtr->sprayStats[s].nrSprays = newAmount;
+        }
+    }
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the frame advance maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::frameAdvance(
+    MakerTools& mgr, const vector<string>& args
+) {
+    if(mgr.mod1) {
+        mgr.frameAdvanceMode = false;
+        mgr.mustAdvanceOneFrame = false;
+    } else {
+        if(!mgr.frameAdvanceMode) {
+            mgr.frameAdvanceMode = true;
+        } else {
+            mgr.mustAdvanceOneFrame = true;
+        }
+    }
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the free camera maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::freeCam(
+    MakerTools& mgr, const vector<string>& args
+) {
+    bool freeCamControlWasOn = mgr.freeCamControl;
+        
+    if(mgr.mod1) {
+        if(mgr.freeCamView) {
+            mgr.freeCamControl = !mgr.freeCamControl;
+        } else {
+            mgr.freeCamView = true;
+            mgr.freeCamControl = false;
+        }
+    } else {
+        if(mgr.freeCamView) {
+            mgr.freeCamView = false;
+            mgr.freeCamControl = false;
+        } else {
+            mgr.freeCamView = true;
+            mgr.freeCamControl = true;
+        }
+    }
+    
+    if(!freeCamControlWasOn && mgr.freeCamControl) {
+        //Stop the leaders, otherwise they'll keep moving out of control.
+        game.states.gameplay->stopAllLeaders();
+    }
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the geometry info maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::geometryInfo(
+    MakerTools& mgr, const vector<string>& args
+) {
+    mgr.geometryInfo = !mgr.geometryInfo;
+    if(mgr.geometryInfo) {
+        mgr.toolStartCursor =
+            game.states.gameplay->players[0].view.mouseCursorWorldPos;
+    }
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the hide HUD maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::hideHud(
+    MakerTools& mgr, const vector<string>& args
+) {
+    mgr.hud = !mgr.hud;
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the hurt mob maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::hurtMob(
+    MakerTools& mgr, const vector<string>& args
+) {
+    unsigned char settingIdx = mgr.getMakerToolSettingIdx();
+    Mob* m =
+        getClosestMobToMouseCursor(
+            game.states.gameplay->players[0].view, true
+        );
+    
+    if(!m) return false;
+
+    m->setHealth(
+        true, true,
+        -mgr.mobHurtingSettings[settingIdx]
+    );
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the mob inspector maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::mobInspector(
+    MakerTools& mgr, const vector<string>& args
+) {
+    Mob* prevInspectedMob = mgr.inspectedMob;
+    Mob* m;
+    if(mgr.mod1) {
+        m =
+            getNextMobNearCursor(
+                game.states.gameplay->players[0].view,
+                prevInspectedMob, false
+            );
+    } else if(mgr.mod2) {
+        m = nullptr;
+    } else {
+        m =
+            getClosestMobToMouseCursor(
+                game.states.gameplay->players[0].view, false
+            );
+    }
+    
+    mgr.inspectedMob = prevInspectedMob == m ? nullptr : m;
+    if(
+        prevInspectedMob != nullptr &&
+        mgr.inspectedMob == nullptr
+    ) {
+        game.makerDisplay.write("No longer inspecting mob.", 5.0f);
+    }
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the new Pikmin maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::newPikmin(
+    MakerTools& mgr, const vector<string>& args
+) {
+    if(
+        game.states.gameplay->mobs.pikmin.size() >= 
+        game.curArea->getMaxPikminInField()
+    ) {
+        return false;
+    }
+
+    bool mustUseLastType = (mgr.mod1 && mgr.lastPikminType);
+    PikminType* newPikminType = nullptr;
+    
+    if(mustUseLastType) {
+        newPikminType = mgr.lastPikminType;
+    } else {
+        newPikminType =
+            game.content.mobTypes.list.pikmin.begin()->second;
+            
+        auto p = game.content.mobTypes.list.pikmin.begin();
+        for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
+            if(p->second == mgr.lastPikminType) {
+                ++p;
+                if(p != game.content.mobTypes.list.pikmin.end()) {
+                    newPikminType = p->second;
+                }
+                break;
+            }
+        }
+        mgr.lastPikminType = newPikminType;
+    }
+    
+    createMob(
+        game.mobCategories.get(MOB_CATEGORY_PIKMIN),
+        game.states.gameplay->players[0].view.mouseCursorWorldPos,
+        newPikminType, 0,
+        mgr.mod2 ? "maturity=0" : "maturity=2"
+    );
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the new reminder maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::newReminder(
+    MakerTools& mgr, const vector<string>& args
+) {
+    if(game.states.gameplay->isPaused()) return false;
+    
+    mgr.toolStartCursor =
+        game.states.gameplay->players[0].view.mouseCursorWorldPos;
+    game.modal.reset();
+    game.modal.title = "New reminder";
+    game.modal.prompt =
+        "Creating a new reminder for the area maker at " +
+        i2s(mgr.toolStartCursor.x) + "," + i2s(mgr.toolStartCursor.y) +
+        ".\n"
+        "What should the reminder say?\n"
+        "\n\n\n\n\n\n";
+    game.modal.back = "Cancel";
+    game.modal.onBack =
+    [] () {
+        game.controls.ignoreMenuCloseActions();
+        game.console.write("Cancelled reminder.", false, 5.0f);
+    };
+    game.modal.extraButtons.push_back(
+    ModalGuiManager::Button {
+        .text = "Create",
+        .tooltip = "Create the reminder.",
+        .onActivate = [mgr] (const Point&) {
+            AreaMakerReminder newReminder;
+            newReminder.center = mgr.toolStartCursor;
+            newReminder.text = game.modal.textInput;
+            game.curArea->reminders.push_back(newReminder);
+            game.content.areas.saveAreaReminders(game.curArea);
+            game.modal.close();
+            game.controls.ignoreMenuCloseActions();
+            game.console.write("Created reminder!", false, 5.0f);
+        }
+    }
+    );
+    game.modal.defaultFocusButtonIdx = 1;
+    game.modal.textInputEnterButtonIdx = 1;
+    game.modal.useTextInput = true;
+    game.modal.updateItems();
+    game.modal.open();
+}
+
+
+/**
+ * @brief Code for the path info maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::pathInfo(
+    MakerTools& mgr, const vector<string>& args
+) {
+    mgr.pathInfo = !mgr.pathInfo;
+
+    return true;
+}
+
+
+/**
+ * @brief Code for the set auto start maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::setAutoStart(
+    MakerTools& mgr, const vector<string>& args
+) {
+    string curStateName = game.getCurStateName();
+    
+    if(curStateName == game.states.animationEd->getName()) {
+        mgr.autoStartState = "animation_editor";
+        mgr.autoStartOption =
+            game.states.animationEd->getOpenedContentPath();
+    } else if(curStateName == game.states.areaEd->getName()) {
+        mgr.autoStartState = "area_editor";
+        mgr.autoStartOption =
+            game.states.areaEd->getOpenedContentPath();
+    } else if(curStateName == game.states.guiEd->getName()) {
+        mgr.autoStartState = "gui_editor";
+        mgr.autoStartOption =
+            game.states.guiEd->getOpenedContentPath();
+    } else if(curStateName == game.states.particleEd->getName()) {
+        mgr.autoStartState = "particle_editor";
+        mgr.autoStartOption =
+            game.states.particleEd->getOpenedContentPath();
+    } else if(curStateName == game.states.gameplay->getName()) {
+        mgr.autoStartState = "play";
+        mgr.autoStartOption =
+            game.states.gameplay->pathOfAreaToLoad;
+    } else {
+        mgr.autoStartState.clear();
+        mgr.autoStartOption.clear();
+    }
+    
+    saveMakerTools();
+    if(mgr.autoStartState.empty()) {
+        game.console.write("Reset Pikifen's auto-start.", false, 5.0f);
+    } else {
+        string msg =
+            "Set Pikifen to auto-start in the \"" + mgr.autoStartState +
+            "\" state";
+        if(mgr.autoStartOption.empty()) {
+            msg += ".";
+        } else {
+            msg += ", option \"" + mgr.autoStartOption + "\".";
+        }
+        game.console.write(msg, false, 5.0f);
+    }
+    
+    mgr.usedHelpingTools = true;
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the set song near loop maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::setSongPosNearLoop(
+    MakerTools& mgr, const vector<string>& args
+) {
+    game.audio.setSongPosNearLoop();
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the show collision maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::showCollision(
+    MakerTools& mgr, const vector<string>& args
+) {
+    mgr.collision = !mgr.collision;
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the show hitboxes maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::showHitboxes(
+    MakerTools& mgr, const vector<string>& args
+) {
+    mgr.hitboxes = !mgr.hitboxes;
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the show reaches maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::showReaches(
+    MakerTools& mgr, const vector<string>& args
+) {
+    mgr.reaches = !mgr.reaches;
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the teleport maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ */
+bool MakerToolRunners::teleport(
+    MakerTools& mgr, const vector<string>& args
+) {
+    Mob* mobToTeleport =
+        (mgr.mod1 && mgr.inspectedMob) ?
+        mgr.inspectedMob :
+        game.states.gameplay->players[0].leaderPtr;
+        
+    Sector* mouseSector =
+        getSector(
+            game.states.gameplay->players[0].view.mouseCursorWorldPos,
+            nullptr, true
+        );
+    
+    if(!mouseSector || !mobToTeleport) return false;
+
+    mobToTeleport->chase(
+        game.states.gameplay->players[0].view.mouseCursorWorldPos,
+        mouseSector->floorZ, CHASE_FLAG_TELEPORT
+    );
+    if(mobToTeleport == game.states.gameplay->players[0].leaderPtr) {
+        game.states.gameplay->players[0].view.cam.setPos(
+            game.states.gameplay->players[0].view.mouseCursorWorldPos
+        );
+        if(!mgr.mod2) {
+            forIdx(p, mobToTeleport->group->members) {
+                mobToTeleport->group->members[p]->chase(
+                    game.states.gameplay->
+                    players[0].view.mouseCursorWorldPos,
+                    mouseSector->floorZ, CHASE_FLAG_TELEPORT
+                );
+            }
+        }
+    } else {
+        //Tick it once so it can run its teleportation code.
+        //This is useful if the player teleports it far away,
+        //where it'd be marked as inactive. It's slightly hacky,
+        //but it's just a maker tool, so no sweat.
+        mobToTeleport->tick(FLT_MIN);
+    }
+    
+    return true;
+}
+
+
+#pragma endregion
+
+
 /**
  * @brief Checks whether maker tools are allowed, and if not, sets up
  * code to warn the player and let them allow it, if applicable.
@@ -99,347 +673,72 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     if(!checkMakerToolsAllowed(action.value)) return true;
     if(action.value < 0.5f) return false;
     
+    MAKER_TOOL_TYPE toolToRun = MAKER_TOOL_TYPE_NONE;
+    vector<string> params;
+    
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MT_AREA_IMAGE: {
-
-        unsigned char settingIdx = getMakerToolSettingIdx();
-        ALLEGRO_BITMAP* bmp =
-            game.states.gameplay->drawToBitmap(
-                areaImageSettings[settingIdx]
-            );
-        string fileName =
-            FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
-            game.curArea->manifest->internalName +
-            "_" + getCurrentTime(true) + ".png";
-            
-        if(!al_save_bitmap(fileName.c_str(), bmp)) {
-            game.errors.report(
-                "Could not save the area onto an image,"
-                " with the name \"" + fileName + "\"!"
-            );
-        } else {
-            game.console.write(
-                "Saved area image \"" + fileName + "\".", false, 5.0f
-            );
-        }
-        
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_AREA_IMAGE;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR: {
-
-        inspectingArea = !inspectingArea;
-        if(!inspectingArea) {
-            game.makerDisplay.write("No longer inspecting area.", 5.0f);
-        }
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_AREA_INSPECTOR;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
-
-        if(frameAdvanceMode) {
-            frameAdvanceMode = false;
-            mustAdvanceOneFrame = false;
-        } else {
-            unsigned char settingIdx =
-                getMakerToolSettingIdx();
-            bool finalState = false;
-            if(!changeSpeed) {
-                finalState = true;
-            } else {
-                if(changeSpeedSettingIdx != settingIdx) {
-                    finalState = true;
-                }
-            }
-            
-            if(finalState) {
-                changeSpeedSettingIdx = settingIdx;
-            }
-            changeSpeed = finalState;
-        }
-        
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_CHANGE_SPEED;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_DELETE_MOB: {
-
-        if(inspectedMob) {
-            inspectedMob->toDelete = true;
-        } else {
-            game.makerDisplay.write("No mob is being inspected.", 5.0f);
-        }
-        
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_DELETE_MOB;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_FILL_INVENTORY: {
-
-        size_t newAmount = mod1 ? 0 : 99;
-        
-        for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
-            PlayerTeam* tPtr = &game.states.gameplay->playerTeams[t];
-            forIdx(s, tPtr->sprayStats) {
-                tPtr->sprayStats[s].nrSprays = newAmount;
-            }
-        }
-        
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_FILL_INVENTORY;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE: {
-
-        if(mod1) {
-            frameAdvanceMode = false;
-            mustAdvanceOneFrame = false;
-        } else {
-            if(!frameAdvanceMode) {
-                frameAdvanceMode = true;
-            } else {
-                mustAdvanceOneFrame = true;
-            }
-        }
-        
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_FRAME_ADVANCE;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_FREE_CAM: {
-
-        bool freeCamControlWasOn = freeCamControl;
-        
-        if(mod1) {
-            if(freeCamView) {
-                freeCamControl = !freeCamControl;
-            } else {
-                freeCamView = true;
-                freeCamControl = false;
-            }
-        } else {
-            if(freeCamView) {
-                freeCamView = false;
-                freeCamControl = false;
-            } else {
-                freeCamView = true;
-                freeCamControl = true;
-            }
-        }
-        
-        if(!freeCamControlWasOn && freeCamControl) {
-            //Stop the leaders, otherwise they'll keep moving out of control.
-            game.states.gameplay->stopAllLeaders();
-        }
-        
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_FREE_CAM;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
-
-        geometryInfo = !geometryInfo;
-        if(geometryInfo) {
-            toolStartCursor =
-                game.states.gameplay->players[0].view.mouseCursorWorldPos;
-        }
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_GEOMETRY_INFO;
         break;
-        
-    } case PLAYER_ACTION_TYPE_MT_HUD: {
-
-        hud = !hud;
+    } case PLAYER_ACTION_TYPE_MT_HIDE_HUD: {
+        toolToRun = MAKER_TOOL_TYPE_HIDE_HUD;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
-
-        unsigned char settingIdx = getMakerToolSettingIdx();
-        Mob* m =
-            getClosestMobToMouseCursor(
-                game.states.gameplay->players[0].view, true
-            );
-        if(m) {
-            m->setHealth(
-                true, true,
-                -mobHurtingSettings[settingIdx]
-            );
-        }
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_HURT_MOB;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR: {
-
-        Mob* prevInspectedMob = inspectedMob;
-        Mob* m;
-        if(mod1) {
-            m =
-                getNextMobNearCursor(
-                    game.states.gameplay->players[0].view,
-                    prevInspectedMob, false
-                );
-        } else if(mod2) {
-            m = nullptr;
-        } else {
-            m =
-                getClosestMobToMouseCursor(
-                    game.states.gameplay->players[0].view, false
-                );
-        }
-        
-        inspectedMob = prevInspectedMob == m ? nullptr : m;
-        if(
-            prevInspectedMob != nullptr &&
-            inspectedMob == nullptr
-        ) {
-            game.makerDisplay.write("No longer inspecting mob.", 5.0f);
-        }
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_MOB_INSPECTOR;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_NEW_PIKMIN: {
-
-        if(
-            game.states.gameplay->mobs.pikmin.size() <
-            game.curArea->getMaxPikminInField()
-        ) {
-            bool mustUseLastType = (mod1 && lastPikminType);
-            PikminType* newPikminType = nullptr;
-            
-            if(mustUseLastType) {
-                newPikminType = lastPikminType;
-            } else {
-                newPikminType =
-                    game.content.mobTypes.list.pikmin.begin()->second;
-                    
-                auto p = game.content.mobTypes.list.pikmin.begin();
-                for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
-                    if(p->second == lastPikminType) {
-                        ++p;
-                        if(p != game.content.mobTypes.list.pikmin.end()) {
-                            newPikminType = p->second;
-                        }
-                        break;
-                    }
-                }
-                lastPikminType = newPikminType;
-            }
-            
-            createMob(
-                game.mobCategories.get(MOB_CATEGORY_PIKMIN),
-                game.states.gameplay->players[0].view.mouseCursorWorldPos,
-                newPikminType, 0,
-                mod2 ? "maturity=0" : "maturity=2"
-            );
-            usedHelpingTools = true;
-        }
+        toolToRun = MAKER_TOOL_TYPE_NEW_PIKMIN;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_NEW_REMINDER: {
-        if(!game.states.gameplay->isPaused()) {
-            toolStartCursor =
-                game.states.gameplay->players[0].view.mouseCursorWorldPos;
-            game.modal.reset();
-            game.modal.title = "New reminder";
-            game.modal.prompt =
-                "Creating a new reminder for the area maker at " +
-                i2s(toolStartCursor.x) + "," + i2s(toolStartCursor.y) +
-                ".\n"
-                "What should the reminder say?\n"
-                "\n\n\n\n\n\n";
-            game.modal.back = "Cancel";
-            game.modal.onBack =
-            [] () {
-                game.controls.ignoreMenuCloseActions();
-                game.console.write("Cancelled reminder.", false, 5.0f);
-            };
-            game.modal.extraButtons.push_back(
-            ModalGuiManager::Button {
-                .text = "Create",
-                .tooltip = "Create the reminder.",
-                .onActivate = [this] (const Point&) {
-                    AreaMakerReminder newReminder;
-                    newReminder.center = toolStartCursor;
-                    newReminder.text = game.modal.textInput;
-                    game.curArea->reminders.push_back(newReminder);
-                    game.content.areas.saveAreaReminders(game.curArea);
-                    game.modal.close();
-                    game.controls.ignoreMenuCloseActions();
-                    game.console.write("Created reminder!", false, 5.0f);
-                }
-            }
-            );
-            game.modal.defaultFocusButtonIdx = 1;
-            game.modal.textInputEnterButtonIdx = 1;
-            game.modal.useTextInput = true;
-            game.modal.updateItems();
-            game.modal.open();
-            usedHelpingTools = true;
-        }
-        
+        toolToRun = MAKER_TOOL_TYPE_NEW_REMINDER;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_PATH_INFO: {
-
-        pathInfo = !pathInfo;
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_PATH_INFO;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_SHOW_COLLISION: {
-
-        collision =
-            !collision;
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_SHOW_COLLISION;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES: {
-
-        hitboxes =
-            !hitboxes;
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_SHOW_HITBOXES;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_SHOW_REACHES: {
-
-        reaches = !reaches;
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_SHOW_REACHES;
         break;
-        
     } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
-
-        Mob* mobToTeleport =
-            (mod1 && inspectedMob) ?
-            inspectedMob :
-            game.states.gameplay->players[0].leaderPtr;
-            
-        Sector* mouseSector =
-            getSector(
-                game.states.gameplay->players[0].view.mouseCursorWorldPos,
-                nullptr, true
-            );
-        if(mouseSector && mobToTeleport) {
-            mobToTeleport->chase(
-                game.states.gameplay->players[0].view.mouseCursorWorldPos,
-                mouseSector->floorZ, CHASE_FLAG_TELEPORT
-            );
-            if(mobToTeleport == game.states.gameplay->players[0].leaderPtr) {
-                game.states.gameplay->players[0].view.cam.setPos(
-                    game.states.gameplay->players[0].view.mouseCursorWorldPos
-                );
-                if(!mod2) {
-                    forIdx(p, mobToTeleport->group->members) {
-                        mobToTeleport->group->members[p]->chase(
-                            game.states.gameplay->
-                            players[0].view.mouseCursorWorldPos,
-                            mouseSector->floorZ, CHASE_FLAG_TELEPORT
-                        );
-                    }
-                }
-            } else {
-                //Tick it once so it can run its teleportation code.
-                //This is useful if the player teleports it far away,
-                //where it'd be marked as inactive. It's slightly hacky,
-                //but it's just a maker tool, so no sweat.
-                mobToTeleport->tick(FLT_MIN);
-            }
-        }
-        usedHelpingTools = true;
+        toolToRun = MAKER_TOOL_TYPE_TELEPORT;
         break;
     }
+    }
+    
+    if(toolToRun != MAKER_TOOL_TYPE_NONE) {
+        types[toolToRun].code(*this, params);
+        if(types[toolToRun].helpful) {
+            usedHelpingTools = true;
+        }
     }
     
     return true;
@@ -474,54 +773,14 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
 
         if(action.value < 0.5f) return false;
         
-        string curStateName = game.getCurStateName();
-        if(curStateName == game.states.animationEd->getName()) {
-            autoStartState = "animation_editor";
-            autoStartOption =
-                game.states.animationEd->getOpenedContentPath();
-        } else if(curStateName == game.states.areaEd->getName()) {
-            autoStartState = "area_editor";
-            autoStartOption =
-                game.states.areaEd->getOpenedContentPath();
-        } else if(curStateName == game.states.guiEd->getName()) {
-            autoStartState = "gui_editor";
-            autoStartOption =
-                game.states.guiEd->getOpenedContentPath();
-        } else if(curStateName == game.states.particleEd->getName()) {
-            autoStartState = "particle_editor";
-            autoStartOption =
-                game.states.particleEd->getOpenedContentPath();
-        } else if(curStateName == game.states.gameplay->getName()) {
-            autoStartState = "play";
-            autoStartOption =
-                game.states.gameplay->pathOfAreaToLoad;
-        } else {
-            autoStartState.clear();
-            autoStartOption.clear();
-        }
-        saveMakerTools();
-        if(autoStartState.empty()) {
-            game.console.write("Reset Pikifen's auto-start.", false, 5.0f);
-        } else {
-            string msg =
-                "Set Pikifen to auto-start in the \"" + autoStartState +
-                "\" state";
-            if(autoStartOption.empty()) {
-                msg += ".";
-            } else {
-                msg += ", option \"" + autoStartOption + "\".";
-            }
-            game.console.write(msg, false, 5.0f);
-        }
-        
-        usedHelpingTools = true;
+        types[MAKER_TOOL_TYPE_SET_AUTO_START].code(*this, {});
         break;
         
     } case PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP: {
 
         if(action.value < 0.5f) return false;
         
-        game.audio.setSongPosNearLoop();
+        types[MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP].code(*this, {});
         break;
         
     } case PLAYER_ACTION_TYPE_MT_MOD_1: {

@@ -759,6 +759,7 @@ int Game::start() {
     initMobCategories();
     initMiscDatabases();
     initInventoryItems();
+    initMakerToolTypes();
     loadMakerTools();
     saveMakerTools();
     

@@ -24,6 +24,12 @@
 using std::vector;
 
 
+#pragma region Constants
+
+
+struct MakerTools;
+
+
 //List of maker tools.
 enum MAKER_TOOL_TYPE {
 
@@ -38,9 +44,6 @@ enum MAKER_TOOL_TYPE {
     
     //Change gameplay speed.
     MAKER_TOOL_TYPE_CHANGE_SPEED,
-    
-    //Show collision box.
-    MAKER_TOOL_TYPE_COLLISION,
     
     //Delete mob.
     MAKER_TOOL_TYPE_DELETE_MOB,
@@ -57,11 +60,8 @@ enum MAKER_TOOL_TYPE {
     //Geometry info beneath mouse cursor.
     MAKER_TOOL_TYPE_GEOMETRY_INFO,
     
-    //Show hitboxes.
-    MAKER_TOOL_TYPE_HITBOXES,
-    
     //Toggle HUD visibility.
-    MAKER_TOOL_TYPE_HUD,
+    MAKER_TOOL_TYPE_HIDE_HUD,
     
     //Hurt mob beneath mouse cursor.
     MAKER_TOOL_TYPE_HURT_MOB,
@@ -78,8 +78,20 @@ enum MAKER_TOOL_TYPE {
     //Show path info.
     MAKER_TOOL_TYPE_PATH_INFO,
     
+    //Set auto-start data.
+    MAKER_TOOL_TYPE_SET_AUTO_START,
+    
     //Set song position near loop.
     MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP,
+    
+    //Show collision box.
+    MAKER_TOOL_TYPE_SHOW_COLLISION,
+    
+    //Show hitboxes.
+    MAKER_TOOL_TYPE_SHOW_HITBOXES,
+    
+    //Show reaches.
+    MAKER_TOOL_TYPE_SHOW_REACHES,
     
     //Teleport to mouse cursor.
     MAKER_TOOL_TYPE_TELEPORT,
@@ -90,13 +102,66 @@ enum MAKER_TOOL_TYPE {
 };
 
 
+//Contexts in which a maker tool's command can run.
+enum MAKER_TOOL_CONTEXT {
+
+    //Anywhere.
+    MAKER_TOOL_CONTEXT_ANYWHERE,
+    
+    //Mid gameplay.
+    MAKER_TOOL_CONTEXT_GAMEPLAY,
+    
+};
+
+
 namespace MAKER_TOOLS {
 extern const float PLAY_CONFIRMATION_TIMER;
 }
 
 
+#pragma endregion
+#pragma region Classes
+
+
 /**
- * @brief Info about all of the maker tools.
+ * @brief Function that runs a maker tool command's logic.
+ *
+ * The first parameter is the arguments passed to it.
+ * The return value is whether it succeeded.
+ */
+typedef bool (MakerToolTypeCode)(MakerTools& mgr, const vector<string>& args);
+
+
+/**
+ * @brief Information about a type of maker tool.
+ */
+struct MakerToolType {
+
+    //--- Public members ---
+    
+    //Type of maker tool.
+    MAKER_TOOL_TYPE type = MAKER_TOOL_TYPE_NONE;
+    
+    //Name. Also used for its command.
+    string name;
+    
+    //Code to run when its command is executed.
+    MakerToolTypeCode* code = nullptr;
+    
+    //Parameters that it can take.
+    vector<CommandParam> parameters;
+    
+    //Flags for the contexts in which it can be run. Use MAKER_TOOL_CONTEXT.
+    Bitmask8 contexts = 0;
+    
+    //Whether using this tool helps the player in any way.
+    bool helpful = false;
+    
+};
+
+
+/**
+ * @brief Manager of all of the maker tools.
  */
 struct MakerTools {
 
@@ -120,6 +185,9 @@ struct MakerTools {
     
     
     //--- Public members ---
+    
+    //List of all types of maker tool.
+    vector<MakerToolType> types;
     
     //Are the tools enabled?
     bool enabled = true;
@@ -219,12 +287,37 @@ struct MakerTools {
     void resetForGameplay();
     void saveToDataNode(DataNode* node);
     void tick(float deltaT);
-    
-    
-private:
-
-    //--- Private function declarations ---
-    
     unsigned char getMakerToolSettingIdx() const;
     
 };
+
+
+#pragma endregion
+#pragma region Tool runner functions
+
+
+namespace MakerToolRunners {
+bool areaImage(MakerTools& mgr, const vector<string>& args);
+bool areaInspector(MakerTools& mgr, const vector<string>& args);
+bool changeSpeed(MakerTools& mgr, const vector<string>& args);
+bool deleteMob(MakerTools& mgr, const vector<string>& args);
+bool fillInventory(MakerTools& mgr, const vector<string>& args);
+bool frameAdvance(MakerTools& mgr, const vector<string>& args);
+bool freeCam(MakerTools& mgr, const vector<string>& args);
+bool geometryInfo(MakerTools& mgr, const vector<string>& args);
+bool hideHud(MakerTools& mgr, const vector<string>& args);
+bool hurtMob(MakerTools& mgr, const vector<string>& args);
+bool mobInspector(MakerTools& mgr, const vector<string>& args);
+bool newPikmin(MakerTools& mgr, const vector<string>& args);
+bool newReminder(MakerTools& mgr, const vector<string>& args);
+bool pathInfo(MakerTools& mgr, const vector<string>& args);
+bool setAutoStart(MakerTools& mgr, const vector<string>& args);
+bool setSongPosNearLoop(MakerTools& mgr, const vector<string>& args);
+bool showCollision(MakerTools& mgr, const vector<string>& args);
+bool showHitboxes(MakerTools& mgr, const vector<string>& args);
+bool showReaches(MakerTools& mgr, const vector<string>& args);
+bool teleport(MakerTools& mgr, const vector<string>& args);
+}
+
+
+#pragma endregion

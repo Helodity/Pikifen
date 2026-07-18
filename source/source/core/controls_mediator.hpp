@@ -240,8 +240,8 @@ enum PLAYER_ACTION_TYPE {
     //Geometry info.
     PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
     
-    //HUD.
-    PLAYER_ACTION_TYPE_MT_HUD,
+    //Hide HUD.
+    PLAYER_ACTION_TYPE_MT_HIDE_HUD,
     
     //Hurt mob.
     PLAYER_ACTION_TYPE_MT_HURT_MOB,
