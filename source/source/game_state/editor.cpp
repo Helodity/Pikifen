@@ -2680,6 +2680,7 @@ void Editor::processGuiDialogNewPack() {
     static string name = "My pack!";
     static string description;
     static string maker;
+    static string license = "MIT";
     string problem;
     bool hitCreateButton = false;
     
@@ -2732,14 +2733,40 @@ void Editor::processGuiDialogNewPack() {
     }
     setTooltip("Who made the pack. So really, type your name or nickname.");
     
+    //License input.
+    if(
+        ImGui::InputText(
+            "License", &license,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip(
+        "Software license for the pack and its contents. Optional.\n"
+        "\"MIT\" is recommended, since it allows others to\n"
+        "use and change its contents at will, while still\n"
+        "keeping credit, and is what Pikifen as a whole uses.\n"
+        "If not specified, the pack will be assumed to have all\n"
+        "rights reserved by the maker, which makes it harder\n"
+        "for others to use their content!"
+    );
+    
     //File explanation text.
     string explanation =
         "These properties can be changed later by editing the "
         "pack's data file.\n"
         "There are also more properties; check the manual "
-        "for more information!\n"
-        "Pack data file path: ";
+        "for more information!";
     ImGui::TextWrapped("%s", explanation.c_str());
+    
+    //Open manual button.
+    if(ImGui::Button("Open manual")) {
+        openManual("making.html#packs");
+    }
+    
+    //File path label text.
+    ImGui::TextWrapped("%s", "Pack data file path: ");
     
     //Path text.
     string pathToShow =
@@ -2748,12 +2775,8 @@ void Editor::processGuiDialogNewPack() {
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         internalName + "/" +
         FILE_NAMES::PACK_DATA;
+    ImGui::SameLine();
     monoText("%s", pathToShow.c_str());
-    
-    //Open manual button.
-    if(ImGui::Button("Open manual")) {
-        openManual("making.html#packs");
-    }
     
     //Check if everything's ok.
     if(internalName.empty()) {
@@ -2796,7 +2819,7 @@ void Editor::processGuiDialogNewPack() {
     if(hitCreateButton) {
         if(!problem.empty()) return;
         game.content.addNewPack(
-            internalName, name, description, maker
+            internalName, name, description, maker, license
         );
         forIdx(p, game.content.packs.manifestsWithBase) {
             if(game.content.packs.manifestsWithBase[p] == internalName) {

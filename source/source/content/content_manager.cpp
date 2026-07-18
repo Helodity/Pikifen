@@ -36,11 +36,14 @@ ContentManager::ContentManager() {
  * @param name Proper name of the pack.
  * @param description Description.
  * @param maker Maker(s).
+ * @param license License for the pack and content,
+ * or empty for all rights reserved.
  * @return Whether it succeeded.
  */
 bool ContentManager::addNewPack(
     const string& internalName, const string& name,
-    const string& description, const string& maker
+    const string& description, const string& maker,
+    const string& license
 ) {
     string packPath = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + internalName;
     
@@ -60,6 +63,7 @@ bool ContentManager::addNewPack(
     pGW.write("tags", "");
     pGW.write("dependencies", "");
     pGW.write("conflicts", "");
+    pGW.write("license", "");
     pGW.write("notes", "");
     data.saveFile(packPath + "/" + FILE_NAMES::PACK_DATA, true, true);
     
@@ -357,6 +361,7 @@ void PackManager::loadAll() {
         pRS.set("engine_version", packData.engineVersion);
         pRS.set("dependencies", packData.dependencies);
         pRS.set("conflicts", packData.conflicts);
+        pRS.set("license", packData.license);
         pRS.set("notes", packData.notes);
         
         list[manifestsWithBaseRaw[p]] = packData;

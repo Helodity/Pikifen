@@ -56,7 +56,7 @@
     Change version information in the code
         In-development is false, apply the correct release date
         Use the helper tool, or edit const.h and the *.rc files
-    Update all area version numbers and engine version numbers
+    Update the base content pack's version number and engine version number
     Update the Allegro version number on the Compiling page of the manual, if it changed
     Check any changes made on Windows in order to compile, and port them over
 5. Final build

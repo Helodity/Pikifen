@@ -15,7 +15,7 @@ If you have any feedback, suggestions, or ideas, feel free to open a [GitHub iss
 
 ## Contributing with code
 
-If you want to make your own code changes to _Pikifen_ and you want them included in the repository, that's great! Please make sure you follow these guidelines. This assumes you're already at least a bit familiar with git, commits, pull requests, etc.
+If you make your own code changes to _Pikifen_ and you want them included in the repository, that's great! This section assumes you're already at least a bit familiar with git, commits, pull requests, etc. Here are some notes about the process. By submitting your contributions you agree to these notes.
 
 ### Procedure
 
@@ -39,9 +39,13 @@ If you want to make your own code changes to _Pikifen_ and you want them include
 * Use only one branch per feature or bug-fix, unless it makes sense to have multiple in one.
 * Follow the style of the commit messages as best as you can.
 
+### Licensing
+
+* Any commit added to the project is licensed under the project's license, the MIT license.
+
 ## Contributing with content
 
-If you've made some content to be added to the base content in _Pikifen_, you can also submit it to be added! You can do this either via a [GitHub issue](https://github.com/Espyo/Pikifen/issues) or on the [Discord server](https://discord.gg/qbhz4u3). In general, contact me first, but there are also some more notes to keep in mind.
+If you've made some content to be added to the base content in _Pikifen_, you can also submit it to be added! You can do this either via a [GitHub issue](https://github.com/Espyo/Pikifen/issues) or on the [Discord server](https://discord.gg/qbhz4u3). Here are some notes about the process. By submitting your contributions you agree to these notes.
 
 ### Ownership
 
@@ -55,6 +59,7 @@ The content you made, once done, will be officially added to the engine. For the
 6. If you want to make some change or update to the content, it can be added to a future version of _Pikifen_, but it's best if we talk about it first.
 7. I won't delete or make massive changes to the content due to anyone's request, unless I have a strong reason to.
 8. You can still create and submit custom content that is about your originally made content, like a "remix" variant, or a "director's cut" edition that has things that had to be removed from the official version.
+9. Content added to the project's base content will be licensed under the project's license, the MIT license, if it wasn't already.
 
 ### Variety
 
@@ -62,16 +67,16 @@ Before starting your work on content to be added officially, you should probably
 
 ### Quality
 
-Content should have a minimum level of quality to make it into _Pikifen_. The idea is for people to have fun content to toy around with right when they download the engine. If the content looks terrible, is very boring, and makes the game lag, it won't really serve that goal, will it? On top of the basics. If the content's not good, while I will of course appreciate the effort, I will have to decline it. For areas, you can try following the area-making tips present in the included manual.
+Content should have a minimum level of quality to make it into _Pikifen_. The idea is for people to have fun content to toy around with right when they download the engine. If the content looks terrible, is very boring, and makes the game lag, it won't really serve that goal, will it? If the content's not good, while I will of course appreciate the effort, I will have to decline it. For areas, you can try following the area-making tips present in the included manual.
 
 ### Other notes
 
-* For textures, songs, and sounds, make sure they aren't massive in size, and that they are royalty-free.
+* For textures, songs, and sounds, make sure they aren't massive in size, and that they are royalty-free. Specify their licenses and credits in the manual's credits page.
 * For songs:
   * Ideally, add your DAW's song project to `source/documents/music`, provided it's possible and it's not bloated with embedded samples or anything.
   * Ideally, use OGG.
   * Looped sections, if any, should play only once to help keep the file size small.
-  * Credit the instruments used in the manual's credits page.
+  * Specify the licenses and credits of the instruments used in the manual's credits page.
   * Edit every track files' metadata:
     * Title: e.g. "My Song", "My Song (enemy track)", etc.
     * Artist

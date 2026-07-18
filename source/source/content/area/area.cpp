@@ -411,6 +411,7 @@ void Area::clone(Area& other) {
     other.difficulty = difficulty;
     other.maker = maker;
     other.version = version;
+    other.license = license;
     other.makerNotes = makerNotes;
     other.sprayAmounts = sprayAmounts;
     other.songName = songName;

@@ -2680,6 +2680,24 @@ void AreaEditor::processGuiPanelInfo() {
             "play the mission again."
         );
         
+        //License input.
+        string license = game.curArea->license;
+        if(ImGui::InputText("License", &game.curArea->license)) {
+            registerChange("area license change");
+            game.curArea->license = license;
+        }
+        setTooltip(
+            "Software license. Optional.\n"
+            "If not specified, it uses the license of the pack it is in.\n"
+            "\"MIT\" is recommended, since it allows others to\n"
+            "use and change the content at will, while still\n"
+            "keeping credit, and is what Pikifen as a whole uses.\n"
+            "If this content and its pack do not have a license,\n"
+            "the content will be assumed to have all\n"
+            "rights reserved by the maker, which makes it harder\n"
+            "for others to use their content!"
+        );
+        
         //Maker notes input.
         string makerNotes = game.curArea->makerNotes;
         if(ImGui::InputText("Maker notes", &makerNotes)) {

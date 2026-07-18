@@ -120,7 +120,8 @@ struct ContentManager {
     ContentManager();
     bool addNewPack(
         const string& internalName, const string& name,
-        const string& description = "", const string& maker = ""
+        const string& description = "", const string& maker = "",
+        const string& license = ""
     );
     bool loadAreaAsCurrent(
         const string& requestedAreaPath, ContentManifest* manifPtr,
