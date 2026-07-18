@@ -229,7 +229,7 @@ struct Options {
         int targetFps = ADVANCED_D::TARGET_FPS;
         
         //Should we force the window's positioning?
-        //(on some machines it appears out-of-bounds by default)
+        //On some devices it appears out-of-bounds by default.
         bool windowPosHack = ADVANCED_D::WINDOW_POS_HACK;
         
         //Set the camera's middle zoom level to this amount.

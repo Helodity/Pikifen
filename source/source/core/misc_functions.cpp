@@ -1230,7 +1230,7 @@ void saveScreenshot() {
         
     //Before saving, let's set every pixel's alpha to 255.
     //This is because alpha operations on the backbuffer behave weirdly.
-    //On some machines, when saving to a bitmap, it will use those weird
+    //On some devices, when saving to a bitmap, it will use those weird
     //alpha values, which may be harmless on the backbuffer, but not so much
     //on a saved PNG file.
     ALLEGRO_BITMAP* screenshot =

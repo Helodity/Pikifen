@@ -1181,7 +1181,7 @@ void PikminNestType::createColormap() {
     menuColormap = al_create_bitmap(bitmapSize, 1);
     al_set_target_bitmap(menuColormap);
     for(int i = 0; i < bitmapSize; i++) {
-        al_put_pixel(i, 0, ki.get(i / (float)bitmapSize));
+        al_put_pixel(i, 0, ki.get(i / (float) bitmapSize));
     }
     al_set_target_bitmap(oldTargetBmp);
     al_set_new_bitmap_flags(oldBmpFlags);

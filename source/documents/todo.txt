@@ -16,23 +16,54 @@ Next tasks (roughly sorted most important first)
             Easy elemental obstacles
         It should be small and compact, so the player can, with little effort, see many Pikmin carrying many things around
             Piles help a lot with this
+            Make good use of verticality so it's easy to drop down ledges to reach places, but Pikmin have to climb up the pathways to carry things
+        It should be a bit of a vertical slice of the engine
+            Maybe try to have at least one mob of each category
+        Concept
+            Experience: Easy, approachable, and diverse, and getting to see the pretty Pikmin walking around
+            Gimmicks: Loads of situations where Pikmin are carrying things back and forth, maybe have at least one mob of each category
+            Objective: Grow 100 Pikmin, bonus points for recovered treasures, no time limit or time bonus
+            Pikmin types: Reds, since they're the basics, Purples and Whites so players can balance their object collection needs
+            Difficulty: Easy to reach 100 Pikmin, still easy to get platinum (all treasures)
+            Theme: Sandy, maybe some greenery here and there
+            Landmarks: Sand castle with the base on top, Puffy Blowhog arena
+            Obstacles: Fire geysers due to the dryness, ceramic bridges so there's a lot of carrying
+            Textures: Sands, rocks, maybe dry leaves
+        Misc
+            Start with normal Pikmin near you, but also have one or two sprouts
+            Have a 20-pellet behind a paper bag
+            Have a gate blocking something
+            Have geysers on the sand castle so players can easily make it back to the base
+            Ceramic bridges here and there
+            Buried White and Purple Pikmin, next to White and Purple Candypop Buds; only Reds can be grown
+            Healthy selection of eggs, all dropping nectar
+            Healthy selection of pellet posies
+            A spicy spiderwort somewhere?
+            Nuggets and chocolate bars
+            Have a cardboard box somewhere?
+            Have a bomb rock tucked in the corner?
+            Have a climbing stick somewhere?
+            Enemies: Crumbugs, Dwarf Reds, loads of Female Sheargrubs, Puffy Blowhog?, White Spectralids
+            
     
     --- 2.0.0 ---
     Freezecake
     Update Dear ImGui to 1.92.8
         > Made AddCallback() user data default to Null for convenience.
     Increase the size of all gates to 256? A lot of the larger enemies and treasures have a hard time squeezing through the 192-length gaps
+    https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
+    https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
     Add a proper maker console
         Helpful so you can see error logs, script prints, etc.
         The ability to write commands that trigger maker tools, with parameters too
         Page up and page down to scroll the output, up and down for input history, tab to auto-complete
+            If you're not at the bottom, new commands shouldn't scroll the view down, and deleting old commands shouldn't scroll the view up
         Add general commands
             help
             clear
             alias
         Printing something to the console should receive an argument that specifies whether that gets shown in the "console preview" and added to the console's output for later viewing (errors, script prints) or if it is just shown in the preview (mob inspector, area inspector)
         Move somewhere the logic that is common between this system and the existing script action parsing/running system
-        Smooth scrolling in/out animation
         Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Multiplayer co-op
@@ -47,6 +78,7 @@ Next tasks (roughly sorted most important first)
                 A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
                 It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
                     Confirm that these work both on Linux and on Windows
+                Some of the misc. control options, like using the mouse cursor, should be a part of the control scheme, while others are just personal preference
             Player setup menu
                 The menu should be split into four columns, each one for a player. Each column should have:
                     A button to toggle that player on or off
@@ -57,7 +89,7 @@ Next tasks (roughly sorted most important first)
                     Their favorite leader, including "none" and "random"
             Pause menu
                 The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
-                The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
+                The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay (unless it's single-player)
             Area selection
                 Add a button that takes you to the player setup menu
                 Only show areas that match the corresponding number of players, but allow other areas to be entered
@@ -131,18 +163,49 @@ Next tasks (roughly sorted most important first)
             A player sees an opposing team's Pikmin on their screen
                 I think the player's own Pikmin (and Pikmin belonging to another player that's still on their team) should appear normal, but the opponents should be marked. Maybe a triangle above them?
         Roulette items
-            The P2, P3, and P4 ones
-            Clock: Inflicts a status effect on Pikmin (maybe the leader too?) that makes them move at half speed for 10 seconds
-            Conversion: Picks three Pikmin at random from the opposing team(s) and converts them to your team. If a team would end up with 0 Pikmin this way, then one of the randomly chosen Pikmin is instead unharmed
-            Teleportation items: Bring opponent to you, teleport to opponent, swap places with opponent, teleport opponent somewhere random
+            All items should be read from a versus_items folder or something, where you specify the name of the item, its icon, its behavior from an enum, and any parameters if that behavior allows parameter customization
+            Item behaviors
+                give_status: Grants the given status effect to all matching mobs. Can customize what status to give, a radius if necessary, and the list of targets as a bitmask: all team leaders, all opponent leaders, Pikmin in radius near team leaders, Pikmin in radius near opponent leaders, all team Pikmin, all opponent Pikmin, enemies in radius near team leaders, enemies in radius near opponent leaders, all enemies
+                spawn_object: Spawns the given object somewhere. Can customize the object, the amount, and the target location from an enum: near team leaders, near opponent leaders, near team Onion, near opponent Onion
+                add_pikmin: Makes the team's Onion sprout some new Pikmin. Can customize the amount, and whether it's a basic Pikmin type or a fixed type like Glow Pikmin or Bulbmin
+                add_inventory_item: Grants the team some amount of an inventory item. Can customize the amount, and the spray type
+                flag_return: Teleports the "flag" object back to the base. Items with this behavior are only present if there is a flag object
+                bingo_cell_fill: Fills one cell in the team's bingo card. Items with this behavior are only present if the bingo card is on
+                bingo_card_shuffle: Shuffles every opponent's bingo card. Items with this behavior are only present if the bingo card is on
+                warp: Warps every opponent somewhere else on the stage at random
+                convert: Picks some Pikmin at random from each opposing team, and converts them to the user's team. If a team would end up with 0 Pikmin this way, then one of the randomly chosen Pikmin is instead unharmed. Can customize the amount of Pikmin to convert
+                steal_items: Makes all opponents lose their current item, and steals the most powerful item of that bunch, whatever "powerful" means
+            Default items
+                +10 Pikmin: Adds five basic Pikmin (add_pikmin)
+                +5 Glow Pikmin: Adds five Glow Pikmin (add_pikmin)
+                Flower: Instantly flower all Pikmin (give_status)
+                Ghost: Probably give the player a status that makes their sprites invisible on others's screens, and also does "turns_invisible = true" (give_status)
+                +1 spicy spray: Adds one spicy spray (add_inventory_item)
+                +1 bitter spray: Adds one bitter spray (add_inventory_item)
+                Flag return: Teleports the "flag" object back to the base (flag_return)
+                Lucky Marble: Fills in one cell of the bingo card (bingo_cell_fill)
+                Enemy Annihilator: Kills every non-boss enemy that's on-screen, using a status that causes 9999 damage and cannot affect bosses (give_status)
+                Bomb: Spawns a bomb rock near the leader (spawn_object)
+                Spawn enemy: Spawns some undecided enemy near opponents (spawn_object)
+                Boulders: Spawns boulders from the sky near opponents (spawn_object)
+                Lightning: Makes every opponent leader and the Pikmin in a radius near them act as if they had touched the electricity_stunning hazard (give_status)
+                Shuffle: Shuffles every opponent's bingo card (bingo_card_shuffle)
+                Warp: Warps every opponent somewhere else on the stage (warp)
+                Clock: Inflicts a status effect on Pikmin (maybe the leader too?) that makes them move at half speed for 10 seconds (give_status)
+                Conversion: Picks three Pikmin at random from each opposing team, and converts them to your team. This will likely result in in-fighting (convert)
+                Item stealer: Makes all opponents lose their current item, and steals the most powerful item of that bunch (steal_items)
             The next item to use should go in a slot in the inventory
-        Victory rules
-            KO
-                When a team loses all Pikmin or a leader (maybe an option to make it ALL leaders instead?), they lose. Last one standing wins
+            Have some sort of manager that determines what the rolled item should be. It probably try to avoid giving the same item twice in a row, and should try to benefit players who are behind
+            The cherries should probably have some outline (maybe with a shader), so the players can tell they're special and not your average collectible
+        End conditions
+            Pikmin extinction
+                When a team loses all their Pikmin, they finish with a loss
+                Compatibility data: None; all areas are compatible
+            Leader KO
+                When a team loses some or all leaders, they finish with a loss
                 Compatibility data: None; all areas are compatible
             Collection
-                First team to collect a certain amount of certain treasure wins
-                In the canon games, this is P2's yellow marbles
+                When a team reaches a certain amount of a certain treasure, they finish with a win (like P2's yellow marbles)
                 Compatibility data:
                     What the treasure is. If not specified, a random treasure from the area is chosen
                 Default recommended values:
@@ -150,7 +213,7 @@ Next tasks (roughly sorted most important first)
                 When (if) time is up:
                     Player with the most collected gets +1 point in their overall standing. No points are awarded in the case of a first-place tie
             Capture the Flag
-                When a team collects the other team's flag they gain a point. First team to reach a certain amount of points wins
+                When a team collects another team's flag they gain a point. First team to reach a certain amount of points wins
                 In the canon games, this is pretty much marble/macaroon capture. Delivering once is enough there, but here, if the amount of captures is higher than 1, the flag should respawn in its original location after being captured
                 The object spawns near the Onion, some small distance away, facing like 45 degrees left of the direction from this Onion to the other area center (the average of all Onions)
                 Compatibility data:
@@ -206,6 +269,8 @@ Next tasks (roughly sorted most important first)
                 One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in choke-points, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
             Time?
                 When time is up, the player with the most Pikmin raised wins. Or with the most enemy defeats. Or treasure points collected. Or mission points for custom competitive missions. And so on.
+            Stage wipe
+                When every object in the stage has been collected or defeated, one player is declared the winner based on whatever, same as the time limit condition
             Delivery?
                 There are loose, 1-weight objects stranded around the area, and players can send their Pikmin to deliver them to a pick-up point somewhere in the center of the area. The player to reach the highest amount of deliveries wins
         Rulesets
@@ -905,7 +970,9 @@ Tasks for later on (I might never implement these)
             See the Pikmin 2 ending movie, for instance
         When something contributes to something in the mission that's reflected in a HUD item, it should fly into said item
     The ability for particle generators to consist of multiple particle generators
-    A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
+    Multiplayer competitive ideas
+        A mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
+        A mode where you're tasked to make your Pikmin squad match an exact, randomly-generated listing, like 5 Red Pikmin, 8 Blue Pikmin, and 1 Glow Pikmin?
     Observation spot
         An interactable that makes the camera zoom out a lot for a few seconds, so you can get a good overview of the surrounding location
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey
