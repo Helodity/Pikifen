@@ -464,9 +464,7 @@ public:
     
     //--- Public function declarations ---
     
-    ALLEGRO_BITMAP* drawToBitmap(
-        const MakerTools::AreaImageSettings& settings
-    );
+    ALLEGRO_BITMAP* drawToBitmap(int size, int padding, bool treeShadows);
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
@@ -545,8 +543,7 @@ private:
     void doGameDrawing(
         ALLEGRO_BITMAP* bmpOutput = nullptr,
         const ALLEGRO_TRANSFORM* bmpTransform = nullptr,
-        const MakerTools::AreaImageSettings& bmpSettings =
-            MakerTools::AreaImageSettings()
+        bool treeShadows = true
     );
     void doGameplayLeaderLogic(Player* player, float deltaT);
     void doGameplayLogic(float deltaT);

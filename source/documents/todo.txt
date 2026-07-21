@@ -5,6 +5,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Area image is coming up all washed up and transparent on Playful Yard
+    Freezing the free cam makes it still keep some momentum if it was moving
+    If you heal and hurt a mob repeatedly, the health wheel will start to vanish while filling up and it'll look weird
 
     --- 1.2.0 ---
     Create an area that's good for people to pick up and play
@@ -820,7 +823,9 @@ Misc things (so I don't forget)
                 Item run-up ticking
                 Item run-up finished
                 Ka-ching for getting a medal
-        A Night Expedition area
+        Areas
+            A Night Expedition area
+            Enough areas that every Pikmin type appears at least once
     Base content to tweak
         Move the areas into their own pack, so people can disable it if they ever want to not have them (like if they installed another pack that changes Pikifen entirely and the base areas don't fit)
             Make sure the Tutorial Meadow prompt doesn't crash trying to access a non-existent area. The engine should probably read a property from the game config with the name of the tutorial area, and simply not show the prompt if it's empty

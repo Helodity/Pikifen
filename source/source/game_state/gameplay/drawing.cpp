@@ -32,11 +32,12 @@
  *
  * @param bmpOutput If not nullptr, draw the area onto this.
  * @param bmpTransform Transformation to use when drawing to a bitmap.
- * @param bmpSettings Settings to use when drawing to a bitmap.
+ * @param treeShadows Whether to draw tree shadows. Only applicable when
+ * drawing to a bitmap.
  */
 void GameplayState::doGameDrawing(
     ALLEGRO_BITMAP* bmpOutput, const ALLEGRO_TRANSFORM* bmpTransform,
-    const MakerTools::AreaImageSettings& bmpSettings
+    bool treeShadows
 ) {
 
     /*  ***************************************
@@ -113,7 +114,7 @@ void GameplayState::doGameDrawing(
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- Tree shadows");
         }
-        if(!(bmpOutput && !bmpSettings.shadows)) {
+        if(!(bmpOutput && !treeShadows)) {
             drawTreeShadows();
         }
         if(game.perfMon) {
@@ -1904,11 +1905,14 @@ void GameplayState::drawThrowPreview(Player* player) {
 /**
  * @brief Draws the current area and mobs to a bitmap and returns it.
  *
- * @param settings What settings to use.
+ * @param size Maximum image width or height, in pixels.
+ * @param padding Padding around the actual area, in area pixels. Each side
+ * of the area receives these many pixels divided by two.
+ * @param shadows Whether to draw tree shadows.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* GameplayState::drawToBitmap(
-    const MakerTools::AreaImageSettings& settings
+    int size, int padding, bool treeShadows
 ) {
     //First, get the full dimensions of the map.
     RectCorners corners = RectCorners::readyForSearch;
@@ -1919,17 +1923,17 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     }
     
     //Figure out the scale that will fit on the image.
-    float areaW = corners.br.x - corners.tl.x + settings.padding;
-    float areaH = corners.br.y - corners.tl.y + settings.padding;
-    float finalBmpW = settings.size;
-    float finalBmpH = settings.size;
+    float areaW = corners.br.x - corners.tl.x + padding;
+    float areaH = corners.br.y - corners.tl.y + padding;
+    float finalBmpW = size;
+    float finalBmpH = size;
     float scale;
     
     if(areaW > areaH) {
-        scale = settings.size / areaW;
+        scale = size / areaW;
         finalBmpH *= areaH / areaW;
     } else {
-        scale = settings.size / areaH;
+        scale = size / areaH;
         finalBmpW *= areaW / areaH;
     }
     
@@ -1940,13 +1944,13 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     al_identity_transform(&t);
     al_translate_transform(
         &t,
-        -corners.tl.x + settings.padding / 2.0f,
-        -corners.tl.y + settings.padding / 2.0f
+        -corners.tl.x + padding / 2.0f,
+        -corners.tl.y + padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
     
     //Begin drawing!
-    doGameDrawing(bmp, &t);
+    doGameDrawing(bmp, &t, treeShadows);
     
     return bmp;
 }

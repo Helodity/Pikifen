@@ -169,7 +169,8 @@ struct MakerTools {
     
     struct AreaImageSettings {
     
-        //Padding around the area in the area image tool.
+        //Padding around the actual area, in area pixels. Each side
+        //of the area receives these many pixels divided by two.
         float padding = 32.0f;
         
         //Show tree shadows in the area image tool?
@@ -177,9 +178,6 @@ struct MakerTools {
         
         //Maximum width or height of the area image.
         int size = 2048;
-        
-        //Show mobs in the area image?
-        bool mobs = true;
         
     };
     
@@ -207,6 +205,9 @@ struct MakerTools {
     //Are we currently changing the game speed?
     bool changeSpeed = false;
     
+    //Which game speed change multiplier to use.
+    float changeSpeedMultiplier = 2.0f;
+    
     //Are we currently paused for frame advance?
     bool frameAdvanceMode = false;
     
@@ -218,9 +219,6 @@ struct MakerTools {
     
     //Do we have to advance one game frame on the next processing frame?
     bool mustAdvanceOneFrame = false;
-    
-    //Which game speed change setting to use.
-    unsigned char changeSpeedSettingIdx = 0;
     
     //Different game speed change settings. These are multipliers to change by.
     float changeSpeedSettings[3] = { 2.0f, 0.5f, 1.0f };

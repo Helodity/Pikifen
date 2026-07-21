@@ -1396,11 +1396,7 @@ void initMakerToolTypes() {
     const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
     const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
     const COMMAND_PARAM_TYPE ptBool = COMMAND_PARAM_TYPE_BOOL;
-    const COMMAND_PARAM_TYPE ptString = COMMAND_PARAM_TYPE_STRING;
-    const COMMAND_PARAM_TYPE ptEnum = COMMAND_PARAM_TYPE_ENUM;
-    const COMMAND_PARAM_FLAG pfConst = COMMAND_PARAM_FLAG_CONST;
     const COMMAND_PARAM_FLAG pfOpt = COMMAND_PARAM_FLAG_OPTIONAL;
-    const COMMAND_PARAM_FLAG pfVector = COMMAND_PARAM_FLAG_VECTOR;
     
     
     //-Anywhere tools-
@@ -1428,6 +1424,10 @@ void initMakerToolTypes() {
         getIdxBitmask(MAKER_TOOL_CONTEXT_GAMEPLAY);
         
     //Area image.
+    queueParam("size", ptInt, pfOpt, "2048");
+    queueParam("padding", ptInt, pfOpt, "32");
+    queueParam("mobs", ptBool, pfOpt, "true");
+    queueParam("shadows", ptBool, pfOpt, "true");
     commitTool(
         MAKER_TOOL_TYPE_AREA_IMAGE,
         "area_image", true,
@@ -1442,6 +1442,7 @@ void initMakerToolTypes() {
     );
     
     //Change speed.
+    queueParam("multiplier", ptFloat, pfOpt, "2");
     commitTool(
         MAKER_TOOL_TYPE_CHANGE_SPEED,
         "change_speed", true,
@@ -1456,6 +1457,7 @@ void initMakerToolTypes() {
     );
     
     //Fill inventory.
+    queueParam("amount", ptInt, pfOpt, "99");
     commitTool(
         MAKER_TOOL_TYPE_FILL_INVENTORY,
         "fill_inventory", true,
@@ -1463,6 +1465,7 @@ void initMakerToolTypes() {
     );
     
     //Frame advance.
+    queueParam("disable tool", ptBool, pfOpt, "false");
     commitTool(
         MAKER_TOOL_TYPE_FRAME_ADVANCE,
         "frame_advance", true,
@@ -1470,6 +1473,7 @@ void initMakerToolTypes() {
     );
     
     //Free cam.
+    queueParam("toggle camera freeze", ptBool, pfOpt, "false");
     commitTool(
         MAKER_TOOL_TYPE_FREE_CAM,
         "free_cam", true,
@@ -1491,6 +1495,7 @@ void initMakerToolTypes() {
     );
     
     //Hurt mob.
+    queueParam("percentage", ptFloat, pfOpt, "50");
     commitTool(
         MAKER_TOOL_TYPE_HURT_MOB,
         "hurt_mob", true,
@@ -1498,6 +1503,8 @@ void initMakerToolTypes() {
     );
     
     //Mob inspector.
+    queueParam("scan", ptBool, pfOpt, "false");
+    queueParam("disable tool", ptBool, pfOpt, "false");
     commitTool(
         MAKER_TOOL_TYPE_MOB_INSPECTOR,
         "mob_inspector", true,
@@ -1505,6 +1512,8 @@ void initMakerToolTypes() {
     );
     
     //New Pikmin.
+    queueParam("same type as before", ptBool, pfOpt, "false");
+    queueParam("maturity", ptInt, pfOpt, "2");
     commitTool(
         MAKER_TOOL_TYPE_NEW_PIKMIN,
         "new_pikmin", true,
@@ -1547,6 +1556,8 @@ void initMakerToolTypes() {
     );
     
     //Teleport.
+    queueParam("use inspected mob", ptBool, pfOpt, "false");
+    queueParam("leave group members behind", ptBool, pfOpt, "false");
     commitTool(
         MAKER_TOOL_TYPE_TELEPORT,
         "teleport", true,

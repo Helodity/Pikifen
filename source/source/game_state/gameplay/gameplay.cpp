@@ -443,10 +443,7 @@ void GameplayState::doLogic() {
     float regularDeltaT = game.deltaT;
     
     if(game.makerTools.changeSpeed) {
-        game.deltaT *=
-            game.makerTools.changeSpeedSettings[
-                game.makerTools.changeSpeedSettingIdx
-            ];
+        game.deltaT *= game.makerTools.changeSpeedMultiplier;
     } else if(game.makerTools.frameAdvanceMode) {
         if(game.makerTools.mustAdvanceOneFrame) {
             game.makerTools.mustAdvanceOneFrame = false;

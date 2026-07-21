@@ -469,10 +469,7 @@ void Game::processSystemInfo() {
     //Make sure that speed changes don't affect the FPS calculation.
     double realDeltaT = deltaT;
     if(makerTools.changeSpeed) {
-        realDeltaT /=
-            makerTools.changeSpeedSettings[
-                makerTools.changeSpeedSettingIdx
-            ];
+        realDeltaT /= makerTools.changeSpeedMultiplier;
     }
     
     framerateHistory.push_back(curFrameProcessTime);

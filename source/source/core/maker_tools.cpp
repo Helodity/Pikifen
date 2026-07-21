@@ -36,10 +36,13 @@ const float PLAY_CONFIRMATION_TIMER = 1.0f;
 bool MakerToolRunners::areaImage(
     MakerTools& mgr, const vector<string>& args
 ) {
-    unsigned char settingIdx = mgr.getMakerToolSettingIdx();
+    int size = s2i(args[0]);
+    int padding = s2i(args[1]);
+    bool treeShadows = s2b(args[2]);
+    
     ALLEGRO_BITMAP* bmp =
         game.states.gameplay->drawToBitmap(
-            mgr.areaImageSettings[settingIdx]
+            size, padding, treeShadows
         );
     string fileName =
         FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
@@ -88,22 +91,23 @@ bool MakerToolRunners::areaInspector(
 bool MakerToolRunners::changeSpeed(
     MakerTools& mgr, const vector<string>& args
 ) {
+    float newMultiplier = s2f(args[0]);
+    
     if(mgr.frameAdvanceMode) {
         mgr.frameAdvanceMode = false;
         mgr.mustAdvanceOneFrame = false;
     } else {
-        unsigned char settingIdx = mgr.getMakerToolSettingIdx();
         bool finalState = false;
         if(!mgr.changeSpeed) {
             finalState = true;
         } else {
-            if(mgr.changeSpeedSettingIdx != settingIdx) {
+            if(mgr.changeSpeedMultiplier != newMultiplier) {
                 finalState = true;
             }
         }
         
         if(finalState) {
-            mgr.changeSpeedSettingIdx = settingIdx;
+            mgr.changeSpeedMultiplier = newMultiplier;
         }
         mgr.changeSpeed = finalState;
     }
@@ -127,7 +131,7 @@ bool MakerToolRunners::deleteMob(
         game.makerDisplay.write("No mob is being inspected.", 5.0f);
         return false;
     }
-
+    
     return true;
 }
 
@@ -141,14 +145,15 @@ bool MakerToolRunners::deleteMob(
 bool MakerToolRunners::fillInventory(
     MakerTools& mgr, const vector<string>& args
 ) {
-    size_t newAmount = mgr.mod1 ? 0 : 99;
+    size_t newAmount = s2i(args[0]);
+    
     for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
         PlayerTeam* tPtr = &game.states.gameplay->playerTeams[t];
         forIdx(s, tPtr->sprayStats) {
             tPtr->sprayStats[s].nrSprays = newAmount;
         }
     }
-
+    
     return true;
 }
 
@@ -162,7 +167,9 @@ bool MakerToolRunners::fillInventory(
 bool MakerToolRunners::frameAdvance(
     MakerTools& mgr, const vector<string>& args
 ) {
-    if(mgr.mod1) {
+    bool disableTool = s2b(args[0]);
+    
+    if(disableTool) {
         mgr.frameAdvanceMode = false;
         mgr.mustAdvanceOneFrame = false;
     } else {
@@ -172,7 +179,7 @@ bool MakerToolRunners::frameAdvance(
             mgr.mustAdvanceOneFrame = true;
         }
     }
-
+    
     return true;
 }
 
@@ -186,9 +193,11 @@ bool MakerToolRunners::frameAdvance(
 bool MakerToolRunners::freeCam(
     MakerTools& mgr, const vector<string>& args
 ) {
+    bool toggleCameraFreeze = s2b(args[0]);
+    
     bool freeCamControlWasOn = mgr.freeCamControl;
-        
-    if(mgr.mod1) {
+    
+    if(toggleCameraFreeze) {
         if(mgr.freeCamView) {
             mgr.freeCamControl = !mgr.freeCamControl;
         } else {
@@ -209,7 +218,7 @@ bool MakerToolRunners::freeCam(
         //Stop the leaders, otherwise they'll keep moving out of control.
         game.states.gameplay->stopAllLeaders();
     }
-
+    
     return true;
 }
 
@@ -228,7 +237,7 @@ bool MakerToolRunners::geometryInfo(
         mgr.toolStartCursor =
             game.states.gameplay->players[0].view.mouseCursorWorldPos;
     }
-
+    
     return true;
 }
 
@@ -243,7 +252,7 @@ bool MakerToolRunners::hideHud(
     MakerTools& mgr, const vector<string>& args
 ) {
     mgr.hud = !mgr.hud;
-
+    
     return true;
 }
 
@@ -257,19 +266,17 @@ bool MakerToolRunners::hideHud(
 bool MakerToolRunners::hurtMob(
     MakerTools& mgr, const vector<string>& args
 ) {
-    unsigned char settingIdx = mgr.getMakerToolSettingIdx();
+    float ratio = s2f(args[0]);
+    
     Mob* m =
         getClosestMobToMouseCursor(
             game.states.gameplay->players[0].view, true
         );
-    
+        
     if(!m) return false;
-
-    m->setHealth(
-        true, true,
-        -mgr.mobHurtingSettings[settingIdx]
-    );
-
+    
+    m->setHealth(true, true, -ratio);
+    
     return true;
 }
 
@@ -307,7 +314,7 @@ bool MakerToolRunners::mobInspector(
     ) {
         game.makerDisplay.write("No longer inspecting mob.", 5.0f);
     }
-
+    
     return true;
 }
 
@@ -321,17 +328,23 @@ bool MakerToolRunners::mobInspector(
 bool MakerToolRunners::newPikmin(
     MakerTools& mgr, const vector<string>& args
 ) {
+    bool sameTypeAsBefore = s2b(args[0]);
+    unsigned char maturity = s2i(args[1]);
+    
     if(
-        game.states.gameplay->mobs.pikmin.size() >= 
+        game.states.gameplay->mobs.pikmin.size() >=
         game.curArea->getMaxPikminInField()
     ) {
         return false;
     }
-
-    bool mustUseLastType = (mgr.mod1 && mgr.lastPikminType);
-    PikminType* newPikminType = nullptr;
     
-    if(mustUseLastType) {
+    PikminType* newPikminType = nullptr;
+    maturity =
+        std::clamp(
+            maturity, (unsigned char) 0, (unsigned char) N_MATURITIES
+        );
+        
+    if(sameTypeAsBefore && mgr.lastPikminType) {
         newPikminType = mgr.lastPikminType;
     } else {
         newPikminType =
@@ -354,7 +367,7 @@ bool MakerToolRunners::newPikmin(
         game.mobCategories.get(MOB_CATEGORY_PIKMIN),
         game.states.gameplay->players[0].view.mouseCursorWorldPos,
         newPikminType, 0,
-        mgr.mod2 ? "maturity=0" : "maturity=2"
+        "maturity=" + i2s(maturity)
     );
     
     return true;
@@ -409,6 +422,8 @@ bool MakerToolRunners::newReminder(
     game.modal.useTextInput = true;
     game.modal.updateItems();
     game.modal.open();
+    
+    return true;
 }
 
 
@@ -422,7 +437,7 @@ bool MakerToolRunners::pathInfo(
     MakerTools& mgr, const vector<string>& args
 ) {
     mgr.pathInfo = !mgr.pathInfo;
-
+    
     return true;
 }
 
@@ -553,8 +568,11 @@ bool MakerToolRunners::showReaches(
 bool MakerToolRunners::teleport(
     MakerTools& mgr, const vector<string>& args
 ) {
+    bool useInspectedMob = s2b(args[0]);
+    bool leaveGroupMembersBehind = s2b(args[1]);
+    
     Mob* mobToTeleport =
-        (mgr.mod1 && mgr.inspectedMob) ?
+        (useInspectedMob && mgr.inspectedMob) ?
         mgr.inspectedMob :
         game.states.gameplay->players[0].leaderPtr;
         
@@ -563,9 +581,9 @@ bool MakerToolRunners::teleport(
             game.states.gameplay->players[0].view.mouseCursorWorldPos,
             nullptr, true
         );
-    
+        
     if(!mouseSector || !mobToTeleport) return false;
-
+    
     mobToTeleport->chase(
         game.states.gameplay->players[0].view.mouseCursorWorldPos,
         mouseSector->floorZ, CHASE_FLAG_TELEPORT
@@ -574,7 +592,7 @@ bool MakerToolRunners::teleport(
         game.states.gameplay->players[0].view.cam.setPos(
             game.states.gameplay->players[0].view.mouseCursorWorldPos
         );
-        if(!mgr.mod2) {
+        if(!leaveGroupMembersBehind) {
             forIdx(p, mobToTeleport->group->members) {
                 mobToTeleport->group->members[p]->chase(
                     game.states.gameplay->
@@ -674,29 +692,38 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     if(action.value < 0.5f) return false;
     
     MAKER_TOOL_TYPE toolToRun = MAKER_TOOL_TYPE_NONE;
-    vector<string> params;
+    vector<string> args;
     
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MT_AREA_IMAGE: {
         toolToRun = MAKER_TOOL_TYPE_AREA_IMAGE;
+        unsigned char settingIdx = getMakerToolSettingIdx();
+        args.push_back(i2s(areaImageSettings[settingIdx].size));
+        args.push_back(i2s(areaImageSettings[settingIdx].padding));
+        args.push_back(b2s(areaImageSettings[settingIdx].shadows));
         break;
     } case PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR: {
         toolToRun = MAKER_TOOL_TYPE_AREA_INSPECTOR;
         break;
     } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
         toolToRun = MAKER_TOOL_TYPE_CHANGE_SPEED;
+        unsigned char settingIdx = getMakerToolSettingIdx();
+        args.push_back(f2s(changeSpeedSettings[settingIdx]));
         break;
     } case PLAYER_ACTION_TYPE_MT_DELETE_MOB: {
         toolToRun = MAKER_TOOL_TYPE_DELETE_MOB;
         break;
     } case PLAYER_ACTION_TYPE_MT_FILL_INVENTORY: {
         toolToRun = MAKER_TOOL_TYPE_FILL_INVENTORY;
+        args.push_back(mod1 ? "0" : "99");
         break;
     } case PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE: {
         toolToRun = MAKER_TOOL_TYPE_FRAME_ADVANCE;
+        args.push_back(b2s(mod1));
         break;
     } case PLAYER_ACTION_TYPE_MT_FREE_CAM: {
         toolToRun = MAKER_TOOL_TYPE_FREE_CAM;
+        args.push_back(b2s(mod1));
         break;
     } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
         toolToRun = MAKER_TOOL_TYPE_GEOMETRY_INFO;
@@ -706,12 +733,16 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         break;
     } case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
         toolToRun = MAKER_TOOL_TYPE_HURT_MOB;
+        unsigned char settingIdx = getMakerToolSettingIdx();
+        args.push_back(f2s(mobHurtingSettings[settingIdx]));
         break;
     } case PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR: {
         toolToRun = MAKER_TOOL_TYPE_MOB_INSPECTOR;
         break;
     } case PLAYER_ACTION_TYPE_MT_NEW_PIKMIN: {
         toolToRun = MAKER_TOOL_TYPE_NEW_PIKMIN;
+        args.push_back(b2s(mod1));
+        args.push_back(mod2 ? "0" : "2");
         break;
     } case PLAYER_ACTION_TYPE_MT_NEW_REMINDER: {
         toolToRun = MAKER_TOOL_TYPE_NEW_REMINDER;
@@ -730,12 +761,14 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         break;
     } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
         toolToRun = MAKER_TOOL_TYPE_TELEPORT;
+        args.push_back(b2s(mod1));
+        args.push_back(b2s(mod2));
         break;
     }
     }
     
     if(toolToRun != MAKER_TOOL_TYPE_NONE) {
-        types[toolToRun].code(*this, params);
+        types[toolToRun].code(*this, args);
         if(types[toolToRun].helpful) {
             usedHelpingTools = true;
         }
@@ -830,7 +863,6 @@ void MakerTools::loadFromDataNode(DataNode* node) {
             
             aRS.set("size", areaImageSettings[s].size);
             aRS.set("padding", areaImageSettings[s].padding);
-            aRS.set("mobs", areaImageSettings[s].mobs);
             aRS.set("shadows", areaImageSettings[s].shadows);
         }
     }
@@ -936,7 +968,6 @@ void MakerTools::saveToDataNode(DataNode* node) {
             
             sGW.write("size", areaImageSettings[s].size);
             sGW.write("padding", areaImageSettings[s].padding);
-            sGW.write("mobs", areaImageSettings[s].mobs);
             sGW.write("shadows", areaImageSettings[s].shadows);
         }
     }
