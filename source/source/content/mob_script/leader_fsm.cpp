@@ -2753,6 +2753,7 @@ void LeaderFsm::startGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
         speed = std::min(speed, leaPtr->group->members[gm]->getBaseSpeed());
     }
     
+    enableFlag(settings.flags, PATH_FOLLOW_FLAG_ANY_ANGLE);
     bool success =
         leaPtr->followPath(
             settings, speed, leaPtr->type->acceleration

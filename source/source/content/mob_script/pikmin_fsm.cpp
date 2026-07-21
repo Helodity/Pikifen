@@ -4519,6 +4519,7 @@ void PikminFsm::startReturning(ScriptVM* scriptVM, void* info1, void* info2) {
     PathFollowSettings settings;
     settings.targetPoint = carriedMob->carryInfo->returnPoint;
     settings.finalTargetDistance = carriedMob->carryInfo->returnDist;
+    enableFlag(settings.flags, PATH_FOLLOW_FLAG_ANY_ANGLE);
     
     if(carriedMob->carryInfo->destination == CARRY_DESTINATION_LINKED_MOB) {
         //Special case: bridges.
