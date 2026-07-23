@@ -170,7 +170,6 @@ void OptionsMenu::addNewBindEntryItems(
         bindsGui.addItem(overrideNoteText);
         
     } else {
-    
         //More button.
         ButtonGuiItem* moreButton =
             new ButtonGuiItem("...", game.sysContent.fntStandard);
@@ -202,7 +201,6 @@ void OptionsMenu::addNewBindEntryItems(
         
         vector<Inpution::Bind> aBinds = bindsPerActionType[actionType.id];
         forIdx(b, aBinds) {
-        
             //Change bind button.
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
@@ -281,7 +279,6 @@ void OptionsMenu::addNewBindEntryItems(
         }
         
         if(aBinds.empty()) {
-        
             //Create first bind button.
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
@@ -316,7 +313,6 @@ void OptionsMenu::addNewBindEntryItems(
                 OPTIONS_MENU::BIND_BUTTON_PADDING;
                 
         } else if(showingBindsMore && actionType.id == curActionType) {
-        
             //Create new bind button.
             ButtonGuiItem* createButton =
                 new ButtonGuiItem("New...", game.sysContent.fntStandard);
@@ -343,7 +339,6 @@ void OptionsMenu::addNewBindEntryItems(
         }
         
         if(showingBindsMore && actionType.id == curActionType) {
-        
             //Restore default button.
             ButtonGuiItem* restoreButton =
                 new ButtonGuiItem(

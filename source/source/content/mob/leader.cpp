@@ -467,14 +467,12 @@ void Leader::dismissLogic(bool forceDismissAll) {
     SubgroupType* curType = firstType;
     
     do {
-    
         if(
             curType !=
             game.states.gameplay->subgroupTypes.getType(
                 SUBGROUP_TYPE_CATEGORY_LEADER
             )
         ) {
-        
             bool subgroupExists = false;
             
             forIdx(m, group->members) {
@@ -998,7 +996,6 @@ bool Leader::orderPikminToOnion(
     
     //Order Pikmin, in order.
     forIdx(p, candidates) {
-    
         Pikmin* pikPtr = candidates[p].second;
         FsmEventDef* ev = pikPtr->scriptVM.fsm.getEvent(FSM_EV_GO_TO_ONION);
         if(!ev) continue;

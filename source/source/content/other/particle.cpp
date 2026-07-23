@@ -683,7 +683,6 @@ ParticleManager::ParticleManager(const ParticleManager& pm2) :
 ParticleManager& ParticleManager::operator =(
     const ParticleManager& pm2
 ) {
-
     if(this != &pm2) {
         if(this->particles) {
             delete[] this->particles;
@@ -797,7 +796,6 @@ void ParticleManager::fillComponentList(
     vector<WorldComponent>& list, const RectCorners& camera
 ) {
     for(size_t c = 0; c < count; c++) {
-    
         Particle* pPtr = &particles[c];
         float pSize =
             pPtr->size.get((pPtr->duration - pPtr->time) / pPtr->duration);

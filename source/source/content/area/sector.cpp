@@ -108,7 +108,6 @@ void Sector::getNeighborSectorsConditionally(
     const std::function<bool(Sector* s_ptr)>& condition,
     vector<Sector*>& sectorList
 ) {
-
     //If this sector is already on the list, skip.
     forIdx(s, sectorList) {
         if(sectorList[s] == this) return;
@@ -300,9 +299,7 @@ void Sector::removeEdge(const Edge* ePtr) {
 Sector* getSector(
     const Point& p, size_t* outSectorIdx, bool useBlockmap
 ) {
-
     if(useBlockmap) {
-    
         size_t col = game.curArea->bmap.getCol(p.x);
         size_t row = game.curArea->bmap.getRow(p.y);
         if(col == INVALID || row == INVALID) return nullptr;
@@ -313,7 +310,6 @@ Sector* getSector(
         if(sectors->size() == 1) return *sectors->begin();
         
         for(auto& s : (*sectors)) {
-        
             if(!s) {
                 continue;
             }
@@ -325,7 +321,6 @@ Sector* getSector(
         return nullptr;
         
     } else {
-    
         forIdx(s, game.curArea->sectors) {
             Sector* sPtr = game.curArea->sectors[s];
             

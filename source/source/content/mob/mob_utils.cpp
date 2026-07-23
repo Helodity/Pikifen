@@ -372,7 +372,6 @@ vector<Hazard*> Group::getGroupInvulnerabilities(
 bool Group::getNextStandbyType(
     bool moveBackwards, SubgroupType** newType
 ) {
-
     if(members.empty()) {
         *newType = nullptr;
         return true;
@@ -509,7 +508,6 @@ void Group::initSpots(Mob* affectedMobPtr) {
     alphaSpots.push_back(AlphaSpot(Point()));
     
     while(alphaSpots.size() < members.size()) {
-    
         //First, calculate how far the center
         //of these spots are from the central spot.
         float distFromCenter =

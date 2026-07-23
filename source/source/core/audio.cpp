@@ -738,7 +738,6 @@ void AudioManager::setCameraPos(const RectCorners& camera) {
 bool AudioManager::setCurrentSong(
     const string& name, bool fromStart, bool fadeIn, bool loop
 ) {
-
     //Stop all other songs first.
     for(auto& s : game.content.songs.list) {
         Song* songPtr = &s.second;

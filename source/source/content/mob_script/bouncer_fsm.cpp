@@ -98,7 +98,6 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
-    
         //Pikmin is about to be bounced.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
         
@@ -106,7 +105,6 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
-    
         //Leader is about to be bounced.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
         
@@ -118,9 +116,9 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
             PATH_FOLLOW_FLAG_LIGHT_LOAD
         )
     ) {
-    
         //Pikmin carrying light load is about to be bounced.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
+        
     }
     
     if(!ev) return;

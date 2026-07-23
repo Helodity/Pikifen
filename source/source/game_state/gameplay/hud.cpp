@@ -154,7 +154,6 @@ Hud::Hud() :
     
     //Leader health and icons.
     for(size_t l = 0; l < 3; l++) {
-    
         //Icon.
         GuiItem* leaderIcon = new GuiItem();
         leaderIcon->onDraw =
@@ -846,7 +845,6 @@ Hud::Hud() :
     gui.addItem(inventoryUpdate, "inventory_update");
     
     if(game.options.advanced.expoMode) {
-    
         //Watermark wordmark.
         GuiItem* watermarkWordmark = new GuiItem();
         watermarkWordmark->onDraw =
@@ -868,7 +866,6 @@ Hud::Hud() :
             );
         };
         gui.addItem(watermarkLogo, "watermark_logo");
-        
     }
     
     
@@ -1587,7 +1584,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         );
         
         if(!onlyOneAmount) {
-        
             //Second amount.
             GuiItem* amt2Text = new GuiItem();
             amt2Text->onDraw =
@@ -1619,7 +1615,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             gui.addItem(
                 amt2Text, "mission_amount_2_second"
             );
-            
         }
         
         break;
@@ -1678,7 +1673,6 @@ void Hud::tick(float deltaT) {
     
     //Update standby bubbles.
     for(unsigned char s = 0; s < 3; s++) {
-    
         ALLEGRO_BITMAP* icon = nullptr;
         Leader* curLeaderPtr = player->leaderPtr;
         Mob* member = player->closestGroupMember[s];

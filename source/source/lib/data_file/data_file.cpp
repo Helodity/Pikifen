@@ -517,7 +517,6 @@ size_t DataNode::loadNode(
         //Sub-node start.
         pos = line.find('{');
         if(pos != string::npos) {
-        
             DataNode* newChild = new DataNode();
             newChild->name = trimSpaces(line.substr(0, pos));
             newChild->value.clear();

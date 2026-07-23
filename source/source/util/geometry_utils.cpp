@@ -699,7 +699,6 @@ void calculateThrow(
     float maxH, float gravity,
     Point* outSpeedXY, float* outSpeedZ, float* outHAngle
 ) {
-
     if(targetZ - startZ > maxH) {
         //If the target is above the maximum height it can be thrown...
         //Then this is an impossible throw.
@@ -771,7 +770,6 @@ bool circleIntersectsLineSeg(
     const Point& lineP1, const Point& lineP2,
     float* outLix, float* outLiy
 ) {
-
     //Code by
     //  http://www.melloland.com/scripts-and-tutos/
     //  collision-detection-between-circles-and-lines
@@ -1109,7 +1107,6 @@ float getAngleSmallestDiff(float a1, float a2) {
 Point getClosestPointInLineSeg(
     const Point& l1, const Point& l2, const Point& p, float* outSegmentRatio
 ) {
-
     //Code by http://stackoverflow.com/a/3122532
     
     Point l1ToP = p - l1;
@@ -1424,7 +1421,6 @@ Point getRatioPointInRing(
     float innerDist, float outerDist,
     float arc, float arcRot, float ratio
 ) {
-
     float radius = (innerDist + outerDist) / 2.0f;
     float angle1 = -arc / 2.0f + arcRot;
     float angle2 = arc / 2.0f + arcRot;
@@ -1998,7 +1994,6 @@ void movePoint(
         if(reached) *reached = false;
         
     } else {
-    
         if(mov) *mov = Point();
         if(reached) *reached = true;
     }

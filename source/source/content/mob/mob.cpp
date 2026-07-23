@@ -2489,7 +2489,6 @@ void Mob::getSpriteBitmapEffects(
     Sprite* sPtr, Sprite* nextSPtr, float interpolationFactor,
     BitmapEffect* info, Bitmask16 effects
 ) const {
-
     //Animation, position, angle, etc.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_STANDARD)) {
         Point effTrans;
@@ -4170,7 +4169,6 @@ void Mob::tickBrain(float deltaT) {
         !hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORT) &&
         (speedZ == 0 || hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR))
     ) {
-    
         //Calculate where the target is.
         Point finalTargetPos = getChaseTarget();
         Distance horizDist = Distance(center, finalTargetPos);
@@ -4223,7 +4221,6 @@ void Mob::tickBrain(float deltaT) {
                 pathInfo && !direct &&
                 pathInfo->blockReason == PATH_BLOCK_REASON_NONE
             ) {
-            
                 pathInfo->curPathStopIdx++;
                 
                 if(pathInfo->curPathStopIdx < pathInfo->path.size()) {
@@ -4435,7 +4432,6 @@ void Mob::tickMiscLogic(float deltaT) {
     
     //Group stuff.
     if(group && group->members.size()) {
-    
         Player* playerIfLeader = nullptr;
         if(type->category->id == MOB_CATEGORY_LEADERS) {
             playerIfLeader = ((Leader*) this)->player;

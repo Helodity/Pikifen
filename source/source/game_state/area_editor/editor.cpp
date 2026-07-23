@@ -2065,7 +2065,6 @@ void AreaEditor::finishLayoutMoving() {
     for(auto& m : merges) {
         Vertex* crushedVertex = nullptr;
         if(m.first->is2ndDegreeNeighbor(m.second, &crushedVertex)) {
-        
             for(auto const& m2 : merges) {
                 if(m2.second == crushedVertex) {
                     cancelLayoutMoving();

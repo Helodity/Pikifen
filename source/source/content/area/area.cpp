@@ -968,7 +968,6 @@ void Area::generateBlockmap() {
      */
     for(size_t bx = 0; bx < bmap.nCols; bx++) {
         for(size_t by = 0; by < bmap.nRows; by++) {
-        
             if(!bmap.sectors[bx][by].empty()) continue;
             
             if(
@@ -1013,7 +1012,6 @@ void Area::generateBlockmap() {
  */
 void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
     forIdx(e, edgeList) {
-    
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
         
@@ -1028,7 +1026,6 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
         
         for(size_t bx = bMinX; bx <= bMaxX; bx++) {
             for(size_t by = bMinY; by <= bMaxY; by++) {
-            
                 //Get the block's coordinates.
                 Point corner = bmap.getCellTopLeftCorner(bx, by);
                 
@@ -1040,7 +1037,6 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
                         v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1])
                     )
                 ) {
-                
                     //If it is, add it and the sectors to the list.
                     bool addEdge = true;
                     if(ePtr->sectors[0] && ePtr->sectors[1]) {
@@ -2573,7 +2569,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Vertexes.
     DataNode* vertexesNode = node->addNew("vertexes");
     forIdx(v, vertexes) {
-    
         //Vertex.
         Vertex* vPtr = vertexes[v];
         vertexesNode->addNew("v", p2s(v2p(vPtr)));
@@ -2582,7 +2577,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Edges.
     DataNode* edgesNode = node->addNew("edges");
     forIdx(e, edges) {
-    
         //Edge.
         Edge* ePtr = edges[e];
         DataNode* edgeNode = edgesNode->addNew("e");
@@ -2621,7 +2615,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Sectors.
     DataNode* sectorsNode = node->addNew("sectors");
     forIdx(s, sectors) {
-    
         //Sector.
         Sector* sPtr = sectors[s];
         DataNode* sectorNode = sectorsNode->addNew("s");
@@ -2681,7 +2674,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Mobs.
     DataNode* mobsNode = node->addNew("mobs");
     forIdx(m, mobGenerators) {
-    
         //Mob.
         MobGen* mPtr = mobGenerators[m];
         string catName = "unknown";
@@ -2720,7 +2712,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Path stops.
     DataNode* pathStopsNode = node->addNew("path_stops");
     forIdx(s, pathStops) {
-    
         //Path stop.
         PathStop* sPtr = pathStops[s];
         DataNode* pathStopNode = pathStopsNode->addNew("s");
@@ -2752,7 +2743,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Tree shadows.
     DataNode* shadowsNode = node->addNew("tree_shadows");
     forIdx(s, treeShadows) {
-    
         //Tree shadow.
         TreeShadow* sPtr = treeShadows[s];
         DataNode* shadowNode = shadowsNode->addNew("shadow");
@@ -2770,7 +2760,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Regions.
     DataNode* regionsNode = node->addNew("regions");
     forIdx(r, regions) {
-    
         //Region.
         AreaRegion* rPtr = regions[r];
         DataNode* regionNode = regionsNode->addNew("region");
@@ -3088,7 +3077,6 @@ bool Blockmap::getEdgesInRect(
     
     for(size_t bx = bx1; bx <= bx2; bx++) {
         for(size_t by = by1; by <= by2; by++) {
-        
             const vector<Edge*>& blockEdges = edges[bx][by];
             
             forIdx(e, blockEdges) {

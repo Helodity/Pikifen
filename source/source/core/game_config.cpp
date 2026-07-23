@@ -212,7 +212,6 @@ const float ZOOM_FARTHEST_REACH = 1340.0f;
  * @param file File to load from.
  */
 void GameConfig::load(DataNode* file) {
-
     //Aesthetic general.
     {
         ReaderSetter aRS(file->getChildByName("aesthetic_general"));

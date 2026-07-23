@@ -540,7 +540,6 @@ void AreaEditor::drawCrossSectionGraph() {
     const ALLEGRO_COLOR LINE_COLOR = al_map_rgb(160, 96, 96);
     
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
-    
         Distance crossSectionWorldLength(
             crossSectionCheckpoints[0], crossSectionCheckpoints[1]
         );
@@ -752,7 +751,6 @@ void AreaEditor::drawCrossSectionGraph() {
             }
             
         } else {
-        
             drawText(
                 "Please cross some edges.",
                 game.sysContent.fntBuiltin,
@@ -1900,7 +1898,6 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
         (previewMode && showShadows)
     ) {
         forIdx(s, game.curArea->treeShadows) {
-        
             TreeShadow* sPtr = game.curArea->treeShadows[s];
             if(!previewMode && shadowSelection.contains(s)) {
                 //Draw a white rectangle to contrast the shadow better.

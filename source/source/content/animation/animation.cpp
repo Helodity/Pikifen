@@ -432,7 +432,6 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
     DataNode* bodyPartsNode = node->getChildByName("body_parts");
     size_t nBodyParts = bodyPartsNode->getNrOfChildren();
     for(size_t b = 0; b < nBodyParts; b++) {
-    
         DataNode* bodyPartNode = bodyPartsNode->getChild(b);
         
         BodyPart* curBodyPart = new BodyPart(bodyPartNode->name);
@@ -443,7 +442,6 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
     DataNode* spritesNode = node->getChildByName("sprites");
     size_t nSprites = spritesNode->getNrOfChildren();
     for(size_t s = 0; s < nSprites; s++) {
-    
         DataNode* spriteNode = spritesNode->getChild(s);
         ReaderSetter sRS(spriteNode);
         Sprite* newSprite = new Sprite(spriteNode->name);
@@ -607,7 +605,6 @@ void AnimationDatabase::saveToDataNode(
     //Animations.
     DataNode* animationsNode = node->addNew("animations");
     forIdx(a, animations) {
-    
         //Animation.
         Animation* animPtr = animations[a];
         DataNode* animNode = animationsNode->addNew(animPtr->name);
@@ -623,7 +620,6 @@ void AnimationDatabase::saveToDataNode(
         //Frames.
         DataNode* framesNode = animNode->addNew("frames");
         forIdx(f, animPtr->frames) {
-        
             //Frame.
             Frame* framePtr = &animPtr->frames[f];
             DataNode* frameNode = framesNode->addNew(framePtr->spriteName);
@@ -645,7 +641,6 @@ void AnimationDatabase::saveToDataNode(
     //Sprites.
     DataNode* spritesNode = node->addNew("sprites");
     forIdx(s, sprites) {
-    
         //Sprite.
         Sprite* spritePtr = sprites[s];
         DataNode* spriteNode = spritesNode->addNew(sprites[s]->name);
@@ -675,11 +670,10 @@ void AnimationDatabase::saveToDataNode(
         }
         
         if(!spritePtr->hitboxes.empty()) {
-        
             //Hitboxes.
             DataNode* hitboxesNode = spriteNode->addNew("hitboxes");
+
             forIdx(h, spritePtr->hitboxes) {
-            
                 //Hitbox.
                 Hitbox* hitboxPtr = &spritePtr->hitboxes[h];
                 DataNode* hitboxNode =
@@ -729,7 +723,6 @@ void AnimationDatabase::saveToDataNode(
     //Body parts.
     DataNode* bodyPartsNode = node->addNew("body_parts");
     forIdx(b, bodyParts) {
-    
         //Body part.
         BodyPart* bodyPartPtr = bodyParts[b];
         bodyPartsNode->addNew(bodyPartPtr->name);

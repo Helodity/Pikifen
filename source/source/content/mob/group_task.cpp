@@ -45,9 +45,7 @@ GroupTask::GroupTask(
     );
     
     for(size_t r = 0; r < neededRows; r++) {
-    
         for(size_t s = 0; s < tasType->pikminPerRow; s++) {
-        
             float x;
             if(tasType->pikminPerRow % 2 == 0) {
                 x =

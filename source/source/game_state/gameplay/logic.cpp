@@ -841,7 +841,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
     }
     
     if(!cutsceneMsgBox) {
-    
         /************************************
         *                              .-.  *
         *   Timer things - gameplay   ( L ) *
@@ -1052,7 +1051,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *              O  *
         *******************/
         if(game.curArea->type == AREA_TYPE_MISSION) {
-        
             //Mission end conditions.
             forIdx(c, game.curArea->mission.endConds) {
                 MissionEndCond* condPtr =
@@ -1179,7 +1177,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
         }
         
     } else {
-    
         //Displaying a cutscene message.
         cutsceneMsgBox->tick(deltaT);
         if(cutsceneMsgBox->toDelete) {
@@ -1320,7 +1317,6 @@ void GameplayState::doMenuLogic() {
     //Print path info.
     if(game.makerTools.inspectedMob && game.makerTools.pathInfo) {
         if(game.makerTools.inspectedMob->pathInfo) {
-        
             Path* path = game.makerTools.inspectedMob->pathInfo;
             string resultStr = pathResultToString(path->result);
             
@@ -1377,7 +1373,6 @@ void GameplayState::doMenuLogic() {
             );
             
         } else {
-        
             game.makerDisplay.write(
                 "Inspected mob is not following any path.", 5.0f
             );
@@ -2262,7 +2257,6 @@ void GameplayState::processMobTouches(
     FsmEventDef* touchObEv =
         mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_OBJECT);
     if(touchOpEv || touchObEv) {
-    
         bool zTouch;
         if(
             mPtr->height == 0 ||
@@ -2349,7 +2343,6 @@ void GameplayState::processMobTouches(
         s1Ptr && s2Ptr &&
         !s1Ptr->hitboxes.empty() && !s2Ptr->hitboxes.empty()
     ) {
-    
         bool reportedANEv = false;
         bool reportedNAEv = false;
         bool reportedNNEv = false;
@@ -2357,7 +2350,6 @@ void GameplayState::processMobTouches(
         bool reportedHazEv = false;
         
         forIdx(h1, s1Ptr->hitboxes) {
-        
             Hitbox* h1Ptr = &s1Ptr->hitboxes[h1];
             if(h1Ptr->type == HITBOX_TYPE_DISABLED) continue;
             

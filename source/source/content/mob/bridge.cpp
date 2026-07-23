@@ -91,7 +91,6 @@ bool Bridge::checkHealth() {
         }
         
         if(zOffset == prevChunkZOffset) {
-        
             //Just expand the existing components!
             float oldComponentWidth = chunkWidth * prevChunkCombo;
             prevChunkCombo++;
@@ -117,7 +116,6 @@ bool Bridge::checkHealth() {
             }
             
         } else {
-        
             //Create new components. First, the floor component.
             Point offset(xOffset, 0.0f);
             offset = rotatePoint(offset, angle);

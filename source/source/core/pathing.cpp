@@ -460,7 +460,6 @@ PATH_RESULT aStar(
     
     //Start iterating.
     while(!toVisit.empty()) {
-    
         //Part 2: Figure out what node to work on in this iteration.
         PathStop* curNode = nullptr;
         float curNodeDist = 0.0f;
@@ -480,7 +479,6 @@ PATH_RESULT aStar(
         //Part 3: If the node we're processing is the end node, then
         //that's it, best path found!
         if(curNode == endNode) {
-        
             //Construct the path.
             float td = data[endNode].sinceStart;
             outPath.clear();
@@ -788,7 +786,6 @@ PATH_RESULT getPath(
     vector<PathStop*>& fullPath, float* outTotalDist,
     PathStop** outStartStop, PathStop** outEndStop
 ) {
-
     fullPath.clear();
     
     if(game.curArea->pathStops.empty()) {

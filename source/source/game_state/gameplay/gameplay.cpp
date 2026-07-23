@@ -316,7 +316,6 @@ void CutsceneMessageBox::tick(float deltaT) {
     }
     
     if(!transitionIn || transitionTimer == 0.0f) {
-    
         //Animate the text.
         if(game.config.aestheticGen.cutsceneMsgChInterval == 0.0f) {
             skippedAtToken = 0;
@@ -977,7 +976,6 @@ Mob* GameplayState::getClosestGroupMember(
     //Fetch the closest, for each maturity.
     size_t nMembers = player->leaderPtr->group->members.size();
     for(size_t m = 0; m < nMembers; m++) {
-    
         Mob* memberPtr = player->leaderPtr->group->members[m];
         if(memberPtr->subgroupTypePtr != type) {
             continue;
@@ -1106,7 +1104,6 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
  * @param ev Event to handle.
  */
 void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
-
     if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
         if(game.options.advanced.pauseOnFocusLost) {
             tryPause();

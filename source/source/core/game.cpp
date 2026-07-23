@@ -391,7 +391,6 @@ void Game::mainLoop() {
     //Main loop.
     al_start_timer(mainTimer);
     while(isGameRunning) {
-    
         /*  ************************************************
           *** | _ |                                  | _ | ***
         *****  \_/           EVENT HANDLING           \_/  *****
@@ -407,7 +406,6 @@ void Game::mainLoop() {
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {
             if(al_is_event_queue_empty(eventQueue)) {
-            
                 double curFrameStartTime = al_get_time();
                 if(resetDeltaT) {
                     //Failsafe.

@@ -102,7 +102,6 @@ function populate_prop_tables() {
 
     var trs = table.getElementsByTagName('tr');
     for (var tr of trs) {
-
       tr.classList.add('props');
 
       var tds = tr.getElementsByTagName('td');

@@ -136,7 +136,6 @@ HORIZ_MOVE_RESULT Mob::getMovementEdgeIntersections(
     
     //Go through each edge, and figure out if it is a valid wall for our mob.
     for(auto& ePtr : candidateEdges) {
-    
         bool isEdgeBlocking = false;
         
         if(
@@ -234,7 +233,6 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
         Point finalTargetPos = getChaseTarget();
         
         if(hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORT)) {
-        
             Sector* sec =
                 getSector(finalTargetPos, nullptr, true);
                 
@@ -259,7 +257,6 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
             return HORIZ_MOVE_RESULT_TELEPORTED;
             
         } else {
-        
             //Make it go to the direction it wants.
             float d = Distance(center, finalTargetPos).toFloat();
             
@@ -406,7 +403,6 @@ void Mob::tickHorizontalMovementPhysics(
     //Try placing it in the place it should be at, judging
     //from the movement speed.
     while(!finishedMoving) {
-    
         //Start by checking sector collisions.
         //For this, we will only check if the mob is intersecting
         //with any edge. With this, we trust that mobs can't go so fast
@@ -573,7 +569,6 @@ void Mob::tickHorizontalMovementPhysics(
             finishedMoving = true;
             
         } else {
-        
             //Try sliding.
             if(doingSlide) {
                 //We already tried sliding, and we still hit something...

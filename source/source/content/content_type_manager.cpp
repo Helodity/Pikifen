@@ -1473,7 +1473,6 @@ void MobTypeContentManager::unloadMobType(
 void MobTypeContentManager::unloadMobTypesOfCategory(
     MobCategory* category, CONTENT_LOAD_LEVEL level
 ) {
-
     vector<string> typeNames;
     category->getTypeNames(typeNames);
     

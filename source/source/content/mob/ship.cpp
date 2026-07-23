@@ -89,7 +89,6 @@ Ship::~Ship() {
  * @brief Draws a ship.
  */
 void Ship::drawMob() {
-
     //Draw the rings on the control point.
     for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
         float ringIdxRatio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
@@ -145,7 +144,6 @@ void Ship::drawMob() {
     //Drawing the beam rings.
     //Go in reverse to ensure the most recent rings are drawn underneath.
     for(char r = (char) beamRings.size() - 1; r > 0; r--) {
-    
         float ringAnimRatio =
             beamRings[r] / SHIP::BEAM_RING_ANIM_DUR;
             

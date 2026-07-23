@@ -245,7 +245,6 @@ void AreaMenu::initGuiBriefingPage() {
     gui.readDataFile(guiFile);
     
     if(!game.content.areas.list[areaType].empty()) {
-    
         //Name text.
         briefingNameText =
             new TextGuiItem(
@@ -336,7 +335,6 @@ void AreaMenu::initGuiInfoPage() {
     gui.readDataFile(guiFile);
     
     if(!game.content.areas.list[areaType].empty()) {
-    
         //Name text.
         infoNameText =
             new TextGuiItem(
@@ -518,7 +516,6 @@ void AreaMenu::initGuiMain() {
     guiCreateBackInputIcon(&gui);
     
     if(!game.content.areas.list[areaType].empty()) {
-    
         //Area list box.
         listBox = new ListGuiItem();
         gui.addItem(listBox, "list");
@@ -707,7 +704,6 @@ void AreaMenu::initGuiMain() {
         }
         
     } else {
-    
         //No areas found text.
         TextGuiItem* noAreasText =
             new TextGuiItem(

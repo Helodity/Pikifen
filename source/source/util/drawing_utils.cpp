@@ -31,7 +31,6 @@ void drawBitmap(
     ALLEGRO_BITMAP* bmp, const Point& center,
     const Point& size, float angle, const ALLEGRO_COLOR& tint
 ) {
-
     if(size.x == 0 && size.y == 0) return;
     
     Point bmpSize = getBitmapDimensions(bmp);

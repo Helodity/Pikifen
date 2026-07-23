@@ -365,7 +365,6 @@ void MobType::loadFromDataNode(
     DataNode* vulnerabilitiesNode =
         node->getChildByName("vulnerabilities");
     for(size_t h = 0; h < vulnerabilitiesNode->getNrOfChildren(); h++) {
-    
         DataNode* vulnNode = vulnerabilitiesNode->getChild(h);
         auto hazardIt = game.content.hazards.list.find(vulnNode->name);
         vector<string> words = split(vulnNode->value);
@@ -465,7 +464,6 @@ void MobType::loadFromDataNode(
     size_t nSdVuln =
         spikeDamageVulnNode->getNrOfChildren();
     for(size_t v = 0; v < nSdVuln; v++) {
-    
         DataNode* vulNode = spikeDamageVulnNode->getChild(v);
         auto sdvIt = game.content.spikeDamageTypes.list.find(vulNode->name);
         vector<string> words = split(vulNode->value);
@@ -508,7 +506,6 @@ void MobType::loadFromDataNode(
     size_t nSVuln =
         statusVulnNode->getNrOfChildren();
     for(size_t v = 0; v < nSVuln; v++) {
-    
         DataNode* vulNode = statusVulnNode->getChild(v);
         auto svIt = game.content.statusTypes.list.find(vulNode->name);
         vector<string> words = split(vulNode->value);
@@ -580,7 +577,6 @@ void MobType::loadFromDataNode(
     DataNode* spawnsNode = node->getChildByName("spawns");
     size_t nSpawns = spawnsNode->getNrOfChildren();
     for(size_t s = 0; s < nSpawns; s++) {
-    
         DataNode* spawnNode = spawnsNode->getChild(s);
         ReaderSetter sRS(spawnNode);
         MobType::SpawnInfo newSpawn;
@@ -609,7 +605,6 @@ void MobType::loadFromDataNode(
     DataNode* childrenNode = node->getChildByName("children");
     size_t nChildren = childrenNode->getNrOfChildren();
     for(size_t c = 0; c < nChildren; c++) {
-    
         DataNode* childNode = childrenNode->getChild(c);
         ReaderSetter cRS(childNode);
         MobType::Child newChild;
@@ -681,7 +676,6 @@ void MobType::loadFromDataNode(
         node->getChildByName("area_editor_properties");
     size_t nAeProps = aePropsNode->getNrOfChildren();
     for(size_t p = 0; p < nAeProps; p++) {
-    
         DataNode* propNode = aePropsNode->getChild(p);
         ReaderSetter pRS(propNode);
         MobType::AreaEditorProp newProp;

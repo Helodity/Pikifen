@@ -113,7 +113,6 @@ void DropFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
         droPtr->droType->consumer == DROP_CONSUMER_PIKMIN &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
-    
         //Pikmin is about to drink it.
         Pikmin* pikPtr = (Pikmin*) toucher;
         
@@ -135,7 +134,6 @@ void DropFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
         droPtr->droType->consumer == DROP_CONSUMER_LEADERS &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
-    
         //Leader is about to drink it.
         switch(droPtr->droType->effect) {
         case DROP_EFFECT_INCREASE_SPRAYS:

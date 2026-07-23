@@ -52,7 +52,6 @@ void BridgeFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("destroyed", BRIDGE_STATE_DESTROYED); {
-    
     }
     
     

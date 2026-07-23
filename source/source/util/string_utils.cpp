@@ -712,7 +712,6 @@ string wordWrap(const string& s, size_t nrCharsPerLine, size_t indent) {
     size_t curLineWidth = 0;
     bool lineHasWords = false;
     for(size_t c = 0; c < s.size() + 1; c++) {
-    
         if(c < s.size() && s[c] != ' ' && s[c] != '\n') {
             //Keep building the current word.
             

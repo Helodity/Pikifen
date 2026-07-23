@@ -28,7 +28,6 @@ Drop::Drop(const Point& center, DropType* type, float angle) :
     droType(type),
     dosesLeft(droType->totalDoses) {
     
-    
 }
 
 

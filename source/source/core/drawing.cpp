@@ -691,7 +691,6 @@ void drawLiquid(
         };
         
         for(size_t v = 0; v < nVertexes; v++) {
-        
             const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
             Vertex* vPtr = tPtr->points[v % 3];
             float vx = vPtr->x;
@@ -859,7 +858,6 @@ void drawLoadingScreen(
     const float subtextX = game.winW * 0.5 - subtextW * 0.5;
     float subtextY = game.winH * 0.5 + DRAWING::LOADING_SCREEN_PADDING * 0.5;
     if(!subtext.empty()) {
-    
         al_draw_tinted_bitmap(
             game.loadingSubtextBmp,
             mapAlpha(alpha * 255),
@@ -872,7 +870,6 @@ void drawLoadingScreen(
     
     //Now, draw the polygon that will hold the reflection for the text.
     if(!text.empty()) {
-    
         ALLEGRO_VERTEX textVertexes[4];
         const float textReflectionH = textH * 0.80f;
         //Top-left vertex.
@@ -913,7 +910,6 @@ void drawLoadingScreen(
     
     //And the polygon for the subtext.
     if(!subtext.empty()) {
-    
         ALLEGRO_VERTEX subtextVertexes[4];
         const float subtextReflectionH = subtextH * 0.80f;
         //Top-left vertex.
@@ -1395,7 +1391,6 @@ void drawSectorTexture(
     }
     
     for(unsigned char t = 0; t < nTextures; t++) {
-    
         bool drawSector0 = true;
         if(!textureSector[0]) drawSector0 = false;
         else if(textureSector[0]->isBottomlessPit) {
@@ -1429,7 +1424,6 @@ void drawSectorTexture(
         );
         
         for(size_t v = 0; v < nVertexes; v++) {
-        
             const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
             Vertex* vPtr = tPtr->points[v % 3];
             float vx = vPtr->x;

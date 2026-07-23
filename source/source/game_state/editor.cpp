@@ -875,7 +875,6 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
                 isM1Pressed = false;
                 
             } else {
-            
                 switch(ev.mouse.button) {
                 case 1: {
                     handleLmbDoubleClick(ev);
@@ -902,7 +901,6 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
                 isM1Pressed = false;
                 
             } else {
-            
                 lastMouseClickSubState = subState;
                 
                 switch(ev.mouse.button) {
@@ -1433,7 +1431,6 @@ bool Editor::keyCheck(
     int pressedKey, int matchKey,
     bool needsCtrl, bool needsShift
 ) {
-
     if(pressedKey != matchKey) {
         return false;
     }
@@ -2918,7 +2915,6 @@ void Editor::processGuiDialogUnsavedChanges() {
 void Editor::processGuiEditorStyle() {
     //Style node.
     if(saveableTreeNode("options", "Style")) {
-    
         //Use custom style checkbox.
         if(
             ImGui::Checkbox(
@@ -3006,9 +3002,7 @@ void Editor::processGuiHistory(
     const std::function<string(const string&)>& tooltipCallback
 ) {
     if(saveableTreeNode("load", "History")) {
-    
         if(!history.empty() && !history[0].first.empty()) {
-        
             size_t nFilledEntries = 0;
             forIdx(h, history) {
                 if(!history[h].first.empty()) nFilledEntries++;
@@ -3037,7 +3031,6 @@ void Editor::processGuiHistory(
             }
             
         } else {
-        
             //No history text.
             ImGui::TextDisabled("(Empty)");
             
@@ -3700,7 +3693,6 @@ bool Editor::processGuiWidgetsMobType(
     );
     
     if(!internalCustomCatName.empty()) {
-    
         //Object type combobox.
         vector<string> typeNames;
         size_t customCatIdx = customCatNameIdxs[internalCustomCatName];
@@ -3802,7 +3794,6 @@ bool Editor::processGuiWidgetsSize(
             label, (float*) &newSize, vSpeed, minSize, FLT_MAX
         )
     ) {
-    
         bool freeResize = !keepAspectRatio && !keepArea;
         bool valuesValid =
             size.x != 0.0f && size.y != 0.0f &&
@@ -3932,7 +3923,6 @@ void Editor::setTooltip(
         )
     ) {
         if(ImGui::BeginTooltip()) {
-        
             ImGui::Text("%s", explanation.c_str());
             
             string widgetExplanationText;
@@ -4082,7 +4072,6 @@ void Editor::updateHistory(
  * @brief Updates the Dear ImGui style based on the player's options.
  */
 void Editor::updateStyle() {
-
     ImGuiStyle* style = &ImGui::GetStyle();
     style->FrameRounding = 3;
     style->IndentSpacing = 25;
@@ -4346,7 +4335,6 @@ bool Editor::ChangesManager::askIfUnsaved(
         return true;
         
     } else {
-    
         actionCallback();
         
         return false;
@@ -4548,7 +4536,6 @@ void Editor::Dialog::process() {
             (title + "##dialog").c_str(), &isOpen
         )
     ) {
-    
         processCallback();
         
         ImGui::EndPopup();
@@ -4749,7 +4736,6 @@ void Editor::Picker::process() {
     ImGui::BeginChild("list");
     
     forIdx(tc, finalItems) {
-    
         bool topCatOpened = true;
         if(!topCatNames[tc].empty()) {
             //Top category node.
@@ -4760,7 +4746,6 @@ void Editor::Picker::process() {
         if(!topCatOpened) continue;
         
         forIdx(sc, finalItems[tc]) {
-        
             bool secCatOpened = true;
             if(!secCatNames[tc][sc].empty()) {
                 //Secondary category node.
@@ -4784,7 +4769,6 @@ void Editor::Picker::process() {
                 Point buttonSize;
                 
                 if(iPtr->bitmap) {
-                
                     ImGui::BeginGroup();
                     
                     //Item image button.
@@ -4818,7 +4802,6 @@ void Editor::Picker::process() {
                     ImGui::EndGroup();
                     
                 } else {
-                
                     //Item button.
                     buttonSize = Point(EDITOR::PICKER_IMG_BUTTON_SIZE, 32.0f);
                     if(

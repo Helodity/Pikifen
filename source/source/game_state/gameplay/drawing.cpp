@@ -39,7 +39,6 @@ void GameplayState::doGameDrawing(
     ALLEGRO_BITMAP* bmpOutput, const ALLEGRO_TRANSFORM* bmpTransform,
     bool treeShadows
 ) {
-
     /*  ***************************************
       *** |  |                           |  | ***
     ***** |__|          DRAWING          |__| *****
@@ -323,7 +322,6 @@ void GameplayState::drawBigMsg() {
         break;
         
     } case BIG_MESSAGE_GO: {
-
         const float TEXT_GROW_STOP_T = 0.10f;
         const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_GO_DUR;
         
@@ -1045,7 +1043,6 @@ void GameplayState::drawInGameText(Player* player) {
             path->settings.targetPoint;
             
         if(!path->path.empty()) {
-        
             //Faint lines for the entire path.
             for(size_t s = 0; s < path->path.size() - 1; s++) {
                 bool isBlocked = false;
@@ -2265,7 +2262,6 @@ void GameplayState::drawWorldComponents(
             );
             
         } else if(cPtr->mobShadowPtr) {
-        
             float deltaZ = 0;
             if(!cPtr->mobShadowPtr->standingOnMob) {
                 deltaZ =
@@ -2279,13 +2275,11 @@ void GameplayState::drawWorldComponents(
             );
             
         } else if(cPtr->mobLimbPtr) {
-        
             if(!hasFlag(cPtr->mobLimbPtr->flags, MOB_FLAG_HIDDEN)) {
                 cPtr->mobLimbPtr->drawLimb();
             }
             
         } else if(cPtr->mobPtr) {
-        
             if(!hasFlag(cPtr->mobPtr->flags, MOB_FLAG_HIDDEN)) {
                 cPtr->mobPtr->drawMob();
                 if(cPtr->mobPtr->type->drawMobCallback) {
@@ -2294,7 +2288,6 @@ void GameplayState::drawWorldComponents(
             }
             
         } else if(cPtr->particlePtr) {
-        
             cPtr->particlePtr->draw();
             
         }

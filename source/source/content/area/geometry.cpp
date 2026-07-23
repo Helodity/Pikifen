@@ -539,7 +539,6 @@ void findTraceEdge(
     
     //Go through each edge to check for the best.
     forIdx(e, vPtr->edges) {
-    
         Edge* ePtr = vPtr->edges[e];
         
         if(ePtr->sectors[0] != sPtr && ePtr->sectors[1] != sPtr) {
@@ -633,7 +632,6 @@ vector<std::pair<Distance, Vertex*> > getMergeVertexes(
     const Point& pos, const vector<Vertex*>& allVertexes,
     float mergeRadius
 ) {
-
     vector<std::pair<Distance, Vertex*> > result;
     forIdx(v, allVertexes) {
         Vertex* v_ptr = allVertexes[v];
@@ -698,7 +696,6 @@ TRIANGULATION_ERROR getPolys(
     
     //Now trace along the edges, vertex by vertex, until we have no more left.
     while(!edgesLeft.empty()) {
-    
         //Start with the rightmost vertex.
         Vertex* firstVPtr = getRightmostVertex(edgesLeft);
         
@@ -769,7 +766,6 @@ bool getPolysIsOuter(
     float closestEdgeCwAngle = FLT_MAX;
     
     forIdx(e, vPtr->edges) {
-    
         Edge* ePtr = vPtr->edges[e];
         if(ePtr->sectors[0] != sPtr && ePtr->sectors[1] != sPtr) {
             //This edge is irrelevant to our sector.
@@ -965,7 +961,6 @@ TRIANGULATION_ERROR traceEdges(
     
     //Trace around, vertex by vertex, until we're done.
     while(!polyDone) {
-    
         //Find the next edge to go to.
         //For cases where the vertex only has two edges of our sector,
         //it's pretty obvious -- just go to the edge that isn't the one we
@@ -1099,7 +1094,6 @@ TRIANGULATION_ERROR traceEdges(
 TRIANGULATION_ERROR triangulatePolygon(
     Polygon* poly, vector<Triangle>* triangles
 ) {
-
     TRIANGULATION_ERROR result = TRIANGULATION_ERROR_NONE;
     vector<Vertex*> vertexesLeft = poly->vertexes;
     vector<size_t> ears;
@@ -1116,7 +1110,6 @@ TRIANGULATION_ERROR triangulatePolygon(
     //We do the triangulation until we're left
     //with three vertexes -- the final triangle.
     while(vertexesLeft.size() > 3) {
-    
         if(ears.empty()) {
             //Something went wrong, the polygon mightn't be simple.
             result = TRIANGULATION_ERROR_NO_EARS;

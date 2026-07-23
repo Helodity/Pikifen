@@ -850,7 +850,6 @@ bool GuiManager::draw() {
     );
     
     forIdx(i, drawingSortedItems) {
-    
         GuiItem* iPtr = drawingSortedItems[i];
         
         if(!iPtr->onDraw) continue;
@@ -1280,7 +1279,6 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
     case PLAYER_ACTION_TYPE_MENU_DOWN:
     case PLAYER_ACTION_TYPE_MENU_LEFT:
     case PLAYER_ACTION_TYPE_MENU_UP: {
-
         if(isDown) {
             handleSpatialNavigationAction(action);
         }
@@ -2408,7 +2406,6 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
     int textY = draw.center.y;
     
     if(lineWrap) {
-    
         textY = draw.center.y - draw.size.y / 2.0f;
         int lineHeight = al_get_font_line_height(this->font);
         vector<StringToken> tokens =
@@ -2435,7 +2432,6 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         
     } else {
-    
         drawText(
             this->text, this->font, Point(textX, textY), draw.size,
             tintColor(this->color, draw.tint),

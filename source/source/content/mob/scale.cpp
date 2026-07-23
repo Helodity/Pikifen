@@ -35,7 +35,6 @@ Scale::Scale(const Point& center, ScaleType* type, float angle) :
  * @return The weight.
  */
 float Scale::calculateCurWeight() const {
-
     //Start by figuring out which mobs are applying weight.
     set<Mob*> weighingMobs;
     

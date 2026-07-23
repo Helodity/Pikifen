@@ -204,7 +204,6 @@ void AnimationEditor::drawCanvas() {
         }
         
     } else if(s) {
-    
         if(sideView && state == EDITOR_STATE_HITBOXES) {
             drawSideViewSprite(s);
         } else {
@@ -292,7 +291,6 @@ void AnimationEditor::drawCanvas() {
     
     //Grid.
     if(gridAlpha != 0.0f) {
-    
         drawGrid(
             ANIM_EDITOR::GRID_INTERVAL,
             multAlpha(EDITOR::GRID_COLOR_MAJOR, gridAlpha),

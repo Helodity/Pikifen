@@ -205,7 +205,6 @@ vector<string> folderToVector(
             folders ==
             (hasFlag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
         ) {
-        
             string entryName =
                 standardizePath(al_get_fs_entry_name(entry));
                 

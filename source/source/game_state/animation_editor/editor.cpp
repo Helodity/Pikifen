@@ -2043,7 +2043,6 @@ void AnimationEditor::unload() {
  */
 void AnimationEditor::updateHitboxes() {
     forIdx(s, db.sprites) {
-    
         Sprite* sPtr = db.sprites[s];
         
         //Start by deleting non-existent hitboxes.

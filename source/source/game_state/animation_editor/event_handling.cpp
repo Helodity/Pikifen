@@ -92,7 +92,6 @@ void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
         saveCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
-    
         escapeWasPressed = true;
         
         if(!dialogs.empty()) {

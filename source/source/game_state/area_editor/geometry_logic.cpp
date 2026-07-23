@@ -1211,7 +1211,6 @@ void AreaEditor::findProblemsMobInsideWalls() {
                     nullptr, nullptr
                 )
             ) {
-            
                 if(
                     ePtr->sectors[0] && ePtr->sectors[1] &&
                     ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ
@@ -2408,12 +2407,10 @@ void AreaEditor::mergeVertex(
     vector<Edge*> edges = v1->edges;
     //Find out what to do with every edge of the dragged vertex.
     forIdx(e, edges) {
-    
         Edge* ePtr = edges[e];
         Vertex* otherVertex = ePtr->getOtherVertex(v1);
         
         if(otherVertex == v2) {
-        
             //Squashed into non-existence.
             affectedSectors->insert(ePtr->sectors[0]);
             affectedSectors->insert(ePtr->sectors[1]);
@@ -2422,13 +2419,11 @@ void AreaEditor::mergeVertex(
             deleteEdge(ePtr);
             
         } else {
-        
             bool hasMerged = false;
             //Check if the edge will be merged with another one.
             //These are edges that share a common vertex,
             //plus the moved/destination vertex.
             forIdx(de, v2->edges) {
-            
                 Edge* dePtr = v2->edges[de];
                 Vertex* dOtherVertex = dePtr->getOtherVertex(v2);
                 

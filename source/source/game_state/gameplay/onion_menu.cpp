@@ -266,7 +266,6 @@ OnionMenu::OnionMenu(
     
     //Items for each Pikmin type.
     forIdx(t, types) {
-    
         //Onion icon.
         GuiItem* onionIcon = new GuiItem(false);
         onionIcon->forceSquare = true;
@@ -633,7 +632,6 @@ ONION_TRANSFER_RESULT OnionMenu::canAddToOnion(size_t typeIdx) {
         
     //First, check if there are enough in the group to put in.
     if((signed int) (realGroupAmount + types[typeIdx].delta) <= 0) {
-    
         return ONION_TRANSFER_RESULT_NONE_IN_GROUP;
     }
     
@@ -852,7 +850,6 @@ void OnionMenu::startClosing() {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void OnionMenu::tick(float deltaT) {
-
     //Correct the amount of wanted group members, if they are invalid.
     int totalDelta = 0;
     
@@ -994,7 +991,6 @@ ONION_TRANSFER_RESULT OnionMenu::transfer(bool toGroup, size_t typeIdx) {
     
     for(size_t p = 0; p < amountToTransfer; p++) {
         for(size_t t = firstTypeIdx; t <= lastTypeIdx; t++) {
-        
             ONION_TRANSFER_RESULT oneResult =
                 toGroup ? canAddToGroup(t) : canAddToOnion(t);
                 

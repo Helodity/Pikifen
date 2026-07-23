@@ -740,7 +740,6 @@ void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev) {
         drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
         
     } else {
-    
         checkDrawingLine(hotspot);
         
         bool needsReverse = false;
@@ -1208,7 +1207,6 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
     }
     
     if(!crossSectionHandled) {
-    
         handleSelectionAndTransformationLmbDown(
             reviewSelCtrl, curTransformationWidget,
             !game.options.areaEd.selTrans

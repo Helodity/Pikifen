@@ -362,7 +362,6 @@ void PauseMenu::addNewPikminStatusLine(
     const string& lostText,
     bool isSingle, bool isTotals
 ) {
-
     const float x1 = 0.00f;
     const float x2 = 1.00f;
     const float workingWidth = x2 - x1;
@@ -387,7 +386,6 @@ void PauseMenu::addNewPikminStatusLine(
     bool canFocus = pikType || isTotals;
     
     if(pikType) {
-    
         //Pikmin type.
         GuiItem* typeItem = new GuiItem();
         typeItem->onDraw =
@@ -406,7 +404,6 @@ void PauseMenu::addNewPikminStatusLine(
         statusGui.addItem(typeItem);
         
     } else if(isTotals) {
-    
         //Totals header.
         TextGuiItem* totalsHeaderItem =
             new TextGuiItem("Total", game.sysContent.fntAreaName);
@@ -1177,7 +1174,6 @@ void PauseMenu::drawRadar(
         } case PATH_RESULT_NORMAL_PATH:
         case PATH_RESULT_PATH_WITH_SINGLE_STOP:
         case PATH_RESULT_PATH_WITH_OBSTACLES: {
-    
             size_t firstStop = lPtr->pathInfo->curPathStopIdx;
             if(firstStop >= lPtr->pathInfo->path.size()) continue;
             
@@ -1206,8 +1202,8 @@ void PauseMenu::drawRadar(
             break;
             
         } default: {
-    
             break;
+
         }
         }
     }
@@ -1262,8 +1258,8 @@ void PauseMenu::drawRadar(
         break;
         
     } default: {
-
         break;
+
     }
     }
     
@@ -1415,7 +1411,6 @@ void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
  */
 void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(!game.modal.isActive()) {
-    
         radarView.updateMouseCursor(game.mouseCursor.winPos);
         
         gui.handleAllegroEvent(ev);
@@ -1502,7 +1497,6 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
     if(closing) return;
     
     if(!game.modal.isActive()) {
-    
         bool handledByRadar = false;
         
         if(radarGui.responsive) {
@@ -2602,7 +2596,6 @@ void PauseMenu::tick(float deltaT) {
     radarView.updateTransformations();
     
     if(radarGui.responsive) {
-    
         Point radarMovCoords;
         float dummyAngle;
         float dummyMagnitude;

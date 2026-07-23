@@ -135,7 +135,6 @@ void clearAreaTextures() {
  * @param exitStatus Program exit status.
  */
 void crash(const string& reason, const string& info, int exitStatus) {
-
     if(game.display) {
         ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(game.display);
         if(backbuffer) {
@@ -1434,7 +1433,6 @@ vector<vector<StringToken> > splitLongStringWithTokens(
     unsigned int wordBufferWidth = 0;
     
     for(size_t t = 0; t < tokens.size() + 1; t++) {
-    
         bool tokenIsSpace =
             t != tokens.size() &&
             tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == " ";
