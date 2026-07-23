@@ -52,11 +52,11 @@ const float INPUT_SIZE = 24.0f;
 //Padding between each line.
 const int LINE_PADDING = 2;
 
-//Maximum amount of output lines that can be visible.
-const size_t OUTPUT_MAX_VISIBLE_LINES = 10;
-
 //Maximum amount of output lines that can be in the console.
 const size_t OUTPUT_MAX_SIZE = 100;
+
+//Maximum amount of output lines that can be visible.
+const size_t OUTPUT_MAX_VISIBLE_LINES = 10;
 
 //Padding on all sides.
 const int PADDING = 8;
@@ -392,730 +392,6 @@ CommandParam::CommandParam(
     flags(flags),
     defValue(defValue) {
     
-}
-
-
-#pragma endregion
-#pragma region Maker console
-
-
-/**
- * @brief Clears everything.
- */
-void MakerConsole::clear() {
-    terminal.clear();
-    notifier.clear();
-}
-
-
-/**
- * @brief Closes the console terminal,
- * gradually hiding it unless specified otherwise.
- *
- * @param instant Whether to close it instantaneously.
- */
-void MakerConsole::closeTerminal(bool instant) {
-    terminal.close(instant);
-}
-
-
-/**
- * @brief Draws the console terminal and notifier on-screen.
-
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerConsole::draw(int y) const {
-    int terminalHeight = terminal.draw(y);
-    int notifierHeight = notifier.draw(y + terminalHeight + CONSOLE::PADDING);
-    return
-        terminalHeight +
-        (notifierHeight > 0 ? CONSOLE::PADDING + notifierHeight : 0);
-}
-
-
-/**
- * @brief Opens the console terminal,
- * gradually showing it unless specified otherwise.
- *
- * @param instant Whether to open it instantaneously.
- */
-void MakerConsole::openTerminal(bool instant) {
-    terminal.open(instant);
-    notifier.close(instant);
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerConsole::tick(float deltaT) {
-    terminal.tick(deltaT);
-    notifier.tick(deltaT);
-}
-
-
-/**
- * @brief Toggles between opening and closing the console terminal,
- * gradually showing or hiding it unless specified otherwise.
- *
- * @param instant Whether to open or close it instantaneously.
- */
-void MakerConsole::toggleTerminal(bool instant) {
-    switch(terminal.getVisibilityState()) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        openTerminal();
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        closeTerminal();
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Writes a line of output.
- *
- * @param text The line of text.
- * @param error Whether it is an error output.
- * @param notifierDuration If a notification is meant to appear in the notifier,
- * specify the duration here. Otherwise, this should be 0.
- */
-void MakerConsole::write(
-    const string& text, bool error, float notificationDuration
-) {
-    terminal.write(text, error);
-    
-    OPEN_CLOSE_STATE terminalVisibilityState = terminal.getVisibilityState();
-    bool isTerminalVisible =
-        terminalVisibilityState == OPEN_CLOSE_STATE_OPEN ||
-        terminalVisibilityState == OPEN_CLOSE_STATE_OPENING;
-        
-    if(notificationDuration > 0.0f && !isTerminalVisible) {
-        notifier.write(text, error, notificationDuration);
-    }
-}
-
-
-/**
- * @brief Clears the data of the notifier.
- */
-void MakerConsoleNotifier::clear() {
-    text.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-    timeLeft = 0.0f;
-}
-
-
-/**
- * @brief Closes the console notifier,
- * gradually hiding it unless specified otherwise.
- *
- * @param instant Whether to close it instantaneously.
- */
-void MakerConsoleNotifier::close(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-            visibility = 0.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_CLOSING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Draws the console notifier on-screen.
- *
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerConsoleNotifier::draw(int y) const {
-    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
-    
-    //Setup.
-    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const vector<string> lines = split(text, "\n", true);
-    const int fontHeight = al_get_font_line_height(FONT);
-    
-    int longestLineWidth = 0;
-    forIdx(l, lines) {
-        longestLineWidth =
-            std::max(
-                longestLineWidth,
-                al_get_text_width(FONT, lines[l].c_str())
-            );
-    }
-    
-    int textW = longestLineWidth;
-    int textH =
-        lines.size() * fontHeight +
-        (lines.size() - 1) * CONSOLE::LINE_PADDING;
-    int boxW =
-        CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING +
-        textW + CONSOLE::PADDING;
-    boxW = std::max(boxW, (int) (game.winW / 2.0f) - CONSOLE::PADDING * 2);
-    int boxH =
-        std::max(
-            CONSOLE::PADDING + (int) CONSOLE::INPUT_SIZE + CONSOLE::PADDING,
-            CONSOLE::PADDING + textH + CONSOLE::PADDING
-        );
-    int boxX = CONSOLE::PADDING;
-    int boxY = y;
-    int textX =
-        boxX + CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING;
-    int textY = (boxY + boxH / 2.0f) - textH / 2.0f;
-    
-    float alpha = visibility;
-    
-    const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
-    
-    //Background.
-    al_draw_filled_rectangle(
-        boxX, boxY, boxX + boxW, boxY + boxH,
-        multAlpha(CONSOLE::COLOR_BG, alpha)
-    );
-    
-    //Lines.
-    forIdx(l, lines) {
-        int lineY = getLineY(l);
-        
-        drawText(
-            lines[l], FONT,
-            Point(textX, lineY),
-            Point(textW, fontHeight),
-            multAlpha(
-                error ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
-                alpha
-            ),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-    }
-    
-    //Terminal toggle input.
-    drawPlayerActionInputSourceIcon(
-        PLAYER_ACTION_TYPE_MT_CONSOLE,
-        Point(
-            boxX + CONSOLE::PADDING + (CONSOLE::INPUT_SIZE / 2.0f),
-            boxY + (boxH / 2.0f)
-        ),
-        Point(CONSOLE::INPUT_SIZE),
-        true, game.sysContent.fntSlim, mapAlpha(alpha * 255)
-    );
-    
-    return boxH;
-}
-
-
-/**
- * @brief Opens the console notifier,
- * gradually showing it unless specified otherwise.
- *
- * @param instant Whether to open it instantaneously.
- */
-void MakerConsoleNotifier::open(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-            visibility = 1.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_OPENING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerConsoleNotifier::tick(float deltaT) {
-    if(timeLeft > 0.0f) {
-        timeLeft -= deltaT;
-        if(timeLeft <= 0.0f) {
-            timeLeft = 0.0f;
-            close();
-        }
-    }
-    
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_OPEN: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSING:
-    case OPEN_CLOSE_STATE_OPENING: {
-        visibility =
-            inchTowards(
-                visibility,
-                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
-                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
-            );
-        if(visibility >= 1.0f) {
-            visibility = 1.0f;
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-        } else if(visibility <= 0.0f) {
-            visibility = 0.0f;
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Sets the text to show on the notifier.
- *
- * @param text Text to show.
- * @param error Whether it is an error output.
- * @param duration How long to show the notification for.
- */
-void MakerConsoleNotifier::write(
-    const string& text, bool error, float duration
-) {
-    this->text = text;
-    this->error = error;
-    timeLeft = duration;
-    open();
-}
-
-
-/**
- * @brief Clears the list of output lines.
- */
-void MakerConsoleTerminal::clear() {
-    output.clear();
-    outputTimestamps.clear();
-    outputErrors.clear();
-    input.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-}
-
-
-/**
- * @brief Closes the console terminal,
- * gradually hiding it unless specified otherwise.
- *
- * @param instant Whether to close it instantaneously.
- */
-void MakerConsoleTerminal::close(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-            visibility = 0.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_CLOSING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Draws the console terminal on-screen.
- *
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerConsoleTerminal::draw(int y) const {
-    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
-    
-    //Setup.
-    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const size_t nLines =
-        CONSOLE::OUTPUT_MAX_VISIBLE_LINES;
-    const int fontHeight = al_get_font_line_height(FONT);
-    
-    int textW = game.winW - CONSOLE::PADDING * 2;
-    int textH =
-        nLines * fontHeight +
-        (nLines - 1) * CONSOLE::LINE_PADDING;
-    int boxW = game.winW;
-    int boxH = CONSOLE::PADDING + textH + CONSOLE::PADDING;
-    int boxX = 0;
-    int boxY = y;
-    int textX = boxX + CONSOLE::PADDING;
-    int textY = boxY + CONSOLE::PADDING;
-    
-    int yOffset = -(boxH * (1.0f - ease(visibility, EASE_METHOD_IN_OUT)));
-    boxY += yOffset;
-    textY += yOffset;
-    
-    const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
-    
-    //Background.
-    al_draw_filled_rectangle(
-        boxX, boxY, boxX + boxW, boxY + boxH,
-        CONSOLE::COLOR_BG
-    );
-    
-    //Output lines.
-    for(size_t l = 0; l < CONSOLE::OUTPUT_MAX_VISIBLE_LINES; l++) {
-        int entryIdx = output.size() - CONSOLE::OUTPUT_MAX_VISIBLE_LINES + l;
-        if(entryIdx < 0 || entryIdx >= (int) output.size()) continue;
-        int entryY = getLineY(l);
-        
-        //Timestamp.
-        string timestamp =
-            resizeString(f2s(outputTimestamps[entryIdx]), 8, true, false);
-        timestamp =
-            resizeString(f2s(outputTimestamps[entryIdx]), 8, false, true, true);
-        timestamp = "[" + timestamp + "] ";
-        int timestampWidth = al_get_text_width(FONT, timestamp.c_str());
-        drawText(
-            timestamp, FONT,
-            Point(textX, entryY),
-            Point(timestampWidth, fontHeight),
-            CONSOLE::COLOR_MUTED, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-        
-        //Text.
-        drawText(
-            output[entryIdx], FONT,
-            Point(textX + timestampWidth, entryY),
-            Point(textW - timestampWidth, fontHeight),
-            outputErrors[entryIdx] ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-    }
-    
-    //TODO
-    /*
-    //Divisor line between output and input.
-    int lineY = getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) + fontHeight / 2.0f;
-    al_draw_line(
-        textX, lineY, textX + textW, lineY,
-        CONSOLE::COLOR_MUTED, 2.0f
-    );
-    
-    //Input text.
-    drawText(
-        "> " + input, FONT,
-        Point(textX, getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 1)),
-        Point(textW, fontHeight),
-        CONSOLE::COLOR_MAIN, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-        TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-    );
-    */
-    
-    return boxH + yOffset;
-}
-
-
-/**
- * @brief Returns the current visibility state.
- *
- * @return The state.
- */
-OPEN_CLOSE_STATE MakerConsoleTerminal::getVisibilityState() const {
-    return visibilityState;
-}
-
-
-/**
- * @brief Opens the console terminal,
- * gradually showing it unless specified otherwise.
- *
- * @param instant Whether to open it instantaneously.
- */
-void MakerConsoleTerminal::open(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-            visibility = 1.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_OPENING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerConsoleTerminal::tick(float deltaT) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_OPEN: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSING:
-    case OPEN_CLOSE_STATE_OPENING: {
-        visibility =
-            inchTowards(
-                visibility,
-                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
-                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
-            );
-        if(visibility >= 1.0f) {
-            visibility = 1.0f;
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-        } else if(visibility <= 0.0f) {
-            visibility = 0.0f;
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Toggles between opening and closing the console terminal,
- * gradually showing or hiding it unless specified otherwise.
- *
- * @param instant Whether to open or close it instantaneously.
- */
-void MakerConsoleTerminal::toggle(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        open(instant);
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        close(instant);
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Adds an output line.
- *
- * @param text Text to add. It can have line breaks, in which case it's split
- * into different output lines.
- * @param error Whether it is an error output.
- */
-void MakerConsoleTerminal::write(const string& text, bool error) {
-    vector<string> lines = split(text, "\n", true);
-    forIdx(l, lines) {
-        output.push_back(lines[l]);
-        outputTimestamps.push_back(game.timePassed);
-        outputErrors.push_back(error);
-    }
-}
-
-
-#pragma endregion
-#pragma region Maker display
-
-
-/**
- * @brief Clears the data of the display.
- */
-void MakerDisplay::clear() {
-    text.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-    timeLeft = 0.0f;
-}
-
-
-/**
- * @brief Closes the display,
- * gradually hiding it unless specified otherwise.
- *
- * @param instant Whether to close it instantaneously.
- */
-void MakerDisplay::close(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-            visibility = 0.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_CLOSING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Draws the maker display on-screen.
- *
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerDisplay::draw(int y) const {
-    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
-    
-    //Setup.
-    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const vector<string> lines = split(text, "\n", true);
-    const int fontHeight = al_get_font_line_height(FONT);
-    
-    int textW = game.winW - CONSOLE::PADDING * 4;
-    int textH =
-        lines.size() * fontHeight +
-        (lines.size() - 1) * CONSOLE::LINE_PADDING;
-    int boxW = textW + CONSOLE::PADDING * 2;
-    int boxH = textH + CONSOLE::PADDING * 2;
-    int boxX = CONSOLE::PADDING;
-    int boxY = y;
-    int textX = boxX + CONSOLE::PADDING;
-    int textY = boxY + CONSOLE::PADDING;
-    
-    float alpha = visibility;
-    
-    const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
-    
-    //Background.
-    al_draw_filled_rectangle(
-        boxX, boxY, boxX + boxW, boxY + boxH,
-        multAlpha(CONSOLE::COLOR_BG, alpha)
-    );
-    
-    //Lines.
-    forIdx(l, lines) {
-        int lineY = getLineY(l);
-        
-        drawText(
-            lines[l], FONT,
-            Point(textX, lineY),
-            Point(textW, fontHeight),
-            multAlpha(CONSOLE::COLOR_MAIN, alpha),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-    }
-    
-    return boxH;
-}
-
-
-/**
- * @brief Opens the display,
- * gradually showing it unless specified otherwise.
- *
- * @param instant Whether to open it instantaneously.
- */
-void MakerDisplay::open(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-            visibility = 1.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_OPENING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerDisplay::tick(float deltaT) {
-    if(timeLeft > 0.0f) {
-        timeLeft -= deltaT;
-        if(timeLeft <= 0.0f) {
-            timeLeft = 0.0f;
-            close();
-        }
-    }
-    
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_OPEN: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSING:
-    case OPEN_CLOSE_STATE_OPENING: {
-        visibility =
-            inchTowards(
-                visibility,
-                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
-                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
-            );
-        if(visibility >= 1.0f) {
-            visibility = 1.0f;
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-        } else if(visibility <= 0.0f) {
-            visibility = 0.0f;
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Sets the text to show on the display.
- *
- * @param text Text to show.
- * @param duration How long to keep the display on after this.
- */
-void MakerDisplay::write(
-    const string& text, float duration
-) {
-    this->text = text;
-    timeLeft = duration;
-    open();
 }
 
 
@@ -1890,6 +1166,730 @@ void LeaderPrompt::tick(float deltaT) {
         visibility -= LEADER_PROMPT::FADE_SPEED * deltaT;
     }
     visibility = std::clamp(visibility, 0.0f, 1.0f);
+}
+
+
+#pragma endregion
+#pragma region Maker console
+
+
+/**
+ * @brief Clears everything.
+ */
+void MakerConsole::clear() {
+    terminal.clear();
+    notifier.clear();
+}
+
+
+/**
+ * @brief Closes the console terminal,
+ * gradually hiding it unless specified otherwise.
+ *
+ * @param instant Whether to close it instantaneously.
+ */
+void MakerConsole::closeTerminal(bool instant) {
+    terminal.close(instant);
+}
+
+
+/**
+ * @brief Draws the console terminal and notifier on-screen.
+ *
+ * @param y Y coordinate to draw at.
+ * @return Its height.
+ */
+int MakerConsole::draw(int y) const {
+    int terminalHeight = terminal.draw(y);
+    int notifierHeight = notifier.draw(y + terminalHeight + CONSOLE::PADDING);
+    return
+        terminalHeight +
+        (notifierHeight > 0 ? CONSOLE::PADDING + notifierHeight : 0);
+}
+
+
+/**
+ * @brief Opens the console terminal,
+ * gradually showing it unless specified otherwise.
+ *
+ * @param instant Whether to open it instantaneously.
+ */
+void MakerConsole::openTerminal(bool instant) {
+    terminal.open(instant);
+    notifier.close(instant);
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void MakerConsole::tick(float deltaT) {
+    terminal.tick(deltaT);
+    notifier.tick(deltaT);
+}
+
+
+/**
+ * @brief Toggles between opening and closing the console terminal,
+ * gradually showing or hiding it unless specified otherwise.
+ *
+ * @param instant Whether to open or close it instantaneously.
+ */
+void MakerConsole::toggleTerminal(bool instant) {
+    switch(terminal.getVisibilityState()) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        openTerminal();
+        break;
+    } case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        closeTerminal();
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Writes a line of output.
+ *
+ * @param text The line of text.
+ * @param error Whether it is an error output.
+ * @param notificationDuration If a notification is meant to appear
+ * in the notifier, specify the duration here. Otherwise, this should be 0.
+ */
+void MakerConsole::write(
+    const string& text, bool error, float notificationDuration
+) {
+    terminal.write(text, error);
+    
+    OPEN_CLOSE_STATE terminalVisibilityState = terminal.getVisibilityState();
+    bool isTerminalVisible =
+        terminalVisibilityState == OPEN_CLOSE_STATE_OPEN ||
+        terminalVisibilityState == OPEN_CLOSE_STATE_OPENING;
+        
+    if(notificationDuration > 0.0f && !isTerminalVisible) {
+        notifier.write(text, error, notificationDuration);
+    }
+}
+
+
+/**
+ * @brief Clears the data of the notifier.
+ */
+void MakerConsoleNotifier::clear() {
+    text.clear();
+    visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    visibility = 0.0f;
+    timeLeft = 0.0f;
+}
+
+
+/**
+ * @brief Closes the console notifier,
+ * gradually hiding it unless specified otherwise.
+ *
+ * @param instant Whether to close it instantaneously.
+ */
+void MakerConsoleNotifier::close(bool instant) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        break;
+    } case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        if(instant) {
+            visibilityState = OPEN_CLOSE_STATE_CLOSED;
+            visibility = 0.0f;
+        } else {
+            visibilityState = OPEN_CLOSE_STATE_CLOSING;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Draws the console notifier on-screen.
+ *
+ * @param y Y coordinate to draw at.
+ * @return Its height.
+ */
+int MakerConsoleNotifier::draw(int y) const {
+    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
+    
+    //Setup.
+    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
+    const vector<string> lines = split(text, "\n", true);
+    const int fontHeight = al_get_font_line_height(FONT);
+    
+    int longestLineWidth = 0;
+    forIdx(l, lines) {
+        longestLineWidth =
+            std::max(
+                longestLineWidth,
+                al_get_text_width(FONT, lines[l].c_str())
+            );
+    }
+    
+    int textW = longestLineWidth;
+    int textH =
+        lines.size() * fontHeight +
+        (lines.size() - 1) * CONSOLE::LINE_PADDING;
+    int boxW =
+        CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING +
+        textW + CONSOLE::PADDING;
+    boxW = std::max(boxW, (int) (game.winW / 2.0f) - CONSOLE::PADDING * 2);
+    int boxH =
+        std::max(
+            CONSOLE::PADDING + (int) CONSOLE::INPUT_SIZE + CONSOLE::PADDING,
+            CONSOLE::PADDING + textH + CONSOLE::PADDING
+        );
+    int boxX = CONSOLE::PADDING;
+    int boxY = y;
+    int textX =
+        boxX + CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING;
+    int textY = (boxY + boxH / 2.0f) - textH / 2.0f;
+    
+    float alpha = visibility;
+    
+    const auto getLineY =
+    [textY, fontHeight] (size_t idx) {
+        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
+    };
+    
+    //Background.
+    al_draw_filled_rectangle(
+        boxX, boxY, boxX + boxW, boxY + boxH,
+        multAlpha(CONSOLE::COLOR_BG, alpha)
+    );
+    
+    //Lines.
+    forIdx(l, lines) {
+        int lineY = getLineY(l);
+        
+        drawText(
+            lines[l], FONT,
+            Point(textX, lineY),
+            Point(textW, fontHeight),
+            multAlpha(
+                error ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
+                alpha
+            ),
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
+            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
+        );
+    }
+    
+    //Terminal toggle input.
+    drawPlayerActionInputSourceIcon(
+        PLAYER_ACTION_TYPE_MT_CONSOLE,
+        Point(
+            boxX + CONSOLE::PADDING + (CONSOLE::INPUT_SIZE / 2.0f),
+            boxY + (boxH / 2.0f)
+        ),
+        Point(CONSOLE::INPUT_SIZE),
+        true, game.sysContent.fntSlim, mapAlpha(alpha * 255)
+    );
+    
+    return boxH;
+}
+
+
+/**
+ * @brief Opens the console notifier,
+ * gradually showing it unless specified otherwise.
+ *
+ * @param instant Whether to open it instantaneously.
+ */
+void MakerConsoleNotifier::open(bool instant) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        break;
+    } case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        if(instant) {
+            visibilityState = OPEN_CLOSE_STATE_OPEN;
+            visibility = 1.0f;
+        } else {
+            visibilityState = OPEN_CLOSE_STATE_OPENING;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void MakerConsoleNotifier::tick(float deltaT) {
+    if(timeLeft > 0.0f) {
+        timeLeft -= deltaT;
+        if(timeLeft <= 0.0f) {
+            timeLeft = 0.0f;
+            close();
+        }
+    }
+    
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_OPEN: {
+        break;
+    } case OPEN_CLOSE_STATE_CLOSING:
+    case OPEN_CLOSE_STATE_OPENING: {
+        visibility =
+            inchTowards(
+                visibility,
+                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
+                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
+            );
+        if(visibility >= 1.0f) {
+            visibility = 1.0f;
+            visibilityState = OPEN_CLOSE_STATE_OPEN;
+        } else if(visibility <= 0.0f) {
+            visibility = 0.0f;
+            visibilityState = OPEN_CLOSE_STATE_CLOSED;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Sets the text to show on the notifier.
+ *
+ * @param text Text to show.
+ * @param error Whether it is an error output.
+ * @param duration How long to show the notification for.
+ */
+void MakerConsoleNotifier::write(
+    const string& text, bool error, float duration
+) {
+    this->text = text;
+    this->error = error;
+    timeLeft = duration;
+    open();
+}
+
+
+/**
+ * @brief Clears the list of output lines.
+ */
+void MakerConsoleTerminal::clear() {
+    output.clear();
+    outputTimestamps.clear();
+    outputErrors.clear();
+    input.clear();
+    visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    visibility = 0.0f;
+}
+
+
+/**
+ * @brief Closes the console terminal,
+ * gradually hiding it unless specified otherwise.
+ *
+ * @param instant Whether to close it instantaneously.
+ */
+void MakerConsoleTerminal::close(bool instant) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        break;
+    } case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        if(instant) {
+            visibilityState = OPEN_CLOSE_STATE_CLOSED;
+            visibility = 0.0f;
+        } else {
+            visibilityState = OPEN_CLOSE_STATE_CLOSING;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Draws the console terminal on-screen.
+ *
+ * @param y Y coordinate to draw at.
+ * @return Its height.
+ */
+int MakerConsoleTerminal::draw(int y) const {
+    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
+    
+    //Setup.
+    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
+    const size_t nLines =
+        CONSOLE::OUTPUT_MAX_VISIBLE_LINES;
+    const int fontHeight = al_get_font_line_height(FONT);
+    
+    int textW = game.winW - CONSOLE::PADDING * 2;
+    int textH =
+        nLines * fontHeight +
+        (nLines - 1) * CONSOLE::LINE_PADDING;
+    int boxW = game.winW;
+    int boxH = CONSOLE::PADDING + textH + CONSOLE::PADDING;
+    int boxX = 0;
+    int boxY = y;
+    int textX = boxX + CONSOLE::PADDING;
+    int textY = boxY + CONSOLE::PADDING;
+    
+    int yOffset = -(boxH * (1.0f - ease(visibility, EASE_METHOD_IN_OUT)));
+    boxY += yOffset;
+    textY += yOffset;
+    
+    const auto getLineY =
+    [textY, fontHeight] (size_t idx) {
+        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
+    };
+    
+    //Background.
+    al_draw_filled_rectangle(
+        boxX, boxY, boxX + boxW, boxY + boxH,
+        CONSOLE::COLOR_BG
+    );
+    
+    //Output lines.
+    for(size_t l = 0; l < CONSOLE::OUTPUT_MAX_VISIBLE_LINES; l++) {
+        int entryIdx = output.size() - CONSOLE::OUTPUT_MAX_VISIBLE_LINES + l;
+        if(entryIdx < 0 || entryIdx >= (int) output.size()) continue;
+        int entryY = getLineY(l);
+        
+        //Timestamp.
+        string timestamp =
+            resizeString(f2s(outputTimestamps[entryIdx]), 8, true, false);
+        timestamp =
+            resizeString(f2s(outputTimestamps[entryIdx]), 8, false, true, true);
+        timestamp = "[" + timestamp + "] ";
+        int timestampWidth = al_get_text_width(FONT, timestamp.c_str());
+        drawText(
+            timestamp, FONT,
+            Point(textX, entryY),
+            Point(timestampWidth, fontHeight),
+            CONSOLE::COLOR_MUTED, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
+            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
+        );
+        
+        //Text.
+        drawText(
+            output[entryIdx], FONT,
+            Point(textX + timestampWidth, entryY),
+            Point(textW - timestampWidth, fontHeight),
+            outputErrors[entryIdx] ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
+            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
+        );
+    }
+    
+    //TODO
+    /*
+    //Divisor line between output and input.
+    int lineY = getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) + fontHeight / 2.0f;
+    al_draw_line(
+        textX, lineY, textX + textW, lineY,
+        CONSOLE::COLOR_MUTED, 2.0f
+    );
+    
+    //Input text.
+    drawText(
+        "> " + input, FONT,
+        Point(textX, getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 1)),
+        Point(textW, fontHeight),
+        CONSOLE::COLOR_MAIN, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
+        TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
+    );
+    */
+    
+    return boxH + yOffset;
+}
+
+
+/**
+ * @brief Returns the current visibility state.
+ *
+ * @return The state.
+ */
+OPEN_CLOSE_STATE MakerConsoleTerminal::getVisibilityState() const {
+    return visibilityState;
+}
+
+
+/**
+ * @brief Opens the console terminal,
+ * gradually showing it unless specified otherwise.
+ *
+ * @param instant Whether to open it instantaneously.
+ */
+void MakerConsoleTerminal::open(bool instant) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        break;
+    } case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        if(instant) {
+            visibilityState = OPEN_CLOSE_STATE_OPEN;
+            visibility = 1.0f;
+        } else {
+            visibilityState = OPEN_CLOSE_STATE_OPENING;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void MakerConsoleTerminal::tick(float deltaT) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_OPEN: {
+        break;
+    } case OPEN_CLOSE_STATE_CLOSING:
+    case OPEN_CLOSE_STATE_OPENING: {
+        visibility =
+            inchTowards(
+                visibility,
+                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
+                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
+            );
+        if(visibility >= 1.0f) {
+            visibility = 1.0f;
+            visibilityState = OPEN_CLOSE_STATE_OPEN;
+        } else if(visibility <= 0.0f) {
+            visibility = 0.0f;
+            visibilityState = OPEN_CLOSE_STATE_CLOSED;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Toggles between opening and closing the console terminal,
+ * gradually showing or hiding it unless specified otherwise.
+ *
+ * @param instant Whether to open or close it instantaneously.
+ */
+void MakerConsoleTerminal::toggle(bool instant) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        open(instant);
+        break;
+    } case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        close(instant);
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Adds an output line.
+ *
+ * @param text Text to add. It can have line breaks, in which case it's split
+ * into different output lines.
+ * @param error Whether it is an error output.
+ */
+void MakerConsoleTerminal::write(const string& text, bool error) {
+    vector<string> lines = split(text, "\n", true);
+    forIdx(l, lines) {
+        output.push_back(lines[l]);
+        outputTimestamps.push_back(game.timePassed);
+        outputErrors.push_back(error);
+    }
+}
+
+
+#pragma endregion
+#pragma region Maker display
+
+
+/**
+ * @brief Clears the data of the display.
+ */
+void MakerDisplay::clear() {
+    text.clear();
+    visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    visibility = 0.0f;
+    timeLeft = 0.0f;
+}
+
+
+/**
+ * @brief Closes the display,
+ * gradually hiding it unless specified otherwise.
+ *
+ * @param instant Whether to close it instantaneously.
+ */
+void MakerDisplay::close(bool instant) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        break;
+    } case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        if(instant) {
+            visibilityState = OPEN_CLOSE_STATE_CLOSED;
+            visibility = 0.0f;
+        } else {
+            visibilityState = OPEN_CLOSE_STATE_CLOSING;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Draws the maker display on-screen.
+ *
+ * @param y Y coordinate to draw at.
+ * @return Its height.
+ */
+int MakerDisplay::draw(int y) const {
+    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
+    
+    //Setup.
+    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
+    const vector<string> lines = split(text, "\n", true);
+    const int fontHeight = al_get_font_line_height(FONT);
+    
+    int textW = game.winW - CONSOLE::PADDING * 4;
+    int textH =
+        lines.size() * fontHeight +
+        (lines.size() - 1) * CONSOLE::LINE_PADDING;
+    int boxW = textW + CONSOLE::PADDING * 2;
+    int boxH = textH + CONSOLE::PADDING * 2;
+    int boxX = CONSOLE::PADDING;
+    int boxY = y;
+    int textX = boxX + CONSOLE::PADDING;
+    int textY = boxY + CONSOLE::PADDING;
+    
+    float alpha = visibility;
+    
+    const auto getLineY =
+    [textY, fontHeight] (size_t idx) {
+        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
+    };
+    
+    //Background.
+    al_draw_filled_rectangle(
+        boxX, boxY, boxX + boxW, boxY + boxH,
+        multAlpha(CONSOLE::COLOR_BG, alpha)
+    );
+    
+    //Lines.
+    forIdx(l, lines) {
+        int lineY = getLineY(l);
+        
+        drawText(
+            lines[l], FONT,
+            Point(textX, lineY),
+            Point(textW, fontHeight),
+            multAlpha(CONSOLE::COLOR_MAIN, alpha),
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
+            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
+        );
+    }
+    
+    return boxH;
+}
+
+
+/**
+ * @brief Opens the display,
+ * gradually showing it unless specified otherwise.
+ *
+ * @param instant Whether to open it instantaneously.
+ */
+void MakerDisplay::open(bool instant) {
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_OPEN:
+    case OPEN_CLOSE_STATE_OPENING: {
+        break;
+    } case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_CLOSING: {
+        if(instant) {
+            visibilityState = OPEN_CLOSE_STATE_OPEN;
+            visibility = 1.0f;
+        } else {
+            visibilityState = OPEN_CLOSE_STATE_OPENING;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void MakerDisplay::tick(float deltaT) {
+    if(timeLeft > 0.0f) {
+        timeLeft -= deltaT;
+        if(timeLeft <= 0.0f) {
+            timeLeft = 0.0f;
+            close();
+        }
+    }
+    
+    switch(visibilityState) {
+    case OPEN_CLOSE_STATE_CLOSED:
+    case OPEN_CLOSE_STATE_OPEN: {
+        break;
+    } case OPEN_CLOSE_STATE_CLOSING:
+    case OPEN_CLOSE_STATE_OPENING: {
+        visibility =
+            inchTowards(
+                visibility,
+                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
+                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
+            );
+        if(visibility >= 1.0f) {
+            visibility = 1.0f;
+            visibilityState = OPEN_CLOSE_STATE_OPEN;
+        } else if(visibility <= 0.0f) {
+            visibility = 0.0f;
+            visibilityState = OPEN_CLOSE_STATE_CLOSED;
+        }
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Sets the text to show on the display.
+ *
+ * @param text Text to show.
+ * @param duration How long to keep the display on after this.
+ */
+void MakerDisplay::write(
+    const string& text, float duration
+) {
+    this->text = text;
+    timeLeft = duration;
+    open();
 }
 
 

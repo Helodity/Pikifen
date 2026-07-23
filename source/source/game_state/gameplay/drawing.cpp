@@ -1905,7 +1905,7 @@ void GameplayState::drawThrowPreview(Player* player) {
  * @param size Maximum image width or height, in pixels.
  * @param padding Padding around the actual area, in area pixels. Each side
  * of the area receives these many pixels divided by two.
- * @param shadows Whether to draw tree shadows.
+ * @param treeShadows Whether to draw tree shadows.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* GameplayState::drawToBitmap(

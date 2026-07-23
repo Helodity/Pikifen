@@ -116,108 +116,6 @@ void AreaEditor::openOptionsDialog() {
 
 
 /**
- * @brief Processes the Dear ImGui widgets regarding a song
- * for this frame.
- *
- * @param songNamePtr Points to the song name.
- * @param widgetLabel Label for the widgets.
- * @param widgetDescription Description for the widget.
- */
-void AreaEditor::processGuiWidgetsSong(
-    string* songNamePtr, const string& widgetLabel,
-    const string& widgetDescription
-) {
-    //Preview song button.
-    bool validSongSelected =
-        !songNamePtr->empty() &&
-        *songNamePtr != NONE_OPTION;
-    bool previewing =
-        !previewSong.empty() &&
-        previewSong == *songNamePtr;
-    bool canPreviewSelectedSong =
-        validSongSelected &&
-        previewSong != *songNamePtr;
-    bool canStopPreviewing =
-        previewing &&
-        (
-            !validSongSelected ||
-            previewSong == *songNamePtr
-        );
-    bool previewButtonValid =
-        canPreviewSelectedSong || canStopPreviewing;
-        
-    if(!previewButtonValid) ImGui::BeginDisabled();
-    
-    if(
-        ImGui::ImageButton(
-            "previewSongButton" + widgetLabel,
-            canStopPreviewing ?
-            editorIcons[EDITOR_ICON_STOP] :
-            editorIcons[EDITOR_ICON_PLAY],
-            Point(ImGui::GetTextLineHeight())
-        )
-    ) {
-        if(canPreviewSelectedSong) {
-            previewSong = *songNamePtr;
-            game.audio.setCurrentSong(previewSong);
-            previewing = true;
-        } else if(canStopPreviewing) {
-            game.audio.setCurrentSong(
-                game.sysContentNames.sngEditors, false
-            );
-            previewSong.clear();
-            previewing = false;
-        }
-    }
-    
-    if(!previewButtonValid) ImGui::EndDisabled();
-    
-    string previewTooltipStr;
-    if(previewing) {
-        previewTooltipStr +=
-            "Currently previewing the song \"" +
-            game.content.songs.list[previewSong].name +
-            "\".\n";
-    }
-    if(canPreviewSelectedSong) {
-        previewTooltipStr +=
-            "Press here to preview the song \"" +
-            game.content.songs.list[*songNamePtr].name +
-            "\".";
-    } else if(canStopPreviewing) {
-        previewTooltipStr +=
-            "Press here to stop.";
-    } else {
-        previewTooltipStr +=
-            "If you select a song, you can press here to preview it.";
-    }
-    setTooltip(previewTooltipStr);
-    
-    //Song combobox.
-    ImGui::SameLine();
-    vector<string> songInternals;
-    vector<string> songNames;
-    songInternals.push_back("");
-    songNames.push_back(NONE_OPTION);
-    for(auto& s : game.content.songs.list) {
-        songInternals.push_back(s.first);
-        songNames.push_back(s.second.name);
-    }
-    string songName = *songNamePtr;
-    if(
-        ImGui::Combo(
-            widgetLabel,
-            &songName, songInternals, songNames, 15
-        )
-    ) {
-        registerChange("area song change");
-        *songNamePtr = songName;
-    }
-    setTooltip(widgetDescription);
-}
-
-
-/**
  * @brief Processes Dear ImGui for this frame.
  */
 void AreaEditor::processGui() {
@@ -6612,4 +6510,106 @@ void AreaEditor::processGuiWidgetsMetric(
         if(!useManualTarget) ImGui::EndDisabled();
         
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets regarding a song
+ * for this frame.
+ *
+ * @param songNamePtr Points to the song name.
+ * @param widgetLabel Label for the widgets.
+ * @param widgetDescription Description for the widget.
+ */
+void AreaEditor::processGuiWidgetsSong(
+    string* songNamePtr, const string& widgetLabel,
+    const string& widgetDescription
+) {
+    //Preview song button.
+    bool validSongSelected =
+        !songNamePtr->empty() &&
+        *songNamePtr != NONE_OPTION;
+    bool previewing =
+        !previewSong.empty() &&
+        previewSong == *songNamePtr;
+    bool canPreviewSelectedSong =
+        validSongSelected &&
+        previewSong != *songNamePtr;
+    bool canStopPreviewing =
+        previewing &&
+        (
+            !validSongSelected ||
+            previewSong == *songNamePtr
+        );
+    bool previewButtonValid =
+        canPreviewSelectedSong || canStopPreviewing;
+        
+    if(!previewButtonValid) ImGui::BeginDisabled();
+    
+    if(
+        ImGui::ImageButton(
+            "previewSongButton" + widgetLabel,
+            canStopPreviewing ?
+            editorIcons[EDITOR_ICON_STOP] :
+            editorIcons[EDITOR_ICON_PLAY],
+            Point(ImGui::GetTextLineHeight())
+        )
+    ) {
+        if(canPreviewSelectedSong) {
+            previewSong = *songNamePtr;
+            game.audio.setCurrentSong(previewSong);
+            previewing = true;
+        } else if(canStopPreviewing) {
+            game.audio.setCurrentSong(
+                game.sysContentNames.sngEditors, false
+            );
+            previewSong.clear();
+            previewing = false;
+        }
+    }
+    
+    if(!previewButtonValid) ImGui::EndDisabled();
+    
+    string previewTooltipStr;
+    if(previewing) {
+        previewTooltipStr +=
+            "Currently previewing the song \"" +
+            game.content.songs.list[previewSong].name +
+            "\".\n";
+    }
+    if(canPreviewSelectedSong) {
+        previewTooltipStr +=
+            "Press here to preview the song \"" +
+            game.content.songs.list[*songNamePtr].name +
+            "\".";
+    } else if(canStopPreviewing) {
+        previewTooltipStr +=
+            "Press here to stop.";
+    } else {
+        previewTooltipStr +=
+            "If you select a song, you can press here to preview it.";
+    }
+    setTooltip(previewTooltipStr);
+    
+    //Song combobox.
+    ImGui::SameLine();
+    vector<string> songInternals;
+    vector<string> songNames;
+    songInternals.push_back("");
+    songNames.push_back(NONE_OPTION);
+    for(auto& s : game.content.songs.list) {
+        songInternals.push_back(s.first);
+        songNames.push_back(s.second.name);
+    }
+    string songName = *songNamePtr;
+    if(
+        ImGui::Combo(
+            widgetLabel,
+            &songName, songInternals, songNames, 15
+        )
+    ) {
+        registerChange("area song change");
+        *songNamePtr = songName;
+    }
+    setTooltip(widgetDescription);
 }

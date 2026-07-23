@@ -487,6 +487,25 @@ void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
 
 
 /**
+ * @brief Generic handler for a mob leaving a hazard.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Points to the hazard.
+ * @param info2 Unused.
+ */
+void GenMobFsm::leaveHazard(ScriptVM* scriptVM, void* info1, void* info2) {
+    Mob* mPtr = scriptVM->mob;
+    Hazard* h = (Hazard*) info1;
+    
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
+    
+    if(h->associatedLiquid) {
+        mPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
+    }
+}
+
+
+/**
  * @brief When a mob has to lose its momentum.
  *
  * @param scriptVM The script VM responsible.
@@ -599,25 +618,6 @@ void GenMobFsm::touchHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     if(vuln.statusToApply) {
         mPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
-    }
-}
-
-
-/**
- * @brief Generic handler for a mob leaving a hazard.
- *
- * @param scriptVM The script VM responsible.
- * @param info1 Points to the hazard.
- * @param info2 Unused.
- */
-void GenMobFsm::leaveHazard(ScriptVM* scriptVM, void* info1, void* info2) {
-    Mob* mPtr = scriptVM->mob;
-    Hazard* h = (Hazard*) info1;
-    
-    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
-    
-    if(h->associatedLiquid) {
-        mPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
 

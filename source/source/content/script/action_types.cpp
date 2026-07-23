@@ -3120,7 +3120,8 @@ void ScriptActionRunners::storeFocusInside(ScriptActionInstRunData& data) {
     //Main logic.
     if(
         data.scriptVM->getRunnerScriptVM()->focusedMob &&
-        !data.scriptVM->getRunnerScriptVM()->focusedMob->isMobOrParentStoredInside()
+        !data.scriptVM->getRunnerScriptVM()->focusedMob->
+        isMobOrParentStoredInside()
     ) {
         data.scriptVM->getRunnerMob()->storeMobInside(
             data.scriptVM->getRunnerScriptVM()->focusedMob

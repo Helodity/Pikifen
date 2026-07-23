@@ -52,8 +52,8 @@ extern const ALLEGRO_COLOR COLOR_MAIN;
 extern const ALLEGRO_COLOR COLOR_MUTED;
 extern const float INPUT_SIZE;
 extern const int LINE_PADDING;
-extern const size_t OUTPUT_MAX_VISIBLE_LINES;
 extern const size_t OUTPUT_MAX_SIZE;
+extern const size_t OUTPUT_MAX_VISIBLE_LINES;
 extern const int PADDING;
 extern const float VISIBILITY_CHANGE_SPEED;
 }

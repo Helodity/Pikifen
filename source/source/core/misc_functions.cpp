@@ -1693,6 +1693,17 @@ string unescapeString(const string& s) {
 
 
 /**
+ * @brief Converts a vertex to a point.
+ *
+ * @param v Vertex to convert.
+ * @return The point.
+ */
+Point v2p(const Vertex* v) {
+    return Point(v->x, v->y);
+}
+
+
+/**
  * @brief Given a series of command-like parameters, validates that everything
  * is okay with them. If not, the engine trips an assert.
  *
@@ -1737,15 +1748,4 @@ bool validateCommandParams(
     }
     
     return true;
-}
-
-
-/**
- * @brief Converts a vertex to a point.
- *
- * @param v Vertex to convert.
- * @return The point.
- */
-Point v2p(const Vertex* v) {
-    return Point(v->x, v->y);
 }
