@@ -1460,9 +1460,16 @@ void Mob::chaseNextPathStop(float speed, float acceleration) {
         nextStopZ += PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
     }
     
+    Bitmask8 chaseFlags = CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED;
+    
+    //Mobs following a path via scripting should respect rotation.
+    if(!hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)){
+        chaseFlags |= CHASE_FLAG_ANY_ANGLE;
+    }
+
     chase(
         nextStop->center, nextStopZ,
-        CHASE_FLAG_ANY_ANGLE | CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED,
+        chaseFlags,
         PATHS::DEF_CHASE_TARGET_DISTANCE,
         speed, acceleration
     );
@@ -2026,7 +2033,7 @@ bool Mob::followPath(
     }
     
     PathFollowSettings finalSettings = settings;
-    
+
     if(carryInfo) {
         //Check if this carriable is considered light load.
         if(type->weight == 1) {
