@@ -2033,7 +2033,7 @@ bool Mob::followPath(
     }
     
     PathFollowSettings finalSettings = settings;
-
+    
     if(carryInfo) {
         //Check if this carriable is considered light load.
         if(type->weight == 1) {
