@@ -58,6 +58,13 @@ const float INPUT_SIZE = 24.0f;
 //Padding between each line.
 const int LINE_PADDING = 2;
 
+//Number of characters to indent the next line of the same
+//word-wrapped entry by.
+const size_t OUTPUT_INDENT = 2;
+
+//Maximum amount of characters per line of text.
+const size_t OUTPUT_MAX_CHARS_PER_LINE = 80;
+
 //Maximum amount of output lines that can be in the console.
 const size_t OUTPUT_MAX_SIZE = 100;
 
@@ -1329,7 +1336,11 @@ int MakerConsoleNotifier::draw(int y) const {
     
     //Setup.
     const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const vector<string> lines = split(text, "\n", true);
+    const string wrappedText =
+        wordWrap(
+            text, CONSOLE::OUTPUT_MAX_CHARS_PER_LINE, CONSOLE::OUTPUT_INDENT
+        );
+    const vector<string> lines = split(wrappedText, "\n", true);
     const int fontHeight = al_get_font_line_height(FONT);
     
     int longestLineWidth = 0;
@@ -1547,8 +1558,7 @@ int MakerConsoleTerminal::draw(int y) const {
     
     //Setup.
     const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const size_t nLines =
-        CONSOLE::OUTPUT_MAX_VISIBLE_LINES;
+    const size_t nLines = CONSOLE::OUTPUT_MAX_VISIBLE_LINES;
     const int fontHeight = al_get_font_line_height(FONT);
     
     int textW = game.winW - CONSOLE::PADDING * 2;
@@ -1577,21 +1587,65 @@ int MakerConsoleTerminal::draw(int y) const {
         CONSOLE::COLOR_BG
     );
     
-    //Output lines.
-    for(size_t l = 0; l < CONSOLE::OUTPUT_MAX_VISIBLE_LINES; l++) {
-        int entryIdx = output.size() - CONSOLE::OUTPUT_MAX_VISIBLE_LINES + l;
-        if(entryIdx < 0 || entryIdx >= (int) output.size()) continue;
-        int entryY = getLineY(l);
+    //Calculate the lines to show.
+    vector<string> lines;
+    vector<float> lineTimestamps;
+    vector<bool> lineErrors;
+    size_t entryIt = 0;
+    
+    while(true) {
+        bool done = false;
+        int entryIdx = output.size() - entryIt - 1;
+        if(entryIdx < 0 || entryIdx >= (int) output.size()) break;
+        
+        //Split the entry into lines, since it may be too long to fit
+        //in the game window.
+        const string wrappedEntry =
+            wordWrap(
+                output[entryIdx],
+                CONSOLE::OUTPUT_MAX_CHARS_PER_LINE, CONSOLE::OUTPUT_INDENT
+            );
+        const vector<string> entryLines = split(wrappedEntry, "\n");
+        
+        //Add each line in reverse order.
+        for(size_t l = 0; l < entryLines.size(); l++) {
+            int entryLineIdx = entryLines.size() - l - 1;
+            
+            lines.push_back(entryLines[entryLineIdx]);
+            if(entryLineIdx == 0) {
+                lineTimestamps.push_back(outputTimestamps[entryIdx]);
+            } else {
+                lineTimestamps.push_back(-1.0f);
+            }
+            lineErrors.push_back(outputErrors[entryIdx]);
+            
+            if(lines.size() >= CONSOLE::OUTPUT_MAX_VISIBLE_LINES) {
+                done = true;
+                break;
+            }
+        }
+        
+        if(done) break;
+        entryIt++;
+    }
+    
+    //Text lines.
+    for(size_t l = 0; l < lines.size(); l++) {
+        int entryYIdx = CONSOLE::OUTPUT_MAX_VISIBLE_LINES - l;
+        int entryY = getLineY(entryYIdx - 1);
         
         //Timestamp.
-        string timestamp =
-            resizeString(f2s(outputTimestamps[entryIdx]), 8, true, false);
-        timestamp =
-            resizeString(f2s(outputTimestamps[entryIdx]), 8, false, true, true);
-        timestamp = "[" + timestamp + "] ";
-        int timestampWidth = al_get_text_width(FONT, timestamp.c_str());
+        string timestampStr;
+        if(lineTimestamps[l] >= 0.0f) {
+            timestampStr =
+                resizeString(f2s(lineTimestamps[l]), 8, true, true, true);
+            timestampStr = "[" + timestampStr + "] ";
+        } else {
+            timestampStr = string(11, ' ');
+        }
+        int timestampWidth = al_get_text_width(FONT, timestampStr.c_str());
         drawText(
-            timestamp, FONT,
+            timestampStr, FONT,
             Point(textX, entryY),
             Point(timestampWidth, fontHeight),
             CONSOLE::COLOR_MUTED, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
@@ -1600,10 +1654,10 @@ int MakerConsoleTerminal::draw(int y) const {
         
         //Text.
         drawText(
-            output[entryIdx], FONT,
+            lines[l], FONT,
             Point(textX + timestampWidth, entryY),
             Point(textW - timestampWidth, fontHeight),
-            outputErrors[entryIdx] ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
+            lineErrors[l] ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
             TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
         );

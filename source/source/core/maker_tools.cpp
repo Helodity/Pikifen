@@ -409,7 +409,7 @@ bool MakerToolRunners::newReminder(
     game.modal.onBack =
     [] () {
         game.controls.ignoreMenuCloseActions();
-        game.console.write("Cancelled reminder.", false, 5.0f);
+        game.console.write("Canceled reminder.", false, 5.0f);
     };
     game.modal.extraButtons.push_back(
     ModalGuiManager::Button {

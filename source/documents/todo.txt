@@ -6,13 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
     Using the transformation widget to resize hitboxes still doesn't work
-    Long error messages, like leaders switching to unknown animations, cuts off
-    Empty nugget piles still show up as a mission critical mob on the radar. Even when the nuggets have been delivered it'll still be marked until it's back on-camera
 
     --- 1.2.0 ---
-    New leader animations should default to idling, for compatibility's sake
-    Pressing Delete on a reminder in the area editor should delete it
-    Add a button to move camera to current reminder in area editor
     Add the Hocotate ship pod as a ship
     Add the S.S. Dolphin 2 and its pod as ships
     
@@ -73,6 +68,8 @@ Next tasks (roughly sorted most important first)
         Printing something to the console should receive an argument that specifies whether that gets shown in the "console preview" and added to the console's output for later viewing (errors, script prints) or if it is just shown in the preview (mob inspector, area inspector)
         Move somewhere the logic that is common between this system and the existing script action parsing/running system
         Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
+        Warnings? For things like leaders needing certain animations, but since they don't exist, the idling animation will be used instead. Or for usages of deprecated stuff
+            Maybe a maker tool that makes it so the next time you reload an area, it checks for warnings and prints those to the console as errors
     A command to spawn any type of mob?
     GUI items and GUI manager need to be split into a generic usage library, where the Pikifen variants inherit from them
     Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts

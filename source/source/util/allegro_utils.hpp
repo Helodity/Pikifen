@@ -31,7 +31,7 @@ enum FILE_DIALOG_RESULT {
     //The option picked is not in the expected folder.
     FILE_DIALOG_RESULT_WRONG_FOLDER,
     
-    //The player cancelled the dialog.
+    //The player canceled the dialog.
     FILE_DIALOG_RESULT_CANCELED,
     
 };
