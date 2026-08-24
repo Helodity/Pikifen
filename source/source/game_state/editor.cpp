@@ -1309,12 +1309,15 @@ bool Editor::handleSelectionAndTransformationLmbDown(
  * @param skipTraWid Whether to skip the transformation widget's logic.
  * @param mouseCursor Mouse cursor coordinates to use.
  * @param onPreTransform Code to run before any transformation is made, if any.
+ * @param forceKeepAspectRatio Whether to force the transformation
+ * widget to keep the aspect ratio.
  * @return Whether any important data changed.
  */
 bool Editor::handleSelectionAndTransformationLmbDrag(
     SelectionController& selCtrl, TransformationWidget& traWid,
     bool skipTraWid, const Point& mouseCursor,
-    const std::function<void()>& onPreTransform
+    const std::function<void()>& onPreTransform,
+    bool forceKeepAspectRatio
 ) {
     //Rubber band.
     if(selCtrl.isCreatingRubberBand()) {
@@ -1345,6 +1348,9 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
                 &useSelectionAngle, &twFlags, &twPadding
             )
         ) {
+            if(forceKeepAspectRatio) {
+                enableFlag(twFlags, TransformationWidget::TW_FLAG_KEEP_RATIO);
+            }
             bool twHandled =
                 traWid.handleMouseMove(
                     mouseCursor,

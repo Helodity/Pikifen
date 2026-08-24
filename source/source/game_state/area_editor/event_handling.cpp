@@ -1355,7 +1355,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         handleSelectionAndTransformationLmbDrag(
             detailsSelCtrl, curTransformationWidget, false,
             snapPoint(game.editorsView.mouseCursorWorldPos),
-            [this] { registerChange("tree shadow movement"); }
+            [this] { registerChange("tree shadow movement"); },
+            selectedShadowKeepAspectRatio
         );
         
         break;

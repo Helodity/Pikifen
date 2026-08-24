@@ -1313,7 +1313,8 @@ protected:
     bool handleSelectionAndTransformationLmbDrag(
         SelectionController& selCtrl, TransformationWidget& traWid,
         bool skipTraWid, const Point& mouseCursor,
-        const std::function<void()>& onPreTransform = nullptr
+        const std::function<void()>& onPreTransform = nullptr,
+        bool forceKeepAspectRatio = false
     );
     void handleSelectionAndTransformationLmbUp(
         SelectionController& selCtrl, TransformationWidget& traWid,
