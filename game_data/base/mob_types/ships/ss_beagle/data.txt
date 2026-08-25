@@ -30,6 +30,9 @@ sounds {
 children {
     antenna {
         spawn = antenna
+        parent_holds = true
+        hold_offset_vertical_distance = 1.1
+        hold_rotation_method = copy_parent
         handle_events = true
         relay_events = true
         handle_statuses = true

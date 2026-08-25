@@ -13,7 +13,7 @@ pikmin_types = purple_pikmin; white_pikmin
 pushable = false
 pushes = true
 pushes_softly = true
-radius = 50
+radius = 58
 receptacle_offset = 40 0
 
 sounds {
@@ -43,6 +43,44 @@ sounds {
         volume = 40
         speed = 95
         speed_deviation = 15
+    }
+}
+
+children {
+    propeller {
+        spawn = propeller
+        parent_holds = true
+        hold_offset_vertical_distance = 1.1
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+    antenna {
+        spawn = antenna
+        parent_holds = true
+        hold_offset_distance = 1
+        hold_offset_vertical_distance = 1.1
+        hold_offset_angle = 180
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+}
+
+spawns {
+    propeller {
+        object = hocotate_ship_propeller
+        relative = true
+        angle = 0
+    }
+    antenna {
+        object = hocotate_ship_antenna
+        relative = true
+        angle = 0
     }
 }
 

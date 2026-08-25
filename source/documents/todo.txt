@@ -7,6 +7,8 @@ Next tasks (roughly sorted most important first)
     --- Problems to fix ---
 
     --- 1.2.0 ---
+    Sounds for the ships
+    Add the Dolphin's antenna and such
     Add the Hocotate ship pod as a ship
     Add the S.S. Dolphin 2 and its pod as ships
     

@@ -1,5 +1,5 @@
 name=S.S. Beagle antenna animations
-description=Animations for the S.S. Beagle antenna.
+description=Animations for the S.S. Beagle's antenna.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0
