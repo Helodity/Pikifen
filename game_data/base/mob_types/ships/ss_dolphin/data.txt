@@ -27,6 +27,80 @@ sounds {
     }
 }
 
+children {
+    radar {
+        spawn = radar
+        parent_holds = true
+        hold_offset_distance = 0.9
+        hold_offset_vertical_distance = 1.1
+        hold_offset_angle = 180
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+    antenna {
+        spawn = antenna
+        parent_holds = true
+        hold_offset_distance = 1.4
+        hold_offset_vertical_distance = 1.1
+        hold_offset_angle = 135
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+    radio {
+        spawn = radio
+        parent_holds = true
+        hold_offset_distance = 1.4
+        hold_offset_vertical_distance = 1.1
+        hold_offset_angle = -45
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+    satellite {
+        spawn = satellite
+        parent_holds = true
+        hold_offset_distance = 1.4
+        hold_offset_vertical_distance = 1.1
+        hold_offset_angle = 45
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+}
+
+spawns {
+    radar {
+        object = ss_dolphin_radar
+        relative = true
+        angle = 0
+    }
+    antenna {
+        object = ss_dolphin_antenna
+        relative = true
+        angle = 0
+    }
+    radio {
+        object = ss_dolphin_radio
+        relative = true
+        angle = 0
+    }
+    satellite {
+        object = ss_dolphin_satellite
+        relative = true
+        angle = 0
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.2.0

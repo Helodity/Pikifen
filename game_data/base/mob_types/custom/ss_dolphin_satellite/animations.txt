@@ -1,0 +1,57 @@
+name=S.S. Dolphin Guard Satellite animations
+description=Animations for the Guard Satellite at the S.S. Dolphin.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	idling{
+		frames{
+			idling_01{
+				duration=0.8000
+				interpolate=true
+			}
+			idling_02{
+				duration=0.8000
+				interpolate=true
+			}
+			idling_03{
+				duration=0.8000
+				interpolate=true
+			}
+			idling_04{
+				duration=0.8000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	idling_01{
+		file=other_mobs/dolphin
+		file_pos=1118.0000 99.0000
+		file_size=98.0000 98.0000
+		scale=0.5000 0.5000
+	}
+	idling_02{
+		file=other_mobs/dolphin
+		file_pos=1118.0000 99.0000
+		file_size=98.0000 98.0000
+		scale=0.5200 0.5200
+		angle=1.5708
+	}
+	idling_03{
+		file=other_mobs/dolphin
+		file_pos=1118.0000 99.0000
+		file_size=98.0000 98.0000
+		scale=0.5000 0.5000
+		angle=3.1416
+	}
+	idling_04{
+		file=other_mobs/dolphin
+		file_pos=1118.0000 99.0000
+		file_size=98.0000 98.0000
+		scale=0.5200 0.5200
+		angle=4.7124
+	}
+}
+body_parts
