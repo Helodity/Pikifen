@@ -1,7 +1,7 @@
 script {
     idling {
         on_enter {
-            start_particles hocotate_ship_smoke 0 0 64
+            start_particles hocotate_ship_smoke 0 0 0
         }
     }
 }

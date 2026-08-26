@@ -69,6 +69,18 @@ children {
         handle_statuses = true
         relay_statuses = true
     }
+    exhausts {
+        spawn = exhausts
+        parent_holds = true
+        hold_offset_distance = 0.75
+        hold_offset_vertical_distance = 0
+        hold_offset_angle = 0
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
 }
 
 spawns {
@@ -79,6 +91,11 @@ spawns {
     }
     antenna {
         object = hocotate_ship_antenna
+        relative = true
+        angle = 0
+    }
+    exhausts {
+        object = hocotate_ship_exhausts
         relative = true
         angle = 0
     }

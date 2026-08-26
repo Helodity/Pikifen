@@ -5,10 +5,11 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
+    "going to after hours in a survive map instantly ends the mission again lol" (thanks Helodity)
+    SHOULD I do something about nuggets having changed their price?
 
     --- 1.2.0 ---
     Sounds for the ships
-    Add the Dolphin's antenna and such
     Add the Hocotate ship pod as a ship
     Add the S.S. Dolphin 2 and its pod as ships
     
@@ -95,6 +96,7 @@ Next tasks (roughly sorted most important first)
     Editor controls
         Customizable controls overall, including double-clicking any of the mouse buttons
         Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
+        If I can't figure this out, then before entering an editor it should detect if the last input was keyboard and mouse. If not, it should show a modal warning the player they'll want a keyboard and mouse to continue
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     Use al_clear_keyboard_state instead of game.controls.releaseAll()
     Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number

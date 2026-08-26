@@ -7,6 +7,10 @@ animations{
 	idling{
 		frames{
 			idling_01_01{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_01_01{
 				duration=0.4000
 				interpolate=true
 			}
@@ -20,6 +24,10 @@ animations{
 			}
 			idling_04_01{
 				duration=0.4000
+				interpolate=true
+			}
+			idling_05_01{
+				duration=0.2000
 				interpolate=true
 			}
 			idling_05_01{
