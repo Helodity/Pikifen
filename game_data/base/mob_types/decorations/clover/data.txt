@@ -2,6 +2,7 @@ name = Clover
 description = A cluster of small green three-leaved clovers.
 
 height = 120
+peek_underneath_opacity = 50
 radius = 52
 random_animation_delay = true
 rotation_random_variation = 360

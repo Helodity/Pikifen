@@ -25,9 +25,6 @@ using std::string;
 
 namespace ONION {
 
-//How quickly an Onion fades to and from see-through, in values per second.
-const float FADE_SPEED = 1.5f;
-
 //Delay before the Onion starts the generation process.
 const float GENERATION_DELAY = 2.0f;
 
@@ -36,9 +33,6 @@ const float NEW_SEED_Z_OFFSET = 320.0f;
 
 //Interval between each individual Pikmin generation.
 const float NEXT_GENERATION_INTERVAL = 0.10f;
-
-//Onion alpha when it goes see-through [0 - 1].
-const float SEE_THROUGH_ALPHA = 0.2f;
 
 //After spitting a seed, the next seed's angle shifts by this much.
 const float SPIT_ANGLE_SHIFT = TAU * 0.12345;
@@ -101,34 +95,6 @@ Onion::Onion(const Point& center, OnionType* type, float angle) :
  */
 Onion::~Onion() {
     delete nest;
-}
-
-
-/**
- * @brief Draws an Onion.
- */
-void Onion::drawMob() {
-    Sprite* curSPtr;
-    Sprite* nextSPtr;
-    float interpolationFactor;
-    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
-    if(!curSPtr) return;
-    
-    BitmapEffect eff;
-    getSpriteBitmapEffects(
-        curSPtr, nextSPtr, interpolationFactor,
-        &eff,
-        SPRITE_BMP_EFFECT_FLAG_STANDARD |
-        SPRITE_BMP_EFFECT_FLAG_STATUS |
-        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
-        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
-    );
-    
-    eff.tintColor.a *= seeThrough;
-    
-    drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
 
@@ -289,47 +255,6 @@ void Onion::tickClassSpecifics(float deltaT) {
     //Timers.
     generationDelayTimer.tick(deltaT);
     nextGenerationTimer.tick(deltaT);
-    
-    //See-through effect.
-    if(oniType->canTurnSeeThrough) {
-        float finalAlpha = 1.0f;
-        
-        forIdx(p, game.states.gameplay->players) {
-            Player& player = game.states.gameplay->players[p];
-            if(!player.leaderPtr) continue;
-            if(
-                bBoxCheck(
-                    player.leaderPtr->center, center,
-                    player.leaderPtr->radius + radius
-                )
-            ) {
-                finalAlpha = ONION::SEE_THROUGH_ALPHA;
-            }
-            
-            if(
-                bBoxCheck(
-                    player.leaderCursorWorld, center,
-                    player.leaderPtr->radius + radius
-                )
-            ) {
-                finalAlpha = ONION::SEE_THROUGH_ALPHA;
-            }
-        }
-        
-        if(seeThrough != finalAlpha) {
-            if(finalAlpha < seeThrough) {
-                seeThrough =
-                    std::max(
-                        finalAlpha, seeThrough - ONION::FADE_SPEED * deltaT
-                    );
-            } else {
-                seeThrough =
-                    std::min(
-                        finalAlpha, seeThrough + ONION::FADE_SPEED * deltaT
-                    );
-            }
-        }
-    }
     
     //Auto-ejection.
     if(

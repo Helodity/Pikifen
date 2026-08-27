@@ -94,9 +94,6 @@ public:
     //Radius of the area where a carried mob can be delivered.
     float deliveryAreaRadius = 0.0f;
     
-    //Whether it can turn see-through.
-    bool canTurnSeeThrough = true;
-    
     //If true, nutrients received are sent to the linked Onion and then ignored.
     bool sendNutrientsToLink = false;
     

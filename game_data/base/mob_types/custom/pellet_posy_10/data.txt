@@ -6,6 +6,7 @@ custom_category_name = Pellet Posy
 height = 128
 inactive_logic = ticks
 max_health = 300
+peek_underneath_opacity = 50
 pushable = false
 pushes = true
 pushes_softly = true

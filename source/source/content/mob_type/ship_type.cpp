@@ -72,7 +72,6 @@ void ShipType::loadCatProperties(DataNode* file) {
     ReaderSetter sRS(file);
     
     sRS.set("can_heal", canHeal);
-    sRS.set("can_turn_see_through", canTurnSeeThrough);
     sRS.set("control_point_radius", controlPointRadius);
     sRS.set("control_point_offset", controlPointOffset);
     sRS.set("receptacle_offset", receptacleOffset);

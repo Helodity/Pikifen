@@ -501,13 +501,16 @@ enum SPRITE_BMP_EFFECT_FLAG {
     SPRITE_BMP_EFFECT_FLAG_HEIGHT = 1 << 3,
     
     //Onion delivery shrinking, and other types of delivery too.
-    SPRITE_BMP_EFFECT_DELIVERY = 1 << 4,
+    SPRITE_BMP_EFFECT_FLAG_DELIVERY = 1 << 4,
     
     //Squash and stretch from being damaged.
-    SPRITE_BMP_EFFECT_DAMAGE = 1 << 5,
+    SPRITE_BMP_EFFECT_FLAG_DAMAGE = 1 << 5,
     
     //Sway from being carried.
-    SPRITE_BMP_EFFECT_CARRY = 1 << 6,
+    SPRITE_BMP_EFFECT_FLAG_CARRY = 1 << 6,
+    
+    //Fade from peeking underneath.
+    SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH = 1 << 7,
     
 };
 

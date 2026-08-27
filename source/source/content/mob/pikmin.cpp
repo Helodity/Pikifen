@@ -143,15 +143,16 @@ void Pikmin::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     BitmapEffect pikSpriteEff = mobEff;
     getSpriteBitmapEffects(
         curSPtr, nextSPtr, interpolationFactor,
         &pikSpriteEff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     drawBitmapWithEffects(curSPtr->bitmap, pikSpriteEff);

@@ -115,6 +115,9 @@ const float MOB_SPEED_ANIM_MIN_MULT = 0.3f;
 //When an opponent is hit, it takes this long to be possible to hit it again.
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 
+//How quickly a mob's alpha changes for peeking underneath, in units per second.
+const float PEEK_UNDERNEATH_FADE_SPEED = 1.5f;
+
 //Wait these many seconds before allowing another Pikmin to be called out.
 const float PIKMIN_NEST_CALL_INTERVAL = 0.02f;
 
@@ -1893,8 +1896,9 @@ void Mob::drawLimb() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     Point parentEnd;
@@ -1966,9 +1970,10 @@ void Mob::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        SPRITE_BMP_EFFECT_CARRY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        SPRITE_BMP_EFFECT_FLAG_CARRY |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
@@ -2689,7 +2694,7 @@ void Mob::getSpriteBitmapEffects(
     
     //Being delivered.
     if(
-        hasFlag(effects, SPRITE_BMP_EFFECT_DELIVERY) &&
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_DELIVERY) &&
         deliveryInfo && scriptVM.focusedMob
     ) {
         switch(deliveryInfo->animType) {
@@ -2826,7 +2831,7 @@ void Mob::getSpriteBitmapEffects(
     
     //Damage squash and stretch.
     if(
-        hasFlag(effects, SPRITE_BMP_EFFECT_DAMAGE) &&
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_DAMAGE) &&
         damageSquashTime > 0.0f
     ) {
         float damageSquashTimeRatio =
@@ -2858,7 +2863,7 @@ void Mob::getSpriteBitmapEffects(
     
     //Carry sway.
     if(
-        hasFlag(effects, SPRITE_BMP_EFFECT_CARRY) &&
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_CARRY) &&
         carryInfo
     ) {
         if(carryInfo->isMoving) {
@@ -2879,6 +2884,14 @@ void Mob::getSpriteBitmapEffects(
             info->tf.rot -=
                 factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
         }
+    }
+    
+    //Peeking underneath.
+    if(
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH) &&
+        type->peekUnderneathAlpha != 1.0f
+    ) {
+        info->tintColor.a *= peekUnderneathAlpha;
     }
 }
 
@@ -4480,6 +4493,45 @@ void Mob::tickMiscLogic(float deltaT) {
         if(fraction->toDelete) {
             delete fraction;
             fraction = nullptr;
+        }
+    }
+    
+    //Peek underneath effect.
+    if(type->peekUnderneathAlpha != 1.0f) {
+        float targetAlpha = 1.0f;
+        
+        forIdx(p, game.states.gameplay->players) {
+            Player& player = game.states.gameplay->players[p];
+            if(!player.leaderPtr) continue;
+            bool leaderIsBelow =
+                player.leaderPtr->bottomZ + player.leaderPtr->height <=
+                bottomZ + height;
+            if(
+                leaderIsBelow &&
+                bBoxCheck(
+                    player.leaderPtr->center, center,
+                    player.leaderPtr->radius + radius
+                )
+            ) {
+                targetAlpha = type->peekUnderneathAlpha;
+
+            } else if(
+                bBoxCheck(
+                    player.leaderCursorWorld, center,
+                    player.leaderPtr->radius + radius
+                )
+            ) {
+                targetAlpha = type->peekUnderneathAlpha;
+
+            }
+        }
+        
+        if(peekUnderneathAlpha != targetAlpha) {
+            peekUnderneathAlpha =
+                inchTowards(
+                    peekUnderneathAlpha, targetAlpha,
+                    MOB::PEEK_UNDERNEATH_FADE_SPEED * deltaT
+                );
         }
     }
     

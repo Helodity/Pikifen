@@ -21,11 +21,9 @@
 
 
 namespace ONION {
-extern const float FADE_SPEED;
 extern const float GENERATION_DELAY;
 extern const float NEW_SEED_Z_OFFSET;
 extern const float NEXT_GENERATION_INTERVAL;
-extern const float SEE_THROUGH_ALPHA;
 extern const float SPIT_ANGLE_SHIFT;
 extern const float SPIT_H_SPEED;
 extern const float SPIT_H_SPEED_DEVIATION;
@@ -66,9 +64,6 @@ public:
     //Number of seeds it has spit so far.
     unsigned int nSpits = 0;
     
-    //The Onion's alpha [0 - 1].
-    float seeThrough = 1.0f;
-    
     //How many objects are currently being beamed?
     size_t mobsBeingBeamed = 0;
     
@@ -80,7 +75,6 @@ public:
     
     Onion(const Point& pos, OnionType* type, float angle);
     ~Onion();
-    void drawMob() override;
     void generate();
     void readScriptVars(const ScriptVarManager& varsMgr) override;
     void receiveNutrients(PikminType* pikType, size_t nutrientAmount);

@@ -297,6 +297,10 @@ public:
     
     //List of sounds it can play.
     vector<Sound> sounds;
+
+    //If it can fade out to let the player peek underneath, this specifies
+    //the final alpha value [0 - 1]. If 1, the effect is disabled.
+    float peekUnderneathAlpha = 1.0f;
     
     //- Movement -
     

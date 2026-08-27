@@ -272,6 +272,7 @@ void MobType::loadFromDataNode(
     string hurtableTargetsStr;
     string teamStr;
     string inactiveLogicStr;
+    unsigned char peekUnderneathAlphaC = 255;
     DataNode* areaEditorTipsNode = nullptr;
     DataNode* customCarrySpotsNode = nullptr;
     DataNode* spikeDamageNode = nullptr;
@@ -280,6 +281,7 @@ void MobType::loadFromDataNode(
     DataNode* hurtableTargetsNode = nullptr;
     DataNode* teamNode = nullptr;
     DataNode* inactiveLogicNode = nullptr;
+    DataNode* peekNode = nullptr;
     
     tRS.set("acceleration", acceleration);
     tRS.set("appears_in_area_editor", appearsInAreaEditor);
@@ -320,6 +322,7 @@ void MobType::loadFromDataNode(
     tRS.set("max_carriers", maxCarriers);
     tRS.set("max_health", maxHealth);
     tRS.set("move_speed", moveSpeed);
+    tRS.set("peek_underneath_opacity", peekUnderneathAlphaC, &peekNode);
     tRS.set("pushable", pushable);
     tRS.set("pushes", pushes);
     tRS.set("pushes_softly", pushesSoftly);
@@ -753,6 +756,7 @@ void MobType::loadFromDataNode(
         areaEditorProps.push_back(newProp);
     }
     
+    //Loose properties.
     if(targetTypeNode) {
         readEnumProp(
             mobTargetFlagINames, targetTypeStr, &targetType,
@@ -792,6 +796,10 @@ void MobType::loadFromDataNode(
         ) {
             hurtableTargets |= (Bitmask16) tt;
         }
+    }
+
+    if(peekNode) {
+        peekUnderneathAlpha = peekUnderneathAlphaC / 255.0f;
     }
     
     //Resources.
@@ -888,6 +896,7 @@ void createSpecialMobTypes() {
     MobType* bridgeComponentType = customCategory->createType();
     bridgeComponentType->name = "Bridge component";
     bridgeComponentType->blackoutRadius = 0;
+    bridgeComponentType->peekUnderneathAlpha = 0.2f;
     bridgeComponentType->appearsInAreaEditor = false;
     bridgeComponentType->castsShadow = false;
     bridgeComponentType->customCategoryName = "Misc";

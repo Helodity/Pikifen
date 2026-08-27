@@ -65,6 +65,7 @@ extern const float KNOCKBACK_V_POWER;
 extern const float MOB_SPEED_ANIM_MAX_MULT;
 extern const float MOB_SPEED_ANIM_MIN_MULT;
 extern const float OPPONENT_HIT_REGISTER_TIMEOUT;
+extern const float PEEK_UNDERNEATH_FADE_SPEED;
 extern const float PIKMIN_NEST_CALL_INTERVAL;
 extern const float PUSH_EXTRA_AMOUNT;
 extern const float PUSH_SOFTLY_AMOUNT;
@@ -310,6 +311,9 @@ public:
     
     //Data about its in-world fraction numbers, if any.
     InWorldFraction* fraction = nullptr;
+    
+    //Current alpha, for peeking underneath [0 - 1].
+    float peekUnderneathAlpha = 1.0f;
     
     //-Caches-
     
