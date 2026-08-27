@@ -428,13 +428,24 @@ ALLEGRO_COLOR interpolateColor(
     float input, float inputStart, float inputEnd,
     const ALLEGRO_COLOR& outputStart, const ALLEGRO_COLOR& outputEnd
 ) {
+    //For accuracy, we want to interpolate in linear colorspace, not sRGB
+    float start_r, start_g, start_b, end_r, end_g, end_b;
+    al_color_rgb_to_linear(outputStart.r, outputStart.g, outputStart.b, &start_r, &start_g, &start_b);
+    al_color_rgb_to_linear(outputEnd.r, outputEnd.g, outputEnd.b, &end_r, &end_g, &end_b);
+
     float progress =
         (float) (input - inputStart) / (float) (inputEnd - inputStart);
+    
+    float out_r, out_g, out_b;
+    al_color_linear_to_rgb(
+        start_r + progress * (end_r - start_r),
+        start_g + progress * (end_g - start_g),
+        start_b + progress * (end_b - start_b),
+        &out_r, &out_g, &out_b
+    );
     return
         al_map_rgba_f(
-            outputStart.r + progress * (outputEnd.r - outputStart.r),
-            outputStart.g + progress * (outputEnd.g - outputStart.g),
-            outputStart.b + progress * (outputEnd.b - outputStart.b),
+            out_r, out_g, out_b,
             outputStart.a + progress * (outputEnd.a - outputStart.a)
         );
 }
