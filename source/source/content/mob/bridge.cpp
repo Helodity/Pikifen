@@ -113,6 +113,9 @@ bool Bridge::checkHealth() {
                         prevChunkComponents[m]->rectangularDim.y
                     )
                 );
+                prevChunkComponents[m]->setRadius(
+                    prevChunkComponents[m]->rectangularDim.y
+                );
             }
             
         } else {
@@ -136,6 +139,7 @@ bool Bridge::checkHealth() {
             floorComponent->setRectangularDim(
                 Point(chunkWidth, BRIDGE::FLOOR_WIDTH)
             );
+            floorComponent->setRadius(BRIDGE::FLOOR_WIDTH / 2.0f);
             newMobs.push_back(floorComponent);
             
             //Then, the left rail component.
@@ -163,6 +167,7 @@ bool Bridge::checkHealth() {
                     briType->railWidth
                 )
             );
+            leftRailComponent->setRadius(briType->railWidth / 2.0f);
             leftRailComponent->height += GEOMETRY::STEP_HEIGHT * 2.0 + 1.0f;
             newMobs.push_back(leftRailComponent);
             
@@ -187,6 +192,7 @@ bool Bridge::checkHealth() {
             rightRailComponent->setRectangularDim(
                 leftRailComponent->rectangularDim
             );
+            rightRailComponent->setRadius(briType->railWidth / 2.0f);
             rightRailComponent->height = leftRailComponent->height;
             newMobs.push_back(rightRailComponent);
             
@@ -265,13 +271,13 @@ void Bridge::drawComponent(Mob* m) {
         vertexes[v].z = 0.0f;
     }
     
-    vertexes[0].color = mapGray(100);
+    vertexes[0].color = tintColor(mapGray(100), vertexes[0].color);
     vertexes[0].x = m->rectangularDim.x / 2.0f;
     vertexes[0].y = -m->rectangularDim.y / 2.0f;
     vertexes[0].u = textureOffset + m->rectangularDim.x;
     vertexes[0].v = textureV0;
     
-    vertexes[1].color = mapGray(100);
+    vertexes[1].color = tintColor(mapGray(100), vertexes[1].color);
     vertexes[1].x = -m->rectangularDim.x / 2.0f;
     vertexes[1].y = -m->rectangularDim.y / 2.0f;
     vertexes[1].u = textureOffset;
@@ -297,13 +303,13 @@ void Bridge::drawComponent(Mob* m) {
     vertexes[5].u = textureOffset;
     vertexes[5].v = textureV0 + 0.75f * m->rectangularDim.y;
     
-    vertexes[6].color = mapGray(100);
+    vertexes[6].color = tintColor(mapGray(100), vertexes[6].color);
     vertexes[6].x = vertexes[0].x;
     vertexes[6].y = m->rectangularDim.y / 2.0f;
     vertexes[6].u = textureOffset + m->rectangularDim.x;
     vertexes[6].v = textureV0 + m->rectangularDim.y;
     
-    vertexes[7].color = mapGray(100);
+    vertexes[7].color = tintColor(mapGray(100), vertexes[7].color);
     vertexes[7].x = vertexes[1].x;
     vertexes[7].y = m->rectangularDim.y / 2.0f;
     vertexes[7].u = textureOffset;

@@ -3603,7 +3603,7 @@ void Mob::setRadius(float radius) {
     physicalSpan =
         calculateMobPhysicalSpan(
             radius,
-            type->animDb->hitboxSpan,
+            type->animDb ? type->animDb->hitboxSpan : 0.0f,
             rectangularDim
         );
     updateInteractionSpan();
@@ -4508,21 +4508,22 @@ void Mob::tickMiscLogic(float deltaT) {
                 bottomZ + height;
             if(
                 leaderIsBelow &&
-                bBoxCheck(
-                    player.leaderPtr->center, center,
-                    player.leaderPtr->radius + radius
+                circlesOrRectanglesIntersect(
+                    player.leaderPtr->center, player.leaderPtr->radius,
+                    player.leaderPtr->rectangularDim, player.leaderPtr->angle,
+                    center, radius, rectangularDim, angle
                 )
             ) {
                 targetAlpha = type->peekUnderneathAlpha;
-
+                
             } else if(
-                bBoxCheck(
-                    player.leaderCursorWorld, center,
-                    player.leaderPtr->radius + radius
+                circlesOrRectanglesIntersect(
+                    player.leaderCursorWorld, 50.0f, Point(), 0.0f,
+                    center, radius, rectangularDim, angle
                 )
             ) {
                 targetAlpha = type->peekUnderneathAlpha;
-
+                
             }
         }
         

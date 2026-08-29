@@ -48,49 +48,14 @@ Mob* Mob::getMobToWalkOn() const {
         
         //Check if they collide on X+Y.
         if(
-            rectangularDim.x != 0 &&
-            mPtr->rectangularDim.x != 0
+            !circlesOrRectanglesIntersect(
+                center, radius, rectangularDim, angle,
+                mPtr->center, mPtr->radius, mPtr->rectangularDim, mPtr->angle
+            )
         ) {
-            //Rectangle vs rectangle.
-            if(
-                !rectanglesIntersect(
-                    Rect(center, rectangularDim), angle,
-                    Rect(mPtr->center, mPtr->rectangularDim), mPtr->angle
-                )
-            ) {
-                continue;
-            }
-        } else if(rectangularDim.x != 0) {
-            //Rectangle vs circle.
-            if(
-                !circleIntersectsRectangle(
-                    mPtr->center, mPtr->radius,
-                    center, rectangularDim,
-                    angle
-                )
-            ) {
-                continue;
-            }
-        } else if(mPtr->rectangularDim.x != 0) {
-            //Circle vs rectangle.
-            if(
-                !circleIntersectsRectangle(
-                    center, radius,
-                    mPtr->center, mPtr->rectangularDim,
-                    mPtr->angle
-                )
-            ) {
-                continue;
-            }
-        } else {
-            //Circle vs circle.
-            if(
-                Distance(center, mPtr->center) >
-                (radius + mPtr->radius)
-            ) {
-                continue;
-            }
+            continue;
         }
+        
         bestCandidate = mPtr;
     }
     return bestCandidate;

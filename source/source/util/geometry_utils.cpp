@@ -900,6 +900,74 @@ bool circleIntersectsRectangle(
 
 
 /**
+ * @brief Checks if two shapes are intersecting. Either shape can be a circle
+ * or a rectangle. A shape is determined to be a circle if its rectangular
+ * dimensions are 0 in any axis.
+ *
+ * @param center1 Center point of the first shape.
+ * @param radius1 Circular radius of the first shape.
+ * @param rectSize1 Rectangular dimensions of the first shape.
+ * @param angle1 Rotation angle of the first shape.
+ * @param center2 Center point of the second shape.
+ * @param radius2 Circular radius of the second shape.
+ * @param rectSize2 Rectangular dimensions of the second shape.
+ * @param angle2 Rotation angle of the second shape.
+ * @return
+ */
+bool circlesOrRectanglesIntersect(
+    const Point& center1, float radius1, const Point& rectSize1, float angle1,
+    const Point& center2, float radius2, const Point& rectSize2, float angle2
+) {
+    if(rectSize1.x != 0.0f && rectSize2.x != 0.0f) {
+        //Rectangle vs rectangle.
+        if(
+            rectanglesIntersect(
+                Rect(center1, rectSize1), angle1,
+                Rect(center2, rectSize2), angle2
+            )
+        ) {
+            return true;
+        }
+        
+    } else if(rectSize1.x != 0) {
+        //Rectangle vs circle.
+        if(
+            circleIntersectsRectangle(
+                center2, radius2,
+                center1, rectSize1,
+                angle1
+            )
+        ) {
+            return true;
+        }
+        
+    } else if(rectSize2.x != 0) {
+        //Circle vs rectangle.
+        if(
+            circleIntersectsRectangle(
+                center1, radius1,
+                center2, rectSize2,
+                angle2
+            )
+        ) {
+            return true;
+        }
+        
+    } else {
+        //Circle vs circle.
+        if(
+            Distance(center1, center2) <=
+            (radius1 + radius2)
+        ) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+
+/**
  * @brief Returns whether the two line segments, which are known to be
  * collinear, are intersecting.
  *

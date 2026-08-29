@@ -2264,38 +2264,13 @@ void GameplayState::processMobTouches(
                 );
         }
         
-        bool xyCollision = false;
-        if(
-            mPtr->rectangularDim.x != 0 &&
-            m2Ptr->rectangularDim.x != 0
-        ) {
-            //Rectangle vs rectangle.
-            xyCollision =
-                rectanglesIntersect(
-                    Rect(mPtr->center, mPtr->rectangularDim), mPtr->angle,
-                    Rect(m2Ptr->center, m2Ptr->rectangularDim), m2Ptr->angle
-                );
-        } else if(mPtr->rectangularDim.x != 0) {
-            //Rectangle vs circle.
-            xyCollision =
-                circleIntersectsRectangle(
-                    m2Ptr->center, m2Ptr->radius,
-                    mPtr->center, mPtr->rectangularDim,
-                    mPtr->angle
-                );
-        } else if(m2Ptr->rectangularDim.x != 0) {
-            //Circle vs rectangle.
-            xyCollision =
-                circleIntersectsRectangle(
-                    mPtr->center, mPtr->radius,
-                    m2Ptr->center, m2Ptr->rectangularDim,
-                    m2Ptr->angle
-                );
-        } else {
-            //Circle vs circle.
-            xyCollision =
-                d <= (mPtr->radius + m2Ptr->radius);
-        }
+        bool xyCollision =
+            circlesOrRectanglesIntersect(
+                mPtr->center, mPtr->radius,
+                mPtr->rectangularDim, mPtr->angle,
+                m2Ptr->center, m2Ptr->radius,
+                m2Ptr->rectangularDim, m2Ptr->angle
+            );
         
         if(
             zTouch && !hasFlag(m2Ptr->flags, MOB_FLAG_INTANGIBLE) &&
