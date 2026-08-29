@@ -17,15 +17,15 @@
             "MIMode": "gdb",
             "setupCommands": [
                 {
-                    "description": "Enable GDB pretty-printing.",
+                    "description": "Enables GDB pretty-printing.",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
-                },
-                {
-                    "description": "Enable pretty-printing of the Mob class.",
-                    "text": "source ${workspaceFolder}/source/gnu_make/gdb/mob_pretty_printer.py",
-                    "ignoreFailures": true
                 }
+                //{
+                //    "description": "Enables pretty-printing of the Mob class. Warning! Seems like it's randomly VERY slow in Visual Studio Code.",
+                //    "text": "source ${workspaceFolder}/source/gnu_make/gdb/mob_pretty_printer.py",
+                //    "ignoreFailures": true
+                //}
             ],
             "preLaunchTask": "Build Pikifen - Debug"
         },
