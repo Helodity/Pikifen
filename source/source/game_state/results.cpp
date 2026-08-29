@@ -815,8 +815,16 @@ void Results::initGuiMain() {
     //Keep playing button.
     if(
         endCond &&
-        endCond->type == MISSION_END_COND_METRIC_OR_LESS &&
-        endCond->metricType == MISSION_METRIC_SECS_LEFT
+        (
+            (
+                endCond->type == MISSION_END_COND_METRIC_OR_LESS &&
+                endCond->metricType == MISSION_METRIC_SECS_LEFT
+            ) ||
+            (
+                endCond->type == MISSION_END_COND_METRIC_OR_MORE &&
+                endCond->metricType == MISSION_METRIC_SECS_PASSED
+            )
+        )
     ) {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);

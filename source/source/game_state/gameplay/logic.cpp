@@ -1105,7 +1105,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 
             medalGotItJuiceTimer += deltaT;
             
-            //Mission time limit.
+            //Mission time limit warnings.
             if(
                 game.curArea->mission.timeLimit != 0.0f &&
                 game.curArea->mission.timeLimit >= 120.0f &&

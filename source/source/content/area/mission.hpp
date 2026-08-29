@@ -594,7 +594,8 @@ struct MissionData {
     //Mission medal award mode.
     MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
     
-    //Time limit in seconds, if any.
+    //Time limit in seconds, if any. Won't really do much without
+    //an end condition that makes use of it.
     size_t timeLimit = 0;
     
     //HUD items.

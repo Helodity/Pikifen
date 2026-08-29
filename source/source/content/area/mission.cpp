@@ -1711,6 +1711,7 @@ bool MissionMetricTypeScriptSlot::getZoomData(
  */
 int MissionMetricTypeSecsLeft::getAmount(size_t idxParam) const {
     if(game.curArea->mission.timeLimit == 0) return 0;
+    if(game.states.gameplay->afterHours) return game.curArea->mission.timeLimit;
     int secsLeft =
         game.curArea->mission.timeLimit -
         floor(game.states.gameplay->areaTimePassed);
@@ -1766,6 +1767,7 @@ bool MissionMetricTypeSecsLeft::getZoomData(
  * @return The amount.
  */
 int MissionMetricTypeSecsPassed::getAmount(size_t idxParam) const {
+    if(game.states.gameplay->afterHours) return 0;
     return game.states.gameplay->areaTimePassed;
 }
 

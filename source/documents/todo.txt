@@ -5,10 +5,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
-    "going to after hours in a survive map instantly ends the mission again lol" (thanks Helodity)
-    SHOULD I do something about nuggets having changed their price?
 
     --- 1.2.0 ---
+    Hitbox knockback that makes it scale with how close you are to the hitbox center. Use it for bomb rock explosions
+    SHOULD I do something about nuggets having changed their price?
     Sounds for the ships
     Add the Hocotate ship pod as a ship
     Add the S.S. Dolphin 2 and its pod as ships
