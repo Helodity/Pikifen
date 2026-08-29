@@ -2698,7 +2698,7 @@
 
     <h4 id="set-limb-animation">Set limb animation</h4>
 
-    <p>Same as <code><a href="#set-animation">set_animation</a></code>, but for the limb connecting it to its parent mob.</p>
+    <p>Same as <code><a href="#set-animation">set_animation</a></code>, but for the limb connecting it to its parent mob. This animation must be included in the parent object's animation set. The engine expects the bitmap used in this animation's frames to be horizontally long, and will ignore their transformation data, so configure your sprites accordingly.</p>
 
     <p>Syntax: <code><b>set_limb_animation</b> &lt;animation&gt;</code></p>
 

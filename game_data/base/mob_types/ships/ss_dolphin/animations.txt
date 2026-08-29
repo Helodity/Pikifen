@@ -4,6 +4,13 @@ maker=Espyo
 version=1.0.0
 engine_version=1.2.0
 animations{
+	antenna_limb{
+		frames{
+			antenna_limb{
+				duration=0.1000
+			}
+		}
+	}
 	idling{
 		frames{
 			idling_01{
@@ -19,23 +26,66 @@ animations{
 	}
 }
 sprites{
+	antenna_limb{
+		file=other_mobs/dolphin
+		file_pos=1023.0000 363.0000
+		file_size=32.0000 6.0000
+		hitboxes{
+			antenna_attach{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
 	idling_01{
 		file=other_mobs/dolphin
 		file_pos=0.0000 0.0000
 		file_size=340.0000 376.0000
 		scale=0.5000 0.5000
+		hitboxes{
+			antenna_attach{
+				coords=-38.0000 51.0000 0.0000
+				height=200.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	idling_02{
 		file=other_mobs/dolphin
 		file_pos=341.0000 0.0000
 		file_size=340.0000 376.0000
 		scale=0.5000 0.5000
+		hitboxes{
+			antenna_attach{
+				coords=-38.0000 51.0000 0.0000
+				height=200.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	idling_03{
 		file=other_mobs/dolphin
 		file_pos=682.0000 0.0000
 		file_size=340.0000 376.0000
 		scale=0.5000 0.5000
+		hitboxes{
+			antenna_attach{
+				coords=-38.0000 51.0000 0.0000
+				height=200.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 }
-body_parts
+body_parts{
+	antenna_attach
+}

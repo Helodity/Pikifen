@@ -2170,17 +2170,19 @@ void AnimationEditor::processGuiPanelSprite() {
     ImVec2 modeButtonsSize(-1.0f, 24.0f);
     
     //Sprite bitmap button.
-    if(ImGui::Button("Bitmap", modeButtonsSize)) {
-        preSpriteBmpCamPos = game.editorsView.cam.centerTarget;
-        preSpriteBmpCamZoom = game.editorsView.cam.zoomTarget;
-        matchingSpriteBmpPos = curSprite->bmpPos;
-        matchingSpriteBmpSize = curSprite->bmpSize;
-        centerCameraOnSpriteBitmap(true);
-        changeState(EDITOR_STATE_SPRITE_BITMAP);
+    if(curSprite) {
+        if(ImGui::Button("Bitmap", modeButtonsSize)) {
+            preSpriteBmpCamPos = game.editorsView.cam.centerTarget;
+            preSpriteBmpCamZoom = game.editorsView.cam.zoomTarget;
+            matchingSpriteBmpPos = curSprite->bmpPos;
+            matchingSpriteBmpSize = curSprite->bmpSize;
+            centerCameraOnSpriteBitmap(true);
+            changeState(EDITOR_STATE_SPRITE_BITMAP);
+        }
+        setTooltip(
+            "Pick what part of an image makes up this sprite."
+        );
     }
-    setTooltip(
-        "Pick what part of an image makes up this sprite."
-    );
     
     if(curSprite && curSprite->bitmap) {
         //Sprite transformation button.

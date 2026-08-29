@@ -51,6 +51,12 @@ children {
         relay_events = true
         handle_statuses = true
         relay_statuses = true
+        limb_animation = antenna_limb
+        limb_parent_body_part = antenna_attach
+        limb_parent_offset = 0
+        limb_child_offset = 0
+        limb_thickness = 6
+        limb_draw_method = below_child
     }
     radio {
         spawn = radio
