@@ -8,9 +8,9 @@ Next tasks (roughly sorted most important first)
     You can spam click "Quit" in the pause menu
 
     --- 1.2.0 ---
+    Clicking another leader in the radar should make the menu confirm sound
     Hitbox knockback that makes it scale with how close you are to the hitbox center. Use it for bomb rock explosions
     SHOULD I do something about nuggets having changed their price?
-    Add the Hocotate ship pod as a ship
     Add the S.S. Dolphin 2 and its pod as ships
     
     --- 1.3.0 ---
