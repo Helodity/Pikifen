@@ -44,6 +44,25 @@ sounds {
         speed = 95
         speed_deviation = 15
     }
+    hum {
+        sound = misc/hum_1
+        volume = 15
+        speed = 100
+        loop = true
+    }
+    pistons {
+        sound = misc/pistons
+        volume = 25
+        speed = 110
+        loop = true
+    }
+    squeak {
+        sound = misc/metal_squeak_1
+        volume = 15
+        speed = 100
+        speed_deviation = 10
+        random_delay = 0.3
+    }
 }
 
 children {

@@ -5,6 +5,8 @@ init {
 script {
     idling {
         on_enter {
+            play_sound pistons
+            play_sound hum
             set_timer 0.01
         }
         on_timer {
@@ -12,6 +14,7 @@ script {
             start_particles dolphin_blue_light 40 51 250
             if $green_light_tick = true
                 start_particles dolphin_green_light 0 0 250
+                play_sound beep
                 set_var green_light_tick false
             else
                 set_var green_light_tick true

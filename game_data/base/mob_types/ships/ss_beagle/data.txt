@@ -25,6 +25,12 @@ sounds {
         speed = 95
         speed_deviation = 15
     }
+    sci_fi {
+        sound = misc/sci_fi_loop_1
+        volume = 3
+        speed = 120
+        loop = true
+    }
 }
 
 children {

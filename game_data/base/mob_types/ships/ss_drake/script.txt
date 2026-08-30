@@ -1,6 +1,7 @@
 script {
     idling {
         on_enter {
+            play_sound sci_fi
             set_timer 0.01
         }
         on_timer {
@@ -16,6 +17,7 @@ script {
             start_particles drake_green_light 76 76 250
             start_particles drake_green_light -76 76 250
             start_particles drake_green_light -76 -76 250
+            play_sound steam
             set_timer 2
         }
     }

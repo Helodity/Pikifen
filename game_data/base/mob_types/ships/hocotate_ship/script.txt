@@ -2,6 +2,13 @@ script {
     idling {
         on_enter {
             start_particles hocotate_ship_smoke 0 0 0
+            play_sound pistons
+            play_sound hum
+            set_timer 0.01
+        }
+        on_timer {
+            play_sound squeak
+            set_timer 2
         }
     }
 }
