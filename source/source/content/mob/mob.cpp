@@ -4518,7 +4518,7 @@ void Mob::tickMiscLogic(float deltaT) {
                 
             } else if(
                 circlesOrRectanglesIntersect(
-                    player.leaderCursorWorld, 50.0f, Point(), 0.0f,
+                    player.leaderCursorWorld, 20.0f, Point(), 0.0f,
                     center, radius, rectangularDim, angle
                 )
             ) {

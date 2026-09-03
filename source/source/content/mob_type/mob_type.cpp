@@ -896,7 +896,7 @@ void createSpecialMobTypes() {
     MobType* bridgeComponentType = customCategory->createType();
     bridgeComponentType->name = "Bridge component";
     bridgeComponentType->blackoutRadius = 0;
-    bridgeComponentType->peekUnderneathAlpha = 0.2f;
+    bridgeComponentType->peekUnderneathAlpha = 0.4f;
     bridgeComponentType->appearsInAreaEditor = false;
     bridgeComponentType->castsShadow = false;
     bridgeComponentType->customCategoryName = "Misc";
