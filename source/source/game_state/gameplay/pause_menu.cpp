@@ -2500,7 +2500,12 @@ void PauseMenu::radarConfirm() {
     
     if(radarCursorLeader) {
         //Select a leader.
-        radarSelectedLeader = radarCursorLeader;
+        if(radarSelectedLeader != radarCursorLeader) {
+            radarSelectedLeader = radarCursorLeader;
+            game.audio.addNewUiSoundSource(
+                game.sysContent.sndMenuActivate, { .volume = 0.75f }
+            );
+        }
         
     } else if(
         goHerePathResult == PATH_RESULT_DIRECT ||
@@ -2514,6 +2519,9 @@ void PauseMenu::radarConfirm() {
             LEADER_EV_GO_HERE, (void*) &radarCursor
         );
         startClosing(&radarGui);
+        game.audio.addNewUiSoundSource(
+            game.sysContent.sndMenuActivate, { .volume = 0.75f }
+        );
         
     }
 }

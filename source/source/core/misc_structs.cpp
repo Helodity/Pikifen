@@ -1895,87 +1895,89 @@ int MakerDisplay::draw(int y) const {
     }
     
     //Decor.
+    float decorWidth = std::min(40.0f, boxW / 2.0f);
+    float decorHeight = std::min(40.0f, boxH / 2.0f);
     al_draw_line(
         boxX + 0.0f, boxY - 1.0f,
-        boxX + 40.0f, boxY - 1.0f,
+        boxX + decorWidth, boxY - 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + 0.0f, boxY + 1.0f,
-        boxX + 40.0f, boxY + 1.0f,
+        boxX + decorWidth, boxY + 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     al_draw_line(
         boxX + 0.0f - 1.0f, boxY + 0.0f,
-        boxX + 0.0f - 1.0f, boxY + 40.0f,
+        boxX + 0.0f - 1.0f, boxY + decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + 0.0f + 1.0f, boxY + 0.0f,
-        boxX + 0.0f + 1.0f, boxY + 40.0f,
+        boxX + 0.0f + 1.0f, boxY + decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     
     al_draw_line(
         boxX + boxW - 0.0f, boxY - 1.0f,
-        boxX + boxW - 40.0f, boxY - 1.0f,
+        boxX + boxW - decorWidth, boxY - 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + boxW - 0.0f, boxY + 1.0f,
-        boxX + boxW - 40.0f, boxY + 1.0f,
+        boxX + boxW - decorWidth, boxY + 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     al_draw_line(
         boxX + boxW - 1.0f, boxY + 0.0f,
-        boxX + boxW - 1.0f, boxY + 40.0f,
+        boxX + boxW - 1.0f, boxY + decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + boxW + 1.0f, boxY + 0.0f,
-        boxX + boxW + 1.0f, boxY + 40.0f,
+        boxX + boxW + 1.0f, boxY + decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     
     al_draw_line(
         boxX + 0.0f, boxY + boxH - 1.0f,
-        boxX + 40.0f, boxY + boxH - 1.0f,
+        boxX + decorWidth, boxY + boxH - 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + 0.0f, boxY + boxH + 1.0f,
-        boxX + 40.0f, boxY + boxH + 1.0f,
+        boxX + decorWidth, boxY + boxH + 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     al_draw_line(
         boxX + 0.0f - 1.0f, boxY + boxH - 0.0f,
-        boxX + 0.0f - 1.0f, boxY + boxH - 40.0f,
+        boxX + 0.0f - 1.0f, boxY + boxH - decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + 0.0f + 1.0f, boxY + boxH - 0.0f,
-        boxX + 0.0f + 1.0f, boxY + boxH - 40.0f,
+        boxX + 0.0f + 1.0f, boxY + boxH - decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     
     al_draw_line(
         boxX + boxW - 0.0f, boxY + boxH - 1.0f,
-        boxX + boxW - 40.0f, boxY + boxH - 1.0f,
+        boxX + boxW - decorWidth, boxY + boxH - 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + boxW - 0.0f, boxY + boxH + 1.0f,
-        boxX + boxW - 40.0f, boxY + boxH + 1.0f,
+        boxX + boxW - decorWidth, boxY + boxH + 1.0f,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     al_draw_line(
         boxX + boxW - 1.0f, boxY + boxH - 0.0f,
-        boxX + boxW - 1.0f, boxY + boxH - 40.0f,
+        boxX + boxW - 1.0f, boxY + boxH - decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
     );
     al_draw_line(
         boxX + boxW + 1.0f, boxY + boxH - 0.0f,
-        boxX + boxW + 1.0f, boxY + boxH - 40.0f,
+        boxX + boxW + 1.0f, boxY + boxH - decorHeight,
         multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     

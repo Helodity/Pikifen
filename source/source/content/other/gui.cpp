@@ -1553,6 +1553,7 @@ bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
 bool GuiManager::shouldHandleEvents() {
     if(!responsive) return false;
     if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return false;
+    if(game.fadeMgr.isFading()) return false;
     return true;
 }
 
