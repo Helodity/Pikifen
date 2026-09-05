@@ -56,6 +56,15 @@ const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //Invulnerability period after getting hit.
 const float INVULN_PERIOD = 0.7f;
 
+//If the leader's group spot is this far away, give up entirely immediately.
+const float LEADER_CHASE_MAX_DIST = 500.0f;
+
+//If the leader's group spot is this far away, tick the timeout for giving up.
+const float LEADER_CHASE_TIMER_DIST = 100.0f;
+
+//If the leader's group spot is far enough away, give up after this long.
+const float LEADER_CHASE_TIMER_DURATION = 4.0f;
+
 //How long to remember a missed incoming attack for.
 const float MISSED_ATTACK_DURATION = 1.5f;
 

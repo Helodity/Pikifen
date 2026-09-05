@@ -4305,13 +4305,15 @@ void PikminFsm::startChasingLeader(
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     scriptVM->focusOnMob(pikPtr->followingGroup);
-    PikminFsm::updateInGroupChasing(scriptVM, nullptr, nullptr);
     pikPtr->setAnimation(
         pikPtr->getMobHeldInHand() ?
         PIKMIN_ANIM_CARRYING_LIGHT :
         PIKMIN_ANIM_WALKING,
         START_ANIM_OPTION_RANDOM_TIME, true, pikPtr->type->moveSpeed
     );
+    pikPtr->leaderChaseTimer = PIKMIN::LEADER_CHASE_TIMER_DURATION;
+    
+    PikminFsm::updateInGroupChasing(scriptVM, nullptr, nullptr);
 }
 
 
@@ -4992,17 +4994,40 @@ void PikminFsm::updateInGroupChasing(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
+    if(!pikPtr->followingGroup) return;
+    
+    //Get the target position.
     Point targetPos;
-    float targetDist; //Unused dummy value.
-    
-    if(pikPtr->pikType->canFly) {
-        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    }
-    
     if(!info1) {
-        pikPtr->getGroupSpotInfo(&targetPos, &targetDist);
+        float dummy;
+        pikPtr->getGroupSpotInfo(&targetPos, &dummy);
     } else {
         targetPos = *((Point*) info1);
+    }
+    
+    //Check if the Pikmin should give up on chasing after that spot.
+    bool mustGiveUp = false;
+    Distance distToSpot(pikPtr->center, targetPos);
+    if(distToSpot >= PIKMIN::LEADER_CHASE_MAX_DIST) {
+        mustGiveUp = true;
+    } else if(distToSpot >= PIKMIN::LEADER_CHASE_TIMER_DIST) {
+        pikPtr->leaderChaseTimer -= game.deltaT;
+        if(pikPtr->leaderChaseTimer <= 0.0f) {
+            mustGiveUp = true;
+        }
+    } else {
+        pikPtr->leaderChaseTimer = PIKMIN::LEADER_CHASE_TIMER_DURATION;
+    }
+    
+    if(mustGiveUp) {
+        pikPtr->leaveGroup();
+        scriptVM->fsm.setState(PIKMIN_STATE_SIGHING);
+        return;
+    }
+    
+    //Prepare to chase it.
+    if(pikPtr->pikType->canFly) {
+        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     float targetZ = pikPtr->followingGroup->bottomZ;

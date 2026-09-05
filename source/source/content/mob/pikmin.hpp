@@ -29,6 +29,9 @@ extern const float GOTO_TIMEOUT;
 extern const float GROUNDED_ATTACK_DIST;
 extern const float IDLE_GLOW_SPIN_SPEED;
 extern const float INVULN_PERIOD;
+extern const float LEADER_CHASE_MAX_DIST;
+extern const float LEADER_CHASE_TIMER_DIST;
+extern const float LEADER_CHASE_TIMER_DURATION;
 extern const float MISSED_ATTACK_DURATION;
 extern const float PANIC_CHASE_INTERVAL;
 extern const float THROW_HOR_SPEED;
@@ -81,6 +84,9 @@ public:
     
     //Leader it is meant to return to after what it is doing, if any.
     Mob* leaderToReturnTo = nullptr;
+    
+    //Time left until it gives up on following the current leader.
+    float leaderChaseTimer = 0.0f;
     
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool isToolPrimedForWhistle = false;
