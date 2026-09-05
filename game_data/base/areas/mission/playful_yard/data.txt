@@ -7,10 +7,13 @@ engine_version=1.2.0
 notes=This stage is an evolution of the "Play" stage from older versions of Pikifen, which in turn is based on the geometry of an unused stage in Pikmin, "tuto2".
 subtitle=Collect treasures
 difficulty=2
+bg_angle=0.0000
 bg_bmp=textures/grass_dark
 bg_color=0 0 0
 bg_dist=1.0000
-bg_zoom=1.0000
+bg_offset=0.0000 0.0000
+bg_scale=1.0000 1.0000
+bg_tint=255 255 255
 song=areas/crumbug_castle
 boss_song
 boss_victory_song

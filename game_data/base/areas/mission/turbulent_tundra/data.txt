@@ -6,10 +6,13 @@ version=1.0.1
 engine_version=1.2.0
 subtitle=Grow Pikmin!
 difficulty=4
+bg_angle=0.0000
 bg_bmp=textures/snow_icy
 bg_color=0 0 0
 bg_dist=1.0000
-bg_zoom=0.9000
+bg_offset=0.0000 0.0000
+bg_scale=0.9000 0.9000
+bg_tint=255 255 255
 song=areas/frosty_breath
 boss_song
 boss_victory_song

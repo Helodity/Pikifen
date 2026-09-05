@@ -2817,8 +2817,8 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     aGW.write("bg_color", bgVoidColor);
     aGW.write("bg_dist", bgBmpDist);
     aGW.write("bg_offset", bgBmpTrans.trans);
-    aGW.write("bg_tint", bgBmpTint);
     aGW.write("bg_scale", bgBmpTrans.scale);
+    aGW.write("bg_tint", bgBmpTint);
     aGW.write("song", songName);
     aGW.write("boss_song", bossSongOverrideName);
     aGW.write("boss_victory_song", bossVictoryOverrideSongName);
