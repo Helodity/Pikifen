@@ -108,6 +108,25 @@ bool areWallsBetween(
 
 
 /**
+ * @brief Calls al_build_transform and returns the Allegro transform,
+ * using the data from the specified Transform2d structure.
+ * 
+ * @param data The Transform2d data.
+ * @return The Allegro transform data.
+ */
+ALLEGRO_TRANSFORM buildTransform2d(const Transform2d &data) {
+    ALLEGRO_TRANSFORM tf;
+    al_build_transform(
+        &tf,
+        -data.trans.x, -data.trans.y,
+        1.0f / data.scale.x, 1.0f / data.scale.y,
+        -data.rot
+    );
+    return tf;
+}
+
+
+/**
  * @brief Clears the textures of the area's sectors from memory.
  */
 void clearAreaTextures() {

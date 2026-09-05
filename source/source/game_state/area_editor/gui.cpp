@@ -1085,7 +1085,7 @@ void AreaEditor::processGuiMenuBar() {
                 "fits nicely into view.",
                 "Home"
             );
-
+            
             //Zoom onto selection.
             if(ImGui::MenuItem("Zoom onto selection")) {
                 zoomSelectionCmd(1.0f);
@@ -1581,8 +1581,7 @@ void AreaEditor::processGuiPanelDetails() {
                 }
                 setTooltip(
                     "Tint color. You can use this to control how "
-                    "opaque the tree shadow is.",
-                    "", WIDGET_EXPLANATION_SLIDER
+                    "opaque the tree shadow is."
                 );
                 
                 //Tree shadow sway value.
@@ -1739,87 +1738,159 @@ void AreaEditor::processGuiPanelDetails() {
         ImGui::Spacer();
         if(saveableTreeNode("details", "Background")) {
         
-            //Remove background texture button.
-            float remBgAlpha = game.curArea->bgBmpName.empty() ? 0.20f : 1.0f;
+            //Background void color value.
+            ALLEGRO_COLOR bgVoidColor = game.curArea->bgVoidColor;
             if(
-                ImGui::ImageButton(
-                    "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
-                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
-                ) &&
-                !game.curArea->bgBmpName.empty()
-            ) {
-                registerChange("area background removal");
-                game.curArea->bgBmpName.clear();
-                setStatus("Removed the background image successfully.");
-            }
-            setTooltip(
-                "Remove the background image for the area."
-            );
-            
-            //Choose background texture button.
-            ImGui::SameLine();
-            if(ImGui::Button("Choose image...")) {
-                openBitmapDialog(
-                [this] (const string& bmp) {
-                    registerChange("area background change");
-                    game.curArea->bgBmpName = bmp;
-                    setStatus("Picked a background image successfully.");
-                },
-                FOLDER_NAMES::TEXTURES
-                );
-            }
-            setTooltip(
-                "Choose which background image to "
-                "use from the game's content.\n"
-                "This repeating texture can be "
-                "seen when looking at the void."
-            );
-            
-            //Background image name text.
-            ImGui::SameLine();
-            monoText("%s", game.curArea->bgBmpName.c_str());
-            setTooltip("Internal name:\n" + game.curArea->bgBmpName);
-            
-            //Background color value.
-            ALLEGRO_COLOR bgColor = game.curArea->bgColor;
-            if(
-                ImGui::ColorEdit4(
-                    "Void color", (float*) &bgColor,
+                ImGui::ColorEdit3(
+                    "Void color", (float*) &bgVoidColor,
                     ImGuiColorEditFlags_NoInputs
                 )
             ) {
-                registerChange("area background color change");
-                game.curArea->bgColor = bgColor;
+                registerChange("area background void color change");
+                game.curArea->bgVoidColor = bgVoidColor;
+                quickPreviewTimer.start();
             }
             setTooltip(
-                "Set the color of the void. If you have a background image,\n"
-                "this will appear below it."
+                "The color of the void. If you have a background texture,\n"
+                "it will appear above this solid void color."
             );
             
-            //Background distance value.
-            float bgDist = game.curArea->bgDist;
-            if(ImGui::DragFloat("Distance", &bgDist)) {
-                registerChange("area background distance change");
-                game.curArea->bgDist = bgDist;
-            }
-            setTooltip(
-                "How far away the background texture is. "
-                "Affects parallax scrolling.\n"
-                "2 is a good value.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
+            //Background texture node.
+            ImGui::Spacer();
+            if(saveableTreeNode("details", "Texture")) {
             
-            //Background zoom value.
-            float bgBmpZoom = game.curArea->bgBmpZoom;
-            if(ImGui::DragFloat("Zoom", &bgBmpZoom, 0.01)) {
-                registerChange("area background zoom change");
-                game.curArea->bgBmpZoom = bgBmpZoom;
+                //Remove background texture button.
+                float remBgAlpha =
+                    game.curArea->bgBmpName.empty() ? 0.20f : 1.0f;
+                if(
+                    ImGui::ImageButton(
+                        "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
+                        Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                        COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
+                    ) &&
+                    !game.curArea->bgBmpName.empty()
+                ) {
+                    registerChange("area background removal");
+                    game.content.bitmaps.list.free(
+                        game.curArea->bgBmpName
+                    );
+                    game.curArea->bgBmp = nullptr;
+                    game.curArea->bgBmpName.clear();
+                    setStatus("Removed the background texture successfully.");
+                    quickPreviewTimer.start();
+                }
+                setTooltip(
+                    "Remove the background texture for the area."
+                );
+                
+                //Choose background image button.
+                ImGui::SameLine();
+                if(ImGui::Button("Choose image...")) {
+                    openBitmapDialog(
+                    [this] (const string& bmp) {
+                        registerChange("area background change");
+                        game.content.bitmaps.list.free(
+                            game.curArea->bgBmpName
+                        );
+                        game.curArea->bgBmpName = bmp;
+                        game.curArea->bgBmp =
+                            game.content.bitmaps.list.get(
+                                game.curArea->bgBmpName
+                            );
+                        setStatus("Picked a background texture successfully.");
+                        quickPreviewTimer.start();
+                    },
+                    FOLDER_NAMES::TEXTURES
+                    );
+                }
+                setTooltip(
+                    "Choose which background image to "
+                    "use from the game's content.\n"
+                    "This repeating texture can be "
+                    "seen when looking at the void."
+                );
+                
+                //Background texture name text.
+                ImGui::SameLine();
+                monoText("%s", game.curArea->bgBmpName.c_str());
+                setTooltip("Internal name:\n" + game.curArea->bgBmpName);
+                
+                //Background texture offset value.
+                Point bgBmpOffset = game.curArea->bgBmpTrans.trans;
+                if(
+                    ImGui::DragFloat2("Offset", (float*) &bgBmpOffset)
+                ) {
+                    registerChange("area background texture offset change");
+                    game.curArea->bgBmpTrans.trans = bgBmpOffset;
+                    quickPreviewTimer.start();
+                }
+                setTooltip(
+                    "Offset the background texture horizontally or vertically.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Background texture scale value.
+                Point bgBmpScale = game.curArea->bgBmpTrans.scale;
+                if(
+                    ImGui::DragFloat2("Scale", (float*) &bgBmpScale, 0.05f)
+                ) {
+                    registerChange("area background texture scale change");
+                    game.curArea->bgBmpTrans.scale = bgBmpScale;
+                    quickPreviewTimer.start();
+                }
+                setTooltip(
+                    "Scale the background texture by this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Background texture angle value.
+                float bgBmpAngle =
+                    normalizeAngle(game.curArea->bgBmpTrans.rot);
+                if(
+                    ImGui::SliderAngleWithContext(
+                        "Angle", &bgBmpAngle, 0, 360, "%.2f"
+                    )
+                ) {
+                    registerChange("area background texture angle change");
+                    game.curArea->bgBmpTrans.rot = bgBmpAngle;
+                    quickPreviewTimer.start();
+                }
+                setTooltip(
+                    "Angle of the background texture.",
+                    "", WIDGET_EXPLANATION_SLIDER
+                );
+                
+                //Background texture tint color.
+                ALLEGRO_COLOR bgBmpTint = game.curArea->bgBmpTint;
+                if(ImGui::ColorEdit4("Tint", (float*) &bgBmpTint)) {
+                    registerChange("area background texture tint change");
+                    game.curArea->bgBmpTint = bgBmpTint;
+                    quickPreviewTimer.start();
+                }
+                setTooltip(
+                    "Background texture tint color, including opacity."
+                );
+                
+                //Background texture distance value.
+                float bgDist = game.curArea->bgBmpDist;
+                if(ImGui::DragFloat("Distance", &bgDist, 0.05f)) {
+                    registerChange("area background texture distance change");
+                    game.curArea->bgBmpDist = bgDist;
+                    quickPreviewTimer.start();
+                }
+                setTooltip(
+                    "How far away the background texture is. "
+                    "Affects parallax scrolling, and also naturally\n"
+                    "zooms the texture out, accordingly.\n"
+                    "2 is a good general value for distant floors.\n"
+                    "1 makes it flush with the regular terrain.\n"
+                    "Values less than 1 use an inverse effect!",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                ImGui::TreePop();
+                
             }
-            setTooltip(
-                "Scale the texture by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
             
             ImGui::TreePop();
         }
@@ -5919,8 +5990,7 @@ void AreaEditor::processGuiPanelTools() {
         ImGui::ColorEdit4("Tint", (float*) &tint);
         referenceTint = tint;
         setTooltip(
-            "Tint color. You can use this to control how opaque it is.",
-            "", WIDGET_EXPLANATION_SLIDER
+            "Tint color. You can use this to control how opaque it is."
         );
         
         ImGui::TreePop();

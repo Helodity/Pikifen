@@ -222,9 +222,10 @@ void Area::clear() {
     dayTimeStart = AREA::DEF_DAY_TIME_START;
     dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
     bgBmpName.clear();
-    bgColor = COLOR_BLACK;
-    bgDist = 2.0f;
-    bgBmpZoom = 1.0f;
+    bgBmpTrans = Transform2d();
+    bgBmpTint = COLOR_WHITE;
+    bgBmpDist = 2.0f;
+    bgVoidColor = COLOR_BLACK;
     mission = MissionData();
     
     problems.nonSimples.clear();
@@ -249,9 +250,10 @@ void Area::clone(Area& other) {
     } else {
         other.bgBmp = game.content.bitmaps.list.get(bgBmpName, nullptr, false);
     }
-    other.bgBmpZoom = bgBmpZoom;
-    other.bgColor = bgColor;
-    other.bgDist = bgDist;
+    other.bgBmpTrans = bgBmpTrans;
+    other.bgBmpTint = bgBmpTint;
+    other.bgBmpDist = bgBmpDist;
+    other.bgVoidColor = bgVoidColor;
     other.bmap = bmap;
     
     other.vertexes.reserve(vertexes.size());
@@ -1591,10 +1593,18 @@ void Area::loadMainDataFromDataNode(
     //Area configuration data.
     ReaderSetter aRS(node);
     
+    float bgBmpZoom = 1.0f;
+    DataNode* bgBmpZoomNode = nullptr;
     DataNode* weatherNode = nullptr;
     DataNode* songNode = nullptr;
     DataNode* bossSongOverrideNode = nullptr;
     DataNode* bossVictorySongOverrideNode = nullptr;
+    
+    //DEPRECATED in 1.2.0 by "bg_scale".
+    aRS.set("bg_zoom", bgBmpZoom, &bgBmpZoomNode);
+    if(bgBmpZoomNode) {
+        bgBmpTrans.scale = Point(bgBmpZoom);
+    }
     
     aRS.set("subtitle", subtitle);
     aRS.set("difficulty", difficulty);
@@ -1608,10 +1618,13 @@ void Area::loadMainDataFromDataNode(
     aRS.set("weather", weatherName, &weatherNode);
     aRS.set("day_time_start", dayTimeStart);
     aRS.set("day_time_speed", dayTimeSpeed);
+    aRS.set("bg_angle", bgBmpTrans.rot);
     aRS.set("bg_bmp", bgBmpName);
-    aRS.set("bg_color", bgColor);
-    aRS.set("bg_dist", bgDist);
-    aRS.set("bg_zoom", bgBmpZoom);
+    aRS.set("bg_color", bgVoidColor);
+    aRS.set("bg_dist", bgBmpDist);
+    aRS.set("bg_offset", bgBmpTrans.trans);
+    aRS.set("bg_scale", bgBmpTrans.scale);
+    aRS.set("bg_tint", bgBmpTint);
     aRS.set("max_pikmin_in_field", maxPikminInField);
     aRS.set("onions_auto_eject", onionsAutoEject);
     aRS.set("onions_eject_grown_pikmin", onionsEjectGrownPikmin);
@@ -1665,7 +1678,7 @@ void Area::loadMainDataFromDataNode(
         }
     }
     
-    if(level >= CONTENT_LOAD_LEVEL_FULL && !bgBmpName.empty()) {
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR && !bgBmpName.empty()) {
         bgBmp = game.content.bitmaps.list.get(bgBmpName, node);
     }
 }
@@ -2799,10 +2812,13 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     //Main data.
     aGW.write("subtitle", subtitle);
     aGW.write("difficulty", difficulty);
+    aGW.write("bg_angle", bgBmpTrans.rot);
     aGW.write("bg_bmp", bgBmpName);
-    aGW.write("bg_color", bgColor);
-    aGW.write("bg_dist", bgDist);
-    aGW.write("bg_zoom", bgBmpZoom);
+    aGW.write("bg_color", bgVoidColor);
+    aGW.write("bg_dist", bgBmpDist);
+    aGW.write("bg_offset", bgBmpTrans.trans);
+    aGW.write("bg_tint", bgBmpTint);
+    aGW.write("bg_scale", bgBmpTrans.scale);
     aGW.write("song", songName);
     aGW.write("boss_song", bossSongOverrideName);
     aGW.write("boss_victory_song", bossVictoryOverrideSongName);

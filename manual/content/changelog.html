@@ -144,6 +144,7 @@
         <ul>
           <li><span class="cl-a">Added</span> an animation editor hitbox tool: importing the properties of another hitbox in the same sprite.</li>
           <li><span class="cl-a">Added</span> a "view" menu function: zoom onto selection.</li>
+          <li><span class="cl-a">Added</span> the area's background to the preview mode. Editing the background also triggers a quick preview.</li>
           <li><span class="cl-c">Changed</span> the selection system of <a href="editor.html">editors</a>: it is now a lot more powerful and consistent.</li>
           <li><span class="cl-c">Changed</span> the location of some of the <a href="area.html">area editor</a>'s features so it's more organized. (Thanks Helodity)</li>
         </ul>
@@ -165,6 +166,7 @@
           <li><span class="cl-a">Added</span> the ability for <a href="area.html">areas</a> to contain reminders. These are only visible to the area's maker, and can be placed in the editor or in-game with the <a href="maker_toolkit.html">new reminder</a> maker tool.</li>
           <li><span class="cl-a">Added</span> the ability for <a href="area.html">areas</a> to change some of the game rules: the maximum amount of Pikmin on the field, whether Onions auto-eject, and whether Onions eject fully-grown Pikmin.</li>
           <li><span class="cl-a">Added</span> the ability for <a href="area.html">areas</a> to override the boss theme and the boss victory fanfare. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> the ability for <a href="area.html">area</a> background textures to offset, to scale horizontally and vertically independently, to rotate, and to tint.</li>
           <li><span class="cl-a">Added</span> <a href="mob_leader.html">leader type</a> animations: <code>shaking</code>.</li>
           <li><span class="cl-a">Added</span> <a href="system_content_names.html">system content name</a> image properties: <code>chill</code>, <code>clock</code>, <code>clock_hand</code>, <code>frozen_liquid</code>, <code>frozen_liquid_cracked</code>, and <code>rubber_band_selection</code>.</li>
           <li><span class="cl-a">Added</span> <a href="system_content_names.html">system content name</a> sound properties: <code>frozen_liquid</code>, <code>frozen_liquid_crack</code>, and <code>frozen_liquid_thaw</code>.</li>
@@ -190,6 +192,7 @@
         <a href="area.html">Areas</a>:
         <ul>
           <li><span class="cl-c">Changed</span> the mission system for an entirely new one. Save a mission in 1.2.0's editor to automatically port it to the new system, but beware that this port is not perfect, and some aspects of the mission may end up wrong.</li>
+          <li><span class="cl-d">Deprecated</span> an <a href="area.html">area</a> property: <code>bg_zoom</code>. Save an area in 1.2.0's editor to automatically port it to the new property <code>bg_scale</code>.</li>
           <li><span class="cl-d">Deprecated</span> some <a href="area.html">area</a> mob and tree shadow properties: <code>boss</code> for mobs, <code>alpha</code> for tree shadows. Save an area in 1.2.0's editor to automatically port the <code>boss</code> property to the <code>boss=true</code> script var, and to port the <code>alpha</code> tree shadow property to the new property <code>tint</code>.</li>
           <li><span class="cl-d">Deprecated</span> an <a href="area.html">area editor</a> reference image property: <code>alpha</code>. Save an area in 1.2.0's editor to automatically port it to the new property <code>tint</code>.</li>
         </ul>

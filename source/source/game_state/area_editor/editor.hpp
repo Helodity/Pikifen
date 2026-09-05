@@ -242,6 +242,12 @@ private:
         //Mob alpha, [0 - 1].
         float mobAlpha = 1.0f;
         
+        //Tree shadow alpha, [0 - 1].
+        float treeShadowAlpha = 1.0f;
+        
+        //Background void and texture alpha, [0 - 1].
+        float backgroundAlpha = 0.0f;
+        
         //Selection, error, etc. effect alpha, [0 - 1].
         float overlayAlpha = 1.0f;
         

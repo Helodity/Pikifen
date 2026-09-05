@@ -76,6 +76,7 @@ bool areWallsBetween(
     const Point& p1, const Point& p2,
     float ignoreWallsBelowZ = -FLT_MAX, bool* outImpassableWalls = nullptr
 );
+ALLEGRO_TRANSFORM buildTransform2d(const Transform2d& data);
 void clearAreaTextures();
 void crash(const string& reason, const string& info, int exitStatus);
 bool doesEdgeHaveLedgeSmoothing(
