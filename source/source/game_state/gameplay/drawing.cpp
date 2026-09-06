@@ -8,10 +8,22 @@
  * Main gameplay drawing functions.
  */
 
- //Required for OpenGL extensions
- #define ALLEGRO_UNSTABLE
 
 #include <algorithm>
+
+//Required for OpenGL extensions
+#define ALLEGRO_UNSTABLE
+
+#if defined(_WINDOWS)
+    //We need to define windows.h so gl.h can compile on windows
+    //Of course, for whatever reason, windows.h defines Polygon, which
+    //we use all over in geometry_utils.h
+    //Thankfully, defining NOGDI removes it
+    //https://stackoverflow.com/questions/14846072/include-windows-h-defines-many-symbols-in-the-global-namespace-like-polygon
+    #define NOGDI
+    #include <windows.h>
+#endif
+
 #include <allegro5/allegro_opengl.h>
 #include "gameplay.hpp"
 
@@ -1473,20 +1485,20 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         }
 
         //Put each mob's relevant data into an SSBO.
-        float mobData[mobsToDraw.size() * 3];
+        vector<float> mobData;
         for(size_t m = 0; m < mobsToDraw.size(); m++) {
             Mob* mPtr = mobsToDraw[m];
-            mobData[m * 3] = mPtr->center.x;
-            mobData[m * 3 + 1] = mPtr->center.y;
-            mobData[m * 3 + 2] = sign(mPtr->type->blackoutRadius) == 1 ? mPtr->type->blackoutRadius * 2 : mPtr->radius * 2;
+            mobData.push_back(mPtr->center.x);
+            mobData.push_back(mPtr->center.y);
+            mobData.push_back(sign(mPtr->type->blackoutRadius) == 1 ? mPtr->type->blackoutRadius * 2 : mPtr->radius * 2);
         }
 
         GLuint ssbo = 0;     
         glGenBuffers(1, &ssbo);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
         glBufferData(
-            GL_SHADER_STORAGE_BUFFER, sizeof(mobData),
-            &mobData, GL_STREAM_READ
+            GL_SHADER_STORAGE_BUFFER, sizeof(float) * mobData.size(),
+            &mobData[0], GL_STREAM_READ
         );
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -1512,7 +1524,6 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
         drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
         al_use_shader(nullptr);
-        
     }
     
 }
