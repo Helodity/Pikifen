@@ -956,6 +956,27 @@ void Mob::calculateAttackKnockback(
                     victim->center
                 );
             break;
+        } case KNOCKBACK_TYPE_OUTWARD_PROXIMITY: {
+            Point attackHPos =
+                attackH->getCurPos(center, bottomZ, angle, nullptr);
+            Point victimHPos =
+                victimH->getCurPos(
+                    victim->center, victim->bottomZ, victim->angle, nullptr
+                );
+            *outKbExists = true;
+            *outKbStrength =
+                interpolateNumber(
+                    Distance(attackHPos, victimHPos).toFloat(),
+                    0.0f, attackH->radius + victimH->radius,
+                    attackH->knockbackStrength, 0.0f
+                );
+            *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+            *outKbAngle =
+                getAngle(
+                    attackH->getCurPos(center, bottomZ, angle, nullptr),
+                    victim->center
+                );
+            break;
         } case KNOCKBACK_TYPE_DIRECTIONAL: {
             *outKbExists = true;
             *outKbStrength = attackH->knockbackStrength;

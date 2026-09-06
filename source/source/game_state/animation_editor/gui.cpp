@@ -2788,6 +2788,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 "None",
                 "Flinch",
                 "Outward",
+                "Outward, proximity-based",
                 "Directional",
             };
             int knockbackType = curHitbox->knockbackType;
@@ -2828,6 +2829,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             //Knockback strength value.
             if(
                 curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD ||
+                curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD_PROXIMITY ||
                 curHitbox->knockbackType == KNOCKBACK_TYPE_DIRECTIONAL
             ) {
                 ImGui::SetNextItemWidth(128.0f);
