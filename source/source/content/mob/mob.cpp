@@ -1382,6 +1382,10 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
         damage *= v->second.effectMult;
     }
     
+    if(damage == 0.0f && !v->second.statusToApply) {
+        return;
+    }
+    
     if(type->spikeDamage->statusToApply) {
         victim->applyStatus(
             type->spikeDamage->statusToApply, false, false, this,
