@@ -8,8 +8,11 @@
  * Main gameplay drawing functions.
  */
 
-#include <algorithm>
+ //Required for OpenGL extensions
+ #define ALLEGRO_UNSTABLE
 
+#include <algorithm>
+#include <allegro5/allegro_opengl.h>
 #include "gameplay.hpp"
 
 #include "../../content/mob/group_task.hpp"
@@ -1455,26 +1458,10 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     //Draw the blackout effect.
     unsigned char blackoutS =
         game.curArea->weatherCondition.getBlackoutStrength();
-    if(blackoutS > 0) {
-        //First, we'll create the lightmap.
-        //This is inverted (white = darkness, black = light), because we'll
-        //apply it to the window using a subtraction operation.
-        al_set_target_bitmap(lightmapBmp);
-        
-        //For starters, the whole window is dark (white in the map).
-        al_clear_to_color(mapGray(blackoutS));
-        
-        AllegroBlenderState prevBlender;
-        prevBlender.save();
-        al_set_separate_blender(
-            ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
-            ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
-        );
-        
-        //Then, find out spotlights, and draw
-        //their lights on the map (as black).
-        al_hold_bitmap_drawing(true);
-        forIdx(m, mobs.all) {
+    if(blackoutS > 0) {    
+        //Get a list of mobs that we should care about
+        vector<Mob*> mobsToDraw;
+        for(size_t m = 0; m < mobs.all.size(); m++) {
             Mob* mPtr = mobs.all[m];
             if(
                 hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
@@ -1482,35 +1469,49 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             ) {
                 continue;
             }
-            
-            Point center = mPtr->center;
-            al_transform_coordinates(
-                &view.worldToWindowTransform, &center.x, &center.y
-            );
-            float radius = 4.0f * view.cam.zoom;
-            
-            if(mPtr->type->blackoutRadius > 0.0f) {
-                radius *= mPtr->type->blackoutRadius;
-            } else {
-                radius *= mPtr->radius;
-            }
-            
-            al_draw_scaled_bitmap(
-                game.sysContent.bmpSpotlight,
-                0, 0, 64, 64,
-                center.x - radius, center.y - radius,
-                radius * 2.0, radius * 2.0,
-                0
-            );
+            mobsToDraw.push_back(mPtr);
         }
-        al_hold_bitmap_drawing(false);
-        
-        //Now, simply darken the window using the map.
-        al_set_target_backbuffer(game.display);
-        
-        al_draw_bitmap(lightmapBmp, 0, 0, 0);
-        
-        prevBlender.load();
+
+        //Put each mob's relevant data into an SSBO.
+        float mobData[mobsToDraw.size() * 3];
+        for(size_t m = 0; m < mobsToDraw.size(); m++) {
+            Mob* mPtr = mobsToDraw[m];
+            mobData[m * 3] = mPtr->center.x;
+            mobData[m * 3 + 1] = mPtr->center.y;
+            mobData[m * 3 + 2] = sign(mPtr->type->blackoutRadius) == 1 ? mPtr->type->blackoutRadius * 2 : mPtr->radius * 2;
+        }
+
+        GLuint ssbo = 0;     
+        glGenBuffers(1, &ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glBufferData(
+            GL_SHADER_STORAGE_BUFFER, sizeof(mobData),
+            &mobData, GL_STREAM_READ
+        );
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    
+        //Get the viewport's settings to pass to the shader
+        float camPos[2] = {
+            view.windowRect.center.x - (view.windowRect.size.x / 2), 
+            view.windowRect.center.y - (view.windowRect.size.y / 2)
+        };
+        al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
+
+        float camSize[2] = {
+            view.windowRect.size.x / view.cam.zoom, 
+            view.windowRect.size.y / view.cam.zoom
+        };
+
+        //Set the remaining shader options
+        ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
+        al_use_shader(blackoutShader);
+        al_set_shader_float("alpha", blackoutS / 255.0f);
+        al_set_shader_int("mob_count", mobsToDraw.size());
+        al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
+        al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
+        drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
+        al_use_shader(nullptr);
         
     }
     

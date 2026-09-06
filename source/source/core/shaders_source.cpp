@@ -39,6 +39,78 @@ gl_Position = al_projview_matrix * al_pos;
 
 
 #pragma endregion
+#pragma region Blackout fragment shader
+
+
+const char* BLACKOUT_FRAG_SHADER = R"(
+
+#version 430
+#extension GL_ARB_shader_storage_buffer_object: enable
+
+readonly layout(std430, binding = 3) buffer mobLayout
+{
+    //Formatted in (x, y, radius)
+    readonly float mobEntries[];
+};
+
+uniform int mob_count;
+
+//Top left position of the camera
+uniform vec2 cam_pos;
+
+//Size of the camera
+uniform vec2 cam_size;
+
+
+//Fragment shader input for texture coordinates.
+in vec2 varying_texcoord;
+
+//Fragment shader input for the tint.
+in vec4 varying_color;
+
+out vec4 fragColor;
+
+//Alpha of the blackout effect [0 - 1].
+uniform float alpha;
+
+bool alpha_test_func(float x, int op, float compare);
+
+float getFadeVal(vec2 xy) {
+    float fadeVal = 0.0;
+    for(int i = 0; i < mob_count; i++) {
+        if(fadeVal >= 1.0) return 1.0;
+        vec2 mobPos = vec2(mobEntries[3 * i], mobEntries[(3 * i) + 1]);
+
+        float dist = sqrt(pow(mobPos.x - xy.x, 2.0) + pow(mobPos.y - xy.y, 2.0));
+
+        float trans = smoothstep(
+            mobEntries[(3 * i) + 2], 
+            mobEntries[(3 * i) + 2] + 48, 
+            dist
+        );
+        fadeVal += 1 - trans;
+    }
+    return fadeVal;
+}
+
+vec2 toWorldCoords(vec2 texcoord){
+    return cam_pos + vec2(cam_size.x * texcoord.x, cam_size.y * texcoord.y);
+}
+
+
+void main() {
+    //Setup.
+
+    float fadeVal = getFadeVal(toWorldCoords(varying_texcoord));
+
+    //Finish up.
+    fragColor = vec4(0, 0, 0, alpha - fadeVal);
+}
+
+    )";
+
+
+#pragma endregion
 #pragma region Colorizer fragment shader
 
 

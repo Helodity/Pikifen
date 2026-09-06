@@ -43,6 +43,13 @@ void ShaderManager::compileShader(
  * @brief Compiles all shaders from their source.
  */
 void ShaderManager::compileShaders() {
+    //Blackout.
+    compileShader(
+        SHADER_TYPE_BLACKOUT,
+        SHADER_SOURCES::BLACKOUT_FRAG_SHADER,
+        SHADER_SOURCES::DEFAULT_VERT_SHADER
+    );
+
     //Colorizer.
     compileShader(
         SHADER_TYPE_COLORIZER,
