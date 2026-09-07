@@ -174,10 +174,9 @@ void Pikmin::drawMob() {
         BitmapEffect topEff = mobEff;
         ALLEGRO_BITMAP* topBmp = pikType->bmpTop[maturity];
         
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->topReplacementBmp) {
-                topBmp = statuses[s].type->topReplacementBmp;
+        forIdx(s, statuses.getList()) {
+            if(statuses.getList()[s].type->topReplacementBmp) {
+                topBmp = statuses.getList()[s].type->topReplacementBmp;
             }
         }
         
@@ -344,8 +343,8 @@ float Pikmin::getTaskRange() const {
  *
  * @param staType Status effect to handle.
  */
-void Pikmin::handleStatusEffectGain(StatusType* staType) {
-    Mob::handleStatusEffectGain(staType);
+void Pikmin::handleStatusActivation(StatusType* staType) {
+    Mob::handleStatusActivation(staType);
     
     switch(staType->stateChangeType) {
     case STATUS_STATE_CHANGE_FLAILING: {
@@ -387,16 +386,16 @@ void Pikmin::handleStatusEffectGain(StatusType* staType) {
  *
  * @param staType Status effect to handle.
  */
-void Pikmin::handleStatusEffectLoss(StatusType* staType) {
+void Pikmin::handleStatusDeactivation(StatusType* staType) {
     bool stillHasFlailing = false;
     bool stillHasHelplessness = false;
     bool stillHasPanic = false;
     bool stillHasWading = false;
     
-    forIdx(s, statuses) {
-        if(statuses[s].type == staType) continue;
+    forIdx(s, statuses.getList()) {
+        if(statuses.getList()[s].type == staType) continue;
         
-        switch(statuses[s].type->stateChangeType) {
+        switch(statuses.getList()[s].type->stateChangeType) {
         case STATUS_STATE_CHANGE_FLAILING: {
             stillHasFlailing = true;
             break;

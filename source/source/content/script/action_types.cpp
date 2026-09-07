@@ -1568,7 +1568,7 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
         );
         return;
     }
-
+    
     bool rotationFound;
     HOLD_ROTATION_METHOD rotationMethod =
         enumGetValue(holdRotationMethodINames, rotationArg, &rotationFound);
@@ -1970,7 +1970,7 @@ void ScriptActionRunners::receiveStatus(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->getRunnerMob()->applyStatus(it->second, false, false);
+    data.scriptVM->getRunnerMob()->handleStatusSource(it->second, false, false);
 }
 
 
@@ -2055,14 +2055,8 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
         return;
     }
     
-    forIdx(s, data.scriptVM->getRunnerMob()->statuses) {
-        if(data.scriptVM->getRunnerMob()->statuses[s].type == it->second) {
-            data.scriptVM->getRunnerMob()->statuses[s].prevState =
-                data.scriptVM->getRunnerMob()->statuses[s].state;
-            data.scriptVM->getRunnerMob()->statuses[s].state =
-                STATUS_STATE_TO_DELETE;
-        }
-    }
+    Mob* mPtr = data.scriptVM->getRunnerMob();
+    mPtr->statuses.deactivate(it->second);
 }
 
 

@@ -1355,7 +1355,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to lose helplessness is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("flailing", PIKMIN_STATE_FLAILING); {
@@ -1386,7 +1386,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop flailing is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("panicking", PIKMIN_STATE_PANICKING); {
@@ -1415,7 +1415,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop panicking is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("wading", PIKMIN_STATE_WADING); {
@@ -1453,7 +1453,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop wading is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("wading_in_group", PIKMIN_STATE_WADING_IN_GROUP); {
@@ -1495,7 +1495,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop wading is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("drinking", PIKMIN_STATE_DRINKING); {
@@ -3061,7 +3061,7 @@ void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
         pikPtr->increaseMaturity(droPtr->droType->increaseAmount);
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        pikPtr->applyStatus(
+        pikPtr->handleStatusSource(
             droPtr->droType->statusToGive, false, false, droPtr
         );
         break;
@@ -4863,9 +4863,8 @@ void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
         return;
     }
     
-    forIdx(s, pikPtr->statuses) {
-        if(pikPtr->statuses[s].state != STATUS_STATE_ACTIVE) continue;
-        if(pikPtr->statuses[s].type->turnsInedible) {
+    forIdx(s, pikPtr->statuses.getList()) {
+        if(pikPtr->statuses.getList()[s].type->turnsInedible) {
             return;
         }
     }
@@ -4915,7 +4914,7 @@ void PikminFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     forIdx(e, s->effects) {
-        pikPtr->applyStatus(s->effects[e], false, false, sprayer);
+        pikPtr->handleStatusSource(s->effects[e], false, false, sprayer);
     }
     
     if(s->buriesPikmin) {

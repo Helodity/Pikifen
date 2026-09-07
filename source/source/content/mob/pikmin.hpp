@@ -124,8 +124,8 @@ public:
     float getBaseSpeed() const override;
     void getGroupSpotInfo(Point* outSpot, float* outDist) const override;
     float getTaskRange() const;
-    void handleStatusEffectGain(StatusType* s) override;
-    void handleStatusEffectLoss(StatusType* s) override;
+    void handleStatusActivation(StatusType* s) override;
+    void handleStatusDeactivation(StatusType* s) override;
     void readScriptVars(const ScriptVarManager& varsMgr) override;
     void finishDyingClassSpecifics() override;
     void startDyingClassSpecifics() override;

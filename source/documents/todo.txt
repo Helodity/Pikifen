@@ -5,13 +5,15 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
-    You can spam click "Quit" in the pause menu
+    Helodity's many-mob-deletion crash
+    Some editor widgets for scale values let you go lower than 0 when they probably shouldn't
 
     --- 1.2.0 ---
-    Clicking another leader in the radar should make the menu confirm sound
-    Hitbox knockback that makes it scale with how close you are to the hitbox center. Use it for bomb rock explosions
+    Healing at the ship should make a sound
+    The sparkle particles on treasures need to be more obvious
     SHOULD I do something about nuggets having changed their price?
     Add the S.S. Dolphin 2 and its pod as ships
+        When the pod is on the ship, the speaker is upright, and the propellers are hidden
     
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play
@@ -556,7 +558,6 @@ Misc. things (to be implemented whenever)
             Or not -- most obstacles already show their progress visually rather than with a health wheel
         [NEEDS BRAINSTORMING] Mob rotation should have acceleration too
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the leader cursor goes over them
-        The sparkle particles on treasures need to be more obvious
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
         There should be some petal particle effects when a Pikmin loses their maturity
             Each Pikmin type needs to specify its own petal color
@@ -565,20 +566,22 @@ Misc. things (to be implemented whenever)
         Animate the mission results screen. Basically, reveal one thing at a time
             Add sounds for an item's run-up ticking, an item's run-up finishing, and a ka-ching for getting a medal
             Add particles to the medal
-        Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
-        Animated loading screens
-            When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
-            See how Allegro's ex_loading_thread.c does it
+        Loading screen
+            Area names and subtitles could have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
+            Make it animated
+                When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
+                See how Allegro's ex_loading_thread.c does it
+            Make the elements be controlled with a GUI definition
         A way for an area maker to specify sectors or regions that are out-of-bounds, but should still show up on the radar (darkened). This would help the player recognize parts of the area in the radar via landmarks
         Pitch the whistle by the swarm angle (or intensity)
         More music mixes
             Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
                 If we can't get away with many variants, explain in the FAQ why that is
                 What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
+            Boss music logic for attack jingles
         Use a screenshot for the title screen
             The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
-        Healing at the ship should make a sound
         Cursor trail improvements
             In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
             If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots
@@ -690,16 +693,14 @@ Misc. things (to be implemented whenever)
         Pikmin should want to go to nectar by themselves when idling. Particularly important because Winged Pikmin don't drink nectar on their own
         A way for a Pikmin type to control what its resistance to being shaken off is
         Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
-        Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
         When a Pikmin is being burnt up or poisoned, etc., have a few frames at the start of it where it CAN'T be whistled to be saved. This prevents the player from whistling in the area of a soon-to-be burned Pikmin, and save the Pikmin instantly
         A Pikmin that's on fire and runs to the water should probably drown instead of continuing to be on fire
         If your Pikmin are far away and you dismiss them, they should just create groups where they are, not next to where you ordered the dismiss...right?
-        If a Pikmin is too far away, it should sigh and lose the party
         "Oh, yeah, quick suggestion, make all of the pikmin that a leader has get disbanded and maybe panic around for a bit when the leader dies" (thanks Neo)
         Try to find some way for Pikmin to smoothly follow behind when they are faster than the leaders. Right now, they quickly catch up to where they should be in the group, stop, and then slowly accelerate back to continue catching up, over and over
         When they finish breaking a gate, or delivering something, they should probably return to the closest leader's group, right?
-        When they kill an enemy that leaves a corpse, they should stay near it, waiting for the enemy to finish dying, so they can carry it right away
-        [NEEDS BRAINSTORMING] Should Pikmin seeds that land on the ground have a state where they sprout pops out of the ground?
+        [NEEDS BRAINSTORMING] Should Pikmin seeds that land on the ground have a state where the sprout pops out of the ground?
+            Likewise, should seeds take time to transform into sprouts? In theory this encourages the player to multitask instead of waiting for loot to be delivered to the Onion.
         Pikmin that are bounced by a bouncer shouldn't go through the period where they don't let leaders bump them when idle
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
@@ -764,10 +765,8 @@ Misc. things (to be implemented whenever)
         Indoors/Outdoors -- used to control if precipitation can fall in here
     Area background improvements
         Support for backgrounds that don't tile -- what if you want a background that's a tree trunk, because you're on branches? It shouldn't tile, nor should the maker be forced to use a workaround where they have thousands of pixels of blank space for padding
-        Add background viewing/editing to the area editor
-        The ability to tint the background image
-        Move it to the details section
-        Foreground
+        Different background layers, including background and foreground
+            Things like space backgrounds could have stars in different layers, with parallax scrolling at different speeds (thanks Helodity)
     Gameplay notifications
         Useful for making characters talk mid-mission, via scripting
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
@@ -775,7 +774,6 @@ Misc. things (to be implemented whenever)
         Add the previously mentioned ones to the base content
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     Areas should have an option that controls whether Onions should pop new seeds when an extinction happen or if they should let the extinction happen. But for this to make sense, they have to list which Pikmin type are crucial and which are just bonuses, right?
-    The loading screen's elements could be controlled with a GUI definition
     The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing
         For leaders, rename active and inactive to controlled and not controlled
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
@@ -842,7 +840,6 @@ Misc. things (to be implemented whenever)
         Onions should be shaded with hue shifting
         Clovers, Margarets, etc. rustling should also maybe move north and south a bit, so that it's a bit of a circular motion (ellipse, really)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
-    Boss music logic for attack jingles
     Missions
         An end event where you reach X sprays of type Y?
         An end event where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
@@ -1067,7 +1064,6 @@ Difficult tasks (things I don't know how to tackle yet)
         If you go from holding a modifier (Alt) to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
     Weird known issues
-        An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
         Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...
         Regarding true fullscreen crashing when a operative system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     [NEEDS BRAINSTORMING] Questions to be answered later

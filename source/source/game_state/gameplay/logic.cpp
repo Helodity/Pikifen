@@ -2271,7 +2271,7 @@ void GameplayState::processMobTouches(
                 m2Ptr->center, m2Ptr->radius,
                 m2Ptr->rectangularDim, m2Ptr->angle
             );
-        
+            
         if(
             zTouch && !hasFlag(m2Ptr->flags, MOB_FLAG_INTANGIBLE) &&
             xyCollision
@@ -2457,11 +2457,8 @@ void GameplayState::processMobTouches(
                 //Check if m2 is under any status effect
                 //that disables attacks.
                 bool disableAttackStatus = false;
-                forIdx(s, m2Ptr->statuses) {
-                    if(m2Ptr->statuses[s].state != STATUS_STATE_ACTIVE) {
-                        continue;
-                    }
-                    if(m2Ptr->statuses[s].type->disablesAttack) {
+                forIdx(s, m2Ptr->statuses.getList()) {
+                    if(m2Ptr->statuses.getList()[s].type->disablesAttack) {
                         disableAttackStatus = true;
                         break;
                     }
