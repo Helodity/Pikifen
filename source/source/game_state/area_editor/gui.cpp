@@ -1832,7 +1832,9 @@ void AreaEditor::processGuiPanelDetails() {
                 //Background texture scale value.
                 Point bgBmpScale = game.curArea->bgBmpTrans.scale;
                 if(
-                    ImGui::DragFloat2("Scale", (float*) &bgBmpScale, 0.05f)
+                    ImGui::DragFloat2(
+                        "Scale", (float*) &bgBmpScale, 0.01f, 0.001f
+                    )
                 ) {
                     registerChange("area background texture scale change");
                     game.curArea->bgBmpTrans.scale = bgBmpScale;
@@ -2326,7 +2328,9 @@ void AreaEditor::processGuiPanelGameplay() {
             //Region size value.
             Point regionSize = curRegion->pose.size;
             if(
-                ImGui::DragFloat2("Size", (float*) &regionSize)
+                ImGui::DragFloat2(
+                    "Size", (float*) &regionSize, 1.0f, 1.0f
+                )
             ) {
                 registerChange("region size change");
                 curRegion->pose.size = regionSize;
@@ -5754,7 +5758,11 @@ void AreaEditor::processGuiPanelSector() {
             
             //Sector texture scale value.
             Point textureScale = sPtr->textureInfo.tf.scale;
-            if(ImGui::DragFloat2("Scale", (float*) &textureScale, 0.01)) {
+            if(
+                ImGui::DragFloat2(
+                    "Scale", (float*) &textureScale, 0.01f, 0.001f
+                )
+            ) {
                 registerChange("sector texture scale change");
                 sPtr->textureInfo.tf.scale = textureScale;
                 quickPreviewTimer.start();
@@ -6033,7 +6041,7 @@ void AreaEditor::processGuiPanelTools() {
         //Resize everything multiplier value.
         static float resizeMults[2] = { 1.0f, 1.0f };
         ImGui::SetNextItemWidth(128.0f);
-        ImGui::DragFloat2("##resizeMult", resizeMults, 0.01);
+        ImGui::DragFloat2("##resizeMult", resizeMults, 0.01f, 0.001f);
         setTooltip(
             "Resize multipliers, vertically and horizontally.",
             "", WIDGET_EXPLANATION_DRAG

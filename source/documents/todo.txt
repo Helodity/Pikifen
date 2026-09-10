@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
     Helodity's many-mob-deletion crash
-    Some editor widgets for scale values let you go lower than 0 when they probably shouldn't
+    x Some editor widgets for scale values let you go lower than 0 when they probably shouldn't
 
     --- 1.2.0 ---
     Healing at the ship should make a sound
@@ -968,6 +968,7 @@ Tasks for later on (I might never implement these)
             This would involve activation changing from just holding the button to holding + releasing, which might interfere with buttons that have auto-repeat activation
     Blood (optional, of course)
     HUD element for a digital clock?
+    Hidden medallions for story mode campaigns. The maker specifies the requirements for a medallion, like completing with fewer than X throws, fewer than X Pikmin born, etc.
     Pikmin that finish delivering a resource and are thinking of returning to a pile should check if other Pikmin aren't already returning to that pile. If there are already enough to bring the remainder back, this Pikmin shouldn't bother going [PIKMIN 4]
     Better resolution and quality
         Upscale fonts and other things that are really crusty and low-res

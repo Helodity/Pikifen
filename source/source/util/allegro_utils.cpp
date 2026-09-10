@@ -412,8 +412,9 @@ void getShiftCtrlAltState(
 
 
 /**
- * @brief Returns the interpolation between two colors, given a number in
- * an interval.
+ * @brief Returns the linear interpolation between two colors,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,

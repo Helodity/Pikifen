@@ -484,7 +484,7 @@ struct Shaker {
     
     //--- Private members ---
     
-    //Current trauma amount (raw shake factor).
+    //Current trauma amount (raw shake factor) [0 - 1].
     float trauma = 0.0f;
     
     //Time spent so far.
