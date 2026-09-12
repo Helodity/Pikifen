@@ -442,6 +442,34 @@ ALLEGRO_COLOR interpolateColor(
 
 
 /**
+ * @brief Returns whether the given Allegro event counts as an
+ * input made by the user.
+ *
+ * @param ev The event.
+ * @return Whether it's a user input.
+ */
+bool isAllegroEventUserInput(ALLEGRO_EVENT& ev) {
+    switch(ev.type) {
+    case ALLEGRO_EVENT_JOYSTICK_AXIS:
+    case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
+    case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP:
+    case ALLEGRO_EVENT_KEY_CHAR:
+    case ALLEGRO_EVENT_KEY_DOWN:
+    case ALLEGRO_EVENT_KEY_UP:
+    case ALLEGRO_EVENT_MOUSE_AXES:
+    case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+    case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+    case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY: {
+        return true;
+        break;
+    }
+    }
+    
+    return false;
+}
+
+
+/**
  * @brief Returns the color that was provided, but with the alpha multiplied
  * by a given value.
  *

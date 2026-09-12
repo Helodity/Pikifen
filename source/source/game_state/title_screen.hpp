@@ -21,10 +21,14 @@ using std::string;
 
 
 namespace MAIN_MENU {
+extern const float FADE_IN_FAST_DURATION;
+extern const float FADE_IN_DELAY;
+extern const float FADE_IN_DURATION;
 extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const string MAKE_GUI_FILE_NAME;
 extern const string PLAY_GUI_FILE_NAME;
+extern const float ZOOM_DURATION;
 }
 
 
@@ -68,6 +72,9 @@ public:
     //--- Public function declarations ---
     
     void load() override;
+    void hide();
+    void startFadingIn();
+    void speedUpFadeIn();
     
     
 private:
@@ -188,5 +195,14 @@ private:
     
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> wordmarkTypeBitmaps;
+    
+    //Time left until we start fading the GUI in.
+    float guiFadeTimer = MAIN_MENU::FADE_IN_DELAY;
+    
+    
+    //--- Private function declarations ---
+    
+    void drawDecorations(bool justWordmark) const;
+    void drawFixedText() const;
     
 };

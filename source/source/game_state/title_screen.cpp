@@ -26,6 +26,15 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace MAIN_MENU {
 
+//How long the main menu proper's fast fade in animation lasts for.
+const float FADE_IN_FAST_DURATION = 0.25f;
+
+//How long to wait before the menu proper starts fading in to view.
+const float FADE_IN_DELAY = 3.5f;
+
+//How long the main menu proper's fade in animation lasts for.
+const float FADE_IN_DURATION = 1.5f;
+
 //Name of the GUI definition file.
 const string GUI_FILE_NAME = "main_menu_top";
 
@@ -38,6 +47,21 @@ const string MAKE_GUI_FILE_NAME = "main_menu_make";
 //Name of the play page GUI definition file.
 const string PLAY_GUI_FILE_NAME = "main_menu_play";
 
+//How long the zoom effect goes on for.
+const float ZOOM_DURATION = 3.5f;
+
+}
+
+
+/**
+ * @brief Hides the main menu's GUIs.
+ */
+void MainMenu::hide() {
+    forIdx(g, guis) {
+        GuiManager* gPtr = guis[g];
+        gPtr->hideItems();
+        gPtr->responsive = false;
+    }
 }
 
 
@@ -731,13 +755,33 @@ void MainMenu::load() {
 
 
 /**
+ * @brief Speeds up an ongoing fade-in.
+ */
+void MainMenu::speedUpFadeIn() {
+    if(mainGui.getAnimation() == GUI_MANAGER_ANIM_FADE_IN) {
+        mainGui.changeCurAnimationDuration(
+            MAIN_MENU::FADE_IN_FAST_DURATION
+        );
+        mainGui.responsive = true;
+    }
+}
+
+
+/**
+ * @brief Starts the menu's fade-in transition.
+ */
+void MainMenu::startFadingIn() {
+    mainGui.startAnimation(
+        GUI_MANAGER_ANIM_FADE_IN, MAIN_MENU::FADE_IN_DURATION
+    );
+    mainGui.responsive = true;
+}
+
+
+/**
  * @brief Draws the title screen.
  */
 void TitleScreen::doDrawing() {
-    Point pikSize = wordmarkPikminSize;
-    pikSize.x *= game.winW / 100.0f;
-    pikSize.y *= game.winH / 100.0f;
-    
     //To export the wordmark into its own bitmap, set this to true.
     //One good trick is to set it to true only if
     //passedBy(game.timePassed, game.timePassed + game.deltaT, 10)
@@ -749,56 +793,36 @@ void TitleScreen::doDrawing() {
         al_set_target_bitmap(bmpJustWordmark);
     }
     
-    //Draw the background fill color.
+    //Set up the zoom level.
+    float zoomTimeRatio =
+        interpolateNumber(
+            game.timePassed, 0.0f, MAIN_MENU::ZOOM_DURATION, 0.0f, 1.0f
+        );
+    zoomTimeRatio = std::clamp(zoomTimeRatio, 0.0f, 1.0f);
+    zoomTimeRatio = ease(zoomTimeRatio, EASE_METHOD_OUT);
+    float zoomLevel =
+        interpolateNumber(
+            zoomTimeRatio, 0.0f, 1.0f,
+            1.0f / game.config.aestheticGen.titleScreenBgFinalZoom, 1.0f
+        );
+    ALLEGRO_TRANSFORM zoomTransform;
+    al_identity_transform(&zoomTransform);
+    float halfWinW = game.winW / 2.0f;
+    float halfWinH = game.winH / 2.0f;
+    al_translate_transform(&zoomTransform, -halfWinW, -halfWinH);
+    al_scale_transform(&zoomTransform, zoomLevel, zoomLevel);
+    al_translate_transform(&zoomTransform, halfWinW, halfWinH);
+    
+    //Draw! Start with the background fill color.
     al_clear_to_color(justWordmark ? COLOR_EMPTY : COLOR_BLACK);
     
     if(game.debug.showDearImGuiDemo) return;
     
-    //Fill the wordmark Pikmin's shadow buffer.
-    ALLEGRO_BITMAP* prevTargetBmp = al_get_target_bitmap();
-    al_set_target_bitmap(bmpWordmarkShadows);
-    al_clear_to_color(COLOR_EMPTY);
-    AllegroBlenderState prevBlender;
-    prevBlender.save();
-    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE); {
-        forIdx(p, wordmarkPikmin) {
-            WordmarkPikmin* pik = &wordmarkPikmin[p];
-            drawBitmapInBox(
-                game.sysContent.bmpShadow,
-                pik->center + pikSize * 0.30f, pikSize * 1.2f, true
-            );
-        }
-    } prevBlender.load();
-    al_set_target_bitmap(prevTargetBmp);
+    if(!justWordmark) al_use_transform(&zoomTransform);
     
-    //Draw the background.
-    if(!justWordmark) {
-        drawBitmap(
-            bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
-            Point(game.winW, game.winH)
-        );
-    }
+    drawDecorations(justWordmark);
     
-    //Draw the wordmark Pikmin shadows.
-    al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER)); {
-        //Color it just a bit green so it's more natural.
-        ALLEGRO_COLOR color = al_map_rgba(0, 255, 0, 32);
-        al_set_shader_float_vector(
-            "colorizer_color", 4, (float*) &color, 1
-        );
-        drawBitmap(
-            bmpWordmarkShadows, Point(game.winW / 2.0f, game.winH / 2.0f),
-            Point(game.winW, game.winH), 0.0f, COLOR_TRANSPARENT_WHITE
-        );
-    } al_use_shader(nullptr);
-    
-    //Draw the wordmark Pikmin proper.
-    forIdx(p, wordmarkPikmin) {
-        WordmarkPikmin* pik = &wordmarkPikmin[p];
-        drawBitmapInBox(
-            pik->top, pik->center, pikSize, true, pik->angle
-        );
-    }
+    al_use_transform(&game.identityTransform);
     
     if(justWordmark) {
         //Do what you want with bmpJustWordmark, like using al_save_bitmap().
@@ -806,29 +830,7 @@ void TitleScreen::doDrawing() {
         return;
     }
     
-    drawText(
-        "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
-        game.sysContent.fntSlim,
-        Point(8.0f),
-        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
-        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
-    );
-    string versionText;
-    if(!game.config.general.name.empty()) {
-        versionText = game.config.general.name;
-        if(!game.config.general.version.empty()) {
-            versionText += " " + game.config.general.version;
-        }
-        versionText += ", powered by ";
-    }
-    versionText +=
-        "Pikifen " + getEngineVersionString(true);
-    drawText(
-        versionText, game.sysContent.fntSlim,
-        Point(game.winW - 8, 8),
-        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
-        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
-    );
+    drawFixedText();
     
     mainMenu.draw();
     
@@ -883,6 +885,13 @@ void TitleScreen::doLogic() {
         }
     }
     
+    //Main menu logic.
+    if(guiFadeTimer > 0.0f) {
+        guiFadeTimer -= game.deltaT;
+        if(guiFadeTimer <= 0.0f) {
+            mainMenu.startFadingIn();
+        }
+    }
     mainMenu.tick(game.deltaT);
     
     //Fade manager needs to come last, because if
@@ -891,6 +900,95 @@ void TitleScreen::doLogic() {
     //this function, we're going to have a bad time.
     game.fadeMgr.tick(game.deltaT);
     
+}
+
+
+/**
+ * @brief Draws all of the non-interactive parts of the title screen.
+ *
+ * @param justWordmark Whether to draw just the wordmark.
+ */
+void TitleScreen::drawDecorations(bool justWordmark) const {
+    Point pikSize = wordmarkPikminSize;
+    pikSize.x *= game.winW / 100.0f;
+    pikSize.y *= game.winH / 100.0f;
+    
+    //Fill the wordmark Pikmin's shadow buffer.
+    ALLEGRO_BITMAP* prevTargetBmp = al_get_target_bitmap();
+    al_set_target_bitmap(bmpWordmarkShadows);
+    al_clear_to_color(COLOR_EMPTY);
+    AllegroBlenderState prevBlender;
+    prevBlender.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE); {
+        forIdx(p, wordmarkPikmin) {
+            const WordmarkPikmin* pik = &wordmarkPikmin[p];
+            drawBitmapInBox(
+                game.sysContent.bmpShadow,
+                pik->center + pikSize * 0.30f, pikSize * 1.2f, true
+            );
+        }
+    } prevBlender.load();
+    al_set_target_bitmap(prevTargetBmp);
+    
+    //Draw the background.
+    if(!justWordmark) {
+        drawBitmap(
+            bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
+            Point(game.winW, game.winH) *
+            game.config.aestheticGen.titleScreenBgFinalZoom
+        );
+    }
+    
+    //Draw the wordmark Pikmin shadows.
+    al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER)); {
+        //Color it just a bit green so it's more natural.
+        ALLEGRO_COLOR color = al_map_rgba(0, 255, 0, 32);
+        al_set_shader_float_vector(
+            "colorizer_color", 4, (float*) &color, 1
+        );
+        drawBitmap(
+            bmpWordmarkShadows, Point(game.winW / 2.0f, game.winH / 2.0f),
+            Point(game.winW, game.winH), 0.0f, COLOR_TRANSPARENT_WHITE
+        );
+    } al_use_shader(nullptr);
+    
+    //Draw the wordmark Pikmin proper.
+    forIdx(p, wordmarkPikmin) {
+        const WordmarkPikmin* pik = &wordmarkPikmin[p];
+        drawBitmapInBox(
+            pik->top, pik->center, pikSize, true, pik->angle
+        );
+    }
+}
+
+
+/**
+ * @brief Draws all of the fixed text.
+ */
+void TitleScreen::drawFixedText() const {
+    drawText(
+        "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
+        game.sysContent.fntSlim,
+        Point(8.0f),
+        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
+    );
+    string versionText;
+    if(!game.config.general.name.empty()) {
+        versionText = game.config.general.name;
+        if(!game.config.general.version.empty()) {
+            versionText += " " + game.config.general.version;
+        }
+        versionText += ", powered by ";
+    }
+    versionText +=
+        "Pikifen " + getEngineVersionString(true);
+    drawText(
+        versionText, game.sysContent.fntSlim,
+        Point(game.winW - 8, 8),
+        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
+        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
+    );
 }
 
 
@@ -910,6 +1008,14 @@ string TitleScreen::getName() const {
  * @param ev Event to handle.
  */
 void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+    if(isAllegroEventUserInput(ev)) {
+        if(guiFadeTimer > 0.0f) {
+            guiFadeTimer = 0.0f;
+            mainMenu.startFadingIn();
+        }
+        mainMenu.speedUpFadeIn();
+    }
+    
     if(game.fadeMgr.isFading()) return;
     
     mainMenu.handleAllegroEvent(ev);
@@ -946,7 +1052,7 @@ void TitleScreen::load() {
         
     //Wordmark pikmin.
     DataNode* wordmarkNode = settingsFile->getChildByName("logo");
-    ReaderSetter lRS(wordmarkNode);
+    ReaderSetter wRS(wordmarkNode);
     
     DataNode* pikTypesNode =
         wordmarkNode->getChildByName("pikmin_types");
@@ -966,15 +1072,15 @@ void TitleScreen::load() {
             std::max(mapTotalCols, mapNode->getChild(r)->name.size());
     }
     
-    lRS.set("min_window_limit", wordmarkMinWindowLimit);
-    lRS.set("max_window_limit", wordmarkMaxWindowLimit);
-    lRS.set("pikmin_max_speed", wordmarkPikminMaxSpeed);
-    lRS.set("pikmin_min_speed", wordmarkPikminMinSpeed);
-    lRS.set("pikmin_speed_smoothness", wordmarkPikminSpeedSmoothness);
-    lRS.set("pikmin_sway_amount", wordmarkPikminSwayAmount);
-    lRS.set("pikmin_sway_max_speed", wordmarkPikminSwayMaxSpeed);
-    lRS.set("pikmin_sway_min_speed", wordmarkPikminSwayMinSpeed);
-    lRS.set("pikmin_size", wordmarkPikminSize);
+    wRS.set("min_window_limit", wordmarkMinWindowLimit);
+    wRS.set("max_window_limit", wordmarkMaxWindowLimit);
+    wRS.set("pikmin_max_speed", wordmarkPikminMaxSpeed);
+    wRS.set("pikmin_min_speed", wordmarkPikminMinSpeed);
+    wRS.set("pikmin_speed_smoothness", wordmarkPikminSpeedSmoothness);
+    wRS.set("pikmin_sway_amount", wordmarkPikminSwayAmount);
+    wRS.set("pikmin_sway_max_speed", wordmarkPikminSwayMaxSpeed);
+    wRS.set("pikmin_sway_min_speed", wordmarkPikminSwayMinSpeed);
+    wRS.set("pikmin_size", wordmarkPikminSize);
     
     bool mapOk = true;
     
@@ -1043,6 +1149,7 @@ void TitleScreen::load() {
     //Finishing touches.
     game.audio.setCurrentSong(game.sysContentNames.sngMenus, false);
     if(game.timePassed == 0.0f) {
+        mainMenu.hide();
         game.fadeMgr.setNextFadeDuration(GAME::FADE_SLOW_DURATION);
     }
     game.fadeMgr.startFade(true, nullptr);

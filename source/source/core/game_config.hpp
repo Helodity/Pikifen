@@ -149,6 +149,9 @@ struct GameConfig {
         ALLEGRO_COLOR noPikminColor =
             AESTHETIC_GENERAL_D::NO_PIKMIN_COLOR;
             
+        //Final zoom level for the title screen background, and similar things.
+        float titleScreenBgFinalZoom = 1.5f;
+        
     } aestheticGen;
     
     //Radar aesthetic details.

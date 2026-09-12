@@ -216,6 +216,8 @@ void GameConfig::load(DataNode* file) {
     {
         ReaderSetter aRS(file->getChildByName("aesthetic_general"));
         
+        DataNode* titleScreenBgFinalZoomNode = nullptr;
+        
         //DEPRECATED in 1.1.0 by "mouse_cursor_spin_speed".
         aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
         //DEPRECATED in 1.2.0 by "cutscene_msg_char_interval".
@@ -230,9 +232,17 @@ void GameConfig::load(DataNode* file) {
         );
         aRS.set("mouse_cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
         aRS.set("no_pikmin_color", aestheticGen.noPikminColor);
+        aRS.set(
+            "title_screen_bg_final_zoom", aestheticGen.titleScreenBgFinalZoom,
+            &titleScreenBgFinalZoomNode
+        );
         
         aestheticGen.mouseCursorSpinSpeed =
             degToRad(aestheticGen.mouseCursorSpinSpeed);
+            
+        if(titleScreenBgFinalZoomNode) {
+            aestheticGen.titleScreenBgFinalZoom /= 100.0f;
+        }
     }
     
     //Aesthetic radar.

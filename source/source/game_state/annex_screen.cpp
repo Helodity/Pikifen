@@ -24,7 +24,9 @@ void AnnexScreen::doDrawing() {
     
     drawBitmap(
         bmpBg, Point(game.winW * 0.5, game.winH * 0.5),
-        Point(game.winW, game.winH), 0, mapGray(64)
+        Point(game.winW, game.winH) *
+        game.config.aestheticGen.titleScreenBgFinalZoom,
+        0, mapGray(64)
     );
     
     if(curMenu) curMenu->draw();
