@@ -376,15 +376,17 @@ void GuiEditor::processGuiDialogOptions() {
         ImGui::TreePop();
     }
     
+    ImGui::Spacer();
+    
+    processGuiEditorStyle();
+    
+    ImGui::Spacer();
+    
     //Misc. node.
     if(saveableTreeNode("options", "Misc.")) {
         processGuiDialogOptionsMisc();
         ImGui::TreePop();
     }
-    
-    ImGui::Spacer();
-    
-    processGuiEditorStyle();
 }
 
 
@@ -464,7 +466,11 @@ void GuiEditor::processGuiDialogOptionsMisc() {
                 areaPaths[selectedAreaIdx];
         }
     }
-    setTooltip("Area to play on when choosing the quick play feature.");
+    setTooltip(
+        "Area to play on when choosing the quick play feature.\n"
+        "You can also choose one by right-clicking the\n"
+        "quick play button in the toolbar."
+    );
 }
 
 

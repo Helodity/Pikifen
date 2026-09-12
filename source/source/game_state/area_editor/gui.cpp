@@ -495,7 +495,8 @@ void AreaEditor::processGuiDialogOptions() {
 
 
 /**
- * @brief Processes the options dialog's controls widgets for this frame.
+ * @brief Processes the controls widgets of the
+ * options dialog for this frame.
  */
 void AreaEditor::processGuiDialogOptionsControls() {
     //Snap threshold value.
@@ -542,7 +543,8 @@ void AreaEditor::processGuiDialogOptionsControls() {
 
 
 /**
- * @brief Processes the options dialog's misc. widgets for this frame.
+ * @brief Processes the misc. widgets of the
+ * options dialog for this frame.
  */
 void AreaEditor::processGuiDialogOptionsMisc() {
     //Interface mode text.
@@ -653,7 +655,8 @@ void AreaEditor::processGuiDialogOptionsMisc() {
 
 
 /**
- * @brief Processes the options dialog's view widgets for this frame.
+ * @brief Processes the view widgets of the
+ * options dialog for this frame.
  */
 void AreaEditor::processGuiDialogOptionsView() {
     //Show edge length checkbox.

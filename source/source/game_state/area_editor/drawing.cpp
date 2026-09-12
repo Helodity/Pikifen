@@ -224,16 +224,21 @@ void AreaEditor::drawCanvas() {
         game.editorsView.windowRect.size.x, game.editorsView.windowRect.size.y
     );
     
+    ALLEGRO_COLOR voidColor =
+        game.curArea ?
+        changeAlpha(game.curArea->bgVoidColor, 255) :
+        COLOR_BLACK;
     al_clear_to_color(
         interpolateColor(
-            style.backgroundAlpha, 0.0f, 1.0f,
-            COLOR_BLACK, changeAlpha(game.curArea->bgVoidColor, 255)
+            style.backgroundAlpha, 0.0f, 1.0f, COLOR_BLACK, voidColor
         )
     );
     
-    drawAreaBackgroundTexture(game.editorsView, style.backgroundAlpha, nullptr);
-    
-    if(!game.curArea) {
+    if(game.curArea) {
+        drawAreaBackgroundTexture(
+            game.editorsView, style.backgroundAlpha, nullptr
+        );
+    } else {
         al_reset_clipping_rectangle();
         return;
     }

@@ -553,7 +553,11 @@ void ParticleEditor::processGuiDialogOptionsMisc() {
                 areaPaths[selectedAreaIdx];
         }
     }
-    setTooltip("Area to play on when choosing the quick play feature.");
+    setTooltip(
+        "Area to play on when choosing the quick play feature.\n"
+        "You can also choose one by right-clicking the\n"
+        "quick play button in the toolbar."
+    );
 }
 
 
@@ -825,10 +829,10 @@ void ParticleEditor::processGuiPanelGenerator() {
         "Everything about how the particle generator emits new particles."
     );
     if(openEmissionNode) {
-
+    
         processGuiPanelGeneratorEmission();
         ImGui::TreePop();
-
+        
     }
     
     //Particle appearance node.

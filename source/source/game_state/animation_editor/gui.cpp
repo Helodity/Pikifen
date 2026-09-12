@@ -616,7 +616,11 @@ void AnimationEditor::processGuiDialogOptionsMisc() {
                 areaPaths[selectedAreaIdx];
         }
     }
-    setTooltip("Area to play on when choosing the quick play feature.");
+    setTooltip(
+        "Area to play on when choosing the quick play feature.\n"
+        "You can also choose one by right-clicking the\n"
+        "quick play button in the toolbar."
+    );
 }
 
 
