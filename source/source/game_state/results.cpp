@@ -698,14 +698,15 @@ void Results::initGuiMain() {
             if(medal != MISSION_MEDAL_NONE) {
                 drawBitmapInBox(
                     game.sysContent.bmpIdleGlow,
-                    draw.center, draw.size * RESULTS::MEDAL_SHINE_SCALE, true,
+                    draw.center, draw.size * RESULTS::MEDAL_SHINE_SCALE,
+                    true, true,
                     game.timePassed * RESULTS::MEDAL_SHINE_ROT_TIME_SCALE,
                     draw.tint
                 );
             }
             drawBitmapInBox(
                 bmp, draw.center, draw.size * RESULTS::MEDAL_SCALE,
-                true, 0.0f, draw.tint
+                true, true, 0.0f, draw.tint
             );
         };
         gui.addItem(medalItem, "medal");

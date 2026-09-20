@@ -895,7 +895,7 @@ void OptionsMenu::initGuiControlBindsPage() {
         bindsWarningButton->defDrawCode(draw);
         drawBitmapInBox(
             game.sysContent.bmpWarning, draw.center, draw.size * 0.8f,
-            true, 0.0f, draw.tint
+            true, true, 0.0f, draw.tint
         );
     };
     bindsWarningButton->onActivate =

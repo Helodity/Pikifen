@@ -296,8 +296,8 @@ void MainMenu::initGuiMainPage() {
     discordButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
-            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f, true,
-            0.0f, draw.tint
+            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f,
+            true, true, 0.0f, draw.tint
         );
         drawButton(
             draw.center, draw.size,
@@ -325,8 +325,8 @@ void MainMenu::initGuiMainPage() {
     githubButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
-            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f, true,
-            0.0f, draw.tint
+            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f,
+            true, true, 0.0f, draw.tint
         );
         drawButton(
             draw.center, draw.size,
@@ -929,7 +929,7 @@ void TitleScreen::drawDecorations(bool justWordmark) const {
             const WordmarkPikmin* pik = &wordmarkPikmin[p];
             drawBitmapInBox(
                 game.sysContent.bmpShadow,
-                pik->center + pikSize * 0.30f, pikSize * 1.2f, true
+                pik->center + pikSize * 0.30f, pikSize * 1.2f, true, true
             );
         }
     } prevBlender.load();
@@ -937,10 +937,11 @@ void TitleScreen::drawDecorations(bool justWordmark) const {
     
     //Draw the background.
     if(!justWordmark) {
-        drawBitmap(
+        drawBitmapInBox(
             bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
             Point(game.winW, game.winH) *
-            game.config.aestheticGen.titleScreenBgFinalZoom
+            game.config.aestheticGen.titleScreenBgFinalZoom,
+            true, false
         );
     }
     
@@ -961,7 +962,7 @@ void TitleScreen::drawDecorations(bool justWordmark) const {
     forIdx(p, wordmarkPikmin) {
         const WordmarkPikmin* pik = &wordmarkPikmin[p];
         drawBitmapInBox(
-            pik->top, pik->center, pikSize, true, pik->angle
+            pik->top, pik->center, pikSize, true, true, pik->angle
         );
     }
 }
@@ -1185,6 +1186,8 @@ void TitleScreen::unload() {
     wordmarkPikmin.clear();
     al_destroy_bitmap(bmpWordmarkShadows);
     bmpWordmarkShadows = nullptr;
+    guiFadeTimer = 0.0f;
+    zoomInTimer = 0.0f;
     
     //Game content.
     game.content.unloadAll(

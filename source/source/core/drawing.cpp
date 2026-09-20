@@ -550,7 +550,7 @@ void drawInputSourceIcon(
                 (iconBmpSize + 1) * (int) bitmapSprite, 0,
                 iconBmpSize, iconBmpSize
             );
-        drawBitmapInBox(bmp, iconPos, iconSize, true, 0.0f, tint);
+        drawBitmapInBox(bmp, iconPos, iconSize, true, true, 0.0f, tint);
         al_destroy_bitmap(bmp);
         return;
     }
@@ -1110,7 +1110,7 @@ void drawMenuButtonIcon(
     drawBitmapInBox(
         bmp, iconCenter,
         Point(buttonSize.y),
-        true, 0.0f, tint
+        true, true, 0.0f, tint
     );
     al_destroy_bitmap(bmp);
 }
