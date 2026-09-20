@@ -1234,7 +1234,7 @@ void Results::populateScoringList() {
         } else {
             value = typePtr->getAmount(cPtr->idxParam) * cPtr->points;
         }
-        string name = typePtr->getInfo().friendlyName;
+        string name = cPtr->customName;
         if(name.empty()) name = typePtr->getInfo().name;
         addNewBulletPoint(
             scoringList,

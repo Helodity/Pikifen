@@ -781,7 +781,7 @@ void AreaEditor::processGuiMenuBar() {
     
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
-
+        
             processGuiMenuBarEditor();
             ImGui::EndMenu();
             
@@ -789,7 +789,7 @@ void AreaEditor::processGuiMenuBar() {
         
         //Edit menu.
         if(ImGui::BeginMenu("Edit")) {
-
+        
             processGuiMenuBarEdit();
             ImGui::EndMenu();
             
@@ -797,7 +797,7 @@ void AreaEditor::processGuiMenuBar() {
         
         //View menu.
         if(ImGui::BeginMenu("View")) {
-
+        
             processGuiMenuBarView();
             ImGui::EndMenu();
             
@@ -1457,7 +1457,7 @@ void AreaEditor::processGuiPanelDetails() {
         
         //Tree shadows node.
         if(saveableTreeNode("details", "Tree shadows")) {
-
+        
             processGuiPanelDetailsShadows();
             ImGui::TreePop();
             
@@ -1972,7 +1972,7 @@ void AreaEditor::processGuiPanelEdge() {
     
     //Wall shadow node.
     if(saveableTreeNode("layout", "Wall shadow")) {
-
+    
         processGuiPanelEdgeShadow(ePtr);
         ImGui::TreePop();
     }
@@ -2058,7 +2058,7 @@ void AreaEditor::processGuiPanelEdge() {
 /**
  * @brief Processes the Dear ImGui wall shadow widgets in the
  * edge control panel for this frame.
- * 
+ *
  * @param ePtr The edge.
  */
 void AreaEditor::processGuiPanelEdgeShadow(Edge* ePtr) {
@@ -2155,7 +2155,7 @@ void AreaEditor::processGuiPanelEdgeShadow(Edge* ePtr) {
 /**
  * @brief Processes the Dear ImGui ledge smoothing widgets in the
  * edge control panel for this frame.
- * 
+ *
  * @param ePtr The edge.
  */
 void AreaEditor::processGuiPanelEdgeSmoothing(Edge* ePtr) {
@@ -4283,6 +4283,21 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 "in real time.",
                 "", WIDGET_EXPLANATION_DRAG
             );
+            
+            //Custom name input.
+            string customName = criterionPtr->customName;
+            if(ImGui::InputText("Custom name", &customName)) {
+                registerChange("mission score criterion name change");
+                criterionPtr->customName = customName;
+            }
+            setTooltip(
+                "What name to show in the results screen.\n"
+                "If empty, the metric type's name will be shown.\n"
+                "This is useful for those cases where the metric type's\n"
+                "name is something technical or not specific enough, and\n"
+                "you want a name that better explains to the player\n"
+                "what they are being scored with."
+            );
         }
         
         ImGui::TreePop();
@@ -4732,7 +4747,7 @@ void AreaEditor::processGuiPanelPaths() {
     ImGui::BeginChild("paths");
     
     if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
-
+    
         processGuiPanelPathsDrawing();
         
     } else {
@@ -5646,12 +5661,12 @@ void AreaEditor::processGuiPanelSector() {
 /**
  * @brief Processes the Dear ImGui appearance widgets in the
  * sector control panel for this frame.
- * 
+ *
  * @param sPtr The sector.
  */
 void AreaEditor::processGuiPanelSectorAppearance(Sector* sPtr) {
     int textureType = !sPtr->fade;
-        
+    
     //Sector texture fader radio button.
     ImGui::RadioButton("Texture fader", &textureType, 0);
     setTooltip(
@@ -5878,7 +5893,7 @@ void AreaEditor::processGuiPanelSectorAppearance(Sector* sPtr) {
 /**
  * @brief Processes the Dear ImGui behavior widgets in the
  * sector control panel for this frame.
- * 
+ *
  * @param sPtr The sector.
  */
 void AreaEditor::processGuiPanelSectorBehavior(Sector* sPtr) {

@@ -1858,6 +1858,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         cRS.set("index_param", newCriterion.idxParam);
         cRS.set("points", newCriterion.points);
         cRS.set("affects_hud", newCriterion.affectsHud);
+        cRS.set("custom_name", newCriterion.customName);
         
         readEnumProp(
             missionMetricNames, metricTypeStr,
@@ -2954,6 +2955,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         cGW.write("index_param", criterionPtr->idxParam);
         cGW.write("points", criterionPtr->points);
         cGW.write("affects_hud", criterionPtr->affectsHud);
+        cGW.write("custom_name", criterionPtr->customName);
     }
 }
 

@@ -1357,7 +1357,6 @@ MissionMetricType::Info MissionMetricTypeMobGroup::getInfo() const {
     return
     Info {
         .name = "Mob group cleared mobs",
-        .friendlyName = "Target objects cleared",
         .idxParamName = "Mob group number",
         .idxParamDescription = "Number of the mob group.",
         .hasAutoTarget = true
@@ -1423,7 +1422,6 @@ MissionMetricType::Info MissionMetricTypeMobGroupHealth::getInfo() const {
     return
     Info {
         .name = "Mob group health",
-        .friendlyName = "Target object health",
         .idxParamName = "Mob group number",
         .idxParamDescription = "Number of the mob group.",
         .hasAutoTarget = true
@@ -1679,7 +1677,6 @@ MissionMetricType::Info MissionMetricTypeScriptSlot::getInfo() const {
     return
     Info {
         .name = "Script slot",
-        .friendlyName = "Special metric",
         .idxParamName = "Slot number",
         .idxParamDescription = "Number of the script slot.",
         .hasAutoTarget = false

@@ -123,7 +123,7 @@ enum MISSION_METRIC {
     MISSION_METRIC_ENEMY_DEFEAT_PTS,
     
     //Custom script-defined slot.
-    MISSION_METRIC_ENEMY_SCRIPT_SLOT,
+    MISSION_METRIC_SCRIPT_SLOT,
     
 };
 
@@ -143,7 +143,7 @@ buildEnumNames(missionMetricNames, MISSION_METRIC)({
     { MISSION_METRIC_TREASURE_COLLECTION_PTS, "Treasure collection points" },
     { MISSION_METRIC_ENEMY_COLLECTION_PTS, "Enemy collection points" },
     { MISSION_METRIC_ENEMY_DEFEAT_PTS, "Enemy defeat points" },
-    { MISSION_METRIC_ENEMY_SCRIPT_SLOT, "Script slot" },
+    { MISSION_METRIC_SCRIPT_SLOT, "Script slot" },
 });
 
 
@@ -162,7 +162,7 @@ buildEnumNames(missionMetricINames, MISSION_METRIC)({
     { MISSION_METRIC_TREASURE_COLLECTION_PTS, "treasure_collection_points" },
     { MISSION_METRIC_ENEMY_COLLECTION_PTS, "enemy_collection_points" },
     { MISSION_METRIC_ENEMY_DEFEAT_PTS, "enemy_defeat_points" },
-    { MISSION_METRIC_ENEMY_SCRIPT_SLOT, "script_slot" },
+    { MISSION_METRIC_SCRIPT_SLOT, "script_slot" },
 });
 
 
@@ -536,6 +536,9 @@ struct MissionScoreCriterion {
     //Whether it affects the HUD score, or only the final results.
     bool affectsHud = true;
     
+    //Custom display name in the results screen, if any.
+    string customName;
+    
 };
 
 
@@ -748,9 +751,6 @@ public:
     
         //Its name.
         string name;
-        
-        //Friendlier player-facing name.
-        string friendlyName;
         
         //Descriptor of the index parameter, if any.
         string idxParamName;
