@@ -6002,7 +6002,7 @@ mobs{
 		p=1809.9692 1671.5974
 	}
 	decoration{
-		type=clover
+		type=fern
 		p=2013.2809 1547.7832
 	}
 	decoration{
@@ -6142,8 +6142,8 @@ mobs{
 		p=2176.0000 -32.0000
 	}
 	decoration{
-		type=clover
-		p=2496.0000 640.0000
+		type=fern
+		p=2464.0000 640.0000
 	}
 	decoration{
 		type=clover
@@ -6378,7 +6378,7 @@ mobs{
 		p=1376.0000 -512.0000
 	}
 	decoration{
-		type=clover
+		type=fern
 		p=2275.6462 186.3269
 	}
 	decoration{
@@ -6598,6 +6598,14 @@ mobs{
 	decoration{
 		type=clover
 		p=-128.0000 192.0000
+	}
+	decoration{
+		type=fern
+		p=2272.0000 1568.0000
+	}
+	decoration{
+		type=fern
+		p=2048.0000 704.0000
 	}
 }
 path_stops{
