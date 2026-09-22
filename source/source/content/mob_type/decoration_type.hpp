@@ -32,6 +32,9 @@ enum DECORATION_ANIM {
 //Decoration object states.
 enum DECORATION_STATE {
 
+    //Setup.
+    DECORATION_STATE_SETUP,
+    
     //Idling.
     DECORATION_STATE_IDLING,
     
