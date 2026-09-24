@@ -1,13 +1,14 @@
-name = Grass (tall)
-description = A lump of tall grass blades.
+name = Carnation (red)
+description = A single red carnation.
 
+blackout_radius = 40
 height = 120
-peek_underneath_opacity = 50
+peek_underneath_opacity = 160
 radius = 50
 random_animation_delay = true
 rotation_random_variation = 360
-scale_random_variation = 0.2
-tint_random_maximum = 224 224 224
+scale_random_variation = 0.1
+tint_random_maximum = 208 208 208
 
 sounds {
     bumped {

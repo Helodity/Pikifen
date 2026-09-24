@@ -10,6 +10,15 @@ rotation_random_variation = 360
 scale_random_variation = 0.1
 tint_random_maximum = 224 224 224
 
+sounds {
+    boing {
+        sound = effects/boing_low_1
+        volume = 30
+        speed = 120
+        speed_deviation = 10
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0
