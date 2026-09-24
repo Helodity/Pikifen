@@ -65,45 +65,45 @@ animations{
 sprites{
 	bumped_01{
 		file=decorations/shoot_oak
-		file_pos=0.0000 0.0000
-		file_size=172.0000 177.0000
-		offset=-28.5000 11.5000
+		file_pos=0.0000 182.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
 	}
 	bumped_02{
 		file=decorations/shoot_oak
-		file_pos=0.0000 0.0000
-		file_size=172.0000 177.0000
-		offset=-26.5000 11.5000
+		file_pos=0.0000 364.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
 	}
 	bumped_03{
 		file=decorations/shoot_oak
-		file_pos=0.0000 0.0000
-		file_size=172.0000 177.0000
-		offset=-32.5000 11.5000
+		file_pos=0.0000 546.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
 	}
 	bumped_04{
 		file=decorations/shoot_oak
-		file_pos=0.0000 0.0000
-		file_size=172.0000 177.0000
-		offset=-34.5000 11.5000
+		file_pos=0.0000 728.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
 	}
 	idling_01{
 		file=decorations/shoot_oak
 		file_pos=0.0000 0.0000
-		file_size=172.0000 177.0000
-		offset=-30.5000 11.5000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
 	}
 	idling_02{
 		file=decorations/shoot_oak
 		file_pos=0.0000 0.0000
-		file_size=172.0000 177.0000
-		offset=-30.0000 11.5000
+		file_size=177.0000 181.0000
+		offset=-30.5000 11.5000
 	}
 	idling_03{
 		file=decorations/shoot_oak
 		file_pos=0.0000 0.0000
-		file_size=172.0000 177.0000
-		offset=-31.0000 11.5000
+		file_size=177.0000 181.0000
+		offset=-29.5000 11.5000
 	}
 }
 body_parts
