@@ -1518,7 +1518,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
             }
             forIdx(l, m2Ptr->links) {
                 if(m2Ptr->links[l] == mPtr) {
-                    m2Ptr->links.erase(m2Ptr->links.begin() + l);
+                    eraseInVector(m2Ptr->links, l);
                     l--;
                 }
             }

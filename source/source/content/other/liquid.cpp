@@ -357,7 +357,7 @@ void Liquid::tick(float deltaT) {
         }
         
         if(mustRemove) {
-            freezeCaughtMobs.erase(freezeCaughtMobs.begin() + m);
+            eraseInVector(freezeCaughtMobs, m);
             m--;
             continue;
         }

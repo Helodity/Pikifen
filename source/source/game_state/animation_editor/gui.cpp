@@ -1075,7 +1075,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
             string curAnimName = curAnimInst.curAnim->name;
             size_t nr = db.findAnimation(curAnimName);
             delete db.animations[nr];
-            db.animations.erase(db.animations.begin() + nr);
+            eraseInVector(db.animations, nr);
             if(db.animations.empty()) {
                 curAnimInst.clear();
             } else {
@@ -1247,9 +1247,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
                 string deletedPartName =
                     db.bodyParts[selectedPart]->name;
                 delete db.bodyParts[selectedPart];
-                db.bodyParts.erase(
-                    db.bodyParts.begin() + selectedPart
-                );
+                eraseInVector(db.bodyParts, selectedPart);
                 if(db.bodyParts.empty()) {
                     selectedPart = -1;
                 } else if(selectedPart > 0) {

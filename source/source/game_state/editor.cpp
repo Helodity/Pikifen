@@ -2429,7 +2429,7 @@ void Editor::processDialogs() {
                 dPtr->closeCallback();
             }
             delete dPtr;
-            dialogs.erase(dialogs.begin() + d);
+            eraseInVector(dialogs, d);
         } else {
             d++;
         }
@@ -4058,7 +4058,7 @@ void Editor::updateHistory(
         );
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
-        history.erase(history.begin() + pos);
+        eraseInVector(history, pos);
         history.insert(
             history.begin(),
             make_pair(manifest.path, finalName)
@@ -4066,7 +4066,7 @@ void Editor::updateHistory(
     }
     
     if(history.size() > getHistorySize()) {
-        history.erase(history.begin() + history.size() - 1);
+        eraseInVector(history, history.size() - 1);
     }
     
     //Save the history in the options.

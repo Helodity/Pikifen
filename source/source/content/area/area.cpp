@@ -566,7 +566,7 @@ void Area::deleteEdge(size_t eIdx) {
     }
     
     delete edges[eIdx];
-    edges.erase(edges.begin() + eIdx);
+    eraseInVector(edges, eIdx);
 }
 
 
@@ -602,7 +602,7 @@ void Area::deleteSector(size_t sIdx) {
     }
     
     delete sectors[sIdx];
-    sectors.erase(sectors.begin() + sIdx);
+    eraseInVector(sectors, sIdx);
 }
 
 
@@ -638,7 +638,7 @@ void Area::deleteVertex(size_t vIdx) {
     }
     
     delete vertexes[vIdx];
-    vertexes.erase(vertexes.begin() + vIdx);
+    eraseInVector(vertexes, vIdx);
 }
 
 

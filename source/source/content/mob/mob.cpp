@@ -1149,7 +1149,7 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
         }
         
         if(!valid) {
-            possibleOnions.erase(possibleOnions.begin() + o);
+            eraseInVector(possibleOnions, o);
         } else {
             o++;
         }
@@ -1181,7 +1181,7 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
             isInContainer(oPtr->oniType->nest->pikTypes, decidedType);
             
         if(!valid) {
-            possibleOnions.erase(possibleOnions.begin() + o);
+            eraseInVector(possibleOnions, o);
         } else {
             o++;
         }
@@ -1718,7 +1718,7 @@ void Mob::deleteDeactivatedStatusEffects() {
 void Mob::deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id) {
     for(size_t g = 0; g < particleGenerators.size();) {
         if(particleGenerators[g].id == id) {
-            particleGenerators.erase(particleGenerators.begin() + g);
+            eraseInVector(particleGenerators, g);
         } else {
             g++;
         }
@@ -3356,7 +3356,7 @@ void Mob::release(Mob* m) {
     }
     
     m->scriptVM.fsm.runEvent(FSM_EV_RELEASED, (void*) this);
-    holding.erase(holding.begin() + idx);
+    eraseInVector(holding, idx);
     m->holder.clear();
     
     if(standingOnMob) {
@@ -3936,7 +3936,7 @@ void Mob::swallowChompedPikmin(Mob* mPtr) {
         game.statistics.pikminEaten++;
     }
     
-    chompingMobs.erase(chompingMobs.begin() + idx);
+    eraseInVector(chompingMobs, idx);
     
 }
 
@@ -4067,7 +4067,7 @@ void Mob::tickAnimation(float deltaT) {
     for(size_t h = 0; h < hitOpponents.size();) {
         hitOpponents[h].first -= deltaT;
         if(hitOpponents[h].first <= 0.0f) {
-            hitOpponents.erase(hitOpponents.begin() + h);
+            eraseInVector(hitOpponents, h);
         } else {
             h++;
         }
@@ -4333,7 +4333,7 @@ void Mob::tickMiscLogic(float deltaT) {
             deltaT, game.states.gameplay->particles
         );
         if(particleGenerators[g].emission.interval == 0) {
-            particleGenerators.erase(particleGenerators.begin() + g);
+            eraseInVector(particleGenerators, g);
         } else {
             g++;
         }

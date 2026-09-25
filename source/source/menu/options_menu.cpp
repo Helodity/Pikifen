@@ -581,7 +581,7 @@ void OptionsMenu::deleteBind(
     forIdx(b, allBinds) {
         if(allBinds[b].actionTypeId != actionType) continue;
         if(bindsCounted == bindIdx) {
-            allBinds.erase(allBinds.begin() + b);
+            eraseInVector(allBinds, b);
             break;
         } else {
             bindsCounted++;
@@ -1786,7 +1786,7 @@ void OptionsMenu::load() {
     //Delete any duplicates.
     for(size_t p = 0; p < resolutionPresets.size() - 1;) {
         if(resolutionPresets[p] == resolutionPresets[p + 1]) {
-            resolutionPresets.erase(resolutionPresets.begin() + (p + 1));
+            eraseInVector(resolutionPresets, (p + 1));
         } else {
             p++;
         }
@@ -1928,7 +1928,7 @@ void OptionsMenu::restoreDefaultBinds(
             allBinds[b].playerNr == 0 &&
             allBinds[b].actionTypeId == actionTypeId
         ) {
-            allBinds.erase(allBinds.begin() + b);
+            eraseInVector(allBinds, b);
         } else {
             b++;
         }

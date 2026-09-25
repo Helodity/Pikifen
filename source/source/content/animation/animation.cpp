@@ -100,7 +100,7 @@ void Animation::deleteFrame(size_t idx) {
         //Stop the loop frame from going out of bounds.
         loopFrame--;
     }
-    frames.erase(frames.begin() + idx);
+    eraseInVector(frames, idx);
 }
 
 
@@ -298,7 +298,7 @@ void AnimationDatabase::deleteSprite(size_t idx) {
     }
     
     delete sprites[idx];
-    sprites.erase(sprites.begin() + idx);
+    eraseInVector(sprites, idx);
     
     forIdx(a, animations) {
         Animation* aPtr = animations[a];

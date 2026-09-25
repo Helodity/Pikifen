@@ -3916,8 +3916,8 @@ void Whistle::tick(
         //Delete rings that go beyond the leader's cursor.
         rings[r] += WHISTLE::RING_SPEED * deltaT;
         if(leaderToCursorDist < rings[r]) {
-            rings.erase(rings.begin() + r);
-            ringColors.erase(ringColors.begin() + r);
+            eraseInVector(rings, r);
+            eraseInVector(ringColors, r);
         } else {
             r++;
         }

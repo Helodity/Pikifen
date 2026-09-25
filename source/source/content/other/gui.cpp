@@ -572,7 +572,7 @@ bool GuiItem::removeChild(GuiItem* item) {
     bool success = false;
     forIdx(c, children) {
         if(children[c] == item) {
-            children.erase(children.begin() + c);
+            eraseInVector(children, c);
             item->parent = nullptr;
             success = true;
         }
@@ -1536,7 +1536,7 @@ bool GuiManager::removeItem(GuiItem* item) {
     
     forIdx(i, items) {
         if(items[i] == item) {
-            items.erase(items.begin() + i);
+            eraseInVector(items, i);
             item->manager = nullptr;
             success = true;
         }

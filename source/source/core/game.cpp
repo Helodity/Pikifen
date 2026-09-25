@@ -351,9 +351,9 @@ void Game::globalLogicPre() {
     //Player action handling.
     for(size_t a = 0; a < controls.actionQueue.size();) {
         if(makerTools.handleGeneralPlayerAction(controls.actionQueue[a])) {
-            controls.actionQueue.erase(controls.actionQueue.begin() + a);
+            eraseInVector(controls.actionQueue, a);
         } else if(globalHandleSystemPlayerAction(controls.actionQueue[a])) {
-            controls.actionQueue.erase(controls.actionQueue.begin() + a);
+            eraseInVector(controls.actionQueue, a);
         } else {
             a++;
         }

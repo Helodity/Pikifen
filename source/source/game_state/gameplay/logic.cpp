@@ -95,9 +95,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             leaderToCursorDist;
             
         if(maxDist < player->leaderPtr->swarmArrows[a]) {
-            player->leaderPtr->swarmArrows.erase(
-                player->leaderPtr->swarmArrows.begin() + a
-            );
+            eraseInVector(player->leaderPtr->swarmArrows, a);
         } else {
             a++;
         }
@@ -1036,7 +1034,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     curArea.weatherCondition.
                     precipitationSpeed.getRandomNumber() * deltaT;
                 if(precipitation[p].y > scrH) {
-                    precipitation.erase(precipitation.begin() + p);
+                    eraseInVector(precipitation, p);
                 } else {
                     p++;
                 }

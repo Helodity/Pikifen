@@ -3333,9 +3333,8 @@ void AreaEditor::processGuiPanelMissionBriefing() {
                 )
             ) {
                 registerChange("mission briefing note deletion");
-                game.curArea->mission.briefingNotes.erase(
-                    game.curArea->mission.briefingNotes.begin() +
-                    prevCurNoteIdx
+                eraseInVector(
+                    game.curArea->mission.briefingNotes, prevCurNoteIdx
                 );
                 setStatus(
                     "Deleted mission briefing note #" +
@@ -3437,9 +3436,8 @@ void AreaEditor::processGuiPanelMissionEndCond() {
                 )
             ) {
                 registerChange("mission end condition deletion");
-                game.curArea->mission.endConds.erase(
-                    game.curArea->mission.endConds.begin() +
-                    prevCurCondIdx
+                eraseInVector(
+                    game.curArea->mission.endConds, prevCurCondIdx
                 );
                 setStatus(
                     "Deleted mission end condition #" +
@@ -4040,9 +4038,8 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                 )
             ) {
                 registerChange("mission mob group deletion");
-                game.curArea->mission.mobGroups.erase(
-                    game.curArea->mission.mobGroups.begin() +
-                    prevCurMobGroupIdx
+                eraseInVector(
+                    game.curArea->mission.mobGroups, prevCurMobGroupIdx
                 );
                 forIdx(e, game.curArea->mission.endConds) {
                     MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
@@ -4223,9 +4220,8 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 )
             ) {
                 registerChange("mission score criterion deletion");
-                game.curArea->mission.scoreCriteria.erase(
-                    game.curArea->mission.scoreCriteria.begin() +
-                    prevCurCriterionIdx
+                eraseInVector(
+                    game.curArea->mission.scoreCriteria, prevCurCriterionIdx
                 );
                 setStatus(
                     "Deleted mission score criterion #" +

@@ -175,7 +175,7 @@ void StatusManager::deactivate(size_t idx) {
     if(sPtr->type->buildup > 0.0f) {
         for(size_t b = 0; b < buildups.size(); ) {
             if(buildups[b].type == sPtr->type) {
-                buildups.erase(buildups.begin() + b);
+                eraseInVector(buildups, b);
             } else {
                 b++;
             }
@@ -192,7 +192,7 @@ void StatusManager::deactivate(size_t idx) {
     deactivated.push_back(*sPtr);
     
     //Remove it from the activated list.
-    statuses.erase(statuses.begin() + idx);
+    eraseInVector(statuses, idx);
 }
 
 
@@ -482,7 +482,7 @@ void StatusManager::tick(float deltaT) {
         }
         
         if(toDelete) {
-            buildups.erase(buildups.begin() + s);
+            eraseInVector(buildups, s);
         } else {
             s++;
         }
@@ -499,7 +499,7 @@ void StatusManager::tick(float deltaT) {
         }
         
         if(toDelete) {
-            cooldowns.erase(cooldowns.begin() + s);
+            eraseInVector(cooldowns, s);
         } else {
             s++;
         }

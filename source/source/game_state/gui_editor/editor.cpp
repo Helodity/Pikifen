@@ -379,8 +379,8 @@ void GuiEditor::deleteSelectedItems() {
         ((CustomGuiItemDef*) allItems[itemIdxToDelete])->clearBitmap();
         
         //Delete it.
-        customItems.erase(customItems.begin() + customIdx);
-        allItems.erase(allItems.begin() + itemIdxToDelete);
+        eraseInVector(customItems, customIdx);
+        eraseInVector(allItems, itemIdxToDelete);
         
         //Adjust the indexes of the next ones to process.
         itemIdxsToDelete.erase(itemIdxsToDelete.begin());

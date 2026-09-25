@@ -18,6 +18,7 @@
 
 #include "../lib/data_file/data_file.hpp"
 #include "allegro_utils.hpp"
+#include "container_utils.hpp"
 #include "geometry_utils.hpp"
 #include "math_utils.hpp"
 #include "string_utils.hpp"
@@ -226,9 +227,9 @@ struct KeyframeInterpolator {
      * @param idx Its index.
      */
     void deleteKeyframe(size_t idx) {
-        keyframeTimes.erase(keyframeTimes.begin() + idx);
-        keyframeValues.erase(keyframeValues.begin() + idx);
-        keyframeEases.erase(keyframeEases.begin() + idx);
+        eraseInVector(keyframeTimes, idx);
+        eraseInVector(keyframeValues, idx);
+        eraseInVector(keyframeEases, idx);
     }
     
     

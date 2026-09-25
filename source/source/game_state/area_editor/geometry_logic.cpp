@@ -541,8 +541,8 @@ void AreaEditor::deleteSelectedMobs() {
             if(!m2Ptr) continue;
             for(size_t l = 0; l < m2Ptr->links.size(); ) {
                 if(m2Ptr->linkIdxs[l] == mobIdxToDelete) {
-                    m2Ptr->links.erase(m2Ptr->links.begin() + l);
-                    m2Ptr->linkIdxs.erase(m2Ptr->linkIdxs.begin() + l);
+                    eraseInVector(m2Ptr->links, l);
+                    eraseInVector(m2Ptr->linkIdxs, l);
                 } else {
                     adjustMisalignedIndex(
                         m2Ptr->linkIdxs[l], mobIdxToDelete, false
@@ -567,7 +567,7 @@ void AreaEditor::deleteSelectedMobs() {
             MissionMobGroup* cPtr = &game.curArea->mission.mobGroups[c];
             for(size_t m = 0; m < cPtr->mobIdxs.size();) {
                 if(cPtr->mobIdxs[m] == mobIdxToDelete) {
-                    cPtr->mobIdxs.erase(cPtr->mobIdxs.begin() + m);
+                    eraseInVector(cPtr->mobIdxs, m);
                 } else {
                     adjustMisalignedIndex(
                         cPtr->mobIdxs[m], mobIdxToDelete, false
@@ -579,9 +579,7 @@ void AreaEditor::deleteSelectedMobs() {
         
         //Delete it.
         delete game.curArea->mobGenerators[mobIdxToDelete];
-        game.curArea->mobGenerators.erase(
-            game.curArea->mobGenerators.begin() + mobIdxToDelete
-        );
+        eraseInVector(game.curArea->mobGenerators, mobIdxToDelete);
         
         //Adjust the indexes of the next ones to process.
         mobIdxsToDelete.erase(mobIdxsToDelete.begin());
@@ -612,9 +610,7 @@ void AreaEditor::deleteSelectedPathLinks() {
         if(elPtr->link2) elPtr->link2->startPtr->deleteLink(elPtr->link2);
         
         //Delete it.
-        game.curArea->editorPathLinks.erase(
-            game.curArea->editorPathLinks.begin() + linkIdxToDelete
-        );
+        eraseInVector(game.curArea->editorPathLinks, linkIdxToDelete);
         
         //Adjust the indexes of the next ones to process.
         linksIdxsToDelete.erase(linksIdxsToDelete.begin());
@@ -645,9 +641,7 @@ void AreaEditor::deleteSelectedPathStops() {
         
         //Delete it.
         delete game.curArea->pathStops[stopIdxToDelete];
-        game.curArea->pathStops.erase(
-            game.curArea->pathStops.begin() + stopIdxToDelete
-        );
+        eraseInVector(game.curArea->pathStops, stopIdxToDelete);
         
         //Adjust the indexes of the next ones to process.
         stopIdxsToDelete.erase(stopIdxsToDelete.begin());
@@ -685,9 +679,7 @@ void AreaEditor::deleteSelectedRegions() {
         
         //Delete it.
         delete game.curArea->regions[regionIdxToDelete];
-        game.curArea->regions.erase(
-            game.curArea->regions.begin() + regionIdxToDelete
-        );
+        eraseInVector(game.curArea->regions, regionIdxToDelete);
         
         //Adjust the indexes of the next ones to process.
         regionIdxsToDelete.erase(regionIdxsToDelete.begin());
@@ -714,9 +706,7 @@ void AreaEditor::deleteSelectedTreeShadows() {
         
         //Delete it.
         delete game.curArea->treeShadows[shadowIdxToDelete];
-        game.curArea->treeShadows.erase(
-            game.curArea->treeShadows.begin() + shadowIdxToDelete
-        );
+        eraseInVector(game.curArea->treeShadows, shadowIdxToDelete);
         
         //Adjust the indexes of the next ones to process.
         shadowIdxsToDelete.erase(shadowIdxsToDelete.begin());
@@ -2891,7 +2881,7 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
             for(size_t vIdx : selectedVertexes) {
                 forIdx(v2, vertexesToCheck) {
                     if(vertexesToCheck[v2] == game.curArea->vertexes[vIdx]) {
-                        vertexesToCheck.erase(vertexesToCheck.begin() + v2);
+                        eraseInVector(vertexesToCheck, v2);
                         break;
                     }
                 }

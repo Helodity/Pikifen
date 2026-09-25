@@ -2027,7 +2027,7 @@ void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
     if(!isIdxValid(idx, items)) idx = items.size() - 1;
     
     if(isIdxValid(idx, items)) {
-        items.erase(items.begin() + idx);
+        eraseInVector(items, idx);
     }
     string newListStr = join(items, delChar);
     

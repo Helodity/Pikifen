@@ -2058,9 +2058,7 @@ void AnimationEditor::updateHitboxes() {
             }
             
             if(!nameFound) {
-                sPtr->hitboxes.erase(
-                    sPtr->hitboxes.begin() + h
-                );
+                eraseInVector(sPtr->hitboxes, h);
             } else {
                 h++;
             }
