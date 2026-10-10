@@ -260,8 +260,23 @@ void loadMiscGraphics() {
     al_set_display_icon(game.display, game.sysContent.bmpIcon);
     
     //Graphics.
-    game.sysContent.bmpMenuIcons =
+
+    //Menu icons and subbitmaps
+    game.sysContent.bmpMenuIconsParent =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMenuIcons);
+    //All icons are square, and in a row, so the spritesheet height works.
+    int iconSize =
+        al_get_bitmap_height(game.sysContent.bmpMenuIconsParent);
+    for(size_t i = 0; i < N_MENU_ICONS; i++) {
+        game.sysContent.bmpMenuIcons.push_back(
+            al_create_sub_bitmap(
+                game.sysContent.bmpMenuIconsParent,
+                (iconSize + 1) * i, 0,
+                iconSize, iconSize
+            )
+        );
+    }
+
     game.sysContent.bmpArrowDown =
         game.content.bitmaps.list.get(game.sysContentNames.bmpArrowDown);
     game.sysContent.bmpArrowLeft =
@@ -340,7 +355,7 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalPlatinum);
     game.sysContent.bmpMedalSilver =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalSilver);
-    game.sysContent.bmpMenuIcons =
+    game.sysContent.bmpMenuIconsParent =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMenuIcons);
     game.sysContent.bmpMissionMob =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMissionMob);
@@ -603,7 +618,6 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpMedalNone);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalPlatinum);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalSilver);
-    game.content.bitmaps.list.free(game.sysContent.bmpMenuIcons);
     game.content.bitmaps.list.free(game.sysContent.bmpMissionMob);
     game.content.bitmaps.list.free(game.sysContent.bmpMore);
     game.content.bitmaps.list.free(game.sysContent.bmpMouseCursor);
@@ -632,6 +646,14 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpWaveRing);
     game.content.bitmaps.list.free(game.sysContent.bmpWordmark);
     
+    //Menu icons
+    game.content.bitmaps.list.free(game.sysContent.bmpMenuIconsParent);
+    while(game.sysContent.bmpMenuIcons.size() > 0) {
+        game.content.bitmaps.list.free(game.sysContent.bmpMenuIcons[0]);
+        game.sysContent.bmpMenuIcons.erase(game.sysContent.bmpMenuIcons.begin());
+    }
+
+
     //Fonts.
     al_destroy_font(game.sysContent.fntAreaName);
     al_destroy_font(game.sysContent.fntCounter);

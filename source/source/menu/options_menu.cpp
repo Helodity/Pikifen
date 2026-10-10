@@ -1480,15 +1480,16 @@ void OptionsMenu::initGuiTopPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    auto getIconAlignment = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def)) 
+        ? ALLEGRO_ALIGN_LEFT : ALLEGRO_ALIGN_RIGHT;
     };
     
-    bool controlsIconLeft = getIconLeft("controls", "true");
-    bool graphicsIconLeft = getIconLeft("graphics", "true");
-    bool audioIconLeft = getIconLeft("audio", "true");
-    bool packsIconLeft = getIconLeft("packs", "true");
-    bool miscIconLeft = getIconLeft("misc", "true");
+    bool controlsIconAlignment = getIconAlignment("controls", "true");
+    bool graphicsIconAlignment = getIconAlignment("graphics", "true");
+    bool audioIconAlignment = getIconAlignment("audio", "true");
+    bool packsIconAlignment = getIconAlignment("packs", "true");
+    bool miscIconAlignment = getIconAlignment("misc", "true");
     
     //Menu items.
     topGui.registerCoords("back",       12,  5, 20,  6);
@@ -1521,15 +1522,8 @@ void OptionsMenu::initGuiTopPage() {
     
     //Controls options button.
     ButtonGuiItem* controlsButton =
-        new ButtonGuiItem("Controls", game.sysContent.fntStandard);
-    controlsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_CONTROLS, draw.center, draw.size, controlsIconLeft,
-            draw.tint
-        );
-        controlsButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Controls", game.sysContent.fntStandard, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_CONTROLS], controlsIconAlignment);
     controlsButton->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -1543,15 +1537,8 @@ void OptionsMenu::initGuiTopPage() {
     
     //Graphics options button.
     ButtonGuiItem* graphicsButton =
-        new ButtonGuiItem("Graphics", game.sysContent.fntStandard);
-    graphicsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_GRAPHICS, draw.center, draw.size, graphicsIconLeft,
-            draw.tint
-        );
-        graphicsButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Graphics", game.sysContent.fntStandard, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_GRAPHICS], graphicsIconAlignment);
     graphicsButton->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -1565,14 +1552,8 @@ void OptionsMenu::initGuiTopPage() {
     
     //Audio options button.
     ButtonGuiItem* audioButton =
-        new ButtonGuiItem("Audio", game.sysContent.fntStandard);
-    audioButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_AUDIO, draw.center, draw.size, audioIconLeft, draw.tint
-        );
-        audioButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Audio", game.sysContent.fntStandard, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_AUDIO], audioIconAlignment);
     audioButton->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -1586,14 +1567,8 @@ void OptionsMenu::initGuiTopPage() {
     
     //Packs options button.
     ButtonGuiItem* packsButton =
-        new ButtonGuiItem("Packs", game.sysContent.fntStandard);
-    packsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_PACKS, draw.center, draw.size, packsIconLeft, draw.tint
-        );
-        packsButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Packs", game.sysContent.fntStandard, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_PACKS], packsIconAlignment);
     packsButton->onActivate =
     [this] (const Point&) {
         packsMenu = new PacksMenu();
@@ -1617,15 +1592,8 @@ void OptionsMenu::initGuiTopPage() {
     
     //Misc. options button.
     ButtonGuiItem* miscButton =
-        new ButtonGuiItem("Misc.", game.sysContent.fntStandard);
-    miscButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_OPTIONS_MISC, draw.center, draw.size, miscIconLeft,
-            draw.tint
-        );
-        packsButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Misc.", game.sysContent.fntStandard, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_OPTIONS_MISC], miscIconAlignment);
     miscButton->onActivate =
     [this] (const Point&) {
         transitionGuis(

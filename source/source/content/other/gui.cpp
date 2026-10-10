@@ -165,12 +165,15 @@ void BulletGuiItem::defDrawCode(const DrawInfo& draw) {
  * @param color Color of the button's text.
  */
 ButtonGuiItem::ButtonGuiItem(
-    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color
+    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color,
+    ALLEGRO_BITMAP* iconBmp, const int iconAlignment
 ) :
     GuiItem(true),
     text(text),
     font(font),
-    color(color) {
+    color(color),
+    iconBmp(iconBmp),
+    iconAlignment(iconAlignment) {
     
     onDraw =
     [this] (const DrawInfo & draw) {
@@ -187,6 +190,14 @@ ButtonGuiItem::ButtonGuiItem(
 void ButtonGuiItem::defDrawCode(
     const DrawInfo& info
 ) {
+    if(iconBmp) {
+        drawBitmapInBox(
+            iconBmp, getIconCenter(info.center, info.size),
+            Point(info.size.y),
+            true, true, 0.0f, info.tint
+        );
+    }
+
     drawText(
         text, font, info.center, info.size * GUI::STANDARD_CONTENT_SIZE,
         tintColor(this->color, info.tint),
@@ -203,6 +214,21 @@ void ButtonGuiItem::defDrawCode(
     drawTexturedBox(
         info.center, info.size, game.sysContent.bmpBubbleBox, boxTint
     );
+}
+
+
+Point ButtonGuiItem::getIconCenter(Point btnCenter, Point btnSize) {
+    //Center alignment handled by default
+    float xPos = btnCenter.x;
+    switch(iconAlignment) {
+        case ALLEGRO_ALIGN_LEFT:
+            xPos = btnCenter.x - btnSize.x * 0.5 + btnSize.y * 0.5;
+        break;
+        case ALLEGRO_ALIGN_RIGHT:
+            xPos = btnCenter.x + btnSize.x * 0.5 - btnSize.y * 0.5;
+        break;
+    }
+    return Point(xPos, btnCenter.y);
 }
 
 

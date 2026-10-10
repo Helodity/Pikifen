@@ -1040,7 +1040,9 @@ struct SystemContentList {
     ALLEGRO_BITMAP* bmpMedalSilver = nullptr;
     
     //Icons for menu buttons.
-    ALLEGRO_BITMAP* bmpMenuIcons = nullptr;
+    ALLEGRO_BITMAP* bmpMenuIconsParent = nullptr;
+
+    vector<ALLEGRO_BITMAP*> bmpMenuIcons;
     
     //Mission mob marker.
     ALLEGRO_BITMAP* bmpMissionMob = nullptr;

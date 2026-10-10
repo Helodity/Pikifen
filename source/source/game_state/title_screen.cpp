@@ -74,16 +74,16 @@ void MainMenu::initGuiMainPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    auto getIconAlignment = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def)) ? ALLEGRO_ALIGN_LEFT : ALLEGRO_ALIGN_RIGHT;
     };
     
-    bool playIconLeft = getIconLeft("play", "true");
-    bool makeIconLeft = getIconLeft("make", "false");
-    bool helpIconLeft = getIconLeft("help", "true");
-    bool optionsIconLeft = getIconLeft("options", "true");
-    bool statsIconLeft = getIconLeft("statistics", "true");
-    bool quitIconLeft = getIconLeft("quit", "false");
+    int playIconAlignment = getIconAlignment("play", "true");
+    int makeIconAlignment = getIconAlignment("make", "false");
+    int helpIconAlignment = getIconAlignment("help", "true");
+    int optionsIconAlignment = getIconAlignment("options", "true");
+    int statsIconAlignment = getIconAlignment("statistics", "true");
+    int quitIconAlignment = getIconAlignment("quit", "false"); 
     
     //Menu items.
     mainGui.registerCoords("play",       42, 58, 44, 12);
@@ -100,14 +100,8 @@ void MainMenu::initGuiMainPage() {
     
     //Play button.
     ButtonGuiItem* playButton =
-        new ButtonGuiItem("Play", game.sysContent.fntAreaName);
-    playButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_PLAY, draw.center, draw.size, playIconLeft, draw.tint
-        );
-        playButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Play", game.sysContent.fntAreaName,
+        COLOR_WHITE, game.sysContent.bmpMenuIcons[MENU_ICON_PLAY], playIconAlignment);
     playButton->onActivate =
     [this] (const Point&) {
         if(game.statistics.areaEntries == 0) {
@@ -167,14 +161,8 @@ void MainMenu::initGuiMainPage() {
     
     //Make button.
     ButtonGuiItem* makeButton =
-        new ButtonGuiItem("Make", game.sysContent.fntAreaName);
-    makeButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft, draw.tint
-        );
-        makeButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Make", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_MAKE], makeIconAlignment);
     makeButton->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -188,14 +176,8 @@ void MainMenu::initGuiMainPage() {
     
     //Help button.
     ButtonGuiItem* helpButton =
-        new ButtonGuiItem("Help", game.sysContent.fntAreaName);
-    helpButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_HELP, draw.center, draw.size, helpIconLeft, draw.tint
-        );
-        helpButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Help", game.sysContent.fntAreaName, 
+            COLOR_WHITE, game.sysContent.bmpMenuIcons[MENU_ICON_HELP], helpIconAlignment);
     helpButton->onActivate =
     [this] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
@@ -212,15 +194,8 @@ void MainMenu::initGuiMainPage() {
     
     //Options button.
     ButtonGuiItem* optionsButton =
-        new ButtonGuiItem("Options", game.sysContent.fntAreaName);
-    optionsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft,
-            draw.tint
-        );
-        optionsButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Options", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_OPTIONS], optionsIconAlignment);
     optionsButton->onActivate =
     [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
@@ -239,15 +214,8 @@ void MainMenu::initGuiMainPage() {
     
     //Statistics button.
     ButtonGuiItem* statsButton =
-        new ButtonGuiItem("Statistics", game.sysContent.fntAreaName);
-    statsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft,
-            draw.tint
-        );
-        statsButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Statistics", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_STATISTICS], statsIconAlignment);
     statsButton->onActivate =
     [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
@@ -311,16 +279,9 @@ void MainMenu::initGuiMainPage() {
     //Exit button.
     mainGui.backItem =
         new ButtonGuiItem(
-        "Exit", game.sysContent.fntAreaName, game.config.guiColors.bad
+        "Exit", game.sysContent.fntAreaName, game.config.guiColors.bad, 
+        game.sysContent.bmpMenuIcons[MENU_ICON_QUIT], quitIconAlignment
     );
-    mainGui.backItem->onDraw =
-    [this, quitIconLeft] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft, draw.tint
-        );
-        ButtonGuiItem* backButtonPtr = (ButtonGuiItem*) mainGui.backItem;
-        backButtonPtr->defDrawCode(draw);
-    };
     mainGui.backItem->onActivate =
     [] (const Point&) {
         saveStatistics();
@@ -360,14 +321,14 @@ void MainMenu::initGuiMakePage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    auto getIconAlignment = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def)) ? ALLEGRO_ALIGN_LEFT : ALLEGRO_ALIGN_RIGHT;
     };
     
-    bool animEditorIconLeft = getIconLeft("animation_editor", "true");
-    bool areaEditorIconLeft = getIconLeft("area_editor", "false");
-    bool particleEditorIconLeft = getIconLeft("particle_editor", "true");
-    bool guiEditorIconLeft = getIconLeft("gui_editor", "false");
+    int animEditorIconAlignment = getIconAlignment("animation_editor", "true");
+    int areaEditorIconAlignment = getIconAlignment("area_editor", "false");
+    int particleEditorIconAlignment = getIconAlignment("particle_editor", "true");
+    int guiEditorIconAlignment = getIconAlignment("gui_editor", "false");
     
     //Menu items.
     makeGui.registerCoords("animation_editor", 27.5, 63, 43, 12);
@@ -382,15 +343,8 @@ void MainMenu::initGuiMakePage() {
     
     //Animation editor button.
     ButtonGuiItem* animEdButton =
-        new ButtonGuiItem("Animations", game.sysContent.fntAreaName);
-    animEdButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft,
-            draw.tint
-        );
-        animEdButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Animations", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_ANIM_EDITOR], animEditorIconAlignment);
     animEdButton->onActivate =
     [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
@@ -403,15 +357,8 @@ void MainMenu::initGuiMakePage() {
     
     //Area editor button.
     ButtonGuiItem* areaEdButton =
-        new ButtonGuiItem("Areas", game.sysContent.fntAreaName);
-    areaEdButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft,
-            draw.tint
-        );
-        areaEdButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Areas", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_AREA_EDITOR], areaEditorIconAlignment);
     areaEdButton->onActivate =
     [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
@@ -424,20 +371,8 @@ void MainMenu::initGuiMakePage() {
     
     //Particle editor button.
     ButtonGuiItem* partEdButton =
-        new ButtonGuiItem("Particles", game.sysContent.fntAreaName);
-    partEdButton->onDraw =
-    [ = ](const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size,
-            particleEditorIconLeft, draw.tint
-        );
-        partEdButton->defDrawCode(draw);(
-            draw.center, draw.size,
-            partEdButton->text, partEdButton->font,
-            partEdButton->color, partEdButton->focused,
-            partEdButton->getJuiceValue(), draw.tint
-        );
-    };
+        new ButtonGuiItem("Particles", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_PARTICLE_EDITOR], particleEditorIconAlignment);
     partEdButton->onActivate =
     [](const Point&) {
         game.fadeMgr.startFade(false, []() {
@@ -450,15 +385,8 @@ void MainMenu::initGuiMakePage() {
     
     //GUI editor button.
     ButtonGuiItem* guiEdButton =
-        new ButtonGuiItem("GUI", game.sysContent.fntAreaName);
-    guiEdButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft,
-            draw.tint
-        );
-        guiEdButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("GUI", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_GUI_EDITOR], guiEditorIconAlignment);
     guiEdButton->onActivate =
     [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
@@ -552,12 +480,12 @@ void MainMenu::initGuiPlayPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    auto getIconAlignment = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def)) ? ALLEGRO_ALIGN_LEFT : ALLEGRO_ALIGN_RIGHT;
     };
     
-    bool simpleAreasIconLeft = getIconLeft("simple_areas", "true");
-    bool missionsIconLeft = getIconLeft("missions", "true");
+    int simpleAreasIconAlignment = getIconAlignment("simple_areas", "true");
+    bool missionsIconAlignment = getIconAlignment("missions", "true");
     
     //Menu items.
     playGui.registerCoords("simple",     42, 60, 60, 12.5);
@@ -569,15 +497,8 @@ void MainMenu::initGuiPlayPage() {
     
     //Play a simple area button.
     ButtonGuiItem* simpleButton =
-        new ButtonGuiItem("Simple areas", game.sysContent.fntAreaName);
-    simpleButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft,
-            draw.tint
-        );
-        simpleButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Simple areas", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_SIMPLE_AREAS], simpleAreasIconAlignment);
     simpleButton->onActivate =
     [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
@@ -594,15 +515,8 @@ void MainMenu::initGuiPlayPage() {
     
     //Play a mission area button.
     ButtonGuiItem* missionButton =
-        new ButtonGuiItem("Missions", game.sysContent.fntAreaName);
-    missionButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft,
-            draw.tint
-        );
-        missionButton->defDrawCode(draw);
-    };
+        new ButtonGuiItem("Missions", game.sysContent.fntAreaName, COLOR_WHITE, 
+            game.sysContent.bmpMenuIcons[MENU_ICON_MISSIONS], missionsIconAlignment);
     missionButton->onActivate =
     [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {

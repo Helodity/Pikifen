@@ -469,18 +469,27 @@ public:
     //Icon to display on the button
     ALLEGRO_BITMAP* iconBmp = nullptr;
 
-    bool iconLeftSide = false;
+    //ALLEGRO_ALIGN value for positioning
+    int iconAlignment = ALLEGRO_ALIGN_LEFT;
     
     
     //--- Public function declarations ---
     
     ButtonGuiItem(
         const string& text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR& color = COLOR_WHITE
+        const ALLEGRO_COLOR& color = COLOR_WHITE,
+        ALLEGRO_BITMAP* iconBmp = nullptr, 
+        const int alignment = ALLEGRO_ALIGN_LEFT
     );
     
     void defDrawCode(const DrawInfo& draw);
     
+private:
+
+    //--- Private function declarations ---
+
+    Point getIconCenter(Point btnCenter, Point btnSize);
+
 };
 
 

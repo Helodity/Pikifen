@@ -1054,36 +1054,6 @@ void drawMenuBackground(const float alpha) {
 
 
 /**
- * @brief Draws the icon for a menu button.
- *
- * @param icon Icon ID.
- * @param buttonCenter Center coordinates of the button.
- * @param buttonSize Dimensions of the button.
- * @param leftSide If true, place the icon to the left side of the button.
- * If false, place it to the right.
- * @param tint Color to tint with.
- */
-void drawMenuButtonIcon(
-    MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
-    bool leftSide, const ALLEGRO_COLOR& tint
-) {
-    ALLEGRO_BITMAP* bmp = getMenuButtonIcon(icon);
-    Point iconCenter(
-        leftSide ?
-        buttonCenter.x - buttonSize.x * 0.5 + buttonSize.y * 0.5 :
-        buttonCenter.x + buttonSize.x * 0.5 - buttonSize.y * 0.5,
-        buttonCenter.y
-    );
-    drawBitmapInBox(
-        bmp, iconCenter,
-        Point(buttonSize.y),
-        true, true, 0.0f, tint
-    );
-    al_destroy_bitmap(bmp);
-}
-
-
-/**
  * @brief Draws a mob's shadow.
  *
  * @param m mob to draw the shadow for.
@@ -1681,13 +1651,5 @@ float getInputSourceIconWidth(
 }
 
 ALLEGRO_BITMAP* getMenuButtonIcon(MENU_ICON icon) {
-    //All icons are square, and in a row, so the spritesheet height works.
-    int iconSize =
-        al_get_bitmap_height(game.sysContent.bmpMenuIcons);
-    return
-        al_create_sub_bitmap(
-            game.sysContent.bmpMenuIcons,
-            (iconSize + 1) * (int) icon, 0,
-            iconSize, iconSize
-        );
+    return game.sysContent.bmpMenuIcons[icon];
 }

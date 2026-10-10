@@ -102,6 +102,9 @@ enum MENU_ICON {
     
     //Options menu misc. button.
     MENU_ICON_OPTIONS_MISC,
+
+    //Total Number of menu icons
+    N_MENU_ICONS
 };
 
 
@@ -179,5 +182,4 @@ float getInputSourceIconWidth(
     const Inpution::InputSource& s, const ALLEGRO_FONT* font,
     bool condensed, float maxBitmapHeight = 0
 );
-ALLEGRO_BITMAP* getMenuButtonIcon(MENU_ICON icon);
 
