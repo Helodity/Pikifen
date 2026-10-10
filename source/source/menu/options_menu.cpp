@@ -216,12 +216,7 @@ void OptionsMenu::addNewBindEntryItems(
                     false, game.sysContent.fntSlim, draw.tint
                 );
                 
-                drawButton(
-                    draw.center, draw.size,
-                    "", game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->focused,
-                    bindButton->getJuiceValue(), draw.tint
-                );
+                bindButton->defDrawCode(draw);
             };
             bindButton->ratioRect.center =
                 Point(0.63f, curY);
@@ -238,20 +233,10 @@ void OptionsMenu::addNewBindEntryItems(
             if(showingBindsMore && actionType.id == curActionType) {
                 //Delete bind button.
                 ButtonGuiItem* deleteBindButton =
-                    new ButtonGuiItem("", game.sysContent.fntStandard);
+                    new ButtonGuiItem("X", game.sysContent.fntStandard);
                 deleteBindButton->onActivate =
                 [this, actionType, b] (const Point&) {
                     deleteBind(actionType.id, b);
-                };
-                deleteBindButton->onDraw =
-                    [this, deleteBindButton]
-                (const DrawInfo & draw) {
-                    drawButton(
-                        draw.center, draw.size, "X",
-                        game.sysContent.fntStandard, COLOR_WHITE,
-                        deleteBindButton->focused,
-                        deleteBindButton->getJuiceValue(), draw.tint
-                    );
                 };
                 deleteBindButton->ratioRect.center =
                     Point(0.85f, curY);
@@ -285,16 +270,6 @@ void OptionsMenu::addNewBindEntryItems(
             bindButton->onActivate =
             [this, actionType] (const Point&) {
                 chooseInput(actionType.id, 0);
-            };
-            bindButton->onDraw =
-                [this, bindButton]
-            (const DrawInfo & draw) {
-                drawButton(
-                    draw.center, draw.size, "",
-                    game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->focused,
-                    bindButton->getJuiceValue(), draw.tint
-                );
             };
             bindButton->ratioRect.center =
                 Point(0.63f, curY);
@@ -1553,13 +1528,7 @@ void OptionsMenu::initGuiTopPage() {
             MENU_ICON_CONTROLS, draw.center, draw.size, controlsIconLeft,
             draw.tint
         );
-        drawButton(
-            draw.center, draw.size,
-            controlsButton->text, controlsButton->font,
-            controlsButton->color,
-            controlsButton->focused,
-            controlsButton->getJuiceValue(), draw.tint
-        );
+        controlsButton->defDrawCode(draw);
     };
     controlsButton->onActivate =
     [this] (const Point&) {
@@ -1581,13 +1550,7 @@ void OptionsMenu::initGuiTopPage() {
             MENU_ICON_GRAPHICS, draw.center, draw.size, graphicsIconLeft,
             draw.tint
         );
-        drawButton(
-            draw.center, draw.size,
-            graphicsButton->text, graphicsButton->font,
-            graphicsButton->color,
-            graphicsButton->focused,
-            graphicsButton->getJuiceValue(), draw.tint
-        );
+        graphicsButton->defDrawCode(draw);
     };
     graphicsButton->onActivate =
     [this] (const Point&) {
@@ -1608,12 +1571,7 @@ void OptionsMenu::initGuiTopPage() {
         drawMenuButtonIcon(
             MENU_ICON_AUDIO, draw.center, draw.size, audioIconLeft, draw.tint
         );
-        drawButton(
-            draw.center, draw.size,
-            audioButton->text, audioButton->font,
-            audioButton->color, audioButton->focused,
-            audioButton->getJuiceValue(), draw.tint
-        );
+        audioButton->defDrawCode(draw);
     };
     audioButton->onActivate =
     [this] (const Point&) {
@@ -1634,12 +1592,7 @@ void OptionsMenu::initGuiTopPage() {
         drawMenuButtonIcon(
             MENU_ICON_PACKS, draw.center, draw.size, packsIconLeft, draw.tint
         );
-        drawButton(
-            draw.center, draw.size,
-            packsButton->text, packsButton->font,
-            packsButton->color, packsButton->focused,
-            packsButton->getJuiceValue(), draw.tint
-        );
+        packsButton->defDrawCode(draw);
     };
     packsButton->onActivate =
     [this] (const Point&) {
@@ -1671,12 +1624,7 @@ void OptionsMenu::initGuiTopPage() {
             MENU_ICON_OPTIONS_MISC, draw.center, draw.size, miscIconLeft,
             draw.tint
         );
-        drawButton(
-            draw.center, draw.size,
-            miscButton->text, miscButton->font,
-            miscButton->color, miscButton->focused,
-            miscButton->getJuiceValue(), draw.tint
-        );
+        packsButton->defDrawCode(draw);
     };
     miscButton->onActivate =
     [this] (const Point&) {

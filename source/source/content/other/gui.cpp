@@ -185,12 +185,23 @@ ButtonGuiItem::ButtonGuiItem(
  * @param draw Information on how to draw.
  */
 void ButtonGuiItem::defDrawCode(
-    const DrawInfo& draw
+    const DrawInfo& info
 ) {
-    drawButton(
-        draw.center, draw.size,
-        this->text, this->font, this->color,
-        focused, getJuiceValue(), draw.tint
+    drawText(
+        text, font, info.center, info.size * GUI::STANDARD_CONTENT_SIZE,
+        tintColor(this->color, info.tint),
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW,
+        Point(1.0 + getJuiceValue())
+    );
+    
+    ALLEGRO_COLOR boxTint =
+        focused ?
+        tintColor(game.config.guiColors.focusedItem, info.tint) :
+        info.tint;
+        
+    drawTexturedBox(
+        info.center, info.size, game.sysContent.bmpBubbleBox, boxTint
     );
 }
 

@@ -116,11 +116,6 @@ void drawBackgroundLogos(
 void drawBitmapWithEffects(
     ALLEGRO_BITMAP* bmp, const BitmapEffect& effects
 );
-void drawButton(
-    const Point& center, const Point& size, const string& text,
-    const ALLEGRO_FONT* font, const ALLEGRO_COLOR& textColor, bool focused,
-    float juicyGrowAmount = 0.0f, const ALLEGRO_COLOR& tint = COLOR_WHITE
-);
 void drawFraction(
     const Point& bottom, size_t valueNr,
     size_t requirementNr, const ALLEGRO_COLOR& color, float scale
@@ -184,3 +179,5 @@ float getInputSourceIconWidth(
     const Inpution::InputSource& s, const ALLEGRO_FONT* font,
     bool condensed, float maxBitmapHeight = 0
 );
+ALLEGRO_BITMAP* getMenuButtonIcon(MENU_ICON icon);
+

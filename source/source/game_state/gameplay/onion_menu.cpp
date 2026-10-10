@@ -288,16 +288,6 @@ OnionMenu::OnionMenu(
         ButtonGuiItem* onionButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
         onionButton->forceSquare = true;
-        onionButton->onDraw =
-        [this, onionButton] (const DrawInfo & draw) {
-            float juicyGrowAmount = onionButton->getJuiceValue();
-            drawButton(
-                draw.center,
-                draw.size + juicyGrowAmount,
-                "", game.sysContent.fntStandard, COLOR_WHITE,
-                onionButton->focused, 0.0f, draw.tint
-            );
-        };
         onionButton->onActivate =
         [this, t, onionButton] (const Point&) {
             doButtonLogic(false, t, false);
@@ -385,16 +375,6 @@ OnionMenu::OnionMenu(
         ButtonGuiItem* groupButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
         groupButton->forceSquare = true;
-        groupButton->onDraw =
-        [this, groupButton] (const DrawInfo & draw) {
-            float juicyGrowAmount = groupButton->getJuiceValue();
-            drawButton(
-                draw.center,
-                draw.size + juicyGrowAmount,
-                "", game.sysContent.fntStandard, COLOR_WHITE,
-                groupButton->focused, 0.0f, draw.tint
-            );
-        };
         groupButton->onActivate =
         [this, t, groupButton] (const Point&) {
             doButtonLogic(true, t, false);
@@ -481,16 +461,6 @@ OnionMenu::OnionMenu(
     //Onion's all button.
     onionAllButton =
         new ButtonGuiItem("", game.sysContent.fntStandard);
-    onionAllButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = onionAllButton->getJuiceValue();
-        drawButton(
-            draw.center,
-            draw.size + juicyGrowAmount,
-            "", game.sysContent.fntStandard, COLOR_WHITE,
-            onionAllButton->focused, 0.0f, draw.tint
-        );
-    };
     onionAllButton->onActivate =
     [this] (const Point&) {
         doButtonLogic(false, 0, false);
@@ -513,16 +483,6 @@ OnionMenu::OnionMenu(
     //Group's all button.
     groupAllButton =
         new ButtonGuiItem("", game.sysContent.fntStandard);
-    groupAllButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = groupAllButton->getJuiceValue();
-        drawButton(
-            draw.center,
-            draw.size + juicyGrowAmount,
-            "", game.sysContent.fntStandard, COLOR_WHITE,
-            groupAllButton->focused, 0.0f, draw.tint
-        );
-    };
     groupAllButton->onActivate =
     [this] (const Point&) {
         doButtonLogic(true, 0, false);

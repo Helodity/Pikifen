@@ -636,15 +636,11 @@ void AreaMenu::initGuiMain() {
         randomButton->forceSquare = true;
         randomButton->onDraw =
         [randomButton] (const DrawInfo & draw) {
-            drawButton(
-                draw.center, draw.size, "",
-                game.sysContent.fntStandard, COLOR_WHITE,
-                randomButton->focused, 0.0f, draw.tint
-            );
             drawBitmapInBox(
                 game.sysContent.bmpRandom,
                 draw.center, draw.size - 8, true, true, 0.0f, draw.tint
             );
+            randomButton->defDrawCode(draw);
         };
         randomButton->onActivate =
         [this] (const Point&) {

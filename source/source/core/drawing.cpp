@@ -306,43 +306,6 @@ void drawBitmapWithEffects(
 
 
 /**
- * @brief Draws a button.
- *
- * @param center Center coordinates.
- * @param size Width and height.
- * @param text Text inside the button.
- * @param font What font to write the text in.
- * @param textColor Color to draw the text with.
- * @param focused Is the button currently focused?
- * @param juicyGrowAmount If it's in the middle of a juicy grow animation,
- * specify the amount here.
- * @param tint General tint color.
- */
-void drawButton(
-    const Point& center, const Point& size, const string& text,
-    const ALLEGRO_FONT* font, const ALLEGRO_COLOR& textColor,
-    bool focused, float juicyGrowAmount, const ALLEGRO_COLOR& tint
-) {
-    drawText(
-        text, font, center, size * GUI::STANDARD_CONTENT_SIZE,
-        tintColor(textColor, tint),
-        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-        TEXT_SETTING_FLAG_CANT_GROW,
-        Point(1.0 + juicyGrowAmount)
-    );
-    
-    ALLEGRO_COLOR boxTint =
-        focused ?
-        tintColor(game.config.guiColors.focusedItem, tint) :
-        tint;
-        
-    drawTexturedBox(
-        center, size, game.sysContent.bmpBubbleBox, boxTint
-    );
-}
-
-
-/**
  * @brief Draws a fraction, so one number above another, divided by a bar.
  * The top number usually represents the current value of some attribute,
  * and the bottom number usually represents the required value for some goal.
@@ -1104,15 +1067,7 @@ void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
     bool leftSide, const ALLEGRO_COLOR& tint
 ) {
-    //All icons are square, and in a row, so the spritesheet height works.
-    int iconSize =
-        al_get_bitmap_height(game.sysContent.bmpMenuIcons);
-    ALLEGRO_BITMAP* bmp =
-        al_create_sub_bitmap(
-            game.sysContent.bmpMenuIcons,
-            (iconSize + 1) * (int) icon, 0,
-            iconSize, iconSize
-        );
+    ALLEGRO_BITMAP* bmp = getMenuButtonIcon(icon);
     Point iconCenter(
         leftSide ?
         buttonCenter.x - buttonSize.x * 0.5 + buttonSize.y * 0.5 :
@@ -1723,4 +1678,16 @@ float getInputSourceIconWidth(
             al_get_text_width(font, text.c_str()) +
             BIND_INPUT_ICON::PADDING * 2;
     }
+}
+
+ALLEGRO_BITMAP* getMenuButtonIcon(MENU_ICON icon) {
+    //All icons are square, and in a row, so the spritesheet height works.
+    int iconSize =
+        al_get_bitmap_height(game.sysContent.bmpMenuIcons);
+    return
+        al_create_sub_bitmap(
+            game.sysContent.bmpMenuIcons,
+            (iconSize + 1) * (int) icon, 0,
+            iconSize, iconSize
+        );
 }

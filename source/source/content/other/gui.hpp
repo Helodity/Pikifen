@@ -465,6 +465,11 @@ public:
     
     //Color to tint the text with.
     ALLEGRO_COLOR color = COLOR_WHITE;
+
+    //Icon to display on the button
+    ALLEGRO_BITMAP* iconBmp = nullptr;
+
+    bool iconLeftSide = false;
     
     
     //--- Public function declarations ---
