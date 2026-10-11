@@ -233,7 +233,8 @@ void OptionsMenu::addNewBindEntryItems(
             if(showingBindsMore && actionType.id == curActionType) {
                 //Delete bind button.
                 ButtonGuiItem* deleteBindButton =
-                    new ButtonGuiItem("X", game.sysContent.fntStandard);
+                    new ButtonGuiItem("X", game.sysContent.fntStandard, 
+                        game.config.guiColors.bad);
                 deleteBindButton->onActivate =
                 [this, actionType, b] (const Point&) {
                     deleteBind(actionType.id, b);
