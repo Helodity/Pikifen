@@ -161,7 +161,8 @@ OnionMenu::OnionMenu(
     gui.addItem(fieldAmountText, "field");
     
     //Change ten at a time button.
-    changeTenButton = new ButtonGuiItem("", game.sysContent.fntStandard);
+    changeTenButton = new ButtonGuiItem("", game.sysContent.fntStandard, 
+        COLOR_WHITE, nullptr, ALLEGRO_ALIGN_CENTER);
     changeTenButton->forceSquare = true;
     changeTenButton->onActivate =
     [this] (const Point&) {
@@ -169,14 +170,9 @@ OnionMenu::OnionMenu(
     };
     changeTenButton->onDraw =
     [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = changeTenButton->getJuiceValue();
-        drawBitmapInBox(
-            changeTen ?
+        changeTenButton->iconBmp = changeTen ?
             game.sysContent.bmpOnionMenu10 :
-            game.sysContent.bmpOnionMenu1,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
-            0.0f, draw.tint
-        );
+            game.sysContent.bmpOnionMenu1;
         changeTenButton->defDrawCode(draw);
     };
     changeTenButton->onGetTooltip =
@@ -206,7 +202,8 @@ OnionMenu::OnionMenu(
     gui.addItem(changeTenInput, "change_ten_input");
     
     //Select all button.
-    selectAllButton = new ButtonGuiItem("", game.sysContent.fntStandard);
+    selectAllButton = new ButtonGuiItem("", game.sysContent.fntStandard, 
+        COLOR_WHITE, nullptr, ALLEGRO_ALIGN_CENTER);
     selectAllButton->forceSquare = true;
     selectAllButton->onActivate =
     [this] (const Point&) {
@@ -214,14 +211,9 @@ OnionMenu::OnionMenu(
     };
     selectAllButton->onDraw =
     [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = selectAllButton->getJuiceValue();
-        drawBitmapInBox(
-            selectAll ?
+        selectAllButton->iconBmp = selectAll ?
             game.sysContent.bmpOnionMenuAll :
-            game.sysContent.bmpOnionMenuSingle,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
-            0.0f, draw.tint
-        );
+            game.sysContent.bmpOnionMenuSingle;
         selectAllButton->defDrawCode(draw);
     };
     selectAllButton->visible = types.size() > 1;

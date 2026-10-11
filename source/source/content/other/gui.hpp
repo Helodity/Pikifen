@@ -469,7 +469,8 @@ public:
     //Icon to display on the button
     ALLEGRO_BITMAP* iconBmp = nullptr;
 
-    //ALLEGRO_ALIGN value for positioning
+    //Where the icon is positioned. When centered,
+    //The icon will be slightly smaller.
     int iconAlignment = ALLEGRO_ALIGN_LEFT;
     
     

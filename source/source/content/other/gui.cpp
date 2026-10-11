@@ -191,9 +191,14 @@ void ButtonGuiItem::defDrawCode(
     const DrawInfo& info
 ) {
     if(iconBmp) {
+        float bmpSize = 
+            iconAlignment == ALLEGRO_ALIGN_CENTER ? 
+                info.size.y * 0.8f : 
+                info.size.y;
+        bmpSize *= (1 + getJuiceValue());
         drawBitmapInBox(
             iconBmp, getIconCenter(info.center, info.size),
-            Point(info.size.y),
+            Point(bmpSize),
             true, true, 0.0f, info.tint
         );
     }

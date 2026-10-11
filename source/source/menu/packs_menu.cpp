@@ -209,18 +209,11 @@ void PacksMenu::initGuiMain() {
         //Move up button.
         if(p > 0) {
             ButtonGuiItem* upButton =
-                new ButtonGuiItem("", game.sysContent.fntStandard);
+                new ButtonGuiItem("", game.sysContent.fntStandard, 
+                    COLOR_WHITE, game.sysContent.bmpArrowUp, ALLEGRO_ALIGN_CENTER);
             upButton->forceSquare = true;
             upButton->ratioRect.center = Point(0.87f, rowCenterY);
             upButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
-            upButton->onDraw =
-            [upButton] (const DrawInfo & draw) {
-                upButton->defDrawCode(draw);
-                drawBitmapInBox(
-                    game.sysContent.bmpArrowUp, draw.center,
-                    draw.size * 0.80f, true, true, 0.0f, draw.tint
-                );
-            };
             upButton->onActivate =
             [p, this] (const Point&) {
                 std::iter_swap(
@@ -247,18 +240,11 @@ void PacksMenu::initGuiMain() {
         //Move down button.
         if(p < packOrder.size() - 1) {
             ButtonGuiItem* downButton =
-                new ButtonGuiItem("", game.sysContent.fntStandard);
+                new ButtonGuiItem("", game.sysContent.fntStandard, 
+                    COLOR_WHITE, game.sysContent.bmpArrowDown, ALLEGRO_ALIGN_CENTER);
             downButton->forceSquare = true;
             downButton->ratioRect.center = Point(0.95f, rowCenterY);
             downButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
-            downButton->onDraw =
-            [downButton] (const DrawInfo & draw) {
-                downButton->defDrawCode(draw);
-                drawBitmapInBox(
-                    game.sysContent.bmpArrowDown, draw.center,
-                    draw.size * 0.80f, true, true, 0.0f, draw.tint
-                );
-            };
             downButton->onActivate =
             [p, this] (const Point&) {
                 std::iter_swap(

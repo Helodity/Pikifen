@@ -863,16 +863,9 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsGui.addItem(listScroll, "list_scroll");
     
     //Controls warning button.
-    bindsWarningButton = new ButtonGuiItem("", game.sysContent.fntStandard);
+    bindsWarningButton = new ButtonGuiItem("", game.sysContent.fntStandard, 
+        COLOR_WHITE, game.sysContent.bmpWarning, ALLEGRO_ALIGN_CENTER);
     bindsWarningButton->forceSquare = true;
-    bindsWarningButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        bindsWarningButton->defDrawCode(draw);
-        drawBitmapInBox(
-            game.sysContent.bmpWarning, draw.center, draw.size * 0.8f,
-            true, true, 0.0f, draw.tint
-        );
-    };
     bindsWarningButton->onActivate =
     [this] (const Point&) {
         game.modal.reset();

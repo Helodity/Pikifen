@@ -234,16 +234,9 @@ void MainMenu::initGuiMainPage() {
     
     //Discord server button.
     ButtonGuiItem* discordButton =
-        new ButtonGuiItem("", game.sysContent.fntAreaName);
+        new ButtonGuiItem("", game.sysContent.fntAreaName, 
+            COLOR_WHITE, game.sysContent.bmpDiscordIcon, ALLEGRO_ALIGN_CENTER);
     discordButton->forceSquare = true;
-    discordButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawBitmapInBox(
-            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f,
-            true, true, 0.0f, draw.tint
-        );
-        discordButton->defDrawCode(draw);
-    };
     discordButton->onActivate =
     [] (const Point&) {
         openWebBrowser(DISCORD_SERVER_URL);
@@ -258,16 +251,9 @@ void MainMenu::initGuiMainPage() {
     
     //GitHub page button.
     ButtonGuiItem* githubButton =
-        new ButtonGuiItem("", game.sysContent.fntAreaName);
+        new ButtonGuiItem("", game.sysContent.fntAreaName, 
+            COLOR_WHITE, game.sysContent.bmpGithubIcon, ALLEGRO_ALIGN_CENTER);
     githubButton->forceSquare = true;
-    githubButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawBitmapInBox(
-            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f,
-            true, true, 0.0f, draw.tint
-        );
-        githubButton->defDrawCode(draw);
-    };
     githubButton->onActivate =
     [] (const Point&) {
         openWebBrowser(GITHUB_PAGE_URL);

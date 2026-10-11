@@ -632,16 +632,9 @@ void AreaMenu::initGuiMain() {
         
         //Random button.
         ButtonGuiItem* randomButton =
-            new ButtonGuiItem("", game.sysContent.fntStandard);
+            new ButtonGuiItem("", game.sysContent.fntStandard, 
+                COLOR_WHITE, game.sysContent.bmpRandom, ALLEGRO_ALIGN_CENTER);
         randomButton->forceSquare = true;
-        randomButton->onDraw =
-        [randomButton] (const DrawInfo & draw) {
-            drawBitmapInBox(
-                game.sysContent.bmpRandom,
-                draw.center, draw.size - 8, true, true, 0.0f, draw.tint
-            );
-            randomButton->defDrawCode(draw);
-        };
         randomButton->onActivate =
         [this] (const Point&) {
             size_t areaIdx = game.rng.i(0, (int) (areaButtons.size() - 1));
