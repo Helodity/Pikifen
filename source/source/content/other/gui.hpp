@@ -474,6 +474,9 @@ public:
     //The icon will be slightly smaller.
     int iconAlignment = ALLEGRO_ALIGN_LEFT;
     
+    //The last time this button was focused. Used for animations
+    float lastFocusTime = 0;
+
     //--- Public function declarations ---
     
     ButtonGuiItem(
@@ -486,11 +489,6 @@ public:
     void defDrawCode(const DrawInfo& draw);
     
 private:
-
-    //--- Private members ---
-
-    //The last time this button was focused. Used for animations
-    float lastFocusTime = 0;
 
     //--- Private function declarations ---
 

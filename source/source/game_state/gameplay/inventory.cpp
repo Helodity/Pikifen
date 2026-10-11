@@ -304,7 +304,10 @@ void Inventory::populateInventoryListGui() {
             tryUseItem(i);
         };
         button->onGetTooltip = [iPtr] () { return iPtr->name; };
-        button->onFocused = [this, i] () { focusedItemIdx = i; };
+        button->onFocused = [this, i, button] () { 
+            button->lastFocusTime = game.timePassed; 
+            focusedItemIdx = i; 
+        };
         itemList->addChild(button);
         gui.addItem(button);
         

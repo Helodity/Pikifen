@@ -554,7 +554,10 @@ void AreaMenu::initGuiMain() {
                 });
             };
             areaButton->onFocused =
-            [this, a] () { changeInfo(a); };
+            [this, a, areaButton] () { 
+                areaButton->lastFocusTime = game.timePassed;
+                changeInfo(a); 
+            };
             areaButton->onGetTooltip =
             [areaPtr] () { return "Play " + areaPtr->name + "."; };
             listBox->addChild(areaButton);

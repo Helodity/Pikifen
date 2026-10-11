@@ -228,7 +228,10 @@ void PacksMenu::initGuiMain() {
                 triggerRestartWarning();
                 populatePacksList();
             };
-            upButton->onFocused = [p, this] () { changeInfo((int) p); };
+            upButton->onFocused = [p, this, upButton] () { 
+                upButton->lastFocusTime = game.timePassed;
+                changeInfo((int) p); 
+            };
             upButton->onGetTooltip =
             [] () {
                 return "Move up on the list (make it be loaded earlier).";
@@ -259,7 +262,10 @@ void PacksMenu::initGuiMain() {
                 triggerRestartWarning();
                 populatePacksList();
             };
-            downButton->onFocused = [p, this] () { changeInfo((int) p); };
+            downButton->onFocused = [p, this, downButton] () { 
+                downButton->lastFocusTime = game.timePassed;
+                changeInfo((int) p); 
+            };
             downButton->onGetTooltip =
             [] () {
                 return "Move down on the list (make it be loaded later).";
