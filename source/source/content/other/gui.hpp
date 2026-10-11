@@ -41,6 +41,7 @@ extern const float AUTO_REPEAT_MIN_INTERVAL;
 extern const float AUTO_REPEAT_RAMP_TIME;
 extern const float BULLET_PADDING;
 extern const float BULLET_RADIUS;
+extern const float BUTTON_FOCUS_ANIM_DURATION;
 extern const unsigned char DRAWING_LAYER_CUSTOM_AFTER;
 extern const unsigned char DRAWING_LAYER_CUSTOM_BEFORE;
 extern const unsigned char DRAWING_LAYER_NORMAL;
@@ -473,7 +474,6 @@ public:
     //The icon will be slightly smaller.
     int iconAlignment = ALLEGRO_ALIGN_LEFT;
     
-    
     //--- Public function declarations ---
     
     ButtonGuiItem(
@@ -486,6 +486,11 @@ public:
     void defDrawCode(const DrawInfo& draw);
     
 private:
+
+    //--- Private members ---
+
+    //The last time this button was focused. Used for animations
+    float lastFocusTime = 0;
 
     //--- Private function declarations ---
 

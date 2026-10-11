@@ -40,6 +40,9 @@ const float BULLET_PADDING = 6.0f;
 //Radius of the circle that represents the bullet in a bullet point item.
 const float BULLET_RADIUS = 4.0f;
 
+//Duration of the animation when focusing a button.
+const float BUTTON_FOCUS_ANIM_DURATION = 0.2f;
+
 //Drawing layer for custom items meant to be drawn after the normal ones.
 const unsigned char DRAWING_LAYER_CUSTOM_AFTER = 20;
 
@@ -179,6 +182,10 @@ ButtonGuiItem::ButtonGuiItem(
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
+    onFocused = 
+    [this] () {
+        lastFocusTime = game.timePassed;
+    };
 }
 
 
@@ -190,21 +197,34 @@ ButtonGuiItem::ButtonGuiItem(
 void ButtonGuiItem::defDrawCode(
     const DrawInfo& info
 ) {
+    float focusAnimTime = interpolateNumber(
+        game.timePassed, 
+        lastFocusTime, 
+        lastFocusTime + GUI::BUTTON_FOCUS_ANIM_DURATION, 1, 0
+    );
+    focusAnimTime = ease(std::clamp(focusAnimTime, 0.0f, 1.0f), EASE_METHOD_IN);
+
+    //Appear slightly smaller when non focused
+    Point finalSize = info.size * 0.98f;
+    if(focused) {
+        finalSize = info.size * (1 - (0.02f * focusAnimTime));
+    }
+
     if(iconBmp) {
         float bmpSize = 
             iconAlignment == ALLEGRO_ALIGN_CENTER ? 
-                info.size.y * 0.8f : 
-                info.size.y;
+                finalSize.y * 0.8f : 
+                finalSize.y;
         bmpSize *= (1 + getJuiceValue());
         drawBitmapInBox(
-            iconBmp, getIconCenter(info.center, info.size),
+            iconBmp, getIconCenter(info.center, finalSize),
             Point(bmpSize),
             true, true, 0.0f, info.tint
         );
     }
 
     drawText(
-        text, font, info.center, info.size * GUI::STANDARD_CONTENT_SIZE,
+        text, font, info.center, finalSize * GUI::STANDARD_CONTENT_SIZE,
         tintColor(this->color, info.tint),
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
@@ -213,11 +233,14 @@ void ButtonGuiItem::defDrawCode(
     
     ALLEGRO_COLOR boxTint =
         focused ?
-        tintColor(game.config.guiColors.focusedItem, info.tint) :
+        interpolateColor(
+            focusAnimTime, 1, 0, 
+            info.tint, tintColor(game.config.guiColors.focusedItem, info.tint)
+        ) :
         info.tint;
         
     drawTexturedBox(
-        info.center, info.size, game.sysContent.bmpBubbleBox, boxTint
+        info.center, finalSize, game.sysContent.bmpBubbleBox, boxTint
     );
 }
 
