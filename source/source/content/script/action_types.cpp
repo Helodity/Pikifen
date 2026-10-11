@@ -118,6 +118,28 @@ void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the string int addition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::addIntToString(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& baseStrArg = data.args[1];
+    const string& newContentArg = data.args[2];
+    const string& addSpaceArg = data.args[3];
+    
+    //Main logic.
+    string result = baseStrArg;
+    if(s2b(addSpaceArg)) result += " ";
+    result += i2s(s2i(newContentArg));
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the string addition script action type.
  *
  * @param data Data about the action call.
@@ -1005,6 +1027,38 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
     data.scriptVM->getRunnerScriptVM()->focusedMob->scriptVM.vars.getValue(
         focusVarArg, result
     );
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
+ * @brief Code for the leader activity retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getLeaderActivity(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& targetArg = data.args[1];
+    
+    //Main logic.
+    SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
+        ScriptActionUtils::getMobTargetType(data, targetArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
+    
+    if(!target) return;
+    
+    bool result = false;
+    if(!target->group) {
+        result = false;
+    } else if(target->type->category->id != MOB_CATEGORY_LEADERS) {
+        result = false;
+    } else {
+        Leader* lPtr = (Leader*) target;
+        result = lPtr->player != nullptr;
+    }
     
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
@@ -3536,6 +3590,14 @@ Mob* ScriptActionUtils::getTargetMob(
             data.scriptVM->getRunnerMob()->parent
         ) {
             return data.scriptVM->getRunnerMob()->parent->m;
+        }
+        break;
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER: {
+        if(
+            data.scriptVM->getRunnerMob() &&
+            data.scriptVM->getRunnerMob()->followingGroup
+        ) {
+            return data.scriptVM->getRunnerMob()->followingGroup;
         }
         break;
     }

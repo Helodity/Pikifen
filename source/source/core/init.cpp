@@ -1035,6 +1035,11 @@ void initEventThings(
             )
         );
     }
+    if(game.options.graphics.vsync) {
+        al_set_new_display_option(
+            ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST
+        );
+    }
     game.display = al_create_display(game.winW, game.winH);
     
     //It's possible that this resolution is not valid for fullscreen.
@@ -1877,6 +1882,17 @@ void initScriptActionTypes() {
         ScriptActionRunners::addListItem
     );
     
+    //Add int to string.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("base string", ptString);
+    queueParam("number to add", ptFloat);
+    queueParam("add a space between", ptBool, pfOpt, "false");
+    commitAction(
+        SCRIPT_ACTION_ADD_INT_TO_STRING,
+        "add_int_to_string",
+        ScriptActionRunners::addIntToString
+    );
+    
     //Add to string.
     queueParam("destination var name", ptString, pfConst);
     queueParam("base string", ptString);
@@ -2118,6 +2134,15 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
         ScriptActionRunners::getFocusVar
+    );
+    
+    //Get leader activity.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("target", ptString);
+    commitAction(
+        SCRIPT_ACTION_GET_LEADER_ACTIVITY,
+        "get_leader_activity",
+        ScriptActionRunners::getLeaderActivity
     );
     
     //Get leader Pikmin count var.
