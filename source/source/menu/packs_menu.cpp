@@ -209,7 +209,7 @@ void PacksMenu::initGuiMain() {
         //Move up button.
         if(p > 0) {
             ButtonGuiItem* upButton =
-                new ButtonGuiItem("", game.sysContent.fntStandard, 
+                new IconButtonGuiItem("", game.sysContent.fntStandard, 
                     COLOR_WHITE, game.sysContent.bmpArrowUp, ALLEGRO_ALIGN_CENTER);
             upButton->forceSquare = true;
             upButton->ratioRect.center = Point(0.87f, rowCenterY);
@@ -243,7 +243,7 @@ void PacksMenu::initGuiMain() {
         //Move down button.
         if(p < packOrder.size() - 1) {
             ButtonGuiItem* downButton =
-                new ButtonGuiItem("", game.sysContent.fntStandard, 
+                new IconButtonGuiItem("", game.sysContent.fntStandard, 
                     COLOR_WHITE, game.sysContent.bmpArrowDown, ALLEGRO_ALIGN_CENTER);
             downButton->forceSquare = true;
             downButton->ratioRect.center = Point(0.95f, rowCenterY);

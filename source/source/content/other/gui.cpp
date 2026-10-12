@@ -168,15 +168,12 @@ void BulletGuiItem::defDrawCode(const DrawInfo& draw) {
  * @param color Color of the button's text.
  */
 ButtonGuiItem::ButtonGuiItem(
-    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color,
-    ALLEGRO_BITMAP* iconBmp, const int iconAlignment
+    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color
 ) :
     GuiItem(true),
     text(text),
     font(font),
-    color(color),
-    iconBmp(iconBmp),
-    iconAlignment(iconAlignment) {
+    color(color) {
     
     onDraw =
     [this] (const DrawInfo & draw) {
@@ -197,30 +194,12 @@ ButtonGuiItem::ButtonGuiItem(
 void ButtonGuiItem::defDrawCode(
     const DrawInfo& info
 ) {
-    float focusAnimTime = interpolateNumber(
-        game.timePassed, 
-        lastFocusTime, 
-        lastFocusTime + GUI::BUTTON_FOCUS_ANIM_DURATION, 1, 0
-    );
-    focusAnimTime = ease(std::clamp(focusAnimTime, 0.0f, 1.0f), EASE_METHOD_IN);
+    float focusAnimTime = getFocusAnimTime();
 
     //Appear slightly smaller when non focused
     Point finalSize = info.size * 0.98f;
     if(focused) {
         finalSize = info.size * (1 - (0.02f * focusAnimTime));
-    }
-
-    if(iconBmp) {
-        float bmpSize = 
-            iconAlignment == ALLEGRO_ALIGN_CENTER ? 
-                finalSize.y * 0.8f : 
-                finalSize.y;
-        bmpSize *= (1 + getJuiceValue());
-        drawBitmapInBox(
-            iconBmp, getIconCenter(info.center, finalSize),
-            Point(bmpSize),
-            true, true, 0.0f, info.tint
-        );
     }
 
     drawText(
@@ -245,7 +224,80 @@ void ButtonGuiItem::defDrawCode(
 }
 
 
-Point ButtonGuiItem::getIconCenter(Point btnCenter, Point btnSize) {
+float ButtonGuiItem::getFocusAnimTime() {
+    float focusAnimTime = interpolateNumber(
+        game.timePassed, 
+        lastFocusTime, 
+        lastFocusTime + GUI::BUTTON_FOCUS_ANIM_DURATION, 1, 0
+    );
+    return ease(std::clamp(focusAnimTime, 0.0f, 1.0f), EASE_METHOD_IN);
+}
+
+
+#pragma endregion
+#pragma region Icon Button
+
+/**
+ * @brief Constructs a new button GUI item object.
+ *
+ * @param text Text to display on the button.
+ * @param font Font for the button's text.
+ * @param color Color of the button's text.
+ */
+IconButtonGuiItem::IconButtonGuiItem(
+    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color,
+    ALLEGRO_BITMAP* iconBmp, const int iconAlignment
+) :
+    ButtonGuiItem(text, font, color),
+    iconBmp(iconBmp),
+    iconAlignment(iconAlignment) {
+    
+    onDraw =
+    [this] (const DrawInfo & draw) {
+        this->defDrawCode(draw);
+    };
+    onFocused = 
+    [this] () {
+        lastFocusTime = game.timePassed;
+    };
+}
+
+
+/**
+ * @brief Default icon button GUI item draw code.
+ *
+ * @param draw Information on how to draw.
+ */
+void IconButtonGuiItem::defDrawCode(
+    const DrawInfo& info
+) {
+    if(iconBmp) {
+        float focusAnimTime = getFocusAnimTime();
+
+        //Appear slightly smaller when non focused
+        Point finalSize = info.size * 0.98f;
+        if(focused) {
+            finalSize = info.size * (1 - (0.02f * focusAnimTime));
+        }
+
+        float bmpSize = 
+            iconAlignment == ALLEGRO_ALIGN_CENTER ? 
+                finalSize.y * 0.8f : 
+                finalSize.y;
+        bmpSize *= (1 + getJuiceValue());
+        drawBitmapInBox(
+            iconBmp, getIconCenter(info.center, finalSize),
+            Point(bmpSize),
+            true, true, 0.0f, info.tint
+        );
+    }
+
+    //Draw base button
+    ButtonGuiItem::defDrawCode(info);
+}
+
+
+Point IconButtonGuiItem::getIconCenter(Point btnCenter, Point btnSize) {
     //Center alignment handled by default
     float xPos = btnCenter.x;
     switch(iconAlignment) {

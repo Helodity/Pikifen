@@ -161,7 +161,7 @@ OnionMenu::OnionMenu(
     gui.addItem(fieldAmountText, "field");
     
     //Change ten at a time button.
-    changeTenButton = new ButtonGuiItem("", game.sysContent.fntStandard, 
+    changeTenButton = new IconButtonGuiItem("", game.sysContent.fntStandard, 
         COLOR_WHITE, nullptr, ALLEGRO_ALIGN_CENTER);
     changeTenButton->forceSquare = true;
     changeTenButton->onActivate =
@@ -202,7 +202,7 @@ OnionMenu::OnionMenu(
     gui.addItem(changeTenInput, "change_ten_input");
     
     //Select all button.
-    selectAllButton = new ButtonGuiItem("", game.sysContent.fntStandard, 
+    selectAllButton = new IconButtonGuiItem("", game.sysContent.fntStandard, 
         COLOR_WHITE, nullptr, ALLEGRO_ALIGN_CENTER);
     selectAllButton->forceSquare = true;
     selectAllButton->onActivate =

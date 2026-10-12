@@ -467,19 +467,43 @@ public:
     //Color to tint the text with.
     ALLEGRO_COLOR color = COLOR_WHITE;
 
-    //Icon to display on the button
-    ALLEGRO_BITMAP* iconBmp = nullptr;
-
-    //Where the icon is positioned. When centered,
-    //The icon will be slightly smaller.
-    int iconAlignment = ALLEGRO_ALIGN_LEFT;
-    
     //The last time this button was focused. Used for animations
     float lastFocusTime = 0;
 
     //--- Public function declarations ---
     
     ButtonGuiItem(
+        const string& text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR& color = COLOR_WHITE
+    );
+    
+    void defDrawCode(const DrawInfo& draw);
+
+protected:
+
+    float getFocusAnimTime();
+
+};
+
+
+/**
+ * @brief A GUI item with fields ready to make it behave like a button.
+ */
+class IconButtonGuiItem : public ButtonGuiItem {
+
+public:
+    //--- Public members ---
+
+    //Icon to display on the button
+    ALLEGRO_BITMAP* iconBmp = nullptr;
+
+    //Where the icon is positioned. When centered,
+    //The icon will be slightly smaller.
+    int iconAlignment = ALLEGRO_ALIGN_LEFT;
+
+    //--- Public function declarations ---
+    
+    IconButtonGuiItem(
         const string& text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR& color = COLOR_WHITE,
         ALLEGRO_BITMAP* iconBmp = nullptr, 

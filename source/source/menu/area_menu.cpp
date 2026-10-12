@@ -635,7 +635,7 @@ void AreaMenu::initGuiMain() {
         
         //Random button.
         ButtonGuiItem* randomButton =
-            new ButtonGuiItem("", game.sysContent.fntStandard, 
+            new IconButtonGuiItem("", game.sysContent.fntStandard, 
                 COLOR_WHITE, game.sysContent.bmpRandom, ALLEGRO_ALIGN_CENTER);
         randomButton->forceSquare = true;
         randomButton->onActivate =

@@ -97,7 +97,7 @@ void MainMenu::initGuiMainPage() {
     
     //Play button.
     ButtonGuiItem* playButton =
-        new ButtonGuiItem("Play", game.sysContent.fntAreaName,
+        new IconButtonGuiItem("Play", game.sysContent.fntAreaName,
         COLOR_WHITE, game.sysContent.bmpMenuIcons[MENU_ICON_PLAY], playIconAlignment);
     playButton->onActivate =
     [this] (const Point&) {
@@ -158,7 +158,7 @@ void MainMenu::initGuiMainPage() {
     
     //Make button.
     ButtonGuiItem* makeButton =
-        new ButtonGuiItem("Make", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Make", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_MAKE], makeIconAlignment);
     makeButton->onActivate =
     [this] (const Point&) {
@@ -173,7 +173,7 @@ void MainMenu::initGuiMainPage() {
     
     //Help button.
     ButtonGuiItem* helpButton =
-        new ButtonGuiItem("Help", game.sysContent.fntAreaName, 
+        new IconButtonGuiItem("Help", game.sysContent.fntAreaName, 
             COLOR_WHITE, game.sysContent.bmpMenuIcons[MENU_ICON_HELP], helpIconAlignment);
     helpButton->onActivate =
     [this] (const Point&) {
@@ -191,7 +191,7 @@ void MainMenu::initGuiMainPage() {
     
     //Options button.
     ButtonGuiItem* optionsButton =
-        new ButtonGuiItem("Options", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Options", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_OPTIONS], optionsIconAlignment);
     optionsButton->onActivate =
     [] (const Point&) {
@@ -211,7 +211,7 @@ void MainMenu::initGuiMainPage() {
     
     //Statistics button.
     ButtonGuiItem* statsButton =
-        new ButtonGuiItem("Statistics", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Statistics", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_STATISTICS], statsIconAlignment);
     statsButton->onActivate =
     [] (const Point&) {
@@ -231,7 +231,7 @@ void MainMenu::initGuiMainPage() {
     
     //Discord server button.
     ButtonGuiItem* discordButton =
-        new ButtonGuiItem("", game.sysContent.fntAreaName, 
+        new IconButtonGuiItem("", game.sysContent.fntAreaName, 
             COLOR_WHITE, game.sysContent.bmpDiscordIcon, ALLEGRO_ALIGN_CENTER);
     discordButton->forceSquare = true;
     discordButton->onActivate =
@@ -248,7 +248,7 @@ void MainMenu::initGuiMainPage() {
     
     //GitHub page button.
     ButtonGuiItem* githubButton =
-        new ButtonGuiItem("", game.sysContent.fntAreaName, 
+        new IconButtonGuiItem("", game.sysContent.fntAreaName, 
             COLOR_WHITE, game.sysContent.bmpGithubIcon, ALLEGRO_ALIGN_CENTER);
     githubButton->forceSquare = true;
     githubButton->onActivate =
@@ -261,7 +261,7 @@ void MainMenu::initGuiMainPage() {
     
     //Exit button.
     mainGui.backItem =
-        new ButtonGuiItem(
+        new IconButtonGuiItem(
         "Exit", game.sysContent.fntAreaName, game.config.guiColors.bad, 
         game.sysContent.bmpMenuIcons[MENU_ICON_QUIT], quitIconAlignment
     );
@@ -326,7 +326,7 @@ void MainMenu::initGuiMakePage() {
     
     //Animation editor button.
     ButtonGuiItem* animEdButton =
-        new ButtonGuiItem("Animations", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Animations", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_ANIM_EDITOR], animEditorIconAlignment);
     animEdButton->onActivate =
     [] (const Point&) {
@@ -340,7 +340,7 @@ void MainMenu::initGuiMakePage() {
     
     //Area editor button.
     ButtonGuiItem* areaEdButton =
-        new ButtonGuiItem("Areas", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Areas", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_AREA_EDITOR], areaEditorIconAlignment);
     areaEdButton->onActivate =
     [] (const Point&) {
@@ -354,7 +354,7 @@ void MainMenu::initGuiMakePage() {
     
     //Particle editor button.
     ButtonGuiItem* partEdButton =
-        new ButtonGuiItem("Particles", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Particles", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_PARTICLE_EDITOR], particleEditorIconAlignment);
     partEdButton->onActivate =
     [](const Point&) {
@@ -368,7 +368,7 @@ void MainMenu::initGuiMakePage() {
     
     //GUI editor button.
     ButtonGuiItem* guiEdButton =
-        new ButtonGuiItem("GUI", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("GUI", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_GUI_EDITOR], guiEditorIconAlignment);
     guiEdButton->onActivate =
     [] (const Point&) {
@@ -480,7 +480,7 @@ void MainMenu::initGuiPlayPage() {
     
     //Play a simple area button.
     ButtonGuiItem* simpleButton =
-        new ButtonGuiItem("Simple areas", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Simple areas", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_SIMPLE_AREAS], simpleAreasIconAlignment);
     simpleButton->onActivate =
     [] (const Point&) {
@@ -498,7 +498,7 @@ void MainMenu::initGuiPlayPage() {
     
     //Play a mission area button.
     ButtonGuiItem* missionButton =
-        new ButtonGuiItem("Missions", game.sysContent.fntAreaName, COLOR_WHITE, 
+        new IconButtonGuiItem("Missions", game.sysContent.fntAreaName, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_MISSIONS], missionsIconAlignment);
     missionButton->onActivate =
     [] (const Point&) {

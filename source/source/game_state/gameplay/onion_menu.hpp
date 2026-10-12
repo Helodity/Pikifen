@@ -141,10 +141,10 @@ struct OnionMenu {
     ListGuiItem* listItem = nullptr;
     
     //"Change 10" mode toggle button.
-    ButtonGuiItem* changeTenButton = nullptr;
+    IconButtonGuiItem* changeTenButton = nullptr;
     
     //"Select all" mode toggle button.
-    ButtonGuiItem* selectAllButton = nullptr;
+    IconButtonGuiItem* selectAllButton = nullptr;
     
     //Dummy item used to help with padding the list. Cache for convenience.
     GuiItem* listPaddingDummyItem = nullptr;

@@ -864,7 +864,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsGui.addItem(listScroll, "list_scroll");
     
     //Controls warning button.
-    bindsWarningButton = new ButtonGuiItem("", game.sysContent.fntStandard, 
+    bindsWarningButton = new IconButtonGuiItem("", game.sysContent.fntStandard, 
         COLOR_WHITE, game.sysContent.bmpWarning, ALLEGRO_ALIGN_CENTER);
     bindsWarningButton->forceSquare = true;
     bindsWarningButton->onActivate =
@@ -1536,7 +1536,7 @@ void OptionsMenu::initGuiTopPage() {
     
     //Controls options button.
     ButtonGuiItem* controlsButton =
-        new ButtonGuiItem("Controls", game.sysContent.fntStandard, COLOR_WHITE, 
+        new IconButtonGuiItem("Controls", game.sysContent.fntStandard, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_CONTROLS], controlsIconAlignment);
     controlsButton->onActivate =
     [this] (const Point&) {
@@ -1551,7 +1551,7 @@ void OptionsMenu::initGuiTopPage() {
     
     //Graphics options button.
     ButtonGuiItem* graphicsButton =
-        new ButtonGuiItem("Graphics", game.sysContent.fntStandard, COLOR_WHITE, 
+        new IconButtonGuiItem("Graphics", game.sysContent.fntStandard, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_GRAPHICS], graphicsIconAlignment);
     graphicsButton->onActivate =
     [this] (const Point&) {
@@ -1566,7 +1566,7 @@ void OptionsMenu::initGuiTopPage() {
     
     //Audio options button.
     ButtonGuiItem* audioButton =
-        new ButtonGuiItem("Audio", game.sysContent.fntStandard, COLOR_WHITE, 
+        new IconButtonGuiItem("Audio", game.sysContent.fntStandard, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_AUDIO], audioIconAlignment);
     audioButton->onActivate =
     [this] (const Point&) {
@@ -1581,7 +1581,7 @@ void OptionsMenu::initGuiTopPage() {
     
     //Packs options button.
     ButtonGuiItem* packsButton =
-        new ButtonGuiItem("Packs", game.sysContent.fntStandard, COLOR_WHITE, 
+        new IconButtonGuiItem("Packs", game.sysContent.fntStandard, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_PACKS], packsIconAlignment);
     packsButton->onActivate =
     [this] (const Point&) {
@@ -1606,7 +1606,7 @@ void OptionsMenu::initGuiTopPage() {
     
     //Misc. options button.
     ButtonGuiItem* miscButton =
-        new ButtonGuiItem("Misc.", game.sysContent.fntStandard, COLOR_WHITE, 
+        new IconButtonGuiItem("Misc.", game.sysContent.fntStandard, COLOR_WHITE, 
             game.sysContent.bmpMenuIcons[MENU_ICON_OPTIONS_MISC], miscIconAlignment);
     miscButton->onActivate =
     [this] (const Point&) {
