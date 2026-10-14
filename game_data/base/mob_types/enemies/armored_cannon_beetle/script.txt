@@ -145,6 +145,7 @@ script {
         }
         on_frame_signal {
             play_sound steam sound_id
+            start_particles steam 0 0 101
         }
         on_animation_end {
             set_state moving_hot
@@ -161,7 +162,6 @@ script {
             get_random_float x -1000 1000
             get_random_float y -1000 1000
             move_to_relative $x $y
-            start_particles steam 0 0 101
         }
         on_timer {
             get_random_float x -1000 1000
