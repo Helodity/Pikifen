@@ -238,14 +238,16 @@ void Pikmin::finishDyingClassSpecifics() {
         center, LARGE_FLOAT,
         radius * 2, 2.0f
     );
+    par.size.addNew(1, radius * 3);
     par.bitmap = game.sysContent.bmpPikminSoul;
     par.friction = 0.8;
-    Point baseSpeed = Point(game.rng.f(-20, 20), game.rng.f(-70, -30));
-    par.linearSpeed = KeyframeInterpolator<Point>(baseSpeed);
-    par.linearSpeed.addNew(1, Point(Point(baseSpeed.x, baseSpeed.y - 20)));
+    Point baseSpeed = Point(game.rng.f(-20, 20), game.rng.f(-45, -35));
+    par.linearSpeed = KeyframeInterpolator<Point>(baseSpeed * 0.5f);
+    par.linearSpeed.addNew(0.1f, baseSpeed);
     par.color.setKeyframeValue(0, changeAlpha(pikType->mainColor, 0));
     par.color.addNew(0.1f, pikType->mainColor);
     par.color.addNew(1, changeAlpha(pikType->mainColor, 0));
+    par.blendType = PARTICLE_BLEND_TYPE_ADDITIVE;
     game.states.gameplay->particles.addParticle(par);
     
     //Sound. Create a positional sound source instead of a mob sound source,
