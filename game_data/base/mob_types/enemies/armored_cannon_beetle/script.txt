@@ -104,7 +104,7 @@ script {
             stop
             set_animation inhaling
             play_sound inhaling sound_id
-            start_particles armored_cannon_beetle_inhale 114 0 120
+            start_particles armored_cannon_beetle_inhale 85 0 120
             start_chomping 1 blowhole
         }
         on_leave {
@@ -131,7 +131,7 @@ script {
             set_animation spitting
         }
         on_frame_signal {
-            start_particles dust_spit 180 0
+            start_particles dust_spit 135 0
             spawn boulder
         }
         on_animation_end {

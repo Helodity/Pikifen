@@ -18,7 +18,7 @@ points = 80
 pushable = true
 pushes = true
 pushes_softly = true
-radius = 95
+radius = 72
 rotation_speed = 40
 target_type = enemy
 terrain_radius = 200
@@ -73,7 +73,7 @@ spawns {
     boulder {
         object = rolling_boulder
         relative = true
-        coordinates = 140 0 0
+        coordinates = 120 0 0
         angle = 0
     }
 }
