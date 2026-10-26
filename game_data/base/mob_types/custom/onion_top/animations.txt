@@ -1,0 +1,106 @@
+name=Adult Bulbmin stem animations
+description=Animations for the Adult Bulbmin stem.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	generating{
+		loop_frame=2
+		frames{
+			idling_4{
+				duration=0.2000
+				interpolate=true
+			}
+			idling{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_2{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_3{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_4{
+				duration=0.1000
+				interpolate=true
+			}
+			idling{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=2.0000
+				interpolate=true
+			}
+			idling_2{
+				duration=2.0000
+				interpolate=true
+			}
+			idling_3{
+				duration=2.0000
+				interpolate=true
+			}
+			idling_4{
+				duration=2.0000
+				interpolate=true
+			}
+		}
+	}
+	stopping_generation{
+		frames{
+			idling{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_2{
+				duration=0.1750
+				interpolate=true
+			}
+			idling_3{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_4{
+				duration=0.3000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=onions/onion_top
+		file_pos=0.0000 0.0000
+		file_size=192.0000 192.0000
+		scale=0.2500 0.2500
+	}
+	idling_2{
+		file=onions/onion_top
+		file_pos=0.0000 0.0000
+		file_size=192.0000 192.0000
+		scale=0.2500 0.2500
+		angle=1.5708
+	}
+	idling_3{
+		file=onions/onion_top
+		file_pos=0.0000 0.0000
+		file_size=192.0000 192.0000
+		scale=0.2500 0.2500
+		angle=3.1416
+	}
+	idling_4{
+		file=onions/onion_top
+		file_pos=0.0000 0.0000
+		file_size=192.0000 192.0000
+		scale=0.2500 0.2500
+		angle=4.7124
+	}
+}
+body_parts

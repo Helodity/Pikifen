@@ -1,0 +1,13 @@
+script {
+	generating {
+		on_enter {
+			send_message_to_links start_generating
+		}
+	}
+	stopping_generation {
+		on_enter {
+			send_message_to_links stop_generating
+		}
+	}
+
+}

@@ -10,7 +10,19 @@ pikmin_exit_speed = 2
 pikmin_types = purple_pikmin
 pushable = false
 pushes = false
-radius = 24
+radius = 28
+
+children {
+    top {
+        spawn = top
+        parent_holds = true
+        hold_body_part = top
+        hold_rotation_method = face_parent
+        handle_damage = false
+        handle_events = false
+        handle_statuses = false
+    }
+}
 
 sounds {
     beam {
@@ -46,6 +58,17 @@ sounds {
     }
 }
 
+spawns {
+    top {
+        object = onion_top
+        relative = true
+        coordinates = 0 0 0
+        angle = 0
+        link_spawn_to_object = true
+        link_object_to_spawn = true
+    }
+}
+
 maker = Espyo
-version = 1.0.0
+version = 1.1.0
 engine_version = 1.2.0
