@@ -53,10 +53,10 @@ Converter::Converter(
     autoConversionTimer(conType->autoConversionTimeout) {
     
     typeChangeTimer.onEnd =
-    [this] () { this->changeType(); };
-    
+        [this] () { this->changeType(); };
+        
     autoConversionTimer.onEnd =
-    [this] () { this->close(); };
+        [this] () { this->close(); };
 }
 
 

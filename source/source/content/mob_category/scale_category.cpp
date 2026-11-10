@@ -115,6 +115,8 @@ void ScaleCategory::getTypeNames(vector<string>& list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ScaleCategory::registerType(const string& internalName, MobType* type) {
+void ScaleCategory::registerType(
+    const string& internalName, MobType* type
+) {
     game.content.mobTypes.list.scale[internalName] = (ScaleType*) type;
 }

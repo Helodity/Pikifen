@@ -43,11 +43,11 @@ GuiEditor::GuiEditor() :
     zoomMinLevel = GUI_EDITOR::ZOOM_MIN_LEVEL;
     
     auto registerCmd =
-    [this] (void (GuiEditor::* func)(float), const string& name) {
-        commands.push_back(
-            Command(std::bind(func, this, std::placeholders::_1), name)
-        );
-    };
+        [this] (void (GuiEditor::* func)(float), const string & name) {
+            commands.push_back(
+                Command(std::bind(func, this, std::placeholders::_1), name)
+            );
+        };
     
     //Register commands.
     registerCmd(
@@ -70,41 +70,42 @@ GuiEditor::GuiEditor() :
     
     //Setup the selection manager and controller.
     itemSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = allItems[idx]->rect.center;
-        *outSize = allItems[idx]->rect.size;
-        *outAngle = 0.0f;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            *outCenter = allItems[idx]->rect.center;
+            *outSize = allItems[idx]->rect.size;
+            *outAngle = 0.0f;
+        };
     itemSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        allItems[idx]->rect.center = newCenter;
-        allItems[idx]->rect.size = newSize;
-    };
+        ) {
+            allItems[idx]->rect.center = newCenter;
+            allItems[idx]->rect.size = newSize;
+        };
     itemSelection.onGetTotal =
-    [this] () {
-        return allItems.size();
-    };
+        [this] () {
+            return allItems.size();
+        };
     itemSelection.onIsEligible =
-    [this] (size_t idx) {
-        bool isCustom = idx >= hardcodedItems.size();
-        if(isCustom && state != EDITOR_STATE_CUSTOM) return false;
-        if(!isCustom && state != EDITOR_STATE_HARDCODED) return false;
-        return true;
-    };
+        [this] (size_t idx) {
+            bool isCustom = idx >= hardcodedItems.size();
+            if(isCustom && state != EDITOR_STATE_CUSTOM) return false;
+            if(!isCustom && state != EDITOR_STATE_HARDCODED) return false;
+            return true;
+        };
     itemSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     itemSelection.itemsAreRectangular = true;
     itemSelection.itemsCanResize = true;
     itemSelection.itemsCanRotate = false;
     
     itemSelCtrl.managers.push_back(&itemSelection);
     itemSelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
+        [this] (const Point & p) { return snapPoint(p); };
     itemSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
     itemSelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
     itemSelCtrl.overlapsCycle = true;
@@ -125,15 +126,15 @@ void GuiEditor::addNewCustomItemCmd(float inputValue) {
     newItem.name =
         incrementNameTillUnique(
             "new_item",
-    [this] (const string& n) {
-        forIdx(i, allItems) {
-            if(allItems[i]->name == n) {
-                return false;
-            }
-        }
-        return true;
-    },
-    "_"
+            [this] (const string & n) {
+                forIdx(i, allItems) {
+                    if(allItems[i]->name == n) {
+                        return false;
+                    }
+                }
+                return true;
+            },
+            "_"
         );
         
     setToDefaults(&newItem);
@@ -151,7 +152,8 @@ void GuiEditor::addNewCustomItemCmd(float inputValue) {
 void GuiEditor::changeState(const EDITOR_STATE newState) {
     disableAllSelectionControllers(true);
     
-    if(newState == EDITOR_STATE_CUSTOM || newState == EDITOR_STATE_HARDCODED) {
+    if(newState == EDITOR_STATE_CUSTOM
+        || newState == EDITOR_STATE_HARDCODED) {
         itemSelCtrl.enable(true);
         
     }
@@ -305,11 +307,11 @@ void GuiEditor::deleteCurrentGuiDef() {
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
     const auto finishUp = [this, goToLoadDialog] () {
-        if(goToLoadDialog) {
-            setupForNewGuiDef();
-            openLoadDialog();
-        }
-    };
+                              if(goToLoadDialog) {
+                                  setupForNewGuiDef();
+                                  openLoadDialog();
+                              }
+                          };
     
     //Update the status bar.
     if(success) {
@@ -508,7 +510,8 @@ void GuiEditor::gridIntervalIncreaseCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     float newGridInterval = GUI_EDITOR::GRID_INTERVALS.back();
-    for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
+    for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0;
+        --i) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] <=
             game.options.guiEd.gridInterval
@@ -534,16 +537,16 @@ void GuiEditor::load() {
     //Load necessary game content.
     game.content.reloadPacks();
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
     },
-    CONTENT_LOAD_LEVEL_EDITOR
+        CONTENT_LOAD_LEVEL_EDITOR
     );
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
     
     //Misc. setup.
@@ -609,7 +612,7 @@ void GuiEditor::loadGuiDefFile(
         openMessageDialog(
             "Load failed!",
             "Could not load the GUI definition file \"" + manifest.path + "\"!",
-        [this] () { openLoadDialog(); }
+            [this] () { openLoadDialog(); }
         );
         manifest.clear();
         return;
@@ -681,9 +684,9 @@ void GuiEditor::pickGuiDefFile(
     ContentManifest* tempManif = (ContentManifest*) info;
     
     auto reallyLoad = [this, tempManif] () {
-        closeTopDialog();
-        loadGuiDefFile(tempManif->path, true);
-    };
+                          closeTopDialog();
+                          loadGuiDefFile(tempManif->path, true);
+                      };
     
     if(
         tempManif->pack == FOLDER_NAMES::BASE_PACK &&
@@ -773,8 +776,8 @@ void GuiEditor::reloadCmd(float inputValue) {
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
         "reloading the current definition", "reload",
-    [this] () { loadGuiDefFile(string(manifest.path), false); },
-    std::bind(&GuiEditor::saveGuiDef, this)
+        [this] () { loadGuiDefFile(string(manifest.path), false); },
+        std::bind(&GuiEditor::saveGuiDef, this)
     );
 }
 
@@ -784,15 +787,15 @@ void GuiEditor::reloadCmd(float inputValue) {
  */
 void GuiEditor::reloadGuiDefs() {
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
     }
     );
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
 }
 
@@ -900,7 +903,8 @@ void GuiEditor::selectAllCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(isSelectionIdle()) {
-        if(state == EDITOR_STATE_HARDCODED || state == EDITOR_STATE_CUSTOM) {
+        if(state == EDITOR_STATE_HARDCODED
+            || state == EDITOR_STATE_CUSTOM) {
             bool isCustomState = state == EDITOR_STATE_CUSTOM;
             itemSelection.clear();
             forIdx(i, allItems) {
@@ -1048,12 +1052,12 @@ void GuiEditor::unload() {
     itemSelection.clear();
     
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     }
     );
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
     }
     );

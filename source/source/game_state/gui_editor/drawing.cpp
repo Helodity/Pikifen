@@ -80,7 +80,7 @@ void GuiEditor::drawCanvas() {
     );
     
     //Sort them by layer.
-    vector<pair<GuiItemDef*, unsigned char> > drawingSortedItems;
+    vector<pair<GuiItemDef*, unsigned char>> drawingSortedItems;
     map<GuiItemDef*, size_t> itemIdxMap;
     forIdx(i, allItems) {
         itemIdxMap[allItems[i]] = i;
@@ -99,9 +99,9 @@ void GuiEditor::drawCanvas() {
     }
     std::stable_sort(
         drawingSortedItems.begin(), drawingSortedItems.end(),
-    [] (const auto & i1, const auto & i2) {
-        return i1.second < i2.second;
-    }
+        [] (const auto & i1, const auto & i2) {
+            return i1.second < i2.second;
+        }
     );
     
     forIdx(i, drawingSortedItems) {

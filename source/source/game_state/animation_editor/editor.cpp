@@ -73,10 +73,10 @@ AnimationEditor::AnimationEditor() :
     comparisonBlinkTimer =
         Timer(
             0.6,
-    [this] () {
-        this->comparisonBlinkShow = !this->comparisonBlinkShow;
-        this->comparisonBlinkTimer.start();
-    }
+            [this] () {
+                this->comparisonBlinkShow = !this->comparisonBlinkShow;
+                this->comparisonBlinkTimer.start();
+            }
         );
     comparisonBlinkTimer.start();
     
@@ -85,11 +85,11 @@ AnimationEditor::AnimationEditor() :
     
     //Register commands.
     auto registerCmd =
-    [this] (void (AnimationEditor::* func)(float), const string& name) {
-        commands.push_back(
-            Command(std::bind(func, this, std::placeholders::_1), name)
-        );
-    };
+        [this] (void (AnimationEditor::* func)(float), const string & name) {
+            commands.push_back(
+                Command(std::bind(func, this, std::placeholders::_1), name)
+            );
+        };
     
     registerCmd(&AnimationEditor::gridToggleCmd, "grid_toggle");
     registerCmd(&AnimationEditor::hitboxesToggleCmd, "hitboxes_toggle");
@@ -115,50 +115,51 @@ AnimationEditor::AnimationEditor() :
     
     //Setup the selection manager and controller.
     hitboxSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        if(!sideView) {
-            *outCenter = curSprite->hitboxes[idx].center;
-            *outSize = Point(curSprite->hitboxes[idx].radius * 2.0f);
-        } else {
-            *outCenter =
-                Point(
-                    curSprite->hitboxes[idx].center.x,
-                    (-(curSprite->hitboxes[idx].height / 2.0f)) -
-                    curSprite->hitboxes[idx].bottomZ
-                );
-            *outSize =
-                Point(
-                    curSprite->hitboxes[idx].radius * 2.0f,
-                    curSprite->hitboxes[idx].height
-                );
-        }
-        *outAngle = 0.0f;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            if(!sideView) {
+                *outCenter = curSprite->hitboxes[idx].center;
+                *outSize = Point(curSprite->hitboxes[idx].radius * 2.0f);
+            } else {
+                *outCenter =
+                    Point(
+                        curSprite->hitboxes[idx].center.x,
+                        (-(curSprite->hitboxes[idx].height / 2.0f)) -
+                        curSprite->hitboxes[idx].bottomZ
+                    );
+                *outSize =
+                    Point(
+                        curSprite->hitboxes[idx].radius * 2.0f,
+                        curSprite->hitboxes[idx].height
+                    );
+            }
+            *outAngle = 0.0f;
+        };
     hitboxSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        if(!sideView) {
-            curSprite->hitboxes[idx].center = newCenter;
-            curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
-        } else {
-            curSprite->hitboxes[idx].center.x = newCenter.x;
-            curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
-            curSprite->hitboxes[idx].bottomZ =
-                -(newCenter.y + newSize.y / 2.0f);
-            curSprite->hitboxes[idx].height = newSize.y;
-        }
-    };
+        ) {
+            if(!sideView) {
+                curSprite->hitboxes[idx].center = newCenter;
+                curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
+            } else {
+                curSprite->hitboxes[idx].center.x = newCenter.x;
+                curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
+                curSprite->hitboxes[idx].bottomZ =
+                    -(newCenter.y + newSize.y / 2.0f);
+                curSprite->hitboxes[idx].height = newSize.y;
+            }
+        };
     hitboxSelection.onGetTotal =
-    [this] () {
-        if(!curSprite) return (size_t) 0;
-        return curSprite->hitboxes.size();
-    };
+        [this] () {
+            if(!curSprite) return (size_t) 0;
+            return curSprite->hitboxes.size();
+        };
     hitboxSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     hitboxSelection.itemsCanResize = true;
     hitboxSelection.itemsCanRotate = false;
     
@@ -168,8 +169,8 @@ AnimationEditor::AnimationEditor() :
     hitboxSelCtrl.overlapsCycle = true;
     hitboxSelCtrl.clickingSelectedUnselectsOthers = true;
     hitboxSelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
-    
+        [this] (const Point & p) { return snapPoint(p); };
+        
     selectionControllers.push_back(&hitboxSelCtrl);
 }
 
@@ -364,11 +365,11 @@ void AnimationEditor::deleteCurrentAnimDb() {
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
     const auto finishUp = [this, goToLoadDialog] () {
-        if(goToLoadDialog) {
-            setupForNewAnimDbPre();
-            openLoadDialog();
-        }
-    };
+                              if(goToLoadDialog) {
+                                  setupForNewAnimDbPre();
+                                  openLoadDialog();
+                              }
+                          };
     
     //Update the status bar.
     if(success) {
@@ -767,7 +768,7 @@ void AnimationEditor::load() {
     //Load necessary game content.
     game.content.reloadPacks();
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
         CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_STATUS_TYPE,
@@ -779,7 +780,7 @@ void AnimationEditor::load() {
         CONTENT_TYPE_MOB_ANIMATION,
         CONTENT_TYPE_MOB_TYPE,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
     
     loadCustomMobCatTypes(false);
@@ -844,7 +845,7 @@ void AnimationEditor::loadAnimDbFile(
             "Load failed!",
             "Could not load the animation database file \"" +
             manifest.path + "\"!",
-        [this] () { openLoadDialog(); }
+            [this] () { openLoadDialog(); }
         );
         manifest.clear();
         return;
@@ -858,7 +859,7 @@ void AnimationEditor::loadAnimDbFile(
     
     if(!db.sprites.empty()) {
         map<string, size_t> fileUsesMap;
-        vector<std::pair<size_t, string> > fileUsesVector;
+        vector<std::pair<size_t, string>> fileUsesVector;
         forIdx(f, db.sprites) {
             fileUsesMap[db.sprites[f]->bmpName]++;
         }
@@ -870,9 +871,9 @@ void AnimationEditor::loadAnimDbFile(
             fileUsesVector.end(),
             [] (
                 std::pair<size_t, string> u1, std::pair<size_t, string> u2
-        ) -> bool {
-            return u1.first > u2.first;
-        }
+            ) -> bool {
+                return u1.first > u2.first;
+            }
         );
         lastSpritesheetUsed = fileUsesVector[0].second;
     }
@@ -916,7 +917,8 @@ void AnimationEditor::loadCmd(float inputValue) {
  * @param horizontal Whether it's horizontal or vertical.
  * @param topLeft Whether it's based on the top/left, or the bottom/right.
  */
-void AnimationEditor::makeHitboxesSymmetrical(bool horizontal, bool topLeft) {
+void AnimationEditor::makeHitboxesSymmetrical(bool horizontal,
+    bool topLeft) {
     if(curSprite->hitboxes.size() <= 1) {
         setStatus("There aren't enough hitboxes to arrange!", true);
         return;
@@ -1047,9 +1049,9 @@ void AnimationEditor::pickAnimDbFile(
     ContentManifest* tempManif = (ContentManifest*) info;
     string path = tempManif->path;
     auto reallyLoad = [this, path] () {
-        closeTopDialog();
-        loadAnimDbFile(path, true);
-    };
+                          closeTopDialog();
+                          loadAnimDbFile(path, true);
+                      };
     
     if(
         tempManif->pack == FOLDER_NAMES::BASE_PACK &&
@@ -1082,7 +1084,7 @@ void AnimationEditor::pickSprite(
                 &db,
                 loadedMobType ? loadedMobType->height : 128,
                 loadedMobType ? loadedMobType->radius : 32
-            );
+                );
             setDefaultTopValues(db.sprites.back());
             db.sortAlphabetically();
             changesMgr.markAsChanged();
@@ -1179,11 +1181,11 @@ void AnimationEditor::quitCmd(float inputValue) {
     changesMgr.askIfUnsaved(
         quitWidgetPos,
         "quitting", "quit",
-    [this] () {
-        stopSounds();
-        leave();
-    },
-    std::bind(&AnimationEditor::saveAnimDb, this)
+        [this] () {
+            stopSounds();
+            leave();
+        },
+        std::bind(&AnimationEditor::saveAnimDb, this)
     );
 }
 
@@ -1193,17 +1195,17 @@ void AnimationEditor::quitCmd(float inputValue) {
  */
 void AnimationEditor::reloadAnimDbs() {
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GLOBAL_ANIMATION,
         CONTENT_TYPE_MOB_ANIMATION,
     }
     );
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_MOB_ANIMATION,
         CONTENT_TYPE_GLOBAL_ANIMATION,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
 }
 
@@ -1221,8 +1223,8 @@ void AnimationEditor::reloadCmd(float inputValue) {
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
         "reloading the current database", "reload",
-    [this] () { loadAnimDbFile(string(manifest.path), false); },
-    std::bind(&AnimationEditor::saveAnimDb, this)
+        [this] () { loadAnimDbFile(string(manifest.path), false); },
+        std::bind(&AnimationEditor::saveAnimDb, this)
     );
 }
 
@@ -1660,11 +1662,11 @@ void AnimationEditor::setBestFrameSprite() {
         std::sort(
             bestSpriteIdxs.begin(),
             bestSpriteIdxs.end(),
-        [this, &bestSpriteIdxs] (size_t s1, size_t s2) {
-            return
-                strToLower(db.sprites[s1]->name) <
-                strToLower(db.sprites[s2]->name);
-        });
+            [this, &bestSpriteIdxs] (size_t s1, size_t s2) {
+                return
+                    strToLower(db.sprites[s1]->name) <
+                    strToLower(db.sprites[s2]->name);
+            });
         finalSpriteIdx = bestSpriteIdxs[0];
     }
     
@@ -1870,7 +1872,8 @@ void AnimationEditor::spriteBmpFloodFill(
     if(x < 0 || x > bmpW) return;
     if(y < 0 || y > bmpH) return;
     if(selectionPixels[y * bmpW + x]) return;
-    if(al_get_pixel(bmp, x, y).a < ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD) {
+    if(al_get_pixel(bmp, x, y).a <
+        ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD) {
         return;
     }
     
@@ -2017,7 +2020,7 @@ void AnimationEditor::unload() {
     db.destroy();
     
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_MOB_TYPE,
         CONTENT_TYPE_MOB_ANIMATION,
         CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
@@ -2091,14 +2094,14 @@ void AnimationEditor::updateHitboxes() {
         std::sort(
             sPtr->hitboxes.begin(),
             sPtr->hitboxes.end(),
-        [this] (const Hitbox & h1, const Hitbox & h2) -> bool {
-            size_t pos1 = 0, pos2 = 1;
-            forIdx(b, db.bodyParts) {
-                if(db.bodyParts[b]->name == h1.bodyPartName) pos1 = b;
-                if(db.bodyParts[b]->name == h2.bodyPartName) pos2 = b;
+            [this] (const Hitbox & h1, const Hitbox & h2) -> bool {
+                size_t pos1 = 0, pos2 = 1;
+                forIdx(b, db.bodyParts) {
+                    if(db.bodyParts[b]->name == h1.bodyPartName) pos1 = b;
+                    if(db.bodyParts[b]->name == h2.bodyPartName) pos2 = b;
+                }
+                return pos1 < pos2;
             }
-            return pos1 < pos2;
-        }
         );
     }
 }

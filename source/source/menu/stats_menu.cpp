@@ -115,12 +115,12 @@ void StatsMenu::initGuiMain() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
-        saveStatistics();
-        leave();
-    };
+        [this] (const Point&) {
+            saveStatistics();
+            leave();
+        };
     gui.backItem->onGetTooltip =
-    [] () { return "Return to the previous menu."; };
+        [] () { return "Return to the previous menu."; };
     gui.addItem(gui.backItem, "back");
     
     //Back input icon.
@@ -283,7 +283,8 @@ void StatsMenu::populateStatsList() {
         if(record.isPlatinum(areaPtr->mission)) {
             missionPlatinums++;
         }
-        if(areaPtr->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS) {
+        if(areaPtr->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS) {
             missionScores += record.score;
         }
     }

@@ -127,9 +127,9 @@ PikminType::PikminType() :
 AnimConversionVector PikminType::getAnimConversions() const {
     AnimConversionVector v;
     
-    auto add = [&v] (size_t idx, const string& name) {
-        v.push_back(std::make_pair(idx, name));
-    };
+    auto add = [&v] (size_t idx, const string & name) {
+                   v.push_back(std::make_pair(idx, name));
+               };
     
     add(PIKMIN_ANIM_IDLING,             "idling");
     add(PIKMIN_ANIM_CALLED,             "called");

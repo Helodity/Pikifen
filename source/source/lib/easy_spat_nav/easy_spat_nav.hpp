@@ -264,7 +264,7 @@ protected:
     std::map<ItemId, ItemId> parents;
     
     //Children associations.
-    std::map<ItemId, std::vector<ItemId> > children;
+    std::map<ItemId, std::vector<ItemId>> children;
     
     //Navigation history in the last navigated direction.
     std::vector<ItemId> history;

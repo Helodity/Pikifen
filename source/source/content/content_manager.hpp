@@ -132,8 +132,8 @@ struct ContentManager {
     void unloadAll(const vector<CONTENT_TYPE>& types);
     void unloadCurrentArea(CONTENT_LOAD_LEVEL level);
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     CONTENT_LOAD_LEVEL loadLevels[N_CONTENT_TYPES];

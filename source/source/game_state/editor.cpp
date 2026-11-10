@@ -637,18 +637,18 @@ void Editor::getQuickPlayAreaList(
     
     auto scanAreas =
         [&selectedAreaPath, outAreaNames, outAreaPaths, outSelectedAreaIdx]
-    (const vector<Area*> areas) {
-        forIdx(a, areas) {
-            Area* aPtr = areas[a];
-            if(aPtr->manifest->path == selectedAreaPath) {
-                *outSelectedAreaIdx = (int) outAreaNames->size();
+            (const vector<Area*> areas) {
+            forIdx(a, areas) {
+                Area* aPtr = areas[a];
+                if(aPtr->manifest->path == selectedAreaPath) {
+                    *outSelectedAreaIdx = (int) outAreaNames->size();
+                }
+                outAreaNames->push_back(
+                    aPtr->name + "##" + aPtr->manifest->internalName
+                );
+                outAreaPaths->push_back(aPtr->manifest->path);
             }
-            outAreaNames->push_back(
-                aPtr->name + "##" + aPtr->manifest->internalName
-            );
-            outAreaPaths->push_back(aPtr->manifest->path);
-        }
-    };
+        };
     scanAreas(game.content.areas.list[AREA_TYPE_SIMPLE]);
     scanAreas(game.content.areas.list[AREA_TYPE_MISSION]);
 }
@@ -1985,15 +1985,15 @@ void Editor::leave() {
     saveOptions();
     
     game.fadeMgr.startFade(false, [] () {
-        if(game.quickPlay.areaPath.empty()) {
-            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAKE;
-            game.changeState(game.states.titleScreen);
-        } else {
-            game.states.gameplay->pathOfAreaToLoad =
-                game.quickPlay.areaPath;
-            game.changeState(game.states.gameplay);
-        }
-    });
+                                      if(game.quickPlay.areaPath.empty()) {
+                                          game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAKE;
+                                          game.changeState(game.states.titleScreen);
+                                      } else {
+                                          game.states.gameplay->pathOfAreaToLoad =
+                                              game.quickPlay.areaPath;
+                                          game.changeState(game.states.gameplay);
+                                      }
+                                  });
     
     setStatus("Bye!");
 }
@@ -2161,20 +2161,20 @@ void Editor::loadCustomMobCatTypes(bool isAreaEditor) {
     //Sort.
     std::sort(
         customCatTypes.begin(), customCatTypes.end(),
-    [] (const vector<MobType*>& c1, const vector<MobType*>& c2) -> bool {
-        return
-        c1.front()->customCategoryName <
-        c2.front()->customCategoryName;
-    }
+        [] (const vector<MobType*>& c1, const vector<MobType*>& c2) -> bool {
+            return
+                c1.front()->customCategoryName <
+                c2.front()->customCategoryName;
+        }
     );
     forIdx(c, customCatTypes) {
         vector<MobType*>& types = customCatTypes[c];
         //Sort the types within a custom category.
         std::sort(
             types.begin(), types.end(),
-        [] (const MobType * t1, const MobType * t2) {
-            return t1->name < t2->name;
-        }
+            [] (const MobType * t1, const MobType * t2) {
+                return t1->name < t2->name;
+            }
         );
         //Adjust customCatNameIdxs, since the list of custom category names
         //got shuffled earlier.
@@ -2224,11 +2224,11 @@ void Editor::openBitmapDialog(
     bitmapDialogRecommendedFolder = recommendedFolder;
     bitmapDialogPicker.pickCallback =
         [this] (
-            const string& newBmpName, const string&,
+            const string & newBmpName, const string&,
             const string&, void*, bool
-    ) {
-        bitmapDialogNewBmpName = newBmpName;
-    };
+        ) {
+            bitmapDialogNewBmpName = newBmpName;
+        };
     bitmapDialogPicker.needsFilterBoxFocus = true;
     
     openDialog(
@@ -2236,15 +2236,15 @@ void Editor::openBitmapDialog(
         std::bind(&Editor::processGuiDialogBitmap, this)
     );
     dialogs.back()->closeCallback = [this] () {
-        if(!bitmapDialogCurBmpName.empty()) {
-            game.content.bitmaps.list.free(bitmapDialogCurBmpName);
-            bitmapDialogCurBmpName.clear();
-            bitmapDialogCurBmpPtr = nullptr;
-            bitmapDialogNewBmpName.clear();
-            bitmapDialogOkCallback = nullptr;
-            bitmapDialogRecommendedFolder = "";
-        }
-    };
+                                        if(!bitmapDialogCurBmpName.empty()) {
+                                            game.content.bitmaps.list.free(bitmapDialogCurBmpName);
+                                            bitmapDialogCurBmpName.clear();
+                                            bitmapDialogCurBmpPtr = nullptr;
+                                            bitmapDialogNewBmpName.clear();
+                                            bitmapDialogOkCallback = nullptr;
+                                            bitmapDialogRecommendedFolder = "";
+                                        }
+                                    };
 }
 
 
@@ -2376,8 +2376,8 @@ void Editor::openPickerDialog(
     newDialog->processCallback =
         std::bind(&Editor::Picker::process, newPicker);
     newDialog->closeCallback = [newPicker] () {
-        delete newPicker;
-    };
+                                   delete newPicker;
+                               };
     newPicker->dialogPtr = newDialog;
 }
 
@@ -3002,7 +3002,7 @@ void Editor::processGuiEditorStyle() {
  * @param tooltipCallback Code to obtain an entry's tooltip with, if any.
  */
 void Editor::processGuiHistory(
-    const vector<pair<string, string> >& history,
+    const vector<pair<string, string>>& history,
     const std::function<string(const string&)>& nameDisplayCallback,
     const std::function<void(const string&)>& pickCallback,
     const std::function<string(const string&)>& tooltipCallback
@@ -3025,7 +3025,8 @@ void Editor::processGuiHistory(
                 
                 //History entry button.
                 const ImVec2 buttonSize(120, 24);
-                if(ImGui::Button((name + "##" + i2s(h)).c_str(), buttonSize)) {
+                if(ImGui::Button((name + "##" + i2s(h)).c_str(),
+                    buttonSize)) {
                     pickCallback(path);
                 }
                 if(tooltipCallback) {
@@ -3609,7 +3610,8 @@ void Editor::processGuiWidgetsDeviation(
  * @param selectedHazardIname Internal name of the currently selected hazard.
  * @return Whether the hazard was changed.
  */
-bool Editor::processGuiWidgetsHazardManagement(string& selectedHazardIname) {
+bool Editor::processGuiWidgetsHazardManagement(string&
+    selectedHazardIname) {
     //Hazard combo.
     int selectedHazardIdx = -1;
     vector<string> allHazardINames = {""};
@@ -3631,7 +3633,6 @@ bool Editor::processGuiWidgetsHazardManagement(string& selectedHazardIname) {
     
     return result;
 }
-
 
 
 /**
@@ -3681,7 +3682,7 @@ bool Editor::processGuiWidgetsMobType(
         );
     ImGui::PopStyleVar();
     
-    vector<vector<MobType*> > finalList;
+    vector<vector<MobType*>> finalList;
     if(!packFilter.empty()) {
         forIdx(c, customCatTypes) {
             finalList.push_back(vector<MobType*>());
@@ -3711,25 +3712,25 @@ bool Editor::processGuiWidgetsMobType(
         openPickerDialog(
             "Pick an object type", items,
             [this, finalList] (
-                const string& n, const string& tc, const string& sc, void*, bool
-        ) {
-            //For clarity, this code will NOT be run within the context
-            //of editor::processGuiWidgetsMobType, but will instead
-            //be run wherever dialogs are processed.
-            internalChangedByDialog = true;
-            internalCustomCatName = tc;
-            internalMobType = nullptr;
-            size_t customCatIdx = customCatNameIdxs[tc];
-            const vector<MobType*>& types =
-                finalList[customCatIdx];
-            forIdx(t, types) {
-                if(types[t]->name == n) {
-                    internalMobType = types[t];
-                    return;
+                const string & n, const string & tc, const string & sc, void*, bool
+            ) {
+                //For clarity, this code will NOT be run within the context
+                //of editor::processGuiWidgetsMobType, but will instead
+                //be run wherever dialogs are processed.
+                internalChangedByDialog = true;
+                internalCustomCatName = tc;
+                internalMobType = nullptr;
+                size_t customCatIdx = customCatNameIdxs[tc];
+                const vector<MobType*>& types =
+                    finalList[customCatIdx];
+                forIdx(t, types) {
+                    if(types[t]->name == n) {
+                        internalMobType = types[t];
+                        return;
+                    }
                 }
-            }
-        },
-        "", false
+            },
+            "", false
         );
     }
     setTooltip(
@@ -4096,7 +4097,7 @@ void Editor::unload() {
  * @param name Proper name of the entry.
  */
 void Editor::updateHistory(
-    vector<pair<string, string> >& history,
+    vector<pair<string, string>>& history,
     const ContentManifest& manifest, const string& name
 ) {
     string finalName = name.empty() ? manifest.internalName : name;
@@ -4393,29 +4394,29 @@ bool Editor::ChangesManager::askIfUnsaved(
         ed->dialogs.back()->customPos = game.mouseCursor.winPos;
         ed->dialogs.back()->customSize = Point(580, 0);
         ed->dialogs.back()->eventCallback =
-        [this] (const ALLEGRO_EVENT * ev) {
-            if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
-                if(
-                    ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
-                ) {
-                    ed->closeTopDialog();
-                    const std::function<bool()>& saveCallback =
-                        this->getUnsavedWarningSaveCallback();
-                    const std::function<void()>& actionCallback =
-                        this->getUnsavedWarningActionCallback();
-                    if(saveCallback()) {
-                        actionCallback();
+                [this] (const ALLEGRO_EVENT * ev) {
+                    if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
+                        if(
+                            ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
+                        ) {
+                            ed->closeTopDialog();
+                            const std::function<bool()>& saveCallback =
+                                this->getUnsavedWarningSaveCallback();
+                            const std::function<void()>& actionCallback =
+                                this->getUnsavedWarningActionCallback();
+                            if(saveCallback()) {
+                                actionCallback();
+                            }
+                        } else if(
+                            ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
+                        ) {
+                            ed->closeTopDialog();
+                            const std::function<void()>& actionCallback =
+                                this->getUnsavedWarningActionCallback();
+                            actionCallback();
+                        }
                     }
-                } else if(
-                    ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
-                ) {
-                    ed->closeTopDialog();
-                    const std::function<void()>& actionCallback =
-                        this->getUnsavedWarningActionCallback();
-                    actionCallback();
-                }
-            }
-        };
+                };
         
         return true;
         
@@ -4643,8 +4644,8 @@ Editor::Picker::Picker(Editor* editorPtr) :
  */
 void Editor::Picker::process() {
     vector<string> topCatNames;
-    vector<vector<string> > secCatNames;
-    vector<vector<vector<PickerItem> > > finalItems;
+    vector<vector<string>> secCatNames;
+    vector<vector<vector<PickerItem>>> finalItems;
     string filterLower = strToLower(filter);
     
     //Figure out the items.
@@ -4667,7 +4668,7 @@ void Editor::Picker::process() {
         if(topCatIdx == INVALID) {
             topCatNames.push_back(items[i].topCategory);
             secCatNames.push_back(vector<string>());
-            finalItems.push_back(vector<vector<PickerItem> >());
+            finalItems.push_back(vector<vector<PickerItem>>());
             topCatIdx = topCatNames.size() - 1;
         }
         
@@ -4690,34 +4691,34 @@ void Editor::Picker::process() {
     
     //Stuff for creating a new item.
     auto tryMakeNew = [this] () {
-        if(filter.empty()) return;
-        
-        if(
-            !newItemTopCatChoices.empty() &&
-            newItemTopCat.empty()
-        ) {
-            //The user has to pick a category, but hasn't picked yet.
-            //Let's show the pop-up and leave.
-            ImGui::OpenPopup("newItemCategory");
-            return;
-        }
-        
-        bool isReallyNew = true;
-        forIdx(i, items) {
-            if(
-                filter == items[i].name &&
-                newItemTopCat == items[i].topCategory
-            ) {
-                isReallyNew = false;
-                break;
-            }
-        }
-        
-        pickCallback(filter, newItemTopCat, "", nullptr, isReallyNew);
-        if(dialogPtr) {
-            dialogPtr->isOpen = false;
-        }
-    };
+                          if(filter.empty()) return;
+                          
+                          if(
+                              !newItemTopCatChoices.empty() &&
+                              newItemTopCat.empty()
+                          ) {
+                              //The user has to pick a category, but hasn't picked yet.
+                              //Let's show the pop-up and leave.
+                              ImGui::OpenPopup("newItemCategory");
+                              return;
+                          }
+                          
+                          bool isReallyNew = true;
+                          forIdx(i, items) {
+                              if(
+                                  filter == items[i].name &&
+                                  newItemTopCat == items[i].topCategory
+                              ) {
+                                  isReallyNew = false;
+                                  break;
+                              }
+                          }
+                          
+                          pickCallback(filter, newItemTopCat, "", nullptr, isReallyNew);
+                          if(dialogPtr) {
+                              dialogPtr->isOpen = false;
+                          }
+                      };
     
     if(canMakeNew) {
         //"New" button.
@@ -5014,7 +5015,7 @@ bool Editor::SelectionController::chooseViaMouseDown(
     if(!enabled) return false;
     
     //Get which items are selected and which are under the mouse cursor.
-    vector<std::pair<size_t, size_t> > clickedItems;
+    vector<std::pair<size_t, size_t>> clickedItems;
     std::pair<size_t, size_t> singleSelectedItem = { INVALID, INVALID };
     size_t totalNrSelectedItems = 0;
     size_t totalNrClickedItems = 0;
@@ -5048,7 +5049,8 @@ bool Editor::SelectionController::chooseViaMouseDown(
     
     //Figure out which of the clicked items to focus on.
     std::pair<size_t, size_t> finalItem = { INVALID, INVALID };
-    if(overlapsCycle && totalNrSelectedItems == 1 && totalNrClickedItems >= 2) {
+    if(overlapsCycle && totalNrSelectedItems == 1
+        && totalNrClickedItems >= 2) {
         finalItem = getNextInVector(clickedItems, singleSelectedItem);
     } else if(totalNrClickedItems > 0) {
         finalItem = clickedItems[0];
@@ -5170,56 +5172,56 @@ void Editor::SelectionController::draw(
         
         const auto drawRBLine =
             [&av, &textureSize, &thickness, &timeOffset, zoom]
-        (const Point & p1, const Point & p2, DIR dir) {
-            float dist = 0.0f;
-            float rightTurnX = 0.0f;
-            float rightTurnY = 0.0f;
-            switch(dir) {
-            case DIR_RIGHT: {
-                dist = p2.x - p1.x;
-                rightTurnY = thickness / 2.0f;
-                break;
-            } case DIR_DOWN: {
-                dist = p2.y - p1.y;
-                rightTurnX = -thickness / 2.0f;
-                break;
-            } case DIR_LEFT: {
-                dist = p1.x - p2.x;
-                rightTurnY = -thickness / 2.0f;
-                break;
-            } case DIR_UP: {
-                dist = p1.y - p2.y;
-                rightTurnX = thickness / 2.0f;
-                break;
-            }
-            }
-            
-            av[0].x = p1.x - rightTurnX;
-            av[0].y = p1.y - rightTurnY;
-            av[0].u = 0.0f - timeOffset;
-            av[0].v = dist * zoom;
-            
-            av[1].x = p1.x + rightTurnX;
-            av[1].y = p1.y + rightTurnY;
-            av[1].u = 0.0f - timeOffset;
-            av[1].v = dist * zoom;
-            
-            av[2].x = p2.x - rightTurnX;
-            av[2].y = p2.y - rightTurnY;
-            av[2].u = dist * zoom - timeOffset;
-            av[2].v = thickness;
-            
-            av[3].x = p2.x + rightTurnX;
-            av[3].y = p2.y + rightTurnY;
-            av[3].u = dist * zoom - timeOffset;
-            av[3].v = -thickness;
-            
-            al_draw_prim(
-                av, nullptr,
-                game.sysContent.bmpRubberBandSel,
-                0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
-            );
-        };
+                (const Point & p1, const Point & p2, DIR dir) {
+                float dist = 0.0f;
+                float rightTurnX = 0.0f;
+                float rightTurnY = 0.0f;
+                switch(dir) {
+                case DIR_RIGHT: {
+                    dist = p2.x - p1.x;
+                    rightTurnY = thickness / 2.0f;
+                    break;
+                } case DIR_DOWN: {
+                    dist = p2.y - p1.y;
+                    rightTurnX = -thickness / 2.0f;
+                    break;
+                } case DIR_LEFT: {
+                    dist = p1.x - p2.x;
+                    rightTurnY = -thickness / 2.0f;
+                    break;
+                } case DIR_UP: {
+                    dist = p1.y - p2.y;
+                    rightTurnX = thickness / 2.0f;
+                    break;
+                }
+                }
+                
+                av[0].x = p1.x - rightTurnX;
+                av[0].y = p1.y - rightTurnY;
+                av[0].u = 0.0f - timeOffset;
+                av[0].v = dist * zoom;
+                
+                av[1].x = p1.x + rightTurnX;
+                av[1].y = p1.y + rightTurnY;
+                av[1].u = 0.0f - timeOffset;
+                av[1].v = dist * zoom;
+                
+                av[2].x = p2.x - rightTurnX;
+                av[2].y = p2.y - rightTurnY;
+                av[2].u = dist * zoom - timeOffset;
+                av[2].v = thickness;
+                
+                av[3].x = p2.x + rightTurnX;
+                av[3].y = p2.y + rightTurnY;
+                av[3].u = dist * zoom - timeOffset;
+                av[3].v = -thickness;
+                
+                al_draw_prim(
+                    av, nullptr,
+                    game.sysContent.bmpRubberBandSel,
+                    0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+                );
+            };
         
         //Top line (shifted left).
         drawRBLine(
@@ -6021,7 +6023,8 @@ bool Editor::SelectionManager::applySharedTransformation(
                     preOpItemSpaceCorners.tl + iSize / 2.0f;
                 preOpItemSpaceCorners.br =
                     preOpItemSpaceCorners.br - iSize / 2.0f;
-                Rect preOpItemSpace = rectCornersToRect(preOpItemSpaceCorners);
+                Rect preOpItemSpace = rectCornersToRect(
+                        preOpItemSpaceCorners);
                 RectCorners newItemSpaceCorners(
                     newRectCorners.tl + iSize / 2.0f,
                     newRectCorners.br - iSize / 2.0f
@@ -6771,7 +6774,8 @@ bool Editor::TransformationWidget::handleMouseMove(
     }
     
     //Logic for moving the rotation handle.
-    if(movingHandle == 9 && angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
+    if(movingHandle == 9 && angle
+        && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
         float oldMouseAngle = getAngle(oldCenter, oldMouseCoords);
         float newMouseAngle = getAngle(oldCenter, mouseCoords);
         *angle = oldAngle + (newMouseAngle) - (oldMouseAngle);

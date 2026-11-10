@@ -251,8 +251,8 @@ protected:
      */
     struct SelectionList {
     
-        public:
-        
+    public:
+    
         //--- Public function declarations ---
         
         bool add(size_t idx);
@@ -272,8 +272,8 @@ protected:
         size_t getCount() const;
         
         
-        private:
-        
+    private:
+    
         //--- Private members ---
         
         //The list proper.
@@ -288,8 +288,8 @@ protected:
      */
     struct SelectionManager {
     
-        public:
-        
+    public:
+    
         //--- Public members ---
         
         //Callback for when the info of an item needs to be retrieved.
@@ -386,8 +386,8 @@ protected:
         size_t getNrTotalItems() const;
         
         
-        private:
-        
+    private:
+    
         //--- Private members ---
         
         //The list of selected items.
@@ -417,8 +417,8 @@ protected:
      */
     struct SelectionController {
     
-        public:
-        
+    public:
+    
         //--- Public misc. declarations ---
         
         //Rules for how and when a given operation can be started.
@@ -563,8 +563,8 @@ protected:
      */
     struct TransformationWidget {
     
-        public:
-        
+    public:
+    
         //--- Public misc. declarations ---
         
         //Flags.
@@ -802,8 +802,8 @@ protected:
      */
     struct ChangesManager {
     
-        public:
-        
+    public:
+    
         //--- Public function declarations ---
         
         explicit ChangesManager(Editor* ed);
@@ -829,8 +829,8 @@ protected:
         void reset();
         
         
-        private:
-        
+    private:
+    
         //--- Private members ---
         
         //Editor it belongs to.
@@ -882,15 +882,15 @@ protected:
      */
     struct Command {
     
-        public:
-        
+    public:
+    
         //--- Public function declarations ---
         
         Command(CommandFunc f, const string& n);
         void run(float inputValue);
         
-        private:
-        
+    private:
+    
         //--- Private members ---
         
         //Function to run.
@@ -1166,7 +1166,7 @@ protected:
     void processGuiDialogUnsavedChanges();
     void processGuiEditorStyle();
     void processGuiHistory(
-        const vector<pair<string, string> >& history,
+        const vector<pair<string, string>>& history,
         const std::function<string(const string&)>& nameDisplayCallback,
         const std::function<void(const string&)>& pickCallback,
         const std::function<string(const string&)>& tooltipCallback
@@ -1288,7 +1288,7 @@ protected:
     Point snapPointToAxis(const Point& p, const Point& anchor);
     Point snapPointToGrid(const Point& p, float gridInterval);
     void updateHistory(
-        vector<pair<string, string> >& history,
+        vector<pair<string, string>>& history,
         const ContentManifest& manifest, const string& name
     );
     void zoomWithCursor(float newZoom);

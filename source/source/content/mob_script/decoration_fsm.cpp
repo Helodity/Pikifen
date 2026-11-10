@@ -87,7 +87,9 @@ void DecorationFsm::beBumped(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DecorationFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
+void DecorationFsm::becomeIdle(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Decoration* decPtr = (Decoration*) scriptVM->mob;
     
     if(
@@ -111,7 +113,9 @@ void DecorationFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Pointer to the mob that touched it.
  * @param info2 Unused.
  */
-void DecorationFsm::checkBump(ScriptVM* scriptVM, void* info1, void* info2) {
+void DecorationFsm::checkBump(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Mob* toucher = (Mob*) info1;
     
     if(

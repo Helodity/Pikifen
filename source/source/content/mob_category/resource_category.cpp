@@ -115,6 +115,8 @@ void ResourceCategory::getTypeNames(vector<string>& list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ResourceCategory::registerType(const string& internalName, MobType* type) {
+void ResourceCategory::registerType(
+    const string& internalName, MobType* type
+) {
     game.content.mobTypes.list.resource[internalName] = (ResourceType*) type;
 }

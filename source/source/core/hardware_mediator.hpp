@@ -199,8 +199,8 @@ struct HardwareMediator {
     void updateControllers(bool silent = false);
     
     
-    private:
-    
+private:
+
     //--- Private misc. definitions ---
     
     struct Controller {

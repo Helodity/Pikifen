@@ -187,7 +187,6 @@ struct GuiItemDef {
 };
 
 
-
 /**
  * @brief Definition of a hardcoded GUI item, an item that must exist in the GUI
  * since the engine expects it.

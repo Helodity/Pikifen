@@ -216,17 +216,17 @@ void crash(const string& reason, const string& info, int exitStatus) {
             game.states.gameplay->mobs.pikmin;
         sort(
             closestPikmin.begin(), closestPikmin.end(),
-        [] (const Pikmin * p1, const Pikmin * p2) -> bool {
-            return
-            Distance(
-                game.states.gameplay->players[0].leaderPtr->center,
-                p1->center
-            ).toFloat() <
-            Distance(
-                game.states.gameplay->players[0].leaderPtr->center,
-                p2->center
-            ).toFloat();
-        }
+            [] (const Pikmin * p1, const Pikmin * p2) -> bool {
+                return
+                    Distance(
+                        game.states.gameplay->players[0].leaderPtr->center,
+                        p1->center
+                    ).toFloat() <
+                    Distance(
+                        game.states.gameplay->players[0].leaderPtr->center,
+                        p2->center
+                    ).toFloat();
+            }
         );
         
         size_t closestPAmount = std::min(closestPikmin.size(), (size_t) 10);
@@ -579,9 +579,9 @@ Mob* getNextMobNearCursor(
     //Sort them by ID.
     std::sort(
         mobsNearCursor.begin(), mobsNearCursor.end(),
-    [] (const Mob * m1, const Mob * m2) -> bool {
-        return m1->id < m2->id;
-    }
+        [] (const Mob * m1, const Mob * m2) -> bool {
+            return m1->id < m2->id;
+        }
     );
     
     //Now get the next one.
@@ -662,35 +662,36 @@ unsigned char getThrowPreviewVertexes(
         LEADER::THROW_PREVIEW_DEF_MAX_THICKNESS :
         LEADER::THROW_PREVIEW_MIN_THICKNESS;
         
-    float leaderToCursorDist = Distance(leaderPos, leaderCursorPos).toFloat();
+    float leaderToCursorDist = Distance(leaderPos,
+            leaderCursorPos).toFloat();
     unsigned char curV = 0;
     
     auto getThickness =
-    [maxThickness] (float n) -> float {
-        if(n >= 0.5f) {
-            n = 1 - n;
-        }
-        return
-        interpolateNumber(
-            n, 0.0f, 0.5f, LEADER::THROW_PREVIEW_MIN_THICKNESS, maxThickness
-        );
-    };
-    auto getColor =
-    [&color] (float n) -> ALLEGRO_COLOR {
-        if(n >= 0.5f) {
-            n = 1 - n;
-        }
-        if(n < LEADER::THROW_PREVIEW_FADE_IN_RATIO) {
+        [maxThickness] (float n) -> float {
+            if(n >= 0.5f) {
+                n = 1 - n;
+            }
             return
-            interpolateColor(
-                n, 0.0f, LEADER::THROW_PREVIEW_FADE_IN_RATIO,
-                changeAlpha(color, 0),
-                color
-            );
-        } else {
-            return color;
-        }
-    };
+                interpolateNumber(
+                    n, 0.0f, 0.5f, LEADER::THROW_PREVIEW_MIN_THICKNESS, maxThickness
+                );
+        };
+    auto getColor =
+        [&color] (float n) -> ALLEGRO_COLOR {
+            if(n >= 0.5f) {
+                n = 1 - n;
+            }
+            if(n < LEADER::THROW_PREVIEW_FADE_IN_RATIO) {
+                return
+                interpolateColor(
+                    n, 0.0f, LEADER::THROW_PREVIEW_FADE_IN_RATIO,
+                    changeAlpha(color, 0),
+                    color
+                );
+            } else {
+                return color;
+            }
+        };
     
     //Get the vertexes of each necessary segment.
     for(unsigned char segment = 0; segment < 4; segment++) {
@@ -786,8 +787,8 @@ float getWallShadowLength(Edge* ePtr) {
  * @param node Data node with the weather table.
  * @return The table.
  */
-vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
-    vector<std::pair<int, string> > table;
+vector<std::pair<int, string>> getWeatherTable(DataNode* node) {
+    vector<std::pair<int, string>> table;
     size_t nPoints = node->getNrOfChildren();
     
     for(size_t p = 0; p < nPoints; p++) {
@@ -800,9 +801,9 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
         [] (
             std::pair<int, string> p1,
             std::pair<int, string> p2
-    ) -> bool {
-        return p1.first < p2.first;
-    }
+        ) -> bool {
+            return p1.first < p2.first;
+        }
     );
     
     if(!table.empty()) {
@@ -843,13 +844,13 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
 void guiCreateBackInputIcon(GuiManager* gui, const string& itemName) {
     GuiItem* backInput = new GuiItem();
     backInput->onDraw =
-    [] (const GuiItem::DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_BACK, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [] (const GuiItem::DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_MENU_BACK, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     gui->addItem(backInput, itemName);
 }
 
@@ -1223,7 +1224,7 @@ void saveMakerTools() {
     DataNode file("", "");
     game.makerTools.saveToDataNode(&file);
     file.getChildOrAddNew("engine_version")->value =
-        getEngineVersionString();
+            getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
 }
 
@@ -1263,7 +1264,7 @@ void saveOptions(bool showNotification) {
     DataNode file("", "");
     game.options.saveToDataNode(&file);
     file.getChildOrAddNew("engine_version")->value =
-        getEngineVersionString();
+            getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
     if(showNotification) {
         game.systemNotifications.add("Options saved.", false, false);
@@ -1285,10 +1286,10 @@ void saveScreenshot() {
     string finalFileBaseName =
         incrementNameTillUnique(
             initialFileBaseName,
-    [&files, &fileExt] (const string& n) {
-        return !isInContainer(files, n + fileExt);
-    },
-    "_"
+            [&files, &fileExt] (const string & n) {
+                return !isInContainer(files, n + fileExt);
+            },
+            "_"
         );
         
     ALLEGRO_BITMAP* screenshot = getBackBufferOpaqueCopy();
@@ -1461,10 +1462,10 @@ void spitPikminSeed(
  * @param maxWidth Maximum width of each line.
  * @return The lines.
  */
-vector<vector<StringToken> > splitLongStringWithTokens(
+vector<vector<StringToken>> splitLongStringWithTokens(
     const vector<StringToken>& tokens, int maxWidth
 ) {
-    vector<vector<StringToken> > tokensPerLine;
+    vector<vector<StringToken>> tokensPerLine;
     if(tokens.empty()) return tokensPerLine;
     
     tokensPerLine.push_back(vector<StringToken>());

@@ -412,8 +412,8 @@ struct MakerConsoleTerminal {
     OPEN_CLOSE_STATE getVisibilityState() const;
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Visibility state.
@@ -455,8 +455,8 @@ struct MakerConsoleNotifier {
     void close(bool instant = false);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Visibility state.
@@ -498,8 +498,8 @@ struct MakerConsole {
     void toggleTerminal(bool instant = false);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //The terminal.
@@ -527,8 +527,8 @@ struct MakerDisplay {
     void close(bool instant = false);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Visibility state.
@@ -568,8 +568,8 @@ struct LogManager {
     bool getSessionHasMessages();
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //How many messages have been reported this application session.
@@ -661,7 +661,6 @@ struct MouseCursor {
 };
 
 
-
 struct Player;
 
 
@@ -693,7 +692,6 @@ struct InventoryItem {
 };
 
 
-
 /**
  * @brief Holds all of the possible inventory items; their names, icons,
  * what they do when used, etc.
@@ -709,14 +707,13 @@ struct InventoryItemDatabase {
     InventoryItem* getByIName(const string& iName);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //All items.
     vector<InventoryItem> items;
 };
-
 
 
 /**
@@ -738,13 +735,12 @@ struct RngManager {
     float f(float minimum, float maximum);
     
     
-    private:
-    
+private:
+
     //--- Private function declarations ---
     
     int32_t generateGoodInt();
 };
-
 
 
 /**
@@ -825,7 +821,6 @@ struct GetterWriter {
     );
     
 };
-
 
 
 /**
@@ -945,7 +940,6 @@ struct ScriptVarManager {
     map<string, string> varsMap;
     
 };
-
 
 
 /**
@@ -1649,8 +1643,8 @@ struct SystemContentNames {
  */
 struct FadeManager {
 
-    public:
-    
+public:
+
     //--- Public function declarations ---
     
     FadeManager(float duration);
@@ -1662,8 +1656,8 @@ struct FadeManager {
     void tick(float deltaT);
     void draw();
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Standard duration of a fade in/out.
@@ -1684,7 +1678,6 @@ struct FadeManager {
 };
 
 
-
 /**
  * @brief Manages system notifications, drawing them, queuing them, etc.
  */
@@ -1697,8 +1690,8 @@ struct SystemNotificationManager {
     void tick(float deltaT);
     
     
-    private:
-    
+private:
+
     //--- Private misc. declarations ---
     
     //Current notification's state.
@@ -1750,8 +1743,8 @@ struct SystemNotificationManager {
  */
 struct TextInput {
 
-    public:
-    
+public:
+
     //--- Public members ---
     
     //Maximum size.
@@ -1766,8 +1759,8 @@ struct TextInput {
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Current text.
@@ -1779,7 +1772,6 @@ struct TextInput {
 };
 
 
-
 /**
  * @brief Info about the currently visible prompt that appears above a
  * leader, telling the player what button to press to do something,
@@ -1787,8 +1779,8 @@ struct TextInput {
  */
 struct LeaderPrompt {
 
-    public:
-    
+public:
+
     //--- Public function declarations ---
     
     void draw(const Viewport& view) const;
@@ -1801,8 +1793,8 @@ struct LeaderPrompt {
     void setEnabled(bool enabled);
     void tick(float deltaT);
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Is it meant to exist?
@@ -1821,7 +1813,6 @@ struct LeaderPrompt {
     float visibility = 0.0f;
     
 };
-
 
 
 /**
@@ -1862,8 +1853,8 @@ enum PERF_MON_STATE {
  */
 struct PerformanceMonitor {
 
-    public:
-    
+public:
+
     //--- Public function declarations ---
     
     PerformanceMonitor();
@@ -1876,8 +1867,8 @@ struct PerformanceMonitor {
     void saveLog();
     void reset();
     
-    private:
-    
+private:
+
     //--- Private misc. declarations ---
     
     /**
@@ -1885,23 +1876,23 @@ struct PerformanceMonitor {
      */
     struct Page {
     
-        public:
-        
+    public:
+    
         //--- Public members ---
         
         //How long it lasted for in total.
         double duration = 0.0f;
         
         //Measurements took, and how long each one took.
-        vector<std::pair<string, double> > measurements;
+        vector<std::pair<string, double>> measurements;
         
         
         //--- Public function declarations ---
         
         void write(string& s);
         
-        private:
-        
+    private:
+    
         //--- Private function declarations ---
         
         void writeMeasurement(
@@ -1961,8 +1952,8 @@ struct SubgroupTypeManager;
  */
 struct SubgroupType {
 
-    public:
-    
+public:
+
     //--- Public function declarations ---
     
     SUBGROUP_TYPE_CATEGORY getCategory() const { return category; }
@@ -1991,8 +1982,8 @@ private:
  */
 struct SubgroupTypeManager {
 
-    public:
-    
+public:
+
     //--- Public function declarations ---
     
     void registerType(
@@ -2009,8 +2000,8 @@ struct SubgroupTypeManager {
     SubgroupType* getNextType(const SubgroupType* sgt) const;
     void clear();
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Known types.

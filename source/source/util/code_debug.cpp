@@ -92,7 +92,6 @@ void* operator new[](size_t size, char* file, int line) {
 #endif //ifndef CODE_DEBUG_NEW
 
 
-
 /**
  * @brief Starts a time measurement for benchmarking.
  */

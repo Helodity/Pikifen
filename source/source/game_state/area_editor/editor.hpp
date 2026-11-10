@@ -749,7 +749,7 @@ private:
     Timer quickPreviewTimer = Timer(AREA_EDITOR::QUICK_PREVIEW_DURATION);
     
     //Redo history, with the state of the area at each point. Front = latest.
-    deque<std::pair<Area*, string> > redoHistory;
+    deque<std::pair<Area*, string>> redoHistory;
     
     //Tint for the reference image.
     ALLEGRO_COLOR referenceTint = COLOR_WHITE;
@@ -866,7 +866,7 @@ private:
     bool thumbnailBackupNeedsSaving = false;
     
     //Undo history, with the state of the area at each point. Front = latest.
-    deque<std::pair<Area*, string> > undoHistory;
+    deque<std::pair<Area*, string>> undoHistory;
     
     //Name of the undo operation responsible for the lock.
     string undoSaveLockOperation;

@@ -102,14 +102,15 @@ Status* StatusManager::activate(StatusType* statusType) {
  * @return Whether the buildup reached the necessary amount to
  * activate the actual status effect.
  */
-bool StatusManager::applyBuildup(StatusType* statusType, float overrideAmount) {
+bool StatusManager::applyBuildup(StatusType* statusType,
+    float overrideAmount) {
     //Add it to the buildup list if it's not already there.
     auto buildupIt =
         std::find_if(
             buildups.begin(), buildups.end(),
-    [statusType] (const StatusBuildup & s) {
-        return s.type == statusType;
-    }
+            [statusType] (const StatusBuildup & s) {
+                return s.type == statusType;
+            }
         );
         
     if(buildupIt == buildups.end()) {
@@ -154,9 +155,9 @@ void StatusManager::clearBuildupsAndCooldowns() {
  */
 void StatusManager::deactivate(StatusType* statusType) {
     deactivateIf(
-    [statusType] (Status * sPtr) {
-        return sPtr->type == statusType;
-    }
+        [statusType] (Status * sPtr) {
+            return sPtr->type == statusType;
+        }
     );
 }
 
@@ -201,9 +202,9 @@ void StatusManager::deactivate(size_t idx) {
  */
 void StatusManager::deactivateAll() {
     deactivateIf(
-    [] (Status * sPtr) {
-        return true;
-    }
+        [] (Status * sPtr) {
+            return true;
+        }
     );
 }
 
@@ -283,12 +284,12 @@ const vector<Status>& StatusManager::getList() const {
  */
 void StatusManager::handleHazardLeave() {
     deactivateIf(
-    [] (Status * sPtr) {
-        if(sPtr->type->removeOnHazardLeave) {
-            return true;
+        [] (Status * sPtr) {
+            if(sPtr->type->removeOnHazardLeave) {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
     );
 }
 
@@ -298,9 +299,9 @@ void StatusManager::handleHazardLeave() {
  */
 void StatusManager::handleKnockdown() {
     deactivateIf(
-    [] (Status * sPtr) {
-        return sPtr->type->removeOnKnockDown;
-    }
+        [] (Status * sPtr) {
+            return sPtr->type->removeOnKnockDown;
+        }
     );
 }
 
@@ -379,15 +380,15 @@ Status* StatusManager::handleStatusSource(
  */
 void StatusManager::handleWakingUp() {
     deactivateIf(
-    [this] (Status * sPtr) {
-        Leader* leaPtr = (Leader*) mob;
-        if(leaPtr->leaType->sleepingStatus) {
-            if(sPtr->type == leaPtr->leaType->sleepingStatus) {
-                return true;
+        [this] (Status * sPtr) {
+            Leader* leaPtr = (Leader*) mob;
+            if(leaPtr->leaType->sleepingStatus) {
+                if(sPtr->type == leaPtr->leaType->sleepingStatus) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
-    }
     );
 }
 
@@ -400,18 +401,18 @@ void StatusManager::handleWakingUp() {
 bool StatusManager::handleWhistle() {
     bool savedByWhistle = false;
     deactivateIf(
-    [&savedByWhistle] (Status * sPtr) {
-        if(sPtr->type->removeOnWhistle) {
-            if(
-                sPtr->type->healthChange < 0.0f ||
-                sPtr->type->healthChangeRatio < 0.0f
-            ) {
-                savedByWhistle = true;
+        [&savedByWhistle] (Status * sPtr) {
+            if(sPtr->type->removeOnWhistle) {
+                if(
+                    sPtr->type->healthChange < 0.0f ||
+                    sPtr->type->healthChangeRatio < 0.0f
+                ) {
+                    savedByWhistle = true;
+                }
+                return true;
             }
-            return true;
+            return false;
         }
-        return false;
-    }
     );
     
     return savedByWhistle;
@@ -454,15 +455,15 @@ void StatusManager::tick(float deltaT) {
     
     //Delete statuses whose auto-remove timer is up.
     deactivateIf(
-    [] (Status * sPtr) {
-        if(
-            sPtr->type->autoRemoveTime > 0.0f &&
-            sPtr->timeLeft <= 0.0f
-        ) {
-            return true;
+        [] (Status * sPtr) {
+            if(
+                sPtr->type->autoRemoveTime > 0.0f &&
+                sPtr->timeLeft <= 0.0f
+            ) {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
     );
     
     //Tick buildups.
@@ -517,7 +518,8 @@ void StatusManager::tick(float deltaT) {
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
+void StatusType::loadFromDataNode(DataNode* node,
+    CONTENT_LOAD_LEVEL level) {
     //Content metadata.
     loadMetadataFromDataNode(node);
     
@@ -616,20 +618,20 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     }
     
     const auto loadPg =
-    [this] (DataNode * node, const string& str, ParticleGenerator** pg) {
-        if(node) {
-            if(!isInMap(game.content.particleGens.list, str)) {
-                game.log.report(
-                    LOG_LEVEL_ERROR,
-                    "Unknown particle generator \"" +
-                    str + "\"!", node
-                );
-            } else {
-                *pg = &game.content.particleGens.list[str];
-                
+        [this] (DataNode * node, const string & str, ParticleGenerator** pg) {
+            if(node) {
+                if(!isInMap(game.content.particleGens.list, str)) {
+                    game.log.report(
+                        LOG_LEVEL_ERROR,
+                        "Unknown particle generator \"" +
+                        str + "\"!", node
+                    );
+                } else {
+                    *pg = &game.content.particleGens.list[str];
+                    
+                }
             }
-        }
-    };
+        };
     
     loadPg(pgNode, pgStr, &particleGen);
     loadPg(pgStartNode, pgStartStr, &particleGenStart);

@@ -202,17 +202,17 @@ HardwareMediator::getIconDbEntry(
     int dbMapKey = INVALID;
     
     const auto getControllerBrand =
-    [source, this] (DEVICE_BRAND * result) {
-        DEVICE_BRAND brand = DEVICE_BRAND_CONTROLLER_UNKOWN;
-        if((size_t) source.deviceNr < controllers.size()) {
-            brand = controllers[source.deviceNr].brand;
-        }
-        if(deviceBrandDb.find(brand) != deviceBrandDb.end()) {
-            *result = brand;
-            return true;
-        }
-        return false;
-    };
+        [source, this] (DEVICE_BRAND * result) {
+            DEVICE_BRAND brand = DEVICE_BRAND_CONTROLLER_UNKOWN;
+            if((size_t) source.deviceNr < controllers.size()) {
+                brand = controllers[source.deviceNr].brand;
+            }
+            if(deviceBrandDb.find(brand) != deviceBrandDb.end()) {
+                *result = brand;
+                return true;
+            }
+            return false;
+        };
     
     if(source.type == Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON) {
         dbMap = &deviceBrandDb.at(DEVICE_BRAND_MOUSE_ANY).buttonIcons;
@@ -596,8 +596,8 @@ Inpution::InputSource HardwareMediator::sanitizeStick(
     const DeviceBrand* dbEntry = &dbEntryIt->second;
     InputSourceMapEntry old {
         .isButton =
-        source.type ==
-        Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON,
+            source.type ==
+            Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON,
         .stickNr = source.stickNr,
         .axisNr = source.axisNr,
     };
@@ -640,7 +640,7 @@ void HardwareMediator::updateControllers(bool silent) {
         }
         
         controllers.push_back(
-        Controller {
+            Controller {
             .aJoyPtr = aJoyPtr,
             .brand = brand
         }

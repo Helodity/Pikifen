@@ -97,7 +97,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
 void MissionData::applyPresetBattleEnemies() {
     //End conditions.
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_PAUSE_MENU,
         .clear = true,
         .zeroTimeForScore = true,
@@ -106,7 +106,7 @@ void MissionData::applyPresetBattleEnemies() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_LESS,
         .metricType = MISSION_METRIC_SECS_LEFT,
         .matchAmount = 0,
@@ -116,7 +116,7 @@ void MissionData::applyPresetBattleEnemies() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
@@ -127,7 +127,7 @@ void MissionData::applyPresetBattleEnemies() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_LEADERS_LOST,
         .matchAmount = 1,
@@ -139,7 +139,7 @@ void MissionData::applyPresetBattleEnemies() {
     
     //Mob groups.
     mobGroups.push_back(
-    MissionMobGroup {
+        MissionMobGroup {
         .type = MISSION_MOB_GROUP_ENEMIES,
         .highlightOnRadar = true,
     }
@@ -168,7 +168,7 @@ void MissionData::applyPresetBattleEnemies() {
         
     //Score criteria.
     scoreCriteria.push_back(
-    MissionScoreCriterion {
+        MissionScoreCriterion {
         .metricType = MISSION_METRIC_ENEMY_DEFEAT_PTS,
         .points = 1,
         .affectsHud = true,
@@ -193,7 +193,7 @@ void MissionData::applyPresetBattleEnemies() {
 void MissionData::applyPresetCollectEverything() {
     //End conditions.
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_PAUSE_MENU,
         .clear = true,
         .zeroTimeForScore = true,
@@ -202,7 +202,7 @@ void MissionData::applyPresetCollectEverything() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_LESS,
         .metricType = MISSION_METRIC_SECS_LEFT,
         .matchAmount = 0,
@@ -212,7 +212,7 @@ void MissionData::applyPresetCollectEverything() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
@@ -223,7 +223,7 @@ void MissionData::applyPresetCollectEverything() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_LEADERS_LOST,
         .matchAmount = 1,
@@ -235,7 +235,7 @@ void MissionData::applyPresetCollectEverything() {
     
     //Mob groups.
     mobGroups.push_back(
-    MissionMobGroup {
+        MissionMobGroup {
         .type = MISSION_MOB_GROUP_TREASURES_ENEMIES,
         .enemiesNeedCollection = true,
         .highlightOnRadar = true,
@@ -265,7 +265,7 @@ void MissionData::applyPresetCollectEverything() {
         
     //Score criteria.
     scoreCriteria.push_back(
-    MissionScoreCriterion {
+        MissionScoreCriterion {
         .metricType = MISSION_METRIC_OBJECT_COLLECTION_PTS,
         .points = 1,
         .affectsHud = true,
@@ -291,7 +291,7 @@ void MissionData::applyPresetCollectEverything() {
 void MissionData::applyPresetCollectPikmin() {
     //End conditions.
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_PAUSE_MENU,
         .clear = true,
         .zeroTimeForScore = true,
@@ -300,7 +300,7 @@ void MissionData::applyPresetCollectPikmin() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_LESS,
         .metricType = MISSION_METRIC_SECS_LEFT,
         .matchAmount = 0,
@@ -310,7 +310,7 @@ void MissionData::applyPresetCollectPikmin() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_LEADERS_LOST,
         .matchAmount = 1,
@@ -342,7 +342,7 @@ void MissionData::applyPresetCollectPikmin() {
         
     //Score criteria.
     scoreCriteria.push_back(
-    MissionScoreCriterion{
+        MissionScoreCriterion{
         .metricType = MISSION_METRIC_LIVING_PIKMIN,
         .points = 10,
         .affectsHud = true,
@@ -367,7 +367,7 @@ void MissionData::applyPresetCollectPikmin() {
 void MissionData::applyPresetCollectTreasure() {
     //End conditions.
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_PAUSE_MENU,
         .clear = true,
         .zeroTimeForScore = true,
@@ -376,7 +376,7 @@ void MissionData::applyPresetCollectTreasure() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_LESS,
         .metricType = MISSION_METRIC_SECS_LEFT,
         .matchAmount = 0,
@@ -386,7 +386,7 @@ void MissionData::applyPresetCollectTreasure() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
@@ -397,7 +397,7 @@ void MissionData::applyPresetCollectTreasure() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_LEADERS_LOST,
         .matchAmount = 1,
@@ -409,7 +409,7 @@ void MissionData::applyPresetCollectTreasure() {
     
     //Mob groups.
     mobGroups.push_back(
-    MissionMobGroup {
+        MissionMobGroup {
         .type = MISSION_MOB_GROUP_TREASURES,
         .highlightOnRadar = true,
     }
@@ -438,7 +438,7 @@ void MissionData::applyPresetCollectTreasure() {
         
     //Score criteria.
     scoreCriteria.push_back(
-    MissionScoreCriterion {
+        MissionScoreCriterion {
         .metricType = MISSION_METRIC_TREASURE_COLLECTION_PTS,
         .points = 1,
         .affectsHud = true,
@@ -463,7 +463,7 @@ void MissionData::applyPresetCollectTreasure() {
 void MissionData::applyPresetDefeatBosses() {
     //End conditions.
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_PAUSE_MENU,
         .clear = false,
         .zeroTimeForScore = true,
@@ -472,7 +472,7 @@ void MissionData::applyPresetDefeatBosses() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_LESS,
         .metricType = MISSION_METRIC_SECS_LEFT,
         .matchAmount = 0,
@@ -482,7 +482,7 @@ void MissionData::applyPresetDefeatBosses() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
@@ -493,7 +493,7 @@ void MissionData::applyPresetDefeatBosses() {
     }
     );
     endConds.push_back(
-    MissionEndCond {
+        MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_LEADERS_LOST,
         .matchAmount = 1,
@@ -505,7 +505,7 @@ void MissionData::applyPresetDefeatBosses() {
     
     //Mob groups.
     mobGroups.push_back(
-    MissionMobGroup {
+        MissionMobGroup {
         .type = MISSION_MOB_GROUP_ENEMIES,
         .highlightOnRadar = true,
     }
@@ -524,7 +524,7 @@ void MissionData::applyPresetDefeatBosses() {
         
     //Score criteria.
     scoreCriteria.push_back(
-    MissionScoreCriterion {
+        MissionScoreCriterion {
         .metricType = MISSION_METRIC_SECS_LEFT,
         .points = 10,
         .affectsHud = true,
@@ -568,7 +568,8 @@ vector<string> MissionData::getMedalAwardBulletPoints() const {
     
     switch(medalAwardMode) {
     case MISSION_MEDAL_AWARD_MODE_POINTS: {
-        result.push_back("Platinum medal: " + i2s(platinumReq) + "+ points.");
+        result.push_back("Platinum medal: " + i2s(platinumReq) +
+            "+ points.");
         result.push_back("Gold medal: " + i2s(goldReq) + "+ points.");
         result.push_back("Silver medal: " + i2s(silverReq) + "+ points.");
         result.push_back("Bronze medal: " + i2s(bronzeReq) + "+ points.");
@@ -702,12 +703,12 @@ bool MissionEndCond::usesMetric() const {
  */
 MissionEndCondType::Info MissionEndCondTypeMetricOrLess::getInfo() const {
     return
-    Info {
+        Info {
         .name =
-        "Metric is equal or less",
+            "Metric is equal or less",
         .description =
-        "Triggers when a mission metric's value reaches the specified "
-        "amount or less.",
+            "Triggers when a mission metric's value reaches the specified "
+            "amount or less.",
     };
 }
 
@@ -757,12 +758,12 @@ bool MissionEndCondTypeMetricOrLess::isMet(MissionEndCond* cond) const {
  */
 MissionEndCondType::Info MissionEndCondTypeMetricOrMore::getInfo() const {
     return
-    Info {
+        Info {
         .name =
-        "Metric is equal or more",
+            "Metric is equal or more",
         .description =
-        "Triggers when a mission metric's value reaches the specified "
-        "amount or more.",
+            "Triggers when a mission metric's value reaches the specified "
+            "amount or more.",
     };
 }
 
@@ -812,11 +813,11 @@ bool MissionEndCondTypeMetricOrMore::isMet(MissionEndCond* cond) const {
  */
 MissionEndCondType::Info MissionEndCondTypePauseMenu::getInfo() const {
     return
-    Info {
+        Info {
         .name =
-        "Pause menu end",
+            "Pause menu end",
         .description =
-        "Triggers when the player ends the mission early from the pause menu.",
+            "Triggers when the player ends the mission early from the pause menu.",
     };
 }
 
@@ -856,11 +857,11 @@ bool MissionEndCondTypePauseMenu::isMet(MissionEndCond* cond) const {
  */
 MissionEndCondType::Info MissionEndCondTypeTakeDamage::getInfo() const {
     return
-    Info {
+        Info {
         .name =
-        "Take damage",
+            "Take damage",
         .description =
-        "Triggers when a leader takes damage.",
+            "Triggers when a leader takes damage.",
     };
 }
 
@@ -1021,7 +1022,8 @@ int MissionMetricTypeEnemyCollectionPts::getAmount(size_t idxParam) const {
  * @param idxParam Index parameter, if applicable.
  * @return The amount, or 0 if none.
  */
-int MissionMetricTypeEnemyCollectionPts::getAutoTarget(size_t idxParam) const {
+int MissionMetricTypeEnemyCollectionPts::getAutoTarget(size_t idxParam)
+const {
     size_t enemyPoints = 0;
     game.curArea->getTotalEnemyInfo(nullptr, &enemyPoints);
     return enemyPoints;
@@ -1033,9 +1035,10 @@ int MissionMetricTypeEnemyCollectionPts::getAutoTarget(size_t idxParam) const {
  *
  * @return The information.
  */
-MissionMetricType::Info MissionMetricTypeEnemyCollectionPts::getInfo() const {
+MissionMetricType::Info MissionMetricTypeEnemyCollectionPts::getInfo()
+const {
     return
-    Info {
+        Info {
         .name = "Enemy collection points",
         .hasAutoTarget = true
     };
@@ -1094,7 +1097,7 @@ int MissionMetricTypeEnemyDefeatPts::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeEnemyDefeatPts::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Enemy defeat points",
         .hasAutoTarget = true
     };
@@ -1162,7 +1165,7 @@ int MissionMetricTypeLeadersInRegion::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeLeadersInRegion::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Leaders in region",
         .idxParamName = "Region number",
         .idxParamDescription = "Number of the area region.",
@@ -1238,7 +1241,7 @@ int MissionMetricTypeLeadersLost::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeLeadersLost::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Leaders lost",
         .hasAutoTarget = true
     };
@@ -1302,7 +1305,7 @@ int MissionMetricTypeLivingPikmin::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeLivingPikmin::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Living Pikmin",
         .hasAutoTarget = true
     };
@@ -1370,7 +1373,7 @@ int MissionMetricTypeMobGroup::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeMobGroup::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Mob group cleared mobs",
         .idxParamName = "Mob group number",
         .idxParamDescription = "Number of the mob group.",
@@ -1435,7 +1438,7 @@ int MissionMetricTypeMobGroupHealth::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeMobGroupHealth::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Mob group health",
         .idxParamName = "Mob group number",
         .idxParamDescription = "Number of the mob group.",
@@ -1484,7 +1487,8 @@ int MissionMetricTypeObjectCollectionPts::getAmount(size_t idxParam) const {
  * @param idxParam Index parameter, if applicable.
  * @return The amount, or 0 if none.
  */
-int MissionMetricTypeObjectCollectionPts::getAutoTarget(size_t idxParam) const {
+int MissionMetricTypeObjectCollectionPts::getAutoTarget(
+    size_t idxParam) const {
     size_t treasurePoints = 0;
     size_t enemyPoints = 0;
     game.curArea->getTotalTreasureInfo(nullptr, &treasurePoints);
@@ -1498,9 +1502,10 @@ int MissionMetricTypeObjectCollectionPts::getAutoTarget(size_t idxParam) const {
  *
  * @return The information.
  */
-MissionMetricType::Info MissionMetricTypeObjectCollectionPts::getInfo() const {
+MissionMetricType::Info MissionMetricTypeObjectCollectionPts::getInfo()
+const {
     return
-    Info {
+        Info {
         .name = "Object collection points",
         .hasAutoTarget = true
     };
@@ -1569,7 +1574,7 @@ int MissionMetricTypePikminBorn::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypePikminBorn::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Pikmin born",
         .hasAutoTarget = true
     };
@@ -1633,7 +1638,7 @@ int MissionMetricTypePikminDeaths::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypePikminDeaths::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Pikmin deaths",
         .hasAutoTarget = true
     };
@@ -1690,7 +1695,7 @@ int MissionMetricTypeScriptSlot::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeScriptSlot::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Script slot",
         .idxParamName = "Slot number",
         .idxParamDescription = "Number of the script slot.",
@@ -1749,7 +1754,7 @@ int MissionMetricTypeSecsLeft::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeSecsLeft::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Seconds left",
         .hasAutoTarget = true
     };
@@ -1802,7 +1807,7 @@ int MissionMetricTypeSecsPassed::getAutoTarget(size_t idxParam) const {
  */
 MissionMetricType::Info MissionMetricTypeSecsPassed::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Seconds passed",
         .hasAutoTarget = true
     };
@@ -1831,7 +1836,8 @@ bool MissionMetricTypeSecsPassed::getZoomData(
  * @param idxParam Index parameter, if applicable.
  * @return The amount.
  */
-int MissionMetricTypeTreasureCollectionPts::getAmount(size_t idxParam) const {
+int MissionMetricTypeTreasureCollectionPts::getAmount(size_t idxParam)
+const {
     return game.states.gameplay->treasurePointsObtained;
 }
 
@@ -1859,7 +1865,7 @@ int MissionMetricTypeTreasureCollectionPts::getAutoTarget(
 MissionMetricType::Info
 MissionMetricTypeTreasureCollectionPts::getInfo() const {
     return
-    Info {
+        Info {
         .name = "Treasure collection points",
         .hasAutoTarget = true
     };
@@ -1909,49 +1915,49 @@ vector<size_t> MissionMobGroup::calculateList() const {
         bool toAdd = false;
         
         const auto checkTreasure = [gPtr] () {
-            if(gPtr->type->category->id == MOB_CATEGORY_TREASURES) {
-                return true;
-            } else if(gPtr->type->category->id == MOB_CATEGORY_RESOURCES) {
-                ResourceType* resType = (ResourceType*) gPtr->type;
-                if(
-                    resType->deliveryResult ==
-                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-                ) {
-                    return true;
-                }
-            } else if(gPtr->type->category->id == MOB_CATEGORY_PILES) {
-                PileType* pilType = (PileType*) gPtr->type;
-                if(
-                    pilType->contentsResource &&
-                    pilType->contentsResource->deliveryResult ==
-                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-                ) {
-                    return true;
-                }
-            }
-            return false;
-        };
+                                       if(gPtr->type->category->id == MOB_CATEGORY_TREASURES) {
+                                           return true;
+                                       } else if(gPtr->type->category->id == MOB_CATEGORY_RESOURCES) {
+                                           ResourceType* resType = (ResourceType*) gPtr->type;
+                                           if(
+                                               resType->deliveryResult ==
+                                               RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+                                           ) {
+                                               return true;
+                                           }
+                                       } else if(gPtr->type->category->id == MOB_CATEGORY_PILES) {
+                                           PileType* pilType = (PileType*) gPtr->type;
+                                           if(
+                                               pilType->contentsResource &&
+                                               pilType->contentsResource->deliveryResult ==
+                                               RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+                                           ) {
+                                               return true;
+                                           }
+                                       }
+                                       return false;
+                                   };
         
         const auto checkEnemy = [gPtr] () {
-            if(gPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
-                return true;
-            }
-            return false;
-        };
+                                    if(gPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
+                                        return true;
+                                    }
+                                    return false;
+                                };
         
         const auto checkLeader = [gPtr] () {
-            if(gPtr->type->category->id == MOB_CATEGORY_LEADERS) {
-                return true;
-            }
-            return false;
-        };
+                                     if(gPtr->type->category->id == MOB_CATEGORY_LEADERS) {
+                                         return true;
+                                     }
+                                     return false;
+                                 };
         
         const auto checkPikmin = [gPtr] () {
-            if(gPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
-                return true;
-            }
-            return false;
-        };
+                                     if(gPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+                                         return true;
+                                     }
+                                     return false;
+                                 };
         
         switch(type) {
         case MISSION_MOB_GROUP_CUSTOM: {

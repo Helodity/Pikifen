@@ -251,7 +251,6 @@ float Timer::getRatioLeft() const {
 }
 
 
-
 /**
  * @brief Starts a timer.
  *
@@ -421,7 +420,6 @@ string incrementNameTillUnique(
     
     return tentativeName;
 }
-
 
 
 /**

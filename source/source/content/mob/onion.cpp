@@ -48,8 +48,6 @@ const float SPIT_V_SPEED = 600.0f;
 }
 
 
-
-
 /**
  * @brief Constructs a new Onion object.
  *
@@ -70,18 +68,18 @@ Onion::Onion(const Point& center, OnionType* type, float angle) :
     bottomZ++;
     
     generationDelayTimer.onEnd =
-    [this] () { startGenerating(); };
+        [this] () { startGenerating(); };
     nextGenerationTimer.onEnd =
-    [this] () {
-        forIdx(t, oniType->nest->pikTypes) {
-            if(generationQueue[t] > 0) {
-                nextGenerationTimer.start();
-                generate();
-                return;
+        [this] () {
+            forIdx(t, oniType->nest->pikTypes) {
+                if(generationQueue[t] > 0) {
+                    nextGenerationTimer.start();
+                    generate();
+                    return;
+                }
             }
-        }
-        stopGenerating();
-    };
+            stopGenerating();
+        };
     
     forIdx(t, oniType->nest->pikTypes) {
         generationQueue.push_back(0);

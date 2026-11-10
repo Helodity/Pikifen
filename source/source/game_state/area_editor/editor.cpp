@@ -135,21 +135,21 @@ AreaEditor::AreaEditor() :
     //Misc. things.
     enableFlag(pathPreviewSettings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
     pathPreviewTimer =
-    Timer(AREA_EDITOR::PATH_PREVIEW_TIMER_DUR, [this] () {
-        pathPreviewDist = calculatePreviewPath();
-    });
+        Timer(AREA_EDITOR::PATH_PREVIEW_TIMER_DUR, [this] () {
+                                                       pathPreviewDist = calculatePreviewPath();
+                                                   });
     
     undoSaveLockTimer =
         Timer(
             AREA_EDITOR::UNDO_SAVE_LOCK_DURATION,
-    [this] () {undoSaveLockOperation.clear();}
+            [this] () {undoSaveLockOperation.clear();}
         );
         
     if(game.options.areaEd.backupInterval > 0) {
         backupTimer =
             Timer(
                 game.options.areaEd.backupInterval,
-        [this] () {saveBackup();}
+                [this] () {saveBackup();}
             );
     }
     
@@ -158,11 +158,11 @@ AreaEditor::AreaEditor() :
     
     //Register commands.
     auto registerCmd =
-    [this] (void (AreaEditor::* func)(float), const string& name) {
-        commands.push_back(
-            Command(std::bind(func, this, std::placeholders::_1), name)
-        );
-    };
+        [this] (void (AreaEditor::* func)(float), const string & name) {
+            commands.push_back(
+                Command(std::bind(func, this, std::placeholders::_1), name)
+            );
+        };
     
     registerCmd(&AreaEditor::circleSectorCmd, "circle_sector");
     registerCmd(&AreaEditor::copyPropertiesCmd, "copy_properties");
@@ -202,234 +202,240 @@ AreaEditor::AreaEditor() :
     
     //Setup the selection managers.
     vertexSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = v2p(game.curArea->vertexes[idx]);
-        *outSize = Point();
-        *outAngle = 0.0f;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            *outCenter = v2p(game.curArea->vertexes[idx]);
+            *outSize = Point();
+            *outAngle = 0.0f;
+        };
     vertexSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        game.curArea->vertexes[idx]->x = newCenter.x;
-        game.curArea->vertexes[idx]->y = newCenter.y;
-    };
+        ) {
+            game.curArea->vertexes[idx]->x = newCenter.x;
+            game.curArea->vertexes[idx]->y = newCenter.y;
+        };
     vertexSelection.onGetTotal =
-    [this] () {
-        return game.curArea->vertexes.size();
-    };
+        [this] () {
+            return game.curArea->vertexes.size();
+        };
     vertexSelection.onIsEligible =
-    [this] (size_t idx) {
-        return state == EDITOR_STATE_LAYOUT;
-    };
+        [this] (size_t idx) {
+            return state == EDITOR_STATE_LAYOUT;
+        };
     vertexSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     vertexSelection.onCheckUnderCursor =
-    [this] (size_t idx, const Point & cursorPos) {
-        return game.curArea->vertexes[idx] == highlightedVertex;
-    };
+        [this] (size_t idx, const Point & cursorPos) {
+            return game.curArea->vertexes[idx] == highlightedVertex;
+        };
     vertexSelection.itemsAreRectangular = true;
     vertexSelection.itemsCanResize = false;
     vertexSelection.itemsCanRotate = false;
     vertexSelection.itemPadding = AREA_EDITOR::SELECTION_TW_PADDING;
     
     edgeSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        Edge* ePtr = game.curArea->edges[idx];
-        Point v1 = v2p(ePtr->vertexes[0]);
-        Point v2 = v2p(ePtr->vertexes[1]);
-        *outCenter = (v1 + v2) / 2.0f;
-        *outSize =
-            Point(Distance(v1, v2).toFloat(), 0.0f);
-        *outAngle = getAngle(v1, v2);
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            Edge* ePtr = game.curArea->edges[idx];
+            Point v1 = v2p(ePtr->vertexes[0]);
+            Point v2 = v2p(ePtr->vertexes[1]);
+            *outCenter = (v1 + v2) / 2.0f;
+            *outSize =
+                Point(Distance(v1, v2).toFloat(), 0.0f);
+            *outAngle = getAngle(v1, v2);
+        };
     edgeSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-    };
+        ) {
+        };
     edgeSelection.onGetTotal =
-    [this] () {
-        return game.curArea->edges.size();
-    };
+        [this] () {
+            return game.curArea->edges.size();
+        };
     edgeSelection.onIsEligible =
-    [this] (size_t idx) {
-        return
-            state == EDITOR_STATE_LAYOUT &&
-            (
-                selectionFilter == SELECTION_FILTER_EDGES ||
-                selectionFilter == SELECTION_FILTER_SECTORS
-            );
-    };
+        [this] (size_t idx) {
+            return
+                state == EDITOR_STATE_LAYOUT &&
+                (
+                    selectionFilter == SELECTION_FILTER_EDGES ||
+                    selectionFilter == SELECTION_FILTER_SECTORS
+                );
+        };
     edgeSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     edgeSelection.onCheckUnderCursor =
-    [this] (size_t idx, const Point & cursorPos) {
-        return game.curArea->edges[idx] == highlightedEdge;
-    };
+        [this] (size_t idx, const Point & cursorPos) {
+            return game.curArea->edges[idx] == highlightedEdge;
+        };
     edgeSelection.itemsAreRectangular = true;
     edgeSelection.itemsCanResize = false;
     edgeSelection.itemsCanRotate = true;
     edgeSelection.disableChanges = true;
     
     sectorSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        Sector* sPtr = game.curArea->sectors[idx];
-        sPtr->calculateBoundingBox();
-        Rect rect = rectCornersToRect(sPtr->bBox);
-        *outCenter = rect.center;
-        *outSize = rect.size;
-        *outAngle = 0.0f;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            Sector* sPtr = game.curArea->sectors[idx];
+            sPtr->calculateBoundingBox();
+            Rect rect = rectCornersToRect(sPtr->bBox);
+            *outCenter = rect.center;
+            *outSize = rect.size;
+            *outAngle = 0.0f;
+        };
     sectorSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-    };
+        ) {
+        };
     sectorSelection.onGetTotal =
-    [this] () {
-        return game.curArea->sectors.size();
-    };
+        [this] () {
+            return game.curArea->sectors.size();
+        };
     sectorSelection.onIsEligible =
-    [this] (size_t idx) {
-        return
-            state == EDITOR_STATE_LAYOUT &&
-            selectionFilter == SELECTION_FILTER_SECTORS;
-    };
+        [this] (size_t idx) {
+            return
+                state == EDITOR_STATE_LAYOUT &&
+                selectionFilter == SELECTION_FILTER_SECTORS;
+        };
     sectorSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     sectorSelection.onCheckUnderCursor =
-    [this] (size_t idx, const Point & cursorPos) {
-        return game.curArea->sectors[idx] == highlightedSector;
-    };
+        [this] (size_t idx, const Point & cursorPos) {
+            return game.curArea->sectors[idx] == highlightedSector;
+        };
     sectorSelection.itemsAreRectangular = true;
     sectorSelection.itemsCanResize = false;
     sectorSelection.itemsCanRotate = false;
     sectorSelection.disableChanges = true;
     
     mobSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->mobGenerators[idx]->center;
-        *outSize = getMobGenRadius(game.curArea->mobGenerators[idx]) * 2.0f;
-        *outAngle = 0.0f;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            *outCenter = game.curArea->mobGenerators[idx]->center;
+            *outSize = getMobGenRadius(game.curArea->mobGenerators[idx]) * 2.0f;
+            *outAngle = 0.0f;
+        };
     mobSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        game.curArea->mobGenerators[idx]->center = newCenter;
-    };
+        ) {
+            game.curArea->mobGenerators[idx]->center = newCenter;
+        };
     mobSelection.onGetTotal =
-    [this] () {
-        return game.curArea->mobGenerators.size();
-    };
+        [this] () {
+            return game.curArea->mobGenerators.size();
+        };
     mobSelection.onIsEligible =
-    [this] (size_t idx) {
-        return state == EDITOR_STATE_MOBS;
-    };
+        [this] (size_t idx) {
+            return state == EDITOR_STATE_MOBS;
+        };
     mobSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     mobSelection.onCheckUnderCursor =
-    [this] (size_t idx, const Point & cursorPos) {
-        return game.curArea->mobGenerators[idx] == highlightedMob;
-    };
+        [this] (size_t idx, const Point & cursorPos) {
+            return game.curArea->mobGenerators[idx] == highlightedMob;
+        };
     mobSelection.itemsAreRectangular = false;
     mobSelection.itemsCanResize = false;
     mobSelection.itemsCanRotate = false;
     
     pathStopSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->pathStops[idx]->center;
-        *outSize = Point(game.curArea->pathStops[idx]->radius * 2.0f);
-        *outAngle = 0.0f;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            *outCenter = game.curArea->pathStops[idx]->center;
+            *outSize = Point(game.curArea->pathStops[idx]->radius * 2.0f);
+            *outAngle = 0.0f;
+        };
     pathStopSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        game.curArea->pathStops[idx]->center = newCenter;
-        game.curArea->pathStops[idx]->radius = newSize.x / 2.0f;
-    };
+        ) {
+            game.curArea->pathStops[idx]->center = newCenter;
+            game.curArea->pathStops[idx]->radius = newSize.x / 2.0f;
+        };
     pathStopSelection.onGetTotal =
-    [this] () {
-        return game.curArea->pathStops.size();
-    };
+        [this] () {
+            return game.curArea->pathStops.size();
+        };
     pathStopSelection.onIsEligible =
-    [this] (size_t idx) {
-        return state == EDITOR_STATE_PATHS;
-    };
+        [this] (size_t idx) {
+            return state == EDITOR_STATE_PATHS;
+        };
     pathStopSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     pathStopSelection.onCheckUnderCursor =
-    [this] (size_t idx, const Point & cursorPos) {
-        return game.curArea->pathStops[idx] == highlightedPathStop;
-    };
+        [this] (size_t idx, const Point & cursorPos) {
+            return game.curArea->pathStops[idx] == highlightedPathStop;
+        };
     pathStopSelection.itemsAreRectangular = false;
     pathStopSelection.itemsCanResize = false;
     pathStopSelection.itemsCanRotate = false;
     
     pathLinkSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        EditorPathLink* elPtr = &game.curArea->editorPathLinks[idx];
-        PathStop* s1 = elPtr->link1->startPtr;
-        PathStop* s2 = elPtr->link1->endPtr;
-        Point p1 = s1->center;
-        Point p2 = s2->center;
-        *outAngle = getAngle(p1, p2);
-        Point offset = p1;
-        //Transform both points so that p1 is at the origin,
-        //and p2 is to its right. Then shrink by the stop radii.
-        p1 = p1 - offset;
-        p2 = p2 - offset;
-        p2 = rotatePoint(p2, -(*outAngle));
-        p1.x += s1->radius;
-        p2.x -= s2->radius;
-        //Transform them back.
-        p1 = rotatePoint(p1, (*outAngle));
-        p2 = rotatePoint(p2, (*outAngle));
-        p1 = p1 + offset;
-        p2 = p2 + offset;
-        *outCenter = (p1 + p2) / 2.0f;
-        *outSize =
-            Point(Distance(p1, p2).toFloat(), 0.0f);
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            EditorPathLink* elPtr = &game.curArea->editorPathLinks[idx];
+            PathStop* s1 = elPtr->link1->startPtr;
+            PathStop* s2 = elPtr->link1->endPtr;
+            Point p1 = s1->center;
+            Point p2 = s2->center;
+            *outAngle = getAngle(p1, p2);
+            Point offset = p1;
+            //Transform both points so that p1 is at the origin,
+            //and p2 is to its right. Then shrink by the stop radii.
+            p1 = p1 - offset;
+            p2 = p2 - offset;
+            p2 = rotatePoint(p2, -(*outAngle));
+            p1.x += s1->radius;
+            p2.x -= s2->radius;
+            //Transform them back.
+            p1 = rotatePoint(p1, (*outAngle));
+            p2 = rotatePoint(p2, (*outAngle));
+            p1 = p1 + offset;
+            p2 = p2 + offset;
+            *outCenter = (p1 + p2) / 2.0f;
+            *outSize =
+                Point(Distance(p1, p2).toFloat(), 0.0f);
+        };
     pathLinkSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-    };
+        ) {
+        };
     pathLinkSelection.onGetTotal =
-    [this] () {
-        return game.curArea->editorPathLinks.size();
-    };
+        [this] () {
+            return game.curArea->editorPathLinks.size();
+        };
     pathLinkSelection.onIsEligible =
-    [this] (size_t idx) {
-        return state == EDITOR_STATE_PATHS;
-    };
+        [this] (size_t idx) {
+            return state == EDITOR_STATE_PATHS;
+        };
     pathLinkSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     pathLinkSelection.onCheckUnderCursor =
-    [this] (size_t idx, const Point & cursorPos) {
-        return &game.curArea->editorPathLinks[idx] == highlightedEditorPathLink;
-    };
+        [this] (size_t idx, const Point & cursorPos) {
+            return &game.curArea->editorPathLinks[idx] == highlightedEditorPathLink;
+        };
     pathLinkSelection.itemsAreRectangular = true;
     pathLinkSelection.itemsCanResize = false;
     pathLinkSelection.itemsCanRotate = true;
@@ -437,88 +443,90 @@ AreaEditor::AreaEditor() :
     pathLinkSelection.itemPadding = AREA_EDITOR::SELECTION_TW_PADDING;
     
     shadowSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->treeShadows[idx]->pose.pos;
-        *outSize = game.curArea->treeShadows[idx]->pose.size;
-        *outAngle = game.curArea->treeShadows[idx]->pose.angle;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            *outCenter = game.curArea->treeShadows[idx]->pose.pos;
+            *outSize = game.curArea->treeShadows[idx]->pose.size;
+            *outAngle = game.curArea->treeShadows[idx]->pose.angle;
+        };
     shadowSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        game.curArea->treeShadows[idx]->pose.pos = newCenter;
-        game.curArea->treeShadows[idx]->pose.size = newSize;
-        game.curArea->treeShadows[idx]->pose.angle = newAngle;
-    };
+        ) {
+            game.curArea->treeShadows[idx]->pose.pos = newCenter;
+            game.curArea->treeShadows[idx]->pose.size = newSize;
+            game.curArea->treeShadows[idx]->pose.angle = newAngle;
+        };
     shadowSelection.onGetTotal =
-    [this] () {
-        return game.curArea->treeShadows.size();
-    };
+        [this] () {
+            return game.curArea->treeShadows.size();
+        };
     shadowSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     shadowSelection.onIsEligible =
-    [this] (size_t idx) {
-        return state == EDITOR_STATE_DETAILS;
-    };
+        [this] (size_t idx) {
+            return state == EDITOR_STATE_DETAILS;
+        };
     shadowSelection.itemsAreRectangular = true;
     shadowSelection.itemsCanResize = true;
     shadowSelection.itemsCanRotate = true;
     
     regionSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->regions[idx]->pose.pos;
-        *outSize = game.curArea->regions[idx]->pose.size;
-        *outAngle = game.curArea->regions[idx]->pose.angle;
-    };
+        [this] (size_t idx, Point * outCenter, Point * outSize,
+            float* outAngle) {
+            *outCenter = game.curArea->regions[idx]->pose.pos;
+            *outSize = game.curArea->regions[idx]->pose.size;
+            *outAngle = game.curArea->regions[idx]->pose.angle;
+        };
     regionSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        game.curArea->regions[idx]->pose.pos = newCenter;
-        game.curArea->regions[idx]->pose.size = newSize;
-        game.curArea->regions[idx]->pose.angle = newAngle;
-    };
+        ) {
+            game.curArea->regions[idx]->pose.pos = newCenter;
+            game.curArea->regions[idx]->pose.size = newSize;
+            game.curArea->regions[idx]->pose.angle = newAngle;
+        };
     regionSelection.onGetTotal =
-    [this] () {
-        return game.curArea->regions.size();
-    };
+        [this] () {
+            return game.curArea->regions.size();
+        };
     regionSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     regionSelection.onIsEligible =
-    [this] (size_t idx) {
-        return state == EDITOR_STATE_GAMEPLAY;
-    };
+        [this] (size_t idx) {
+            return state == EDITOR_STATE_GAMEPLAY;
+        };
     regionSelection.itemsAreRectangular = true;
     regionSelection.itemsCanResize = true;
     regionSelection.itemsCanRotate = true;
     
     reminderSelection.onGetInfo =
-    [] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->reminders[idx].center;
-        *outSize = AREA_EDITOR::REMINDER_SIZE;
-        *outAngle = 0.0f;
-    };
+        [] (size_t idx, Point * outCenter, Point * outSize, float* outAngle) {
+            *outCenter = game.curArea->reminders[idx].center;
+            *outSize = AREA_EDITOR::REMINDER_SIZE;
+            *outAngle = 0.0f;
+        };
     reminderSelection.onSetInfo =
         [] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
-    ) {
-        game.curArea->reminders[idx].center = newCenter;
-    };
+        ) {
+            game.curArea->reminders[idx].center = newCenter;
+        };
     reminderSelection.onGetTotal =
-    [] () {
-        return game.curArea->reminders.size();
-    };
+        [] () {
+            return game.curArea->reminders.size();
+        };
     reminderSelection.onSelectionChanged =
-    [this] () {
-        setSelectionStatusText();
-    };
+        [this] () {
+            setSelectionStatusText();
+        };
     reminderSelection.itemsAreRectangular = true;
     reminderSelection.itemsCanResize = false;
     reminderSelection.itemsCanRotate = false;
@@ -528,8 +536,9 @@ AreaEditor::AreaEditor() :
     layoutSelCtrl.managers.push_back(&edgeSelection);
     layoutSelCtrl.managers.push_back(&sectorSelection);
     layoutSelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p, true); };
-    layoutSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+        [this] (const Point & p) { return snapPoint(p, true); };
+    layoutSelCtrl.twTransformRule =
+        SelectionController::OP_RULE_MULTIPLE_ITEMS;
     layoutSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     layoutSelCtrl.overlapsCycle = false;
     layoutSelCtrl.clickingSelectedUnselectsOthers = false;
@@ -537,8 +546,9 @@ AreaEditor::AreaEditor() :
     
     mobsSelCtrl.managers.push_back(&mobSelection);
     mobsSelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
-    mobsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+        [this] (const Point & p) { return snapPoint(p); };
+    mobsSelCtrl.twTransformRule =
+        SelectionController::OP_RULE_MULTIPLE_ITEMS;
     mobsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     mobsSelCtrl.overlapsCycle = true;
     mobsSelCtrl.clickingSelectedUnselectsOthers = false;
@@ -547,8 +557,9 @@ AreaEditor::AreaEditor() :
     pathsSelCtrl.managers.push_back(&pathStopSelection);
     pathsSelCtrl.managers.push_back(&pathLinkSelection);
     pathsSelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
-    pathsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+        [this] (const Point & p) { return snapPoint(p); };
+    pathsSelCtrl.twTransformRule =
+        SelectionController::OP_RULE_MULTIPLE_ITEMS;
     pathsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     pathsSelCtrl.overlapsCycle = true;
     pathsSelCtrl.clickingSelectedUnselectsOthers = false;
@@ -556,7 +567,7 @@ AreaEditor::AreaEditor() :
     
     detailsSelCtrl.managers.push_back(&shadowSelection);
     detailsSelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
+        [this] (const Point & p) { return snapPoint(p); };
     detailsSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
     detailsSelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
     detailsSelCtrl.overlapsCycle = true;
@@ -565,7 +576,7 @@ AreaEditor::AreaEditor() :
     
     gameplaySelCtrl.managers.push_back(&regionSelection);
     gameplaySelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
+        [this] (const Point & p) { return snapPoint(p); };
     gameplaySelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
     gameplaySelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
     gameplaySelCtrl.overlapsCycle = true;
@@ -574,8 +585,9 @@ AreaEditor::AreaEditor() :
     
     reviewSelCtrl.managers.push_back(&reminderSelection);
     reviewSelCtrl.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
-    reviewSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+        [this] (const Point & p) { return snapPoint(p); };
+    reviewSelCtrl.twTransformRule =
+        SelectionController::OP_RULE_MULTIPLE_ITEMS;
     reviewSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     reviewSelCtrl.overlapsCycle = true;
     reviewSelCtrl.clickingSelectedUnselectsOthers = false;
@@ -1269,11 +1281,11 @@ void AreaEditor::deleteCurrentArea() {
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
     const auto finishUp = [this, goToLoadDialog] () {
-        if(goToLoadDialog) {
-            setupForNewAreaPre();
-            openLoadDialog();
-        }
-    };
+                              if(goToLoadDialog) {
+                                  setupForNewAreaPre();
+                                  openLoadDialog();
+                              }
+                          };
     
     //Update the status bar.
     if(success) {
@@ -1908,7 +1920,7 @@ void AreaEditor::finishLayoutMoving() {
         Vertex* vPtr = game.curArea->vertexes[vIdx];
         Point p = v2p(vPtr);
         
-        vector<std::pair<Distance, Vertex*> > mergeVertexes =
+        vector<std::pair<Distance, Vertex*>> mergeVertexes =
             getMergeVertexes(
                 p, game.curArea->vertexes,
                 AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
@@ -1930,9 +1942,9 @@ void AreaEditor::finishLayoutMoving() {
             mergeVertexes.begin(), mergeVertexes.end(),
             [] (
                 std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
-        ) -> bool {
-            return v1.first < v2.first;
-        }
+            ) -> bool {
+                return v1.first < v2.first;
+            }
         );
         
         Vertex* mergeV = nullptr;
@@ -2729,7 +2741,7 @@ void AreaEditor::load() {
     //Load necessary game content.
     game.content.reloadPacks();
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
@@ -2742,7 +2754,7 @@ void AreaEditor::load() {
         CONTENT_TYPE_WEATHER_CONDITION,
         CONTENT_TYPE_AREA,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
     
     loadCustomMobCatTypes(true);
@@ -2810,7 +2822,7 @@ void AreaEditor::loadAreaFolder(
         openMessageDialog(
             "Load failed!",
             "Could not load the area folder \"" + manifest.path + "\"!",
-        [this] () { openLoadDialog(); }
+            [this] () { openLoadDialog(); }
         );
         manifest.clear();
         return;
@@ -2818,7 +2830,7 @@ void AreaEditor::loadAreaFolder(
     
     //Calculate texture suggestions.
     map<string, size_t> textureUsesMap;
-    vector<std::pair<string, size_t> > textureUsesVector;
+    vector<std::pair<string, size_t>> textureUsesVector;
     
     forIdx(s, game.curArea->sectors) {
         const string& n = game.curArea->sectors[s]->textureInfo.bmpName;
@@ -2830,9 +2842,10 @@ void AreaEditor::loadAreaFolder(
     }
     sort(
         textureUsesVector.begin(), textureUsesVector.end(),
-    [] (std::pair<string, size_t> u1, std::pair<string, size_t> u2) -> bool {
-        return u1.second > u2.second;
-    }
+        [] (std::pair<string, size_t> u1,
+            std::pair<string, size_t> u2) -> bool {
+            return u1.second > u2.second;
+        }
     );
     
     for(
@@ -2900,7 +2913,7 @@ void AreaEditor::loadCmd(float inputValue) {
         loadWidgetPos,
         "loading an area", "load",
         std::bind(&AreaEditor::openLoadDialog, this),
-    [this] () { return saveArea(false); }
+        [this] () { return saveArea(false); }
     );
 }
 
@@ -3053,9 +3066,9 @@ void AreaEditor::pickAreaFolder(
     ContentManifest* tempManif = (ContentManifest*) info;
     
     auto reallyLoad = [this, tempManif] () {
-        closeTopDialog();
-        loadAreaFolder(tempManif->path, false, true);
-    };
+                          closeTopDialog();
+                          loadAreaFolder(tempManif->path, false, true);
+                      };
     
     if(
         tempManif->pack == FOLDER_NAMES::BASE_PACK &&
@@ -3089,15 +3102,15 @@ void AreaEditor::pickTexture(
     
     if(name == "Choose another...") {
         openBitmapDialog(
-        [this, sPtr] (const string& bmp) {
-            if(sPtr->textureInfo.bmpName == bmp) return;
-            registerChange("sector texture change");
-            updateTextureSuggestions(bmp);
-            updateSectorTexture(sPtr, bmp);
-            homogenizeSelectedSectors();
-            setStatus("Picked an image successfully.");
-        },
-        FOLDER_NAMES::TEXTURES
+            [this, sPtr] (const string & bmp) {
+                if(sPtr->textureInfo.bmpName == bmp) return;
+                registerChange("sector texture change");
+                updateTextureSuggestions(bmp);
+                updateSectorTexture(sPtr, bmp);
+                homogenizeSelectedSectors();
+                setStatus("Picked an image successfully.");
+            },
+            FOLDER_NAMES::TEXTURES
         );
     } else {
         if(sPtr->textureInfo.bmpName == name) return;
@@ -3152,7 +3165,7 @@ void AreaEditor::quitCmd(float inputValue) {
         quitWidgetPos,
         "quitting", "quit",
         std::bind(&AreaEditor::leave, this),
-    [this] () { return saveArea(false); }
+        [this] () { return saveArea(false); }
     );
 }
 
@@ -3289,15 +3302,15 @@ void AreaEditor::registerChange(
  */
 void AreaEditor::reloadAreas() {
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     }
     );
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
 }
 
@@ -3320,10 +3333,10 @@ void AreaEditor::reloadCmd(float inputValue) {
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
         "reloading the current area", "reload",
-    [this] () {
-        loadAreaFolder(string(manifest.path), false, false);
-    },
-    [this] () { return saveArea(false); }
+        [this] () {
+            loadAreaFolder(string(manifest.path), false, false);
+        },
+        [this] () { return saveArea(false); }
     );
 }
 
@@ -4161,7 +4174,7 @@ void AreaEditor::unload() {
     clearCurrentArea();
     
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
         CONTENT_TYPE_WEATHER_CONDITION,
         CONTENT_TYPE_MOB_TYPE,
@@ -4518,7 +4531,7 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
     rawSpot(mouseClick),
     snappedSpot(mouseClick) {
     
-    vector<std::pair<Distance, Vertex*> > mergeVertexes =
+    vector<std::pair<Distance, Vertex*>> mergeVertexes =
         getMergeVertexes(
             mouseClick, game.curArea->vertexes,
             AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
@@ -4528,9 +4541,9 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
             mergeVertexes.begin(), mergeVertexes.end(),
             [] (
                 std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
-        ) -> bool {
-            return v1.first < v2.first;
-        }
+            ) -> bool {
+                return v1.first < v2.first;
+            }
         );
         onVertex = mergeVertexes[0].second;
         onVertexIdx = game.curArea->findVertexIdx(onVertex);

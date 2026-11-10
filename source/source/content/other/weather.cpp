@@ -36,9 +36,9 @@ Weather::Weather() {
  * @param pt Precipitation type.
  */
 Weather::Weather(
-    const string& n, const vector<std::pair<int, ALLEGRO_COLOR> >& dl,
-    const vector<std::pair<int, unsigned char> >& ss,
-    const vector<std::pair<int, unsigned char> >& bs,
+    const string& n, const vector<std::pair<int, ALLEGRO_COLOR>>& dl,
+    const vector<std::pair<int, unsigned char>>& ss,
+    const vector<std::pair<int, unsigned char>>& bs,
     const PRECIPITATION_TYPE pt
 ) :
     daylight(dl),
@@ -163,7 +163,7 @@ void Weather::loadFromDataNode(DataNode* node) {
     fogFar = std::max(fogFar, fogNear);
     
     //Lighting.
-    vector<std::pair<int, string> > lightingTable =
+    vector<std::pair<int, string>> lightingTable =
         getWeatherTable(node->getChildByName("lighting"));
         
     forIdx(p, lightingTable) {
@@ -176,7 +176,7 @@ void Weather::loadFromDataNode(DataNode* node) {
     }
     
     //Sun's strength.
-    vector<std::pair<int, string> > sunStrengthTable =
+    vector<std::pair<int, string>> sunStrengthTable =
         getWeatherTable(node->getChildByName("sun_strength"));
         
     forIdx(p, sunStrengthTable) {
@@ -189,7 +189,7 @@ void Weather::loadFromDataNode(DataNode* node) {
     }
     
     //Blackout effect's strength.
-    vector<std::pair<int, string> > blackoutStrengthTable =
+    vector<std::pair<int, string>> blackoutStrengthTable =
         getWeatherTable(
             node->getChildByName("blackout_strength")
         );
@@ -204,7 +204,7 @@ void Weather::loadFromDataNode(DataNode* node) {
     }
     
     //Fog.
-    vector<std::pair<int, string> > fogColorTable =
+    vector<std::pair<int, string>> fogColorTable =
         getWeatherTable(
             node->getChildByName("fog_color")
         );

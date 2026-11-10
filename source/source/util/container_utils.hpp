@@ -258,7 +258,7 @@ bool isPermutation(const Container1T& cont1, const Container2T& cont2) {
 /**
  * @brief Returns whether a given index number, as a signed int,
  * is valid in the given container.
- * 
+ *
  * @tparam ContainerT Type of the container.
  * @param idx The index.
  * @param vec The container.

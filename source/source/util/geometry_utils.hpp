@@ -121,8 +121,8 @@ struct Distance {
     float toFloat();
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Distance squared. Most operations are based on this number.
@@ -231,7 +231,6 @@ struct RectCorners {
     static const RectCorners readyForSearch;
     
 };
-
 
 
 Point angleToCoordinates(float angle, float magnitude);

@@ -33,7 +33,7 @@ Pile::Pile(const Point& center, PileType* type, float angle) :
     team = MOB_TEAM_OBSTACLE;
     
     rechargeTimer =
-    Timer(pilType->rechargeInterval, [this] () { this->recharge(); });
+        Timer(pilType->rechargeInterval, [this] () { this->recharge(); });
 }
 
 
@@ -97,10 +97,10 @@ int Pile::getMissionPoints(bool* applicableInThisMission) const {
     
     if(applicableInThisMission) {
         const auto checkMetric = [] (MISSION_METRIC metric) {
-            return
-                metric == MISSION_METRIC_OBJECT_COLLECTION_PTS ||
-                metric == MISSION_METRIC_TREASURE_COLLECTION_PTS;
-        };
+                                     return
+                                         metric == MISSION_METRIC_OBJECT_COLLECTION_PTS ||
+                                         metric == MISSION_METRIC_TREASURE_COLLECTION_PTS;
+                                 };
         
         *applicableInThisMission = false;
         

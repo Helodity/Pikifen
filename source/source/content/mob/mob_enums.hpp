@@ -304,13 +304,13 @@ enum MATURITY {
 
     //Leaf.
     MATURITY_LEAF,
-
+    
     //Bud.
     MATURITY_BUD,
-
+    
     //Flower.
     MATURITY_FLOWER,
-
+    
 };
 
 

@@ -134,25 +134,25 @@ public:
         onPrevious = [this] () { changeOption(-1); };
         onNext = [this] () { changeOption(1); };
         onGetTooltip = [this] () {
-            size_t defIdx = 0;
-            string fullTooltip;
-            for(; defIdx < this->presetValues.size(); defIdx++) {
-                if(this->presetValues[defIdx] == this->defValue) {
-                    break;
-                }
-            }
-            if(presetDescriptions.empty()) {
-                fullTooltip = this->tooltip;
-            } else {
-                if(curOptionIdx == INVALID) {
-                    fullTooltip = "Using a custom value.";
-                } else {
-                    fullTooltip = presetDescriptions[curOptionIdx];
-                }
-            }
-            fullTooltip += " Default: " + this->presetNames[defIdx] + ".";
-            return fullTooltip;
-        };
+                           size_t defIdx = 0;
+                           string fullTooltip;
+                           for(; defIdx < this->presetValues.size(); defIdx++) {
+                               if(this->presetValues[defIdx] == this->defValue) {
+                                   break;
+                               }
+                           }
+                           if(presetDescriptions.empty()) {
+                               fullTooltip = this->tooltip;
+                           } else {
+                               if(curOptionIdx == INVALID) {
+                                   fullTooltip = "Using a custom value.";
+                               } else {
+                                   fullTooltip = presetDescriptions[curOptionIdx];
+                               }
+                           }
+                           fullTooltip += " Default: " + this->presetNames[defIdx] + ".";
+                           return fullTooltip;
+                       };
     }
     
     
@@ -247,7 +247,7 @@ private:
     //--- Private members ---
     
     //Known good resolution presets.
-    vector<std::pair<int, int> > resolutionPresets;
+    vector<std::pair<int, int>> resolutionPresets;
     
     //Currently selected resolution.
     std::pair<int, int> curResolutionOption;
@@ -262,7 +262,7 @@ private:
     OptionsMenuPickerGuiItem<AUTO_THROW_MODE>* autoThrowPicker = nullptr;
     
     //Resolution picker item.
-    OptionsMenuPickerGuiItem<std::pair<int, int> >* resolutionPicker = nullptr;
+    OptionsMenuPickerGuiItem<std::pair<int, int>>* resolutionPicker = nullptr;
     
     //Leader cursor with mouse item.
     CheckGuiItem* leaderCursorMouseCheck = nullptr;
@@ -321,7 +321,7 @@ private:
     bool showingBindsMore = false;
     
     //List of binds per player action type.
-    vector<vector<Inpution::Bind> > bindsPerActionType;
+    vector<vector<Inpution::Bind>> bindsPerActionType;
     
     //Current player action type.
     PLAYER_ACTION_TYPE curActionType = PLAYER_ACTION_TYPE_NONE;

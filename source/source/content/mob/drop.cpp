@@ -87,7 +87,8 @@ void Drop::tickClassSpecifics(float deltaT) {
         //Disappeared into nothingness. Time to delete...if it's not being used.
         
         forIdx(m, game.states.gameplay->mobs.all) {
-            if(game.states.gameplay->mobs.all[m]->scriptVM.focusedMob == this) {
+            if(game.states.gameplay->mobs.all[m]->scriptVM.focusedMob ==
+                this) {
                 return;
             }
         }

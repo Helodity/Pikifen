@@ -82,10 +82,10 @@ struct Blockmap {
     Point topLeftCorner;
     
     //Specifies a list of edges in each block.
-    vector<vector<vector<Edge*> > > edges;
+    vector<vector<vector<Edge*>>> edges;
     
     //Specifies a list of sectors in each block.
-    vector<vector<unordered_set<Sector*> > >  sectors;
+    vector<vector<unordered_set<Sector*>>>  sectors;
     
     //Number of columns.
     size_t nCols = 0;
@@ -263,7 +263,7 @@ struct Area : public Content {
     
     //Internal name of the background bitmap.
     string bgBmpName;
-
+    
     //Background texture transformation.
     Transform2d bgBmpTrans;
     
@@ -392,8 +392,8 @@ struct Area : public Content {
     void setupEditorPathLinks();
     
     
-    protected:
-    
+protected:
+
     //--- Protected function declarations ---
     
     void loadOldMissionSystem(DataNode* node);

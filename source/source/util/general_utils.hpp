@@ -128,8 +128,8 @@ struct AutoRepeater {
 template<typename InterT>
 struct KeyframeInterpolator {
 
-    public:
-    
+public:
+
     //--- Public function definitions ---
     
     explicit KeyframeInterpolator(const InterT& initialValue = InterT()) {
@@ -381,7 +381,8 @@ private:
      * @param time Time [0 - 1].
      * @return The value.
      */
-    unsigned char interpolate(unsigned char v1, unsigned char v2, float time) {
+    unsigned char interpolate(unsigned char v1, unsigned char v2,
+        float time) {
         return v1 + (v2 - v1) * time;
     }
     
@@ -418,7 +419,6 @@ private:
     }
     
 };
-
 
 
 /**
@@ -481,8 +481,8 @@ struct Shaker {
     void tick(float deltaT);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Current trauma amount (raw shake factor) [0 - 1].

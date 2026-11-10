@@ -67,7 +67,6 @@ const string TOP_GUI_FILE_NAME = "options_menu_top";
 }
 
 
-
 /**
  * @brief Creates and adds the GUI items for a control bind entry
  * in the control binds menu.
@@ -154,7 +153,7 @@ void OptionsMenu::addNewBindEntryItems(
     nameBullet->ratioRect.size =
         Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
     nameBullet->onGetTooltip =
-    [actionType] () { return actionType.description; };
+        [actionType] () { return actionType.description; };
     bindsListBox->addChild(nameBullet);
     bindsGui.addItem(nameBullet);
     
@@ -174,15 +173,15 @@ void OptionsMenu::addNewBindEntryItems(
         ButtonGuiItem* moreButton =
             new ButtonGuiItem("...", game.sysContent.fntStandard);
         moreButton->onActivate =
-        [this, actionType] (const Point&) {
-            if(showingBindsMore && actionType.id == curActionType) {
-                showingBindsMore = false;
-            } else {
-                curActionType = actionType.id;
-                showingBindsMore = true;
-            }
-            mustPopulateBinds = true;
-        };
+            [this, actionType] (const Point&) {
+                if(showingBindsMore && actionType.id == curActionType) {
+                    showingBindsMore = false;
+                } else {
+                    curActionType = actionType.id;
+                    showingBindsMore = true;
+                }
+                mustPopulateBinds = true;
+            };
         moreButton->ratioRect.center =
             Point(0.92f, curY);
         moreButton->ratioRect.size =
@@ -192,7 +191,7 @@ void OptionsMenu::addNewBindEntryItems(
             "Hide options." :
             "Show information and options for this action.";
         moreButton->onGetTooltip =
-        [tooltip] () { return tooltip; };
+            [tooltip] () { return tooltip; };
         bindsListBox->addChild(moreButton);
         bindsGui.addItem(moreButton);
         if(actionType.id == curActionType) {
@@ -205,24 +204,24 @@ void OptionsMenu::addNewBindEntryItems(
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             bindButton->onActivate =
-            [this, actionType, b] (const Point&) {
-                chooseInput(actionType.id, b);
-            };
+                [this, actionType, b] (const Point&) {
+                    chooseInput(actionType.id, b);
+                };
             bindButton->onDraw =
                 [this, b, aBinds, bindButton]
-            (const DrawInfo & draw) {
-                drawInputSourceIcon(
-                    aBinds[b].inputSource, draw.center, draw.size * 0.8f,
-                    false, game.sysContent.fntSlim, draw.tint
-                );
-                
-                drawButton(
-                    draw.center, draw.size,
-                    "", game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->focused,
-                    bindButton->getJuiceValue(), draw.tint
-                );
-            };
+                    (const DrawInfo & draw) {
+                    drawInputSourceIcon(
+                        aBinds[b].inputSource, draw.center, draw.size * 0.8f,
+                        false, game.sysContent.fntSlim, draw.tint
+                    );
+                    
+                    drawButton(
+                        draw.center, draw.size,
+                        "", game.sysContent.fntStandard, COLOR_WHITE,
+                        bindButton->focused,
+                        bindButton->getJuiceValue(), draw.tint
+                    );
+                };
             bindButton->ratioRect.center =
                 Point(0.63f, curY);
             bindButton->ratioRect.size =
@@ -231,7 +230,7 @@ void OptionsMenu::addNewBindEntryItems(
                     OPTIONS_MENU::BIND_BUTTON_HEIGHT
                 );
             bindButton->onGetTooltip =
-            [] () { return "Change the input for this action."; };
+                [] () { return "Change the input for this action."; };
             bindsListBox->addChild(bindButton);
             bindsGui.addItem(bindButton);
             
@@ -240,25 +239,25 @@ void OptionsMenu::addNewBindEntryItems(
                 ButtonGuiItem* deleteBindButton =
                     new ButtonGuiItem("", game.sysContent.fntStandard);
                 deleteBindButton->onActivate =
-                [this, actionType, b] (const Point&) {
-                    deleteBind(actionType.id, b);
-                };
+                    [this, actionType, b] (const Point&) {
+                        deleteBind(actionType.id, b);
+                    };
                 deleteBindButton->onDraw =
                     [this, deleteBindButton]
-                (const DrawInfo & draw) {
-                    drawButton(
-                        draw.center, draw.size, "X",
-                        game.sysContent.fntStandard, COLOR_WHITE,
-                        deleteBindButton->focused,
-                        deleteBindButton->getJuiceValue(), draw.tint
-                    );
-                };
+                        (const DrawInfo & draw) {
+                        drawButton(
+                            draw.center, draw.size, "X",
+                            game.sysContent.fntStandard, COLOR_WHITE,
+                            deleteBindButton->focused,
+                            deleteBindButton->getJuiceValue(), draw.tint
+                        );
+                    };
                 deleteBindButton->ratioRect.center =
                     Point(0.85f, curY);
                 deleteBindButton->ratioRect.size =
                     Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
                 deleteBindButton->onGetTooltip =
-                [] () { return "Deletes this input bind from this action."; };
+                    [] () { return "Deletes this input bind from this action."; };
                 bindsListBox->addChild(deleteBindButton);
                 bindsGui.addItem(deleteBindButton);
                 deleteBindButton->startJuiceAnimation(
@@ -283,25 +282,25 @@ void OptionsMenu::addNewBindEntryItems(
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             bindButton->onActivate =
-            [this, actionType] (const Point&) {
-                chooseInput(actionType.id, 0);
-            };
+                [this, actionType] (const Point&) {
+                    chooseInput(actionType.id, 0);
+                };
             bindButton->onDraw =
                 [this, bindButton]
-            (const DrawInfo & draw) {
-                drawButton(
-                    draw.center, draw.size, "",
-                    game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->focused,
-                    bindButton->getJuiceValue(), draw.tint
-                );
-            };
+                    (const DrawInfo & draw) {
+                    drawButton(
+                        draw.center, draw.size, "",
+                        game.sysContent.fntStandard, COLOR_WHITE,
+                        bindButton->focused,
+                        bindButton->getJuiceValue(), draw.tint
+                    );
+                };
             bindButton->ratioRect.center =
                 Point(0.63f, curY);
             bindButton->ratioRect.size =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bindButton->onGetTooltip =
-            [] () { return "Choose a new input to bind to this action."; };
+                [] () { return "Choose a new input to bind to this action."; };
             bindsListBox->addChild(bindButton);
             bindsGui.addItem(bindButton);
             bindButton->startJuiceAnimation(
@@ -321,11 +320,11 @@ void OptionsMenu::addNewBindEntryItems(
             createButton->ratioRect.size =
                 Point(0.32f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             createButton->onActivate =
-            [this, actionType, aBinds] (const Point&) {
-                chooseInput(actionType.id, aBinds.size());
-            };
+                [this, actionType, aBinds] (const Point&) {
+                    chooseInput(actionType.id, aBinds.size());
+                };
             createButton->onGetTooltip =
-            [] () { return "Create another input to bind to this action."; };
+                [] () { return "Create another input to bind to this action."; };
             bindsListBox->addChild(createButton);
             bindsGui.addItem(createButton);
             createButton->startJuiceAnimation(
@@ -349,11 +348,11 @@ void OptionsMenu::addNewBindEntryItems(
             restoreButton->ratioRect.size =
                 Point(0.32f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             restoreButton->onActivate =
-            [this, actionType] (const Point&) {
-                restoreDefaultBinds(actionType.id);
-            };
+                [this, actionType] (const Point&) {
+                    restoreDefaultBinds(actionType.id);
+                };
             restoreButton->onGetTooltip =
-            [] () { return "Restore this action's default inputs."; };
+                [] () { return "Restore this action's default inputs."; };
             bindsListBox->addChild(restoreButton);
             bindsGui.addItem(restoreButton);
             restoreButton->startJuiceAnimation(
@@ -389,12 +388,12 @@ void OptionsMenu::addNewBindEntryItems(
             defaultIcon->ratioRect.size =
                 Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             defaultIcon->onDraw =
-            [defInputSource] (const DrawInfo & draw) {
-                drawInputSourceIcon(
-                    defInputSource, draw.center, draw.size,
-                    false, game.sysContent.fntSlim, draw.tint
-                );
-            };
+                [defInputSource] (const DrawInfo & draw) {
+                    drawInputSourceIcon(
+                        defInputSource, draw.center, draw.size,
+                        false, game.sysContent.fntSlim, draw.tint
+                    );
+                };
             bindsListBox->addChild(defaultIcon);
             bindsGui.addItem(defaultIcon);
             
@@ -409,16 +408,16 @@ void OptionsMenu::addNewBindEntryItems(
         );
     line->ratioRect.size = Point(0.90f, 0.02f);
     line->onDraw =
-    [] (const DrawInfo & draw) {
-        al_draw_line(
-            draw.center.x - draw.size.x / 2.0f,
-            draw.center.y,
-            draw.center.x + draw.size.x / 2.0f,
-            draw.center.y,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint),
-            1.0f
-        );
-    };
+        [] (const DrawInfo & draw) {
+            al_draw_line(
+                draw.center.x - draw.size.x / 2.0f,
+                draw.center.y,
+                draw.center.x + draw.size.x / 2.0f,
+                draw.center.y,
+                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint),
+                1.0f
+            );
+        };
     bindsListBox->addChild(line);
     bindsGui.addItem(line);
 }
@@ -429,7 +428,8 @@ void OptionsMenu::addNewBindEntryItems(
  *
  * @param input The input.
  */
-void OptionsMenu::addNewOrUpdateBindFromInput(const Inpution::Input& input) {
+void OptionsMenu::addNewOrUpdateBindFromInput(const Inpution::Input&
+    input) {
     vector<Inpution::Bind>& allBinds = game.controls.binds();
     if(curBindIdx >= allBinds.size()) {
         Inpution::Bind newBind;
@@ -472,18 +472,18 @@ void OptionsMenu::addNewShortcutItemItems(
     shortcutButton->ratioRect.size =
         Point(0.95f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
     shortcutButton->onActivate =
-    [this, internalName] (const Point&) {
-        if(curShortcutIdx == -1) return;
-        game.options.controls.inventoryShortcuts[0][curShortcutIdx] =
-            internalName;
-        shortcutButtons[curShortcutIdx]->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-        );
-        curShortcutIdx = -1;
-        updateShortcutsPage();
-    };
+        [this, internalName] (const Point&) {
+            if(curShortcutIdx == -1) return;
+            game.options.controls.inventoryShortcuts[0][curShortcutIdx] =
+                internalName;
+            shortcutButtons[curShortcutIdx]->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
+            curShortcutIdx = -1;
+            updateShortcutsPage();
+        };
     shortcutButton->onGetTooltip =
-    [] () { return "Set the shortcut to this."; };
+        [] () { return "Set the shortcut to this."; };
     shortcutItemsListBox->addChild(shortcutButton);
     shortcutsGui.addItem(shortcutButton);
     shortcutButton->startJuiceAnimation(
@@ -513,22 +513,22 @@ void OptionsMenu::addNewShortcutItems(unsigned char index) {
     //Label text.
     GuiItem* text = new GuiItem();
     text->onDraw =
-    [this, index] (const DrawInfo & draw) {
-        drawShortcutName(draw, index);
-    };
+        [this, index] (const DrawInfo & draw) {
+            drawShortcutName(draw, index);
+        };
     shortcutsGui.addItem(text, "shortcut_" + shortcutLetter + "_label");
     
     //Assignment button.
     ButtonGuiItem* button = new ButtonGuiItem("", game.sysContent.fntStandard);
     button->onActivate =
-    [this, index] (const Point&) {
-        curShortcutIdx = index;
-        updateShortcutsPage();
-    };
+        [this, index] (const Point&) {
+            curShortcutIdx = index;
+            updateShortcutsPage();
+        };
     button->onGetTooltip =
-    [] () {
-        return "Choose what item to assign to this shortcut.";
-    };
+        [] () {
+            return "Choose what item to assign to this shortcut.";
+        };
     shortcutsGui.addItem(button, "shortcut_" + shortcutLetter);
     shortcutButtons.push_back(button);
 }
@@ -627,7 +627,8 @@ void OptionsMenu::draw() {
  * @param draw Draw information.
  * @param index Shortcut index.
  */
-void OptionsMenu::drawShortcutName(const DrawInfo& draw, unsigned char index) {
+void OptionsMenu::drawShortcutName(const DrawInfo& draw,
+    unsigned char index) {
     string text =
         "Shortcut " +
         string(1, 'A' + index) +
@@ -723,14 +724,14 @@ void OptionsMenu::initGuiAudioPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     audioGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            audioGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                audioGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     audioGui.backItem->onGetTooltip =
-    [] () { return "Return to the top-level options menu."; };
+        [] () { return "Return to the top-level options menu."; };
     audioGui.addItem(audioGui.backItem, "back");
     
     //Back input icon.
@@ -747,18 +748,18 @@ void OptionsMenu::initGuiAudioPage() {
         "100%"
     };
     auto updateVolumes = [this] () {
-        game.audio.baseMasterMixerVolume =
-            game.options.audio.masterVol;
-        game.audio.baseGameplaySoundMixerVolume =
-            game.options.audio.gameplaySoundVol;
-        game.audio.baseMusicMixerVolume =
-            game.options.audio.musicVol;
-        game.audio.baseAmbianceSoundMixerVolume =
-            game.options.audio.ambianceSoundVol;
-        game.audio.baseUiSoundMixerVolume =
-            game.options.audio.uiSoundVol;
-        game.audio.updateMixerVolumes();
-    };
+                             game.audio.baseMasterMixerVolume =
+                                 game.options.audio.masterVol;
+                             game.audio.baseGameplaySoundMixerVolume =
+                                 game.options.audio.gameplaySoundVol;
+                             game.audio.baseMusicMixerVolume =
+                                 game.options.audio.musicVol;
+                             game.audio.baseAmbianceSoundMixerVolume =
+                                 game.options.audio.ambianceSoundVol;
+                             game.audio.baseUiSoundMixerVolume =
+                                 game.options.audio.uiSoundVol;
+                             game.audio.updateMixerVolumes();
+                         };
     
     //Master volume picker.
     masterVolPicker =
@@ -863,16 +864,16 @@ void OptionsMenu::initGuiControlBindsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     bindsGui.backItem->onActivate =
-    [this] (const Point&) {
-        saveOptions();
-        saveMakerTools();
-        transitionGuis(
-            bindsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            saveOptions();
+            saveMakerTools();
+            transitionGuis(
+                bindsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     bindsGui.backItem->onGetTooltip =
-    [] () { return "Return to the previous menu."; };
+        [] () { return "Return to the previous menu."; };
     bindsGui.addItem(bindsGui.backItem, "back");
     
     //Back input icon.
@@ -891,40 +892,40 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsWarningButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     bindsWarningButton->forceSquare = true;
     bindsWarningButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        bindsWarningButton->defDrawCode(draw);
-        drawBitmapInBox(
-            game.sysContent.bmpWarning, draw.center, draw.size * 0.8f,
-            true, true, 0.0f, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            bindsWarningButton->defDrawCode(draw);
+            drawBitmapInBox(
+                game.sysContent.bmpWarning, draw.center, draw.size * 0.8f,
+                true, true, 0.0f, draw.tint
+            );
+        };
     bindsWarningButton->onActivate =
-    [this] (const Point&) {
-        game.modal.reset();
-        game.modal.title = "Unbound actions";
-        game.modal.prompt =
-            "You have no input bound to these actions, but you really should!"
-            "\n \n";
-        for(
-            size_t a = 0;
-            a < std::min(unboundRecommendedActions.size(), (size_t) 8);
-            a++
-        ) {
-            if(a > 0) game.modal.prompt += "\n";
-            game.modal.prompt +=
-                "- " +
-                game.controls.getActionTypeById(
-                    unboundRecommendedActions[a]
-                ).name;
-        }
-        if(unboundRecommendedActions.size() >= 9) {
-            game.modal.prompt += "\n- (And more...)";
-        }
-        game.modal.updateItems();
-        game.modal.open();
-    };
+        [this] (const Point&) {
+            game.modal.reset();
+            game.modal.title = "Unbound actions";
+            game.modal.prompt =
+                "You have no input bound to these actions, but you really should!"
+                "\n \n";
+            for(
+                size_t a = 0;
+                a < std::min(unboundRecommendedActions.size(), (size_t) 8);
+                a++
+            ) {
+                if(a > 0) game.modal.prompt += "\n";
+                game.modal.prompt +=
+                    "- " +
+                    game.controls.getActionTypeById(
+                        unboundRecommendedActions[a]
+                    ).name;
+            }
+            if(unboundRecommendedActions.size() >= 9) {
+                game.modal.prompt += "\n- (And more...)";
+            }
+            game.modal.updateItems();
+            game.modal.open();
+        };
     bindsWarningButton->onGetTooltip =
-    [] () { return "You have some warnings! Press here to see them."; };
+        [] () { return "You have some warnings! Press here to see them."; };
     bindsGui.addItem(bindsWarningButton, "warning");
     
     //Tooltip text.
@@ -964,14 +965,14 @@ void OptionsMenu::initGuiControlsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     controlsGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            controlsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                controlsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     controlsGui.backItem->onGetTooltip =
-    [] () { return "Return to the top-level options menu."; };
+        [] () { return "Return to the top-level options menu."; };
     controlsGui.addItem(controlsGui.backItem, "back");
     
     //Back input icon.
@@ -983,16 +984,16 @@ void OptionsMenu::initGuiControlsPage() {
         "Normal control binds...", game.sysContent.fntStandard
     );
     normalBindsButton->onActivate =
-    [this] (const Point&) {
-        bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
-        mustPopulateBinds = true;
-        transitionGuis(
-            controlsGui, bindsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
+            mustPopulateBinds = true;
+            transitionGuis(
+                controlsGui, bindsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     normalBindsButton->onGetTooltip =
-    [] () { return "Choose what buttons do what regular actions."; };
+        [] () { return "Choose what buttons do what regular actions."; };
     controlsGui.addItem(normalBindsButton, "normal_binds");
     
     //Special control binds button.
@@ -1001,16 +1002,16 @@ void OptionsMenu::initGuiControlsPage() {
         "Special control binds...", game.sysContent.fntStandard
     );
     specialBindsButton->onActivate =
-    [this] (const Point&) {
-        bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
-        mustPopulateBinds = true;
-        transitionGuis(
-            controlsGui, bindsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
+            mustPopulateBinds = true;
+            transitionGuis(
+                controlsGui, bindsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     specialBindsButton->onGetTooltip =
-    [] () { return "Choose what buttons do what special features."; };
+        [] () { return "Choose what buttons do what special features."; };
     controlsGui.addItem(specialBindsButton, "special_binds");
     
     //Inventory shortcuts button.
@@ -1019,18 +1020,18 @@ void OptionsMenu::initGuiControlsPage() {
         "Inventory shortcuts...", game.sysContent.fntStandard
     );
     inventoryShortcutsButton->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            controlsGui, shortcutsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                controlsGui, shortcutsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     inventoryShortcutsButton->onGetTooltip =
-    [] () {
-        return
-            "Assign certain inventory items to shortcuts, "
-            "set in the control binds.";
-    };
+        [] () {
+            return
+                "Assign certain inventory items to shortcuts, "
+                "set in the control binds.";
+        };
     controlsGui.addItem(inventoryShortcutsButton, "shortcuts");
     
     //Leader cursor mouse check.
@@ -1040,16 +1041,16 @@ void OptionsMenu::initGuiControlsPage() {
         "Leader cursor with mouse", game.sysContent.fntStandard
     );
     leaderCursorMouseCheck->onActivate =
-    [this] (const Point&) {
-        leaderCursorMouseCheck->defActivateCode();
-        updateControlsPage();
-    };
+        [this] (const Point&) {
+            leaderCursorMouseCheck->defActivateCode();
+            updateControlsPage();
+        };
     leaderCursorMouseCheck->onGetTooltip =
-    [] () {
-        return
-            "Whether the leader's cursor is controlled with the mouse "
-            "or with buttons/keys.";
-    };
+        [] () {
+            return
+                "Whether the leader's cursor is controlled with the mouse "
+                "or with buttons/keys.";
+        };
     controlsGui.addItem(leaderCursorMouseCheck, "leader_cursor_mouse");
     
     //Leader cursor speed picker.
@@ -1060,19 +1061,19 @@ void OptionsMenu::initGuiControlsPage() {
         OPTIONS::CONTROLS_D::LEADER_CURSOR_SPEED,
     {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
-    "Leader cursor speed, when controlling without buttons/keys."
+        "Leader cursor speed, when controlling without buttons/keys."
     );
     leaderCursorSpeedPicker->onDraw =
-    [this] (const DrawInfo & draw) {
-        DrawInfo newDraw = draw;
-        if(game.options.controls.mouseMovesLeaderCursor[0]) {
-            newDraw.tint.a = 0.33f;
-        }
-        leaderCursorSpeedPicker->defDrawCode(newDraw);
-    };
+        [this] (const DrawInfo & draw) {
+            DrawInfo newDraw = draw;
+            if(game.options.controls.mouseMovesLeaderCursor[0]) {
+                newDraw.tint.a = 0.33f;
+            }
+            leaderCursorSpeedPicker->defDrawCode(newDraw);
+        };
     leaderCursorSpeedPicker->valueToString = [] (float v) {
-        return f2s(v);
-    };
+                                                 return f2s(v);
+                                             };
     leaderCursorSpeedPicker->init();
     controlsGui.addItem(leaderCursorSpeedPicker, "leader_cursor_speed");
     
@@ -1100,11 +1101,11 @@ void OptionsMenu::initGuiControlsPage() {
         game.sysContent.fntStandard
     );
     fastInventoryCheck->onGetTooltip =
-    [] () {
-        return
-            "Makes the inventory open as long as the button is held. "
-            "Releasing uses the focused item.";
-    };
+        [] () {
+            return
+                "Makes the inventory open as long as the button is held. "
+                "Releasing uses the focused item.";
+        };
     controlsGui.addItem(fastInventoryCheck, "fast_inventory");
     
     //Tooltip text.
@@ -1142,14 +1143,14 @@ void OptionsMenu::initGuiGraphicsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     graphicsGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            graphicsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                graphicsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     graphicsGui.backItem->onGetTooltip =
-    [] () { return "Return to the top-level options menu."; };
+        [] () { return "Return to the top-level options menu."; };
     graphicsGui.addItem(graphicsGui.backItem, "back");
     
     //Back input icon.
@@ -1162,16 +1163,16 @@ void OptionsMenu::initGuiGraphicsPage() {
         "Fullscreen", game.sysContent.fntStandard
     );
     fullscreenCheck->onActivate =
-    [this, fullscreenCheck] (const Point&) {
-        fullscreenCheck->defActivateCode();
-        triggerRestartWarning();
-    };
+        [this, fullscreenCheck] (const Point&) {
+            fullscreenCheck->defActivateCode();
+            triggerRestartWarning();
+        };
     fullscreenCheck->onGetTooltip =
-    [] () {
-        return
-            "Show the game in fullscreen, or in a window? Default: " +
-            b2s(OPTIONS::GRAPHICS_D::WIN_FULLSCREEN) + ".";
-    };
+        [] () {
+            return
+                "Show the game in fullscreen, or in a window? Default: " +
+                b2s(OPTIONS::GRAPHICS_D::WIN_FULLSCREEN) + ".";
+        };
     graphicsGui.addItem(fullscreenCheck, "fullscreen");
     
     //Resolution picker.
@@ -1185,7 +1186,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     curResolutionOption.first = game.options.graphics.intendedWinW;
     curResolutionOption.second = game.options.graphics.intendedWinH;
     resolutionPicker =
-        new OptionsMenuPickerGuiItem<std::pair<int, int> >(
+        new OptionsMenuPickerGuiItem<std::pair<int, int>>(
         "Resolution: ",
         &curResolutionOption,
         std::make_pair(OPTIONS::GRAPHICS_D::WIN_W, OPTIONS::GRAPHICS_D::WIN_H),
@@ -1194,13 +1195,13 @@ void OptionsMenu::initGuiGraphicsPage() {
         "The game's width and height."
     );
     resolutionPicker->afterChange = [this] () {
-        game.options.graphics.intendedWinW = curResolutionOption.first;
-        game.options.graphics.intendedWinH = curResolutionOption.second;
-        triggerRestartWarning();
-    };
+                                        game.options.graphics.intendedWinW = curResolutionOption.first;
+                                        game.options.graphics.intendedWinH = curResolutionOption.second;
+                                        triggerRestartWarning();
+                                    };
     resolutionPicker->valueToString = [] (const std::pair<int, int>& v) {
-        return i2s(v.first) + "x" + i2s(v.second);
-    };
+                                          return i2s(v.first) + "x" + i2s(v.second);
+                                      };
     resolutionPicker->init();
     graphicsGui.addItem(resolutionPicker, "resolution");
     
@@ -1211,17 +1212,17 @@ void OptionsMenu::initGuiGraphicsPage() {
         "VSync", game.sysContent.fntStandard
     );
     vsyncCheckbox->onActivate =
-    [this, vsyncCheckbox] (const Point&) {
-        vsyncCheckbox->defActivateCode();
-        triggerRestartWarning();
-    };
+        [this, vsyncCheckbox] (const Point&) {
+            vsyncCheckbox->defActivateCode();
+            triggerRestartWarning();
+        };
     vsyncCheckbox->onGetTooltip =
-    [] () {
-        return
-            "Forcing VSync can fix tearing problems, but may add some "
-            "slight input delay. Default: " +
-            b2s(OPTIONS::GRAPHICS_D::VSYNC) + ".";
-    };
+        [] () {
+            return
+                "Forcing VSync can fix tearing problems, but may add some "
+                "slight input delay. Default: " +
+                b2s(OPTIONS::GRAPHICS_D::VSYNC) + ".";
+        };
     graphicsGui.addItem(vsyncCheckbox, "vsync");
     
     //Camera shake multiplier picker.
@@ -1232,7 +1233,7 @@ void OptionsMenu::initGuiGraphicsPage() {
         OPTIONS::GRAPHICS_D::CAM_SHAKE_MULT,
     { 0.00f, 0.25f, 0.50f, 0.75f, 1.00f },
     { "Off", "25%", "50%", "75%", "100%" },
-    "Strength of the camera shaking effects."
+        "Strength of the camera shaking effects."
     );
     camShakeMultPicker->init();
     graphicsGui.addItem(camShakeMultPicker, "cam_shake_mult");
@@ -1266,16 +1267,26 @@ void OptionsMenu::initGuiMiscPage() {
     //Menu items.
     DataNode* guiFile =
         &game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME];
-    miscGui.registerCoords("back",                       12,     5, 20,   6);
-    miscGui.registerCoords("back_input",                  3,     7,  4,   4);
-    miscGui.registerCoords("pikmin_bump",                50, 23.75, 70, 7.5);
-    miscGui.registerCoords("dismiss_all",                50, 33.75, 70, 7.5);
-    miscGui.registerCoords("leader_cursor_cam_weight",   50, 43.75, 70, 7.5);
-    miscGui.registerCoords("show_leader_cursor_counter", 50, 53.75, 70, 7.5);
-    miscGui.registerCoords("show_gui_input_icons",       50, 63.75, 70, 7.5);
-    miscGui.registerCoords("leaving_confirmation",       50, 73.75, 70, 7.5);
-    miscGui.registerCoords("maker_tools_in_play",        50, 83.75, 70, 7.5);
-    miscGui.registerCoords("tooltip",                    50,    96, 96,   4);
+    miscGui.registerCoords("back",                       12,     5, 20,
+        6);
+    miscGui.registerCoords("back_input",                  3,     7,  4,
+        4);
+    miscGui.registerCoords("pikmin_bump",                50, 23.75, 70,
+        7.5);
+    miscGui.registerCoords("dismiss_all",                50, 33.75, 70,
+        7.5);
+    miscGui.registerCoords("leader_cursor_cam_weight",   50, 43.75, 70,
+        7.5);
+    miscGui.registerCoords("show_leader_cursor_counter", 50, 53.75, 70,
+        7.5);
+    miscGui.registerCoords("show_gui_input_icons",       50, 63.75, 70,
+        7.5);
+    miscGui.registerCoords("leaving_confirmation",       50, 73.75, 70,
+        7.5);
+    miscGui.registerCoords("maker_tools_in_play",        50, 83.75, 70,
+        7.5);
+    miscGui.registerCoords("tooltip",                    50,    96, 96,
+        4);
     miscGui.readDataFile(guiFile);
     
     //Back button.
@@ -1284,14 +1295,14 @@ void OptionsMenu::initGuiMiscPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     miscGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            miscGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                miscGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     miscGui.backItem->onGetTooltip =
-    [] () { return "Return to the top-level options menu."; };
+        [] () { return "Return to the top-level options menu."; };
     miscGui.addItem(miscGui.backItem, "back");
     
     //Back input icon.
@@ -1326,11 +1337,11 @@ void OptionsMenu::initGuiMiscPage() {
         "Dismissing dismisses all", game.sysContent.fntStandard
     );
     dismissAllCheckbox->onGetTooltip =
-    [] () {
-        return
-            "Do dismisses dismiss all Pikmin, or keep the standby type? "
-            "Default: " + b2s(OPTIONS::MISC_D::DISMISS_ALL) + ".";
-    };
+        [] () {
+            return
+                "Do dismisses dismiss all Pikmin, or keep the standby type? "
+                "Default: " + b2s(OPTIONS::MISC_D::DISMISS_ALL) + ".";
+        };
     miscGui.addItem(dismissAllCheckbox, "dismiss_all");
     
     //Leader cursor camera weight picker.
@@ -1341,11 +1352,11 @@ void OptionsMenu::initGuiMiscPage() {
         OPTIONS::MISC_D::LEADER_CURSOR_CAM_WEIGHT,
     {0.0f, 0.1f, 0.3f, 0.6f},
     {"None", "Small", "Medium", "Large"},
-    "When you move the leader cursor, how much does it affect the camera?"
+        "When you move the leader cursor, how much does it affect the camera?"
     );
     leaderCursorCamWeightPicker->valueToString = [] (float v) {
-        return f2s(v);
-    };
+                                                     return f2s(v);
+                                                 };
     leaderCursorCamWeightPicker->init();
     miscGui.addItem(leaderCursorCamWeightPicker, "leader_cursor_cam_weight");
     
@@ -1356,12 +1367,12 @@ void OptionsMenu::initGuiMiscPage() {
         "Show leader cursor counter", game.sysContent.fntStandard
     );
     showLeaderCursorCounterCheck->onGetTooltip =
-    [] () {
-        return
-            "Show a standby type counter on the leader's cursor? "
-            "Default: " +
-            b2s(OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER) + ".";
-    };
+        [] () {
+            return
+                "Show a standby type counter on the leader's cursor? "
+                "Default: " +
+                b2s(OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER) + ".";
+        };
     miscGui.addItem(showLeaderCursorCounterCheck, "show_leader_cursor_counter");
     
     //Show control guide when idling checkbox.
@@ -1371,11 +1382,11 @@ void OptionsMenu::initGuiMiscPage() {
         "Show control guide", game.sysContent.fntStandard
     );
     showControlGuideCheck->onGetTooltip =
-    [] () {
-        return
-            "Show a control guide on-screen when you're idling? "
-            "Default: " + b2s(OPTIONS::MISC_D::SHOW_CONTROL_GUIDE) + ".";
-    };
+        [] () {
+            return
+                "Show a control guide on-screen when you're idling? "
+                "Default: " + b2s(OPTIONS::MISC_D::SHOW_CONTROL_GUIDE) + ".";
+        };
     miscGui.addItem(showControlGuideCheck, "show_control_guide");
     
     //Show GUI player input icons checkbox.
@@ -1385,11 +1396,11 @@ void OptionsMenu::initGuiMiscPage() {
         "Show input icons on GUI", game.sysContent.fntStandard
     );
     showGuiInputIconsCheck->onGetTooltip =
-    [] () {
-        return
-            "Show icons of the player inputs near relevant GUI items? "
-            "Default: " + b2s(OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS) + ".";
-    };
+        [] () {
+            return
+                "Show icons of the player inputs near relevant GUI items? "
+                "Default: " + b2s(OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS) + ".";
+        };
     miscGui.addItem(showGuiInputIconsCheck, "show_gui_input_icons");
     
     //Leaving confirmation mode.
@@ -1397,7 +1408,7 @@ void OptionsMenu::initGuiMiscPage() {
         new OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>(
         "Leave confirm: ",
         &game.options.misc.leavingConfMode,
-    OPTIONS::MISC_D::LEAVING_CONF, {
+        OPTIONS::MISC_D::LEAVING_CONF, {
         LEAVING_CONF_MODE_ALWAYS,
         LEAVING_CONF_MODE_1_MIN,
         LEAVING_CONF_MODE_NEVER
@@ -1420,11 +1431,11 @@ void OptionsMenu::initGuiMiscPage() {
         "Maker tools in normal gameplay", game.sysContent.fntStandard
     );
     makerToolsInPlayCheck->onGetTooltip =
-    [] () {
-        return
-            "Freely allow maker tools in normal gameplay? Or ask to confirm? "
-            "Default: " + b2s(OPTIONS::MISC_D::MAKER_TOOLS_IN_PLAY) + ".";
-    };
+        [] () {
+            return
+                "Freely allow maker tools in normal gameplay? Or ask to confirm? "
+                "Default: " + b2s(OPTIONS::MISC_D::MAKER_TOOLS_IN_PLAY) + ".";
+        };
     miscGui.addItem(makerToolsInPlayCheck, "maker_tools_in_play");
     
     //Tooltip text.
@@ -1468,15 +1479,15 @@ void OptionsMenu::initGuiShortcutsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     shortcutsGui.backItem->onActivate =
-    [this] (const Point&) {
-        saveOptions(true);
-        transitionGuis(
-            shortcutsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            saveOptions(true);
+            transitionGuis(
+                shortcutsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     shortcutsGui.backItem->onGetTooltip =
-    [] () { return "Return to the previous menu."; };
+        [] () { return "Return to the previous menu."; };
     shortcutsGui.addItem(shortcutsGui.backItem, "back");
     
     //Back input icon.
@@ -1525,9 +1536,10 @@ void OptionsMenu::initGuiTopPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
-    };
+    auto getIconLeft = [&iconsNode] (const string & name,
+            const string & def) {
+                           return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+                       };
     
     bool controlsIconLeft = getIconLeft("controls", "true");
     bool graphicsIconLeft = getIconLeft("graphics", "true");
@@ -1553,12 +1565,12 @@ void OptionsMenu::initGuiTopPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     topGui.backItem->onActivate =
-    [this] (const Point&) {
-        saveOptions(true);
-        leave();
-    };
+        [this] (const Point&) {
+            saveOptions(true);
+            leave();
+        };
     topGui.backItem->onGetTooltip =
-    [] () { return "Return to the previous menu."; };
+        [] () { return "Return to the previous menu."; };
     topGui.addItem(topGui.backItem, "back");
     
     //Back input icon.
@@ -1568,186 +1580,186 @@ void OptionsMenu::initGuiTopPage() {
     ButtonGuiItem* controlsButton =
         new ButtonGuiItem("Controls", game.sysContent.fntStandard);
     controlsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_CONTROLS, draw.center, draw.size, controlsIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            controlsButton->text, controlsButton->font,
-            controlsButton->color,
-            controlsButton->focused,
-            controlsButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_CONTROLS, draw.center, draw.size, controlsIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                controlsButton->text, controlsButton->font,
+                controlsButton->color,
+                controlsButton->focused,
+                controlsButton->getJuiceValue(), draw.tint
+            );
+        };
     controlsButton->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            topGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                topGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     controlsButton->onGetTooltip =
-    [] () { return "Change the way you control the game."; };
+        [] () { return "Change the way you control the game."; };
     topGui.addItem(controlsButton, "controls");
     
     //Graphics options button.
     ButtonGuiItem* graphicsButton =
         new ButtonGuiItem("Graphics", game.sysContent.fntStandard);
     graphicsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_GRAPHICS, draw.center, draw.size, graphicsIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            graphicsButton->text, graphicsButton->font,
-            graphicsButton->color,
-            graphicsButton->focused,
-            graphicsButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_GRAPHICS, draw.center, draw.size, graphicsIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                graphicsButton->text, graphicsButton->font,
+                graphicsButton->color,
+                graphicsButton->focused,
+                graphicsButton->getJuiceValue(), draw.tint
+            );
+        };
     graphicsButton->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            topGui, graphicsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                topGui, graphicsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     graphicsButton->onGetTooltip =
-    [] () { return "Change some options about how the game looks."; };
+        [] () { return "Change some options about how the game looks."; };
     topGui.addItem(graphicsButton, "graphics");
     
     //Audio options button.
     ButtonGuiItem* audioButton =
         new ButtonGuiItem("Audio", game.sysContent.fntStandard);
     audioButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_AUDIO, draw.center, draw.size, audioIconLeft, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            audioButton->text, audioButton->font,
-            audioButton->color, audioButton->focused,
-            audioButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_AUDIO, draw.center, draw.size, audioIconLeft, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                audioButton->text, audioButton->font,
+                audioButton->color, audioButton->focused,
+                audioButton->getJuiceValue(), draw.tint
+            );
+        };
     audioButton->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            topGui, audioGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                topGui, audioGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     audioButton->onGetTooltip =
-    [] () { return "Change options about the way the game sounds."; };
+        [] () { return "Change options about the way the game sounds."; };
     topGui.addItem(audioButton, "audio");
     
     //Packs options button.
     ButtonGuiItem* packsButton =
         new ButtonGuiItem("Packs", game.sysContent.fntStandard);
     packsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_PACKS, draw.center, draw.size, packsIconLeft, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            packsButton->text, packsButton->font,
-            packsButton->color, packsButton->focused,
-            packsButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_PACKS, draw.center, draw.size, packsIconLeft, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                packsButton->text, packsButton->font,
+                packsButton->color, packsButton->focused,
+                packsButton->getJuiceValue(), draw.tint
+            );
+        };
     packsButton->onActivate =
-    [this] (const Point&) {
-        packsMenu = new PacksMenu();
-        packsMenu->leaveCallback = [ this ] () {
-            packsMenu->unloadTimer = OPTIONS_MENU::HUD_MOVE_TIME;
+        [this] (const Point&) {
+            packsMenu = new PacksMenu();
+            packsMenu->leaveCallback = [ this ] () {
+                                           packsMenu->unloadTimer = OPTIONS_MENU::HUD_MOVE_TIME;
+                                           transitionGuis(
+                                               packsMenu->gui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                                               OPTIONS_MENU::HUD_MOVE_TIME
+                                           );
+                                       };
+            packsMenu->load();
+            packsMenu->enter();
             transitionGuis(
-                packsMenu->gui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                topGui, packsMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
                 OPTIONS_MENU::HUD_MOVE_TIME
             );
         };
-        packsMenu->load();
-        packsMenu->enter();
-        transitionGuis(
-            topGui, packsMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
     packsButton->onGetTooltip =
-    [] () { return "Manage any content packs you have installed."; };
+        [] () { return "Manage any content packs you have installed."; };
     topGui.addItem(packsButton, "packs");
     
     //Misc. options button.
     ButtonGuiItem* miscButton =
         new ButtonGuiItem("Misc.", game.sysContent.fntStandard);
     miscButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_OPTIONS_MISC, draw.center, draw.size, miscIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            miscButton->text, miscButton->font,
-            miscButton->color, miscButton->focused,
-            miscButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_OPTIONS_MISC, draw.center, draw.size, miscIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                miscButton->text, miscButton->font,
+                miscButton->color, miscButton->focused,
+                miscButton->getJuiceValue(), draw.tint
+            );
+        };
     miscButton->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            topGui, miscGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                topGui, miscGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                OPTIONS_MENU::HUD_MOVE_TIME
+            );
+        };
     miscButton->onGetTooltip =
-    [] () { return "Change some miscellaneous gameplay and game options."; };
+        [] () { return "Change some miscellaneous gameplay and game options."; };
     topGui.addItem(miscButton, "misc");
     
     //Advanced button.
     ButtonGuiItem* advancedButton =
         new ButtonGuiItem("Advanced...", game.sysContent.fntStandard);
     advancedButton->onActivate =
-    [] (const Point&) {
-        game.modal.reset();
-        game.modal.title = "Advanced options";
-        game.modal.prompt =
-            "There are more options than the ones available in the options "
-            "menu. You can also give some of the existing options entirely "
-            "custom values, like a custom window resolution. To access all "
-            "options, edit the options text file by hand. The way the file "
-            "works is described in the manual.";
-        game.modal.extraButtons.push_back(
-        ModalGuiManager::Button {
-            .text = "Open manual",
-            .tooltip = "Open the manual in the options page.",
-            .onActivate = [] (const Point&) {
-                openManual("options.html");
+        [] (const Point&) {
+            game.modal.reset();
+            game.modal.title = "Advanced options";
+            game.modal.prompt =
+                "There are more options than the ones available in the options "
+                "menu. You can also give some of the existing options entirely "
+                "custom values, like a custom window resolution. To access all "
+                "options, edit the options text file by hand. The way the file "
+                "works is described in the manual.";
+            game.modal.extraButtons.push_back(
+                ModalGuiManager::Button {
+                .text = "Open manual",
+                .tooltip = "Open the manual in the options page.",
+                .onActivate = [] (const Point&) {
+                                  openManual("options.html");
+                              }
             }
-        }
-        );
-        game.modal.extraButtons.push_back(
-        ModalGuiManager::Button {
-            .text = "Open options file",
-            .tooltip = "Open the file with all the options.",
-            .onActivate = [] (const Point&) {
-                openFileExplorer(FILE_PATHS_FROM_ROOT::OPTIONS);
+            );
+            game.modal.extraButtons.push_back(
+                ModalGuiManager::Button {
+                .text = "Open options file",
+                .tooltip = "Open the file with all the options.",
+                .onActivate = [] (const Point&) {
+                                  openFileExplorer(FILE_PATHS_FROM_ROOT::OPTIONS);
+                              }
             }
-        }
-        );
-        game.modal.updateItems();
-        game.modal.open();
-    };
+            );
+            game.modal.updateItems();
+            game.modal.open();
+        };
     advancedButton->onGetTooltip =
-    [] () {
-        return
-            "Information on how advanced option management works.";
-    };
+        [] () {
+            return
+                "Information on how advanced option management works.";
+        };
     topGui.addItem(advancedButton, "advanced");
     
     //Tooltip text.
@@ -1795,12 +1807,12 @@ void OptionsMenu::load() {
     //Sort the list.
     sort(
         resolutionPresets.begin(), resolutionPresets.end(),
-    [] (std::pair<int, int> p1, std::pair<int, int> p2) -> bool {
-        if(p1.first == p2.first) {
-            return p1.second < p2.second;
+        [] (std::pair<int, int> p1, std::pair<int, int> p2) -> bool {
+            if(p1.first == p2.first) {
+                return p1.second < p2.second;
+            }
+            return p1.first < p2.first;
         }
-        return p1.first < p2.first;
-    }
     );
     
     //Delete any duplicates.
@@ -2055,9 +2067,9 @@ void OptionsMenu::updateBindWarnings() {
         const auto it =
             std::find_if(
                 binds.begin(), binds.end(),
-        [actionType] (const Inpution::Bind & b) {
-            return b.actionTypeId == actionType.id;
-        }
+                [actionType] (const Inpution::Bind & b) {
+                    return b.actionTypeId == actionType.id;
+                }
             );
         if(it != binds.end()) continue;
         unboundRecommendedActions.push_back(actionType.id);

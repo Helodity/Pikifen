@@ -96,7 +96,8 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
             game.states.gameplay->treasuresCollected++;
             game.states.gameplay->treasurePointsObtained +=
                 resPtr->resType->pointAmount;
-            game.states.gameplay->lastCollectedTreasurePos = shiPtr->center;
+            game.states.gameplay->lastCollectedTreasurePos =
+                shiPtr->center;
             break;
         } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
             if(resPtr->deliveryInfo->playerTeamIdx != INVALID) {
@@ -112,7 +113,8 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
                 ) {
                     team->sprayStats[typeIdx].nrIngredients -=
                         game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded;
-                    game.states.gameplay->changeSprayCount(team, typeIdx, 1);
+                    game.states.gameplay->changeSprayCount(team,
+                        typeIdx, 1);
                     game.states.gameplay->showInventoryUpdateDisplay(
                         team,
                         game.config.misc.sprayOrder[typeIdx]->

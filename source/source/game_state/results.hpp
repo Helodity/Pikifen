@@ -116,7 +116,7 @@ private:
     int scoreChartTop = 0;
     
     //Relevant score markers, sorted. Cache for convenience.
-    vector<std::pair<SCORE_MARKER, int> > scoreMarkers;
+    vector<std::pair<SCORE_MARKER, int>> scoreMarkers;
     
     //Bullet point GUI item for each score marker. Cache for convenience.
     vector<GuiItem*> scoreMarkerGuiItems;

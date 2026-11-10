@@ -506,7 +506,6 @@ void Area::connectEdgeToVertex(
 }
 
 
-
 /**
  * @brief Connects the edges of a sector that link to it into the
  * edgeIdxs vector.
@@ -945,10 +944,10 @@ void Area::generateBlockmap() {
         ceil((corners.br.y - corners.tl.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
         
     bmap.edges.assign(
-        bmap.nCols, vector<vector<Edge*> >(bmap.nRows, vector<Edge*>())
+        bmap.nCols, vector<vector<Edge*>>(bmap.nRows, vector<Edge*>())
     );
     bmap.sectors.assign(
-        bmap.nCols, vector<unordered_set<Sector*> >(
+        bmap.nCols, vector<unordered_set<Sector*>>(
             bmap.nRows, unordered_set<Sector*>()
         )
     );
@@ -1149,7 +1148,8 @@ void Area::getTotalEnemyInfo(size_t* outAmount, size_t* outPoints) const {
  * @param outPoints If not nullptr, the total amount of treasure points
  * is returned here.
  */
-void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
+void Area::getTotalTreasureInfo(size_t* outAmount,
+    size_t* outPoints) const {
     size_t amount = 0;
     size_t points = 0;
     
@@ -1338,7 +1338,7 @@ void Area::loadGeometryFromDataNode(
     }
     
     DataNode* mobsNode = node->getChildByName("mobs");
-    vector<std::pair<size_t, size_t> > mobLinksBuffer;
+    vector<std::pair<size_t, size_t>> mobLinksBuffer;
     size_t nMobs = mobsNode->getNrOfChildren();
     for(size_t m = 0; m < nMobs; m++) {
         DataNode* mobNode = mobsNode->getChild(m);
@@ -2012,19 +2012,19 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.briefingObjective =
             "Collect treasures!";
         mission.mobGroups.push_back(
-        MissionMobGroup {
+            MissionMobGroup {
             .type =
-            goalMobIdxs.empty() ?
-            MISSION_MOB_GROUP_TREASURES :
-            MISSION_MOB_GROUP_CUSTOM,
+                goalMobIdxs.empty() ?
+                MISSION_MOB_GROUP_TREASURES :
+                MISSION_MOB_GROUP_CUSTOM,
             .highlightOnRadar = true,
             .mobIdxs =
-            vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
+                vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
         );
         goalMobGroupIdx = mission.mobGroups.size() - 1;
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
             .clear = true,
             .zeroTimeForScore = true,
@@ -2033,7 +2033,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         }
         );
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
             .idxParam = goalMobGroupIdx,
@@ -2049,20 +2049,20 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.briefingObjective =
             "Battle enemies!";
         mission.mobGroups.push_back(
-        MissionMobGroup {
+            MissionMobGroup {
             .type =
-            goalMobIdxs.empty() ?
-            MISSION_MOB_GROUP_ENEMIES :
-            MISSION_MOB_GROUP_CUSTOM,
+                goalMobIdxs.empty() ?
+                MISSION_MOB_GROUP_ENEMIES :
+                MISSION_MOB_GROUP_CUSTOM,
             .enemiesNeedCollection = enemyPointsOnCollection,
             .highlightOnRadar = true,
             .mobIdxs =
-            vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
+                vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
         );
         goalMobGroupIdx = mission.mobGroups.size() - 1;
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
             .clear = true,
             .zeroTimeForScore = true,
@@ -2071,7 +2071,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         }
         );
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
             .idxParam = goalMobGroupIdx,
@@ -2087,7 +2087,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.briefingObjective =
             "Survive until the time limit!";
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
             .clear = false,
             .zeroTimeForScore = false,
@@ -2096,7 +2096,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         }
         );
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_LESS,
             .metricType = MISSION_METRIC_SECS_LEFT,
             .matchAmount = 0,
@@ -2112,10 +2112,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.briefingObjective =
             "Get the leaders to the exit!";
         regions.push_back(
-        new AreaRegion {
+            new AreaRegion {
             .type = AREA_REGION_TYPE_MISSION,
             .pose =
-            Pose2d {
+                Pose2d {
                 .pos = goalExit.center,
                 .size = goalExit.size,
                 .angle = 0.0f,
@@ -2124,7 +2124,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         exitRegionIdx = regions.size() - 1;
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
             .clear = false,
             .zeroTimeForScore = true,
@@ -2133,7 +2133,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         }
         );
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_LEADERS_IN_REGION,
             .idxParam = exitRegionIdx,
@@ -2149,7 +2149,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.briefingObjective =
             "Grow " + i2s(goalAmount) + " Pikmin!";
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
             .clear = false,
             .zeroTimeForScore = true,
@@ -2158,7 +2158,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         }
         );
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_LIVING_PIKMIN,
             .matchAmount = goalAmount,
@@ -2178,13 +2178,13 @@ void Area::loadOldMissionSystem(DataNode* node) {
         )
     ) {
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_LESS,
             .metricType = MISSION_METRIC_SECS_LEFT,
             .matchAmount = 0,
             .clear = false,
             .zeroTimeForScore =
-            hasFlag(pointLossData, MISSION_FAIL_COND_OLD_TIME_LIMIT),
+                hasFlag(pointLossData, MISSION_FAIL_COND_OLD_TIME_LIMIT),
             .neutralMood = false,
             .reason = "Time's up!",
         }
@@ -2197,7 +2197,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         )
     ) {
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_LESS,
             .metricType = MISSION_METRIC_LIVING_PIKMIN,
             .matchAmount = failTooFewPikAmount,
@@ -2213,7 +2213,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         )
     ) {
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_LIVING_PIKMIN,
             .matchAmount = failTooManyPikAmount,
@@ -2229,7 +2229,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         )
     ) {
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_PIKMIN_LOST,
             .matchAmount = failPikKilled,
@@ -2245,7 +2245,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         )
     ) {
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_TAKE_DAMAGE,
             .clear = false,
             .neutralMood = false,
@@ -2259,7 +2259,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         )
     ) {
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_LEADERS_LOST,
             .matchAmount = failLeadersKod,
@@ -2276,13 +2276,13 @@ void Area::loadOldMissionSystem(DataNode* node) {
         )
     ) {
         mission.mobGroups.push_back(
-        MissionMobGroup {
+            MissionMobGroup {
             .type = MISSION_MOB_GROUP_ENEMIES,
         }
         );
         enemyDefeatFailIdx = mission.mobGroups.size() - 1;
         mission.endConds.push_back(
-        MissionEndCond {
+            MissionEndCond {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
             .idxParam = enemyDefeatFailIdx,
@@ -2319,7 +2319,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_METRIC_MOB_GROUP_CLEARED_MOBS;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].totalAmount =
             goalAllMobs ? INVALID : goalAmount;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = goalMobGroupIdx;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam =
+            goalMobGroupIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Treasures:";
         break;
         
@@ -2331,7 +2332,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_METRIC_MOB_GROUP_CLEARED_MOBS;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].totalAmount =
             goalAllMobs ? INVALID : goalAmount;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = goalMobGroupIdx;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam =
+            goalMobGroupIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Enemies:";
         break;
         
@@ -2355,7 +2357,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_METRIC_LEADERS_IN_REGION;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].totalAmount =
             goalAllMobs ? INVALID : goalMobIdxs.size();
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = exitRegionIdx;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam =
+            exitRegionIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "In exit:";
         break;
         
@@ -2471,82 +2474,82 @@ void Area::loadOldMissionSystem(DataNode* node) {
     //Port the score criteria.
     if(pointsPerPikminBorn != 0) {
         mission.scoreCriteria.push_back(
-        MissionScoreCriterion {
+            MissionScoreCriterion {
             .metricType = MISSION_METRIC_PIKMIN_BORN,
             .points = pointsPerPikminBorn,
             .affectsHud =
-            hasFlag(
-                pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_BORN)
-            ),
+                hasFlag(
+                    pointHudData,
+                    getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_BORN)
+                ),
         }
         );
     }
     if(pointsPerPikminDeath != 0) {
         mission.scoreCriteria.push_back(
-        MissionScoreCriterion {
+            MissionScoreCriterion {
             .metricType = MISSION_METRIC_PIKMIN_LOST,
             .points = pointsPerPikminDeath,
             .affectsHud =
-            hasFlag(
-                pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_DEATH)
-            ),
+                hasFlag(
+                    pointHudData,
+                    getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_DEATH)
+                ),
         }
         );
     }
     if(pointsPerSecLeft != 0) {
         mission.scoreCriteria.push_back(
-        MissionScoreCriterion {
+            MissionScoreCriterion {
             .metricType = MISSION_METRIC_SECS_LEFT,
             .points = pointsPerSecLeft,
             .affectsHud =
-            hasFlag(
-                pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
-            ),
+                hasFlag(
+                    pointHudData,
+                    getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
+                ),
         }
         );
     }
     if(pointsPerSecPassed != 0) {
         mission.scoreCriteria.push_back(
-        MissionScoreCriterion {
+            MissionScoreCriterion {
             .metricType = MISSION_METRIC_SECS_PASSED,
             .points = pointsPerSecPassed,
             .affectsHud =
-            hasFlag(
-                pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_PASSED)
-            ),
+                hasFlag(
+                    pointHudData,
+                    getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_PASSED)
+                ),
         }
         );
     }
     if(pointsPerTreasurePoint != 0) {
         mission.scoreCriteria.push_back(
-        MissionScoreCriterion {
+            MissionScoreCriterion {
             .metricType = MISSION_METRIC_TREASURE_COLLECTION_PTS,
             .points = pointsPerTreasurePoint,
             .affectsHud =
-            hasFlag(
-                pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_TREASURE_POINTS)
-            ),
+                hasFlag(
+                    pointHudData,
+                    getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_TREASURE_POINTS)
+                ),
         }
         );
     }
     if(pointsPerEnemyPoint != 0) {
         mission.scoreCriteria.push_back(
-        MissionScoreCriterion {
+            MissionScoreCriterion {
             .metricType =
-            enemyPointsOnCollection ?
-            MISSION_METRIC_ENEMY_COLLECTION_PTS :
-            MISSION_METRIC_ENEMY_DEFEAT_PTS,
+                enemyPointsOnCollection ?
+                MISSION_METRIC_ENEMY_COLLECTION_PTS :
+                MISSION_METRIC_ENEMY_DEFEAT_PTS,
             .points = pointsPerEnemyPoint,
             .affectsHud =
-            hasFlag(
-                pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_ENEMY_POINTS)
-            ),
+                hasFlag(
+                    pointHudData,
+                    getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_ENEMY_POINTS)
+                ),
         }
         );
     }
@@ -2595,9 +2598,9 @@ void Area::loadThumbnail(const string& thumbnailPath) {
         thumbnail =
             std::shared_ptr<ALLEGRO_BITMAP>(
                 al_load_bitmap(thumbnailPath.c_str()),
-        [](ALLEGRO_BITMAP * b) {
-            al_destroy_bitmap(b);
-        }
+                [](ALLEGRO_BITMAP * b) {
+                    al_destroy_bitmap(b);
+                }
             );
     }
 }

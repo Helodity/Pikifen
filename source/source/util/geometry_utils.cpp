@@ -535,7 +535,6 @@ const Point operator +(float n, const Point& p) {
 }
 
 
-
 /**
  * @brief Subtracts a number with the coordinates.
  *
@@ -548,7 +547,6 @@ const Point operator -(float n, const Point& p) {
 }
 
 
-
 /**
  * @brief Multiplies a number by the coordinates.
  *
@@ -559,7 +557,6 @@ const Point operator -(float n, const Point& p) {
 const Point operator *(float n, const Point& p) {
     return Point(n * p.x, n * p.y);
 }
-
 
 
 /**
@@ -665,7 +662,8 @@ bool bBoxCheck(const Point& center1, const Point& center2, float r) {
  * @param r Radius of the circle.
  * @return Whether they are colliding.
  */
-bool bBoxCheck(const RectCorners& rect, const Point& circleCenter, float r) {
+bool bBoxCheck(const RectCorners& rect, const Point& circleCenter,
+    float r) {
     return
         rectanglesIntersect(
             rect, RectCorners(circleCenter - r, circleCenter + r)
@@ -1156,7 +1154,7 @@ float getAngleSmallestDiff(float a1, float a2) {
     return
         (float) M_PI -
         (float) std::abs(
-            std::abs(normalizeAngle(a1) - normalizeAngle(a2)) - M_PI
+        std::abs(normalizeAngle(a1) - normalizeAngle(a2)) - M_PI
         );
 }
 

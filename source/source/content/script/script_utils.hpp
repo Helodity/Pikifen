@@ -28,22 +28,22 @@ enum SCRIPT_CONSTRUCT_TYPE {
 
     //None, or not applicable.
     SCRIPT_CONSTRUCT_TYPE_NONE,
-
+    
     //Condition (if, else, else_if, end_if).
     SCRIPT_CONSTRUCT_TYPE_IF,
-
+    
     //Do-while loop.
     SCRIPT_CONSTRUCT_TYPE_DO_WHILE,
-
+    
     //While-do loop.
     SCRIPT_CONSTRUCT_TYPE_WHILE_DO,
-
+    
     //For loop.
     SCRIPT_CONSTRUCT_TYPE_FOR,
-
+    
     //For-each loop.
     SCRIPT_CONSTRUCT_TYPE_FOR_EACH,
-
+    
 };
 
 buildEnumNames(constructTypeActionNames, SCRIPT_CONSTRUCT_TYPE)({

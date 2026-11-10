@@ -210,7 +210,7 @@ Mob::Mob(const Point& center, MobType* type, float angle) :
         );
     adjustKeyframeInterpolatorValues<float>(
         waveRingPG.baseParticle.size,
-    [ this ] (const float & f) { return f * radius; }
+        [ this ] (const float& f) { return f * radius; }
     );
     waveRingPG.baseParticle.priority = PARTICLE_PRIORITY_LOW;
     waveRingPG.followZOffset = 1.0f;
@@ -235,7 +235,6 @@ Mob::~Mob() {
     
     deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
 }
-
 
 
 /**
@@ -360,7 +359,8 @@ void Mob::handleStatusSource(
     }
     
     //Parent logic.
-    if(handleStatusSourceParentLogic(statusType, givenByParent, fromHazard)) {
+    if(handleStatusSourceParentLogic(statusType, givenByParent,
+        fromHazard)) {
         return;
     }
     
@@ -496,9 +496,9 @@ void Mob::applyStatusParticles(const Status* sPtr, ParticleGenerator* pg) {
     if(sPtr->type->particleScaleSizes) {
         adjustKeyframeInterpolatorValues<float>(
             newPg.baseParticle.size,
-        [this] (const float & s) {
-            return (s / 100.0f) * radius;
-        }
+            [this] (const float& s) {
+                return (s / 100.0f) * radius;
+            }
         );
         newPg.sizeDeviation = (newPg.sizeDeviation / 100.0f) * radius;
     }
@@ -874,7 +874,8 @@ void Mob::calculateAttackKnockback(
         } case KNOCKBACK_TYPE_OUTWARD: {
             *outKbExists = true;
             *outKbStrength = attackH->knockbackStrength;
-            *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+            *outKbStrength *= offenseMultiplier * (1.0f /
+                    defenseMultiplier);
             *outKbAngle =
                 getAngle(
                     attackH->getCurPos(center, bottomZ, angle, nullptr),
@@ -895,7 +896,8 @@ void Mob::calculateAttackKnockback(
                     0.0f, attackH->radius + victimH->radius,
                     attackH->knockbackStrength, 0.0f
                 );
-            *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+            *outKbStrength *= offenseMultiplier * (1.0f /
+                    defenseMultiplier);
             *outKbAngle =
                 getAngle(
                     attackH->getCurPos(center, bottomZ, angle, nullptr),
@@ -905,7 +907,8 @@ void Mob::calculateAttackKnockback(
         } case KNOCKBACK_TYPE_DIRECTIONAL: {
             *outKbExists = true;
             *outKbStrength = attackH->knockbackStrength;
-            *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+            *outKbStrength *= offenseMultiplier * (1.0f /
+                    defenseMultiplier);
             *outKbAngle = angle + attackH->knockbackAngle;
             break;
         }
@@ -1006,7 +1009,7 @@ bool Mob::calculateCarryingDestination(
         }
         
         unordered_set<PikminType*> availableTypes;
-        vector<std::pair<Mob*, PikminType*> > mobsPerType;
+        vector<std::pair<Mob*, PikminType*>> mobsPerType;
         
         forIdx(l, links) {
             if(!links[l]) continue;
@@ -1144,7 +1147,8 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
         if(!oPtr->activated) {
             valid = false;
         }
-        if(!isInContainer(oPtr->oniType->nutrientFamilies, nutrientFamily)) {
+        if(!isInContainer(oPtr->oniType->nutrientFamilies,
+            nutrientFamily)) {
             valid = false;
         }
         
@@ -1637,7 +1641,7 @@ PikminType* Mob::decideCarryPikminType(
  * this frame.
  */
 void Mob::deleteDeactivatedStatusEffects() {
-    vector<std::pair<StatusType*, bool> > newStatusesToApply;
+    vector<std::pair<StatusType*, bool>> newStatusesToApply;
     bool removedForcedSprite = false;
     
     const vector<Status>& deactivated = statuses.getDeactivated();
@@ -2426,7 +2430,8 @@ float Mob::getSpeedMultiplier() const {
     float moveSpeedMult = 1.0f;
     forIdx(s, statuses.getList()) {
         float vulnMult = statuses.getList()[s].type->speedMultiplier - 1.0f;
-        auto vulnIt = type->statusVulnerabilities.find(statuses.getList()[s].type);
+        auto vulnIt = type->statusVulnerabilities.find(
+                statuses.getList()[s].type);
         if(vulnIt != type->statusVulnerabilities.end()) {
             vulnMult *= vulnIt->second.effectMult;
         }
@@ -3827,14 +3832,14 @@ void Mob::stopHeightEffect() {
                 );
             adjustKeyframeInterpolatorValues<float>(
                 pg.baseParticle.size,
-            [ = ] (const float & s) {
-                return
-                    std::min(
-                        GAMEPLAY::LEADER_LAND_PART_MAX_SIZE,
-                        s * distanceFallen *
-                        GAMEPLAY::LEADER_LAND_PART_SIZE_MULT
-                    );
-            }
+                [ = ] (const float& s) {
+                    return
+                        std::min(
+                            GAMEPLAY::LEADER_LAND_PART_MAX_SIZE,
+                            s * distanceFallen *
+                            GAMEPLAY::LEADER_LAND_PART_SIZE_MULT
+                        );
+                }
             );
             pg.followZOffset = 1.0f;
             pg.baseParticle.priority = PARTICLE_PRIORITY_HIGH;
@@ -4035,7 +4040,8 @@ void Mob::tickAnimation(float deltaT) {
     float mult = 1.0f;
     forIdx(s, statuses.getList()) {
         float vulnMult = statuses.getList()[s].type->animSpeedMultiplier - 1.0f;
-        auto vulnIt = type->statusVulnerabilities.find(statuses.getList()[s].type);
+        auto vulnIt = type->statusVulnerabilities.find(
+                statuses.getList()[s].type);
         if(vulnIt != type->statusVulnerabilities.end()) {
             vulnMult *= vulnIt->second.effectMult;
         }
@@ -4317,7 +4323,8 @@ void Mob::tickMiscLogic(float deltaT) {
     
     //Wave ring liquid particles.
     forIdx(p, particleGenerators) {
-        if(particleGenerators[p].id == MOB_PARTICLE_GENERATOR_ID_WAVE_RING) {
+        if(particleGenerators[p].id ==
+            MOB_PARTICLE_GENERATOR_ID_WAVE_RING) {
             particleGenerators[p].canEmit = false;
             break;
         }
@@ -4679,7 +4686,8 @@ void Mob::tickScript(float deltaT) {
         if(!player.leaderPtr) continue;
         if(!player.whistle.whistling) continue;
         if(!player.leaderPtr->isViableLeader(this)) continue;
-        if(Distance(center, player.whistle.center) > player.whistle.radius) {
+        if(Distance(center, player.whistle.center) >
+            player.whistle.radius) {
             continue;
         }
         

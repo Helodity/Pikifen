@@ -271,8 +271,9 @@ void GameplayState::drawBigMsg() {
         const float TEXT_MOVE_AGAIN_T = 0.66f;
         const float TEXT_DRIFT_START_X = game.winW * 0.005f;
         const float TEXT_DRIFT_END_X = game.winW * -0.005f;
-        const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
-        
+        const float t = bigMsg.getTime() /
+            GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
+            
         KeyframeInterpolator<float> kiX(game.winW);
         kiX.addNew(
             TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK
@@ -1144,8 +1145,8 @@ void GameplayState::drawLeaderCursor(
                 0.75f,
                 0.75f *
                 (float) (
-                    player->leaderPtr->swarmArrows[a] /
-                    (game.config.rules.leaderCursorMaxDist * 0.40f)
+            player->leaderPtr->swarmArrows[a] /
+            (game.config.rules.leaderCursorMaxDist * 0.40f)
                 )
             );
         drawBitmap(
@@ -1153,7 +1154,7 @@ void GameplayState::drawLeaderCursor(
             player->leaderPtr->center + center,
             Point(
                 16 * (1 + player->leaderPtr->swarmArrows[a] /
-                      game.config.rules.leaderCursorMaxDist),
+                    game.config.rules.leaderCursorMaxDist),
                 -1
             ),
             player->swarmAngle,
@@ -2079,12 +2080,12 @@ void GameplayState::drawWorldComponents(
     
     sort(
         components.begin(), components.end(),
-    [] (const WorldComponent & c1, const WorldComponent & c2) -> bool {
-        if(c1.z == c2.z) {
-            return c1.idx < c2.idx;
+        [] (const WorldComponent & c1, const WorldComponent & c2) -> bool {
+            if(c1.z == c2.z) {
+                return c1.idx < c2.idx;
+            }
+            return c1.z < c2.z;
         }
-        return c1.z < c2.z;
-    }
     );
     
     float mobShadowStretch = 0;

@@ -22,7 +22,7 @@
 
 /**
  * @brief Returns "a term" or "an term", depending on the term.
- * 
+ *
  * @param term The term.
  * @param justArticle If true, it returns just the article ("a" or "an").
  * @return The string.
@@ -189,7 +189,7 @@ size_t getSplitCount(
  * @brief Returns the character index of the next word limit in a string.
  * This mirrors what happens in most text editors when Ctrl + Right or
  * Ctrl + Left is pressed.
- * 
+ *
  * @param text Text to scan.
  * @param forward Whether we're moving forward or backward.
  * @param startIdx Starting index to scan from.
@@ -199,28 +199,28 @@ size_t getNextWordLimitPos(
     const string& text, bool forward, size_t startIdx
 ) {
     const auto isCharWord = [] (char c) {
-        if(c >= 'a' && c <= 'z') return true;
-        if(c >= 'A' && c <= 'Z') return true;
-        if(c >= '0' && c <= '9') return true;
-        if(c == '-') return true;
-        if(c == '_') return true;
-        if(c == '\'') return true;
-        return false;
-    };
+                                if(c >= 'a' && c <= 'z') return true;
+                                if(c >= 'A' && c <= 'Z') return true;
+                                if(c >= '0' && c <= '9') return true;
+                                if(c == '-') return true;
+                                if(c == '_') return true;
+                                if(c == '\'') return true;
+                                return false;
+                            };
     const auto isRelevantCharWord =
-    [&forward, &text, &isCharWord] (size_t idx) {
-        if(forward) {
-            return isCharWord(text[idx]);
-        } else {
-            return idx > 0 ? isCharWord(text[idx - 1]) : isCharWord(text[idx]);
-        }
-    };
-
+        [&forward, &text, &isCharWord] (size_t idx) {
+            if(forward) {
+                return isCharWord(text[idx]);
+            } else {
+                return idx > 0 ? isCharWord(text[idx - 1]) : isCharWord(text[idx]);
+            }
+        };
+    
     if(text.empty()) return 0;
-
+    
     size_t idx = startIdx > text.size() ? text.size() - 1 : startIdx;
     bool hadWord = isRelevantCharWord(idx);
-
+    
     while(true) {
         if(forward) {
             if(idx >= text.size()) return text.size();
@@ -233,7 +233,7 @@ size_t getNextWordLimitPos(
         if(hadWord && !hasWord) return idx;
         hadWord = hasWord;
     }
-
+    
     return idx;
 }
 
@@ -257,7 +257,7 @@ bool isNumber(const string& s) {
 
 /**
  * @brief Returns whether the given character is a vowel.
- * 
+ *
  * @param c The character.
  * @return Whether it is a vowel.
  */
@@ -314,7 +314,8 @@ string removeExtension(const string& s) {
  * @param replacement What to replace found search terms with.
  * @return The string with the instances replaced.
  */
-string replaceAll(string s, const string& search, const string& replacement) {
+string replaceAll(string s, const string& search,
+    const string& replacement) {
     size_t pos = s.find(search);
     while(pos != string::npos) {
         s.replace(pos, search.size(), replacement);

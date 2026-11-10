@@ -87,7 +87,6 @@ private:
 };
 
 
-
 /**
  * @brief Info about the title screen.
  */

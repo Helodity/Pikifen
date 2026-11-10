@@ -59,23 +59,23 @@ void Content::resetMetadata() {
  */
 void Content::saveMetadataToDataNode(DataNode* node) const {
     const auto doProp =
-    [node] (const string& name, const string& value) {
-        DataNode* propNode = nullptr;
-        if(node->getNrOfChildrenByName(name) > 0) {
-            propNode = node->getChildByName(name);
-        }
-        if(propNode) {
-            if(value.empty()) {
-                node->deleteChild(propNode);
+        [node] (const string & name, const string & value) {
+            DataNode* propNode = nullptr;
+            if(node->getNrOfChildrenByName(name) > 0) {
+                propNode = node->getChildByName(name);
+            }
+            if(propNode) {
+                if(value.empty()) {
+                    node->deleteChild(propNode);
+                } else {
+                    propNode->value = value;
+                }
             } else {
-                propNode->value = value;
+                if(!value.empty()) {
+                    node->addNew(name, value);
+                }
             }
-        } else {
-            if(!value.empty()) {
-                node->addNew(name, value);
-            }
-        }
-    };
+        };
     
     doProp("name", name);
     doProp("description", description);

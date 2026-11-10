@@ -662,9 +662,9 @@ void AreaEditor::drawCrossSectionGraph() {
         if(!splits.empty()) {
             sort(
                 splits.begin(), splits.end(),
-            [] (const Split & i1, const Split & i2) -> bool {
-                return i1.l2r < i2.l2r;
-            }
+                [] (const Split & i1, const Split & i2) -> bool {
+                    return i1.l2r < i2.l2r;
+                }
             );
             
             splits.insert(
@@ -1201,7 +1201,6 @@ void AreaEditor::drawLineDist(
         AREA_EDITOR::MEASUREMENT_COLOR, lengthNrPos, prefix + i2s(d)
     );
 }
-
 
 
 /**

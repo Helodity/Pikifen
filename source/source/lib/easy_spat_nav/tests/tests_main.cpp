@@ -126,46 +126,46 @@ void SpatNavTestInterface::fromString(const std::string& s) {
     size_t caretY = 0;
     
     const auto finishItem =
-    [this, &inItem, &itemIsParent, &itemStartX, &caretX, &caretY] () {
-        if(!inItem) return;
-        //Finish a new item.
-        bool updated = false;
-        for(size_t i = 0; i < items.size(); i++) {
-            if(
-                items[i].startX == itemStartX &&
-                items[i].endX == caretX &&
-                items[i].endY == caretY
-            ) {
-                //Update the one from the previous line(s).
-                items[i].endY = caretY + 1.0f;
-                updated = true;
-                break;
+        [this, &inItem, &itemIsParent, &itemStartX, &caretX, &caretY] () {
+            if(!inItem) return;
+            //Finish a new item.
+            bool updated = false;
+            for(size_t i = 0; i < items.size(); i++) {
+                if(
+                    items[i].startX == itemStartX &&
+                    items[i].endX == caretX &&
+                    items[i].endY == caretY
+                ) {
+                    //Update the one from the previous line(s).
+                    items[i].endY = caretY + 1.0f;
+                    updated = true;
+                    break;
+                }
             }
-        }
-        if(!updated) {
-            //Save a new one.
-            items.push_back(
-            SpatNavTestItem {
-                .startX = (float) itemStartX,
-                .endX = (float) caretX,
-                .startY = (float) caretY,
-                .endY = (float) caretY + 1.0f,
+            if(!updated) {
+                //Save a new one.
+                items.push_back(
+                    SpatNavTestItem {
+                    .startX = (float) itemStartX,
+                    .endX = (float) caretX,
+                    .startY = (float) caretY,
+                    .endY = (float) caretY + 1.0f,
+                }
+                );
             }
-            );
-        }
-        if(itemIsParent) {
-            parentNrs.push_back(items.size());
-        }
-        inItem = false;
-        itemIsParent = false;
-    };
+            if(itemIsParent) {
+                parentNrs.push_back(items.size());
+            }
+            inItem = false;
+            itemIsParent = false;
+        };
     
     const auto finishLine =
-    [this, &caretX, &caretY] () {
-        width = std::max(width, (float) caretX);
-        caretX = 0;
-        caretY++;
-    };
+        [this, &caretX, &caretY] () {
+            width = std::max(width, (float) caretX);
+            caretX = 0;
+            caretY++;
+        };
     
     for(size_t c = 0; c < s.size(); c++) {
         bool isItem = s[c] == '#' || s[c] == 'P';
@@ -320,7 +320,7 @@ void testNav(
     
     size_t targetItemNr =
         (size_t) spatNavManager.navigate(
-            direction, (EasySpatNav::ItemId) focusedItemNr
+        direction, (EasySpatNav::ItemId) focusedItemNr
         );
         
     test(testDescription, expectedItemNr, targetItemNr);
@@ -517,22 +517,22 @@ int main(int argc, char** argv) {
     );
     testNav(
         "Test that looping to the right won't be done if disabled.",
-    ifBasic3By3, DIRECTION_RIGHT, 3, 0, {},
+        ifBasic3By3, DIRECTION_RIGHT, 3, 0, {},
     { .loopX = false, .loopY = false }
     );
     testNav(
         "Test that looping to the left won't be done if disabled.",
-    ifBasic3By3, DIRECTION_LEFT, 1, 0, {},
+        ifBasic3By3, DIRECTION_LEFT, 1, 0, {},
     { .loopX = false, .loopY = false }
     );
     testNav(
         "Test that looping down won't be done if disabled.",
-    ifBasic3By3, DIRECTION_DOWN, 7, 0, {},
+        ifBasic3By3, DIRECTION_DOWN, 7, 0, {},
     { .loopX = false, .loopY = false }
     );
     testNav(
         "Test that looping up won't be done if disabled.",
-    ifBasic3By3, DIRECTION_UP, 1, 0, {},
+        ifBasic3By3, DIRECTION_UP, 1, 0, {},
     { .loopX = false, .loopY = false }
     );
     

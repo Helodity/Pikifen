@@ -484,8 +484,8 @@ void ParticleGenerator::loadFromDataNode(
     
     id =
         (MOB_PARTICLE_GENERATOR_ID) (
-            MOB_PARTICLE_GENERATOR_ID_STATUS +
-            game.content.particleGens.list.size()
+        MOB_PARTICLE_GENERATOR_ID_STATUS +
+        game.content.particleGens.list.size()
         );
 }
 
@@ -571,7 +571,8 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     DataNode* linSpeedNode = baseParticleNode->addNew("linear_speed");
     GetterWriter plsGW(linSpeedNode);
     
-    for(size_t c = 0; c < baseParticle.linearSpeed.getKeyframeCount(); c++) {
+    for(size_t c = 0; c < baseParticle.linearSpeed.getKeyframeCount();
+        c++) {
         auto keyframe = baseParticle.linearSpeed.getKeyframe(c);
         plsGW.write(f2s(keyframe.first), keyframe.second);
     }
@@ -579,7 +580,8 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     DataNode* outSpeedNode = baseParticleNode->addNew("outwards_speed");
     GetterWriter posGW(outSpeedNode);
     
-    for(size_t c = 0; c < baseParticle.outwardsSpeed.getKeyframeCount(); c++) {
+    for(size_t c = 0; c < baseParticle.outwardsSpeed.getKeyframeCount();
+        c++) {
         auto keyframe = baseParticle.outwardsSpeed.getKeyframe(c);
         posGW.write(f2s(keyframe.first), keyframe.second);
     }
@@ -587,7 +589,8 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     DataNode* orbSpeedNode = baseParticleNode->addNew("orbital_speed");
     GetterWriter porsGW(orbSpeedNode);
     
-    for(size_t c = 0; c < baseParticle.orbitalSpeed.getKeyframeCount(); c++) {
+    for(size_t c = 0; c < baseParticle.orbitalSpeed.getKeyframeCount();
+        c++) {
         auto keyframe = baseParticle.orbitalSpeed.getKeyframe(c);
         porsGW.write(f2s(keyframe.first), keyframe.second);
     }

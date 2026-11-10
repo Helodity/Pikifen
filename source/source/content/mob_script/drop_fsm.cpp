@@ -78,9 +78,6 @@ void DropFsm::createFsm(MobType* typ) {
 #pragma region FSM functions
 
 
-
-
-
 /**
  * @brief What to do when the drop is touched.
  *

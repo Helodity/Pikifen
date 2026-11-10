@@ -57,7 +57,7 @@ void ParticleEditor::openLoadDialog() {
         std::bind(&ParticleEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&ParticleEditor::closeLoadDialog, this);
+            std::bind(&ParticleEditor::closeLoadDialog, this);
 }
 
 
@@ -71,12 +71,12 @@ void ParticleEditor::openNewDialog() {
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
-        newDialog.pack.clear();
-        newDialog.internalName = "my_particle_generator";
-        newDialog.partGenPath.clear();
-        newDialog.lastCheckedPartGenPath.clear();
-        newDialog.partGenPathExists = false;
-    };
+                                        newDialog.pack.clear();
+                                        newDialog.internalName = "my_particle_generator";
+                                        newDialog.partGenPath.clear();
+                                        newDialog.lastCheckedPartGenPath.clear();
+                                        newDialog.partGenPathExists = false;
+                                    };
     
 }
 
@@ -90,7 +90,7 @@ void ParticleEditor::openOptionsDialog() {
         std::bind(&ParticleEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&ParticleEditor::closeOptionsDialog, this);
+            std::bind(&ParticleEditor::closeOptionsDialog, this);
 }
 
 
@@ -252,16 +252,16 @@ void ParticleEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.partEd.history,
-    [this](const string& path) -> string {
-        return path;
-    },
-    [this](const string& path) {
-        closeTopDialog();
-        loadPartGenFile(path, true);
-    },
-    [this](const string& path) {
-        return getFileTooltip(path);
-    }
+        [this](const string & path) -> string {
+            return path;
+        },
+        [this](const string & path) {
+            closeTopDialog();
+            loadPartGenFile(path, true);
+        },
+        [this](const string & path) {
+            return getFileTooltip(path);
+        }
     );
     
     //New node.
@@ -358,10 +358,10 @@ void ParticleEditor::processGuiDialogNew() {
     if(hitCreateButton) {
         if(!problem.empty()) return;
         auto reallyCreate = [this] () {
-            createPartGen(newDialog.partGenPath);
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-        };
+                                createPartGen(newDialog.partGenPath);
+                                closeTopDialog();
+                                closeTopDialog(); //Close the load dialog.
+                            };
         
         if(
             newDialog.pack == FOLDER_NAMES::BASE_PACK &&
@@ -993,15 +993,15 @@ void ParticleEditor::processGuiPanelGeneratorAppearance() {
         ImGui::SameLine();
         if(ImGui::Button("Choose image...")) {
             openBitmapDialog(
-            [this] (const string& bmp) {
-                //We can't have living particles with destroyed bitmaps,
-                //so clear them all.
-                partMgr.clear();
-                loadedGen.baseParticle.setBitmap(bmp);
-                changesMgr.markAsChanged();
-                setStatus("Picked an image successfully.");
-            },
-            "effects"
+                [this] (const string & bmp) {
+                    //We can't have living particles with destroyed bitmaps,
+                    //so clear them all.
+                    partMgr.clear();
+                    loadedGen.baseParticle.setBitmap(bmp);
+                    changesMgr.markAsChanged();
+                    setStatus("Picked an image successfully.");
+                },
+                "effects"
             );
         }
         setTooltip("Choose which image to use from the game's content.");
@@ -1261,87 +1261,87 @@ void ParticleEditor::processGuiPanelGeneratorEmission() {
                 
             //Emission interval base value.
             const auto processIntervalBase =
-            [this] () {
-                ImGui::SetNextItemWidth(85);
-                if(
-                    ImGui::DragFloat(
-                        "##intervalBase", &loadedGen.emission.interval,
-                        0.01f, 0.01f, FLT_MAX
-                    )
-                ) {
-                    changesMgr.markAsChanged();
-                }
-                setTooltip(
-                    "How long between particle emissions, in seconds.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-            };
+                [this] () {
+                    ImGui::SetNextItemWidth(85);
+                    if(
+                        ImGui::DragFloat(
+                            "##intervalBase", &loadedGen.emission.interval,
+                            0.01f, 0.01f, FLT_MAX
+                        )
+                    ) {
+                        changesMgr.markAsChanged();
+                    }
+                    setTooltip(
+                        "How long between particle emissions, in seconds.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
+                };
             
             //Emission interval deviation value.
             const auto processIntervalDev =
-            [this] () {
-                ImGui::SetNextItemWidth(70);
-                if(
-                    ImGui::DragFloat(
-                        "##intervalDeviation",
-                        &loadedGen.emission.intervalDeviation,
-                        0.01f, 0.0f, FLT_MAX
-                    )
-                ) {
-                    changesMgr.markAsChanged();
-                }
-                setTooltip(
-                    "The emission interval varies randomly up or down "
-                    "by this amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-            };
+                [this] () {
+                    ImGui::SetNextItemWidth(70);
+                    if(
+                        ImGui::DragFloat(
+                            "##intervalDeviation",
+                            &loadedGen.emission.intervalDeviation,
+                            0.01f, 0.0f, FLT_MAX
+                        )
+                    ) {
+                        changesMgr.markAsChanged();
+                    }
+                    setTooltip(
+                        "The emission interval varies randomly up or down "
+                        "by this amount.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
+                };
             
             //Emission interval minimum value.
             const auto processIntervalMin =
-            [this, &emissionMin, &emissionMax] () {
-                ImGui::SetNextItemWidth(85);
-                if(
-                    ImGui::DragFloat(
-                        "##intervalMin", &emissionMin,
-                        0.01f, 0.0f, FLT_MAX
-                    )
-                ) {
-                    loadedGen.emission.interval =
-                        (emissionMin + emissionMax) / 2.0f;
-                    loadedGen.emission.intervalDeviation =
-                        fabs(emissionMax - loadedGen.emission.interval);
-                    changesMgr.markAsChanged();
-                }
-                setTooltip(
-                    "The emission interval varies randomly, "
-                    "with this being the lowest amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-            };
+                [this, &emissionMin, &emissionMax] () {
+                    ImGui::SetNextItemWidth(85);
+                    if(
+                        ImGui::DragFloat(
+                            "##intervalMin", &emissionMin,
+                            0.01f, 0.0f, FLT_MAX
+                        )
+                    ) {
+                        loadedGen.emission.interval =
+                            (emissionMin + emissionMax) / 2.0f;
+                        loadedGen.emission.intervalDeviation =
+                            fabs(emissionMax - loadedGen.emission.interval);
+                        changesMgr.markAsChanged();
+                    }
+                    setTooltip(
+                        "The emission interval varies randomly, "
+                        "with this being the lowest amount.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
+                };
             
             //Emission interval maximum value.
             const auto processIntervalMax =
-            [this, &emissionMin, &emissionMax] () {
-                ImGui::SetNextItemWidth(85);
-                if(
-                    ImGui::DragFloat(
-                        "##intervalMax", &emissionMax,
-                        0.01f, 0.0f, FLT_MAX
-                    )
-                ) {
-                    loadedGen.emission.interval =
-                        (emissionMin + emissionMax) / 2.0f;
-                    loadedGen.emission.intervalDeviation =
-                        fabs(emissionMax - loadedGen.emission.interval);
-                    changesMgr.markAsChanged();
-                }
-                setTooltip(
-                    "The emission interval varies randomly, "
-                    "with this being the highest amount.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-            };
+                [this, &emissionMin, &emissionMax] () {
+                    ImGui::SetNextItemWidth(85);
+                    if(
+                        ImGui::DragFloat(
+                            "##intervalMax", &emissionMax,
+                            0.01f, 0.0f, FLT_MAX
+                        )
+                    ) {
+                        loadedGen.emission.interval =
+                            (emissionMin + emissionMax) / 2.0f;
+                        loadedGen.emission.intervalDeviation =
+                            fabs(emissionMax - loadedGen.emission.interval);
+                        changesMgr.markAsChanged();
+                    }
+                    setTooltip(
+                        "The emission interval varies randomly, "
+                        "with this being the highest amount.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
+                };
             
             //Interval widgets.
             ImGui::Indent();
@@ -1631,86 +1631,86 @@ void ParticleEditor::processGuiPanelGeneratorPBehavior() {
             
         //Duration base value.
         const auto processDurationBase =
-        [this] () {
-            ImGui::SetNextItemWidth(85);
-            if(
-                ImGui::DragFloat(
-                    "##particleDurBase", &loadedGen.baseParticle.duration,
-                    0.01f, 0.01f, FLT_MAX
-                )
-            ) {
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "How long each particle lives for, in seconds.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this] () {
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::DragFloat(
+                        "##particleDurBase", &loadedGen.baseParticle.duration,
+                        0.01f, 0.01f, FLT_MAX
+                    )
+                ) {
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "How long each particle lives for, in seconds.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Duration deviation value.
         const auto processDurationDev =
-        [this] () {
-            ImGui::SetNextItemWidth(70);
-            if(
-                ImGui::DragFloat(
-                    "##particleDurDev",
-                    &loadedGen.durationDeviation, 0.01f, 0.0f, FLT_MAX
-                )
-            ) {
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "A particle's lifespan varies randomly up or down by this "
-                "amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this] () {
+                ImGui::SetNextItemWidth(70);
+                if(
+                    ImGui::DragFloat(
+                        "##particleDurDev",
+                        &loadedGen.durationDeviation, 0.01f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "A particle's lifespan varies randomly up or down by this "
+                    "amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Duration minimum value.
         const auto processDurationMin =
-        [this, &durationMin, &durationMax] () {
-            ImGui::SetNextItemWidth(85);
-            if(
-                ImGui::DragFloat(
-                    "##particleDurMin", &durationMin,
-                    0.01f, 0.01f, FLT_MAX
-                )
-            ) {
-                loadedGen.baseParticle.duration =
-                    (durationMin + durationMax) / 2.0f;
-                loadedGen.durationDeviation =
-                    fabs(durationMax - loadedGen.baseParticle.duration);
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "A particle's lifespan varies randomly, "
-                "with this being the lowest amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this, &durationMin, &durationMax] () {
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::DragFloat(
+                        "##particleDurMin", &durationMin,
+                        0.01f, 0.01f, FLT_MAX
+                    )
+                ) {
+                    loadedGen.baseParticle.duration =
+                        (durationMin + durationMax) / 2.0f;
+                    loadedGen.durationDeviation =
+                        fabs(durationMax - loadedGen.baseParticle.duration);
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "A particle's lifespan varies randomly, "
+                    "with this being the lowest amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Duration maximum value.
         const auto processDurationMax =
-        [this, &durationMin, &durationMax] () {
-            ImGui::SetNextItemWidth(85);
-            if(
-                ImGui::DragFloat(
-                    "##particleDurMax", &durationMax,
-                    0.01f, 0.01f, FLT_MAX
-                )
-            ) {
-                loadedGen.baseParticle.duration =
-                    (durationMin + durationMax) / 2.0f;
-                loadedGen.durationDeviation =
-                    fabs(durationMax - loadedGen.baseParticle.duration);
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "A particle's lifespan varies randomly, "
-                "with this being the highest amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this, &durationMin, &durationMax] () {
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::DragFloat(
+                        "##particleDurMax", &durationMax,
+                        0.01f, 0.01f, FLT_MAX
+                    )
+                ) {
+                    loadedGen.baseParticle.duration =
+                        (durationMin + durationMax) / 2.0f;
+                    loadedGen.durationDeviation =
+                        fabs(durationMax - loadedGen.baseParticle.duration);
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "A particle's lifespan varies randomly, "
+                    "with this being the highest amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Duration widgets.
         processGuiWidgetsDeviation(
@@ -1898,87 +1898,87 @@ void ParticleEditor::processGuiPanelGeneratorPBehavior() {
             
         //Friction base value.
         const auto processFrictionBase =
-        [this] () {
-            ImGui::SetNextItemWidth(85);
-            if(
-                ImGui::DragFloat(
-                    "##particleFrictionBase", &loadedGen.baseParticle.friction,
-                    0.1f, -FLT_MAX, FLT_MAX
-                )
-            ) {
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "Slowing factor applied to a particle.\n"
-                "Negative values make it speed up.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this] () {
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::DragFloat(
+                        "##particleFrictionBase", &loadedGen.baseParticle.friction,
+                        0.1f, -FLT_MAX, FLT_MAX
+                    )
+                ) {
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "Slowing factor applied to a particle.\n"
+                    "Negative values make it speed up.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Friction deviation value.
         const auto processFrictionDev =
-        [this] () {
-            ImGui::SetNextItemWidth(70);
-            if(
-                ImGui::DragFloat(
-                    "##particleFrictionDev",
-                    &loadedGen.frictionDeviation, 0.1f, 0.0f, FLT_MAX
-                )
-            ) {
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "A particle's friction varies randomly up or down\n"
-                "by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this] () {
+                ImGui::SetNextItemWidth(70);
+                if(
+                    ImGui::DragFloat(
+                        "##particleFrictionDev",
+                        &loadedGen.frictionDeviation, 0.1f, 0.0f, FLT_MAX
+                    )
+                ) {
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "A particle's friction varies randomly up or down\n"
+                    "by this amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Friction minimum value.
         const auto processFrictionMin =
-        [this, &frictionMin, &frictionMax] () {
-            ImGui::SetNextItemWidth(85);
-            if(
-                ImGui::DragFloat(
-                    "##particleFrictionMin", &frictionMin,
-                    0.1f, -FLT_MAX, FLT_MAX
-                )
-            ) {
-                loadedGen.baseParticle.friction =
-                    (frictionMin + frictionMax) / 2.0f;
-                loadedGen.frictionDeviation =
-                    fabs(frictionMax - loadedGen.baseParticle.friction);
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "A particle's friction varies randomly, "
-                "with this being the lowest amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this, &frictionMin, &frictionMax] () {
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::DragFloat(
+                        "##particleFrictionMin", &frictionMin,
+                        0.1f, -FLT_MAX, FLT_MAX
+                    )
+                ) {
+                    loadedGen.baseParticle.friction =
+                        (frictionMin + frictionMax) / 2.0f;
+                    loadedGen.frictionDeviation =
+                        fabs(frictionMax - loadedGen.baseParticle.friction);
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "A particle's friction varies randomly, "
+                    "with this being the lowest amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Friction maximum value.
         const auto processFrictionMax =
-        [this, &frictionMin, &frictionMax] () {
-            ImGui::SetNextItemWidth(85);
-            if(
-                ImGui::DragFloat(
-                    "##particleFrictionMax", &frictionMax,
-                    0.1f, -FLT_MAX, FLT_MAX
-                )
-            ) {
-                loadedGen.baseParticle.friction =
-                    (frictionMin + frictionMax) / 2.0f;
-                loadedGen.frictionDeviation =
-                    fabs(frictionMax - loadedGen.baseParticle.friction);
-                changesMgr.markAsChanged();
-            }
-            setTooltip(
-                "A particle's friction varies randomly, "
-                "with this being the highest amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        };
+            [this, &frictionMin, &frictionMax] () {
+                ImGui::SetNextItemWidth(85);
+                if(
+                    ImGui::DragFloat(
+                        "##particleFrictionMax", &frictionMax,
+                        0.1f, -FLT_MAX, FLT_MAX
+                    )
+                ) {
+                    loadedGen.baseParticle.friction =
+                        (frictionMin + frictionMax) / 2.0f;
+                    loadedGen.frictionDeviation =
+                        fabs(frictionMax - loadedGen.baseParticle.friction);
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "A particle's friction varies randomly, "
+                    "with this being the highest amount.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+            };
         
         //Friction widgets.
         processGuiWidgetsDeviation(

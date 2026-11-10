@@ -64,8 +64,8 @@ struct ShaderManager {
     void compileShaders();
     
     
-    private:
-    
+private:
+
     //--- Private function declarations ---
     
     void compileShader(

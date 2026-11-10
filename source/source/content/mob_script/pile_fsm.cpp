@@ -101,7 +101,8 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         float spawnHSpeed = 0;
         float spawnVSpeed = 0;
         
-        if(r == 0 && info->mob2->type->category->id == MOB_CATEGORY_PIKMIN) {
+        if(r == 0 && info->mob2->type->category->id ==
+            MOB_CATEGORY_PIKMIN) {
             pikminToStartCarrying = (Pikmin*) (info->mob2);
             //If this was a Pikmin's attack, spawn the first resource nearby
             //so it can pick it up.

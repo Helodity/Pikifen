@@ -170,8 +170,8 @@ struct CategoryManager {
     MobCategory* getFromPName(const string& pname) const;
     void clear();
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //List of known mob categories.

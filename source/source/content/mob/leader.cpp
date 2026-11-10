@@ -127,8 +127,9 @@ const float THROW_PREVIEW_DEF_MAX_THICKNESS = 8.0f;
 const float THROW_PREVIEW_FADE_IN_RATIO = 0.30f;
 
 //The throw preview starts fading out at this ratio.
-const float THROW_PREVIEW_FADE_OUT_RATIO = 1.0f - THROW_PREVIEW_FADE_IN_RATIO;
-
+const float THROW_PREVIEW_FADE_OUT_RATIO = 1.0f -
+    THROW_PREVIEW_FADE_IN_RATIO;
+    
 //Throw preview minimum thickness.
 const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
 
@@ -160,54 +161,54 @@ Leader::Leader(const Point& center, LeaderType* type, float angle) :
         );
         
     swarmNextArrowTimer.onEnd = [this] () {
-        if(!player) return;
-        swarmNextArrowTimer.start();
-        swarmArrows.push_back(0);
-        
-        Particle p;
-        unsigned char colorIdx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
-        p.bitmap = game.sysContent.bmpBrightCircle;
-        ALLEGRO_COLOR c =
-            al_map_rgba(
-                WHISTLE::DOT_COLORS[colorIdx][0],
-                WHISTLE::DOT_COLORS[colorIdx][1],
-                WHISTLE::DOT_COLORS[colorIdx][2],
-                LEADER::SWARM_PARTICLE_ALPHA * 255
-            );
-        p.color = KeyframeInterpolator<ALLEGRO_COLOR>(c);
-        p.color.addNew(1, changeAlpha(c, 0));
-        p.duration =
-            game.rng.f(
-                LEADER::SWARM_PARTICLE_MIN_DURATION,
-                LEADER::SWARM_PARTICLE_MAX_DURATION
-            );
-        p.friction = LEADER::SWARM_PARTICLE_FRICTION;
-        p.center = this->center;
-        p.center.x += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
-        p.center.y += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
-        p.priority = PARTICLE_PRIORITY_MEDIUM;
-        p.size.setKeyframeValue(0, LEADER::SWARM_PARTICLE_SIZE);
-        float pSpeed =
-            player->swarmMagnitude *
-            LEADER::SWARM_PARTICLE_SPEED_MULT +
-            game.rng.f(
-                -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
-                LEADER::SWARM_PARTICLE_SPEED_DEVIATION
-            );
-        float pAngle =
-            player->swarmAngle +
-            game.rng.f(
-                -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
-                LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
-            );
-        p.linearSpeed =
-            KeyframeInterpolator<Point>(
-                rotatePoint(Point(pSpeed, 0.0f), pAngle)
-            );
-        p.time = p.duration;
-        p.z = this->bottomZ + this->height / 2.0f;
-        game.states.gameplay->particles.addParticle(p);
-    };
+                                    if(!player) return;
+                                    swarmNextArrowTimer.start();
+                                    swarmArrows.push_back(0);
+                                    
+                                    Particle p;
+                                    unsigned char colorIdx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
+                                    p.bitmap = game.sysContent.bmpBrightCircle;
+                                    ALLEGRO_COLOR c =
+                                        al_map_rgba(
+                                            WHISTLE::DOT_COLORS[colorIdx][0],
+                                            WHISTLE::DOT_COLORS[colorIdx][1],
+                                            WHISTLE::DOT_COLORS[colorIdx][2],
+                                            LEADER::SWARM_PARTICLE_ALPHA * 255
+                                        );
+                                    p.color = KeyframeInterpolator<ALLEGRO_COLOR>(c);
+                                    p.color.addNew(1, changeAlpha(c, 0));
+                                    p.duration =
+                                        game.rng.f(
+                                            LEADER::SWARM_PARTICLE_MIN_DURATION,
+                                            LEADER::SWARM_PARTICLE_MAX_DURATION
+                                        );
+                                    p.friction = LEADER::SWARM_PARTICLE_FRICTION;
+                                    p.center = this->center;
+                                    p.center.x += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
+                                    p.center.y += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
+                                    p.priority = PARTICLE_PRIORITY_MEDIUM;
+                                    p.size.setKeyframeValue(0, LEADER::SWARM_PARTICLE_SIZE);
+                                    float pSpeed =
+                                        player->swarmMagnitude *
+                                        LEADER::SWARM_PARTICLE_SPEED_MULT +
+                                        game.rng.f(
+                                            -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
+                                            LEADER::SWARM_PARTICLE_SPEED_DEVIATION
+                                        );
+                                    float pAngle =
+                                        player->swarmAngle +
+                                        game.rng.f(
+                                            -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
+                                            LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
+                                        );
+                                    p.linearSpeed =
+                                        KeyframeInterpolator<Point>(
+                                            rotatePoint(Point(pSpeed, 0.0f), pAngle)
+                                        );
+                                    p.time = p.duration;
+                                    p.z = this->bottomZ + this->height / 2.0f;
+                                    game.states.gameplay->particles.addParticle(p);
+                                };
     swarmNextArrowTimer.start();
     
     ParticleGenerator antennaPG =
@@ -216,14 +217,14 @@ Leader::Leader(const Point& center, LeaderType* type, float angle) :
         );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         antennaPG.baseParticle.color,
-    [ this ] (const ALLEGRO_COLOR & c) {
-        ALLEGRO_COLOR newColor = c;
-        newColor.r *= leaType->lightParticleTint.r;
-        newColor.g *= leaType->lightParticleTint.g;
-        newColor.b *= leaType->lightParticleTint.b;
-        newColor.a *= leaType->lightParticleTint.a;
-        return newColor;
-    }
+        [ this ] (const ALLEGRO_COLOR & c) {
+            ALLEGRO_COLOR newColor = c;
+            newColor.r *= leaType->lightParticleTint.r;
+            newColor.g *= leaType->lightParticleTint.g;
+            newColor.b *= leaType->lightParticleTint.b;
+            newColor.a *= leaType->lightParticleTint.a;
+            return newColor;
+        }
     );
     antennaPG.canEmit = false;
     antennaPG.id = MOB_PARTICLE_GENERATOR_ID_ANTENNA;
@@ -350,8 +351,9 @@ void Leader::dismissDetails() {
         tidySingleDismissTime > 0.0f ?
         1.03f :
         1.0f;
-    game.audio.addNewMobSoundSource(sound->sample, this, false, soundConfig);
-    
+    game.audio.addNewMobSoundSource(sound->sample, this, false,
+        soundConfig);
+        
     //Particles.
     float particleAlpha =
         LEADER::DISMISS_PARTICLE_ALPHA *
@@ -507,9 +509,9 @@ void Leader::dismissLogic(bool forceDismissAll) {
     auto firstSubgroup =
         std::find_if(
             subgroupsInfo.begin(), subgroupsInfo.end(),
-    [this] (const auto & s) -> bool {
-        return s.type == this->group->curStandbyType;
-    }
+            [this] (const auto & s) -> bool {
+                return s.type == this->group->curStandbyType;
+            }
         );
     if(firstSubgroup != subgroupsInfo.end()) {
         std::rotate(subgroupsInfo.begin(), firstSubgroup, firstSubgroup + 1);
@@ -817,9 +819,9 @@ void Leader::drawMob() {
             antennaPG->baseParticle.z = bottomZ + height + 1.0f;
             adjustKeyframeInterpolatorValues<float>(
                 antennaPG->baseParticle.size,
-            [ = ] (float s) {
-                return std::max(lightSize.x, lightSize.y);
-            }
+                [ = ] (float s) {
+                    return std::max(lightSize.x, lightSize.y);
+                }
             );
             antennaPG->canEmit = true;
         }
@@ -992,13 +994,13 @@ bool Leader::orderPikminToOnion(
         [] (
             const std::pair<Distance, Pikmin*>& p1,
             const std::pair<Distance, Pikmin*>& p2
-    ) -> bool {
-        if(p1.second->maturity != p2.second->maturity) {
-            return p1.second->maturity < p2.second->maturity;
-        } else {
-            return p1.first < p2.first;
+        ) -> bool {
+            if(p1.second->maturity != p2.second->maturity) {
+                return p1.second->maturity < p2.second->maturity;
+            } else {
+                return p1.first < p2.first;
+            }
         }
-    }
     );
     
     //Order Pikmin, in order.
@@ -1136,18 +1138,18 @@ void Leader::startThrowTrail() {
     pg.followZOffset = 0.0f;
     adjustKeyframeInterpolatorValues<float>(
         pg.baseParticle.size,
-    [ this ] (const float & f) { return f * radius; }
+        [ this ] (const float& f) { return f * radius; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         pg.baseParticle.color,
-    [ this ] (const ALLEGRO_COLOR & c) {
-        ALLEGRO_COLOR newColor = c;
-        newColor.r *= type->mainColor.r;
-        newColor.g *= type->mainColor.g;
-        newColor.b *= type->mainColor.b;
-        newColor.a *= type->mainColor.a;
-        return newColor;
-    }
+        [ this ] (const ALLEGRO_COLOR & c) {
+            ALLEGRO_COLOR newColor = c;
+            newColor.r *= type->mainColor.r;
+            newColor.g *= type->mainColor.g;
+            newColor.b *= type->mainColor.b;
+            newColor.a *= type->mainColor.a;
+            return newColor;
+        }
     );
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
     particleGenerators.push_back(pg);
@@ -1293,7 +1295,8 @@ void Leader::tickClassSpecifics(float deltaT) {
         healthWheelCautionTimer > 0.0f
     ) {
         healthWheelCautionTimer += deltaT;
-        if(healthWheelCautionTimer >= LEADER::HEALTH_CAUTION_RING_DURATION) {
+        if(healthWheelCautionTimer >=
+            LEADER::HEALTH_CAUTION_RING_DURATION) {
             healthWheelCautionTimer = 0.0f;
         }
     }

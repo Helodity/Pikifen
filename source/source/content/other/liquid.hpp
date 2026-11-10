@@ -113,8 +113,8 @@ struct Liquid {
     void tick(float deltaT);
     
     
-    private:
-    
+private:
+
     //--- Private function declarations ---
     
     void changeSectorsHazard(Hazard* hPtr);

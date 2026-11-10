@@ -285,10 +285,10 @@ const float GRID_INTERVAL = 32.0f;
  * @param str The string.
  * @return Vector with the history.
  */
-vector<pair<string, string> > Options::loadEditorHistory(
+vector<pair<string, string>> Options::loadEditorHistory(
     const string& str
 ) const {
-    vector<pair<string, string> > result;
+    vector<pair<string, string>> result;
     vector<string> parts = semicolonListToVector(str);
     for(size_t e = 0; e < parts.size(); e += 2) {
         result.push_back(make_pair(parts[e], parts[e + 1]));
@@ -602,7 +602,7 @@ void Options::loadFromDataNode(DataNode* file) {
  * @return The string.
  */
 string Options::saveEditorHistory(
-    const vector<pair<string, string> >& vec
+    const vector<pair<string, string>>& vec
 ) const {
     vector<string> parts;
     for(size_t e = 0; e < vec.size(); e ++) {

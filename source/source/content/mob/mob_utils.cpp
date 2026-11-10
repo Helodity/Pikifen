@@ -583,9 +583,9 @@ void Group::initSpots(Mob* affectedMobPtr) {
     
     std::sort(
         alphaSpots.begin(), alphaSpots.end(),
-    [] (const AlphaSpot & a1, const AlphaSpot & a2) -> bool {
-        return a1.distanceToRightmost < a2.distanceToRightmost;
-    }
+        [] (const AlphaSpot & a1, const AlphaSpot & a2) -> bool {
+            return a1.distanceToRightmost < a2.distanceToRightmost;
+        }
     );
     
     //Finally, create the group spots.
@@ -947,7 +947,7 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
         float spawnZ;
         Point spawnCoords =
             mPtr->getHitbox(legHoleBPIdx)->getCurPos(
-                mPtr->center, mPtr->bottomZ, mPtr->angle, &spawnZ
+            mPtr->center, mPtr->bottomZ, mPtr->angle, &spawnZ
             );
         float spawnAngle =
             getAngle(mPtr->center, spawnCoords);

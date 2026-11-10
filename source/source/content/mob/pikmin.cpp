@@ -103,16 +103,16 @@ Pikmin::Pikmin(const Point& center, PikminType* type, float angle) :
     missedAttackTimer =
         Timer(
             PIKMIN::MISSED_ATTACK_DURATION,
-    [this] () { this->missedAttackPtr = nullptr; }
+            [this] () { this->missedAttackPtr = nullptr; }
         );
     if(pikType->autoMaturateInterval != 0.0f) {
         autoMaturateTimer =
             Timer(
                 pikType->autoMaturateInterval,
-        [this] () {
-            this->increaseMaturity(1);
-            this->autoMaturateTimer.start();
-        }
+                [this] () {
+                    this->increaseMaturity(1);
+                    this->autoMaturateTimer.start();
+                }
             );
         autoMaturateTimer.start();
     }
@@ -645,18 +645,18 @@ void Pikmin::startThrowTrail() {
     pg.followZOffset = 0.0f;
     adjustKeyframeInterpolatorValues<float>(
         pg.baseParticle.size,
-    [ this ] (const float & f) { return f * radius; }
+        [ this ] (const float& f) { return f * radius; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         pg.baseParticle.color,
-    [ this ] (const ALLEGRO_COLOR & c) {
-        ALLEGRO_COLOR newColor = c;
-        newColor.r *= type->mainColor.r;
-        newColor.g *= type->mainColor.g;
-        newColor.b *= type->mainColor.b;
-        newColor.a *= type->mainColor.a;
-        return newColor;
-    }
+        [ this ] (const ALLEGRO_COLOR & c) {
+            ALLEGRO_COLOR newColor = c;
+            newColor.r *= type->mainColor.r;
+            newColor.g *= type->mainColor.g;
+            newColor.b *= type->mainColor.b;
+            newColor.a *= type->mainColor.a;
+            return newColor;
+        }
     );
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
     particleGenerators.push_back(pg);

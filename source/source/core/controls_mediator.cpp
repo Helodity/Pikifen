@@ -154,13 +154,16 @@ Inpution::Input ControlsMediator::allegroEventToInput(
             input.source.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP;
             input.value = ev.mouse.dz;
         } else if(ev.mouse.dz < 0) {
-            input.source.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN;
+            input.source.type =
+                Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN;
             input.value = -ev.mouse.dz;
         } else if(ev.mouse.dw > 0) {
-            input.source.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT;
+            input.source.type =
+                Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT;
             input.value = ev.mouse.dw;
         } else if(ev.mouse.dw < 0) {
-            input.source.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT;
+            input.source.type =
+                Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT;
             input.value = -ev.mouse.dw;
         }
         break;
@@ -171,7 +174,8 @@ Inpution::Input ControlsMediator::allegroEventToInput(
         input.source.deviceNr =
             (int) game.hardware.getControllerNr(ev.joystick.id);
         input.source.buttonNr = ev.joystick.button;
-        input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0;
+        input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 :
+            0;
         break;
         
     } case ALLEGRO_EVENT_JOYSTICK_AXIS: {

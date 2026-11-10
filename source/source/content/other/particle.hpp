@@ -121,8 +121,8 @@ enum PARTICLE_BLEND_TYPE {
  */
 struct ParticleEmission {
 
-    public:
-    
+public:
+
     //--- Public members ---
     
     //Shape for particles to emit from.
@@ -289,8 +289,8 @@ struct ParticleManager {
     void tickAll(float deltaT);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //This list works as follows:
@@ -389,8 +389,8 @@ struct ParticleGenerator : public Content {
     void saveToDataNode(DataNode* node);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Time left before the next emission.

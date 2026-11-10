@@ -270,7 +270,8 @@ void AreaContentManager::pathToManifest(
     }
     
     if(outType) {
-        if(path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/") != string::npos) {
+        if(path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/") !=
+            string::npos) {
             *outType = AREA_TYPE_MISSION;
         } else {
             *outType = AREA_TYPE_SIMPLE;
@@ -1051,7 +1052,8 @@ void MobAnimContentManager::fillCatManifestsFromPack(
         packName + "/" +
         FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
         category->folderName;
-    vector<string> typeFolders = folderToVectorRecursively(categoryPath, true);
+    vector<string> typeFolders = folderToVectorRecursively(categoryPath,
+            true);
     forIdx(f, typeFolders) {
         string internalName = typeFolders[f];
         manifests[category->id][internalName] =

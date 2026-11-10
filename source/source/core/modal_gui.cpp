@@ -118,7 +118,7 @@ bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         
         if(textInput.handleAllegroEvent(ev)) {
             game.audio.addNewUiSoundSource(
-            game.sysContent.sndCutsceneMsgChar, {
+                game.sysContent.sndCutsceneMsgChar, {
                 .stackMinPos = 0.05f,
                 .volume = 0.5f,
                 .volumeDeviation = 0.1f,
@@ -213,43 +213,43 @@ void ModalGuiManager::updateItems() {
             "", game.sysContent.fntStandard, game.config.guiColors.gold
         );
         textInputItem->onDraw =
-        [textInputItem, this] (const DrawInfo & draw) {
-            textInputItem->text = textInput.getString();
-            textInputItem->defDrawCode(draw);
-            float t = fmod(game.timePassed, MODAL::CARET_BLINK_INTERVAL);
-            
-            if(t < MODAL::CARET_BLINK_INTERVAL / 2.0f) {
-                int textWidth =
-                    al_get_text_width(
-                        game.sysContent.fntStandard, textInputItem->text.c_str()
+            [textInputItem, this] (const DrawInfo & draw) {
+                textInputItem->text = textInput.getString();
+                textInputItem->defDrawCode(draw);
+                float t = fmod(game.timePassed, MODAL::CARET_BLINK_INTERVAL);
+                
+                if(t < MODAL::CARET_BLINK_INTERVAL / 2.0f) {
+                    int textWidth =
+                        al_get_text_width(
+                            game.sysContent.fntStandard, textInputItem->text.c_str()
+                        );
+                    float textScale = 1.0f;
+                    if(textWidth > draw.size.x) {
+                        textScale = draw.size.x / (float) textWidth;
+                    }
+                    int textHeight =
+                        al_get_font_line_height(game.sysContent.fntStandard);
+                    int textX1 = draw.center.x - textWidth / 2.0f;
+                    textX1 =
+                        std::max(
+                            textX1, (int) (draw.center.x - draw.size.x / 2.0f)
+                        );
+                        
+                    string preCaretText =
+                        textInputItem->text.substr(0, textInput.getCaretPos());
+                    int preCaretTextWidth =
+                        al_get_text_width(
+                            game.sysContent.fntStandard, preCaretText.c_str()
+                        );
+                        
+                    int caretX = textX1 + preCaretTextWidth * textScale;
+                    al_draw_line(
+                        caretX, draw.center.y - textHeight / 2.0f,
+                        caretX, draw.center.y + textHeight / 2.0f,
+                        game.config.guiColors.gold, 2.0f
                     );
-                float textScale = 1.0f;
-                if(textWidth > draw.size.x) {
-                    textScale = draw.size.x / (float) textWidth;
                 }
-                int textHeight =
-                    al_get_font_line_height(game.sysContent.fntStandard);
-                int textX1 = draw.center.x - textWidth / 2.0f;
-                textX1 =
-                    std::max(
-                        textX1, (int) (draw.center.x - draw.size.x / 2.0f)
-                    );
-                    
-                string preCaretText =
-                    textInputItem->text.substr(0, textInput.getCaretPos());
-                int preCaretTextWidth =
-                    al_get_text_width(
-                        game.sysContent.fntStandard, preCaretText.c_str()
-                    );
-                    
-                int caretX = textX1 + preCaretTextWidth * textScale;
-                al_draw_line(
-                    caretX, draw.center.y - textHeight / 2.0f,
-                    caretX, draw.center.y + textHeight / 2.0f,
-                    game.config.guiColors.gold, 2.0f
-                );
-            }
-        };
+            };
         addItem(textInputItem, "text_input");
     }
     
@@ -259,14 +259,14 @@ void ModalGuiManager::updateItems() {
         back, game.sysContent.fntStandard, game.config.guiColors.back
     );
     backItem->onGetTooltip =
-    [this] () {
-        return backTooltip;
-    };
+        [this] () {
+            return backTooltip;
+        };
     backItem->onActivate =
-    [this] (const Point&) {
-        if(onBack) onBack();
-        close();
-    };
+        [this] (const Point&) {
+            if(onBack) onBack();
+            close();
+        };
     addItem(backItem, "button_area");
     buttonItems.push_back(backItem);
     
@@ -281,15 +281,15 @@ void ModalGuiManager::updateItems() {
             extraButtons[b].color
         );
         button->onActivate = [this, b] (const Point & cursorPos) {
-            close();
-            if(extraButtons[b].onActivate) {
-                extraButtons[b].onActivate(cursorPos);
-            }
-        };
+                                 close();
+                                 if(extraButtons[b].onActivate) {
+                                     extraButtons[b].onActivate(cursorPos);
+                                 }
+                             };
         button->onGetTooltip =
-        [this, b] () {
-            return extraButtons[b].tooltip;
-        };
+            [this, b] () {
+                return extraButtons[b].tooltip;
+            };
         addItem(button, "button_area");
         buttonItems.push_back(button);
     }

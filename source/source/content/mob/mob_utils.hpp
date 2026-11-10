@@ -739,7 +739,7 @@ struct PikminNest {
     PikminNestType* nestType = nullptr;
     
     //How many Pikmin are inside, per type, per maturity.
-    vector<vector<size_t> > pikminInside;
+    vector<vector<size_t>> pikminInside;
     
     //How many Pikmin are queued up to be called out, of each type.
     vector<size_t> callQueue;

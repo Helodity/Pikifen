@@ -53,7 +53,8 @@ EnemyType::EnemyType() :
 void EnemyType::createAndAddCarryingStates() {
     EasyFsmCreator efc;
     
-    efc.newState("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
+    efc.newState("carriable_waiting",
+        ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
         }

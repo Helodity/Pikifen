@@ -667,7 +667,7 @@ void Game::shutdown() {
     inventoryItems.clear();
     
     content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_MISC,
         CONTENT_TYPE_BITMAP,
         CONTENT_TYPE_SOUND,
@@ -733,14 +733,14 @@ int Game::start() {
     initErrorBitmap();
     content.reloadPacks();
     content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_MISC,
         CONTENT_TYPE_BITMAP,
         CONTENT_TYPE_SOUND,
         CONTENT_TYPE_SONG_TRACK,
         CONTENT_TYPE_SONG,
     },
-    CONTENT_LOAD_LEVEL_FULL
+        CONTENT_LOAD_LEVEL_FULL
     );
     loadFonts();
     loadMiscGraphics();

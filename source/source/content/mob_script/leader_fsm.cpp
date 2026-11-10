@@ -969,7 +969,8 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
     }
     
-    efc.newState("inactive_mid_go_here", LEADER_STATE_INACTIVE_MID_GO_HERE); {
+    efc.newState("inactive_mid_go_here",
+        LEADER_STATE_INACTIVE_MID_GO_HERE); {
         efc.newEvent(FSM_EV_WHISTLED); {
             efc.run(LeaderFsm::stopGoHere);
             efc.changeState("called");
@@ -1432,7 +1433,9 @@ void LeaderFsm::becomeActive(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::becomeInactive(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::becomeInactive(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->player = nullptr;
@@ -1604,7 +1607,9 @@ void LeaderFsm::checkBoredomAnimEnd(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::checkPunchDamage(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::checkPunchDamage(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
@@ -1637,7 +1642,8 @@ void LeaderFsm::checkPunchDamage(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::clearBoredomData(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     LeaderFsm::clearTimer(scriptVM, info1, info2);
@@ -1664,7 +1670,9 @@ void LeaderFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::closeInventory(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::closeInventory(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     if(!leaPtr->player) return;
@@ -1845,7 +1853,9 @@ void LeaderFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::finishCalledAnim(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     Mob* caller = scriptVM->focusedMob;
@@ -1866,7 +1876,9 @@ void LeaderFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::finishDrinking(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     engineAssert(
@@ -1911,7 +1923,8 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::finishGettingUp(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     Mob* prevFocusedMob = scriptVM->focusedMob;
@@ -1955,7 +1968,9 @@ void LeaderFsm::finishPluck(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishShaking(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::finishShaking(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
@@ -1969,7 +1984,9 @@ void LeaderFsm::finishShaking(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKnockedBack(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::getKnockedBack(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     scriptVM->unfocusFromMob();
@@ -1984,7 +2001,9 @@ void LeaderFsm::getKnockedBack(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKnockedDown(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::getKnockedDown(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopTurning();
@@ -2255,7 +2274,9 @@ void LeaderFsm::notifyPikminRelease(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::openInventory(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::openInventory(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     if(!leaPtr->player) return;
@@ -2401,7 +2422,9 @@ void LeaderFsm::setIsTurningFalse(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsTurningTrue(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::setIsTurningTrue(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     if(!leaPtr->isActiveTurning) {
@@ -2437,7 +2460,8 @@ void LeaderFsm::setIsWalkingFalse(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsWalkingTrue(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::setIsWalkingTrue(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     if(!leaPtr->isActiveWalking) {
@@ -2583,18 +2607,18 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
         );
     adjustKeyframeInterpolatorValues<Point>(
         pg.baseParticle.linearSpeed,
-    [ = ] (const Point&) { return particleSpeedVector; }
+        [ = ] (const Point&) { return particleSpeedVector; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         pg.baseParticle.color,
-    [ = ] (const ALLEGRO_COLOR & c) {
-        ALLEGRO_COLOR newColor = c;
-        newColor.r *= sprayTypeRef.mainColor.r;
-        newColor.g *= sprayTypeRef.mainColor.g;
-        newColor.b *= sprayTypeRef.mainColor.b;
-        newColor.a *= sprayTypeRef.mainColor.a;
-        return newColor;
-    }
+        [ = ] (const ALLEGRO_COLOR & c) {
+            ALLEGRO_COLOR newColor = c;
+            newColor.r *= sprayTypeRef.mainColor.r;
+            newColor.g *= sprayTypeRef.mainColor.g;
+            newColor.b *= sprayTypeRef.mainColor.b;
+            newColor.a *= sprayTypeRef.mainColor.a;
+            return newColor;
+        }
     );
     pg.linearSpeedAngleDeviation = sprayTypeRef.angleRange / 2.0f;
     pg.linearSpeedDeviation.x = sprayTypeRef.distanceRange * 0.4;
@@ -2639,7 +2663,9 @@ void LeaderFsm::standStill(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startBoredomAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::startBoredomAnim(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     size_t lookingAroundAnimIdx =
@@ -2691,7 +2717,9 @@ void LeaderFsm::startChasingLeader(
  * @param info1 Pointer to the drop mob.
  * @param info2 Unused.
  */
-void LeaderFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::startDrinking(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* droPtr = (Mob*) info1;
     
@@ -2710,7 +2738,9 @@ void LeaderFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::startGettingUp(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
@@ -2785,7 +2815,9 @@ void LeaderFsm::startPluck(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Points to the track mob.
  * @param info2 Unused.
  */
-void LeaderFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::startRidingTrack(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     Track* traPtr = (Track*) info1;
     
@@ -2826,7 +2858,8 @@ void LeaderFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::startWakingUp(
+    ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
@@ -2842,7 +2875,8 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopAutoPluck(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::stopAutoPluck(
+    ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     if(leaPtr->pluckTarget) {
@@ -2863,7 +2897,8 @@ void LeaderFsm::stopAutoPluck(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopBeingThrown(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::stopBeingThrown(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     //Delete the throw particle generator.
@@ -2878,7 +2913,9 @@ void LeaderFsm::stopBeingThrown(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::stopGoHere(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopFollowingPath();
@@ -2893,7 +2930,9 @@ void LeaderFsm::stopGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopInGroup(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::stopInGroup(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopChasing();
@@ -2925,7 +2964,9 @@ void LeaderFsm::stopWhistle(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::tickActiveState(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::tickActiveState(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->face(
@@ -2950,7 +2991,9 @@ void LeaderFsm::tickActiveState(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
+void LeaderFsm::tickTrackRide(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     engineAssert(

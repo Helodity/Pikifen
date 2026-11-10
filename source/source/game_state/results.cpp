@@ -151,13 +151,13 @@ ButtonGuiItem* Results::addNewPageItem(
         game.config.guiColors.pageChange
     );
     newButton->onActivate =
-    [this, targetPage] (const Point&) {
-        switchPage(targetPage);
-    };
+        [this, targetPage] (const Point&) {
+            switchPage(targetPage);
+        };
     newButton->onGetTooltip =
-    [tooltipName] () {
-        return "Go to the " + tooltipName + " page.";
-    };
+        [tooltipName] () {
+            return "Go to the " + tooltipName + " page.";
+        };
     
     return newButton;
 }
@@ -191,13 +191,13 @@ void Results::addNewPageItems(
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
     leftPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     curBox->addChild(leftPageInput);
     gui.addItem(leftPageInput, itemNamePrefix + "_left_page_input");
     
@@ -212,13 +212,13 @@ void Results::addNewPageItems(
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
     rightPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     curBox->addChild(rightPageInput);
     gui.addItem(rightPageInput, itemNamePrefix + "_right_page_input");
 }
@@ -283,12 +283,12 @@ void Results::addNewScoreMarkerBulletPoint(
  */
 void Results::continuePlaying() {
     game.fadeMgr.startFade(false, [] () {
-        game.states.gameplay->afterHours = true;
-        game.states.gameplay->missionEndCondIdx = INVALID;
-        game.audio.setCurrentSong("");
-        game.changeState(game.states.gameplay, true, false);
-        game.states.gameplay->enter();
-    });
+                                      game.states.gameplay->afterHours = true;
+                                      game.states.gameplay->missionEndCondIdx = INVALID;
+                                      game.audio.setCurrentSong("");
+                                      game.changeState(game.states.gameplay, true, false);
+                                      game.states.gameplay->enter();
+                                  });
 }
 
 
@@ -444,39 +444,39 @@ void Results::drawScoreChartConnections() {
 void Results::drawScoreChartGraphic(const DrawInfo& draw) {
     const ALLEGRO_COLOR AXIS_COLOR = al_map_rgb(0, 0, 96);
     const auto drawRegion =
-    [&draw] (float startY, float endY, ALLEGRO_COLOR color, bool endFades) {
-        ALLEGRO_VERTEX av[4];
-        for(size_t v = 0; v < 4; v++) {
-            av[v].u = 0.0f;
-            av[v].v = 0.0f;
-            av[v].z = 0.0f;
-        }
-        
-        av[0].x = draw.center.x;
-        av[0].y = startY;
-        av[0].color = color;
-        av[1].x = draw.center.x;
-        av[1].y = endY;
-        av[1].color = endFades ? changeAlpha(color, 0) : color;
-        av[2].x = draw.center.x - draw.size.x / 2.0f;
-        av[2].y = endY;
-        av[2].color = changeAlpha(color, 0);
-        av[3].x = draw.center.x - draw.size.x / 2.0f;
-        av[3].y = startY;
-        av[3].color = changeAlpha(color, 0);
-        
-        al_draw_prim(
-            av, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
-        );
-        
-        av[2].x = draw.center.x + draw.size.x / 2.0f;
-        av[3].x = draw.center.x + draw.size.x / 2.0f;
-        
-        al_draw_prim(
-            av, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
-        );
-        
-    };
+        [&draw] (float startY, float endY, ALLEGRO_COLOR color, bool endFades) {
+            ALLEGRO_VERTEX av[4];
+            for(size_t v = 0; v < 4; v++) {
+                av[v].u = 0.0f;
+                av[v].v = 0.0f;
+                av[v].z = 0.0f;
+            }
+            
+            av[0].x = draw.center.x;
+            av[0].y = startY;
+            av[0].color = color;
+            av[1].x = draw.center.x;
+            av[1].y = endY;
+            av[1].color = endFades ? changeAlpha(color, 0) : color;
+            av[2].x = draw.center.x - draw.size.x / 2.0f;
+            av[2].y = endY;
+            av[2].color = changeAlpha(color, 0);
+            av[3].x = draw.center.x - draw.size.x / 2.0f;
+            av[3].y = startY;
+            av[3].color = changeAlpha(color, 0);
+            
+            al_draw_prim(
+                av, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+            );
+            
+            av[2].x = draw.center.x + draw.size.x / 2.0f;
+            av[3].x = draw.center.x + draw.size.x / 2.0f;
+            
+            al_draw_prim(
+                av, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+            );
+            
+        };
     
     //Bronze region.
     drawRegion(
@@ -632,13 +632,13 @@ void Results::initGuiMain() {
             finalScoreTextColor
         );
         finalScoreText->onDraw =
-        [finalScoreText] (const DrawInfo & draw) {
-            DrawInfo swayDraw = draw;
-            swayDraw.center.x +=
-                RESULTS::FINAL_SCORE_SWAY *
-                sin(game.timePassed * RESULTS::FINAL_SCORE_SWAY_TIME_SCALE);
-            finalScoreText->defDrawCode(swayDraw);
-        };
+            [finalScoreText] (const DrawInfo & draw) {
+                DrawInfo swayDraw = draw;
+                swayDraw.center.x +=
+                    RESULTS::FINAL_SCORE_SWAY *
+                    sin(game.timePassed * RESULTS::FINAL_SCORE_SWAY_TIME_SCALE);
+                finalScoreText->defDrawCode(swayDraw);
+            };
         gui.addItem(finalScoreText, "final_score");
     }
     
@@ -655,19 +655,19 @@ void Results::initGuiMain() {
         );
         finalScoreLabelText->onDraw =
         
-        [finalScoreLabelText] (const DrawInfo & draw) {
-            DrawInfo swayDraw = draw;
-            swayDraw.center.x +=
-                RESULTS::FINAL_SCORE_SWAY *
-                sin(
-                    (
-                        game.timePassed +
-                        RESULTS::FINAL_SCORE_LABEL_SWAY_TIME_OFFSET
-                    ) *
-                    RESULTS::FINAL_SCORE_SWAY_TIME_SCALE
-                );
-            finalScoreLabelText->defDrawCode(swayDraw);
-        };
+            [finalScoreLabelText] (const DrawInfo & draw) {
+                DrawInfo swayDraw = draw;
+                swayDraw.center.x +=
+                    RESULTS::FINAL_SCORE_SWAY *
+                    sin(
+                        (
+                            game.timePassed +
+                            RESULTS::FINAL_SCORE_LABEL_SWAY_TIME_OFFSET
+                        ) *
+                        RESULTS::FINAL_SCORE_SWAY_TIME_SCALE
+                    );
+                finalScoreLabelText->defDrawCode(swayDraw);
+            };
         gui.addItem(finalScoreLabelText, "final_score_label");
     }
     
@@ -675,40 +675,40 @@ void Results::initGuiMain() {
     if(game.curArea->type == AREA_TYPE_MISSION) {
         GuiItem* medalItem = new GuiItem;
         medalItem->onDraw =
-        [this] (const DrawInfo & draw) {
-            ALLEGRO_BITMAP* bmp = nullptr;
-            switch(medal) {
-            case MISSION_MEDAL_NONE: {
-                bmp = game.sysContent.bmpMedalNone;
-                break;
-            } case MISSION_MEDAL_BRONZE: {
-                bmp = game.sysContent.bmpMedalBronze;
-                break;
-            } case MISSION_MEDAL_SILVER: {
-                bmp = game.sysContent.bmpMedalSilver;
-                break;
-            } case MISSION_MEDAL_GOLD: {
-                bmp = game.sysContent.bmpMedalGold;
-                break;
-            } case MISSION_MEDAL_PLATINUM: {
-                bmp = game.sysContent.bmpMedalPlatinum;
-                break;
-            }
-            }
-            if(medal != MISSION_MEDAL_NONE) {
+            [this] (const DrawInfo & draw) {
+                ALLEGRO_BITMAP* bmp = nullptr;
+                switch(medal) {
+                case MISSION_MEDAL_NONE: {
+                    bmp = game.sysContent.bmpMedalNone;
+                    break;
+                } case MISSION_MEDAL_BRONZE: {
+                    bmp = game.sysContent.bmpMedalBronze;
+                    break;
+                } case MISSION_MEDAL_SILVER: {
+                    bmp = game.sysContent.bmpMedalSilver;
+                    break;
+                } case MISSION_MEDAL_GOLD: {
+                    bmp = game.sysContent.bmpMedalGold;
+                    break;
+                } case MISSION_MEDAL_PLATINUM: {
+                    bmp = game.sysContent.bmpMedalPlatinum;
+                    break;
+                }
+                }
+                if(medal != MISSION_MEDAL_NONE) {
+                    drawBitmapInBox(
+                        game.sysContent.bmpIdleGlow,
+                        draw.center, draw.size * RESULTS::MEDAL_SHINE_SCALE,
+                        true, true,
+                        game.timePassed * RESULTS::MEDAL_SHINE_ROT_TIME_SCALE,
+                        draw.tint
+                    );
+                }
                 drawBitmapInBox(
-                    game.sysContent.bmpIdleGlow,
-                    draw.center, draw.size * RESULTS::MEDAL_SHINE_SCALE,
-                    true, true,
-                    game.timePassed * RESULTS::MEDAL_SHINE_ROT_TIME_SCALE,
-                    draw.tint
+                    bmp, draw.center, draw.size * RESULTS::MEDAL_SCALE,
+                    true, true, 0.0f, draw.tint
                 );
-            }
-            drawBitmapInBox(
-                bmp, draw.center, draw.size * RESULTS::MEDAL_SCALE,
-                true, true, 0.0f, draw.tint
-            );
-        };
+            };
         gui.addItem(medalItem, "medal");
     }
     
@@ -806,11 +806,11 @@ void Results::initGuiMain() {
     ButtonGuiItem* retryButton =
         new ButtonGuiItem("Retry", game.sysContent.fntStandard);
     retryButton->onActivate =
-    [this] (const Point&) {
-        retryArea();
-    };
+        [this] (const Point&) {
+            retryArea();
+        };
     retryButton->onGetTooltip =
-    [] () { return "Retry the area from the start."; };
+        [] () { return "Retry the area from the start."; };
     gui.addItem(retryButton, "retry");
     
     //Keep playing button.
@@ -830,15 +830,15 @@ void Results::initGuiMain() {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
-        [this] (const Point&) {
-            continuePlaying();
-        };
+            [this] (const Point&) {
+                continuePlaying();
+            };
         continueButton->onGetTooltip =
-        [] () {
-            return
-                "Continue playing anyway, from where you left off. "
-                "Your result after this point won't count.";
-        };
+            [] () {
+                return
+                    "Continue playing anyway, from where you left off. "
+                    "Your result after this point won't count.";
+            };
         gui.addItem(continueButton, "continue");
     }
     
@@ -851,16 +851,16 @@ void Results::initGuiMain() {
         game.sysContent.fntStandard
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
-        leave();
-    };
+        [this] (const Point&) {
+            leave();
+        };
     gui.backItem->onGetTooltip =
-    [] () {
-        return
-            game.quickPlay.areaPath.empty() ?
-            "Return to the area selection menu." :
-            "Return to the editor.";
-    };
+        [] () {
+            return
+                game.quickPlay.areaPath.empty() ?
+                "Return to the area selection menu." :
+                "Return to the editor.";
+        };
     gui.addItem(gui.backItem, "pick_area");
     
     //Pick an area input icon.
@@ -899,10 +899,10 @@ void Results::initGuiScoreChart() {
     scoreChartChart = new ListGuiItem();
     scoreChartPageBox->addChild(scoreChartChart);
     scoreChartChart->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawScoreChartGraphic(draw);
-        scoreChartChart->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            drawScoreChartGraphic(draw);
+            scoreChartChart->defDrawCode(draw);
+        };
     gui.addItem(scoreChartChart, "score_chart_chart");
     
     populateScoreChart();
@@ -983,18 +983,18 @@ void Results::initGuiStats() {
  */
 void Results::leave() {
     game.fadeMgr.startFade(false, [] () {
-        AREA_TYPE areaType = game.curArea->type;
-        game.unloadLoadedState(game.states.gameplay);
-        if(game.quickPlay.areaPath.empty()) {
-            game.states.annexScreen->areaMenuAreaType =
-                areaType;
-            game.states.annexScreen->menuToLoad =
-                ANNEX_SCREEN_MENU_AREA_SELECTION;
-            game.changeState(game.states.annexScreen);
-        } else {
-            game.changeState(game.quickPlay.editor);
-        }
-    });
+                                      AREA_TYPE areaType = game.curArea->type;
+                                      game.unloadLoadedState(game.states.gameplay);
+                                      if(game.quickPlay.areaPath.empty()) {
+                                          game.states.annexScreen->areaMenuAreaType =
+                                              areaType;
+                                          game.states.annexScreen->menuToLoad =
+                                              ANNEX_SCREEN_MENU_AREA_SELECTION;
+                                          game.changeState(game.states.annexScreen);
+                                      } else {
+                                          game.changeState(game.quickPlay.editor);
+                                      }
+                                  });
 }
 
 
@@ -1150,9 +1150,9 @@ void Results::populateScoreChart() {
     //Sort the markers.
     std::stable_sort(
         scoreMarkers.begin(), scoreMarkers.end(),
-    [] (const auto & i1, const auto & i2) {
-        return i1.second < i2.second;
-    }
+        [] (const auto & i1, const auto & i2) {
+            return i1.second < i2.second;
+        }
     );
     
     //Set the score chart's basic limits.
@@ -1310,9 +1310,9 @@ void Results::populateStatsList() {
  */
 void Results::retryArea() {
     game.fadeMgr.startFade(false, [] () {
-        game.unloadLoadedState(game.states.gameplay);
-        game.changeState(game.states.gameplay);
-    });
+                                      game.unloadLoadedState(game.states.gameplay);
+                                      game.changeState(game.states.gameplay);
+                                  });
 }
 
 

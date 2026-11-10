@@ -364,8 +364,8 @@ struct PlayerActionType : public Inpution::ActionType {
  */
 struct ControlsMediator {
 
-    public:
-    
+public:
+
     //--- Public function declarations ---
     
     void addNewModifier(
@@ -439,15 +439,15 @@ struct ControlsMediator {
     vector<Inpution::Action> actionQueue;
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //List of registered player action types.
     vector<PlayerActionType> playerActionTypes;
     
     //Raw state of each game controller stick.
-    map<int, map<int, map<int, float> > > rawSticks;
+    map<int, map<int, map<int, float>>> rawSticks;
     
     //Inpution manager.
     Inpution::Manager mgr;

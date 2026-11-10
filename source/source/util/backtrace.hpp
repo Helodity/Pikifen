@@ -126,7 +126,6 @@ vector<string> getBacktrace() {
 }
 
 
-
 #elif defined(_WIN32)
 //Windows.
 
@@ -147,8 +146,8 @@ vector<string> getBacktrace() {
     HANDLE process = GetCurrentProcess();
     SYMBOL_INFO* symbol =
         (SYMBOL_INFO*) malloc(
-            sizeof(SYMBOL_INFO) +
-            (BACKTRACE::MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR)
+        sizeof(SYMBOL_INFO) +
+        (BACKTRACE::MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR)
         );
     symbol->MaxNameLen = BACKTRACE::MAX_SYMBOL_LENGTH;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
@@ -190,7 +189,6 @@ vector<string> getBacktrace() {
     }
     return result;
 }
-
 
 
 #else

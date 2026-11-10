@@ -974,10 +974,10 @@ void AreaEditor::findProblemsIntersectingEdge() {
             "They cross at (" +
             f2s(
                 floor(eiPtr->e1->vertexes[0]->x + cos(a) * r *
-                      d.toFloat())
+            d.toFloat())
             ) + "," + f2s(
                 floor(eiPtr->e1->vertexes[0]->y + sin(a) * r *
-                      d.toFloat())
+            d.toFloat())
             ) + "). Edges should never cross each other.";
     }
 }
@@ -2080,7 +2080,8 @@ Edge* AreaEditor::getEdgeUnderPoint(
  * @param p The point to check against.
  * @return The link.
  */
-EditorPathLink* AreaEditor::getEditorPathLinkUnderPoint(const Point& p) const {
+EditorPathLink* AreaEditor::getEditorPathLinkUnderPoint(
+    const Point& p) const {
     forIdx(l, game.curArea->editorPathLinks) {
         EditorPathLink* elPtr = &game.curArea->editorPathLinks[l];
         PathStop* s1Ptr = elPtr->link1->startPtr;
@@ -2877,20 +2878,23 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
         
         vector<Vertex*> vertexesToCheck = game.curArea->vertexes;
         if(ignoreSelected) {
-            const set<size_t>& selectedVertexes = vertexSelection.getItemIdxs();
+            const set<size_t>& selectedVertexes =
+                vertexSelection.getItemIdxs();
             for(size_t vIdx : selectedVertexes) {
                 forIdx(v2, vertexesToCheck) {
-                    if(vertexesToCheck[v2] == game.curArea->vertexes[vIdx]) {
+                    if(vertexesToCheck[v2] ==
+                        game.curArea->vertexes[vIdx]) {
                         eraseInVector(vertexesToCheck, v2);
                         break;
                     }
                 }
             }
         }
-        vector<std::pair<Distance, Vertex*> > snappableVertexes =
+        vector<std::pair<Distance, Vertex*>> snappableVertexes =
             getMergeVertexes(
                 finalPoint, vertexesToCheck,
-                game.options.areaEd.snapThreshold / game.editorsView.cam.zoom
+                game.options.areaEd.snapThreshold /
+                game.editorsView.cam.zoom
             );
         if(snappableVertexes.empty()) {
             cursorSnapCache = finalPoint;
@@ -2901,9 +2905,9 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
                 [] (
                     std::pair<Distance, Vertex*> v1,
                     std::pair<Distance, Vertex*> v2
-            ) -> bool {
-                return v1.first < v2.first;
-            }
+                ) -> bool {
+                    return v1.first < v2.first;
+                }
             );
             
             Point result(
@@ -2960,7 +2964,8 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
             Distance d(finalPoint, edgeP);
             if(
                 d >
-                game.options.areaEd.snapThreshold / game.editorsView.cam.zoom
+                game.options.areaEd.snapThreshold /
+                game.editorsView.cam.zoom
             ) {
                 continue;
             }

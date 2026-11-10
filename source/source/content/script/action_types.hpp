@@ -466,7 +466,8 @@ enum SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE {
 
 //Script action arachnorb plan logic type enum naming (internal names).
 buildEnumNames(
-    scriptActionArachnorbPlanLogicTypeINames, SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE
+    scriptActionArachnorbPlanLogicTypeINames,
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE
 )({
     { SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME, "home" },
     { SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD, "forward" },
@@ -560,7 +561,8 @@ enum SCRIPT_ACTION_MOB_TARGET_TYPE {
 
 
 //Script action mob target type enum naming (internal names).
-buildEnumNames(scriptActionMobTargetTypeINames, SCRIPT_ACTION_MOB_TARGET_TYPE)({
+buildEnumNames(scriptActionMobTargetTypeINames,
+    SCRIPT_ACTION_MOB_TARGET_TYPE)({
     { SCRIPT_ACTION_MOB_TARGET_TYPE_SELF, "self" },
     { SCRIPT_ACTION_MOB_TARGET_TYPE_FOCUS, "focus" },
     { SCRIPT_ACTION_MOB_TARGET_TYPE_TRIGGER, "trigger" },
@@ -583,7 +585,8 @@ enum SCRIPT_ACTION_GET_AREA_INFO_TYPE {
 
 
 //Script action get area info type enum naming (internal names).
-buildEnumNames(scriptActionGetAreaInfoTypeINames, SCRIPT_ACTION_GET_AREA_INFO_TYPE)({
+buildEnumNames(scriptActionGetAreaInfoTypeINames,
+    SCRIPT_ACTION_GET_AREA_INFO_TYPE)({
     { SCRIPT_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES, "day_minutes" },
     { SCRIPT_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN, "field_pikmin" },
 });
@@ -620,7 +623,8 @@ enum SCRIPT_ACTION_GET_EV_INFO_TYPE {
 
 
 //Script action get event info type enum naming (internal names).
-buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)({
+buildEnumNames(scriptActionGetEvInfoTypeINames,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE)({
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_BODY_PART, "body_part" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL, "frame_signal" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_HAZARD, "hazard" },
@@ -660,7 +664,8 @@ enum SCRIPT_ACTION_GET_MISC_INFO_TYPE {
 
 
 //Script action get misc. info type enum naming (internal names).
-buildEnumNames(scriptActionGetMiscInfoTypeINames, SCRIPT_ACTION_GET_MISC_INFO_TYPE)({
+buildEnumNames(scriptActionGetMiscInfoTypeINames,
+    SCRIPT_ACTION_GET_MISC_INFO_TYPE)({
     { SCRIPT_ACTION_GET_MISC_INFO_TYPE_DAY_MINUTES, "day_minutes" },
     { SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T, "delta_t" },
     { SCRIPT_ACTION_GET_MISC_INFO_TYPE_FIELD_PIKMIN, "field_pikmin" },
@@ -738,7 +743,8 @@ enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
 
 
 //Script action get mob info type enum naming (internal names).
-buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE)({
+buildEnumNames(scriptActionGetMobInfoTypeINames,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE)({
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANGLE, "angle" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANIM, "animation" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN, "chomped_pikmin" },
@@ -825,7 +831,8 @@ enum SCRIPT_ACTION_CALCULATE_TYPE {
 
 
 //Script action calculate type enum naming (internal names).
-buildEnumNames(scriptActionCalculateTypeINames, SCRIPT_ACTION_CALCULATE_TYPE)({
+buildEnumNames(scriptActionCalculateTypeINames,
+    SCRIPT_ACTION_CALCULATE_TYPE)({
     { SCRIPT_ACTION_CALCULATE_TYPE_SUM, "+" },
     { SCRIPT_ACTION_CALCULATE_TYPE_SUBTRACT, "-" },
     { SCRIPT_ACTION_CALCULATE_TYPE_MULTIPLY, "*" },
@@ -848,7 +855,8 @@ enum SCRIPT_ACTION_STABILIZE_Z_TYPE {
 
 
 //Script action stabilize Z type enum naming (internal names).
-buildEnumNames(scriptActionStabilizeZTypeINames, SCRIPT_ACTION_STABILIZE_Z_TYPE)({
+buildEnumNames(scriptActionStabilizeZTypeINames,
+    SCRIPT_ACTION_STABILIZE_Z_TYPE)({
     { SCRIPT_ACTION_STABILIZE_Z_TYPE_HIGHEST, "highest" },
     { SCRIPT_ACTION_STABILIZE_Z_TYPE_LOWEST, "lowest" },
 });
@@ -870,7 +878,8 @@ enum SCRIPT_ACTION_LIST_DELIMITER {
 
 
 //Script action list delimiter enum naming (internal names).
-buildEnumNames(scriptActionListDelimiterINames, SCRIPT_ACTION_LIST_DELIMITER)({
+buildEnumNames(scriptActionListDelimiterINames,
+    SCRIPT_ACTION_LIST_DELIMITER)({
     { SCRIPT_ACTION_LIST_DELIMITER_COMMA, "comma" },
     { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, "semicolon" },
     { SCRIPT_ACTION_LIST_DELIMITER_SPACE, "space" },
@@ -878,7 +887,8 @@ buildEnumNames(scriptActionListDelimiterINames, SCRIPT_ACTION_LIST_DELIMITER)({
 
 
 //Script action list delimiter character listing.
-buildEnumNames(scriptActionListDelimiterChars, SCRIPT_ACTION_LIST_DELIMITER)({
+buildEnumNames(scriptActionListDelimiterChars,
+    SCRIPT_ACTION_LIST_DELIMITER)({
     { SCRIPT_ACTION_LIST_DELIMITER_COMMA, "," },
     { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, ";" },
     { SCRIPT_ACTION_LIST_DELIMITER_SPACE, " " },

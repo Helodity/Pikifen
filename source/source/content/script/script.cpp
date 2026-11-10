@@ -15,7 +15,6 @@
 #include "script.hpp"
 
 
-
 #pragma region Script definition
 
 

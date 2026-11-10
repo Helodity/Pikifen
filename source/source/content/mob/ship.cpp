@@ -58,16 +58,17 @@ Ship::Ship(const Point& center, ShipType* type, float angle) :
         Distance(controlPointFinalPos, receptacleFinalPos).toFloat()
     ) {
     
-    nextBeamRingTimer.onEnd = [this] () {
-        nextBeamRingTimer.start();
-        beamRings.push_back(0);
-        float hue =
-            fmod(
-                game.states.gameplay->areaTimePassed * 360, 360
-            );
-            
-        beamRingColors.push_back(hue);
-    };
+    nextBeamRingTimer.onEnd =
+        [this] () {
+            nextBeamRingTimer.start();
+            beamRings.push_back(0);
+            float hue =
+                fmod(
+                    game.states.gameplay->areaTimePassed * 360, 360
+                );
+                
+            beamRingColors.push_back(hue);
+        };
     nextBeamRingTimer.start();
     
     nest = new PikminNest(this, shiType->nest);

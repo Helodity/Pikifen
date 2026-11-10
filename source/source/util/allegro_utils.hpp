@@ -81,8 +81,8 @@ struct AllegroBlenderState {
     void loadIfHasData() const;
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Operation mode.

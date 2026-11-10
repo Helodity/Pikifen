@@ -240,7 +240,8 @@ bool AudioManager::destroySoundPlayback(size_t playbackIdx) {
     
     //Destroy the source, if applicable.
     if(sourcePtr) {
-        if(!hasFlag(sourcePtr->config.flags, SOUND_FLAG_KEEP_ON_PLAYBACK_END)) {
+        if(!hasFlag(sourcePtr->config.flags,
+            SOUND_FLAG_KEEP_ON_PLAYBACK_END)) {
             destroySoundSource(playbackPtr->sourceId);
         }
     }
@@ -1055,7 +1056,8 @@ void AudioManager::tick(float deltaT) {
                     1.0f,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            al_set_audio_stream_gain(songPtr->mainTrack,
+                songPtr->volume);
             if(songPtr->volume == 1.0f) {
                 songPtr->state = SONG_STATE_PLAYING;
             }
@@ -1070,7 +1072,8 @@ void AudioManager::tick(float deltaT) {
                     AUDIO::SONG_SOFTENED_VOLUME,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            al_set_audio_stream_gain(songPtr->mainTrack,
+                songPtr->volume);
             if(songPtr->volume == AUDIO::SONG_SOFTENED_VOLUME) {
                 songPtr->state = SONG_STATE_SOFTENED;
             }
@@ -1085,7 +1088,8 @@ void AudioManager::tick(float deltaT) {
                     1.0f,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            al_set_audio_stream_gain(songPtr->mainTrack,
+                songPtr->volume);
             if(songPtr->volume == 1.0f) {
                 songPtr->state = SONG_STATE_PLAYING;
             }
@@ -1097,7 +1101,8 @@ void AudioManager::tick(float deltaT) {
                     0.0f,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            al_set_audio_stream_gain(songPtr->mainTrack,
+                songPtr->volume);
             if(songPtr->volume == 0.0f) {
                 al_set_audio_stream_playing(songPtr->mainTrack, false);
                 al_detach_audio_stream(songPtr->mainTrack);

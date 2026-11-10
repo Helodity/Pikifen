@@ -159,8 +159,8 @@ struct InterludeInfo {
     void tick(float delta_t);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //ID of the current interlude, if any.
@@ -186,8 +186,8 @@ struct BigMessageInfo {
     void tick(float delta_t);
     
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //ID of the current big message, if any.
@@ -249,7 +249,7 @@ public:
     
     //Divides the area into cells, and lists whether a given cell is
     //active for this frame or not.
-    vector<vector<bool> > areaActiveCells;
+    vector<vector<bool>> areaActiveCells;
     
     //How many seconds since area load. Doesn't count when things are paused.
     float areaTimePassed = 0.0f;
@@ -624,7 +624,7 @@ struct CutsceneMessageBox {
     //--- Public members ---
     
     //Full list of message tokens, per line.
-    vector<vector<StringToken> > tokensPerLine;
+    vector<vector<StringToken>> tokensPerLine;
     
     //Icon that represents the speaker, if any.
     ALLEGRO_BITMAP* speakerIcon = nullptr;

@@ -111,7 +111,8 @@ bool ScriptActionDef::loadFromDataNode(
     //Check if this action is allowed in the current context.
     if(!scriptDef->checkContextFlags(actionType->contexts)) {
         bool canUse = false;
-        if(hasFlag(actionType->contexts, getIdxBitmask(SCRIPT_CONTEXT_MOB))) {
+        if(hasFlag(actionType->contexts,
+            getIdxBitmask(SCRIPT_CONTEXT_MOB))) {
             if(
                 !actionList.empty() &&
                 actionList.back()->actionType->type ==
@@ -308,28 +309,28 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         const auto assertStack =
             [&constructStack, &ok, &dn, &a, this] (
                 SCRIPT_CONSTRUCT_TYPE curExpectedConstruct
-        ) {
-            if(
-                constructStack.empty() ||
-                constructStack.back() != curExpectedConstruct
             ) {
-                string foundActionStr =
-                    list[a]->actionType->name;
-                string expectedBlockStr =
-                    enumGetName(
-                        constructTypeActionNames, curExpectedConstruct
+                if(
+                    constructStack.empty() ||
+                    constructStack.back() != curExpectedConstruct
+                ) {
+                    string foundActionStr =
+                        list[a]->actionType->name;
+                    string expectedBlockStr =
+                        enumGetName(
+                            constructTypeActionNames, curExpectedConstruct
+                        );
+                    game.log.report(
+                        LOG_LEVEL_ERROR,
+                        "Found " + aAn(foundActionStr, true) + " \"" +
+                        foundActionStr + "\" action outside of " +
+                        aAn(expectedBlockStr, true) + " \"" +
+                        expectedBlockStr + "\" block!",
+                        dn
                     );
-                game.log.report(
-                    LOG_LEVEL_ERROR,
-                    "Found " + aAn(foundActionStr, true) + " \"" +
-                    foundActionStr + "\" action outside of " +
-                    aAn(expectedBlockStr, true) + " \"" +
-                    expectedBlockStr + "\" block!",
-                    dn
-                );
-                ok = false;
-            }
-        };
+                    ok = false;
+                }
+            };
         
         switch(list[a]->actionType->type) {
         case SCRIPT_ACTION_DO_WHILE: {
@@ -555,7 +556,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             if(passedSetState) {
                 game.log.report(
                     LOG_LEVEL_ERROR,
-                    "There is an action \"" + list[a]->actionType->name + "\" "
+                    "There is an action \"" + list[a]->actionType->name +
+                    "\" "
                     "placed after a \"set_state\" action, which means it will "
                     "never get run! Make sure you didn't mean to call it "
                     "before the \"set_state\" action.", dn

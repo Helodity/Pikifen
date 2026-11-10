@@ -63,31 +63,31 @@ void AreaEditor::openLoadDialog() {
     //Sort the items.
     std::sort(
         areas.begin(), areas.end(),
-    [] (const PickerItem & i1, const PickerItem & i2) {
-        if(i1.topCategory != i2.topCategory) {
-            ContentManifest* man1 = (ContentManifest*) i1.info;
-            ContentManifest* man2 = (ContentManifest*) i2.info;
-            //Base category takes priority.
-            //Otherwise sort categories alphabetically.
-            if(man1->pack == "base") {
-                return true;
-            } else if(man2->pack == "Base") {
-                return false;
+        [] (const PickerItem & i1, const PickerItem & i2) {
+            if(i1.topCategory != i2.topCategory) {
+                ContentManifest* man1 = (ContentManifest*) i1.info;
+                ContentManifest* man2 = (ContentManifest*) i2.info;
+                //Base category takes priority.
+                //Otherwise sort categories alphabetically.
+                if(man1->pack == "base") {
+                    return true;
+                } else if(man2->pack == "Base") {
+                    return false;
+                } else {
+                    return man1->pack < man2->pack;
+                }
+            } else if(i1.secCategory != i2.secCategory) {
+                //Simple areas take priority.
+                if(i1.secCategory == "Simple") {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return man1->pack < man2->pack;
+                //Sort by name.
+                return i1.name < i2.name;
             }
-        } else if(i1.secCategory != i2.secCategory) {
-            //Simple areas take priority.
-            if(i1.secCategory == "Simple") {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            //Sort by name.
-            return i1.name < i2.name;
         }
-    }
     );
     
     loadDialogPicker = Picker(this);
@@ -108,7 +108,7 @@ void AreaEditor::openLoadDialog() {
         std::bind(&AreaEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&AreaEditor::closeLoadDialog, this);
+            std::bind(&AreaEditor::closeLoadDialog, this);
 }
 
 
@@ -122,13 +122,13 @@ void AreaEditor::openNewDialog() {
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
-        newDialog.pack.clear();
-        newDialog.internalName = "my_area";
-        newDialog.type = AREA_TYPE_SIMPLE;
-        newDialog.areaPath.clear();
-        newDialog.lastCheckedAreaPath.clear();
-        newDialog.areaPathExists = false;
-    };
+                                        newDialog.pack.clear();
+                                        newDialog.internalName = "my_area";
+                                        newDialog.type = AREA_TYPE_SIMPLE;
+                                        newDialog.areaPath.clear();
+                                        newDialog.lastCheckedAreaPath.clear();
+                                        newDialog.areaPathExists = false;
+                                    };
 }
 
 
@@ -141,7 +141,7 @@ void AreaEditor::openOptionsDialog() {
         std::bind(&AreaEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&AreaEditor::closeOptionsDialog, this);
+            std::bind(&AreaEditor::closeOptionsDialog, this);
 }
 
 
@@ -312,16 +312,16 @@ void AreaEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.areaEd.history,
-    [this](const string& name) -> string {
-        return name;
-    },
-    [this](const string& path) {
-        closeTopDialog();
-        loadAreaFolder(path, false, true);
-    },
-    [this](const string& path) {
-        return getFolderTooltip(path, "");
-    }
+        [this](const string & name) -> string {
+            return name;
+        },
+        [this](const string & path) {
+            closeTopDialog();
+            loadAreaFolder(path, false, true);
+        },
+        [this](const string & path) {
+            return getFolderTooltip(path, "");
+        }
     );
     
     //New node.
@@ -524,10 +524,10 @@ void AreaEditor::processGuiDialogNew() {
     if(hitCreateButton) {
         if(!problem.empty()) return;
         auto reallyCreate = [this] () {
-            createArea(newDialog.areaPath);
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-        };
+                                createArea(newDialog.areaPath);
+                                closeTopDialog();
+                                closeTopDialog(); //Close the load dialog.
+                            };
         
         if(
             newDialog.pack == FOLDER_NAMES::BASE_PACK &&
@@ -794,12 +794,12 @@ void AreaEditor::processGuiDialogOptionsView() {
     setTooltip(
         "Draw textures on the sectors." +
         (string) (
-            (
-                OPTIONS::AREA_ED_D::VIEW_MODE ==
-                VIEW_MODE_TEXTURES
-            ) ?
-            "\nThis is the default." :
-            ""
+        (
+            OPTIONS::AREA_ED_D::VIEW_MODE ==
+            VIEW_MODE_TEXTURES
+        ) ?
+        "\nThis is the default." :
+        ""
         )
     );
     
@@ -809,12 +809,12 @@ void AreaEditor::processGuiDialogOptionsView() {
         "Do not draw sectors, only edges and vertexes.\n"
         "Best for performance." +
         (string) (
-            (
-                OPTIONS::AREA_ED_D::VIEW_MODE ==
-                VIEW_MODE_WIREFRAME
-            ) ?
-            "This is the default." :
-            ""
+        (
+            OPTIONS::AREA_ED_D::VIEW_MODE ==
+            VIEW_MODE_WIREFRAME
+        ) ?
+        "This is the default." :
+        ""
         )
     );
     
@@ -823,12 +823,12 @@ void AreaEditor::processGuiDialogOptionsView() {
     setTooltip(
         "Draw sectors as heightmaps. Lighter means taller." +
         (string) (
-            (
-                OPTIONS::AREA_ED_D::VIEW_MODE ==
-                VIEW_MODE_HEIGHTMAP
-            ) ?
-            "This is the default." :
-            ""
+        (
+            OPTIONS::AREA_ED_D::VIEW_MODE ==
+            VIEW_MODE_HEIGHTMAP
+        ) ?
+        "This is the default." :
+        ""
         )
     );
     
@@ -837,12 +837,12 @@ void AreaEditor::processGuiDialogOptionsView() {
     setTooltip(
         "Draw sectors as solid grays based on their brightness." +
         (string) (
-            (
-                OPTIONS::AREA_ED_D::VIEW_MODE ==
-                VIEW_MODE_BRIGHTNESS
-            ) ?
-            "This is the default." :
-            ""
+        (
+            OPTIONS::AREA_ED_D::VIEW_MODE ==
+            VIEW_MODE_BRIGHTNESS
+        ) ?
+        "This is the default." :
+        ""
         )
     );
     game.options.areaEd.viewMode = (VIEW_MODE) viewMode;
@@ -1451,7 +1451,8 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         } case AEMP_TYPE_NR_LIST: {
     
             int itemIdx = s2i(value);
-            if(ImGui::Combo(pPtr->name, &itemIdx, pPtr->displayValueList, 15)) {
+            if(ImGui::Combo(pPtr->name, &itemIdx, pPtr->displayValueList,
+                15)) {
                 registerChange("script vars change");
                 value = i2s(itemIdx);
             }
@@ -1749,20 +1750,20 @@ void AreaEditor::processGuiPanelDetailsBackground() {
         ImGui::SameLine();
         if(ImGui::Button("Choose image...")) {
             openBitmapDialog(
-            [this] (const string& bmp) {
-                registerChange("area background change");
-                game.content.bitmaps.list.free(
-                    game.curArea->bgBmpName
-                );
-                game.curArea->bgBmpName = bmp;
-                game.curArea->bgBmp =
-                    game.content.bitmaps.list.get(
+                [this] (const string & bmp) {
+                    registerChange("area background change");
+                    game.content.bitmaps.list.free(
                         game.curArea->bgBmpName
                     );
-                setStatus("Picked a background texture successfully.");
-                quickPreviewTimer.start();
-            },
-            FOLDER_NAMES::TEXTURES
+                    game.curArea->bgBmpName = bmp;
+                    game.curArea->bgBmp =
+                        game.content.bitmaps.list.get(
+                            game.curArea->bgBmpName
+                        );
+                    setStatus("Picked a background texture successfully.");
+                    quickPreviewTimer.start();
+                },
+                FOLDER_NAMES::TEXTURES
             );
         }
         setTooltip(
@@ -1867,8 +1868,8 @@ void AreaEditor::processGuiPanelDetailsShadows() {
     size_t curShadowIdx = shadowSelection.getSingleItemIdx();
     processGuiNavBoxStart(
         "shadow", "Tree shadow", "", &curShadowIdx,
-    [this] () { return game.curArea->treeShadows.size(); },
-    [this] () { return shadowSelection.getCount(); }
+        [this] () { return game.curArea->treeShadows.size(); },
+        [this] () { return shadowSelection.getCount(); }
     );
     
     //Previous shadow button.
@@ -1931,24 +1932,24 @@ void AreaEditor::processGuiPanelDetailsShadows() {
         //Choose the tree shadow image button.
         if(ImGui::Button("Choose image...")) {
             openBitmapDialog(
-            [this, curShadow] (const string& bmp) {
-                if(bmp != curShadow->bmpName) {
-                    //New image, delete the old one.
-                    registerChange("tree shadow image change");
-                    if(curShadow->bitmap != game.bmpError) {
-                        game.content.bitmaps.list.free(
-                            curShadow->bmpName
-                        );
+                [this, curShadow] (const string & bmp) {
+                    if(bmp != curShadow->bmpName) {
+                        //New image, delete the old one.
+                        registerChange("tree shadow image change");
+                        if(curShadow->bitmap != game.bmpError) {
+                            game.content.bitmaps.list.free(
+                                curShadow->bmpName
+                            );
+                        }
+                        curShadow->bmpName = bmp;
+                        curShadow->bitmap =
+                            game.content.bitmaps.list.get(
+                                curShadow->bmpName, nullptr, false
+                            );
                     }
-                    curShadow->bmpName = bmp;
-                    curShadow->bitmap =
-                        game.content.bitmaps.list.get(
-                            curShadow->bmpName, nullptr, false
-                        );
-                }
-                setStatus("Picked a tree shadow image successfully.");
-            },
-            FOLDER_NAMES::TEXTURES
+                    setStatus("Picked a tree shadow image successfully.");
+                },
+                FOLDER_NAMES::TEXTURES
             );
         }
         setTooltip(
@@ -2377,8 +2378,8 @@ void AreaEditor::processGuiPanelGameplayRegions() {
     size_t curRegionIdx = regionSelection.getSingleItemIdx();
     processGuiNavBoxStart(
         "region", "Region", "", &curRegionIdx,
-    [this] () { return game.curArea->regions.size(); },
-    [this] () { return regionSelection.getCount(); }
+        [this] () { return game.curArea->regions.size(); },
+        [this] () { return regionSelection.getCount(); }
     );
     
     //Previous region button.
@@ -2643,7 +2644,8 @@ void AreaEditor::processGuiPanelInfo() {
                 "Custom game mode",
             };
             int gameplayTagIdx = -1;
-            if(ImGui::Combo("Gameplay", &gameplayTagIdx, gameplayTags, 15)) {
+            if(ImGui::Combo("Gameplay", &gameplayTagIdx, gameplayTags,
+                15)) {
                 newTag = gameplayTags[gameplayTagIdx];
             }
             
@@ -3107,7 +3109,8 @@ void AreaEditor::processGuiPanelLayout() {
             
                 layoutMode = LAYOUT_MODE_EDGES;
                 
-                if(edgeSelection.hasOne() || edgeSelection.isHomogenized()) {
+                if(edgeSelection.hasOne()
+                    || edgeSelection.isHomogenized()) {
                     processGuiPanelEdge();
                     
                 } else if(!edgeSelection.hasAny()) {
@@ -3371,8 +3374,8 @@ void AreaEditor::processGuiPanelMissionBriefing() {
         //Nav box start.
         processGuiNavBoxStart(
             "note", "Note", "", &curNoteIdx,
-        [this] () { return game.curArea->mission.briefingNotes.size(); },
-        [this] () { return 1; }
+            [this] () { return game.curArea->mission.briefingNotes.size(); },
+            [this] () { return 1; }
         );
         
         //Previous note button.
@@ -3474,8 +3477,8 @@ void AreaEditor::processGuiPanelMissionEndCond() {
         //Nav box start.
         processGuiNavBoxStart(
             "condition", "Condition", "", &curCondIdx,
-        [this] () { return game.curArea->mission.endConds.size(); },
-        [this] () { return 1; }
+            [this] () { return game.curArea->mission.endConds.size(); },
+            [this] () { return 1; }
         );
         
         //Previous condition button.
@@ -3813,8 +3816,8 @@ void AreaEditor::processGuiPanelMissionHudItems() {
         //Nav box start.
         processGuiNavBoxStart(
             "item", "Item", "", &curHudItemIdx,
-        [this] () { return enumGetCount(missionHudItemIdNames); },
-        [this] () { return 1; }
+            [this] () { return enumGetCount(missionHudItemIdNames); },
+            [this] () { return 1; }
         );
         
         //Previous item button.
@@ -4070,8 +4073,8 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
         //Nav box start.
         processGuiNavBoxStart(
             "group", "Group", "", &curMobGroupIdx,
-        [this] () { return game.curArea->mission.mobGroups.size(); },
-        [this] () { return 1; }
+            [this] () { return game.curArea->mission.mobGroups.size(); },
+            [this] () { return 1; }
         );
         
         //Previous group button.
@@ -4099,7 +4102,8 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
             forIdx(e, game.curArea->mission.endConds) {
                 MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
                 if(!ePtr->usesMetric()) continue;
-                if(ePtr->metricType != MISSION_METRIC_MOB_GROUP_CLEARED_MOBS) {
+                if(ePtr->metricType !=
+                    MISSION_METRIC_MOB_GROUP_CLEARED_MOBS) {
                     continue;
                 }
                 if(ePtr->idxParam == 0) continue;
@@ -4261,8 +4265,8 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
         //Nav box start.
         processGuiNavBoxStart(
             "criterion", "Criterion", "Criteria", &curCriterionIdx,
-        [this] () { return game.curArea->mission.scoreCriteria.size(); },
-        [this] () { return 1; }
+            [this] () { return game.curArea->mission.scoreCriteria.size(); },
+            [this] () { return 1; }
         );
         
         //Previous criterion button.
@@ -5416,8 +5420,8 @@ void AreaEditor::processGuiPanelReview() {
         size_t curReminderIdx = reminderSelection.getSingleItemIdx();
         processGuiNavBoxStart(
             "reminder", "Reminder", "", &curReminderIdx,
-        [this] () { return game.curArea->reminders.size(); },
-        [this] () { return reminderSelection.getCount(); }
+            [this] () { return game.curArea->reminders.size(); },
+            [this] () { return reminderSelection.getCount(); }
         );
         
         //Previous reminder button.
@@ -5477,7 +5481,8 @@ void AreaEditor::processGuiPanelReview() {
                 ];
                 
             //Reminder position.
-            if(ImGui::DragFloat2("Position", (float*) &curReminder->center)) {
+            if(ImGui::DragFloat2("Position",
+                (float*) &curReminder->center)) {
                 changesMgr.markAsChanged();
             }
             setTooltip(
@@ -6246,24 +6251,24 @@ void AreaEditor::processGuiPanelTools() {
             changesMgr.askIfUnsaved(
                 Point(),
                 "loading the auto-backup", "load",
-            [this] () {
-                bool backupExists = false;
-                if(!manifest.internalName.empty()) {
-                    string filePath =
-                        game.curArea->userDataPath + "/" +
-                        FILE_NAMES::AREA_GEOMETRY;
-                    if(al_filename_exists(filePath.c_str())) {
-                        backupExists = true;
+                [this] () {
+                    bool backupExists = false;
+                    if(!manifest.internalName.empty()) {
+                        string filePath =
+                            game.curArea->userDataPath + "/" +
+                            FILE_NAMES::AREA_GEOMETRY;
+                        if(al_filename_exists(filePath.c_str())) {
+                            backupExists = true;
+                        }
                     }
-                }
-                
-                if(backupExists) {
-                    loadBackup();
-                } else {
-                    setStatus("There is no backup available.");
-                }
-            },
-            [this] () { return saveArea(false); }
+                    
+                    if(backupExists) {
+                        loadBackup();
+                    } else {
+                        setStatus("There is no backup available.");
+                    }
+                },
+                [this] () { return saveArea(false); }
             );
         }
         setTooltip(

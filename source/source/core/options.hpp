@@ -247,7 +247,7 @@ struct Options {
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
-        vector<pair<string, string> > history;
+        vector<pair<string, string>> history;
         
         //Quick play area folder path.
         string quickPlayAreaPath;
@@ -268,7 +268,7 @@ struct Options {
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
-        vector<pair<string, string> > history;
+        vector<pair<string, string>> history;
         
         //Can the user transform the selected vertexes?
         bool selTrans = AREA_ED_D::SEL_TRANS;
@@ -417,7 +417,7 @@ struct Options {
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
-        vector<pair<string, string> > history;
+        vector<pair<string, string>> history;
         
         //Quick play area folder path.
         string quickPlayAreaPath;
@@ -482,7 +482,7 @@ struct Options {
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
-        vector<pair<string, string> > history;
+        vector<pair<string, string>> history;
         
         //Quick play area folder path.
         string quickPlayAreaPath;
@@ -500,8 +500,8 @@ private:
 
     //--- Private function declarations ---
     
-    vector<pair<string, string> > loadEditorHistory(const string& str) const;
-    string saveEditorHistory(const vector<pair<string, string> >& vec) const;
+    vector<pair<string, string>> loadEditorHistory(const string& str) const;
+    string saveEditorHistory(const vector<pair<string, string>>& vec) const;
 };
 
 

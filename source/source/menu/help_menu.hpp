@@ -96,7 +96,7 @@ private:
     //--- Private members ---
     
     //All tidbits.
-    map<HELP_CATEGORY, vector<Tidbit> > tidbits;
+    map<HELP_CATEGORY, vector<Tidbit>> tidbits;
     
     //Currently shown tidbit, if any.
     Tidbit* curTidbit = nullptr;

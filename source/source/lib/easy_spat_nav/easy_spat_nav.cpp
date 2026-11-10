@@ -38,7 +38,8 @@ Interface::~Interface() {
  * @param h Height.
  * @return Whether it succeeded.
  */
-bool Interface::addNewItem(ItemId id, float x, float y, float w, float h) {
+bool Interface::addNewItem(ItemId id, float x, float y, float w,
+    float h) {
     if(items.find(id) != items.end()) return false;
     
     Item* newItem = new Item();
@@ -396,7 +397,8 @@ void Interface::getBestItems(
  * @param id Identifier of the item whose children to check.
  * @return The children, or an empty vector if none.
  */
-std::vector<Interface::Item*> Interface::getItemChildren(ItemId id) const {
+std::vector<Interface::Item*> Interface::getItemChildren(
+    ItemId id) const {
     std::vector<Item*> result;
     const auto& it = children.find(id);
     if(it != children.end()) {
@@ -683,7 +685,8 @@ Interface::getItemsWithRelativeUnits(
  * @param dir2 Second direction.
  * @return Whether they are opposites.
  */
-bool Interface::isOppositeDirection(DIRECTION dir1, DIRECTION dir2) const {
+bool Interface::isOppositeDirection(DIRECTION dir1,
+    DIRECTION dir2) const {
     if(dir1 == DIRECTION_RIGHT && dir2 == DIRECTION_LEFT) return true;
     if(dir1 == DIRECTION_DOWN && dir2 == DIRECTION_UP) return true;
     if(dir1 == DIRECTION_LEFT && dir2 == DIRECTION_RIGHT) return true;

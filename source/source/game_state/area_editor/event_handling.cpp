@@ -117,7 +117,8 @@ void AreaEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
         zoomAndPosResetCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_R)) {
-        if(state == EDITOR_STATE_MOBS && subState == EDITOR_SUB_STATE_NONE) {
+        if(state == EDITOR_STATE_MOBS
+            && subState == EDITOR_SUB_STATE_NONE) {
             rotateMobGensToPoint(game.editorsView.mouseCursorWorldPos);
         }
         
@@ -291,7 +292,8 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         selectionFilterCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_H)) {
-        if(state == EDITOR_STATE_LAYOUT && subState == EDITOR_SUB_STATE_NONE) {
+        if(state == EDITOR_STATE_LAYOUT
+            && subState == EDITOR_SUB_STATE_NONE) {
             if(!sectorSelection.hasAny()) {
                 setStatus(
                     "To set a sector's height, you must first select a sector!",
@@ -675,7 +677,8 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
 
         moving = true;
         octeeDragStart = game.editorsView.mouseCursorWorldPos;
-        Sector* sPtr = game.curArea->sectors[sectorSelection.getFirstItemIdx()];
+        Sector* sPtr =
+            game.curArea->sectors[sectorSelection.getFirstItemIdx()];
         octeeOrigAngle = sPtr->textureInfo.tf.rot;
         octeeOrigOffset = sPtr->textureInfo.tf.trans;
         octeeOrigScale = sPtr->textureInfo.tf.scale;
@@ -946,7 +949,8 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_DEL_MOB_LINK: {
 
         //Delete a mob link.
-        MobGen* target = getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
+        MobGen* target = getMobUnderPoint(
+                game.editorsView.mouseCursorWorldPos);
         MobGen* mPtr =
             game.curArea->mobGenerators[mobSelection.getFirstItemIdx()];
             
@@ -1020,7 +1024,8 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
                     curMobGroupIdx
                 ].mobIdxs;
             registerChange("mission mob group choice change");
-            auto it = std::find(listRef.begin(), listRef.end(), clickedMobIdx);
+            auto it = std::find(listRef.begin(), listRef.end(),
+                clickedMobIdx);
             if(it == listRef.end()) {
                 listRef.push_back(clickedMobIdx);
             } else {
@@ -1290,9 +1295,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 layoutSelCtrl, curTransformationWidget,
                 !game.options.areaEd.selTrans,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
-            [this] {
-                startLayoutMoving();
-            }
+                [this] {
+                    startLayoutMoving();
+                }
             );
             if(layoutSelCtrl.isCreatingRubberBand()) {
                 updateSelectionRequirements();
@@ -1329,10 +1334,10 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 pathsSelCtrl, curTransformationWidget,
                 !game.options.areaEd.selTrans,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
-            [this] {
-                startPathStopMove();
-                registerChange("path stop movement");
-            }
+                [this] {
+                    startPathStopMove();
+                    registerChange("path stop movement");
+                }
             );
             if(pathsSelCtrl.isCreatingRubberBand()) {
                 updateSelectionRequirements();
@@ -1387,7 +1392,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             &referenceRect.size,
             nullptr,
             1.0f / game.editorsView.cam.zoom, flags, RectCorners(), 5.0f,
-        [this] (const Point & p) { return snapPoint(p); }
+            [this] (const Point & p) { return snapPoint(p); }
         );
         
         break;
@@ -1404,7 +1409,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             reviewSelCtrl, curTransformationWidget,
             !game.options.areaEd.selTrans,
             game.editorsView.mouseCursorWorldPos,
-        [this] () { changesMgr.markAsChanged(); }
+            [this] () { changesMgr.markAsChanged(); }
         );
         
         break;

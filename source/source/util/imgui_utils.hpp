@@ -28,7 +28,8 @@ using std::vector;
 
 namespace ImGui {
 
-void AdjustColorHSV(ImVec4& color, float hDelta, float sDelta, float vDelta);
+void AdjustColorHSV(ImVec4& color, float hDelta, float sDelta,
+    float vDelta);
 void AlignNextItems(
     const vector<int>& itemWidths, float alignment = 0.5f, int extraPadding = 0
 );

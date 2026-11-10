@@ -45,11 +45,11 @@ ParticleEditor::ParticleEditor() :
     
     //Register commands.
     auto registerCmd =
-    [this] (void (ParticleEditor::* func)(float), const string& name) {
-        commands.push_back(
-            Command(std::bind(func, this, std::placeholders::_1), name)
-        );
-    };
+        [this] (void (ParticleEditor::* func)(float), const string & name) {
+            commands.push_back(
+                Command(std::bind(func, this, std::placeholders::_1), name)
+            );
+        };
     
     registerCmd(
         &ParticleEditor::gridIntervalDecreaseCmd, "grid_interval_decrease"
@@ -207,11 +207,11 @@ void ParticleEditor::deleteCurrentPartGen() {
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
     const auto finishUp = [this, goToLoadDialog] () {
-        if(goToLoadDialog) {
-            setupForNewPartGenPre();
-            openLoadDialog();
-        }
-    };
+                              if(goToLoadDialog) {
+                                  setupForNewPartGenPre();
+                                  openLoadDialog();
+                              }
+                          };
     
     //Update the status bar.
     if(success) {
@@ -439,16 +439,16 @@ void ParticleEditor::load() {
     //Load necessary game content.
     game.content.reloadPacks();
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     },
-    CONTENT_LOAD_LEVEL_EDITOR
+        CONTENT_LOAD_LEVEL_EDITOR
     );
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
     
     //Misc. setup.
@@ -527,7 +527,7 @@ void ParticleEditor::loadPartGenFile(
             "Load failed!",
             "Could not load the particle generator file \"" +
             manifest.path + "\"!",
-        [this] () { openLoadDialog(); }
+            [this] () { openLoadDialog(); }
         );
         manifest.clear();
         return;
@@ -627,9 +627,9 @@ void ParticleEditor::pickPartGenFile(
     ContentManifest* tempManif = (ContentManifest*) info;
     
     auto reallyLoad = [this, tempManif] () {
-        closeTopDialog();
-        loadPartGenFile(tempManif->path, true);
-    };
+                          closeTopDialog();
+                          loadPartGenFile(tempManif->path, true);
+                      };
     
     if(
         tempManif->pack == FOLDER_NAMES::BASE_PACK &&
@@ -703,8 +703,8 @@ void ParticleEditor::reloadCmd(float inputValue) {
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
         "reloading the current generator", "reload",
-    [this] () { loadPartGenFile(string(manifest.path), false); },
-    std::bind(&ParticleEditor::savePartGen, this)
+        [this] () { loadPartGenFile(string(manifest.path), false); },
+        std::bind(&ParticleEditor::savePartGen, this)
     );
 }
 
@@ -714,15 +714,15 @@ void ParticleEditor::reloadCmd(float inputValue) {
  */
 void ParticleEditor::reloadPartGens() {
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     }
     );
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
 }
 
@@ -836,12 +836,12 @@ void ParticleEditor::unload() {
     partMgr.clear();
     
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     }
     );
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     }
     );

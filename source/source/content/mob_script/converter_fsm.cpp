@@ -105,7 +105,8 @@ void ConverterFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
+void ConverterFsm::becomeIdle(
+    ScriptVM* scriptVM, void* info1, void* info2) {
     Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->setAnimation(
@@ -163,7 +164,9 @@ void ConverterFsm::finishBeingBumped(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::finishDying(ScriptVM* scriptVM, void* info1, void* info2) {
+void ConverterFsm::finishDying(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->toDelete = true;
@@ -195,7 +198,9 @@ void ConverterFsm::handleObjectTouch(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
+void ConverterFsm::handlePikmin(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Converter* conPtr = (Converter*) scriptVM->mob;
     Pikmin* pikPtr = (Pikmin*) info1;
     
@@ -292,7 +297,8 @@ void ConverterFsm::openOrDie(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::openOrSpit(ScriptVM* scriptVM, void* info1, void* info2) {
+void ConverterFsm::openOrSpit(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Converter* conPtr = (Converter*) scriptVM->mob;
     
     if(conPtr->amountInBuffer == 0) {
@@ -330,7 +336,8 @@ void ConverterFsm::spit(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::startDying(ScriptVM* scriptVM, void* info1, void* info2) {
+void ConverterFsm::startDying(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->setAnimation(

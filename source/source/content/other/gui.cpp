@@ -110,9 +110,9 @@ BulletGuiItem::BulletGuiItem(
     color(color) {
     
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
 }
 
 
@@ -173,9 +173,9 @@ ButtonGuiItem::ButtonGuiItem(
     color(color) {
     
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
 }
 
 
@@ -218,14 +218,14 @@ CheckGuiItem::CheckGuiItem(
     color(color) {
     
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
     
     onActivate =
-    [this] (const Point&) {
-        this->defActivateCode();
-    };
+        [this] (const Point&) {
+            this->defActivateCode();
+        };
 }
 
 
@@ -625,23 +625,23 @@ GuiManager::GuiManager() :
     
     animTimer =
         Timer(
-    0.0f, [this] () {
-        switch(animType) {
-        case GUI_MANAGER_ANIM_IN_TO_OUT:
-        case GUI_MANAGER_ANIM_CENTER_TO_UP:
-        case GUI_MANAGER_ANIM_CENTER_TO_DOWN:
-        case GUI_MANAGER_ANIM_CENTER_TO_LEFT:
-        case GUI_MANAGER_ANIM_CENTER_TO_RIGHT:
-        case GUI_MANAGER_ANIM_FADE_OUT: {
-            visible = false;
-            break;
-        }
-        default: {
-            visible = true;
-            break;
-        }
-        }
-    }
+            0.0f, [this] () {
+                      switch(animType) {
+                      case GUI_MANAGER_ANIM_IN_TO_OUT:
+                      case GUI_MANAGER_ANIM_CENTER_TO_UP:
+                      case GUI_MANAGER_ANIM_CENTER_TO_DOWN:
+                      case GUI_MANAGER_ANIM_CENTER_TO_LEFT:
+                      case GUI_MANAGER_ANIM_CENTER_TO_RIGHT:
+                      case GUI_MANAGER_ANIM_FADE_OUT: {
+                          visible = false;
+                          break;
+                      }
+                      default: {
+                          visible = true;
+                          break;
+                      }
+                      }
+                  }
         );
 }
 
@@ -710,110 +710,110 @@ void GuiManager::createAndAddCustomItems(
             GUI::DRAWING_LAYER_CUSTOM_BEFORE :
             GUI::DRAWING_LAYER_CUSTOM_AFTER;
         guiItem->onDraw =
-        [this, i] (const DrawInfo & draw) {
-            const CustomGuiItemDef& infoRef = customItemDefs[i];
-            const auto getDimensions =
-            [] (const DrawInfo & draw, bool square) {
-                return
-                    square ?
-                    Point(std::min(draw.size.x, draw.size.y)) :
-                    draw.size;
+            [this, i] (const DrawInfo & draw) {
+                const CustomGuiItemDef& infoRef = customItemDefs[i];
+                const auto getDimensions =
+                    [] (const DrawInfo & draw, bool square) {
+                        return
+                            square ?
+                            Point(std::min(draw.size.x, draw.size.y)) :
+                            draw.size;
+                    };
+                
+                switch(infoRef.type) {
+                case CUSTOM_GUI_ITEM_TYPE_BITMAP: {
+                    if(infoRef.bitmap) {
+                        drawBitmap(
+                            infoRef.bitmap, draw.center, draw.size, 0.0f,
+                            tintColor(infoRef.color, draw.tint)
+                        );
+                    }
+                    break;
+                    
+                } case CUSTOM_GUI_ITEM_TYPE_TEXT: {
+                    int textX = draw.center.x;
+                    switch(infoRef.textAlignment) {
+                    case ALLEGRO_ALIGN_LEFT: {
+                        textX = draw.center.x - draw.size.x / 2.0f;
+                        break;
+                    } case ALLEGRO_ALIGN_RIGHT: {
+                        textX = draw.center.x + draw.size.x / 2.0f;
+                        break;
+                    }
+                    }
+                    drawText(
+                        infoRef.text, infoRef.font,
+                        Point(textX, draw.center.y), draw.size,
+                        tintColor(infoRef.color, draw.tint)
+                    );
+                    break;
+                    
+                } case CUSTOM_GUI_ITEM_TYPE_9_SLICE: {
+                    if(infoRef.bitmap) {
+                        drawTexturedBox(
+                            draw.center, draw.size, infoRef.bitmap,
+                            tintColor(infoRef.color, draw.tint)
+                        );
+                    }
+                    break;
+                    
+                } case CUSTOM_GUI_ITEM_TYPE_RECTANGLE:
+                case CUSTOM_GUI_ITEM_TYPE_SQUARE: {
+                    Point finalSize =
+                        getDimensions(
+                            draw, infoRef.type ==
+                            CUSTOM_GUI_ITEM_TYPE_SQUARE
+                        );
+                    drawRoundedRatioRectangle(
+                        draw.center, finalSize, infoRef.rectangleRounding,
+                        tintColor(infoRef.color, draw.tint),
+                        infoRef.thickness
+                    );
+                    break;
+                    
+                } case CUSTOM_GUI_ITEM_TYPE_FILLED_RECTANGLE:
+                case CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE: {
+                    Point finalSize =
+                        getDimensions(
+                            draw, infoRef.type ==
+                            CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE
+                        );
+                    drawFilledRoundedRatioRectangle(
+                        draw.center, finalSize, infoRef.rectangleRounding,
+                        tintColor(infoRef.color, draw.tint)
+                    );
+                    break;
+                    
+                } case CUSTOM_GUI_ITEM_TYPE_ELLIPSE:
+                case CUSTOM_GUI_ITEM_TYPE_CIRCLE: {
+                    Point finalSize =
+                        getDimensions(
+                            draw, infoRef.type ==
+                            CUSTOM_GUI_ITEM_TYPE_CIRCLE
+                        );
+                    al_draw_ellipse(
+                        draw.center.x, draw.center.y, finalSize.x, finalSize.y,
+                        tintColor(infoRef.color, draw.tint),
+                        infoRef.thickness
+                    );
+                    break;
+                    
+                } case CUSTOM_GUI_ITEM_TYPE_FILLED_ELLIPSE:
+                case CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE: {
+                    Point finalSize =
+                        getDimensions(
+                            draw, infoRef.type ==
+                            CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE
+                        );
+                    al_draw_filled_ellipse(
+                        draw.center.x, draw.center.y, finalSize.x, finalSize.y,
+                        tintColor(infoRef.color, draw.tint)
+                    );
+                    break;
+                    
+                }
+                }
             };
-            
-            switch(infoRef.type) {
-            case CUSTOM_GUI_ITEM_TYPE_BITMAP: {
-                if(infoRef.bitmap) {
-                    drawBitmap(
-                        infoRef.bitmap, draw.center, draw.size, 0.0f,
-                        tintColor(infoRef.color, draw.tint)
-                    );
-                }
-                break;
-                
-            } case CUSTOM_GUI_ITEM_TYPE_TEXT: {
-                int textX = draw.center.x;
-                switch(infoRef.textAlignment) {
-                case ALLEGRO_ALIGN_LEFT: {
-                    textX = draw.center.x - draw.size.x / 2.0f;
-                    break;
-                } case ALLEGRO_ALIGN_RIGHT: {
-                    textX = draw.center.x + draw.size.x / 2.0f;
-                    break;
-                }
-                }
-                drawText(
-                    infoRef.text, infoRef.font,
-                    Point(textX, draw.center.y), draw.size,
-                    tintColor(infoRef.color, draw.tint)
-                );
-                break;
-                
-            } case CUSTOM_GUI_ITEM_TYPE_9_SLICE: {
-                if(infoRef.bitmap) {
-                    drawTexturedBox(
-                        draw.center, draw.size, infoRef.bitmap,
-                        tintColor(infoRef.color, draw.tint)
-                    );
-                }
-                break;
-                
-            } case CUSTOM_GUI_ITEM_TYPE_RECTANGLE:
-            case CUSTOM_GUI_ITEM_TYPE_SQUARE: {
-                Point finalSize =
-                    getDimensions(
-                        draw, infoRef.type ==
-                        CUSTOM_GUI_ITEM_TYPE_SQUARE
-                    );
-                drawRoundedRatioRectangle(
-                    draw.center, finalSize, infoRef.rectangleRounding,
-                    tintColor(infoRef.color, draw.tint),
-                    infoRef.thickness
-                );
-                break;
-                
-            } case CUSTOM_GUI_ITEM_TYPE_FILLED_RECTANGLE:
-            case CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE: {
-                Point finalSize =
-                    getDimensions(
-                        draw, infoRef.type ==
-                        CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE
-                    );
-                drawFilledRoundedRatioRectangle(
-                    draw.center, finalSize, infoRef.rectangleRounding,
-                    tintColor(infoRef.color, draw.tint)
-                );
-                break;
-                
-            } case CUSTOM_GUI_ITEM_TYPE_ELLIPSE:
-            case CUSTOM_GUI_ITEM_TYPE_CIRCLE: {
-                Point finalSize =
-                    getDimensions(
-                        draw, infoRef.type ==
-                        CUSTOM_GUI_ITEM_TYPE_CIRCLE
-                    );
-                al_draw_ellipse(
-                    draw.center.x, draw.center.y, finalSize.x, finalSize.y,
-                    tintColor(infoRef.color, draw.tint),
-                    infoRef.thickness
-                );
-                break;
-                
-            } case CUSTOM_GUI_ITEM_TYPE_FILLED_ELLIPSE:
-            case CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE: {
-                Point finalSize =
-                    getDimensions(
-                        draw, infoRef.type ==
-                        CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE
-                    );
-                al_draw_filled_ellipse(
-                    draw.center.x, draw.center.y, finalSize.x, finalSize.y,
-                    tintColor(infoRef.color, draw.tint)
-                );
-                break;
-                
-            }
-            }
-        };
         if(customChildrenParent) customChildrenParent->addChild(guiItem);
         addItem(guiItem);
     }
@@ -859,9 +859,9 @@ bool GuiManager::draw() {
     vector<GuiItem*> drawingSortedItems = items;
     std::stable_sort(
         drawingSortedItems.begin(), drawingSortedItems.end(),
-    [] (GuiItem * i1, GuiItem * i2) {
-        return i1->drawingLayer < i2->drawingLayer;
-    }
+        [] (GuiItem * i1, GuiItem * i2) {
+            return i1->drawingLayer < i2->drawingLayer;
+        }
     );
     
     forIdx(i, drawingSortedItems) {
@@ -1359,7 +1359,8 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
  *
  * @param action Data about the player action.
  */
-void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
+void GuiManager::handleSpatialNavigationAction(const Inpution::Action&
+    action) {
     //Check if the currently-focused item wants to consume the action.
     if(
         focusedItem && focusedItem->isResponsive() &&
@@ -1432,7 +1433,7 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         !hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT);
     GuiItem* newFocusablePtr =
         (GuiItem*) esnInterface.navigate(
-            direction, (EasySpatNav::ItemId) focusedItem
+        direction, (EasySpatNav::ItemId) focusedItem
         );
         
     //Set it!
@@ -1469,7 +1470,8 @@ bool GuiManager::hideItems() {
  * if not nullptr.
  * @return Whether it succeeded.
  */
-bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
+bool GuiManager::readDataFile(DataNode* node,
+    GuiItem* customChildrenParent) {
     vector<HardcodedGuiItemDef> hardcodedItemDefs;
     vector<CustomGuiItemDef> newCustomItemDefs;
     bool success =
@@ -1729,9 +1731,9 @@ bool GuiManager::writeItemDefsToDataFile(
     const vector<CustomGuiItemDef>& customItemDefs
 ) {
     const auto writeCoordinates =
-    [] (const Rect & rect) {
-        return p2s(rect.center) + " " + p2s(rect.size);
-    };
+        [] (const Rect & rect) {
+            return p2s(rect.center) + " " + p2s(rect.size);
+        };
     
     //Hardcoded items.
     DataNode* hardcodedNode = file->getChildOrAddNew("hardcoded_items");
@@ -1797,21 +1799,21 @@ ListGuiItem::ListGuiItem() :
     
     padding = 8.0f;
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
     onTick =
-    [this] (float deltaT) {
-        this->defTickCode(deltaT);
-    };
+        [this] (float deltaT) {
+            this->defTickCode(deltaT);
+        };
     onAllegroEvent =
-    [this] (const ALLEGRO_EVENT & ev) {
-        this->defEventCode(ev);
-    };
+        [this] (const ALLEGRO_EVENT & ev) {
+            this->defEventCode(ev);
+        };
     onChildFocusedViaSN =
-    [this] (const GuiItem * child) {
-        this->defChildFocusedViaSNCode(child);
-    };
+        [this] (const GuiItem * child) {
+            this->defChildFocusedViaSNCode(child);
+        };
 }
 
 
@@ -1958,7 +1960,8 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         );
     }
     float childrenHSpan = getChildrenSpan(true);
-    if(childrenHSpan > 1.0f && offset.x < childrenHSpan - 1.0f && horizontal) {
+    if(childrenHSpan > 1.0f && offset.x < childrenHSpan - 1.0f
+        && horizontal) {
         //Shade effect at the right.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -2070,24 +2073,24 @@ PickerGuiItem::PickerGuiItem(
     curOptionIdx(curOptionIdx) {
     
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
     
     onActivate =
-    [this] (const Point & cursorPos) {
-        this->defActivateCode(cursorPos);
-    };
+        [this] (const Point & cursorPos) {
+            this->defActivateCode(cursorPos);
+        };
     
     onMenuSNAction =
-    [this] (PLAYER_ACTION_TYPE playerActionId) -> bool{
-        return this->defMenuSNCode(playerActionId);
-    };
+        [this] (PLAYER_ACTION_TYPE playerActionId) -> bool{
+            return this->defMenuSNCode(playerActionId);
+        };
     
     onMouseOver =
-    [this] (const Point & cursorPos) {
-        this->defMouseOverCode(cursorPos);
-    };
+        [this] (const Point & cursorPos) {
+            this->defMouseOverCode(cursorPos);
+        };
 }
 
 
@@ -2243,13 +2246,13 @@ ScrollGuiItem::ScrollGuiItem() :
     GuiItem() {
     
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
     onAllegroEvent =
-    [this] (const ALLEGRO_EVENT & ev) {
-        this->defEventCode(ev);
-    };
+        [this] (const ALLEGRO_EVENT & ev) {
+            this->defEventCode(ev);
+        };
 }
 
 
@@ -2421,9 +2424,9 @@ TextGuiItem::TextGuiItem(
     flags(flags) {
     
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
 }
 
 
@@ -2456,7 +2459,7 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
             tokens, this->font, game.sysContent.fntSlim,
             lineHeight, controlCondensed
         );
-        vector<vector<StringToken> > tokensPerLine =
+        vector<vector<StringToken>> tokensPerLine =
             splitLongStringWithTokens(tokens, draw.size.x);
             
         forIdx(l, tokensPerLine) {
@@ -2500,9 +2503,9 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
     gui(gui) {
     
     onDraw =
-    [this] (const DrawInfo & draw) {
-        this->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            this->defDrawCode(draw);
+        };
 }
 
 

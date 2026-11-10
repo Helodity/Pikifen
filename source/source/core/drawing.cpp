@@ -71,14 +71,17 @@ const ALLEGRO_COLOR HITBOX_COLOR_DISABLED = al_map_rgba(128, 128, 0, 128);
 const ALLEGRO_COLOR HITBOX_COLOR_NORMAL = al_map_rgba(0, 128, 0, 128);
 
 //Color that represents the outline of attack hitboxes.
-const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_ATTACK = al_map_rgba(64, 0, 0, 255);
-
+const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_ATTACK = al_map_rgba(64, 0, 0,
+        255);
+        
 //Color that represents the outline of disabled hitboxes.
-const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_DISABLED = al_map_rgba(64, 64, 0, 255);
-
+const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_DISABLED = al_map_rgba(64, 64, 0,
+        255);
+        
 //Color that represents the outline of normal hitboxes.
-const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_NORMAL = al_map_rgba(0, 64, 0, 255);
-
+const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_NORMAL = al_map_rgba(0, 64, 0,
+        255);
+        
 //How long to display the most recently used inventory shortcut for.
 const float INVENTORY_SHORTCUT_DISPLAY_DURATION = 1.5f;
 
@@ -105,8 +108,9 @@ const float LOADING_SCREEN_TEXT_HEIGHT = 0.10f;
 const float LOADING_SCREEN_TEXT_WIDTH = 0.70f;
 
 //Tint unresponsive GUI buttons with this color.
-const ALLEGRO_COLOR UNRESPONSIVE_BUTTON_TINT = al_map_rgba(128, 128, 128, 128);
-
+const ALLEGRO_COLOR UNRESPONSIVE_BUTTON_TINT = al_map_rgba(128, 128, 128,
+        128);
+        
 }
 
 
@@ -1327,7 +1331,7 @@ void drawPlayerActionInputSourceIcon(
         if(skipIfNone) return;
         drawInputSourceIcon(
         { .type = Inpution::INPUT_SOURCE_TYPE_NONE }, where, maxSize,
-        condensed, font, tint
+            condensed, font, tint
         );
         return;
     }
@@ -1342,7 +1346,8 @@ void drawPlayerActionInputSourceIcon(
             bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
             bindSourceType ==
             Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON;
-        if(game.hardware.lastInputWasController != bindIsController) continue;
+        if(game.hardware.lastInputWasController != bindIsController)
+            continue;
         bindIdx = b;
         break;
     }

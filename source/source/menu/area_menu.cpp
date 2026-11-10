@@ -352,22 +352,22 @@ void AreaMenu::initGuiInfoPage() {
         GuiItem* thumbItem = new GuiItem();
         thumbItem->forceSquare = true;
         thumbItem->onDraw =
-        [this] (const DrawInfo & draw) {
-            //Align it to the top-right corner.
-            Point finalCenter(
-                (draw.center.x + draw.size.x / 2.0f) - draw.size.x / 2.0f,
-                (draw.center.y - draw.size.y / 2.0f) + draw.size.y / 2.0f
-            );
-            if(curThumb) {
-                drawBitmap(
-                    curThumb, finalCenter, draw.size - 4.0f, 0.0f, draw.tint
+            [this] (const DrawInfo & draw) {
+                //Align it to the top-right corner.
+                Point finalCenter(
+                    (draw.center.x + draw.size.x / 2.0f) - draw.size.x / 2.0f,
+                    (draw.center.y - draw.size.y / 2.0f) + draw.size.y / 2.0f
                 );
-            }
-            drawTexturedBox(
-                finalCenter, draw.size, game.sysContent.bmpFrameBox,
-                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-            );
-        };
+                if(curThumb) {
+                    drawBitmap(
+                        curThumb, finalCenter, draw.size - 4.0f, 0.0f, draw.tint
+                    );
+                }
+                drawTexturedBox(
+                    finalCenter, draw.size, game.sysContent.bmpFrameBox,
+                    tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+                );
+            };
         infoBox->addChild(thumbItem);
         gui.addItem(thumbItem, "thumbnail");
         
@@ -399,14 +399,14 @@ void AreaMenu::initGuiInfoPage() {
             //Record medal.
             GuiItem* recordMedalItem = new GuiItem();
             recordMedalItem->onDraw =
-            [this] (const DrawInfo & draw) {
-                if(curMedal) {
-                    drawBitmapInBox(
-                        curMedal, draw.center, draw.size, true, true,
-                        0.0f, draw.tint
-                    );
-                }
-            };
+                [this] (const DrawInfo & draw) {
+                    if(curMedal) {
+                        drawBitmapInBox(
+                            curMedal, draw.center, draw.size, true, true,
+                            0.0f, draw.tint
+                        );
+                    }
+                };
             infoBox->addChild(recordMedalItem);
             gui.addItem(recordMedalItem, "record_medal");
             
@@ -422,36 +422,36 @@ void AreaMenu::initGuiInfoPage() {
         //Difficulty item.
         difficultyItem = new GuiItem();
         difficultyItem->onDraw = [this] (const DrawInfo & draw) {
-            Area* areaPtr = game.content.areas.list[areaType][curAreaIdx];
-            if(areaPtr->difficulty == 0) return;
-            const string difficultyText = "Difficulty: ";
-            
-            drawText(
-                difficultyText, game.sysContent.fntStandard,
-                Point(draw.center.x - draw.size.x / 2.0f, draw.center.y),
-                draw.size,
-                draw.tint, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
-                TEXT_SETTING_FLAG_CANT_GROW,
-                Point(1.0 + difficultyItem->getJuiceValue())
-            );
-            
-            Point iconSize =
-                resizeToBoxKeepingAspectRatio(
-                    getBitmapDimensions(game.sysContent.bmpDifficulty),
-                    Point(draw.size.x / 5.0f, draw.size.y)
-                );
-            const float iconsX2 = draw.center.x + draw.size.x / 2.0f;
-            for(unsigned char i = 0; i < areaPtr->difficulty; i++) {
-                drawBitmap(
-                    game.sysContent.bmpDifficulty,
-                    Point(
-                        iconsX2 - iconSize.x * i - iconSize.x / 2.0f,
-                        draw.center.y
-                    ),
-                    iconSize, 0.0f, draw.tint
-                );
-            }
-        };
+                                     Area* areaPtr = game.content.areas.list[areaType][curAreaIdx];
+                                     if(areaPtr->difficulty == 0) return;
+                                     const string difficultyText = "Difficulty: ";
+                                     
+                                     drawText(
+                                         difficultyText, game.sysContent.fntStandard,
+                                         Point(draw.center.x - draw.size.x / 2.0f, draw.center.y),
+                                         draw.size,
+                                         draw.tint, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+                                         TEXT_SETTING_FLAG_CANT_GROW,
+                                         Point(1.0 + difficultyItem->getJuiceValue())
+                                     );
+                                     
+                                     Point iconSize =
+                                         resizeToBoxKeepingAspectRatio(
+                                             getBitmapDimensions(game.sysContent.bmpDifficulty),
+                                             Point(draw.size.x / 5.0f, draw.size.y)
+                                         );
+                                     const float iconsX2 = draw.center.x + draw.size.x / 2.0f;
+                                     for(unsigned char i = 0; i < areaPtr->difficulty; i++) {
+                                         drawBitmap(
+                                             game.sysContent.bmpDifficulty,
+                                             Point(
+                                                 iconsX2 - iconSize.x * i - iconSize.x / 2.0f,
+                                                 draw.center.y
+                                             ),
+                                             iconSize, 0.0f, draw.tint
+                                         );
+                                     }
+                                 };
         infoBox->addChild(difficultyItem);
         gui.addItem(difficultyItem, "difficulty");
         
@@ -506,11 +506,11 @@ void AreaMenu::initGuiMain() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
-        leave();
-    };
+        [this] (const Point&) {
+            leave();
+        };
     gui.backItem->onGetTooltip =
-    [] () { return "Return to the previous menu."; };
+        [] () { return "Return to the previous menu."; };
     gui.addItem(gui.backItem, "back");
     
     //Back input icon.
@@ -546,17 +546,17 @@ void AreaMenu::initGuiMain() {
                     BUTTON_HEIGHT
                 );
             areaButton->onActivate =
-            [this, areaPtr] (const Point&) {
-                game.states.gameplay->pathOfAreaToLoad =
-                    areaPtr->manifest->path;
-                game.fadeMgr.startFade(false, [] () {
-                    game.changeState(game.states.gameplay);
-                });
-            };
+                [this, areaPtr] (const Point&) {
+                    game.states.gameplay->pathOfAreaToLoad =
+                        areaPtr->manifest->path;
+                    game.fadeMgr.startFade(false, [] () {
+                                                      game.changeState(game.states.gameplay);
+                                                  });
+                };
             areaButton->onFocused =
-            [this, a] () { changeInfo(a); };
+                [this, a] () { changeInfo(a); };
             areaButton->onGetTooltip =
-            [areaPtr] () { return "Play " + areaPtr->name + "."; };
+                [areaPtr] () { return "Play " + areaPtr->name + "."; };
             listBox->addChild(areaButton);
             gui.addItem(areaButton);
             areaButtons.push_back(areaButton);
@@ -572,48 +572,51 @@ void AreaMenu::initGuiMain() {
                 medalItem->ratioRect.size =
                     Point(0.15f, BUTTON_HEIGHT * 0.80f);
                 medalItem->onDraw =
-                [this, areaPtr, a] (const DrawInfo & draw) {
-                    ALLEGRO_BITMAP* medalBmp = nullptr;
-                    if(!areaRecords[a].date.empty()) {
-                        switch(areaPtr->mission.medalAwardMode) {
-                        case MISSION_MEDAL_AWARD_MODE_POINTS: {
-                            int score = areaRecords[a].score;
-                            MISSION_MEDAL medal =
-                                areaPtr->mission.getScoreMedal(score);
-                            switch(medal) {
-                            case MISSION_MEDAL_NONE: {
+                    [this, areaPtr, a] (const DrawInfo & draw) {
+                        ALLEGRO_BITMAP* medalBmp = nullptr;
+                        if(!areaRecords[a].date.empty()) {
+                            switch(areaPtr->mission.medalAwardMode) {
+                            case MISSION_MEDAL_AWARD_MODE_POINTS: {
+                                int score = areaRecords[a].score;
+                                MISSION_MEDAL medal =
+                                    areaPtr->mission.getScoreMedal(score);
+                                switch(medal) {
+                                case MISSION_MEDAL_NONE: {
+                                    break;
+                                } case MISSION_MEDAL_BRONZE: {
+                                    medalBmp =
+                                        game.sysContent.bmpMedalBronze;
+                                    break;
+                                } case MISSION_MEDAL_SILVER: {
+                                    medalBmp =
+                                        game.sysContent.bmpMedalSilver;
+                                    break;
+                                } case MISSION_MEDAL_GOLD: {
+                                    medalBmp = game.sysContent.bmpMedalGold;
+                                    break;
+                                } case MISSION_MEDAL_PLATINUM: {
+                                    medalBmp =
+                                        game.sysContent.bmpMedalPlatinum;
+                                    break;
+                                }
+                                }
                                 break;
-                            } case MISSION_MEDAL_BRONZE: {
-                                medalBmp = game.sysContent.bmpMedalBronze;
-                                break;
-                            } case MISSION_MEDAL_SILVER: {
-                                medalBmp = game.sysContent.bmpMedalSilver;
-                                break;
-                            } case MISSION_MEDAL_GOLD: {
-                                medalBmp = game.sysContent.bmpMedalGold;
-                                break;
-                            } case MISSION_MEDAL_PLATINUM: {
+                            } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
                                 medalBmp = game.sysContent.bmpMedalPlatinum;
                                 break;
+                            } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
+                                medalBmp = game.sysContent.bmpMedalPlatinum;
                             }
                             }
-                            break;
-                        } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
-                            medalBmp = game.sysContent.bmpMedalPlatinum;
-                            break;
-                        } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
-                            medalBmp = game.sysContent.bmpMedalPlatinum;
                         }
+                        
+                        if(medalBmp) {
+                            drawBitmapInBox(
+                                medalBmp, draw.center, draw.size, true, true,
+                                0.0f, draw.tint
+                            );
                         }
-                    }
-                    
-                    if(medalBmp) {
-                        drawBitmapInBox(
-                            medalBmp, draw.center, draw.size, true, true,
-                            0.0f, draw.tint
-                        );
-                    }
-                };
+                    };
                 listBox->addChild(medalItem);
                 gui.addItem(medalItem);
             }
@@ -622,12 +625,12 @@ void AreaMenu::initGuiMain() {
         //Info box item.
         infoBox = new GuiItem();
         infoBox->onDraw =
-        [] (const DrawInfo & draw) {
-            drawTexturedBox(
-                draw.center, draw.size, game.sysContent.bmpFrameBox,
-                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-            );
-        };
+            [] (const DrawInfo & draw) {
+                drawTexturedBox(
+                    draw.center, draw.size, game.sysContent.bmpFrameBox,
+                    tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+                );
+            };
         gui.addItem(infoBox, "info_box");
         
         //Random button.
@@ -635,24 +638,24 @@ void AreaMenu::initGuiMain() {
             new ButtonGuiItem("", game.sysContent.fntStandard);
         randomButton->forceSquare = true;
         randomButton->onDraw =
-        [randomButton] (const DrawInfo & draw) {
-            drawButton(
-                draw.center, draw.size, "",
-                game.sysContent.fntStandard, COLOR_WHITE,
-                randomButton->focused, 0.0f, draw.tint
-            );
-            drawBitmapInBox(
-                game.sysContent.bmpRandom,
-                draw.center, draw.size - 8, true, true, 0.0f, draw.tint
-            );
-        };
+            [randomButton] (const DrawInfo & draw) {
+                drawButton(
+                    draw.center, draw.size, "",
+                    game.sysContent.fntStandard, COLOR_WHITE,
+                    randomButton->focused, 0.0f, draw.tint
+                );
+                drawBitmapInBox(
+                    game.sysContent.bmpRandom,
+                    draw.center, draw.size - 8, true, true, 0.0f, draw.tint
+                );
+            };
         randomButton->onActivate =
-        [this] (const Point&) {
-            size_t areaIdx = game.rng.i(0, (int) (areaButtons.size() - 1));
-            areaButtons[areaIdx]->onActivate(Point());
-        };
+            [this] (const Point&) {
+                size_t areaIdx = game.rng.i(0, (int) (areaButtons.size() - 1));
+                areaButtons[areaIdx]->onActivate(Point());
+            };
         randomButton->onGetTooltip =
-        [] () { return "Pick a random area."; };
+            [] () { return "Pick a random area."; };
         gui.addItem(randomButton, "random");
         
         if(areaType == AREA_TYPE_MISSION) {
@@ -663,43 +666,43 @@ void AreaMenu::initGuiMain() {
                 game.sysContent.fntStandard
             );
             viewToggleButton->onActivate =
-            [this, viewToggleButton] (const Point&) {
-                GuiItem* boxToShow = nullptr;
-                GuiItem* boxToHide = nullptr;
-                if(showMissionBriefing) {
-                    boxToShow = infoBox;
-                    boxToHide = briefingBox;
-                    showMissionBriefing = false;
-                    viewToggleButton->text = "Show mission briefing";
-                } else {
-                    boxToShow = briefingBox;
-                    boxToHide = infoBox;
-                    showMissionBriefing = true;
-                    viewToggleButton->text = "Show standard info";
-                }
-                boxToShow->visible = true;
-                boxToShow->responsive = true;
-                boxToHide->visible = false;
-                boxToHide->responsive = false;
-                animateInfoAndBriefing();
-            };
+                [this, viewToggleButton] (const Point&) {
+                    GuiItem* boxToShow = nullptr;
+                    GuiItem* boxToHide = nullptr;
+                    if(showMissionBriefing) {
+                        boxToShow = infoBox;
+                        boxToHide = briefingBox;
+                        showMissionBriefing = false;
+                        viewToggleButton->text = "Show mission briefing";
+                    } else {
+                        boxToShow = briefingBox;
+                        boxToHide = infoBox;
+                        showMissionBriefing = true;
+                        viewToggleButton->text = "Show standard info";
+                    }
+                    boxToShow->visible = true;
+                    boxToShow->responsive = true;
+                    boxToHide->visible = false;
+                    boxToHide->responsive = false;
+                    animateInfoAndBriefing();
+                };
             viewToggleButton->onGetTooltip =
-            [] () {
-                return
-                    "Toggles between showing basic area info"
-                    "and mission briefing info.";
-            };
+                [] () {
+                    return
+                        "Toggles between showing basic area info"
+                        "and mission briefing info.";
+                };
             gui.addItem(viewToggleButton, "view_toggle");
             
             //Briefing box item.
             briefingBox = new GuiItem();
             briefingBox->onDraw =
-            [] (const DrawInfo & draw) {
-                drawTexturedBox(
-                    draw.center, draw.size, game.sysContent.bmpFrameBox,
-                    tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-                );
-            };
+                [] (const DrawInfo & draw) {
+                    drawTexturedBox(
+                        draw.center, draw.size, game.sysContent.bmpFrameBox,
+                        tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+                    );
+                };
             gui.addItem(briefingBox, "briefing_box");
             
         }

@@ -34,7 +34,7 @@ using std::string;
 using std::vector;
 
 
-typedef vector<std::pair<size_t, string> > AnimConversionVector;
+typedef vector<std::pair<size_t, string>> AnimConversionVector;
 
 namespace MOB_TYPE {
 extern const size_t ANIM_IDLING;
@@ -297,7 +297,7 @@ public:
     
     //List of sounds it can play.
     vector<Sound> sounds;
-
+    
     //If it can fade out to let the player peek underneath, this specifies
     //the final alpha value [0 - 1]. If 1, the effect is disabled.
     float peekUnderneathAlpha = 1.0f;

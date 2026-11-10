@@ -60,7 +60,8 @@ float ease(float n, EASE_METHOD method) {
             (float)
             (pow(2 * n, 2) * ((mag2 + 1.0f) * 2 * n - mag2)) / 2 :
             (float)
-            (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) / 2;
+            (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) /
+            2;
             
     } case EASE_METHOD_IN_ELASTIC: {
         const float mag = TAU / 3;

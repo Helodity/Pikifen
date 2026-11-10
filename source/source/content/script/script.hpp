@@ -128,8 +128,8 @@ public:
  */
 struct ScriptExecutionAuxData {
 
-    public:
-    
+public:
+
     //--- Public members ---
     
     //Consecutive count of actions ran in a row. Used to detect infinite loops.

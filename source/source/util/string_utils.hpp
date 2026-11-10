@@ -100,7 +100,6 @@ string trimWithEllipsis(const string& s, size_t size);
 string wordWrap(const string& s, size_t nCharsPerLine, size_t indent = 0);
 
 
-
 /**
  * @brief Joins a list of strings together into one final string,
  * using a delimiter between them.

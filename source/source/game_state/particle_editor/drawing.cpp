@@ -101,12 +101,12 @@ void ParticleEditor::drawCanvas() {
     
     sort(
         components.begin(), components.end(),
-    [](const WorldComponent & c1, const WorldComponent & c2) -> bool {
-        if(c1.z == c2.z) {
-            return c1.idx < c2.idx;
+        [](const WorldComponent & c1, const WorldComponent & c2) -> bool {
+            if(c1.z == c2.z) {
+                return c1.idx < c2.idx;
+            }
+            return c1.z < c2.z;
         }
-        return c1.z < c2.z;
-    }
     );
     forIdx(c, components) {
         WorldComponent* cPtr = &components[c];

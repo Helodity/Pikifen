@@ -70,7 +70,7 @@ public:
     //Does it bury Pikmin?
     bool buriesPikmin = false;
     
-
+    
     //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);

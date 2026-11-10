@@ -409,24 +409,25 @@ bool MakerToolRunners::newReminder(
         "\n\n\n\n\n\n";
     game.modal.back = "Cancel";
     game.modal.onBack =
-    [] () {
-        game.controls.ignoreMenuCloseActions();
-        game.console.write(LOG_LEVEL_INFO, "Canceled reminder.", 5.0f);
-    };
+        [] () {
+            game.controls.ignoreMenuCloseActions();
+            game.console.write(LOG_LEVEL_INFO, "Canceled reminder.", 5.0f);
+        };
     game.modal.extraButtons.push_back(
-    ModalGuiManager::Button {
+        ModalGuiManager::Button {
         .text = "Create",
         .tooltip = "Create the reminder.",
-        .onActivate = [mgr] (const Point&) {
-            AreaMakerReminder newReminder;
-            newReminder.center = mgr.toolStartCursor;
-            newReminder.text = game.modal.textInput.getString();
-            game.curArea->reminders.push_back(newReminder);
-            game.content.areas.saveAreaReminders(game.curArea);
-            game.modal.close();
-            game.controls.ignoreMenuCloseActions();
-            game.console.write(LOG_LEVEL_INFO, "Created reminder!", 5.0f);
-        }
+        .onActivate =
+            [mgr] (const Point&) {
+                AreaMakerReminder newReminder;
+                newReminder.center = mgr.toolStartCursor;
+                newReminder.text = game.modal.textInput.getString();
+                game.curArea->reminders.push_back(newReminder);
+                game.content.areas.saveAreaReminders(game.curArea);
+                game.modal.close();
+                game.controls.ignoreMenuCloseActions();
+                game.console.write(LOG_LEVEL_INFO, "Created reminder!", 5.0f);
+            }
     }
     );
     game.modal.defaultFocusButtonIdx = 1;
@@ -693,7 +694,8 @@ unsigned char MakerTools::getMakerToolSettingIdx() const {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
+bool MakerTools::handleGameplayPlayerAction(const Inpution::Action&
+    action) {
     bool isGameplayToolAction =
         game.controls.getActionTypeById(
             (PLAYER_ACTION_TYPE) action.actionTypeId

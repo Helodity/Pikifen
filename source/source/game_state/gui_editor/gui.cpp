@@ -57,7 +57,7 @@ void GuiEditor::openLoadDialog() {
         std::bind(&GuiEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&GuiEditor::closeLoadDialog, this);
+            std::bind(&GuiEditor::closeLoadDialog, this);
 }
 
 
@@ -72,12 +72,12 @@ void GuiEditor::openNewDialog() {
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
-        newDialog.pack.clear();
-        newDialog.internalName.clear();
-        newDialog.problem.clear();
-        newDialog.defPath.clear();
-        newDialog.mustUpdate = true;
-    };
+                                        newDialog.pack.clear();
+                                        newDialog.internalName.clear();
+                                        newDialog.problem.clear();
+                                        newDialog.defPath.clear();
+                                        newDialog.mustUpdate = true;
+                                    };
 }
 
 
@@ -90,7 +90,7 @@ void GuiEditor::openOptionsDialog() {
         std::bind(&GuiEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&GuiEditor::closeOptionsDialog, this);
+            std::bind(&GuiEditor::closeOptionsDialog, this);
 }
 
 
@@ -250,16 +250,16 @@ void GuiEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.guiEd.history,
-    [this](const string& path) -> string {
-        return path;
-    },
-    [this](const string& path) {
-        closeTopDialog();
-        loadGuiDefFile(path, true);
-    },
-    [this](const string& path) {
-        return getFileTooltip(path);
-    }
+        [this](const string & path) -> string {
+            return path;
+        },
+        [this](const string & path) {
+            closeTopDialog();
+            loadGuiDefFile(path, true);
+        },
+        [this](const string & path) {
+            return getFileTooltip(path);
+        }
     );
     
     //New node.
@@ -342,10 +342,10 @@ void GuiEditor::processGuiDialogNew() {
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
         auto reallyCreate = [this] () {
-            createGuiDef(string(newDialog.internalName), newDialog.pack);
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-        };
+                                createGuiDef(string(newDialog.internalName), newDialog.pack);
+                                closeTopDialog();
+                                closeTopDialog(); //Close the load dialog.
+                            };
         
         if(
             newDialog.pack == FOLDER_NAMES::BASE_PACK &&
@@ -785,23 +785,23 @@ void GuiEditor::processGuiPanelCustomItem() {
         //Choose the image button.
         if(ImGui::Button("Choose image...")) {
             openBitmapDialog(
-            [this, curItemPtr] (const string& bmp) {
-                if(bmp != curItemPtr->bitmapName) {
-                    //New image, delete the old one.
-                    if(curItemPtr->bitmap != game.bmpError) {
-                        game.content.bitmaps.list.free(
-                            curItemPtr->bitmapName
-                        );
+                [this, curItemPtr] (const string & bmp) {
+                    if(bmp != curItemPtr->bitmapName) {
+                        //New image, delete the old one.
+                        if(curItemPtr->bitmap != game.bmpError) {
+                            game.content.bitmaps.list.free(
+                                curItemPtr->bitmapName
+                            );
+                        }
+                        curItemPtr->bitmapName = bmp;
+                        curItemPtr->bitmap =
+                            game.content.bitmaps.list.get(
+                                curItemPtr->bitmapName, nullptr, false
+                            );
+                        changesMgr.markAsChanged();
                     }
-                    curItemPtr->bitmapName = bmp;
-                    curItemPtr->bitmap =
-                        game.content.bitmaps.list.get(
-                            curItemPtr->bitmapName, nullptr, false
-                        );
-                    changesMgr.markAsChanged();
+                    setStatus("Picked an image successfully.");
                 }
-                setStatus("Picked an image successfully.");
-            }
             );
         }
         setTooltip(
@@ -1078,7 +1078,8 @@ void GuiEditor::processGuiPanelItem() {
     }
     
     //Bottom-right coordinates values.
-    if(ImGui::DragFloat2("Bottom-right", (float*) &curItemCorners.br, 0.10f)) {
+    if(ImGui::DragFloat2("Bottom-right", (float*) &curItemCorners.br,
+        0.10f)) {
         updateFromCorners = true;
     }
     

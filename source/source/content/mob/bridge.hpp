@@ -32,7 +32,7 @@ extern const float STEP_HEIGHT;
  * existing ones.
  */
 class Bridge : public Mob {
-    
+
 public:
 
     //--- Public members ---
@@ -49,7 +49,7 @@ public:
     Point getStartPoint();
     void readScriptVars(const ScriptVarManager& varsMgr) override;
     void setup();
-
+    
 private:
 
     //--- Private members ---

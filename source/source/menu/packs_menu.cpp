@@ -122,14 +122,14 @@ void PacksMenu::initGuiMain() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
-        game.options.packs.order = packOrder;
-        game.options.packs.disabled = packsDisabled;
-        saveOptions();
-        leave();
-    };
+        [this] (const Point&) {
+            game.options.packs.order = packOrder;
+            game.options.packs.disabled = packsDisabled;
+            saveOptions();
+            leave();
+        };
     gui.backItem->onGetTooltip =
-    [] () { return "Return to the previous menu."; };
+        [] () { return "Return to the previous menu."; };
     gui.addItem(gui.backItem, "back");
     
     //Back input icon.
@@ -153,7 +153,7 @@ void PacksMenu::initGuiMain() {
     baseBullet->ratioRect.size =
         Point(0.70f, ITEM_HEIGHT);
     baseBullet->onFocused =
-    [this] () { changeInfo(-1); };
+        [this] () { changeInfo(-1); };
     packsList->addChild(baseBullet);
     gui.addItem(baseBullet);
     
@@ -183,25 +183,25 @@ void PacksMenu::initGuiMain() {
         check->ratioRect.center = Point(0.78f, rowCenterY);
         check->ratioRect.size = Point(0.08f, ITEM_HEIGHT);
         check->onActivate =
-        [p, check, this] (const Point & pos) {
-            check->defActivateCode();
-            if(check->value) {
-                packsDisabled.erase(
-                    std::find(
-                        packsDisabled.begin(), packsDisabled.end(),
-                        packOrder[p]
-                    )
-                );
-            } else {
-                packsDisabled.push_back(packOrder[p]);
-            }
-            triggerRestartWarning();
-        };
+            [p, check, this] (const Point & pos) {
+                check->defActivateCode();
+                if(check->value) {
+                    packsDisabled.erase(
+                        std::find(
+                            packsDisabled.begin(), packsDisabled.end(),
+                            packOrder[p]
+                        )
+                    );
+                } else {
+                    packsDisabled.push_back(packOrder[p]);
+                }
+                triggerRestartWarning();
+            };
         check->onFocused = [p, this] () { changeInfo((int) p); };
         check->onGetTooltip =
-        [] () {
-            return "Enable or disable this pack.";
-        };
+            [] () {
+                return "Enable or disable this pack.";
+            };
         packsList->addChild(check);
         gui.addItem(check);
         packChecks.push_back(check);
@@ -214,32 +214,32 @@ void PacksMenu::initGuiMain() {
             upButton->ratioRect.center = Point(0.87f, rowCenterY);
             upButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
             upButton->onDraw =
-            [upButton] (const DrawInfo & draw) {
-                upButton->defDrawCode(draw);
-                drawBitmapInBox(
-                    game.sysContent.bmpArrowUp, draw.center,
-                    draw.size * 0.80f, true, true, 0.0f, draw.tint
-                );
-            };
+                [upButton] (const DrawInfo & draw) {
+                    upButton->defDrawCode(draw);
+                    drawBitmapInBox(
+                        game.sysContent.bmpArrowUp, draw.center,
+                        draw.size * 0.80f, true, true, 0.0f, draw.tint
+                    );
+                };
             upButton->onActivate =
-            [p, this] (const Point&) {
-                std::iter_swap(
-                    packOrder.begin() + p, packOrder.begin() + (p - 1)
-                );
-                packBullets[p]->startJuiceAnimation(
-                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-                );
-                packBullets[p - 1]->startJuiceAnimation(
-                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-                );
-                triggerRestartWarning();
-                populatePacksList();
-            };
+                [p, this] (const Point&) {
+                    std::iter_swap(
+                        packOrder.begin() + p, packOrder.begin() + (p - 1)
+                    );
+                    packBullets[p]->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                    packBullets[p - 1]->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                    triggerRestartWarning();
+                    populatePacksList();
+                };
             upButton->onFocused = [p, this] () { changeInfo((int) p); };
             upButton->onGetTooltip =
-            [] () {
-                return "Move up on the list (make it be loaded earlier).";
-            };
+                [] () {
+                    return "Move up on the list (make it be loaded earlier).";
+                };
             packsList->addChild(upButton);
             gui.addItem(upButton);
         }
@@ -252,32 +252,32 @@ void PacksMenu::initGuiMain() {
             downButton->ratioRect.center = Point(0.95f, rowCenterY);
             downButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
             downButton->onDraw =
-            [downButton] (const DrawInfo & draw) {
-                downButton->defDrawCode(draw);
-                drawBitmapInBox(
-                    game.sysContent.bmpArrowDown, draw.center,
-                    draw.size * 0.80f, true, true, 0.0f, draw.tint
-                );
-            };
+                [downButton] (const DrawInfo & draw) {
+                    downButton->defDrawCode(draw);
+                    drawBitmapInBox(
+                        game.sysContent.bmpArrowDown, draw.center,
+                        draw.size * 0.80f, true, true, 0.0f, draw.tint
+                    );
+                };
             downButton->onActivate =
-            [p, this] (const Point&) {
-                std::iter_swap(
-                    packOrder.begin() + p, packOrder.begin() + (p + 1)
-                );
-                packBullets[p]->startJuiceAnimation(
-                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-                );
-                packBullets[p + 1]->startJuiceAnimation(
-                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-                );
-                triggerRestartWarning();
-                populatePacksList();
-            };
+                [p, this] (const Point&) {
+                    std::iter_swap(
+                        packOrder.begin() + p, packOrder.begin() + (p + 1)
+                    );
+                    packBullets[p]->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                    packBullets[p + 1]->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                    triggerRestartWarning();
+                    populatePacksList();
+                };
             downButton->onFocused = [p, this] () { changeInfo((int) p); };
             downButton->onGetTooltip =
-            [] () {
-                return "Move down on the list (make it be loaded later).";
-            };
+                [] () {
+                    return "Move down on the list (make it be loaded later).";
+                };
             packsList->addChild(downButton);
             gui.addItem(downButton);
         }
@@ -291,12 +291,12 @@ void PacksMenu::initGuiMain() {
     //Info box item.
     GuiItem* infoBox = new GuiItem();
     infoBox->onDraw =
-    [] (const DrawInfo & draw) {
-        drawTexturedBox(
-            draw.center, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-    };
+        [] (const DrawInfo & draw) {
+            drawTexturedBox(
+                draw.center, draw.size, game.sysContent.bmpFrameBox,
+                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            );
+        };
     gui.addItem(infoBox, "info_box");
     
     //Pack name text.
@@ -311,23 +311,23 @@ void PacksMenu::initGuiMain() {
     GuiItem* packThumbItem = new GuiItem();
     packThumbItem->forceSquare = true;
     packThumbItem->onDraw =
-    [this] (const DrawInfo & draw) {
-        //Align it to the top-right corner.
-        Point finalCenter(
-            (draw.center.x + draw.size.x / 2.0f) - draw.size.x / 2.0f,
-            (draw.center.y - draw.size.y / 2.0f) + draw.size.y / 2.0f
-        );
-        if(!curPackName.empty() && packThumbs[curPackName]) {
-            drawBitmap(
-                packThumbs[curPackName],
-                finalCenter, draw.size - 4.0f, 0.0f, draw.tint
+        [this] (const DrawInfo & draw) {
+            //Align it to the top-right corner.
+            Point finalCenter(
+                (draw.center.x + draw.size.x / 2.0f) - draw.size.x / 2.0f,
+                (draw.center.y - draw.size.y / 2.0f) + draw.size.y / 2.0f
             );
-        }
-        drawTexturedBox(
-            finalCenter, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-    };
+            if(!curPackName.empty() && packThumbs[curPackName]) {
+                drawBitmap(
+                    packThumbs[curPackName],
+                    finalCenter, draw.size - 4.0f, 0.0f, draw.tint
+                );
+            }
+            drawTexturedBox(
+                finalCenter, draw.size, game.sysContent.bmpFrameBox,
+                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            );
+        };
     gui.addItem(packThumbItem, "pack_thumbnail");
     
     //Pack description text.
@@ -373,15 +373,15 @@ void PacksMenu::initGuiMain() {
     ButtonGuiItem* openFolderButton =
         new ButtonGuiItem("Open folder", game.sysContent.fntStandard);
     openFolderButton->onActivate =
-    [this] (const Point&) {
-        openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
-    };
+        [this] (const Point&) {
+            openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
+        };
     openFolderButton->onGetTooltip =
-    [] () {
-        return
-            "Opens the packs folder on your operative system. "
-            "Place downloaded pack folders here!";
-    };
+        [] () {
+            return
+                "Opens the packs folder on your operative system. "
+                "Place downloaded pack folders here!";
+        };
     gui.addItem(openFolderButton, "open_folder");
     
     //Tooltip text.

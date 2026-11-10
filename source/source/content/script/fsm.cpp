@@ -63,9 +63,9 @@ vector<FsmStateDef*> EasyFsmCreator::finish() {
     commitState();
     sort(
         states.begin(), states.end(),
-    [] (const FsmStateDef * ms1, const FsmStateDef * ms2) -> bool {
-        return ms1->id < ms2->id;
-    }
+        [] (const FsmStateDef * ms1, const FsmStateDef * ms2) -> bool {
+            return ms1->id < ms2->id;
+        }
     );
     return states;
 }
@@ -328,7 +328,8 @@ bool FsmInst::setState(size_t newState, void* info1, void* info2) {
         runEvent(FSM_EV_ON_LEAVE, info1, info2, false);
     }
     
-    if(newState < script->scriptDef->fsm.states.size() && newState != INVALID) {
+    if(newState < script->scriptDef->fsm.states.size()
+        && newState != INVALID) {
         //Switch states.
         curState = script->scriptDef->fsm.states[newState];
         

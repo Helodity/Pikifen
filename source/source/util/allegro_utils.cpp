@@ -99,7 +99,7 @@ void al_fwrite(ALLEGRO_FILE* f, const string& s) {
  */
 string c2s(const ALLEGRO_COLOR& c) {
     return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
-           (c.a == 1 ? "" : " " + i2s(c.a * 255));
+        (c.a == 1 ? "" : " " + i2s(c.a * 255));
 }
 
 
@@ -250,9 +250,10 @@ vector<string> folderToVector(
     al_destroy_fs_entry(folder);
     
     
-    sort(v.begin(), v.end(), [] (const string& s1, const string& s2) -> bool {
-        return strToLower(s1) < strToLower(s2);
-    });
+    sort(v.begin(), v.end(), [] (const string & s1,
+        const string & s2) -> bool {
+                                 return strToLower(s1) < strToLower(s2);
+                             });
     
     if(outFolderFound) *outFolderFound = true;
     return v;

@@ -646,8 +646,8 @@ void Mob::tickRotationPhysics(
     
     angle +=
         sign(angleDiff) * std::min(
-            (double) (type->rotationSpeed * moveSpeedMult * deltaT),
-            (double) fabs(angleDiff)
+        (double) (type->rotationSpeed * moveSpeedMult * deltaT),
+        (double) fabs(angleDiff)
         );
         
     if(holder.m) {

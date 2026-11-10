@@ -39,7 +39,6 @@ enum PRECIPITATION_TYPE {
 };
 
 
-
 /**
  * @brief Weather information.
  *
@@ -57,13 +56,13 @@ public:
     //--- Public members ---
     
     //Daylight color table for specific times of day, in minutes.
-    vector<std::pair<int, ALLEGRO_COLOR> > daylight;
+    vector<std::pair<int, ALLEGRO_COLOR>> daylight;
     
     //Sun strength table for specific times of day, in minutes.
-    vector<std::pair<int, unsigned char> > sunStrength;
+    vector<std::pair<int, unsigned char>> sunStrength;
     
     //Blackout effect's strength table for specific times of day, in minutes.
-    vector<std::pair<int, unsigned char> > blackoutStrength;
+    vector<std::pair<int, unsigned char>> blackoutStrength;
     
     //Fog -- distance at which everything is still fully visible.
     float fogNear = 0.0f;
@@ -72,7 +71,7 @@ public:
     float fogFar = 0.0f;
     
     //Fog -- color and density at 100% fogginess. Values throughout the day.
-    vector<std::pair<int, ALLEGRO_COLOR> > fogColor;
+    vector<std::pair<int, ALLEGRO_COLOR>> fogColor;
     
     //Precipitation type, if any.
     PRECIPITATION_TYPE precipitationType = PRECIPITATION_TYPE_NONE;
@@ -82,9 +81,9 @@ public:
     
     Weather();
     Weather(
-        const string& n, const vector<std::pair<int, ALLEGRO_COLOR> >& dl,
-        const vector<std::pair<int, unsigned char> >& ss,
-        const vector<std::pair<int, unsigned char> >& bs,
+        const string& n, const vector<std::pair<int, ALLEGRO_COLOR>>& dl,
+        const vector<std::pair<int, unsigned char>>& ss,
+        const vector<std::pair<int, unsigned char>>& bs,
         const PRECIPITATION_TYPE pt
     );
     unsigned char getBlackoutStrength();
@@ -111,7 +110,7 @@ private:
      */
     template<typename T>
     bool getTableValues(
-        const vector<std::pair<int, T> >& table, int curTime,
+        const vector<std::pair<int, T>>& table, int curTime,
         float* ratio, T* value1, T* value2
     ) {
         if(table.empty()) {

@@ -262,7 +262,7 @@ public:
     size_t findBodyPart(const string& name) const;
     void calculateHitboxSpan();
     void createConversions(
-        const vector<std::pair<size_t, string> >& conversions,
+        const vector<std::pair<size_t, string>>& conversions,
         const DataNode* file
     );
     void deleteSprite(size_t idx);

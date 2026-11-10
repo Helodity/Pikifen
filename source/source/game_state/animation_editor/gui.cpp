@@ -84,7 +84,7 @@ void AnimationEditor::openLoadDialog() {
         std::bind(&AnimationEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&AnimationEditor::closeLoadDialog, this);
+            std::bind(&AnimationEditor::closeLoadDialog, this);
 }
 
 
@@ -98,15 +98,15 @@ void AnimationEditor::openNewDialog() {
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
-        newDialog.pack.clear();
-        newDialog.type = 0;
-        newDialog.customMobCat.clear();
-        newDialog.mobTypePtr = nullptr;
-        newDialog.internalName = "my_animation";
-        newDialog.lastCheckedAnimPath.clear();
-        newDialog.animPath.clear();
-        newDialog.animPathExists = false;
-    };
+                                        newDialog.pack.clear();
+                                        newDialog.type = 0;
+                                        newDialog.customMobCat.clear();
+                                        newDialog.mobTypePtr = nullptr;
+                                        newDialog.internalName = "my_animation";
+                                        newDialog.lastCheckedAnimPath.clear();
+                                        newDialog.animPath.clear();
+                                        newDialog.animPathExists = false;
+                                    };
 }
 
 
@@ -120,7 +120,7 @@ void AnimationEditor::openOptionsDialog() {
         std::bind(&AnimationEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
-        std::bind(&AnimationEditor::closeOptionsDialog, this);
+            std::bind(&AnimationEditor::closeOptionsDialog, this);
 }
 
 
@@ -292,16 +292,16 @@ void AnimationEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.animEd.history,
-    [this](const string& path) -> string {
-        return path;
-    },
-    [this](const string& path) {
-        closeTopDialog();
-        loadAnimDbFile(path, true);
-    },
-    [this](const string& path) {
-        return getFileTooltip(path);
-    }
+        [this](const string & path) -> string {
+            return path;
+        },
+        [this](const string & path) {
+            closeTopDialog();
+            loadAnimDbFile(path, true);
+        },
+        [this](const string & path) {
+            return getFileTooltip(path);
+        }
     );
     
     //New node.
@@ -445,10 +445,10 @@ void AnimationEditor::processGuiDialogNew() {
     if(hitCreateButton) {
         if(!problem.empty()) return;
         auto reallyCreate = [this] () {
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-            createAnimDb(newDialog.animPath);
-        };
+                                closeTopDialog();
+                                closeTopDialog(); //Close the load dialog.
+                                createAnimDb(newDialog.animPath);
+                            };
         
         if(
             newDialog.pack == FOLDER_NAMES::BASE_PACK &&
@@ -962,8 +962,8 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
     //Nav box start.
     processGuiNavBoxStart(
         "animation", "Animation", "", &curAnimIdx,
-    [this] () { return db.animations.size(); },
-    [this] () { return 1; }
+        [this] () { return db.animations.size(); },
+        [this] () { return 1; }
     );
     
     //Previous animation button.
@@ -1512,8 +1512,8 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
     //Nav box start.
     processGuiNavBoxStart(
         "frame", "Frame", "", &curAnimInst.curFrameIdx,
-    [this] () { return curAnimInst.curAnim->frames.size(); },
-    [this] () { return 1; }
+        [this] () { return curAnimInst.curAnim->frames.size(); },
+        [this] () { return 1; }
     );
     
     //Previous frame button.
@@ -1910,8 +1910,8 @@ void AnimationEditor::processGuiPanelSprite() {
     //Nav box start.
     processGuiNavBoxStart(
         "sprite", "Sprite", "", &curSpriteIdx,
-    [this] () { return db.sprites.size(); },
-    [this] () { return 1; }
+        [this] () { return db.sprites.size(); },
+        [this] () { return 1; }
     );
     
     //Previous sprite button.
@@ -2127,7 +2127,7 @@ void AnimationEditor::processGuiPanelSprite() {
         //Uses in animations menu.
         if(ImGui::BeginMenu("Uses in animations")) {
         
-            map<string, vector<size_t> > entries;
+            map<string, vector<size_t>> entries;
             forIdx(a, db.animations) {
                 Animation* aPtr = db.animations[a];
                 forIdx(f, aPtr->frames) {
@@ -2324,15 +2324,15 @@ void AnimationEditor::processGuiPanelSpriteBitmap() {
     ImGui::Spacer();
     if(ImGui::Button("Choose image...")) {
         openBitmapDialog(
-        [this] (const string& bmp) {
-            curSprite->setBitmap(
-                bmp, curSprite->bmpPos, curSprite->bmpSize
-            );
-            lastSpritesheetUsed = bmp;
-            centerCameraOnSpriteBitmap(true);
-            changesMgr.markAsChanged();
-            setStatus("Picked a spritesheet image successfully.");
-        }
+            [this] (const string & bmp) {
+                curSprite->setBitmap(
+                    bmp, curSprite->bmpPos, curSprite->bmpSize
+                );
+                lastSpritesheetUsed = bmp;
+                centerCameraOnSpriteBitmap(true);
+                changesMgr.markAsChanged();
+                setStatus("Picked a spritesheet image successfully.");
+            }
         );
     }
     setTooltip("Choose which spritesheet to use from the game's content.");
@@ -2449,8 +2449,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     size_t curHitboxIdx = hitboxSelection.getSingleItemIdx();
     processGuiNavBoxStart(
         "hitbox", "Hitbox", "Hitboxes", &curHitboxIdx,
-    [this] () { return curSprite->hitboxes.size(); },
-    [this] () { return 1; }
+        [this] () { return curSprite->hitboxes.size(); },
+        [this] () { return 1; }
     );
     
     //Previous hitbox button.
@@ -2555,7 +2555,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                         curSprite->hitboxes[curHitboxIdx].bodyPartIdx;
                     BodyPart* origBPPTr =
                         curSprite->hitboxes[curHitboxIdx].bodyPartPtr;
-                    curSprite->hitboxes[curHitboxIdx] = curSprite->hitboxes[h];
+                    curSprite->hitboxes[curHitboxIdx] =
+                        curSprite->hitboxes[h];
                     curSprite->hitboxes[curHitboxIdx].bodyPartName =
                         origBPName;
                     curSprite->hitboxes[curHitboxIdx].bodyPartIdx =
@@ -2681,7 +2682,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
         Hitbox* curHitbox = &curSprite->hitboxes[curHitboxIdx];
         
         //Hitbox center value.
-        if(ImGui::DragFloat2("Center", (float*) &curHitbox->center, 0.05f)) {
+        if(ImGui::DragFloat2("Center", (float*) &curHitbox->center,
+            0.05f)) {
             changesMgr.markAsChanged();
         }
         setTooltip(
@@ -2859,7 +2861,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             //Knockback strength value.
             if(
                 curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD ||
-                curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD_PROXIMITY ||
+                curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD_PROXIMITY
+                ||
                 curHitbox->knockbackType == KNOCKBACK_TYPE_DIRECTIONAL
             ) {
                 ImGui::SetNextItemWidth(128.0f);
@@ -2885,7 +2888,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             //Wither chance value.
             int witherChanceInt = curHitbox->witherChance;
             ImGui::SetNextItemWidth(128.0f);
-            if(ImGui::SliderInt("Wither chance", &witherChanceInt, 0, 100)) {
+            if(ImGui::SliderInt("Wither chance", &witherChanceInt, 0,
+                100)) {
                 changesMgr.markAsChanged();
                 curHitbox->witherChance = witherChanceInt;
             }

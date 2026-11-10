@@ -166,7 +166,8 @@ void ScriptActionRunners::addToString(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData& data) {
+void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& typeArg = data.args[0];
     
@@ -523,7 +524,8 @@ void ScriptActionRunners::followMobAsLeader(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
+void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& labelArg = data.args[0];
     
@@ -588,7 +590,8 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::followPathToAbsolute(ScriptActionInstRunData& data) {
+void ScriptActionRunners::followPathToAbsolute(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& xArg = data.args[0];
     const string& yArg = data.args[1];
@@ -756,7 +759,8 @@ void ScriptActionRunners::getAngleCwDiff(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
+void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& destVarArg = data.args[0];
     const string& angle1Arg = data.args[1];
@@ -771,7 +775,6 @@ void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, diff);
 }
-
 
 
 /**
@@ -912,7 +915,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             if(data.scriptVM->getRunnerMob()) {
                 result =
                     data.scriptVM->getRunnerMob()->getClosestHitbox(
-                        ((Mob*)(data.customData1))->center
+                    ((Mob*)(data.customData1))->center
                     )->bodyPartName;
             }
         }
@@ -952,7 +955,8 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_SCRIPT_MESSAGE: {
-        if(data.actionDef->parentEvent == FSM_EV_RECEIVE_SCRIPT_MESSAGE) {
+        if(data.actionDef->parentEvent ==
+            FSM_EV_RECEIVE_SCRIPT_MESSAGE) {
             result = *((string*)(data.customData1));
         }
         break;
@@ -976,7 +980,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             if(data.customData1 && data.scriptVM->getRunnerMob()) {
                 result =
                     ((Mob*)(data.customData1))->getClosestHitbox(
-                        data.scriptVM->getRunnerMob()->center
+                    data.scriptVM->getRunnerMob()->center
                     )->bodyPartName;
             }
         }
@@ -1077,7 +1081,8 @@ void ScriptActionRunners::getLeaderActivity(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::getLeaderPikminCount(ScriptActionInstRunData& data) {
+void ScriptActionRunners::getLeaderPikminCount(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& destVarArg = data.args[0];
     const string& targetArg = data.args[1];
@@ -1979,7 +1984,8 @@ void ScriptActionRunners::playSound(ScriptActionInstRunData& data) {
     //Main logic.
     size_t soundDataIdx = INVALID;
     forIdx(s, data.scriptVM->getRunnerMob()->type->sounds) {
-        if(data.scriptVM->getRunnerMob()->type->sounds[s].name == soundArg) {
+        if(data.scriptVM->getRunnerMob()->type->sounds[s].name ==
+            soundArg) {
             soundDataIdx = s;
             break;
         }
@@ -2193,7 +2199,8 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::sendMessageToAllMobs(ScriptActionInstRunData& data) {
+void ScriptActionRunners::sendMessageToAllMobs(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& msgArg = data.args[0];
     
@@ -2230,7 +2237,8 @@ void ScriptActionRunners::sendMessageToArea(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
+void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& msgArg = data.args[0];
     
@@ -2249,7 +2257,8 @@ void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
+void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& msgArg = data.args[0];
     
@@ -2279,7 +2288,8 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
+void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& distArg = data.args[0];
     const string& msgArg = data.args[1];
@@ -2382,7 +2392,8 @@ void ScriptActionRunners::setFarReach(ScriptActionInstRunData& data) {
     //Main logic.
     size_t reachIdx = INVALID;
     forIdx(r, data.scriptVM->getRunnerMob()->type->reaches) {
-        if(data.scriptVM->getRunnerMob()->type->reaches[r].name == reachArg) {
+        if(data.scriptVM->getRunnerMob()->type->reaches[r].name ==
+            reachArg) {
             reachIdx = r;
         }
     }
@@ -2671,7 +2682,8 @@ void ScriptActionRunners::setNearReach(ScriptActionInstRunData& data) {
     //Main logic.
     size_t reachIdx = INVALID;
     forIdx(r, data.scriptVM->getRunnerMob()->type->reaches) {
-        if(data.scriptVM->getRunnerMob()->type->reaches[r].name == reachArg) {
+        if(data.scriptVM->getRunnerMob()->type->reaches[r].name ==
+            reachArg) {
             reachIdx = r;
         }
     }
@@ -2745,7 +2757,8 @@ void ScriptActionRunners::setSectorScroll(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::setShadowVisibility(ScriptActionInstRunData& data) {
+void ScriptActionRunners::setShadowVisibility(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& valueArg = data.args[0];
     
@@ -2897,7 +2910,8 @@ void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::showCutsceneMessage(ScriptActionInstRunData& data) {
+void ScriptActionRunners::showCutsceneMessage(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     string textArg = vectorTailToString(data.args, 0);
     
@@ -2911,7 +2925,8 @@ void ScriptActionRunners::showCutsceneMessage(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData& data) {
+void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& varArg = data.args[0];
     
@@ -2952,7 +2967,8 @@ void ScriptActionRunners::spawn(ScriptActionInstRunData& data) {
     //Main logic.
     size_t spawnIdx = INVALID;
     forIdx(s, data.scriptVM->getRunnerMob()->type->spawns) {
-        if(data.scriptVM->getRunnerMob()->type->spawns[s].name == spawnArg) {
+        if(data.scriptVM->getRunnerMob()->type->spawns[s].name ==
+            spawnArg) {
             spawnIdx = s;
             break;
         }
@@ -3021,19 +3037,24 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
         return;
     }
     
-    for(size_t l = 1; l < data.scriptVM->getRunnerMob()->links.size(); l++) {
+    for(size_t l = 1; l < data.scriptVM->getRunnerMob()->links.size();
+        l++) {
         if(!data.scriptVM->getRunnerMob()->links[l]) continue;
         
         switch(type) {
         case SCRIPT_ACTION_STABILIZE_Z_TYPE_HIGHEST: {
-            if(data.scriptVM->getRunnerMob()->links[l]->bottomZ > bestMatchZ) {
-                bestMatchZ = data.scriptVM->getRunnerMob()->links[l]->bottomZ;
+            if(data.scriptVM->getRunnerMob()->links[l]->bottomZ >
+                bestMatchZ) {
+                bestMatchZ =
+                    data.scriptVM->getRunnerMob()->links[l]->bottomZ;
             }
             break;
             
         } case SCRIPT_ACTION_STABILIZE_Z_TYPE_LOWEST: {
-            if(data.scriptVM->getRunnerMob()->links[l]->bottomZ < bestMatchZ) {
-                bestMatchZ = data.scriptVM->getRunnerMob()->links[l]->bottomZ;
+            if(data.scriptVM->getRunnerMob()->links[l]->bottomZ <
+                bestMatchZ) {
+                bestMatchZ =
+                    data.scriptVM->getRunnerMob()->links[l]->bottomZ;
             }
             break;
             
@@ -3258,7 +3279,8 @@ void ScriptActionRunners::swallowAll(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::teleportToAbsolute(ScriptActionInstRunData& data) {
+void ScriptActionRunners::teleportToAbsolute(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& xArg = data.args[0];
     const string& yArg = data.args[1];
@@ -3277,7 +3299,8 @@ void ScriptActionRunners::teleportToAbsolute(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::teleportToRelative(ScriptActionInstRunData& data) {
+void ScriptActionRunners::teleportToRelative(ScriptActionInstRunData&
+    data) {
     //Get the arguments.
     const string& xArg = data.args[0];
     const string& yArg = data.args[1];
@@ -3460,7 +3483,7 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
     } case SCRIPT_ACTION_TURN_TYPE_HOME: {
         data.scriptVM->getRunnerMob()->face(
             getAngle(data.scriptVM->getRunnerMob()->center,
-                     data.scriptVM->getRunnerMob()->home),
+            data.scriptVM->getRunnerMob()->home),
             nullptr
         );
         break;

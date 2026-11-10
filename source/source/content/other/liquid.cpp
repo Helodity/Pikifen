@@ -75,7 +75,8 @@ Liquid::Liquid(Hazard* hazard, const vector<Sector*>& sectors) :
             if(!sectors[s]->varsStr.empty()) {
                 ScriptVarManager vars(sectors[s]->varsStr);
                 size_t value = 0;
-                if(vars.getValue(LIQUID::FREEZING_POINT_SECTOR_VAR, value)) {
+                if(vars.getValue(LIQUID::FREEZING_POINT_SECTOR_VAR,
+                    value)) {
                     freezingPointFromVars = true;
                     highestVarValue = std::max(highestVarValue, value);
                 }
@@ -494,7 +495,8 @@ void Liquid::updateChill(
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void LiquidType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
+void LiquidType::loadFromDataNode(DataNode* node,
+    CONTENT_LOAD_LEVEL level) {
     //Content metadata.
     loadMetadataFromDataNode(node);
     

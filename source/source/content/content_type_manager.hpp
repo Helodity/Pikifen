@@ -72,7 +72,7 @@ public:
     //--- Public members ---
     
     //List of loaded areas.
-    vector<vector<Area*> > list;
+    vector<vector<Area*>> list;
     
     //Manifests, by area type.
     vector<map<string, ContentManifest>> manifests;
@@ -332,7 +332,6 @@ public:
 };
 
 
-
 /**
  * @brief Responsible for loading and storing game content
  * mob animations into memory.
@@ -344,10 +343,10 @@ public:
     //--- Public members ---
     
     //List of animations, by category.
-    vector<map<string, AnimationDatabase> > list;
+    vector<map<string, AnimationDatabase>> list;
     
     //Manifests, by category.
-    vector<map<string, ContentManifest> > manifests;
+    vector<map<string, ContentManifest>> manifests;
     
     
     //--- Public function declarations ---
@@ -371,7 +370,7 @@ public:
 private:
 
     //--- Private function declarations ---
-
+    
     void fillCatManifestsFromPack(
         MobCategory* category, const string& packName
     );
@@ -397,7 +396,7 @@ public:
     MobTypeLists list;
     
     //Manifests, by category.
-    vector<map<string, ContentManifest> > manifests;
+    vector<map<string, ContentManifest>> manifests;
     
     
     //--- Public function declarations ---
@@ -420,7 +419,7 @@ public:
 private:
 
     //--- Private function declarations ---
-
+    
     void loadMobTypesOfCategory(
         MobCategory* category, CONTENT_LOAD_LEVEL level
     );
@@ -465,7 +464,7 @@ public:
 private:
 
     //--- Private function declarations ---
-
+    
     void loadGenerator(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -505,7 +504,7 @@ public:
 private:
 
     //--- Private function declarations ---
-
+    
     void loadSong(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -617,7 +616,7 @@ public:
 private:
 
     //--- Private function declarations ---
-
+    
     void loadSpikeDamageType(
         ContentManifest* manifest, CONTENT_LOAD_LEVEL level
     );
@@ -659,7 +658,7 @@ public:
 private:
 
     //--- Private function declarations ---
-
+    
     void loadSprayType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -699,7 +698,7 @@ public:
 private:
 
     //--- Private function declarations ---
-
+    
     void loadStatusType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };

@@ -88,8 +88,8 @@ void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
  */
 void AnnexScreen::leave() {
     game.fadeMgr.startFade(false, [] () {
-        game.changeState(game.states.titleScreen);
-    });
+                                      game.changeState(game.states.titleScreen);
+                                  });
 }
 
 
@@ -106,11 +106,11 @@ void AnnexScreen::load() {
     //Game content.
     game.content.reloadPacks();
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
         CONTENT_TYPE_AREA,
     },
-    CONTENT_LOAD_LEVEL_FULL
+        CONTENT_LOAD_LEVEL_FULL
     );
     
     //Load the intended concrete menu.
@@ -119,16 +119,16 @@ void AnnexScreen::load() {
         AreaMenu* areaMenu = new AreaMenu();
         areaMenu->areaType = areaMenuAreaType;
         areaMenu->leaveCallback =
-        [this] () {
-            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_PLAY;
-            leave();
-        };
+            [this] () {
+                game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_PLAY;
+                leave();
+            };
         curMenu = areaMenu;
         break;
         
     } case ANNEX_SCREEN_MENU_HELP: {
         game.content.loadAll(
-        vector<CONTENT_TYPE> {
+            vector<CONTENT_TYPE> {
             CONTENT_TYPE_PARTICLE_GEN,
             CONTENT_TYPE_GLOBAL_ANIMATION,
             CONTENT_TYPE_STATUS_TYPE,
@@ -138,56 +138,56 @@ void AnnexScreen::load() {
             CONTENT_TYPE_WEATHER_CONDITION,
             CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
         },
-        CONTENT_LOAD_LEVEL_BASIC
+            CONTENT_LOAD_LEVEL_BASIC
         );
         game.content.loadAll(
-        vector<CONTENT_TYPE> {
+            vector<CONTENT_TYPE> {
             CONTENT_TYPE_MOB_ANIMATION,
             CONTENT_TYPE_MOB_TYPE,
         },
-        CONTENT_LOAD_LEVEL_FULL
+            CONTENT_LOAD_LEVEL_FULL
         );
         HelpMenu* helpMenu = new HelpMenu();
         helpMenu->unloadCallback =
-        [this] () {
-            game.content.unloadAll(
-            vector<CONTENT_TYPE> {
-                CONTENT_TYPE_MOB_ANIMATION,
-                CONTENT_TYPE_MOB_TYPE,
-                CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
-                CONTENT_TYPE_WEATHER_CONDITION,
-                CONTENT_TYPE_HAZARD,
-                CONTENT_TYPE_SPRAY_TYPE,
-                CONTENT_TYPE_LIQUID,
-                CONTENT_TYPE_STATUS_TYPE,
-                CONTENT_TYPE_GLOBAL_ANIMATION,
-                CONTENT_TYPE_PARTICLE_GEN,
-            }
-            );
-        };
+            [this] () {
+                game.content.unloadAll(
+                    vector<CONTENT_TYPE> {
+                    CONTENT_TYPE_MOB_ANIMATION,
+                    CONTENT_TYPE_MOB_TYPE,
+                    CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+                    CONTENT_TYPE_WEATHER_CONDITION,
+                    CONTENT_TYPE_HAZARD,
+                    CONTENT_TYPE_SPRAY_TYPE,
+                    CONTENT_TYPE_LIQUID,
+                    CONTENT_TYPE_STATUS_TYPE,
+                    CONTENT_TYPE_GLOBAL_ANIMATION,
+                    CONTENT_TYPE_PARTICLE_GEN,
+                }
+                );
+            };
         helpMenu->leaveCallback =
-        [this] () {
-            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
-            leave();
-        };
+            [this] () {
+                game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
+                leave();
+            };
         curMenu = helpMenu;
         break;
         
     } case ANNEX_SCREEN_MENU_OPTIONS: {
         OptionsMenu* optionsMenu = new OptionsMenu();
         optionsMenu->leaveCallback = [this] () {
-            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
-            leave();
-        };
+                                         game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
+                                         leave();
+                                     };
         curMenu = optionsMenu;
         break;
         
     } case ANNEX_SCREEN_MENU_STATS: {
         StatsMenu* statsMenu = new StatsMenu();
         statsMenu->leaveCallback = [this] () {
-            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
-            leave();
-        };
+                                       game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
+                                       leave();
+                                   };
         curMenu = statsMenu;
         break;
         
@@ -220,7 +220,7 @@ void AnnexScreen::unload() {
     
     //Game content.
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
         CONTENT_TYPE_GUI,
     }

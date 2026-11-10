@@ -56,8 +56,8 @@ Enemy::Enemy(const Point& center, EnemyType* type, float angle) :
     isBoss(false) {
     
     reviveTimer.onEnd =
-    [this] () { this->revive(); };
-    
+        [this] () { this->revive(); };
+        
 }
 
 
@@ -163,11 +163,11 @@ int Enemy::getMissionPoints(bool* applicableInThisMission) const {
     
     if(applicableInThisMission) {
         const auto checkMetric = [] (MISSION_METRIC metric) {
-            return
-                metric == MISSION_METRIC_OBJECT_COLLECTION_PTS ||
-                metric == MISSION_METRIC_ENEMY_COLLECTION_PTS ||
-                metric == MISSION_METRIC_ENEMY_DEFEAT_PTS;
-        };
+                                     return
+                                         metric == MISSION_METRIC_OBJECT_COLLECTION_PTS ||
+                                         metric == MISSION_METRIC_ENEMY_COLLECTION_PTS ||
+                                         metric == MISSION_METRIC_ENEMY_DEFEAT_PTS;
+                                 };
         
         *applicableInThisMission = false;
         

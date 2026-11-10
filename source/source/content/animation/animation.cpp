@@ -253,7 +253,7 @@ void AnimationDatabase::calculateHitboxSpan() {
  * report errors.
  */
 void AnimationDatabase::createConversions(
-    const vector<std::pair<size_t, string> >& conversions,
+    const vector<std::pair<size_t, string>>& conversions,
     const DataNode* file
 ) {
     preNamedConversions.clear();
@@ -751,15 +751,15 @@ void AnimationDatabase::saveToDataNode(
 void AnimationDatabase::sortAlphabetically() {
     sort(
         animations.begin(), animations.end(),
-    [] (const Animation * a1, const Animation * a2) {
-        return a1->name < a2->name;
-    }
+        [] (const Animation * a1, const Animation * a2) {
+            return a1->name < a2->name;
+        }
     );
     sort(
         sprites.begin(), sprites.end(),
-    [] (const Sprite * s1, const Sprite * s2) {
-        return s1->name < s2->name;
-    }
+        [] (const Sprite * s1, const Sprite * s2) {
+            return s1->name < s2->name;
+        }
     );
     
     forIdx(a, animations) {
@@ -977,7 +977,8 @@ bool AnimationInstance::tick(
     //This is a while instead of an if because if the framerate is too low
     //and the next frame's duration is too short, it could be that a tick
     //goes over an entire frame, and lands 2 or more frames ahead.
-    while(curFrameTime > curFramePtr->duration && curFramePtr->duration != 0) {
+    while(curFrameTime > curFramePtr->duration
+        && curFramePtr->duration != 0) {
         curFrameTime = curFrameTime - curFramePtr->duration;
         bool reachedEndNow = false;
         curFrameIdx = getNextFrameIdx(&reachedEndNow);

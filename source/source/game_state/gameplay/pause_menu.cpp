@@ -266,13 +266,13 @@ ButtonGuiItem* PauseMenu::addNewPageItem(
         game.config.guiColors.pageChange
     );
     newButton->onActivate =
-    [this, curGui, targetPage, left] (const Point&) {
-        switchPage(curGui, targetPage, left);
-    };
+        [this, curGui, targetPage, left] (const Point&) {
+            switchPage(curGui, targetPage, left);
+        };
     newButton->onGetTooltip =
-    [tooltipName] () {
-        return "Go to the pause menu's " + tooltipName + " page.";
-    };
+        [tooltipName] () {
+            return "Go to the pause menu's " + tooltipName + " page.";
+        };
     
     return newButton;
 }
@@ -293,9 +293,11 @@ void PauseMenu::addNewPageItems(
             pages.begin(),
             std::find(pages.begin(), pages.end(), curPage)
         );
-    size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1, (int) pages.size());
-    size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1, (int) pages.size());
-    
+    size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1,
+        (int) pages.size());
+    size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1,
+        (int) pages.size());
+        
     //Left page button.
     ButtonGuiItem* leftPageButton =
         addNewPageItem(pages[leftPageIdx], true, curGui);
@@ -304,13 +306,13 @@ void PauseMenu::addNewPageItems(
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
     leftPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     curGui->addItem(leftPageInput, "left_page_input");
     
     //Right page button.
@@ -321,13 +323,13 @@ void PauseMenu::addNewPageItems(
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
     rightPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     curGui->addItem(rightPageInput, "right_page_input");
     
     leftPageButtons[curGui] = leftPageButton;
@@ -389,12 +391,12 @@ void PauseMenu::addNewPikminStatusLine(
         //Pikmin type.
         GuiItem* typeItem = new GuiItem();
         typeItem->onDraw =
-        [pikType] (const DrawInfo & draw) {
-            drawBitmapInBox(
-                pikType->bmpIcon, draw.center, draw.size, true, true,
-                0.0f, draw.tint
-            );
-        };
+            [pikType] (const DrawInfo & draw) {
+                drawBitmapInBox(
+                    pikType->bmpIcon, draw.center, draw.size, true, true,
+                    0.0f, draw.tint
+                );
+            };
         typeItem->ratioRect.center =
             Point(
                 firstX + itemXInterval * 0,
@@ -431,9 +433,9 @@ void PauseMenu::addNewPikminStatusLine(
     groupTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         groupTextItem->onGetTooltip =
-        [tooltipStart] () {
-            return tooltipStart + "in your active leader's group.";
-        };
+            [tooltipStart] () {
+                return tooltipStart + "in your active leader's group.";
+            };
     }
     if(groupText == "0") {
         groupTextItem->color = changeAlpha(groupTextItem->color, 64);
@@ -453,9 +455,9 @@ void PauseMenu::addNewPikminStatusLine(
     idleTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         idleTextItem->onGetTooltip =
-        [tooltipStart] () {
-            return tooltipStart + "idling on the field.";
-        };
+            [tooltipStart] () {
+                return tooltipStart + "idling on the field.";
+            };
     }
     if(idleText == "0") {
         idleTextItem->color = changeAlpha(idleTextItem->color, 64);
@@ -475,9 +477,9 @@ void PauseMenu::addNewPikminStatusLine(
     fieldTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         fieldTextItem->onGetTooltip =
-        [tooltipStart] () {
-            return tooltipStart + "out on the field.";
-        };
+            [tooltipStart] () {
+                return tooltipStart + "out on the field.";
+            };
     }
     if(fieldText == "0") {
         fieldTextItem->color = changeAlpha(fieldTextItem->color, 64);
@@ -497,9 +499,9 @@ void PauseMenu::addNewPikminStatusLine(
     onionTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         onionTextItem->onGetTooltip =
-        [tooltipStart] () {
-            return tooltipStart + "inside Onions.";
-        };
+            [tooltipStart] () {
+                return tooltipStart + "inside Onions.";
+            };
     }
     if(onionText == "0") {
         onionTextItem->color = changeAlpha(onionTextItem->color, 64);
@@ -519,9 +521,9 @@ void PauseMenu::addNewPikminStatusLine(
     totalTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         totalTextItem->onGetTooltip =
-        [tooltipStart] () {
-            return tooltipStart + "you have.";
-        };
+            [tooltipStart] () {
+                return tooltipStart + "you have.";
+            };
     }
     if(totalText == "0") {
         totalTextItem->color = changeAlpha(totalTextItem->color, 64);
@@ -535,13 +537,13 @@ void PauseMenu::addNewPikminStatusLine(
         Point(firstX + itemXInterval * 5.5f, itemY);
     separatorItem->ratioRect.size = Point(1.0f, itemHeight);
     separatorItem->onDraw =
-    [] (const DrawInfo & draw) {
-        al_draw_line(
-            draw.center.x, draw.center.y - draw.size.y / 2.0f,
-            draw.center.x, draw.center.y + draw.size.y / 2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint), 5.0f
-        );
-    };
+        [] (const DrawInfo & draw) {
+            al_draw_line(
+                draw.center.x, draw.center.y - draw.size.y / 2.0f,
+                draw.center.x, draw.center.y + draw.size.y / 2.0f,
+                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint), 5.0f
+            );
+        };
     list->addChild(separatorItem);
     statusGui.addItem(separatorItem);
     
@@ -559,9 +561,9 @@ void PauseMenu::addNewPikminStatusLine(
     newTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         newTextItem->onGetTooltip =
-        [tooltipStart] () {
-            return tooltipStart + "born today.";
-        };
+            [tooltipStart] () {
+                return tooltipStart + "born today.";
+            };
     }
     if(newText == "0") {
         newTextItem->color = changeAlpha(newTextItem->color, 64);
@@ -583,9 +585,9 @@ void PauseMenu::addNewPikminStatusLine(
     lostTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         lostTextItem->onGetTooltip =
-        [tooltipStart] () {
-            return tooltipStart + "lost today.";
-        };
+            [tooltipStart] () {
+                return tooltipStart + "lost today.";
+            };
     }
     if(lostText == "0") {
         lostTextItem->color = changeAlpha(lostTextItem->color, 64);
@@ -748,13 +750,13 @@ void PauseMenu::confirmOrLeave() {
             confirmationExplanation + "\n\n\n\n"
             "(Customize this question in the options menu.)";
         game.modal.extraButtons.push_back(
-        ModalGuiManager::Button {
+            ModalGuiManager::Button {
             .text = "Confirm",
             .tooltip = "Yes, I'm sure.",
             .color = game.config.guiColors.bad,
             .onActivate = [this] (const Point&) {
-                startLeavingGameplay();
-            }
+                              startLeavingGameplay();
+                          }
         }
         );
         game.modal.defaultFocusButtonIdx = 1;
@@ -974,16 +976,16 @@ void PauseMenu::drawRadar(
             float fadeCyclePos =
                 std::min(
                     (float) fmod(
-                        game.timePassed,
-                        PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
+                game.timePassed,
+                PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
                     ),
                     PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR
                 );
                 
             size_t pikTypeIdxTarget =
                 (int) (
-                    game.timePassed /
-                    PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
+                game.timePassed /
+                PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
                 ) % nrPikTypes;
             size_t pikTypeIdxPrev =
                 (pikTypeIdxTarget + nrPikTypes - 1) % nrPikTypes;
@@ -1189,7 +1191,8 @@ void PauseMenu::drawRadar(
         forIdx(g, game.states.gameplay->missionMobGroups) {
             MissionMobGroupStatus* gPtr =
                 &game.states.gameplay->missionMobGroups[g];
-            if(!game.curArea->mission.mobGroups[g].highlightOnRadar) continue;
+            if(!game.curArea->mission.mobGroups[g].highlightOnRadar)
+                continue;
             for(Mob* mPtr : gPtr->remaining) {
                 if(mPtr->type->category->id == MOB_CATEGORY_PILES) {
                     //Exception case for piles, which may be empty.
@@ -1753,11 +1756,11 @@ void PauseMenu::initMainPauseMenu() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
-        startClosing(&gui);
-    };
+        [this] (const Point&) {
+            startClosing(&gui);
+        };
     gui.backItem->onGetTooltip =
-    [] () { return "Unpause and continue playing."; };
+        [] () { return "Unpause and continue playing."; };
     gui.addItem(gui.backItem, "continue");
     
     //Continue input icon.
@@ -1772,17 +1775,17 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     retryButton->onActivate =
-    [this] (const Point&) {
-        leaveTarget = GAMEPLAY_LEAVE_TARGET_RETRY;
-        confirmOrLeave();
-    };
+        [this] (const Point&) {
+            leaveTarget = GAMEPLAY_LEAVE_TARGET_RETRY;
+            confirmOrLeave();
+        };
     retryButton->onGetTooltip =
-    [] () {
-        return
-            game.curArea->type == AREA_TYPE_SIMPLE ?
-            "Restart this area's exploration." :
-            "Retry the mission from the start.";
-    };
+        [] () {
+            return
+                game.curArea->type == AREA_TYPE_SIMPLE ?
+                "Restart this area's exploration." :
+                "Retry the mission from the start.";
+        };
     gui.addItem(retryButton, "retry");
     
     //End button.
@@ -1794,108 +1797,108 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     endButton->onActivate =
-    [this] (const Point&) {
-        leaveTarget = GAMEPLAY_LEAVE_TARGET_END_EARLY;
-        confirmOrLeave();
-    };
+        [this] (const Point&) {
+            leaveTarget = GAMEPLAY_LEAVE_TARGET_END_EARLY;
+            confirmOrLeave();
+        };
     endButton->onGetTooltip =
-    [] () {
-        return
-            game.curArea->type == AREA_TYPE_SIMPLE ?
-            "End this area's exploration." :
-            game.curArea->mission.isPauseMenuEndClear() ?
-            "End the mission early. "
-            "This mission still lets you receive a medal this way." :
-            "End the mission early. "
-            "This mission doesn't let you receive a medal this way!";
-    };
+        [] () {
+            return
+                game.curArea->type == AREA_TYPE_SIMPLE ?
+                "End this area's exploration." :
+                game.curArea->mission.isPauseMenuEndClear() ?
+                "End the mission early. "
+                "This mission still lets you receive a medal this way." :
+                "End the mission early. "
+                "This mission doesn't let you receive a medal this way!";
+        };
     gui.addItem(endButton, "end");
     
     //Help button.
     ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntStandard);
     helpButton->onActivate =
-    [this] (const Point&) {
-        HelpMenu* helpMenu = new HelpMenu();
-        helpMenu->leaveCallback = [this, helpMenu] () {
-            helpMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+        [this] (const Point&) {
+            HelpMenu* helpMenu = new HelpMenu();
+            helpMenu->leaveCallback = [this, helpMenu] () {
+                                          helpMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+                                          transitionGuis(
+                                              helpMenu->gui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                                              GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+                                          );
+                                      };
+            helpMenu->load();
+            helpMenu->enter();
+            secondaryMenu = helpMenu;
             transitionGuis(
-                helpMenu->gui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                gui, helpMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
         };
-        helpMenu->load();
-        helpMenu->enter();
-        secondaryMenu = helpMenu;
-        transitionGuis(
-            gui, helpMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-    };
     helpButton->onGetTooltip =
-    [] () {
-        return
-            "Quick help and tips about how to play. "
-            "You can also find this in the title screen.";
-    };
+        [] () {
+            return
+                "Quick help and tips about how to play. "
+                "You can also find this in the title screen.";
+        };
     gui.addItem(helpButton, "help");
     
     //Options button.
     ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntStandard);
     optionsButton->onActivate =
-    [this] (const Point&) {
-        OptionsMenu* optionsMenu = new OptionsMenu();
-        optionsMenu->leaveCallback = [this, optionsMenu] () {
-            optionsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+        [this] (const Point&) {
+            OptionsMenu* optionsMenu = new OptionsMenu();
+            optionsMenu->leaveCallback = [this, optionsMenu] () {
+                                             optionsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+                                             transitionGuis(
+                                                 optionsMenu->topGui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                                                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+                                             );
+                                         };
+            optionsMenu->load();
+            optionsMenu->enter();
+            secondaryMenu = optionsMenu;
             transitionGuis(
-                optionsMenu->topGui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                gui, optionsMenu->topGui, GUI_MANAGER_ANIM_CENTER_TO_UP,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
         };
-        optionsMenu->load();
-        optionsMenu->enter();
-        secondaryMenu = optionsMenu;
-        transitionGuis(
-            gui, optionsMenu->topGui, GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-    };
     optionsButton->onGetTooltip =
-    [] () {
-        return
-            "Customize your playing experience. "
-            "You can also find this in the title screen.";
-    };
+        [] () {
+            return
+                "Customize your playing experience. "
+                "You can also find this in the title screen.";
+        };
     gui.addItem(optionsButton, "options");
     
     //Statistics button.
     ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntStandard);
     statsButton->onActivate =
-    [this] (const Point&) {
-        StatsMenu* statsMenu = new StatsMenu();
-        statsMenu->leaveCallback = [this, statsMenu] () {
-            statsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+        [this] (const Point&) {
+            StatsMenu* statsMenu = new StatsMenu();
+            statsMenu->leaveCallback = [this, statsMenu] () {
+                                           statsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+                                           transitionGuis(
+                                               statsMenu->gui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                                               GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+                                           );
+                                       };
+            statsMenu->load();
+            statsMenu->enter();
+            secondaryMenu = statsMenu;
             transitionGuis(
-                statsMenu->gui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                gui, statsMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
         };
-        statsMenu->load();
-        statsMenu->enter();
-        secondaryMenu = statsMenu;
-        transitionGuis(
-            gui, statsMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-    };
     statsButton->onGetTooltip =
-    [] () {
-        return
-            "Check out some fun lifetime statistics. "
-            "You can also find this in the title screen.";
-    };
+        [] () {
+            return
+                "Check out some fun lifetime statistics. "
+                "You can also find this in the title screen.";
+        };
     gui.addItem(statsButton, "stats");
     
     //Quit button.
@@ -1907,22 +1910,22 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard, game.config.guiColors.bad
     );
     quitButton->onActivate =
-    [this] (const Point&) {
-        leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
-        confirmOrLeave();
-    };
+        [this] (const Point&) {
+            leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
+            confirmOrLeave();
+        };
     quitButton->onGetTooltip =
-    [] () {
-        return
-            "Lose your progress and immediately return to the " +
-            string(
-                game.quickPlay.areaPath.empty() ?
-                game.curArea->type == AREA_TYPE_SIMPLE ?
-                "area selection menu" :
-                "mission selection menu" :
-                "editor"
-            ) + ".";
-    };
+        [] () {
+            return
+                "Lose your progress and immediately return to the " +
+                string(
+                    game.quickPlay.areaPath.empty() ?
+                    game.curArea->type == AREA_TYPE_SIMPLE ?
+                    "area selection menu" :
+                    "mission selection menu" :
+                    "editor"
+                ) + ".";
+        };
     gui.addItem(quitButton, "quit");
     
     //Tooltip text.
@@ -1971,11 +1974,11 @@ void PauseMenu::initMissionPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     missionGui.backItem->onActivate =
-    [this] (const Point&) {
-        startClosing(&missionGui);
-    };
+        [this] (const Point&) {
+            startClosing(&missionGui);
+        };
     missionGui.backItem->onGetTooltip =
-    [] () { return "Unpause and continue playing."; };
+        [] () { return "Unpause and continue playing."; };
     missionGui.addItem(missionGui.backItem, "continue");
     
     //Continue input icon.
@@ -2057,13 +2060,14 @@ void PauseMenu::initRadarPage() {
     //Assets.
     DataNode* bitmapsNode = guiFile->getChildByName("bitmaps");
     
-    auto loader = [&bitmapsNode] (ALLEGRO_BITMAP*& bmpVar, const string& name) {
-        bmpVar =
-            game.content.bitmaps.list.get(
-                bitmapsNode->getChildByName(name)->value,
-                bitmapsNode->getChildByName(name)
-            );
-    };
+    auto loader = [&bitmapsNode] (ALLEGRO_BITMAP*& bmpVar,
+            const string & name) {
+                      bmpVar =
+                          game.content.bitmaps.list.get(
+                              bitmapsNode->getChildByName(name)->value,
+                              bitmapsNode->getChildByName(name)
+                          );
+                  };
     
     loader(bmpRadarCursor,        "cursor");
     loader(bmpRadarPikmin,        "pikmin");
@@ -2106,11 +2110,11 @@ void PauseMenu::initRadarPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     radarGui.backItem->onActivate =
-    [this] (const Point&) {
-        startClosing(&radarGui);
-    };
+        [this] (const Point&) {
+            startClosing(&radarGui);
+        };
     radarGui.backItem->onGetTooltip =
-    [] () { return "Unpause and continue playing."; };
+        [] () { return "Unpause and continue playing."; };
     radarGui.addItem(radarGui.backItem, "continue");
     
     //Continue input icon.
@@ -2119,9 +2123,9 @@ void PauseMenu::initRadarPage() {
     //Radar item.
     radarItem = new GuiItem();
     radarItem->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawRadar(draw.center, draw.size);
-    };
+        [this] (const DrawInfo & draw) {
+            drawRadar(draw.center, draw.size);
+        };
     radarGui.addItem(radarItem, "radar");
     
     //Group Pikmin label text.
@@ -2183,110 +2187,110 @@ void PauseMenu::initRadarPage() {
         new TextGuiItem("", game.sysContent.fntStandard);
     cursorInfoText->lineWrap = true;
     cursorInfoText->onDraw =
-    [this, cursorInfoText] (const DrawInfo & draw) {
-        if(cursorInfoText->text.empty()) return;
-        
-        //Draw the text.
-        int lineHeight = al_get_font_line_height(cursorInfoText->font);
-        vector<StringToken> tokens = tokenizeString(cursorInfoText->text);
-        setStringTokenWidths(
-            tokens, game.sysContent.fntStandard,
-            game.sysContent.fntSlim, lineHeight, false
-        );
-        vector<vector<StringToken> > tokensPerLine =
-            splitLongStringWithTokens(tokens, draw.size.x);
-        float textH = tokensPerLine.size() * lineHeight;
-        
-        forIdx(l, tokensPerLine) {
-            drawStringTokens(
-                tokensPerLine[l], game.sysContent.fntStandard,
-                game.sysContent.fntSlim,
-                false,
-                Point(
-                    draw.center.x,
-                    draw.center.y - textH / 2.0f + l * lineHeight
-                ),
-                cursorInfoText->flags,
-                Point(draw.size.x, lineHeight), Point(1.0f), draw.tint
+        [this, cursorInfoText] (const DrawInfo & draw) {
+            if(cursorInfoText->text.empty()) return;
+            
+            //Draw the text.
+            int lineHeight = al_get_font_line_height(cursorInfoText->font);
+            vector<StringToken> tokens = tokenizeString(cursorInfoText->text);
+            setStringTokenWidths(
+                tokens, game.sysContent.fntStandard,
+                game.sysContent.fntSlim, lineHeight, false
             );
-        }
-        
-        //Draw a box around it.
-        drawTexturedBox(
-            draw.center, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-        
-        //Draw a connection from here to the radar cursor.
-        Point lineAnchor(
-            draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y
-        );
-        Point cursorWindowPos = radarCursor;
-        al_transform_coordinates(
-            &radarView.worldToWindowTransform,
-            &cursorWindowPos.x, &cursorWindowPos.y
-        );
-        
-        al_draw_line(
-            draw.center.x - draw.size.x / 2.0f, draw.center.y,
-            lineAnchor.x, lineAnchor.y,
-            COLOR_TRANSPARENT_WHITE, 2.0f
-        );
-        
-        cursorWindowPos =
-            cursorWindowPos +
-            rotatePoint(
-                Point(24.0f, 0.0f),
-                getAngle(cursorWindowPos, lineAnchor)
+            vector<vector<StringToken>> tokensPerLine =
+                splitLongStringWithTokens(tokens, draw.size.x);
+            float textH = tokensPerLine.size() * lineHeight;
+            
+            forIdx(l, tokensPerLine) {
+                drawStringTokens(
+                    tokensPerLine[l], game.sysContent.fntStandard,
+                    game.sysContent.fntSlim,
+                    false,
+                    Point(
+                        draw.center.x,
+                        draw.center.y - textH / 2.0f + l * lineHeight
+                    ),
+                    cursorInfoText->flags,
+                    Point(draw.size.x, lineHeight), Point(1.0f), draw.tint
+                );
+            }
+            
+            //Draw a box around it.
+            drawTexturedBox(
+                draw.center, draw.size, game.sysContent.bmpFrameBox,
+                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
             );
-        al_draw_line(
-            lineAnchor.x, lineAnchor.y,
-            cursorWindowPos.x, cursorWindowPos.y,
-            COLOR_TRANSPARENT_WHITE, 2.0f
-        );
-    };
+            
+            //Draw a connection from here to the radar cursor.
+            Point lineAnchor(
+                draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y
+            );
+            Point cursorWindowPos = radarCursor;
+            al_transform_coordinates(
+                &radarView.worldToWindowTransform,
+                &cursorWindowPos.x, &cursorWindowPos.y
+            );
+            
+            al_draw_line(
+                draw.center.x - draw.size.x / 2.0f, draw.center.y,
+                lineAnchor.x, lineAnchor.y,
+                COLOR_TRANSPARENT_WHITE, 2.0f
+            );
+            
+            cursorWindowPos =
+                cursorWindowPos +
+                rotatePoint(
+                    Point(24.0f, 0.0f),
+                    getAngle(cursorWindowPos, lineAnchor)
+                );
+            al_draw_line(
+                lineAnchor.x, lineAnchor.y,
+                cursorWindowPos.x, cursorWindowPos.y,
+                COLOR_TRANSPARENT_WHITE, 2.0f
+            );
+        };
     cursorInfoText->onTick =
-    [this, cursorInfoText] (float deltaT) {
-        if(radarCursorLeader) {
-            cursorInfoText->text =
-                (
-                    radarCursorLeader == radarSelectedLeader ?
-                    "" :
-                    "\\k menu_ok \\k "
-                ) + radarCursorLeader->type->name;
-        } else if(
-            radarSelectedLeader &&
-            !radarSelectedLeader->scriptVM.fsm.getEvent(LEADER_EV_GO_HERE)
-        ) {
-            cursorInfoText->text =
-                "Can't go here... Leader is busy!";
-            cursorInfoText->color = COLOR_WHITE;
-        } else {
-            switch(goHerePathResult) {
-            case PATH_RESULT_DIRECT:
-            case PATH_RESULT_DIRECT_NO_STOPS:
-            case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS:
-            case PATH_RESULT_NORMAL_PATH:
-            case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
-                cursorInfoText->text = "\\k menu_ok \\k Go here!";
-                cursorInfoText->color = game.config.guiColors.gold;
-                break;
-            } case PATH_RESULT_PATH_WITH_OBSTACLES: {
-                cursorInfoText->text = "Can't go here... Path blocked!";
+        [this, cursorInfoText] (float deltaT) {
+            if(radarCursorLeader) {
+                cursorInfoText->text =
+                    (
+                        radarCursorLeader == radarSelectedLeader ?
+                        "" :
+                        "\\k menu_ok \\k "
+                    ) + radarCursorLeader->type->name;
+            } else if(
+                radarSelectedLeader &&
+                !radarSelectedLeader->scriptVM.fsm.getEvent(LEADER_EV_GO_HERE)
+            ) {
+                cursorInfoText->text =
+                    "Can't go here... Leader is busy!";
                 cursorInfoText->color = COLOR_WHITE;
-                break;
-            } case PATH_RESULT_END_STOP_UNREACHABLE: {
-                cursorInfoText->text = "Can't go here...";
-                cursorInfoText->color = COLOR_WHITE;
-                break;
-            } default: {
-                cursorInfoText->text.clear();
-                cursorInfoText->color = COLOR_WHITE;
-                break;
+            } else {
+                switch(goHerePathResult) {
+                case PATH_RESULT_DIRECT:
+                case PATH_RESULT_DIRECT_NO_STOPS:
+                case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS:
+                case PATH_RESULT_NORMAL_PATH:
+                case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
+                    cursorInfoText->text = "\\k menu_ok \\k Go here!";
+                    cursorInfoText->color = game.config.guiColors.gold;
+                    break;
+                } case PATH_RESULT_PATH_WITH_OBSTACLES: {
+                    cursorInfoText->text = "Can't go here... Path blocked!";
+                    cursorInfoText->color = COLOR_WHITE;
+                    break;
+                } case PATH_RESULT_END_STOP_UNREACHABLE: {
+                    cursorInfoText->text = "Can't go here...";
+                    cursorInfoText->color = COLOR_WHITE;
+                    break;
+                } default: {
+                    cursorInfoText->text.clear();
+                    cursorInfoText->color = COLOR_WHITE;
+                    break;
+                }
+                }
             }
-            }
-        }
-    };
+        };
     radarGui.addItem(cursorInfoText, "cursor_info");
     
     //Instructions text.
@@ -2346,11 +2350,11 @@ void PauseMenu::initStatusPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     statusGui.backItem->onActivate =
-    [this] (const Point&) {
-        startClosing(&statusGui);
-    };
+        [this] (const Point&) {
+            startClosing(&statusGui);
+        };
     statusGui.backItem->onGetTooltip =
-    [] () { return "Unpause and continue playing."; };
+        [] () { return "Unpause and continue playing."; };
     statusGui.addItem(statusGui.backItem, "continue");
     
     //Continue input icon.
@@ -2359,7 +2363,7 @@ void PauseMenu::initStatusPage() {
     //Pikmin list header box.
     ListGuiItem* listHeader = new ListGuiItem();
     listHeader->onDraw =
-    [] (const DrawInfo&) {};
+        [] (const DrawInfo&) {};
     statusGui.addItem(listHeader, "list_header");
     
     //Pikmin list box.
@@ -2374,7 +2378,7 @@ void PauseMenu::initStatusPage() {
     //Pikmin totals box.
     ListGuiItem* totals = new ListGuiItem();
     totals->onDraw =
-    [] (const DrawInfo&) {};
+        [] (const DrawInfo&) {};
     statusGui.addItem(totals, "totals");
     
     //Tooltip text.

@@ -115,6 +115,8 @@ void TrackCategory::getTypeNames(vector<string>& list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void TrackCategory::registerType(const string& internalName, MobType* type) {
+void TrackCategory::registerType(
+    const string& internalName, MobType* type
+) {
     game.content.mobTypes.list.track[internalName] = (TrackType*) type;
 }

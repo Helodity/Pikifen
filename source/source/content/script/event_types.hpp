@@ -352,7 +352,7 @@ struct FsmEventType {
     
     //Type of FSM event.
     FSM_EV type = FSM_EV_UNKNOWN;
-
+    
     //Name.
     string name;
     

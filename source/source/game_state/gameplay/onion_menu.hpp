@@ -175,8 +175,8 @@ struct OnionMenu {
     bool toggleChangeTen();
     bool toggleSelectAll();
     
-    private:
-    
+private:
+
     //--- Private members ---
     
     //Is it currently closing?

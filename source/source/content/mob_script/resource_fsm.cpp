@@ -183,7 +183,8 @@ void ResourceFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
+void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Resource* resPtr = (Resource*) scriptVM->mob;
     
     if(
@@ -210,7 +211,8 @@ void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleDropped(ScriptVM* scriptVM, void* info1, void* info2) {
+void ResourceFsm::handleDropped(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Resource* resPtr = (Resource*) scriptVM->mob;
     
     if(!resPtr->resType->vanishOnDrop) return;
@@ -265,7 +267,8 @@ void ResourceFsm::handleStartMoving(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
+void ResourceFsm::loseMomentum(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Resource* resPtr = (Resource*) scriptVM->mob;
     
     resPtr->speed.x = 0;
@@ -303,7 +306,8 @@ void ResourceFsm::startBeingDelivered(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::startWaiting(ScriptVM* scriptVM, void* info1, void* info2) {
+void ResourceFsm::startWaiting(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Resource* resPtr = (Resource*) scriptVM->mob;
     
     if(resPtr->toDelete) return;

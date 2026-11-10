@@ -89,11 +89,11 @@ OnionMenu::OnionMenu(
         "Cancel", game.sysContent.fntStandard, game.config.guiColors.bad
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
-        startClosing();
-    };
+        [this] (const Point&) {
+            startClosing();
+        };
     gui.backItem->onGetTooltip =
-    [] () { return "Forget all changes and leave the Onion menu."; };
+        [] () { return "Forget all changes and leave the Onion menu."; };
     gui.addItem(gui.backItem, "cancel");
     
     //Cancel input icon.
@@ -105,151 +105,151 @@ OnionMenu::OnionMenu(
         "Ok", game.sysContent.fntStandard, game.config.guiColors.good
     );
     okButton->onActivate =
-    [this] (const Point&) {
-        confirm();
-    };
+        [this] (const Point&) {
+            confirm();
+        };
     okButton->onGetTooltip =
-    [] () { return "Confirm changes."; };
+        [] () { return "Confirm changes."; };
     gui.addItem(okButton, "ok");
     
     //Ok input.
     GuiItem* okInput = new GuiItem();
     okInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_OK, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_MENU_OK, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     gui.addItem(okInput, "ok_input");
     
     //Field amount text.
     fieldAmountText =
         new TextGuiItem("", game.sysContent.fntStandard);
     fieldAmountText->onDraw =
-    [this] (const DrawInfo & draw) {
-        const ALLEGRO_COLOR TEXT_COLOR = al_map_rgb(188, 230, 230);
-        const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
-        
-        int totalDelta = 0;
-        forIdx(t, this->types) {
-            totalDelta += this->types[t].delta;
-        }
-        
-        ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
-        const auto& redIt = this->redItems.find(fieldAmountText);
-        if(redIt != this->redItems.end()) {
-            color =
-                interpolateColor(
-                    redIt->second,
-                    0, ONION_MENU::RED_TEXT_DURATION,
-                    color, tintColor(ERROR_COLOR, draw.tint)
-                );
-        }
-        
-        float juicyGrowAmount = fieldAmountText->getJuiceValue();
-        drawText(
-            "Field: " +
-            i2s(game.states.gameplay->mobs.pikmin.size() + totalDelta),
-            game.sysContent.fntStandard, draw.center,
-            draw.size * GUI::STANDARD_CONTENT_SIZE, color,
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            Point(1.0f + juicyGrowAmount)
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            const ALLEGRO_COLOR TEXT_COLOR = al_map_rgb(188, 230, 230);
+            const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
+            
+            int totalDelta = 0;
+            forIdx(t, this->types) {
+                totalDelta += this->types[t].delta;
+            }
+            
+            ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
+            const auto& redIt = this->redItems.find(fieldAmountText);
+            if(redIt != this->redItems.end()) {
+                color =
+                    interpolateColor(
+                        redIt->second,
+                        0, ONION_MENU::RED_TEXT_DURATION,
+                        color, tintColor(ERROR_COLOR, draw.tint)
+                    );
+            }
+            
+            float juicyGrowAmount = fieldAmountText->getJuiceValue();
+            drawText(
+                "Field: " +
+                i2s(game.states.gameplay->mobs.pikmin.size() + totalDelta),
+                game.sysContent.fntStandard, draw.center,
+                draw.size * GUI::STANDARD_CONTENT_SIZE, color,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                Point(1.0f + juicyGrowAmount)
+            );
+        };
     gui.addItem(fieldAmountText, "field");
     
     //Change ten at a time button.
     changeTenButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     changeTenButton->forceSquare = true;
     changeTenButton->onActivate =
-    [this] (const Point&) {
-        toggleChangeTen();
-    };
+        [this] (const Point&) {
+            toggleChangeTen();
+        };
     changeTenButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = changeTenButton->getJuiceValue();
-        drawBitmapInBox(
-            changeTen ?
-            game.sysContent.bmpOnionMenu10 :
-            game.sysContent.bmpOnionMenu1,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
-            0.0f, draw.tint
-        );
-        changeTenButton->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            float juicyGrowAmount = changeTenButton->getJuiceValue();
+            drawBitmapInBox(
+                changeTen ?
+                game.sysContent.bmpOnionMenu10 :
+                game.sysContent.bmpOnionMenu1,
+                draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
+                0.0f, draw.tint
+            );
+            changeTenButton->defDrawCode(draw);
+        };
     changeTenButton->onGetTooltip =
-    [this] () {
-        if(changeTen) {
-            return
-                "Changing the numbers by ten at a time. "
-                "Press to change by one.";
-        } else {
-            return
-                "Changing the numbers by one at a time. "
-                "Press to change by ten.";
-        }
-    };
+        [this] () {
+            if(changeTen) {
+                return
+                    "Changing the numbers by ten at a time. "
+                    "Press to change by one.";
+            } else {
+                return
+                    "Changing the numbers by one at a time. "
+                    "Press to change by ten.";
+            }
+        };
     gui.addItem(changeTenButton, "change_ten");
     
     //Change ten at a time input.
     GuiItem* changeTenInput = new GuiItem();
     changeTenInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_ONION_CHANGE_10, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_ONION_CHANGE_10, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     gui.addItem(changeTenInput, "change_ten_input");
     
     //Select all button.
     selectAllButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     selectAllButton->forceSquare = true;
     selectAllButton->onActivate =
-    [this] (const Point&) {
-        toggleSelectAll();
-    };
+        [this] (const Point&) {
+            toggleSelectAll();
+        };
     selectAllButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = selectAllButton->getJuiceValue();
-        drawBitmapInBox(
-            selectAll ?
-            game.sysContent.bmpOnionMenuAll :
-            game.sysContent.bmpOnionMenuSingle,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
-            0.0f, draw.tint
-        );
-        selectAllButton->defDrawCode(draw);
-    };
+        [this] (const DrawInfo & draw) {
+            float juicyGrowAmount = selectAllButton->getJuiceValue();
+            drawBitmapInBox(
+                selectAll ?
+                game.sysContent.bmpOnionMenuAll :
+                game.sysContent.bmpOnionMenuSingle,
+                draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
+                0.0f, draw.tint
+            );
+            selectAllButton->defDrawCode(draw);
+        };
     selectAllButton->visible = types.size() > 1;
     selectAllButton->focusable = types.size() > 1;
     selectAllButton->onGetTooltip =
-    [this] () {
-        if(selectAll) {
-            return
-                "Controlling all Pikmin types at once. "
-                "Press to control one at a time.";
-        } else {
-            return
-                "Controlling one Pikmin type at a time. "
-                "Press to control all at once.";
-        }
-    };
+        [this] () {
+            if(selectAll) {
+                return
+                    "Controlling all Pikmin types at once. "
+                    "Press to control one at a time.";
+            } else {
+                return
+                    "Controlling one Pikmin type at a time. "
+                    "Press to control all at once.";
+            }
+        };
     gui.addItem(selectAllButton, "select_all");
     
     //Select all input.
     GuiItem* selectAllInput = new GuiItem();
     selectAllInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_ONION_SELECT_ALL, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            if(!game.options.misc.showGuiInputIcons) return;
+            drawPlayerActionInputSourceIcon(
+                PLAYER_ACTION_TYPE_ONION_SELECT_ALL, draw.center, draw.size,
+                true, game.sysContent.fntSlim, draw.tint
+            );
+        };
     selectAllInput->visible = types.size() > 1;
     gui.addItem(selectAllInput, "select_all_input");
     
@@ -270,16 +270,16 @@ OnionMenu::OnionMenu(
         GuiItem* onionIcon = new GuiItem(false);
         onionIcon->forceSquare = true;
         onionIcon->onDraw =
-        [this, nPtr, onionIcon] (const DrawInfo & draw) {
-            if(nPtr->nestType->bmpIcon) {
-                float juicyGrowAmount = onionIcon->getJuiceValue();
-                drawBitmapInBox(
-                    nPtr->nestType->bmpIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true, true,
-                    0.0f, draw.tint
-                );
-            }
-        };
+            [this, nPtr, onionIcon] (const DrawInfo & draw) {
+                if(nPtr->nestType->bmpIcon) {
+                    float juicyGrowAmount = onionIcon->getJuiceValue();
+                    drawBitmapInBox(
+                        nPtr->nestType->bmpIcon, draw.center,
+                        (draw.size * 0.8f) + juicyGrowAmount, true, true,
+                        0.0f, draw.tint
+                    );
+                }
+            };
         listItem->addChild(onionIcon);
         gui.addItem(onionIcon, "onion_button");
         onionIconItems.push_back(onionIcon);
@@ -289,32 +289,32 @@ OnionMenu::OnionMenu(
             new ButtonGuiItem("", game.sysContent.fntStandard);
         onionButton->forceSquare = true;
         onionButton->onDraw =
-        [this, onionButton] (const DrawInfo & draw) {
-            float juicyGrowAmount = onionButton->getJuiceValue();
-            drawButton(
-                draw.center,
-                draw.size + juicyGrowAmount,
-                "", game.sysContent.fntStandard, COLOR_WHITE,
-                onionButton->focused, 0.0f, draw.tint
-            );
-        };
+            [this, onionButton] (const DrawInfo & draw) {
+                float juicyGrowAmount = onionButton->getJuiceValue();
+                drawButton(
+                    draw.center,
+                    draw.size + juicyGrowAmount,
+                    "", game.sysContent.fntStandard, COLOR_WHITE,
+                    onionButton->focused, 0.0f, draw.tint
+                );
+            };
         onionButton->onActivate =
-        [this, t, onionButton] (const Point&) {
-            doButtonLogic(false, t, false);
-        };
+            [this, t, onionButton] (const Point&) {
+                doButtonLogic(false, t, false);
+            };
         onionButton->onMenuSNAction =
-        [this, t] (PLAYER_ACTION_TYPE playerActionId) {
-            return doButtonSNLogic(playerActionId, t);
-        };
+            [this, t] (PLAYER_ACTION_TYPE playerActionId) {
+                return doButtonSNLogic(playerActionId, t);
+            };
         onionButton->canAutoRepeat = true;
         onionButton->focusableFromSN = false;
         onionButton->onGetTooltip =
-        [this, t] () {
-            OnionMenuPikminType* tPtr = &this->types[t];
-            return
-                "Store " + getTransferAmountStr() + " " +
-                tPtr->pikType->name + " inside.";
-        };
+            [this, t] () {
+                OnionMenuPikminType* tPtr = &this->types[t];
+                return
+                    "Store " + getTransferAmountStr() + " " +
+                    tPtr->pikType->name + " inside.";
+            };
         listItem->addChild(onionButton);
         gui.addItem(onionButton, "onion_button");
         onionButtonItems.push_back(onionButton);
@@ -323,41 +323,41 @@ OnionMenu::OnionMenu(
         GuiItem* onionAmountText = new GuiItem(false);
         onionAmountText->onDraw =
             [this, t, onionAmountText]
-        (const DrawInfo & draw) {
-            const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
-            const ALLEGRO_COLOR TEXT_COLOR = COLOR_WHITE;
-            const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
-            
-            OnionMenuPikminType* tPtr = &this->types[t];
-            
-            size_t realOnionAmount =
-                this->nestPtr->getAmountByType(tPtr->pikType);
+                (const DrawInfo & draw) {
+                const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
+                const ALLEGRO_COLOR TEXT_COLOR = COLOR_WHITE;
+                const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
                 
-            drawFilledRoundedRatioRectangle(
-                draw.center, draw.size, 0.30f,
-                tintColor(BG_COLOR, draw.tint)
-            );
-            
-            ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
-            const auto& redIt = this->redItems.find(onionAmountText);
-            if(redIt != this->redItems.end()) {
-                color =
-                    interpolateColor(
-                        redIt->second,
-                        0, ONION_MENU::RED_TEXT_DURATION,
-                        color, tintColor(ERROR_COLOR, draw.tint)
-                    );
-            }
-            
-            float juicyGrowAmount = onionAmountText->getJuiceValue();
-            drawText(
-                i2s(realOnionAmount - tPtr->delta),
-                game.sysContent.fntAreaName, draw.center,
-                draw.size * GUI::STANDARD_CONTENT_SIZE, color,
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                Point(1.0f + juicyGrowAmount)
-            );
-        };
+                OnionMenuPikminType* tPtr = &this->types[t];
+                
+                size_t realOnionAmount =
+                    this->nestPtr->getAmountByType(tPtr->pikType);
+                    
+                drawFilledRoundedRatioRectangle(
+                    draw.center, draw.size, 0.30f,
+                    tintColor(BG_COLOR, draw.tint)
+                );
+                
+                ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
+                const auto& redIt = this->redItems.find(onionAmountText);
+                if(redIt != this->redItems.end()) {
+                    color =
+                        interpolateColor(
+                            redIt->second,
+                            0, ONION_MENU::RED_TEXT_DURATION,
+                            color, tintColor(ERROR_COLOR, draw.tint)
+                        );
+                }
+                
+                float juicyGrowAmount = onionAmountText->getJuiceValue();
+                drawText(
+                    i2s(realOnionAmount - tPtr->delta),
+                    game.sysContent.fntAreaName, draw.center,
+                    draw.size * GUI::STANDARD_CONTENT_SIZE, color,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                    Point(1.0f + juicyGrowAmount)
+                );
+            };
         listItem->addChild(onionAmountText);
         gui.addItem(onionAmountText, "onion_amount");
         onionAmountItems.push_back(onionAmountText);
@@ -366,17 +366,17 @@ OnionMenu::OnionMenu(
         GuiItem* groupIcon = new GuiItem(false);
         groupIcon->forceSquare = true;
         groupIcon->onDraw =
-        [this, t, groupIcon] (const DrawInfo & draw) {
-            OnionMenuPikminType* tPtr = &this->types[t];
-            float juicyGrowAmount = groupIcon->getJuiceValue();
-            if(tPtr->pikType->bmpIcon) {
-                drawBitmapInBox(
-                    tPtr->pikType->bmpIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true, true,
-                    0.0f, draw.tint
-                );
-            }
-        };
+            [this, t, groupIcon] (const DrawInfo & draw) {
+                OnionMenuPikminType* tPtr = &this->types[t];
+                float juicyGrowAmount = groupIcon->getJuiceValue();
+                if(tPtr->pikType->bmpIcon) {
+                    drawBitmapInBox(
+                        tPtr->pikType->bmpIcon, draw.center,
+                        (draw.size * 0.8f) + juicyGrowAmount, true, true,
+                        0.0f, draw.tint
+                    );
+                }
+            };
         listItem->addChild(groupIcon);
         gui.addItem(groupIcon, "group_button");
         groupIconItems.push_back(groupIcon);
@@ -386,32 +386,32 @@ OnionMenu::OnionMenu(
             new ButtonGuiItem("", game.sysContent.fntStandard);
         groupButton->forceSquare = true;
         groupButton->onDraw =
-        [this, groupButton] (const DrawInfo & draw) {
-            float juicyGrowAmount = groupButton->getJuiceValue();
-            drawButton(
-                draw.center,
-                draw.size + juicyGrowAmount,
-                "", game.sysContent.fntStandard, COLOR_WHITE,
-                groupButton->focused, 0.0f, draw.tint
-            );
-        };
+            [this, groupButton] (const DrawInfo & draw) {
+                float juicyGrowAmount = groupButton->getJuiceValue();
+                drawButton(
+                    draw.center,
+                    draw.size + juicyGrowAmount,
+                    "", game.sysContent.fntStandard, COLOR_WHITE,
+                    groupButton->focused, 0.0f, draw.tint
+                );
+            };
         groupButton->onActivate =
-        [this, t, groupButton] (const Point&) {
-            doButtonLogic(true, t, false);
-        };
+            [this, t, groupButton] (const Point&) {
+                doButtonLogic(true, t, false);
+            };
         groupButton->onMenuSNAction =
-        [this, t] (PLAYER_ACTION_TYPE playerActionId) {
-            return doButtonSNLogic(playerActionId, t);
-        };
+            [this, t] (PLAYER_ACTION_TYPE playerActionId) {
+                return doButtonSNLogic(playerActionId, t);
+            };
         groupButton->canAutoRepeat = true;
         groupButton->focusableFromSN = false;
         groupButton->onGetTooltip =
-        [this, t] () {
-            OnionMenuPikminType* tPtr = &this->types[t];
-            return
-                "Call " + getTransferAmountStr() + " " +
-                tPtr->pikType->name + " to the group.";
-        };
+            [this, t] () {
+                OnionMenuPikminType* tPtr = &this->types[t];
+                return
+                    "Call " + getTransferAmountStr() + " " +
+                    tPtr->pikType->name + " to the group.";
+            };
         listItem->addChild(groupButton);
         gui.addItem(groupButton, "group_button");
         groupButtonItems.push_back(groupButton);
@@ -420,41 +420,41 @@ OnionMenu::OnionMenu(
         GuiItem* groupAmountText = new GuiItem(false);
         groupAmountText->onDraw =
             [this, t, groupAmountText]
-        (const DrawInfo & draw) {
-            const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
-            const ALLEGRO_COLOR TEXT_COLOR = COLOR_WHITE;
-            const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
-            
-            OnionMenuPikminType* tPtr = &this->types[t];
-            
-            size_t realGroupAmount =
-                this->leaderPtr->group->getAmountByType(tPtr->pikType);
+                (const DrawInfo & draw) {
+                const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
+                const ALLEGRO_COLOR TEXT_COLOR = COLOR_WHITE;
+                const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
                 
-            drawFilledRoundedRatioRectangle(
-                draw.center, draw.size, 0.30f,
-                tintColor(BG_COLOR, draw.tint)
-            );
-            
-            ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
-            const auto& redIt = this->redItems.find(groupAmountText);
-            if(redIt != this->redItems.end()) {
-                color =
-                    interpolateColor(
-                        redIt->second,
-                        0, ONION_MENU::RED_TEXT_DURATION,
-                        color, ERROR_COLOR
-                    );
-            }
-            
-            float juicyGrowAmount = groupAmountText->getJuiceValue();
-            drawText(
-                i2s(realGroupAmount + tPtr->delta),
-                game.sysContent.fntAreaName, draw.center,
-                draw.size * GUI::STANDARD_CONTENT_SIZE, color,
-                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                Point(1.0f + juicyGrowAmount)
-            );
-        };
+                OnionMenuPikminType* tPtr = &this->types[t];
+                
+                size_t realGroupAmount =
+                    this->leaderPtr->group->getAmountByType(tPtr->pikType);
+                    
+                drawFilledRoundedRatioRectangle(
+                    draw.center, draw.size, 0.30f,
+                    tintColor(BG_COLOR, draw.tint)
+                );
+                
+                ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
+                const auto& redIt = this->redItems.find(groupAmountText);
+                if(redIt != this->redItems.end()) {
+                    color =
+                        interpolateColor(
+                            redIt->second,
+                            0, ONION_MENU::RED_TEXT_DURATION,
+                            color, ERROR_COLOR
+                        );
+                }
+                
+                float juicyGrowAmount = groupAmountText->getJuiceValue();
+                drawText(
+                    i2s(realGroupAmount + tPtr->delta),
+                    game.sysContent.fntAreaName, draw.center,
+                    draw.size * GUI::STANDARD_CONTENT_SIZE, color,
+                    ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                    Point(1.0f + juicyGrowAmount)
+                );
+            };
         listItem->addChild(groupAmountText);
         gui.addItem(groupAmountText, "group_amount");
         groupAmountItems.push_back(groupAmountText);
@@ -462,17 +462,17 @@ OnionMenu::OnionMenu(
         //Full type item.
         GuiItem* fullTypeItem = new GuiItem();
         fullTypeItem->onMenuSNAction =
-        [this, t] (PLAYER_ACTION_TYPE playerActionId) {
-            return doButtonSNLogic(playerActionId, t);
-        };
+            [this, t] (PLAYER_ACTION_TYPE playerActionId) {
+                return doButtonSNLogic(playerActionId, t);
+            };
         fullTypeItem->focusableFromMouse = false;
         fullTypeItem->onGetTooltip =
-        [this, t] () {
-            OnionMenuPikminType* tPtr = &this->types[t];
-            return
-                "Call or store " + getTransferAmountStr() + " " +
-                tPtr->pikType->name + ".";
-        };
+            [this, t] () {
+                OnionMenuPikminType* tPtr = &this->types[t];
+                return
+                    "Call or store " + getTransferAmountStr() + " " +
+                    tPtr->pikType->name + ".";
+            };
         listItem->addChild(fullTypeItem);
         gui.addItem(fullTypeItem, "full_type");
         fullTypeItems.push_back(fullTypeItem);
@@ -482,31 +482,31 @@ OnionMenu::OnionMenu(
     onionAllButton =
         new ButtonGuiItem("", game.sysContent.fntStandard);
     onionAllButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = onionAllButton->getJuiceValue();
-        drawButton(
-            draw.center,
-            draw.size + juicyGrowAmount,
-            "", game.sysContent.fntStandard, COLOR_WHITE,
-            onionAllButton->focused, 0.0f, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            float juicyGrowAmount = onionAllButton->getJuiceValue();
+            drawButton(
+                draw.center,
+                draw.size + juicyGrowAmount,
+                "", game.sysContent.fntStandard, COLOR_WHITE,
+                onionAllButton->focused, 0.0f, draw.tint
+            );
+        };
     onionAllButton->onActivate =
-    [this] (const Point&) {
-        doButtonLogic(false, 0, false);
-    };
+        [this] (const Point&) {
+            doButtonLogic(false, 0, false);
+        };
     onionAllButton->onMenuSNAction =
-    [this] (PLAYER_ACTION_TYPE playerActionId) {
-        return doButtonSNLogic(playerActionId, 0);
-    };
+        [this] (PLAYER_ACTION_TYPE playerActionId) {
+            return doButtonSNLogic(playerActionId, 0);
+        };
     onionAllButton->canAutoRepeat = true;
     onionAllButton->focusableFromSN = false;
     onionAllButton->onGetTooltip =
-    [this] () {
-        return
-            "Store " + getTransferAmountStr() +
-            " Pikmin of each type inside.";
-    };
+        [this] () {
+            return
+                "Store " + getTransferAmountStr() +
+                " Pikmin of each type inside.";
+        };
     listItem->addChild(onionAllButton);
     gui.addItem(onionAllButton, "onion_all_button");
     
@@ -514,47 +514,47 @@ OnionMenu::OnionMenu(
     groupAllButton =
         new ButtonGuiItem("", game.sysContent.fntStandard);
     groupAllButton->onDraw =
-    [this] (const DrawInfo & draw) {
-        float juicyGrowAmount = groupAllButton->getJuiceValue();
-        drawButton(
-            draw.center,
-            draw.size + juicyGrowAmount,
-            "", game.sysContent.fntStandard, COLOR_WHITE,
-            groupAllButton->focused, 0.0f, draw.tint
-        );
-    };
+        [this] (const DrawInfo & draw) {
+            float juicyGrowAmount = groupAllButton->getJuiceValue();
+            drawButton(
+                draw.center,
+                draw.size + juicyGrowAmount,
+                "", game.sysContent.fntStandard, COLOR_WHITE,
+                groupAllButton->focused, 0.0f, draw.tint
+            );
+        };
     groupAllButton->onActivate =
-    [this] (const Point&) {
-        doButtonLogic(true, 0, false);
-    };
+        [this] (const Point&) {
+            doButtonLogic(true, 0, false);
+        };
     groupAllButton->onMenuSNAction =
-    [this] (PLAYER_ACTION_TYPE playerActionId) {
-        return doButtonSNLogic(playerActionId, 0);
-    };
+        [this] (PLAYER_ACTION_TYPE playerActionId) {
+            return doButtonSNLogic(playerActionId, 0);
+        };
     groupAllButton->canAutoRepeat = true;
     groupAllButton->focusableFromSN = false;
     groupAllButton->onGetTooltip =
-    [this] () {
-        return
-            "Call " + getTransferAmountStr() +
-            " Pikmin of each type to the group.";
-    };
+        [this] () {
+            return
+                "Call " + getTransferAmountStr() +
+                " Pikmin of each type to the group.";
+        };
     listItem->addChild(groupAllButton);
     gui.addItem(groupAllButton, "group_all_button");
     
     //All types item.
     fullTypeAllItem = new GuiItem();
     fullTypeAllItem->onMenuSNAction =
-    [this] (PLAYER_ACTION_TYPE playerActionId) {
-        return doButtonSNLogic(playerActionId, 0);
-    };
+        [this] (PLAYER_ACTION_TYPE playerActionId) {
+            return doButtonSNLogic(playerActionId, 0);
+        };
     fullTypeAllItem->focusableFromMouse = false;
     fullTypeAllItem->onGetTooltip =
-    [this] () {
-        return
-            "Call or store " + getTransferAmountStr() + " " +
-            "Pikmin of each type.";
-    };
+        [this] () {
+            return
+                "Call or store " + getTransferAmountStr() + " " +
+                "Pikmin of each type.";
+        };
     listItem->addChild(fullTypeAllItem);
     gui.addItem(fullTypeAllItem, "full_type_all");
     fullTypeItems.push_back(fullTypeAllItem);
@@ -858,7 +858,7 @@ void OnionMenu::tick(float deltaT) {
         //Get how many the player really has with them.
         int realGroupAmount =
             (int) leaderPtr->group->getAmountByType(
-                nestPtr->nestType->pikTypes[t]
+            nestPtr->nestType->pikTypes[t]
             );
             
         //Make sure the player can't request to store more than what they have.
@@ -886,7 +886,7 @@ void OnionMenu::tick(float deltaT) {
         forIdx(t, nestPtr->nestType->pikTypes) {
             int realGroupAmount =
                 (int) leaderPtr->group->getAmountByType(
-                    nestPtr->nestType->pikTypes[t]
+                nestPtr->nestType->pikTypes[t]
                 );
                 
             if((-types[t].delta) < realGroupAmount) {

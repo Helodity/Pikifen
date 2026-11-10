@@ -105,6 +105,8 @@ void CustomCategory::getTypeNames(vector<string>& list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void CustomCategory::registerType(const string& internalName, MobType* type) {
+void CustomCategory::registerType(
+    const string& internalName, MobType* type
+) {
     game.content.mobTypes.list.custom[internalName] = type;
 }

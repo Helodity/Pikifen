@@ -71,7 +71,9 @@ void GenMobFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::carryBecomeStuck(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::carryBecomeStuck(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     engineAssert(
         scriptVM->mob->carryInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -93,7 +95,8 @@ void GenMobFsm::carryBecomeStuck(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::carryBeginMove(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::carryBeginMove(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     scriptVM->mob->carryInfo->isMoving = true;
     
     bool canFly =
@@ -249,7 +252,9 @@ void GenMobFsm::carryStopBeingStuck(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::carryStopMove(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::carryStopMove(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     if(!scriptVM->mob->carryInfo) return;
     scriptVM->mob->carryInfo->isMoving = false;
     disableFlag(scriptVM->mob->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -280,7 +285,9 @@ void GenMobFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::goToDyingState(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::goToDyingState(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     if(scriptVM->mob->type->dyingStateIdx == INVALID) return;
     scriptVM->fsm.setState(scriptVM->mob->type->dyingStateIdx, info1, info2);
 }
@@ -430,7 +437,9 @@ void GenMobFsm::handleCarrierRemoved(
     bool mustUpdate = false;
     
     //Start by checking if the target changed.
-    if(canMove && (prevDestination != scriptVM->mob->carryInfo->intendedMob)) {
+    if(canMove &&
+        prevDestination != scriptVM->mob->carryInfo->intendedMob
+    ) {
         mustUpdate = true;
     }
     
@@ -475,7 +484,9 @@ void GenMobFsm::handleCarrierRemoved(
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::handleDelivery(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     if(scriptVM->focusedMob) {
         scriptVM->focusedMob->scriptVM.fsm.runEvent(
             FSM_EV_FINISHED_RECEIVING_DELIVERY, (void*) scriptVM->mob

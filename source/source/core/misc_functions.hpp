@@ -71,7 +71,6 @@ typedef ALLEGRO_COLOR (*OffsetEffectColorGetter)(Edge*);
 typedef float (*OffsetEffectLengthGetter)(Edge*);
 
 
-
 bool areWallsBetween(
     const Point& p1, const Point& p2,
     float ignoreWallsBelowZ = -FLT_MAX, bool* outImpassableWalls = nullptr
@@ -146,7 +145,7 @@ void getPikminSpitData(
 );
 ALLEGRO_COLOR getWallShadowColor(Edge* ePtr);
 float getWallShadowLength(Edge* ePtr);
-vector<std::pair<int, string> > getWeatherTable(DataNode* node);
+vector<std::pair<int, string>> getWeatherTable(DataNode* node);
 void guiCreateBackInputIcon(
     GuiManager* gui, const string& itemName = "back_input"
 );
@@ -207,7 +206,7 @@ void spitPikminSeed(
     uint32_t spitNr, float baseHorizontalSpeed,
     float maxHorizontalSpeedDeviation, float verticalSpeed
 );
-vector<vector<StringToken> > splitLongStringWithTokens(
+vector<vector<StringToken>> splitLongStringWithTokens(
     const vector<StringToken>& tokens, int maxWidth
 );
 ParticleGenerator standardParticleGenSetup(
@@ -235,7 +234,6 @@ bool validateCommandParams(
     const vector<CommandParam>& params, const string& context
 );
 Point v2p(const Vertex* v);
-
 
 
 /**

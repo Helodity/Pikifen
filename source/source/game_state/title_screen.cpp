@@ -71,9 +71,10 @@ void MainMenu::initGuiMainPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
-    };
+    auto getIconLeft = [&iconsNode] (const string & name,
+            const string & def) {
+                           return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+                       };
     
     bool playIconLeft = getIconLeft("play", "true");
     bool makeIconLeft = getIconLeft("make", "false");
@@ -99,191 +100,191 @@ void MainMenu::initGuiMainPage() {
     ButtonGuiItem* playButton =
         new ButtonGuiItem("Play", game.sysContent.fntAreaName);
     playButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_PLAY, draw.center, draw.size, playIconLeft, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            playButton->text, playButton->font,
-            playButton->color, playButton->focused,
-            playButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_PLAY, draw.center, draw.size, playIconLeft, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                playButton->text, playButton->font,
+                playButton->color, playButton->focused,
+                playButton->getJuiceValue(), draw.tint
+            );
+        };
     playButton->onActivate =
-    [this] (const Point&) {
-        if(game.statistics.areaEntries == 0) {
-            game.modal.reset();
-            game.modal.title = "Tutorial";
-            game.modal.prompt =
-                "If you're new to Pikifen, it is recommended to play the "
-                "\"Tutorial Meadow\" mission first.\n\n"
-                "Do you want to play there now?";
-            game.modal.extraButtons.push_back(
-            ModalGuiManager::Button {
-                .text = "No",
-                .tooltip = "Go to the standard area selection menu.",
-                .onActivate = [this] (const Point&) {
-                    transitionGuis(
-                        mainGui, playGui,
-                        GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-                        MAIN_MENU::HUD_MOVE_TIME
-                    );
+        [this] (const Point&) {
+            if(game.statistics.areaEntries == 0) {
+                game.modal.reset();
+                game.modal.title = "Tutorial";
+                game.modal.prompt =
+                    "If you're new to Pikifen, it is recommended to play the "
+                    "\"Tutorial Meadow\" mission first.\n\n"
+                    "Do you want to play there now?";
+                game.modal.extraButtons.push_back(
+                    ModalGuiManager::Button {
+                    .text = "No",
+                    .tooltip = "Go to the standard area selection menu.",
+                    .onActivate = [this] (const Point&) {
+                                      transitionGuis(
+                                          mainGui, playGui,
+                                          GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                                          MAIN_MENU::HUD_MOVE_TIME
+                                      );
+                                  }
                 }
-            }
-            );
-            game.modal.extraButtons.push_back(
-            ModalGuiManager::Button {
-                .text = "Yes",
-                .tooltip = "Play Tutorial Meadow now.",
-                .onActivate = [] (const Point&) {
-                    game.states.gameplay->pathOfAreaToLoad =
-                    game.content.areas.manifestToPath(
-                        ContentManifest(
-                            FOLDER_NAMES::TUTORIAL_AREA, "",
-                            FOLDER_NAMES::BASE_PACK
-                        ), AREA_TYPE_MISSION
-                    );
-                    game.fadeMgr.startFade(false, [] () {
-                        game.changeState(game.states.gameplay);
-                    });
+                );
+                game.modal.extraButtons.push_back(
+                    ModalGuiManager::Button {
+                    .text = "Yes",
+                    .tooltip = "Play Tutorial Meadow now.",
+                    .onActivate = [] (const Point&) {
+                                      game.states.gameplay->pathOfAreaToLoad =
+                                          game.content.areas.manifestToPath(
+                                              ContentManifest(
+                                                  FOLDER_NAMES::TUTORIAL_AREA, "",
+                                                  FOLDER_NAMES::BASE_PACK
+                                              ), AREA_TYPE_MISSION
+                                          );
+                                      game.fadeMgr.startFade(false, [] () {
+                                                                        game.changeState(game.states.gameplay);
+                                                                    });
+                                  }
                 }
+                );
+                game.modal.defaultFocusButtonIdx = 1;
+                game.modal.updateItems();
+                game.modal.open();
+                
+            } else {
+                transitionGuis(
+                    mainGui, playGui,
+                    GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                    MAIN_MENU::HUD_MOVE_TIME
+                );
+                
             }
-            );
-            game.modal.defaultFocusButtonIdx = 1;
-            game.modal.updateItems();
-            game.modal.open();
-            
-        } else {
-            transitionGuis(
-                mainGui, playGui,
-                GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-                MAIN_MENU::HUD_MOVE_TIME
-            );
-            
-        }
-    };
+        };
     playButton->onGetTooltip =
-    [] () { return "Choose an area to play in."; };
+        [] () { return "Choose an area to play in."; };
     mainGui.addItem(playButton, "play");
     
     //Make button.
     ButtonGuiItem* makeButton =
         new ButtonGuiItem("Make", game.sysContent.fntAreaName);
     makeButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            makeButton->text, makeButton->font,
-            makeButton->color, makeButton->focused,
-            makeButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                makeButton->text, makeButton->font,
+                makeButton->color, makeButton->focused,
+                makeButton->getJuiceValue(), draw.tint
+            );
+        };
     makeButton->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            mainGui, makeGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            MAIN_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                mainGui, makeGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                MAIN_MENU::HUD_MOVE_TIME
+            );
+        };
     makeButton->onGetTooltip =
-    [] () { return "Make your own content, like areas or animations."; };
+        [] () { return "Make your own content, like areas or animations."; };
     mainGui.addItem(makeButton, "make");
     
     //Help button.
     ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntAreaName);
     helpButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_HELP, draw.center, draw.size, helpIconLeft, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            helpButton->text, helpButton->font,
-            helpButton->color, helpButton->focused,
-            helpButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_HELP, draw.center, draw.size, helpIconLeft, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                helpButton->text, helpButton->font,
+                helpButton->color, helpButton->focused,
+                helpButton->getJuiceValue(), draw.tint
+            );
+        };
     helpButton->onActivate =
-    [this] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.changeState(game.states.annexScreen);
-        });
-    };
+        [this] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.changeState(game.states.annexScreen);
+                                          });
+        };
     helpButton->onGetTooltip =
-    [] () {
-        return
-            "Quick help and tips about how to play. "
-            "You can also find this in the pause menu.";
-    };
+        [] () {
+            return
+                "Quick help and tips about how to play. "
+                "You can also find this in the pause menu.";
+        };
     mainGui.addItem(helpButton, "help");
     
     //Options button.
     ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntAreaName);
     optionsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            optionsButton->text, optionsButton->font,
-            optionsButton->color, optionsButton->focused,
-            optionsButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                optionsButton->text, optionsButton->font,
+                optionsButton->color, optionsButton->focused,
+                optionsButton->getJuiceValue(), draw.tint
+            );
+        };
     optionsButton->onActivate =
-    [] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.states.annexScreen->menuToLoad =
-                ANNEX_SCREEN_MENU_OPTIONS;
-            game.changeState(game.states.annexScreen);
-        });
-    };
+        [] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.states.annexScreen->menuToLoad =
+                                                  ANNEX_SCREEN_MENU_OPTIONS;
+                                              game.changeState(game.states.annexScreen);
+                                          });
+        };
     optionsButton->onGetTooltip =
-    [] () {
-        return
-            "Customize your playing experience. "
-            "You can also find this in the pause menu.";
-    };
+        [] () {
+            return
+                "Customize your playing experience. "
+                "You can also find this in the pause menu.";
+        };
     mainGui.addItem(optionsButton, "options");
     
     //Statistics button.
     ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntAreaName);
     statsButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            statsButton->text, statsButton->font,
-            statsButton->color, statsButton->focused,
-            statsButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                statsButton->text, statsButton->font,
+                statsButton->color, statsButton->focused,
+                statsButton->getJuiceValue(), draw.tint
+            );
+        };
     statsButton->onActivate =
-    [] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.states.annexScreen->menuToLoad =
-                ANNEX_SCREEN_MENU_STATS;
-            game.changeState(game.states.annexScreen);
-        });
-    };
+        [] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.states.annexScreen->menuToLoad =
+                                                  ANNEX_SCREEN_MENU_STATS;
+                                              game.changeState(game.states.annexScreen);
+                                          });
+        };
     statsButton->onGetTooltip =
-    [] () {
-        return
-            "Check out some fun lifetime statistics. "
-            "You can also find this in the pause menu.";
-    };
+        [] () {
+            return
+                "Check out some fun lifetime statistics. "
+                "You can also find this in the pause menu.";
+        };
     mainGui.addItem(statsButton, "stats");
     
     //Discord server button.
@@ -291,28 +292,28 @@ void MainMenu::initGuiMainPage() {
         new ButtonGuiItem("", game.sysContent.fntAreaName);
     discordButton->forceSquare = true;
     discordButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawBitmapInBox(
-            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f,
-            true, true, 0.0f, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            discordButton->text, discordButton->font,
-            discordButton->color, discordButton->focused,
-            discordButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawBitmapInBox(
+                game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f,
+                true, true, 0.0f, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                discordButton->text, discordButton->font,
+                discordButton->color, discordButton->focused,
+                discordButton->getJuiceValue(), draw.tint
+            );
+        };
     discordButton->onActivate =
-    [] (const Point&) {
-        openWebBrowser(DISCORD_SERVER_URL);
-    };
+        [] (const Point&) {
+            openWebBrowser(DISCORD_SERVER_URL);
+        };
     discordButton->onGetTooltip =
-    [] () {
-        return
-            "Open the project's Discord server! Discussions! Feedback! "
-            "Questions! New content!";
-    };
+        [] () {
+            return
+                "Open the project's Discord server! Discussions! Feedback! "
+                "Questions! New content!";
+        };
     mainGui.addItem(discordButton, "discord");
     
     //GitHub page button.
@@ -320,24 +321,24 @@ void MainMenu::initGuiMainPage() {
         new ButtonGuiItem("", game.sysContent.fntAreaName);
     githubButton->forceSquare = true;
     githubButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawBitmapInBox(
-            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f,
-            true, true, 0.0f, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            githubButton->text, githubButton->font,
-            githubButton->color, githubButton->focused,
-            githubButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawBitmapInBox(
+                game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f,
+                true, true, 0.0f, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                githubButton->text, githubButton->font,
+                githubButton->color, githubButton->focused,
+                githubButton->getJuiceValue(), draw.tint
+            );
+        };
     githubButton->onActivate =
-    [] (const Point&) {
-        openWebBrowser(GITHUB_PAGE_URL);
-    };
+        [] (const Point&) {
+            openWebBrowser(GITHUB_PAGE_URL);
+        };
     githubButton->onGetTooltip =
-    [] () { return "Open the project's development page on GitHub!"; };
+        [] () { return "Open the project's development page on GitHub!"; };
     mainGui.addItem(githubButton, "github");
     
     //Exit button.
@@ -346,32 +347,32 @@ void MainMenu::initGuiMainPage() {
         "Exit", game.sysContent.fntAreaName, game.config.guiColors.bad
     );
     mainGui.backItem->onDraw =
-    [this, quitIconLeft] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft, draw.tint
-        );
-        ButtonGuiItem* backButtonPtr = (ButtonGuiItem*) mainGui.backItem;
-        drawButton(
-            draw.center, draw.size,
-            backButtonPtr->text,
-            backButtonPtr->font,
-            backButtonPtr->color,
-            mainGui.backItem->focused,
-            mainGui.backItem->getJuiceValue(), draw.tint
-        );
-    };
+        [this, quitIconLeft] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft, draw.tint
+            );
+            ButtonGuiItem* backButtonPtr = (ButtonGuiItem*) mainGui.backItem;
+            drawButton(
+                draw.center, draw.size,
+                backButtonPtr->text,
+                backButtonPtr->font,
+                backButtonPtr->color,
+                mainGui.backItem->focused,
+                mainGui.backItem->getJuiceValue(), draw.tint
+            );
+        };
     mainGui.backItem->onActivate =
-    [] (const Point&) {
-        saveStatistics();
-        game.isGameRunning = false;
-    };
+        [] (const Point&) {
+            saveStatistics();
+            game.isGameRunning = false;
+        };
     mainGui.backItem->onGetTooltip =
-    [] () {
-        return
-            game.config.general.name.empty() ?
-            "Quit Pikifen." :
-            "Quit " + game.config.general.name + ".";
-    };
+        [] () {
+            return
+                game.config.general.name.empty() ?
+                "Quit Pikifen." :
+                "Quit " + game.config.general.name + ".";
+        };
     mainGui.addItem(mainGui.backItem, "exit");
     
     //Exit input icon.
@@ -399,9 +400,10 @@ void MainMenu::initGuiMakePage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
-    };
+    auto getIconLeft = [&iconsNode] (const string & name,
+            const string & def) {
+                           return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+                       };
     
     bool animEditorIconLeft = getIconLeft("animation_editor", "true");
     bool areaEditorIconLeft = getIconLeft("area_editor", "false");
@@ -423,104 +425,104 @@ void MainMenu::initGuiMakePage() {
     ButtonGuiItem* animEdButton =
         new ButtonGuiItem("Animations", game.sysContent.fntAreaName);
     animEdButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            animEdButton->text, animEdButton->font,
-            animEdButton->color, animEdButton->focused,
-            animEdButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                animEdButton->text, animEdButton->font,
+                animEdButton->color, animEdButton->focused,
+                animEdButton->getJuiceValue(), draw.tint
+            );
+        };
     animEdButton->onActivate =
-    [] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.changeState(game.states.animationEd);
-        });
-    };
+        [] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.changeState(game.states.animationEd);
+                                          });
+        };
     animEdButton->onGetTooltip =
-    [] () { return "Make an animation for any object in the game."; };
+        [] () { return "Make an animation for any object in the game."; };
     makeGui.addItem(animEdButton, "animation_editor");
     
     //Area editor button.
     ButtonGuiItem* areaEdButton =
         new ButtonGuiItem("Areas", game.sysContent.fntAreaName);
     areaEdButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            areaEdButton->text, areaEdButton->font,
-            areaEdButton->color, areaEdButton->focused,
-            areaEdButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                areaEdButton->text, areaEdButton->font,
+                areaEdButton->color, areaEdButton->focused,
+                areaEdButton->getJuiceValue(), draw.tint
+            );
+        };
     areaEdButton->onActivate =
-    [] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.changeState(game.states.areaEd);
-        });
-    };
+        [] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.changeState(game.states.areaEd);
+                                          });
+        };
     areaEdButton->onGetTooltip =
-    [] () { return "Make an area to play on."; };
+        [] () { return "Make an area to play on."; };
     makeGui.addItem(areaEdButton, "area_editor");
     
     //Particle editor button.
     ButtonGuiItem* partEdButton =
         new ButtonGuiItem("Particles", game.sysContent.fntAreaName);
     partEdButton->onDraw =
-    [ = ](const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size,
-            particleEditorIconLeft, draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            partEdButton->text, partEdButton->font,
-            partEdButton->color, partEdButton->focused,
-            partEdButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ](const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size,
+                particleEditorIconLeft, draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                partEdButton->text, partEdButton->font,
+                partEdButton->color, partEdButton->focused,
+                partEdButton->getJuiceValue(), draw.tint
+            );
+        };
     partEdButton->onActivate =
-    [](const Point&) {
-        game.fadeMgr.startFade(false, []() {
-            game.changeState(game.states.particleEd);
-        });
-    };
+        [](const Point&) {
+            game.fadeMgr.startFade(false, []() {
+                                              game.changeState(game.states.particleEd);
+                                          });
+        };
     partEdButton->onGetTooltip =
-    []() { return "Make generators that create particles."; };
+        []() { return "Make generators that create particles."; };
     makeGui.addItem(partEdButton, "particle_editor");
     
     //GUI editor button.
     ButtonGuiItem* guiEdButton =
         new ButtonGuiItem("GUI", game.sysContent.fntAreaName);
     guiEdButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            guiEdButton->text, guiEdButton->font,
-            guiEdButton->color, guiEdButton->focused,
-            guiEdButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                guiEdButton->text, guiEdButton->font,
+                guiEdButton->color, guiEdButton->focused,
+                guiEdButton->getJuiceValue(), draw.tint
+            );
+        };
     guiEdButton->onActivate =
-    [] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.changeState(game.states.guiEd);
-        });
-    };
+        [] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.changeState(game.states.guiEd);
+                                          });
+        };
     guiEdButton->onGetTooltip =
-    [] () { return "Change the way menus and the gameplay HUD look."; };
+        [] () { return "Change the way menus and the gameplay HUD look."; };
     makeGui.addItem(guiEdButton, "gui_editor");
     
     //Back button.
@@ -529,16 +531,16 @@ void MainMenu::initGuiMakePage() {
         "Back", game.sysContent.fntAreaName, game.config.guiColors.back
     );
     makeGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            makeGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            MAIN_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                makeGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                MAIN_MENU::HUD_MOVE_TIME
+            );
+        };
     makeGui.backItem->onGetTooltip =
-    [] () {
-        return "Return to the main page.";
-    };
+        [] () {
+            return "Return to the main page.";
+        };
     makeGui.addItem(makeGui.backItem, "back");
     
     //Back input icon.
@@ -548,40 +550,40 @@ void MainMenu::initGuiMakePage() {
     ButtonGuiItem* moreButton =
         new ButtonGuiItem("Other...", game.sysContent.fntStandard);
     moreButton->onActivate =
-    [] (const Point&) {
-        game.modal.reset();
-        game.modal.title = "Content making";
-        game.modal.prompt =
-            "You can edit most of the game's content freely. Some of it is "
-            "best done using the editors in the menu, but for other things "
-            "you will have to edit files by hand. The way different types of "
-            "content work vary, and are better explained in the manual.";
-        game.modal.extraButtons.push_back(
-        ModalGuiManager::Button {
-            .text = "Open manual",
-            .tooltip = "Open the manual in the content making page.",
-            .onActivate = [] (const Point&) {
-                openManual("making.html");
+        [] (const Point&) {
+            game.modal.reset();
+            game.modal.title = "Content making";
+            game.modal.prompt =
+                "You can edit most of the game's content freely. Some of it is "
+                "best done using the editors in the menu, but for other things "
+                "you will have to edit files by hand. The way different types of "
+                "content work vary, and are better explained in the manual.";
+            game.modal.extraButtons.push_back(
+                ModalGuiManager::Button {
+                .text = "Open manual",
+                .tooltip = "Open the manual in the content making page.",
+                .onActivate = [] (const Point&) {
+                                  openManual("making.html");
+                              }
             }
-        }
-        );
-        game.modal.extraButtons.push_back(
-        ModalGuiManager::Button {
-            .text = "Open game folder",
-            .tooltip = "Open the folder with the game's content.",
-            .onActivate = [] (const Point&) {
-                openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
+            );
+            game.modal.extraButtons.push_back(
+                ModalGuiManager::Button {
+                .text = "Open game folder",
+                .tooltip = "Open the folder with the game's content.",
+                .onActivate = [] (const Point&) {
+                                  openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
+                              }
             }
-        }
-        );
-        game.modal.updateItems();
-        game.modal.open();
-    };
+            );
+            game.modal.updateItems();
+            game.modal.open();
+        };
     moreButton->onGetTooltip =
-    [] () {
-        return
-            "Information on how to make other content.";
-    };
+        [] () {
+            return
+                "Information on how to make other content.";
+        };
     makeGui.addItem(moreButton, "more");
     
     //Tooltip text.
@@ -606,9 +608,10 @@ void MainMenu::initGuiPlayPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
-        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
-    };
+    auto getIconLeft = [&iconsNode] (const string & name,
+            const string & def) {
+                           return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+                       };
     
     bool simpleAreasIconLeft = getIconLeft("simple_areas", "true");
     bool missionsIconLeft = getIconLeft("missions", "true");
@@ -625,64 +628,64 @@ void MainMenu::initGuiPlayPage() {
     ButtonGuiItem* simpleButton =
         new ButtonGuiItem("Simple areas", game.sysContent.fntAreaName);
     simpleButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            simpleButton->text, simpleButton->font,
-            simpleButton->color, simpleButton->focused,
-            simpleButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                simpleButton->text, simpleButton->font,
+                simpleButton->color, simpleButton->focused,
+                simpleButton->getJuiceValue(), draw.tint
+            );
+        };
     simpleButton->onActivate =
-    [] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.states.annexScreen->areaMenuAreaType =
-                AREA_TYPE_SIMPLE;
-            game.states.annexScreen->menuToLoad =
-                ANNEX_SCREEN_MENU_AREA_SELECTION;
-            game.changeState(game.states.annexScreen);
-        });
-    };
+        [] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.states.annexScreen->areaMenuAreaType =
+                                                  AREA_TYPE_SIMPLE;
+                                              game.states.annexScreen->menuToLoad =
+                                                  ANNEX_SCREEN_MENU_AREA_SELECTION;
+                                              game.changeState(game.states.annexScreen);
+                                          });
+        };
     simpleButton->onGetTooltip =
-    [] () { return "Pick a simple area with no goal, and start playing!"; };
+        [] () { return "Pick a simple area with no goal, and start playing!"; };
     playGui.addItem(simpleButton, "simple");
     
     //Play a mission area button.
     ButtonGuiItem* missionButton =
         new ButtonGuiItem("Missions", game.sysContent.fntAreaName);
     missionButton->onDraw =
-    [ = ] (const DrawInfo & draw) {
-        drawMenuButtonIcon(
-            MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft,
-            draw.tint
-        );
-        drawButton(
-            draw.center, draw.size,
-            missionButton->text, missionButton->font,
-            missionButton->color, missionButton->focused,
-            missionButton->getJuiceValue(), draw.tint
-        );
-    };
+        [ = ] (const DrawInfo & draw) {
+            drawMenuButtonIcon(
+                MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft,
+                draw.tint
+            );
+            drawButton(
+                draw.center, draw.size,
+                missionButton->text, missionButton->font,
+                missionButton->color, missionButton->focused,
+                missionButton->getJuiceValue(), draw.tint
+            );
+        };
     missionButton->onActivate =
-    [] (const Point&) {
-        game.fadeMgr.startFade(false, [] () {
-            game.states.annexScreen->areaMenuAreaType =
-                AREA_TYPE_MISSION;
-            game.states.annexScreen->menuToLoad =
-                ANNEX_SCREEN_MENU_AREA_SELECTION;
-            game.changeState(game.states.annexScreen);
-        });
-    };
+        [] (const Point&) {
+            game.fadeMgr.startFade(false, [] () {
+                                              game.states.annexScreen->areaMenuAreaType =
+                                                  AREA_TYPE_MISSION;
+                                              game.states.annexScreen->menuToLoad =
+                                                  ANNEX_SCREEN_MENU_AREA_SELECTION;
+                                              game.changeState(game.states.annexScreen);
+                                          });
+        };
     missionButton->onGetTooltip =
-    [] () {
-        return
-            "Pick a mission area with goals and limitations, "
-            "and start playing!";
-    };
+        [] () {
+            return
+                "Pick a mission area with goals and limitations, "
+                "and start playing!";
+        };
     playGui.addItem(missionButton, "mission");
     
     //Back button.
@@ -691,16 +694,16 @@ void MainMenu::initGuiPlayPage() {
         "Back", game.sysContent.fntAreaName, game.config.guiColors.back
     );
     playGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            playGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            MAIN_MENU::HUD_MOVE_TIME
-        );
-    };
+        [this] (const Point&) {
+            transitionGuis(
+                playGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                MAIN_MENU::HUD_MOVE_TIME
+            );
+        };
     playGui.backItem->onGetTooltip =
-    [] () {
-        return "Return to the main page.";
-    };
+        [] () {
+            return "Return to the main page.";
+        };
     playGui.addItem(playGui.backItem, "back");
     
     //Back input icon.
@@ -1036,10 +1039,10 @@ void TitleScreen::load() {
     //Game content.
     game.content.reloadPacks();
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
     },
-    CONTENT_LOAD_LEVEL_FULL
+        CONTENT_LOAD_LEVEL_FULL
     );
     
     //Misc. initializations.
@@ -1190,7 +1193,7 @@ void TitleScreen::unload() {
     
     //Game content.
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
     }
     );

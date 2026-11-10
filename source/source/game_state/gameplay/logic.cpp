@@ -137,7 +137,8 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     player->throwDestMob = nullptr;
     forIdx(m, mobs.all) {
         Mob* mPtr = mobs.all[m];
-        if(!bBoxCheck(player->throwDest, mPtr->center, mPtr->physicalSpan)) {
+        if(!bBoxCheck(player->throwDest, mPtr->center,
+            mPtr->physicalSpan)) {
             //Too far away; of course the leader's cursor isn't on it.
             continue;
         }
@@ -265,7 +266,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->whistle.radius < player->leaderPtr->leaType->whistleRange
     ) {
         player->whistle.radius += game.config.rules.whistleGrowthSpeed * deltaT;
-        if(player->whistle.radius > player->leaderPtr->leaType->whistleRange) {
+        if(player->whistle.radius >
+            player->leaderPtr->leaType->whistleRange) {
             player->whistle.radius = player->leaderPtr->leaType->whistleRange;
         }
     }
@@ -277,7 +279,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     player->leaderMovement.getInfo(
         &dummyCoords, &dummyAngle, &leaderMoveMagnitude
     );
-    if(leaderMoveMagnitude < GAMEPLAY::LEADER_MOVEMENT_MAGNITUDE_THRESHOLD) {
+    if(leaderMoveMagnitude <
+        GAMEPLAY::LEADER_MOVEMENT_MAGNITUDE_THRESHOLD) {
         player->leaderPtr->scriptVM.fsm.runEvent(
             LEADER_EV_MOVE_END, (void*) &player->leaderMovement
         );
@@ -724,7 +727,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         float moveStrength =
             leaderToMouseCursorDist /
             (game.config.rules.leaderCursorMaxDist / player->view.cam.zoom);
-        moveStrength = interpolateNumber(moveStrength, 0.75f, 1.0f, 0.0f, 1.0f);
+        moveStrength = interpolateNumber(moveStrength, 0.75f, 1.0f, 0.0f,
+                1.0f);
         moveStrength = std::clamp(moveStrength, 0.0f, 1.0f);
         
         float leaderToMouseCursorAngle =
@@ -1085,7 +1089,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     game.curArea->mission.getScoreMedal(oldMissionScore);
                 MISSION_MEDAL newMedal =
                     game.curArea->mission.getScoreMedal(missionScore);
-                if(oldMedal < newMedal && interlude.get() == INTERLUDE_NONE) {
+                if(oldMedal < newMedal
+                    && interlude.get() == INTERLUDE_NONE) {
                     medalGotItJuiceTimer = 0.0f;
                     game.audio.addNewUiSoundSource(
                         game.sysContent.sndMedalGotIt,
@@ -1230,21 +1235,22 @@ void GameplayState::doMenuLogic() {
     const auto getInspectorStrings =
         [] (
             ScriptVM * scriptVM,
-            string* outStateStr, string* outPrevStatesStr, string* outTimerStr
-    ) {
-        *outStateStr =
-            resizeString(
-                scriptVM->fsm.curState ?
-                scriptVM->fsm.curState->name :
-                "(None!)",
-                20
-            );
-        for(unsigned char p = 0; p < FSM::STATE_HISTORY_SIZE; p++) {
-            (*outPrevStatesStr) +=
-                resizeString(scriptVM->fsm.prevStateNames[p], 20) + " ";
-        }
-        *outTimerStr = f2s(scriptVM->timer.timeLeft);
-    };
+            string * outStateStr, string * outPrevStatesStr,
+            string * outTimerStr
+        ) {
+            *outStateStr =
+                resizeString(
+                    scriptVM->fsm.curState ?
+                    scriptVM->fsm.curState->name :
+                    "(None!)",
+                    20
+                );
+            for(unsigned char p = 0; p < FSM::STATE_HISTORY_SIZE; p++) {
+                (*outPrevStatesStr) +=
+                    resizeString(scriptVM->fsm.prevStateNames[p], 20) + " ";
+            }
+            *outTimerStr = f2s(scriptVM->timer.timeLeft);
+        };
     
     //Print info on the current area.
     if(game.makerTools.inspectingArea) {
@@ -1398,9 +1404,9 @@ void GameplayState::doMenuLogic() {
             Edge* ePtr = game.curArea->edges[e];
             float ratio;
             Point p = getClosestPointInLineSeg(
-                          v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
-                          players[0].view.mouseCursorWorldPos, &ratio
-                      );
+                    v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
+                    players[0].view.mouseCursorWorldPos, &ratio
+                );
             if(ratio < 0.0f) p = v2p(ePtr->vertexes[0]);
             if(ratio > 1.0f) p = v2p(ePtr->vertexes[1]);
             Distance d(players[0].view.mouseCursorWorldPos, p);
@@ -1865,9 +1871,9 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     //Check the pending inter-mob events.
     sort(
         pendingInterMobEvents.begin(), pendingInterMobEvents.end(),
-    [mPtr] (PendingInterMobEvent e1, PendingInterMobEvent e2) -> bool {
-        return e1.d < e2.d;
-    }
+        [mPtr] (PendingInterMobEvent e1, PendingInterMobEvent e2) -> bool {
+            return e1.d < e2.d;
+        }
     );
     
     forIdx(e, pendingInterMobEvents) {
@@ -2087,14 +2093,14 @@ void GameplayState::processMobTouches(
     if(
         okToPush &&
         (m2Ptr->type->pushes || bothIdlePikmin) && (
-            (
-                m2Ptr->bottomZ < mPtr->bottomZ + mPtr->height &&
-                m2Ptr->bottomZ + m2Ptr->height > mPtr->bottomZ
-            ) || (
-                mPtr->height == 0
-            ) || (
-                m2Ptr->height == 0
-            )
+        (
+            m2Ptr->bottomZ < mPtr->bottomZ + mPtr->height &&
+            m2Ptr->bottomZ + m2Ptr->height > mPtr->bottomZ
+        ) || (
+            mPtr->height == 0
+        ) || (
+            m2Ptr->height == 0
+        )
         ) && !(
             //If they are both being carried by Pikmin, one of them
             //shouldn't push, otherwise the Pikmin

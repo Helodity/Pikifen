@@ -171,7 +171,7 @@ void GameplayState::doPlayerActionSwitchMaturity(
     do {
         nextMaturity =
             (size_t) sumAndWrap(
-                (int) nextMaturity, isNext ? 1 : -1, N_MATURITIES
+            (int) nextMaturity, isNext ? 1 : -1, N_MATURITIES
             );
             
         //Back to the start?
@@ -587,7 +587,8 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         case PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_D: {
             doPlayerActionInventoryShortcut(
                 player, isDown,
-                action.actionTypeId - PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A
+                action.actionTypeId -
+                PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A
             );
             break;
             
@@ -744,7 +745,8 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
  * @param action Action to check.
  * @return Whether it should be ignored.
  */
-bool GameplayState::shouldIgnorePlayerAction(const Inpution::Action& action) {
+bool GameplayState::shouldIgnorePlayerAction(const Inpution::Action&
+    action) {
     if(game.modal.responsive) return true;
     if(game.makerTools.freeCamMode && !game.makerTools.freeCamFrozen) {
         return true;

@@ -167,7 +167,8 @@ void AnimationEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
-    if(state == EDITOR_STATE_HITBOXES || state == EDITOR_STATE_SPRITE_BITMAP) {
+    if(state == EDITOR_STATE_HITBOXES
+        || state == EDITOR_STATE_SPRITE_BITMAP) {
         handleLmbDown(ev);
     }
 }
@@ -219,8 +220,9 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
             bmpClickPos.y = floor(bmpClickPos.y - bmpPos.y);
             
             if(bmpClickPos.x < 0 || bmpClickPos.y < 0) return;
-            if(bmpClickPos.x > bmpSize.x || bmpClickPos.y > bmpSize.y) return;
-            
+            if(bmpClickPos.x > bmpSize.x
+                || bmpClickPos.y > bmpSize.y) return;
+                
             RectCorners selectionCorners;
             if(
                 (
@@ -270,7 +272,8 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
             delete[] selectionPixels;
             
             curSprite->bmpPos = selectionCorners.tl;
-            curSprite->bmpSize = selectionCorners.br - selectionCorners.tl + 1;
+            curSprite->bmpSize = selectionCorners.br - selectionCorners.tl +
+                1;
             curSprite->setBitmap(
                 curSprite->bmpName, curSprite->bmpPos, curSprite->bmpSize
             );
@@ -327,7 +330,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 &curSprite->tf.rot,
                 1.0f / game.editorsView.cam.zoom, flags,
                 RectCorners(), -FLT_MAX,
-        [this] (const Point & p) { return snapPoint(p); }
+                [this] (const Point & p) { return snapPoint(p); }
             )
         ) {
             curSprite->tf.scale = curSpriteSize / curSprite->bmpSize;
@@ -356,7 +359,8 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 enableFlag(flags, TransformationWidget::TW_FLAG_KEEP_RATIO);
             }
             if(isAltPressed) {
-                enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
+                enableFlag(flags,
+                    TransformationWidget::TW_FLAG_LOCK_CENTER);
             }
             if(
                 curTransformationWidget.handleMouseMove(
@@ -366,7 +370,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     &curSprite->topPose.angle,
                     1.0f / game.editorsView.cam.zoom, flags,
                     RectCorners(), ANIM_EDITOR::TOP_MIN_SIZE,
-            [this] (const Point & p) { return snapPoint(p); }
+                    [this] (const Point & p) { return snapPoint(p); }
                 )
             ) {
                 changesMgr.markAsChanged();

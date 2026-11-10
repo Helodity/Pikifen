@@ -19,7 +19,6 @@
 #include "../../util/string_utils.hpp"
 
 
-
 /**
  * @brief Handles the drawing part of the main loop of the animation editor.
  */
@@ -229,15 +228,18 @@ void AnimationEditor::drawCanvas() {
                 switch(hPtr->type) {
                 case HITBOX_TYPE_NORMAL: {
                     hitboxColor = DRAWING::HITBOX_COLOR_NORMAL;
-                    hitboxOutlineColor = DRAWING::HITBOX_OUTLINE_COLOR_NORMAL;
+                    hitboxOutlineColor =
+                        DRAWING::HITBOX_OUTLINE_COLOR_NORMAL;
                     break;
                 } case HITBOX_TYPE_ATTACK: {
                     hitboxColor = DRAWING::HITBOX_COLOR_ATTACK;
-                    hitboxOutlineColor = DRAWING::HITBOX_OUTLINE_COLOR_ATTACK;
+                    hitboxOutlineColor =
+                        DRAWING::HITBOX_OUTLINE_COLOR_ATTACK;
                     break;
                 } case HITBOX_TYPE_DISABLED: {
                     hitboxColor = DRAWING::HITBOX_COLOR_DISABLED;
-                    hitboxOutlineColor = DRAWING::HITBOX_OUTLINE_COLOR_DISABLED;
+                    hitboxOutlineColor =
+                        DRAWING::HITBOX_OUTLINE_COLOR_DISABLED;
                     break;
                 }
                 }

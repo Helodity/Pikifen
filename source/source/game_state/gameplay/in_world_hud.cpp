@@ -347,7 +347,8 @@ void InWorldHealthWheel::draw() {
     case IN_WORLD_HUD_TRANSITION_IN: {
         float timerRatio =
             1.0f -
-            (transitionTimer / IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
+            (transitionTimer /
+                IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
         alphaMult = timerRatio;
         sizeMult = ease(timerRatio, EASE_METHOD_OUT) * 0.5 + 0.5;
         break;
@@ -367,8 +368,9 @@ void InWorldHealthWheel::draw() {
         Point(
             IN_WORLD_STATUS_BUILDUP::WIDTH, IN_WORLD_STATUS_BUILDUP::HEIGHT
         ) * sizeMult;
-    float curYOffset = m->radius + IN_WORLD_HEALTH_WHEEL::PADDING + wheelRadius;
-    
+    float curYOffset = m->radius + IN_WORLD_HEALTH_WHEEL::PADDING +
+        wheelRadius;
+        
     //Draw the health wheel.
     drawHealth(
         Point(m->center.x, m->center.y - curYOffset),
@@ -382,59 +384,59 @@ void InWorldHealthWheel::draw() {
     
     const auto drawNextBar =
         [this, &curYOffset, &alphaMult, &buildupBarSize, &sizeMult]
-    (float fillRatio, const ALLEGRO_COLOR & color, bool drawCross) {
-        if(fillRatio <= 0.0f) return;
-        
-        curYOffset +=
-            IN_WORLD_STATUS_BUILDUP::PADDING + IN_WORLD_STATUS_BUILDUP::HEIGHT;
-        Point buildupBarCenter(m->center.x, m->center.y - curYOffset);
-        
-        drawFilledRoundedRatioRectangle(
-            buildupBarCenter,
-            buildupBarSize,
-            IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
-            changeAlpha(
-                COLOR_BLACK, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
-            )
-        );
-        
-        float filledWidth = IN_WORLD_STATUS_BUILDUP::WIDTH * fillRatio;
-        Point filledBarCenter(
-            m->center.x - IN_WORLD_STATUS_BUILDUP::WIDTH / 2.0f +
-            filledWidth / 2.0f,
-            m->center.y - curYOffset
-        );
-        Point filledBarSize =
-            Point(
-                filledWidth, IN_WORLD_STATUS_BUILDUP::HEIGHT
-            ) - IN_WORLD_STATUS_BUILDUP::OUTLINE_SIZE * 2.0f
-            * sizeMult;
-        filledBarSize.x = std::max(0.0f, filledBarSize.x);
-        drawFilledRoundedRatioRectangle(
-            filledBarCenter, filledBarSize,
-            IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
-            changeAlpha(
-                color, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
-            )
-        );
-        
-        if(drawCross) {
-            al_draw_line(
-                buildupBarCenter.x - buildupBarSize.x / 2.0f,
-                buildupBarCenter.y - buildupBarSize.y / 2.0f,
-                buildupBarCenter.x + buildupBarSize.x / 2.0f,
-                buildupBarCenter.y + buildupBarSize.y / 2.0f,
-                al_map_rgb(128, 64, 32), 2.0f
+            (float fillRatio, const ALLEGRO_COLOR & color, bool drawCross) {
+            if(fillRatio <= 0.0f) return;
+            
+            curYOffset +=
+                IN_WORLD_STATUS_BUILDUP::PADDING + IN_WORLD_STATUS_BUILDUP::HEIGHT;
+            Point buildupBarCenter(m->center.x, m->center.y - curYOffset);
+            
+            drawFilledRoundedRatioRectangle(
+                buildupBarCenter,
+                buildupBarSize,
+                IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
+                changeAlpha(
+                    COLOR_BLACK, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
+                )
             );
-            al_draw_line(
-                buildupBarCenter.x + buildupBarSize.x / 2.0f,
-                buildupBarCenter.y - buildupBarSize.y / 2.0f,
-                buildupBarCenter.x - buildupBarSize.x / 2.0f,
-                buildupBarCenter.y + buildupBarSize.y / 2.0f,
-                al_map_rgb(128, 64, 32), 2.0f
+            
+            float filledWidth = IN_WORLD_STATUS_BUILDUP::WIDTH * fillRatio;
+            Point filledBarCenter(
+                m->center.x - IN_WORLD_STATUS_BUILDUP::WIDTH / 2.0f +
+                filledWidth / 2.0f,
+                m->center.y - curYOffset
             );
-        }
-    };
+            Point filledBarSize =
+                Point(
+                    filledWidth, IN_WORLD_STATUS_BUILDUP::HEIGHT
+                ) - IN_WORLD_STATUS_BUILDUP::OUTLINE_SIZE * 2.0f
+                * sizeMult;
+            filledBarSize.x = std::max(0.0f, filledBarSize.x);
+            drawFilledRoundedRatioRectangle(
+                filledBarCenter, filledBarSize,
+                IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
+                changeAlpha(
+                    color, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
+                )
+            );
+            
+            if(drawCross) {
+                al_draw_line(
+                    buildupBarCenter.x - buildupBarSize.x / 2.0f,
+                    buildupBarCenter.y - buildupBarSize.y / 2.0f,
+                    buildupBarCenter.x + buildupBarSize.x / 2.0f,
+                    buildupBarCenter.y + buildupBarSize.y / 2.0f,
+                    al_map_rgb(128, 64, 32), 2.0f
+                );
+                al_draw_line(
+                    buildupBarCenter.x + buildupBarSize.x / 2.0f,
+                    buildupBarCenter.y - buildupBarSize.y / 2.0f,
+                    buildupBarCenter.x - buildupBarSize.x / 2.0f,
+                    buildupBarCenter.y + buildupBarSize.y / 2.0f,
+                    al_map_rgb(128, 64, 32), 2.0f
+                );
+            }
+        };
     
     forIdx(b, m->statuses.getBuildups()) {
         const StatusBuildup* bPtr = &m->statuses.getBuildups()[b];

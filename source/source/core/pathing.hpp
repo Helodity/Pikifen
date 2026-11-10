@@ -331,7 +331,7 @@ struct PathManager {
     //--- Public members ---
     
     //Known obstructions.
-    map<PathLink*, unordered_set<Mob*> > obstructions;
+    map<PathLink*, unordered_set<Mob*>> obstructions;
     
     //Stops known to have hazards.
     unordered_set<PathStop*> hazardousStops;

@@ -151,7 +151,7 @@ void getCCE(
     const vector<Vertex>& vertexesLeft, vector<size_t>& ears,
     vector<size_t>& convexVertexes, vector<size_t>& concaveVertexes
 );
-vector<std::pair<Distance, Vertex*> > getMergeVertexes(
+vector<std::pair<Distance, Vertex*>> getMergeVertexes(
     const Point& p, const vector<Vertex*>& allVertexes,
     float mergeRadius
 );

@@ -115,6 +115,8 @@ void PikminCategory::getTypeNames(vector<string>& list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void PikminCategory::registerType(const string& internalName, MobType* type) {
+void PikminCategory::registerType(
+    const string& internalName, MobType* type
+) {
     game.content.mobTypes.list.pikmin[internalName] = (PikminType*) type;
 }

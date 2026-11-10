@@ -522,10 +522,10 @@ struct DataNodeSound {
     
     //Configuration.
     SoundSourceConfig config;
-
-
+    
+    
     //--- Public function declarations ---
-
+    
     void loadFromDataNode(DataNode* node);
     
 };

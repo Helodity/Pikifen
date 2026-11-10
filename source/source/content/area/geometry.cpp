@@ -178,7 +178,7 @@ void Polygon::cut() {
         //Let's also check the vertexes.
         //If the closest thing is a vertex, not an edge, then
         //we can skip a bunch of steps.
-        Vertex* v1 = nullptr, *v2 = nullptr;
+        Vertex* v1 = nullptr, * v2 = nullptr;
         forIdx(v, vertexes) {
             v1 = vertexes[v];
             v2 = getNextInVectorByIdx(vertexes, v);
@@ -628,11 +628,11 @@ void getCCE(
  * This does not take the camera zoom level into account.
  * @return The merge vertexes.
  */
-vector<std::pair<Distance, Vertex*> > getMergeVertexes(
+vector<std::pair<Distance, Vertex*>> getMergeVertexes(
     const Point& pos, const vector<Vertex*>& allVertexes,
     float mergeRadius
 ) {
-    vector<std::pair<Distance, Vertex*> > result;
+    vector<std::pair<Distance, Vertex*>> result;
     forIdx(v, allVertexes) {
         Vertex* v_ptr = allVertexes[v];
         

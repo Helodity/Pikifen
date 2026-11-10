@@ -73,7 +73,7 @@ bool openFileExplorer(const string& path) {
     string absPath = std::filesystem::absolute(path).string();
     INT_PTR result =
         (INT_PTR) ShellExecuteA(
-            NULL, "open", absPath.c_str(), NULL, NULL, SW_SHOWDEFAULT
+        NULL, "open", absPath.c_str(), NULL, NULL, SW_SHOWDEFAULT
         );
     if(result <= 32) {
         std::cout << "Failed to open file explorer with path \"";
@@ -107,7 +107,7 @@ bool openWebBrowser(const string& url) {
 #ifdef _WIN32
     INT_PTR result =
         (INT_PTR) ShellExecuteA(
-            NULL, "open", url.c_str(), NULL, NULL, SW_SHOWDEFAULT
+        NULL, "open", url.c_str(), NULL, NULL, SW_SHOWDEFAULT
         );
     if(result <= 32) {
         std::cout << "Failed to open web browser with URL \"";

@@ -122,7 +122,8 @@ float Manager::convertActionValue(
  * @param input The input.
  * @return The action types.
  */
-vector<ActionTypeId> Manager::getActionTypesFromInput(const Input& input) {
+vector<ActionTypeId> Manager::getActionTypesFromInput(const Input&
+    input) {
     vector<ActionTypeId> actionTypes;
     
     for(size_t b = 0; b < binds.size(); b++) {
@@ -320,7 +321,8 @@ vector<Action> Manager::newFrame(float deltaT) {
             Action newAction;
             newAction.actionTypeId = a.first;
             newAction.value = state.actionTypeStatuses[a.first].value;
-            newAction.reinsertionLifetime = actionTypes[a.first].reinsertionTTL;
+            newAction.reinsertionLifetime =
+                actionTypes[a.first].reinsertionTTL;
             actionQueue.push_back(newAction);
         }
     }
@@ -474,7 +476,8 @@ void Manager::processTimers(
  * @return Whether it succeeded.
  */
 bool Manager::reinsertAction(const Action& action) {
-    if(actionTypes[action.actionTypeId].reinsertionTTL <= 0.0f) return false;
+    if(actionTypes[action.actionTypeId].reinsertionTTL <= 0.0f) return
+            false;
     if(action.reinsertionLifetime <= 0.0f) return false;
     if(lastDeltaT == 0.0f) return false;
     

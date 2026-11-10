@@ -169,30 +169,30 @@ void Inventory::initGui() {
     //Item info text.
     itemInfoItem = new GuiItem();
     itemInfoItem->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(focusedItemIdx == INVALID) return;
-        InventoryItemInstance* iiPtr = &items[focusedItemIdx];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
-        string progressText;
-        if(iPtr->onGetExtraInfo) {
-            progressText = iPtr->onGetExtraInfo(player);
-        }
-        drawText(
-            iPtr->name, game.sysContent.fntStandard,
-            progressText.empty() ?
-            draw.center :
-            Point(draw.center.x, draw.center.y - draw.size.y / 4.0f),
-            Point(draw.size.x, draw.size.y * 0.50f),
-            game.config.guiColors.smallHeader
-        );
-        if(!progressText.empty()) {
+        [this] (const DrawInfo & draw) {
+            if(focusedItemIdx == INVALID) return;
+            InventoryItemInstance* iiPtr = &items[focusedItemIdx];
+            InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+            string progressText;
+            if(iPtr->onGetExtraInfo) {
+                progressText = iPtr->onGetExtraInfo(player);
+            }
             drawText(
-                progressText, game.sysContent.fntStandard,
-                Point(draw.center.x, draw.center.y + draw.size.y / 4.0f),
-                Point(draw.size.x, draw.size.y * 0.40f)
+                iPtr->name, game.sysContent.fntStandard,
+                progressText.empty() ?
+                draw.center :
+                Point(draw.center.x, draw.center.y - draw.size.y / 4.0f),
+                Point(draw.size.x, draw.size.y * 0.50f),
+                game.config.guiColors.smallHeader
             );
-        }
-    };
+            if(!progressText.empty()) {
+                drawText(
+                    progressText, game.sysContent.fntStandard,
+                    Point(draw.center.x, draw.center.y + draw.size.y / 4.0f),
+                    Point(draw.size.x, draw.size.y * 0.40f)
+                );
+            }
+        };
     gui.addItem(itemInfoItem, "info");
     
     //Close button.
@@ -201,11 +201,11 @@ void Inventory::initGui() {
         "Close", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
-        requestClose();
-    };
+        [this] (const Point&) {
+            requestClose();
+        };
     gui.backItem->onGetTooltip =
-    [] () { return "Close inventory"; };
+        [] () { return "Close inventory"; };
     gui.addItem(gui.backItem, "close");
     
     //Close input icon.
@@ -213,9 +213,9 @@ void Inventory::initGui() {
     
     //Finishing touches.
     gui.onFocusChanged =
-    [this] () {
-        focusedItemIdx = INVALID;
-    };
+        [this] () {
+            focusedItemIdx = INVALID;
+        };
     gui.responsive = false;
     gui.hideItems();
 }
@@ -253,16 +253,16 @@ void Inventory::populateInventoryListGui() {
     Point slotCenter(SLOT_WIDTH / 2.0f, SLOT_HEIGHT / 2.0f);
     
     auto nextSlot =
-    [&columnIdx, &rowIdx, &slotCenter, SLOT_WIDTH, SLOT_HEIGHT] () {
-        rowIdx++;
-        slotCenter.y += SLOT_HEIGHT + INVENTORY::SLOT_PADDING;
-        if(rowIdx >= (int) INVENTORY::ROWS) {
-            rowIdx = 0;
-            slotCenter.y = SLOT_HEIGHT / 2.0f;
-            columnIdx++;
-            slotCenter.x += SLOT_WIDTH + INVENTORY::SLOT_PADDING;
-        }
-    };
+        [&columnIdx, &rowIdx, &slotCenter, SLOT_WIDTH, SLOT_HEIGHT] () {
+            rowIdx++;
+            slotCenter.y += SLOT_HEIGHT + INVENTORY::SLOT_PADDING;
+            if(rowIdx >= (int) INVENTORY::ROWS) {
+                rowIdx = 0;
+                slotCenter.y = SLOT_HEIGHT / 2.0f;
+                columnIdx++;
+                slotCenter.x += SLOT_WIDTH + INVENTORY::SLOT_PADDING;
+            }
+        };
     
     forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
@@ -277,32 +277,32 @@ void Inventory::populateInventoryListGui() {
         button->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
         button->forceSquare = true;
         button->onDraw =
-        [this, button, iPtr] (const DrawInfo & draw) {
-            button->defDrawCode(draw);
-            ALLEGRO_COLOR bmpTint = draw.tint;
-            if(!button->responsive) {
-                bmpTint = tintColor(bmpTint, DRAWING::UNRESPONSIVE_BUTTON_TINT);
-            }
-            if(iPtr->icon) {
-                drawBitmapInBox(
-                    iPtr->icon, draw.center, draw.size * 0.8f,
-                    true, true, 0.0f, bmpTint
-                );
-            }
-            if(iPtr->onGetAmount) {
-                drawText(
-                    "x" + i2s(iPtr->onGetAmount(player)),
-                    game.sysContent.fntCounter,
-                    draw.center + draw.size / 2.0f,
-                    Point(0.80f, 0.50f) * draw.size,
-                    draw.tint, ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
-                );
-            }
-        };
+            [this, button, iPtr] (const DrawInfo & draw) {
+                button->defDrawCode(draw);
+                ALLEGRO_COLOR bmpTint = draw.tint;
+                if(!button->responsive) {
+                    bmpTint = tintColor(bmpTint, DRAWING::UNRESPONSIVE_BUTTON_TINT);
+                }
+                if(iPtr->icon) {
+                    drawBitmapInBox(
+                        iPtr->icon, draw.center, draw.size * 0.8f,
+                        true, true, 0.0f, bmpTint
+                    );
+                }
+                if(iPtr->onGetAmount) {
+                    drawText(
+                        "x" + i2s(iPtr->onGetAmount(player)),
+                        game.sysContent.fntCounter,
+                        draw.center + draw.size / 2.0f,
+                        Point(0.80f, 0.50f) * draw.size,
+                        draw.tint, ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
+                    );
+                }
+            };
         button->onActivate =
-        [this, i] (const Point&) {
-            tryUseItem(i);
-        };
+            [this, i] (const Point&) {
+                tryUseItem(i);
+            };
         button->onGetTooltip = [iPtr] () { return iPtr->name; };
         button->onFocused = [this, i] () { focusedItemIdx = i; };
         itemList->addChild(button);
@@ -326,12 +326,12 @@ void Inventory::populateInventoryListGui() {
         placeholder->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
         placeholder->forceSquare = true;
         placeholder->onDraw =
-        [this] (const DrawInfo & draw) {
-            drawTexturedBox(
-                draw.center, draw.size, game.sysContent.bmpFrameBox,
-                tintColor(mapAlpha(48), draw.tint)
-            );
-        };
+            [this] (const DrawInfo & draw) {
+                drawTexturedBox(
+                    draw.center, draw.size, game.sysContent.bmpFrameBox,
+                    tintColor(mapAlpha(48), draw.tint)
+                );
+            };
         itemList->addChild(placeholder);
         gui.addItem(placeholder);
         

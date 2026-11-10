@@ -57,11 +57,12 @@ int Treasure::getMissionPoints(bool* applicableInThisMission) const {
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
     
     if(applicableInThisMission) {
-        const auto checkMetric = [] (MISSION_METRIC metric) {
-            return
-                metric == MISSION_METRIC_OBJECT_COLLECTION_PTS ||
-                metric == MISSION_METRIC_TREASURE_COLLECTION_PTS;
-        };
+        const auto checkMetric =
+            [] (MISSION_METRIC metric) {
+                return
+                    metric == MISSION_METRIC_OBJECT_COLLECTION_PTS ||
+                    metric == MISSION_METRIC_TREASURE_COLLECTION_PTS;
+            };
         
         *applicableInThisMission = false;
         

@@ -80,19 +80,19 @@ void test(
             const int DRAWING_H = 21;
             
             const auto terminalToScene =
-            [] (int x, int y, float * outX, float * outY) {
-                *outX = x / (float) DRAWING_W;
-                *outY = y / (float) DRAWING_H;
-                *outX = *outX * 2.0f - 1.0f;
-                *outY = *outY * 2.0f - 1.0f;
-            };
+                [] (int x, int y, float* outX, float* outY) {
+                    *outX = x / (float) DRAWING_W;
+                    *outY = y / (float) DRAWING_H;
+                    *outX = *outX * 2.0f - 1.0f;
+                    *outY = *outY * 2.0f - 1.0f;
+                };
             const auto sceneToTerminal =
-            [] (float x, float y, int* outX, int* outY) {
-                x = (x + 1.0f) / 2.0f;
-                y = (y + 1.0f) / 2.0f;
-                *outX = x * DRAWING_W;
-                *outY = y * DRAWING_H;
-            };
+                [] (float x, float y, int* outX, int* outY) {
+                    x = (x + 1.0f) / 2.0f;
+                    y = (y + 1.0f) / 2.0f;
+                    *outX = x * DRAWING_W;
+                    *outY = y * DRAWING_H;
+                };
             
             for(int row = 0; row < DRAWING_H + 1; row ++) {
                 for(int col = 0; col < DRAWING_W + 1; col ++) {
@@ -277,7 +277,7 @@ int main(int argc, char** argv) {
         "Test that the horizontal angular deadzone, with interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "inside the deadzone.",
-    -0.654f, -0.04f, -0.655222058f, 0.0f, {
+        -0.654f, -0.04f, -0.655222058f, 0.0f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular { .horizontal = M_PI * 0.10f }
@@ -288,7 +288,7 @@ int main(int argc, char** argv) {
         "Test that the horizontal angular deadzone, with interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "outside the deadzone.",
-    -0.39f, -0.12f, -0.401685148f, -0.0717565417f, {
+        -0.39f, -0.12f, -0.401685148f, -0.0717565417f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular { .horizontal = M_PI * 0.10f }
@@ -299,7 +299,7 @@ int main(int argc, char** argv) {
         "Test that the horizontal angular deadzone, without interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "inside the deadzone.",
-    0.61f, 0.033f, 0.610891998f, 0.0f, {
+        0.61f, 0.033f, 0.610891998f, 0.0f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -313,7 +313,7 @@ int main(int argc, char** argv) {
         "Test that the horizontal angular deadzone, without interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "outside the deadzone.",
-    -0.37f, -0.39f, -0.37f, -0.39f, {
+        -0.37f, -0.39f, -0.37f, -0.39f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -329,7 +329,7 @@ int main(int argc, char** argv) {
         "Test that the vertical angular deadzone, with interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "inside the deadzone.",
-    -0.037f, -0.62f, 0.0f, -0.621103048f, {
+        -0.037f, -0.62f, 0.0f, -0.621103048f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular { .vertical = M_PI * 0.10f }
@@ -340,7 +340,7 @@ int main(int argc, char** argv) {
         "Test that the vertical angular deadzone, with interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "outside the deadzone.",
-    -0.18f, -0.57f, -0.110540397f, -0.587435782f, {
+        -0.18f, -0.57f, -0.110540397f, -0.587435782f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular { .vertical = M_PI * 0.10f }
@@ -351,7 +351,7 @@ int main(int argc, char** argv) {
         "Test that the vertical angular deadzone, without interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "inside the deadzone.",
-    0.01f, -0.60f, 0.0f, -0.600083351f, {
+        0.01f, -0.60f, 0.0f, -0.600083351f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -365,7 +365,7 @@ int main(int argc, char** argv) {
         "Test that the vertical angular deadzone, without interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "outside the deadzone.",
-    -0.41f, -0.32f, -0.41f, -0.32f, {
+        -0.41f, -0.32f, -0.41f, -0.32f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -381,7 +381,7 @@ int main(int argc, char** argv) {
         "Test that the diagonal angular deadzone, with interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "inside the deadzone.",
-    -0.33f, -0.33f, -0.330000043f, -0.329999983, {
+        -0.33f, -0.33f, -0.330000043f, -0.329999983, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular { .diagonal = M_PI * 0.10f }
@@ -392,7 +392,7 @@ int main(int argc, char** argv) {
         "Test that the diagonal angular deadzone, with interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "outside the deadzone.",
-    -0.22f, -0.70f, -0.27260074f, -0.681240618f, {
+        -0.22f, -0.70f, -0.27260074f, -0.681240618f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular { .diagonal = M_PI * 0.10f }
@@ -403,7 +403,7 @@ int main(int argc, char** argv) {
         "Test that the diagonal angular deadzone, without interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "inside the deadzone.",
-    0.322f, -0.333f, 0.32754612f, -0.327546209f, {
+        0.322f, -0.333f, 0.32754612f, -0.327546209f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -417,7 +417,7 @@ int main(int argc, char** argv) {
         "Test that the diagonal angular deadzone, without interpolation and "
         "default thresholds, and no radial deadzones, gives proper values "
         "outside the deadzone.",
-    -0.41f, -0.12f, -0.41f, -0.119999938f, {
+        -0.41f, -0.12f, -0.41f, -0.119999938f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -433,7 +433,7 @@ int main(int argc, char** argv) {
         "Test that horizontal and vertical angular deadzones, without "
         "interpolation and default thresholds, and no radial deadzones, "
         "gives proper values outside the deadzones.",
-    -0.14f, -0.48f, -0.14f, -0.48f, {
+        -0.14f, -0.48f, -0.14f, -0.48f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -448,7 +448,7 @@ int main(int argc, char** argv) {
         "Test that all angular deadzones, without "
         "interpolation and default thresholds, and no radial deadzones, "
         "gives proper values outside the deadzones.",
-    0.29f, -0.12f, 0.29f, -0.12f, {
+        0.29f, -0.12f, 0.29f, -0.12f, {
         .deadzones {
             .radial { .inner = 0.0f, .outer = 1.0f, .interpolate = false },
             .angular {
@@ -463,7 +463,7 @@ int main(int argc, char** argv) {
     testClean(
         "Test that all deadzones enabled, with interpolation, gives "
         "proper values outside the deadzones.",
-    -0.61f, 0.15f, -0.60568434f, 0.0853933692f, {
+        -0.61f, 0.15f, -0.60568434f, 0.0853933692f, {
         .deadzones {
             .angular {
                 .horizontal = M_PI * 0.10f,
@@ -476,7 +476,7 @@ int main(int argc, char** argv) {
     testClean(
         "Test that all deadzones enabled, without interpolation, gives "
         "proper values outside the deadzones.",
-    0.69f, 0.14f, 0.69f, 0.14f, {
+        0.69f, 0.14f, 0.69f, 0.14f, {
         .deadzones {
             .radial {
                 .interpolate = false
@@ -520,12 +520,12 @@ int main(int argc, char** argv) {
         "set to defaults, gives proper values.",
         0.14f, 0.82f, 0.169723749f, 0.889810681f,
     { .lowPassFilter { .factor = 0.9f } },
-    0.33f, 0.89f
+        0.33f, 0.89f
     );
     testClean(
         "Tests that the stick low-pass filter, with all the other features "
         "disabled, gives proper values.",
-    0.14f, 0.82f, 0.166723758f, 0.871810675f, {
+        0.14f, 0.82f, 0.166723758f, 0.871810675f, {
         .deadzones {
             .angular {
                 .interpolate = false
@@ -535,19 +535,19 @@ int main(int argc, char** argv) {
             .factor = 0.9f
         }
     },
-    0.30f, 0.71f
+        0.30f, 0.71f
     );
     testCleanButton(
         "Tests that the button low-pass filter, with all the other settings "
         "set to defaults, gives proper values.",
         0.41f, 0.378749996f,
     { .lowPassFilter { .factorButton = 0.9f } },
-    0.30f
+        0.30f
     );
     testCleanButton(
         "Tests that the button low-pass filter, with all the other features "
         "disabled, gives proper values.",
-    0.69f, 0.694000006f, {
+        0.69f, 0.694000006f, {
         .deadzones {
             .button {
                 .interpolate = false
@@ -557,7 +557,7 @@ int main(int argc, char** argv) {
             .factorButton = 0.9f
         }
     },
-    0.73f
+        0.73f
     );
     
     //Misc.
@@ -577,7 +577,7 @@ int main(int argc, char** argv) {
     );
     testClean(
         "Test that unit circle clamping alone works.",
-    0.98f, 0.56f, 0.868243158f, 0.496138901f, {
+        0.98f, 0.56f, 0.868243158f, 0.496138901f, {
         .deadzones {
             .angular {
                 .interpolate = false

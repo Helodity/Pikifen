@@ -86,8 +86,8 @@ struct Inventory {
     void tick(float deltaT);
     bool useShortcut(const string& itemInternalName);
     
-    private:
-    
+private:
+
     //--- Private function declarations ---
     
     bool canUseItem(InventoryItemInstance* iPtr);

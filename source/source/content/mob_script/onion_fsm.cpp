@@ -304,7 +304,6 @@ void OnionFsm::startDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
 }
 
 
-
 /**
  * @brief When an Onion starts generating Pikmin.
  *
@@ -312,7 +311,8 @@ void OnionFsm::startDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::startGenerating(ScriptVM* scriptVM, void* info1, void* info2) {
+void OnionFsm::startGenerating(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Onion* oniPtr = (Onion*) scriptVM->mob;
     
     oniPtr->setAnimation(ONION_ANIM_GENERATING);
@@ -342,7 +342,8 @@ void OnionFsm::startIdling(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::stopGenerating(ScriptVM* scriptVM, void* info1, void* info2) {
+void OnionFsm::stopGenerating(ScriptVM* scriptVM, void* info1,
+    void* info2) {
     Onion* oniPtr = (Onion*) scriptVM->mob;
     
     oniPtr->setAnimation(ONION_ANIM_STOPPING_GENERATION);

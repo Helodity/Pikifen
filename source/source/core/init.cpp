@@ -836,25 +836,26 @@ void initDearImGui() {
     editorFontCfg.PixelSnapH = true;
     
     const auto addFont =
-    [ = ] (ImFont** targetVar, const string& assetInternalName, int height) {
-        const string& path =
-            game.content.bitmaps.manifests
-            [assetInternalName].path;
+        [ = ] (ImFont** targetVar, const string & assetInternalName,
+            int height) {
+            const string& path =
+                game.content.bitmaps.manifests
+                [assetInternalName].path;
+                
+            if(!strEndsWith(strToLower(path), ".ttf")) {
+                game.log.report(
+                    LOG_LEVEL_ERROR,
+                    "Could not load the editor font \"" + path + "\"! Only "
+                    "TTF font files are allowed."
+                );
+                return;
+            }
             
-        if(!strEndsWith(strToLower(path), ".ttf")) {
-            game.log.report(
-                LOG_LEVEL_ERROR,
-                "Could not load the editor font \"" + path + "\"! Only "
-                "TTF font files are allowed."
-            );
-            return;
-        }
-        
-        *targetVar =
-            io.Fonts->AddFontFromFileTTF(
-                path.c_str(), height, &editorFontCfg
-            );
-    };
+            *targetVar =
+                io.Fonts->AddFontFromFileTTF(
+                    path.c_str(), height, &editorFontCfg
+                );
+        };
     
     addFont(
         &game.sysContent.fntDearImGuiHeader,
@@ -965,14 +966,14 @@ void initDebugConfig() {
     
     DataNode debugConfigFile(FILE_PATHS_FROM_ROOT::DEBUG_CONFIG);
     
-    const auto getProp = [&debugConfigFile] (const string& name) {
-        return
-            s2b(
-                debugConfigFile.getChildByName(
-                    name
-                )->getValueOrDefault("false")
-            );
-    };
+    const auto getProp = [&debugConfigFile] (const string & name) {
+                             return
+                                 s2b(
+                                     debugConfigFile.getChildByName(
+                                         name
+                                     )->getValueOrDefault("false")
+                                 );
+                         };
     
     game.debug.showAreaActiveCells = getProp("show_area_active_cells");
     game.debug.showControllerEvents = getProp("show_controller_events");
@@ -1101,13 +1102,13 @@ void initFsmEventTypes() {
     Bitmask8 contexts = 0;
     
     auto commitEvent =
-    [&contexts] (FSM_EV eventType, const string eventName) {
-        FsmEventType* eventTypePtr;
-        eventTypePtr = &(game.fsmEventTypes[eventType]);
-        eventTypePtr->type = eventType;
-        eventTypePtr->name = eventName;
-        eventTypePtr->contexts = contexts;
-    };
+        [&contexts] (FSM_EV eventType, const string eventName) {
+            FsmEventType* eventTypePtr;
+            eventTypePtr = &(game.fsmEventTypes[eventType]);
+            eventTypePtr->type = eventType;
+            eventTypePtr->name = eventName;
+            eventTypePtr->contexts = contexts;
+        };
     
     
     //-Common events-
@@ -1339,18 +1340,18 @@ void initFsmEventTypes() {
  */
 void initInventoryItems() {
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_SPRAY_TYPE,
     },
-    CONTENT_LOAD_LEVEL_FULL
+        CONTENT_LOAD_LEVEL_FULL
     );
     
     game.inventoryItems.init();
     
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_SPRAY_TYPE,
         CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_PARTICLE_GEN,
@@ -1370,37 +1371,37 @@ void initMakerToolTypes() {
     //Convenient lambdas and aliases.
     auto queueParam =
         [&params] (
-            const string& paramName, COMMAND_PARAM_TYPE paramType,
+            const string & paramName, COMMAND_PARAM_TYPE paramType,
             Bitmask8 paramFlags = 0, const string& paramDefValue = ""
-    ) {
-        params.push_back(
-            CommandParam(
-                paramName, paramType, paramFlags, paramDefValue
-            )
-        );
-    };
+        ) {
+            params.push_back(
+                CommandParam(
+                    paramName, paramType, paramFlags, paramDefValue
+                )
+            );
+        };
     
     auto commitTool =
         [&params, &contexts] (
-            MAKER_TOOL_TYPE toolType, const string& toolName,
+            MAKER_TOOL_TYPE toolType, const string & toolName,
             bool helpful, MakerToolTypeCode * toolRunCode,
-            const string& description
-    ) {
-        validateCommandParams(
-            params, "Maker tool type \"" + toolName + "\""
-        );
-        
-        MakerToolType* toolTypePtr;
-        toolTypePtr = &(game.makerTools.types[toolType]);
-        toolTypePtr->type = toolType;
-        toolTypePtr->name = toolName;
-        toolTypePtr->code = toolRunCode;
-        toolTypePtr->parameters = params;
-        toolTypePtr->contexts = contexts;
-        toolTypePtr->helpful = helpful;
-        toolTypePtr->description = description;
-        params.clear();
-    };
+            const string & description
+        ) {
+            validateCommandParams(
+                params, "Maker tool type \"" + toolName + "\""
+            );
+            
+            MakerToolType* toolTypePtr;
+            toolTypePtr = &(game.makerTools.types[toolType]);
+            toolTypePtr->type = toolType;
+            toolTypePtr->name = toolName;
+            toolTypePtr->code = toolRunCode;
+            toolTypePtr->parameters = params;
+            toolTypePtr->contexts = contexts;
+            toolTypePtr->helpful = helpful;
+            toolTypePtr->description = description;
+            params.clear();
+        };
     
     const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
     const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
@@ -1440,20 +1441,20 @@ void initMakerToolTypes() {
     queueParam("size", ptInt, pfOpt, "2048");
     params.back().minValue = 1.0f;
     params.back().description =
-        "Maximum image width or height, in pixels. "
-        "2048 is a good size for medium or large areas, "
-        "otherwise 1024 works fine.";
+            "Maximum image width or height, in pixels. "
+            "2048 is a good size for medium or large areas, "
+            "otherwise 1024 works fine.";
     queueParam("padding", ptInt, pfOpt, "32");
     params.back().minValue = 0.0f;
     params.back().description =
-        "Padding around the actual area. "
-        "This is measured in area pixels, and is the total for "
-        "either dimension. e.g. 32 means 16 area pixels above "
-        "the area and 16 area pixels below the area will be "
-        "included; same for 16 pixels to the left and 16 to the right.";
+            "Padding around the actual area. "
+            "This is measured in area pixels, and is the total for "
+            "either dimension. e.g. 32 means 16 area pixels above "
+            "the area and 16 area pixels below the area will be "
+            "included; same for 16 pixels to the left and 16 to the right.";
     queueParam("shadows", ptBool, pfOpt, "true");
     params.back().description =
-        "Whether you want to see tree shadows.";
+            "Whether you want to see tree shadows.";
     commitTool(
         MAKER_TOOL_TYPE_AREA_IMAGE,
         "area_image", true,
@@ -1473,8 +1474,8 @@ void initMakerToolTypes() {
     queueParam("multiplier", ptFloat, pfOpt, "2");
     params.back().minValue = 0.001f;
     params.back().description =
-        "Game speed multiplier. "
-        "1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.";
+            "Game speed multiplier. "
+            "1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.";
     commitTool(
         MAKER_TOOL_TYPE_CHANGE_SPEED,
         "change_speed", true,
@@ -1494,7 +1495,7 @@ void initMakerToolTypes() {
     queueParam("amount", ptInt, pfOpt, "99");
     params.back().minValue = 0.0f;
     params.back().description =
-        "Amount to set all inventory items to.";
+            "Amount to set all inventory items to.";
     commitTool(
         MAKER_TOOL_TYPE_FILL_INVENTORY,
         "fill_inventory", true,
@@ -1506,8 +1507,8 @@ void initMakerToolTypes() {
     queueParam("action", ptEnum, pfOpt, "advance");
     params.back().enumValues = enumGetNames(makerToolFrameAdvanceActionINames);
     params.back().description =
-        "Action to perform. \"advance\" pauses gameplay if unpaused, otherwise "
-        "advances one frame. \"resume\" resumes normal gameplay.";
+            "Action to perform. \"advance\" pauses gameplay if unpaused, otherwise "
+            "advances one frame. \"resume\" resumes normal gameplay.";
     commitTool(
         MAKER_TOOL_TYPE_FRAME_ADVANCE,
         "frame_advance", true,
@@ -1519,10 +1520,10 @@ void initMakerToolTypes() {
     queueParam("action", ptEnum, pfOpt, "control");
     params.back().enumValues = enumGetNames(makerToolFreeCamActionINames);
     params.back().description =
-        "Action to perform. \"mode\" toggles free cam mode. "
-        "\"freeze\" toggles whether the free camera is frozen "
-        "(player controls the leader) or mobile "
-        "(player controls the camera).";
+            "Action to perform. \"mode\" toggles free cam mode. "
+            "\"freeze\" toggles whether the free camera is frozen "
+            "(player controls the leader) or mobile "
+            "(player controls the camera).";
     commitTool(
         MAKER_TOOL_TYPE_FREE_CAM,
         "free_cam", true,
@@ -1551,9 +1552,9 @@ void initMakerToolTypes() {
     //Hurt mob.
     queueParam("percentage", ptFloat, pfOpt, "0.5");
     params.back().description =
-        "Ratio of damage. 0.5 means it loses 50% of its max health. "
-        "1.0 means it loses all its health, -0.2 means it regains 20% of its "
-        "max health, etc.";
+            "Ratio of damage. 0.5 means it loses 50% of its max health. "
+            "1.0 means it loses all its health, -0.2 means it regains 20% of its "
+            "max health, etc.";
     commitTool(
         MAKER_TOOL_TYPE_HURT_MOB,
         "hurt_mob", true,
@@ -1565,10 +1566,10 @@ void initMakerToolTypes() {
     queueParam("action", ptEnum, pfOpt, "closest");
     params.back().enumValues = enumGetNames(makerToolMobInspectorActionINames);
     params.back().description =
-        "Action to perform. \"closest\" makes it detect the mob closest "
-        "to the mouse cursor. \"iterate\" makes it detect mobs near the "
-        "mouse cursor or swap to the next one in that list. \"stop\" makes "
-        "it stop inspecting.";
+            "Action to perform. \"closest\" makes it detect the mob closest "
+            "to the mouse cursor. \"iterate\" makes it detect mobs near the "
+            "mouse cursor or swap to the next one in that list. \"stop\" makes "
+            "it stop inspecting.";
     commitTool(
         MAKER_TOOL_TYPE_MOB_INSPECTOR,
         "mob_inspector", true,
@@ -1579,9 +1580,9 @@ void initMakerToolTypes() {
     //New Pikmin.
     queueParam("type", ptString, pfOpt, "next");
     params.back().description =
-        "Type of Pikmin to spawn. This can be a proper type's internal name, "
-        "or \"next\" to spawn one of the next type from the last spawned one, "
-        "or \"same\" to spawn one of the same type as the last spawned one.";
+            "Type of Pikmin to spawn. This can be a proper type's internal name, "
+            "or \"next\" to spawn one of the next type from the last spawned one, "
+            "or \"same\" to spawn one of the same type as the last spawned one.";
     queueParam("maturity", ptEnum, pfOpt, "flower");
     params.back().enumValues = enumGetNames(maturityINames);
     commitTool(
@@ -1638,12 +1639,12 @@ void initMakerToolTypes() {
     //Teleport.
     queueParam("use inspected mob", ptBool, pfOpt, "false");
     params.back().description =
-        "Whether to teleport the current leader, or to instead teleport "
-        "the inspected mob.";
+            "Whether to teleport the current leader, or to instead teleport "
+            "the inspected mob.";
     queueParam("leave group members behind", ptBool, pfOpt, "false");
     params.back().description =
-        "Whether to teleport the target mob and its group, or to "
-        "instead leave the group members behind.";
+            "Whether to teleport the target mob and its group, or to "
+            "instead leave the group members behind.";
     commitTool(
         MAKER_TOOL_TYPE_TELEPORT,
         "teleport", true,
@@ -1812,36 +1813,36 @@ void initScriptActionTypes() {
     //Convenient lambdas and aliases.
     auto queueParam =
         [&params] (
-            const string& paramName, COMMAND_PARAM_TYPE paramType,
+            const string & paramName, COMMAND_PARAM_TYPE paramType,
             Bitmask8 paramFlags = 0, const string& paramDefValue = ""
-    ) {
-        params.push_back(
-            CommandParam(
-                paramName, paramType, paramFlags, paramDefValue
-            )
-        );
-    };
+        ) {
+            params.push_back(
+                CommandParam(
+                    paramName, paramType, paramFlags, paramDefValue
+                )
+            );
+        };
     
     auto commitAction =
         [&params, &contexts] (
-            SCRIPT_ACTION actionType, const string& actionName,
+            SCRIPT_ACTION actionType, const string & actionName,
             ScriptActionTypeCode * actionRunCode,
             const string& deprecationReplacement = ""
-    ) {
-        validateCommandParams(
-            params, "Script action type \"" + actionName + "\""
-        );
-        
-        ScriptActionType* actionTypePtr;
-        actionTypePtr = &(game.scriptActionTypes[actionType]);
-        actionTypePtr->type = actionType;
-        actionTypePtr->name = actionName;
-        actionTypePtr->code = actionRunCode;
-        actionTypePtr->parameters = params;
-        actionTypePtr->contexts = contexts;
-        actionTypePtr->deprecationReplacement = deprecationReplacement;
-        params.clear();
-    };
+        ) {
+            validateCommandParams(
+                params, "Script action type \"" + actionName + "\""
+            );
+            
+            ScriptActionType* actionTypePtr;
+            actionTypePtr = &(game.scriptActionTypes[actionType]);
+            actionTypePtr->type = actionType;
+            actionTypePtr->name = actionName;
+            actionTypePtr->code = actionRunCode;
+            actionTypePtr->parameters = params;
+            actionTypePtr->contexts = contexts;
+            actionTypePtr->deprecationReplacement = deprecationReplacement;
+            params.clear();
+        };
     
     const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
     const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;

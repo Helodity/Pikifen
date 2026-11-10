@@ -118,6 +118,8 @@ void LeaderCategory::getTypeNames(vector<string>& list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void LeaderCategory::registerType(const string& internalName, MobType* type) {
+void LeaderCategory::registerType(
+    const string& internalName, MobType* type
+) {
     game.content.mobTypes.list.leader[internalName] = (LeaderType*) type;
 }

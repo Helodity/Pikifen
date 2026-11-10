@@ -331,7 +331,7 @@ void CutsceneMessageBox::tick(float deltaT) {
                     std::min(curToken, tokensInSection + 1);
                 if(prevToken != curToken) {
                     game.audio.addNewUiSoundSource(
-                    game.sysContent.sndCutsceneMsgChar, {
+                        game.sysContent.sndCutsceneMsgChar, {
                         .stackMinPos = 0.05f,
                         .volume = 0.5f,
                         .volumeDeviation = 0.1f,
@@ -689,27 +689,28 @@ void GameplayState::enter() {
         updateClosestGroupMembers(&player);
         
         player.whistle.nextDotTimer.onEnd = [&player] () {
-            player.whistle.nextDotTimer.start();
-            unsigned char dot = 255;
-            for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to create.
-                if(player.whistle.dotRadius[d] == -1) {
-                    dot = d;
-                    break;
-                }
-            }
-            
-            if(dot != 255) player.whistle.dotRadius[dot] = 0;
-        };
+                                                player.whistle.nextDotTimer.start();
+                                                unsigned char dot = 255;
+                                                for(unsigned char d = 0; d < 6;
+                                                    d++) { //Find WHAT dot to create.
+                                                    if(player.whistle.dotRadius[d] == -1) {
+                                                        dot = d;
+                                                        break;
+                                                    }
+                                                }
+                                                
+                                                if(dot != 255) player.whistle.dotRadius[dot] = 0;
+                                            };
         
         player.whistle.nextRingTimer.onEnd = [&player] () {
-            player.whistle.nextRingTimer.start();
-            player.whistle.rings.push_back(0);
-            player.whistle.ringColors.push_back(player.whistle.ringPrevColor);
-            player.whistle.ringPrevColor =
-                sumAndWrap(
-                    player.whistle.ringPrevColor, 1, WHISTLE::N_RING_COLORS
-                );
-        };
+                                                 player.whistle.nextRingTimer.start();
+                                                 player.whistle.rings.push_back(0);
+                                                 player.whistle.ringColors.push_back(player.whistle.ringPrevColor);
+                                                 player.whistle.ringPrevColor =
+                                                     sumAndWrap(
+                                                         player.whistle.ringPrevColor, 1, WHISTLE::N_RING_COLORS
+                                                     );
+                                             };
     }
     
     if(skipReadyInterlude) {
@@ -754,11 +755,11 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
     float nearRatio = nearRadius / farRadius;
     
     auto fillPixel = [&curA] (int x, unsigned char* row) {
-        row[(x) * 4 + 0] = 255;
-        row[(x) * 4 + 1] = 255;
-        row[(x) * 4 + 2] = 255;
-        row[(x) * 4 + 3] = curA;
-    };
+                         row[(x) * 4 + 0] = 255;
+                         row[(x) * 4 + 1] = 255;
+                         row[(x) * 4 + 2] = 255;
+                         row[(x) * 4 + 3] = curA;
+                     };
     
     for(int y = 0; y < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); y++) {
         for(int x = 0; x < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); x++) {
@@ -1246,22 +1247,22 @@ void GameplayState::load() {
     
     bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     game.audio.setCurrentSong("");
-    game.audio.onSongFinished = [this] (const string& name) {
-        string bossVictorySongName = game.curArea->bossVictoryOverrideSongName;
-        if(bossVictorySongName.empty()) {
-            bossVictorySongName = game.sysContentNames.sngBossVictory;
-        }
-        if(name == bossVictorySongName) {
-            switch(bossMusicState) {
-            case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.setCurrentSong(game.curArea->songName, false);
-                bossMusicState = BOSS_MUSIC_STATE_PAUSED;
-            } default: {
-                break;
-            }
-            }
-        }
-    };
+    game.audio.onSongFinished = [this] (const string & name) {
+                                    string bossVictorySongName = game.curArea->bossVictoryOverrideSongName;
+                                    if(bossVictorySongName.empty()) {
+                                        bossVictorySongName = game.sysContentNames.sngBossVictory;
+                                    }
+                                    if(name == bossVictorySongName) {
+                                        switch(bossMusicState) {
+                                        case BOSS_MUSIC_STATE_VICTORY: {
+                                            game.audio.setCurrentSong(game.curArea->songName, false);
+                                            bossMusicState = BOSS_MUSIC_STATE_PAUSED;
+                                        } default: {
+                                            break;
+                                        }
+                                        }
+                                    }
+                                };
     
     auto sparkAnimDbIt =
         game.content.globalAnimDbs.list.find(
@@ -1374,12 +1375,12 @@ void GameplayState::load() {
         vector<Sector*> liquidSectors;
         
         sPtr->getNeighborSectorsConditionally(
-        [sPtr] (Sector * s2) -> bool {
-            return
-            s2->hazard &&
-            s2->hazard->associatedLiquid == sPtr->hazard->associatedLiquid;
-        },
-        liquidSectors
+            [sPtr] (Sector * s2) -> bool {
+                return
+                    s2->hazard &&
+                    s2->hazard->associatedLiquid == sPtr->hazard->associatedLiquid;
+            },
+            liquidSectors
         );
         
         liquids.push_back(new Liquid(sPtr->hazard, liquidSectors));
@@ -1391,21 +1392,21 @@ void GameplayState::load() {
     //Sort leaders.
     sort(
         mobs.leaders.begin(), mobs.leaders.end(),
-    [] (Leader * l1, Leader * l2) -> bool {
-        size_t priorityL1 =
-        find(
-            game.config.leaders.order.begin(),
-            game.config.leaders.order.end(), l1->leaType
-        ) -
-        game.config.leaders.order.begin();
-        size_t priorityL2 =
-        find(
-            game.config.leaders.order.begin(),
-            game.config.leaders.order.end(), l2->leaType
-        ) -
-        game.config.leaders.order.begin();
-        return priorityL1 < priorityL2;
-    }
+        [] (Leader * l1, Leader * l2) -> bool {
+            size_t priorityL1 =
+                find(
+                    game.config.leaders.order.begin(),
+                    game.config.leaders.order.end(), l1->leaType
+                ) -
+                game.config.leaders.order.begin();
+            size_t priorityL2 =
+                find(
+                    game.config.leaders.order.begin(),
+                    game.config.leaders.order.end(), l2->leaType
+                ) -
+                game.config.leaders.order.begin();
+            return priorityL1 < priorityL2;
+        }
     );
     
     if(game.perfMon) {
@@ -1441,10 +1442,10 @@ void GameplayState::load() {
             forIdx(i, idxs) {
                 missionMobGroups.back().remaining.insert(
                     mobsPerGen[idxs[i]]
-                );
+                    );
             }
             missionMobGroups.back().startingAmount =
-                missionMobGroups.back().remaining.size();
+                    missionMobGroups.back().remaining.size();
         }
     }
     
@@ -1621,7 +1622,7 @@ void GameplayState::load() {
 void GameplayState::loadGameContent() {
     game.content.reloadPacks();
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
         CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_GLOBAL_ANIMATION,
@@ -1632,24 +1633,24 @@ void GameplayState::loadGameContent() {
         CONTENT_TYPE_WEATHER_CONDITION,
         CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
     },
-    CONTENT_LOAD_LEVEL_FULL
+        CONTENT_LOAD_LEVEL_FULL
     );
     
     //Area manifests.
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     },
-    CONTENT_LOAD_LEVEL_BASIC
+        CONTENT_LOAD_LEVEL_BASIC
     );
     
     //Mob types.
     game.content.loadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_MOB_ANIMATION,
         CONTENT_TYPE_MOB_TYPE,
     },
-    CONTENT_LOAD_LEVEL_FULL
+        CONTENT_LOAD_LEVEL_FULL
     );
     
     //Register leader sub-group types.
@@ -1874,7 +1875,7 @@ void GameplayState::unloadGameContent() {
     subgroupTypes.clear();
     
     game.content.unloadAll(
-    vector<CONTENT_TYPE> {
+        vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
         CONTENT_TYPE_WEATHER_CONDITION,
         CONTENT_TYPE_MOB_TYPE,
@@ -1913,18 +1914,18 @@ void GameplayState::updateAvailableLeaders() {
     //mob index number come first.
     std::sort(
         availableLeaders.begin(), availableLeaders.end(),
-    [] (const Leader * l1, const Leader * l2) -> bool {
-        size_t l1OrderIdx = INVALID;
-        size_t l2OrderIdx = INVALID;
-        forIdx(t, game.config.leaders.order) {
-            if(game.config.leaders.order[t] == l1->type) l1OrderIdx = t;
-            if(game.config.leaders.order[t] == l2->type) l2OrderIdx = t;
+        [] (const Leader * l1, const Leader * l2) -> bool {
+            size_t l1OrderIdx = INVALID;
+            size_t l2OrderIdx = INVALID;
+            forIdx(t, game.config.leaders.order) {
+                if(game.config.leaders.order[t] == l1->type) l1OrderIdx = t;
+                if(game.config.leaders.order[t] == l2->type) l2OrderIdx = t;
+            }
+            if(l1OrderIdx == l2OrderIdx) {
+                return l1->id < l2->id;
+            }
+            return l1OrderIdx < l2OrderIdx;
         }
-        if(l1OrderIdx == l2OrderIdx) {
-            return l1->id < l2->id;
-        }
-        return l1OrderIdx < l2OrderIdx;
-    }
     );
     
     //Update the current leader's index, which could've changed.

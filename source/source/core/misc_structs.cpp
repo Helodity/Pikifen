@@ -241,7 +241,8 @@ ALLEGRO_AUDIO_STREAM* AudioStreamManager::doLoad(
         it != game.content.songTracks.manifests.end() ?
         it->second.path :
         name;
-    ALLEGRO_AUDIO_STREAM* stream = loadAudioStream(path, node, reportErrors);
+    ALLEGRO_AUDIO_STREAM* stream = loadAudioStream(path, node,
+            reportErrors);
     if(stream) {
         game.registerAudioStreamSource(stream);
     }
@@ -986,7 +987,6 @@ void GetterWriter::write(
 #pragma region Inventory item database
 
 
-
 /**
  * @brief Clears the database.
  */
@@ -1051,26 +1051,26 @@ void InventoryItemDatabase::init() {
         item.icon = game.content.bitmaps.list.get(sprayTypeRef.bmpIcon);
         item.name = sprayTypeRef.name;
         item.onGetAmount =
-        [this, s] (Player * player) {
-            return player->team->sprayStats[s].nrSprays;
-        };
+            [this, s] (Player * player) {
+                return player->team->sprayStats[s].nrSprays;
+            };
         item.onUse =
-        [this, s] (Player * player) {
-            if(!player->leaderPtr) return;
-            player->leaderPtr->scriptVM.fsm.runEvent(
-                LEADER_EV_SPRAY, (void*) &s, (void*) player->leaderPtr
-            );
-        };
+            [this, s] (Player * player) {
+                if(!player->leaderPtr) return;
+                player->leaderPtr->scriptVM.fsm.runEvent(
+                    LEADER_EV_SPRAY, (void*) &s, (void*) player->leaderPtr
+                );
+            };
         item.onGetExtraInfo =
-        [this, s] (Player * player) -> string {
-            size_t ingredientsNeeded =
-            game.config.misc.sprayOrder[s]->ingredientsNeeded;
-            if(ingredientsNeeded == 0) return "";
-            return
-            game.config.misc.sprayOrder[s]->ingredientName + ": " +
-            i2s(player->team->sprayStats[s].nrIngredients) + "/" +
-            i2s(ingredientsNeeded);
-        };
+            [this, s] (Player * player) -> string {
+                size_t ingredientsNeeded =
+                    game.config.misc.sprayOrder[s]->ingredientsNeeded;
+                if(ingredientsNeeded == 0) return "";
+                return
+                    game.config.misc.sprayOrder[s]->ingredientName + ": " +
+                    i2s(player->team->sprayStats[s].nrIngredients) + "/" +
+                    i2s(ingredientsNeeded);
+            };
         items.push_back(item);
     }
     
@@ -1081,14 +1081,14 @@ void InventoryItemDatabase::init() {
         item.icon = game.sysContent.bmpNapsack;
         item.name = "Napsack";
         item.onUse =
-        [this] (Player * player) {
-            player->leaderPtr->scriptVM.fsm.runEvent(
-                LEADER_EV_FALL_ASLEEP
-            );
-            game.states.gameplay->showInventoryUpdateDisplay(
-                player, "napsack", 0
-            );
-        };
+            [this] (Player * player) {
+                player->leaderPtr->scriptVM.fsm.runEvent(
+                    LEADER_EV_FALL_ASLEEP
+                );
+                game.states.gameplay->showInventoryUpdateDisplay(
+                    player, "napsack", 0
+                );
+            };
         items.push_back(item);
     }
 }
@@ -1429,9 +1429,9 @@ int MakerConsoleNotifier::draw(int y) const {
     float alpha = visibility;
     
     const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
+        [textY, fontHeight] (size_t idx) {
+            return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
+        };
     
     //Background.
     al_draw_filled_rectangle(
@@ -1643,9 +1643,9 @@ int MakerConsoleTerminal::draw(int y) const {
     textY += yOffset;
     
     const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
+        [textY, fontHeight] (size_t idx) {
+            return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
+        };
     
     //Background.
     al_draw_filled_rectangle(
@@ -1949,9 +1949,9 @@ int MakerDisplay::draw(int y) const {
     float alpha = visibility;
     
     const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
+        [textY, fontHeight] (size_t idx) {
+            return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
+        };
     
     //Background.
     al_draw_filled_rectangle(
@@ -2166,12 +2166,12 @@ void MouseCursor::init() {
     winPos.y = game.winH / 2.0f;
     
     saveTimer.onEnd = [this] () {
-        saveTimer.start();
-        history.push_back(winPos);
-        if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
-            history.erase(history.begin());
-        }
-    };
+                          saveTimer.start();
+                          history.push_back(winPos);
+                          if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
+                              history.erase(history.begin());
+                          }
+                      };
     saveTimer.start(GAME::CURSOR_TRAIL_SAVE_INTERVAL);
 }
 
@@ -2972,8 +2972,6 @@ void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
 #pragma region Script var manager
 
 
-
-
 /**
  * @brief Constructs a new script var manager object.
  *
@@ -3055,7 +3053,8 @@ bool ScriptVarManager::fromString(const string& str) {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarManager::getValue(const string& name, ALLEGRO_COLOR& dest) const {
+bool ScriptVarManager::getValue(const string& name,
+    ALLEGRO_COLOR& dest) const {
     auto v = varsMap.find(name);
     if(v == varsMap.end()) {
         return false;
@@ -3127,7 +3126,8 @@ bool ScriptVarManager::getValue(const string& name, int& dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarManager::getValue(const string& name, unsigned char& dest) const {
+bool ScriptVarManager::getValue(const string& name,
+    unsigned char& dest) const {
     auto v = varsMap.find(name);
     if(v == varsMap.end()) {
         return false;
@@ -3696,7 +3696,8 @@ void SystemNotificationManager::tick(float deltaT) {
     
     switch(curNotifState) {
     case NOTIF_STATE_SHOWING: {
-        curNotifTimer += (deltaT / SYSTEM_NOTIFICATION::DURATION_TRANSITION);
+        curNotifTimer += (deltaT /
+                SYSTEM_NOTIFICATION::DURATION_TRANSITION);
         if(curNotifTimer >= 1.0f) {
             curNotifState = NOTIF_STATE_STAYING;
             curNotifTimer = 0.0f;
@@ -3714,7 +3715,8 @@ void SystemNotificationManager::tick(float deltaT) {
         }
         break;
     } case NOTIF_STATE_HIDING: {
-        curNotifTimer += (deltaT / SYSTEM_NOTIFICATION::DURATION_TRANSITION);
+        curNotifTimer += (deltaT /
+                SYSTEM_NOTIFICATION::DURATION_TRANSITION);
         if(curNotifTimer >= 1.0f) {
             curNotifState = NOTIF_STATE_SHOWING;
             curNotifTimer = 0.0f;
@@ -3760,11 +3762,11 @@ bool TextInput::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     bool handled = false;
     
     const auto eraseChars = [this] (size_t idx1, size_t idx2) {
-        if(idx2 < idx1) std::swap(idx1, idx2);
-        size_t amount = idx2 - idx1;
-        text.erase(idx1, amount);
-        return amount;
-    };
+                                if(idx2 < idx1) std::swap(idx1, idx2);
+                                size_t amount = idx2 - idx1;
+                                text.erase(idx1, amount);
+                                return amount;
+                            };
     
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {

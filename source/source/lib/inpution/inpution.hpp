@@ -350,11 +350,12 @@ struct Manager {
     bool startIgnoringActionInputSources(
         ActionTypeId actionTypeId, bool nowOnly
     );
-    bool startIgnoringInputSource(const InputSource& inputSource, bool nowOnly);
-    
-    
-    protected:
-    
+    bool startIgnoringInputSource(const InputSource& inputSource,
+        bool nowOnly);
+        
+        
+protected:
+
     //--- Protected structs ---
     
     /**

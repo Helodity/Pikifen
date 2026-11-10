@@ -80,7 +80,6 @@ extern const float SWARM_VERTICAL_SCALE;
 };
 
 
-
 /**
  * @brief A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
@@ -223,7 +222,7 @@ public:
     Timer invulnPeriod;
     
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
-    vector<std::pair<float, Mob*> > hitOpponents;
+    vector<std::pair<float, Mob*>> hitOpponents;
     
     //How much damage did it take since the last time the itch event triggered?
     float itchDamage = 0.0f;

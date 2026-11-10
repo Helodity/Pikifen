@@ -188,7 +188,7 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
     }
     
     //Find the two lengthiest ones.
-    vector<std::pair<Distance, Sector*> > neighborsVec;
+    vector<std::pair<Distance, Sector*>> neighborsVec;
     for(auto& n : neighbors) {
         neighborsVec.push_back(
             std::make_pair(
@@ -201,9 +201,9 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
         neighborsVec.begin(), neighborsVec.end(),
         [this] (
             std::pair<Distance, Sector*> p1, std::pair<Distance, Sector*> p2
-    ) -> bool {
-        return p1.first < p2.first;
-    }
+        ) -> bool {
+            return p1.first < p2.first;
+        }
     );
     if(neighborsVec.size() >= 1) {
         textureSector[0] = neighborsVec.back().second;

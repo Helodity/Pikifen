@@ -108,7 +108,8 @@ void Decoration::readScriptVars(const ScriptVarManager& varsMgr) {
     bool randomScaleVar;
     bool randomRotationVar;
     
-    if(varsMgr.getValue("random_animation_delay", randomAnimationDelayVar)) {
+    if(varsMgr.getValue("random_animation_delay",
+        randomAnimationDelayVar)) {
         individualRandomAnimDelay = randomAnimationDelayVar;
     }
     if(varsMgr.getValue("random_tint", randomTintVar)) {
