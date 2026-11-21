@@ -554,14 +554,23 @@ float Results::getScoreChartY(int score) const {
 
 
 /**
- * @brief Handles Allegro events.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void Results::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void Results::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
-    gui.handleAllegroEvent(ev);
+    gui.handleAllegroInputEvent(ev);
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void Results::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 

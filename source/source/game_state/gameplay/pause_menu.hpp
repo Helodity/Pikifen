@@ -134,7 +134,7 @@ public:
     explicit PauseMenu(bool startOnRadar);
     ~PauseMenu();
     void draw();
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     void handlePlayerAction(const Inpution::Action& action);
     void tick(float deltaT);
     

@@ -68,7 +68,8 @@ public:
     virtual ~Editor() = default;
     void doDrawing() override = 0;
     void doLogic() override = 0;
-    void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroInputEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroOtherEvent(ALLEGRO_EVENT& ev) override;
     void load() override;
     void unload() override;
     virtual void updateStyle();
@@ -676,8 +677,8 @@ protected:
         //Callback for when it's time to process the dialog's contents.
         std::function<void()> processCallback = nullptr;
         
-        //Callback for when an Allegro event happens.
-        std::function<void(ALLEGRO_EVENT*)> eventCallback = nullptr;
+        //Callback for when an Allegro event related to user input happens.
+        std::function<void(ALLEGRO_EVENT*)> inputEventCallback = nullptr;
         
         //Callback for when the user closes the dialog, if any.
         std::function<void()> closeCallback = nullptr;

@@ -106,13 +106,13 @@ void Inventory::close() {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  * @return Whether it got handled.
  */
-bool Inventory::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    return gui.handleAllegroEvent(ev);
+bool Inventory::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
+    return gui.handleAllegroInputEvent(ev);
 }
 
 

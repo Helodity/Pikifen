@@ -350,6 +350,9 @@ private:
     //Is deltaT meant to be reset for the next frame?
     bool resetDeltaT = true;
 
+    //Used to calculate the time difference between the current and last frames.
+    double prevFrameStartTime = 0.0;
+    
     //Is the control mediator meant to ignore the next Allegro event?
     bool skipEventForControlMediator = false;
     
@@ -360,8 +363,10 @@ private:
     void globalDrawing();
     void globalLogicPost();
     void globalLogicPre();
-    void globalHandleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void globalHandleAllegroInputEvent(const ALLEGRO_EVENT& ev);
+    void globalHandleAllegroOtherEvent(const ALLEGRO_EVENT& ev);
     bool globalHandleSystemPlayerAction(const Inpution::Action& action);
+    void processFrame();
     void processSystemInfo();
     
 };

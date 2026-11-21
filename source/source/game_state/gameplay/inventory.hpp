@@ -83,7 +83,7 @@ public:
     Inventory(Player* player);
     ~Inventory();
     void close();
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
     void open();
     void requestClose();

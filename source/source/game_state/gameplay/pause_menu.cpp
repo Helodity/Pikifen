@@ -1469,19 +1469,19 @@ void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+void PauseMenu::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!game.modal.isActive()) {
         radarView.updateMouseCursor(game.mouseCursor.winPos);
         
-        gui.handleAllegroEvent(ev);
-        radarGui.handleAllegroEvent(ev);
-        statusGui.handleAllegroEvent(ev);
-        missionGui.handleAllegroEvent(ev);
-        if(secondaryMenu) secondaryMenu->handleAllegroEvent(ev);
+        gui.handleAllegroInputEvent(ev);
+        radarGui.handleAllegroInputEvent(ev);
+        statusGui.handleAllegroInputEvent(ev);
+        missionGui.handleAllegroInputEvent(ev);
+        if(secondaryMenu) secondaryMenu->handleAllegroInputEvent(ev);
         
         //Handle some radar logic.
         DumbGui::DrawInfo dumbRadarDraw;
@@ -1543,7 +1543,7 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         
     }
     
-    game.modal.handleAllegroEvent(ev);
+    game.modal.handleAllegroInputEvent(ev);
 }
 
 

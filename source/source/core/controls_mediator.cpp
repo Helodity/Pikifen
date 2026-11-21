@@ -421,12 +421,12 @@ float ControlsMediator::getValueOfInputSource(
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The Allegro event.
  * @return Whether the event was handled.
  */
-bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool ControlsMediator::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     Inpution::Input input = allegroEventToInput(ev);
     
     if(input.source.type == Inpution::INPUT_SOURCE_TYPE_NONE) {

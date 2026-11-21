@@ -58,7 +58,8 @@ public:
     
     void load() override;
     void unload() override;
-    void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroInputEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroOtherEvent(ALLEGRO_EVENT& ev) override;
     void doLogic() override;
     void doDrawing() override;
     string getName() const override;

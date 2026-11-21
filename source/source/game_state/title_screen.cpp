@@ -1006,23 +1006,30 @@ string TitleScreen::getName() const {
 
 
 /**
- * @brief Handles Allegro events.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
-    if(isAllegroEventUserInput(ev)) {
-        if(guiFadeTimer > 0.0f) {
-            guiFadeTimer = 0.0f;
-            mainMenu.startFadingIn();
-            game.mouseCursor.purposely0Alpha = false;
-        }
-        mainMenu.speedUpFadeIn();
+void TitleScreen::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
+    if(guiFadeTimer > 0.0f) {
+        guiFadeTimer = 0.0f;
+        mainMenu.startFadingIn();
+        game.mouseCursor.purposely0Alpha = false;
     }
+    mainMenu.speedUpFadeIn();
     
     if(game.fadeMgr.isFading()) return;
     
-    mainMenu.handleAllegroEvent(ev);
+    mainMenu.handleAllegroInputEvent(ev);
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void TitleScreen::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 

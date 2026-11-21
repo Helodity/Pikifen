@@ -92,12 +92,12 @@ bool ModalGuiManager::draw() {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  * @return Whether it got handled.
  */
-bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool ModalGuiManager::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!shouldHandleEvents()) return false;
     
     bool handled = false;
@@ -118,7 +118,7 @@ bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             
         }
         
-        if(textInput.handleAllegroEvent(ev)) {
+        if(textInput.handleAllegroInputEvent(ev)) {
             game.audio.addNewUiSoundSource(
             game.sysContent.sndCutsceneMsgChar, {
                 .stackMinPos = 0.05f,
@@ -132,7 +132,7 @@ bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
     }
     
-    handled |= GuiManager::handleAllegroEvent(ev);
+    handled |= GuiManager::handleAllegroInputEvent(ev);
     
     return handled;
 }

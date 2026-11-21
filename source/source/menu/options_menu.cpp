@@ -672,11 +672,11 @@ void OptionsMenu::drawShortcutName(const DrawInfo& draw, unsigned char idx) {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  */
-void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+void OptionsMenu::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!active) return;
     
     switch(capturingInput) {
@@ -703,8 +703,8 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     }
     }
     
-    Menu::handleAllegroEvent(ev);
-    if(packsMenu) packsMenu->handleAllegroEvent(ev);
+    Menu::handleAllegroInputEvent(ev);
+    if(packsMenu) packsMenu->handleAllegroInputEvent(ev);
 }
 
 

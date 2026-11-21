@@ -329,8 +329,11 @@ public:
     //Unlike DumbGui::Item::onDraw, this uses Points and ALLEGRO_COLORs.
     std::function<void(const DrawInfo& draw)> onDrawP = nullptr;
     
-    //What to do when it receives any Allegro event.
-    std::function<void(const ALLEGRO_EVENT& ev)> onAllegroEvent = nullptr;
+    //What to do when it receives an Allegro event related to player input.
+    std::function<void(const ALLEGRO_EVENT& ev)> onAllegroInputEvent = nullptr;
+    
+    //What to do when it receives an Allegro event not related to player input.
+    std::function<void(const ALLEGRO_EVENT& ev)> onAllegroOtherEvent = nullptr;
     
     //What to do when a spatial navigation action is performed
     //when the item is focused. The return value is whether the logic
@@ -496,7 +499,7 @@ public:
     
     void defChildFocusedViaSNCode(const GuiItem* child);
     void defDrawCode(const DrawInfo& draw);
-    void defEventCode(const ALLEGRO_EVENT& ev);
+    void defInputEventCode(const ALLEGRO_EVENT& ev);
     void defTickCode(float deltaT);
     
 };
@@ -578,7 +581,7 @@ public:
     ScrollGuiItem();
     
     void defDrawCode(const DrawInfo& draw);
-    void defEventCode(const ALLEGRO_EVENT& ev);
+    void defInputEventCode(const ALLEGRO_EVENT& ev);
     
     
 private:
@@ -717,7 +720,8 @@ public:
         const vector<CustomGuiItemDef>& customItemDefs
     );
     
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroOtherEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
     bool wasLastInputMouse() const;
     

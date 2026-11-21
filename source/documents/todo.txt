@@ -10,45 +10,47 @@ Next tasks (roughly sorted most important first)
     --- 1.2.0 ---
     
     --- 1.3.0 ---
-    Ditch Tutorial Meadow and create a series of one minute short and sweet tutorial stages, like the training stages in Dandori Academy
-        Expo mode should ask if the user wants to play the tutorial stages when they hit Play on the main menu, just like if an options file is not detected
-    Create an area that's good for people to pick up and play
-        It should be easy to play in, and showcase a lot of action right off the bat
-            You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
-            Respawning Pellet Posies
-            Onions immediately generate a new seed when you run out of Pikmin
-            No time limit
-            Easy elemental obstacles
-        It should be small and compact, so the player can, with little effort, see many Pikmin carrying many things around
-            Piles help a lot with this
-            Make good use of verticality so it's easy to drop down ledges to reach places, but Pikmin have to climb up the pathways to carry things
-        It should be a bit of a vertical slice of the engine
-            Maybe try to have at least one mob of each category
-        Concept
-            Experience: Easy, approachable, and diverse, and getting to see the pretty Pikmin walking around
-            Gimmicks: Loads of situations where Pikmin are carrying things back and forth, maybe have at least one mob of each category
-            Objective: Grow 100 Pikmin, bonus points for recovered treasures, no time limit or time bonus
-            Pikmin types: Reds, since they're the basics, Purples and Whites so players can balance their object collection needs
-            Difficulty: Easy to reach 100 Pikmin, still easy to get platinum (all treasures)
-            Theme: Sandy, maybe some greenery here and there
-            Landmarks: Sand castle with the base on top, Puffy Blowhog arena
-            Obstacles: Fire geysers due to the dryness, ceramic bridges so there's a lot of carrying
-            Textures: Sands, rocks, maybe dry leaves
-        Misc
-            Start with normal Pikmin near you, but also have one or two sprouts
-            Have a 20-pellet behind a paper bag
-            Have a gate blocking something
-            Have geysers on the sand castle so players can easily make it back to the base
-            Ceramic bridges here and there
-            Buried White and Purple Pikmin, next to White and Purple Candypop Buds; only Reds can be grown
-            Healthy selection of eggs, all dropping nectar
-            Healthy selection of pellet posies
-            A spicy spiderwort somewhere?
-            Nuggets and chocolate bars
-            Have a cardboard box somewhere?
-            Have a bomb rock tucked in the corner?
-            Have a climbing stick somewhere?
-            Enemies: Crumbugs, Dwarf Reds, loads of Female Sheargrubs, Puffy Blowhog?, White Spectralids
+    Tutorial improvements
+        Ditch Tutorial Meadow and create a series of one minute short and sweet tutorial stages, like the training stages in Dandori Academy
+            Expo mode should ask if the user wants to play the tutorial stages when they hit Play on the main menu, just like if an options file is not detected
+        Maybe create an area that's good for people to pick up and play
+            It should be easy to play in, and showcase a lot of action right off the bat
+                You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
+                Respawning Pellet Posies
+                Onions immediately generate a new seed when you run out of Pikmin
+                No time limit
+                Easy elemental obstacles
+            It should be small and compact, so the player can, with little effort, see many Pikmin carrying many things around
+                Piles help a lot with this
+                Make good use of verticality so it's easy to drop down ledges to reach places, but Pikmin have to climb up the pathways to carry things
+            It should be a bit of a vertical slice of the engine
+                Maybe try to have at least one mob of each category
+            Concept
+                Experience: Easy, approachable, and diverse, and getting to see the pretty Pikmin walking around
+                Gimmicks: Loads of situations where Pikmin are carrying things back and forth, maybe have at least one mob of each category
+                Objective: Grow 100 Pikmin, bonus points for recovered treasures, no time limit or time bonus
+                Pikmin types: Reds, since they're the basics, Purples and Whites so players can balance their object collection needs
+                Difficulty: Easy to reach 100 Pikmin, still easy to get platinum (all treasures)
+                Theme: Sandy, maybe some greenery here and there
+                Landmarks: Sand castle with the base on top, Puffy Blowhog arena
+                Obstacles: Fire geysers due to the dryness, ceramic bridges so there's a lot of carrying
+                Textures: Sands, rocks, maybe dry leaves
+            Misc
+                Start with normal Pikmin near you, but also have one or two sprouts
+                Have a 20-pellet behind a paper bag
+                Have a gate blocking something
+                Have geysers on the sand castle so players can easily make it back to the base
+                Ceramic bridges here and there
+                Buried White and Purple Pikmin, next to White and Purple Candypop Buds; only Reds can be grown
+                Healthy selection of eggs, all dropping nectar
+                Healthy selection of pellet posies
+                A spicy spiderwort somewhere?
+                Nuggets and chocolate bars
+                Have a cardboard box somewhere?
+                Have a bomb rock tucked in the corner?
+                Have a climbing stick somewhere?
+                Enemies: Crumbugs, Dwarf Reds, loads of Female Sheargrubs, Puffy Blowhog?, White Spectralids
+        Maybe the signs in stuff like Tutorial Meadow could have a preview that is just a summary of what it teaches, half a dozen of words, and if you interact it shows the whole thing
     Winged Pikmin can fly over walls, and when they need to descend they can ignore collision
         This is because getMovementEdgeIntersections is what's responsible for returning the edges that are being touched, which is important to figure out tallestSector, but ignores edges if they're underneath the mob. Without tallestSector, Winged Pikmin can go through walls so long as it's not at the mob's center. This may be fixed by having getMovementEdgeIntersections always return the intersections, use those to update tallestSector, and then have the rest of the logic that checks proper edge COLLISION and does stepping and whatnot be its own thing
         Also, Winged Pikmin can sometimes get stuck because of this, like when trying to deliver to a ship that's a bit higher than the reception point. Adding a step-worth bit of leeway to maxVertDistDiff might solve it, or it might break things
@@ -88,18 +90,20 @@ Next tasks (roughly sorted most important first)
         Info
             Gotta make a list of what problems I've found + what problems Inpution solves, in order to really understand what kind of solution to build
                 If the terminal is open, other systems shouldn't get events, otherwise you get the player moving whenever you type W. But...if they don't, they for instance don't receive a "button up" event for when the player releases W (which the player was holding when they opened the terminal)
-            Hierarchy:
-                Game
-                    Hardware mediator
-                    Console
-                    Maker tools
-                    Current state
-                        Menu
-                            Its GUIs
+                If I'm holding the "charge laser" button, pause the game, release the button, then hold it again and unpause, I expect the laser to continue charging from where I left off
+                If you're holding a direction in the radar screen then swap screens without releasing, it'll keep going in that direction when you come back
+            Hierarchy
+                Hardware mediator
+                Console
+                Modal's text input
+                Dear ImGui editor text input
+                Maker tools
+                Current state's menu
+                Current state proper
             Maybe: Have an input manager, and all things that want to read inputs subscribe to it. The input manager then sends or does not send the data to the different subscribers based on each one's event propagation rules
             What if I make Inpution work via polling only? You could ask like inputionManager.wasActionPressedThisFrame(ACTION_JUMP) or inputionManager.wasActionPressedSinceLastPoll(ACTION_JUMP)
             Maybe the dev should inform Inpution of what states block input from going to other states. Like Console blocks menus and gameplay, menus block gameplay
-            I'll have to most certainly split handleAllegroEvent between handleAllegroInputEvent and handleAllegroOtherEvent
+        Split the library between "input --(player control binds)--> action" and the rest
         Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Controls menus
@@ -157,7 +161,6 @@ Next tasks (roughly sorted most important first)
     The camera (at least for editors and radar) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
         Also add logic to release the mouse while moving the camera to make it slide and lose speed over time
     Rename the "print" script action to "log", and allow it to choose between logging info, a warning, or an error. Instead of telling people they should only use this for debugging, they should be encouraged to use it for other things: print out an unexpected state or something that went wrong with the script so players can warn the maker about it, print out a warning or error message if somebody places a mob in an area with unacceptable script var values, etc.
-    Maybe the signs in Tutorial Meadow could have a preview that is just a summary of what it teaches, half a dozen of words, and if you interact it shows the whole thing
     Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
 
     --- 2.0.0 ---

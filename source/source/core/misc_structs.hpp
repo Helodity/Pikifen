@@ -1625,7 +1625,7 @@ public:
     void reset();
     string getString() const;
     size_t getCaretPos() const;
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     void setCaretPos(size_t newPos);
     void setString(const string& newString, bool caretAtEnd = false);
     

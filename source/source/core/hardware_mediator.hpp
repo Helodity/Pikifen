@@ -194,7 +194,8 @@ public:
         PLAYER_INPUT_ICON_SPRITE* outBitmapSprite,
         string* outExtra
     ) const;
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
+    void handleAllegroOtherEvent(const ALLEGRO_EVENT& ev);
     Inpution::InputSource sanitizeStick(
         const Inpution::InputSource& source
     ) const;

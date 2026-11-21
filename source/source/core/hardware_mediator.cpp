@@ -528,11 +528,11 @@ void HardwareMediator::getInputSourceIconInfo(
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  */
-void HardwareMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+void HardwareMediator::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
@@ -564,7 +564,17 @@ void HardwareMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //Game controller input.
         lastInputWasController = true;
         
-    } else if(
+    }
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev The event.
+ */
+void HardwareMediator::handleAllegroOtherEvent(const ALLEGRO_EVENT& ev) {
+    if(
         ev.type == ALLEGRO_EVENT_JOYSTICK_CONFIGURATION
     ) {
         //Game controller was connected or disconnected.

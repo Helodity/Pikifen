@@ -477,7 +477,8 @@ bool isAllegroEventUserInput(ALLEGRO_EVENT& ev) {
     case ALLEGRO_EVENT_MOUSE_AXES:
     case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
     case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-    case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY: {
+    case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY:
+    case ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY: {
         return true;
         break;
     }

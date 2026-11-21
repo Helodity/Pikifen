@@ -60,7 +60,7 @@ public:
     void reset();
     void clear();
     int draw(int y) const;
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     void tick(float deltaT);
     void write(LOG_LEVEL level, const string& text);
     void open(bool instant = false);
@@ -189,7 +189,7 @@ public:
     //--- Public function declarations ---
     
     int draw(int y) const;
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     void tick(float deltaT);
     void write(
         LOG_LEVEL level, const string& text,

@@ -414,7 +414,7 @@ public:
     Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
     
     bool actionQueueContains(PLAYER_ACTION_TYPE actionTypeId) const;
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     void ignoreActionsForOneFrame();
     void ignoreMenuCloseActions();
     void newFrame(float deltaT);

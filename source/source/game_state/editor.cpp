@@ -796,11 +796,11 @@ bool Editor::guiFocusedText() {
 
 
 /**
- * @brief Handles an Allegro event for control-related things.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void Editor::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
     bool isMouseInCanvas =
@@ -1069,10 +1069,19 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     }
     
     if(!dialogs.empty()) {
-        if(dialogs.back()->eventCallback) {
-            dialogs.back()->eventCallback(&ev);
+        if(dialogs.back()->inputEventCallback) {
+            dialogs.back()->inputEventCallback(&ev);
         }
     }
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void Editor::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 
@@ -4392,7 +4401,7 @@ bool Editor::ChangesManager::askIfUnsaved(
         );
         ed->dialogs.back()->customPos = game.mouseCursor.winPos;
         ed->dialogs.back()->customSize = Point(580, 0);
-        ed->dialogs.back()->eventCallback =
+        ed->dialogs.back()->inputEventCallback =
         [this] (const ALLEGRO_EVENT * ev) {
             if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
                 if(

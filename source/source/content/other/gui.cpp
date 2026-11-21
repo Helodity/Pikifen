@@ -1097,13 +1097,13 @@ bool GuiManager::getItemDrawInfo(
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  * Controls are handled in handlePlayerAction.
  *
  * @param ev The event.
  * @return Whether it got handled.
  */
-bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool GuiManager::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!shouldHandleEvents()) return false;
     
     bool handled = false;
@@ -1142,14 +1142,35 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     //Feed the event to the items.
     forIdx(i, items) {
         GuiItem* iPtr = (GuiItem*) items[i];
-        if(iPtr->isResponsive() && iPtr->onAllegroEvent) {
-            iPtr->onAllegroEvent(ev);
+        if(iPtr->isResponsive() && iPtr->onAllegroInputEvent) {
+            iPtr->onAllegroInputEvent(ev);
         }
     }
     
     if(mouseMoved) lastInputWasMouse = true;
     
     return handled;
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev The event.
+ * @return Whether it got handled.
+ */
+bool GuiManager::handleAllegroOtherEvent(const ALLEGRO_EVENT& ev) {
+    if(!shouldHandleEvents()) return false;
+    
+    //Feed the event to the items.
+    forIdx(i, items) {
+        GuiItem* iPtr = (GuiItem*) items[i];
+        if(iPtr->isResponsive() && iPtr->onAllegroOtherEvent) {
+            iPtr->onAllegroOtherEvent(ev);
+        }
+    }
+    
+    return true;
 }
 
 
@@ -1624,9 +1645,9 @@ ListGuiItem::ListGuiItem() :
     [this] (float deltaT) {
         this->defTickCode(deltaT);
     };
-    onAllegroEvent =
+    onAllegroInputEvent =
     [this] (const ALLEGRO_EVENT & ev) {
-        this->defEventCode(ev);
+        this->defInputEventCode(ev);
     };
     onChildFocusedViaSN =
     [this] (const GuiItem * child) {
@@ -1820,11 +1841,11 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
 
 
 /**
- * @brief Default list GUI item event code.
+ * @brief Default list GUI item Allegro input event code.
  *
  * @param ev The Allegro event.
  */
-void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
+void ListGuiItem::defInputEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
         isMouseOn(ev.mouse.x, ev.mouse.y) &&
@@ -2068,9 +2089,9 @@ ScrollGuiItem::ScrollGuiItem() :
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
-    onAllegroEvent =
+    onAllegroInputEvent =
     [this] (const ALLEGRO_EVENT & ev) {
-        this->defEventCode(ev);
+        this->defInputEventCode(ev);
     };
 }
 
@@ -2144,11 +2165,11 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
 
 
 /**
- * @brief Default scroll GUI item event code.
+ * @brief Default scroll GUI item Allegro input event code.
  *
  * @param ev The Allegro event.
  */
-void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
+void ScrollGuiItem::defInputEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
         ev.mouse.button == 1 &&

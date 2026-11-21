@@ -119,13 +119,13 @@ int MakerConsole::draw(int y) const {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  * @return Whether it was handled.
  */
-bool MakerConsole::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    return terminal.handleAllegroEvent(ev);
+bool MakerConsole::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
+    return terminal.handleAllegroInputEvent(ev);
 }
 
 
@@ -1061,12 +1061,12 @@ OPEN_CLOSE_STATE MakerConsoleTerminal::getVisibilityState() const {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  * @return Whether it was handled.
  */
-bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool MakerConsoleTerminal::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(
         visibilityState == OPEN_CLOSE_STATE_CLOSED ||
         visibilityState == OPEN_CLOSE_STATE_CLOSING
@@ -1121,7 +1121,7 @@ bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
     }
     
-    if(input.handleAllegroEvent(ev)) {
+    if(input.handleAllegroInputEvent(ev)) {
         if(commandHistoryIdx != 0) {
             //We're showing a history item, but the user edited it, so
             //reset and make it seem like this is what the user's writing.

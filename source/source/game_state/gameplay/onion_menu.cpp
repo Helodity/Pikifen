@@ -773,14 +773,14 @@ void OnionMenu::growButtons() {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+void OnionMenu::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!gui.shouldHandleEvents()) return;
     if(closing) return;
-    gui.handleAllegroEvent(ev);
+    gui.handleAllegroInputEvent(ev);
 }
 
 

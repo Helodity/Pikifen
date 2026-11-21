@@ -2790,12 +2790,12 @@ string TextInput::getString() const {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  * @return Whether the event got handled.
  */
-bool TextInput::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool TextInput::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     bool handled = false;
     
     const auto eraseChars = [this] (size_t idx1, size_t idx2) {

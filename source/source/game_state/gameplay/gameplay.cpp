@@ -1102,30 +1102,47 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void GameplayState::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
+    //Handle the Onion menu first so events don't bleed from gameplay to it.
+    if(onionMenu) {
+        onionMenu->handleAllegroInputEvent(ev);
+    } else if(pauseMenu) {
+        pauseMenu->handleAllegroInputEvent(ev);
+    }
+    game.modal.handleAllegroInputEvent(ev);
+    
+    //Finally, let the HUD handle events.
+    forIdx(p, players) {
+        Player& player = players[p];
+        player.hud->gui.handleAllegroInputEvent(ev);
+        player.inventory->gui.handleAllegroInputEvent(ev);
+    }
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void GameplayState::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
     if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
         if(game.options.advanced.pauseOnFocusLost) {
             tryPause();
         }
     }
     
-    //Handle the Onion menu first so events don't bleed from gameplay to it.
-    if(onionMenu) {
-        onionMenu->handleAllegroEvent(ev);
-    } else if(pauseMenu) {
-        pauseMenu->handleAllegroEvent(ev);
-    }
-    game.modal.handleAllegroEvent(ev);
+    game.modal.handleAllegroOtherEvent(ev);
     
     //Finally, let the HUD handle events.
     forIdx(p, players) {
         Player& player = players[p];
-        player.hud->gui.handleAllegroEvent(ev);
-        player.inventory->gui.handleAllegroEvent(ev);
+        player.hud->gui.handleAllegroOtherEvent(ev);
+        player.inventory->gui.handleAllegroOtherEvent(ev);
     }
     
 }

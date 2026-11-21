@@ -112,7 +112,7 @@ public:
     void close();
     void reset();
     void updateItems();
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     
     
 private:

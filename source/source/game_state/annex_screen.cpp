@@ -72,14 +72,23 @@ string AnnexScreen::getName() const {
 
 
 /**
- * @brief Handles Allegro events.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void AnnexScreen::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
-    if(curMenu) curMenu->handleAllegroEvent(ev);
+    if(curMenu) curMenu->handleAllegroInputEvent(ev);
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void AnnexScreen::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 
