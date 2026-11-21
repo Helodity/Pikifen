@@ -117,7 +117,7 @@ void ControlsMediator::addNewActionType(
 void ControlsMediator::addNewModifier(
     Inpution::ActionTypeId id, const Inpution::InputSource& source
 ) {
-    mgr.modifiers[id] = source;
+    mgr.translator.modifiers[id] = source;
 }
 
 
@@ -242,7 +242,7 @@ Inpution::Input ControlsMediator::allegroEventToInput(
  * @return The binds.
  */
 vector<Inpution::Bind>& ControlsMediator::binds() {
-    return mgr.binds;
+    return mgr.translator.binds;
 }
 
 
@@ -256,9 +256,9 @@ vector<Inpution::Bind>& ControlsMediator::binds() {
 Inpution::Bind ControlsMediator::findBind(
     const PLAYER_ACTION_TYPE actionTypeId
 ) const {
-    forIdx(b, mgr.binds) {
-        if(mgr.binds[b].actionTypeId == actionTypeId) {
-            return mgr.binds[b];
+    forIdx(b, mgr.translator.binds) {
+        if(mgr.translator.binds[b].actionTypeId == actionTypeId) {
+            return mgr.translator.binds[b];
         }
     }
     return Inpution::Bind();
@@ -295,9 +295,9 @@ vector<Inpution::Bind> ControlsMediator::findBinds(
     const PLAYER_ACTION_TYPE actionTypeId
 ) const {
     vector<Inpution::Bind> result;
-    forIdx(b, mgr.binds) {
-        if(mgr.binds[b].actionTypeId == actionTypeId) {
-            result.push_back(mgr.binds[b]);
+    forIdx(b, mgr.translator.binds) {
+        if(mgr.translator.binds[b].actionTypeId == actionTypeId) {
+            result.push_back(mgr.translator.binds[b]);
         }
     }
     return result;
@@ -382,10 +382,10 @@ const vector<PlayerActionType>
 bool ControlsMediator::getInputSourceIsBoundToActionType(
     const Inpution::InputSource& inputSource, PLAYER_ACTION_TYPE actionType
 ) const {
-    forIdx(b, mgr.binds) {
+    forIdx(b, mgr.translator.binds) {
         if(
-            mgr.binds[b].inputSource == inputSource &&
-            mgr.binds[b].actionTypeId == actionType
+            mgr.translator.binds[b].inputSource == inputSource &&
+            mgr.translator.binds[b].actionTypeId == actionType
         ) {
             return true;
         }
