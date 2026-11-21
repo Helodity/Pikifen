@@ -9,13 +9,16 @@
  * Please read the included readme file.
  */
 
+#include <algorithm>
+
 #include "dumb_gui.hpp"
+
+
+namespace DumbGui {
 
 
 #pragma region Constants
 
-
-namespace DumbGui {
 
 //Inherent amount of padding, on top of the item's own padding,
 //for use when positioning children items.
@@ -27,8 +30,6 @@ const int WINDOW_DEFAULT_PX_HEIGHT = 768;
 //Default game window width, if Manager::onGetWindowSizePx is not set.
 const int WINDOW_DEFAULT_PX_WIDTH = 1024;
 
-}
-
 
 #pragma endregion
 #pragma region GUI item
@@ -39,7 +40,7 @@ const int WINDOW_DEFAULT_PX_WIDTH = 1024;
  *
  * @param focusable Can the item be focused by the user?
  */
-DumbGui::Item::Item(bool focusable) :
+Item::Item(bool focusable) :
     focusable(focusable) {
     
 }
@@ -52,7 +53,7 @@ DumbGui::Item::Item(bool focusable) :
  * @param cursorPxY Mouse cursor Y coordinate, if applicable.
  * @return Whether it could activate it.
  */
-bool DumbGui::Item::activate(float cursorPxX, float cursorPxY) {
+bool Item::activate(float cursorPxX, float cursorPxY) {
     if(!isResponsive()) return false;
     if(!onActivate) return false;
     
@@ -68,7 +69,7 @@ bool DumbGui::Item::activate(float cursorPxX, float cursorPxY) {
  * @param item Item to add as a child item.
  * @return Whether it succeeded.
  */
-bool DumbGui::Item::addChild(Item* item) {
+bool Item::addChild(Item* item) {
     if(!item) return false;
     children.push_back(item);
     item->parent = this;
@@ -81,7 +82,7 @@ bool DumbGui::Item::addChild(Item* item) {
  *
  * @return Whether all of the deletions succeeded.
  */
-bool DumbGui::Item::deleteAllChildren() {
+bool Item::deleteAllChildren() {
     bool success = true;
     while(!children.empty()) {
         Item* iPtr = children[0];
@@ -99,7 +100,7 @@ bool DumbGui::Item::deleteAllChildren() {
  * @param draw Data to draw with.
  * @return Whether it succeeded.
  */
-bool DumbGui::Item::draw(const DrawInfo& draw) {
+bool Item::draw(const DrawInfo& draw) {
     if(!onDraw) return false;
     
     onDraw(draw);
@@ -117,7 +118,7 @@ bool DumbGui::Item::draw(const DrawInfo& draw) {
  * check the vertical reach (height).
  * @return The X or Y coordinate.
  */
-float DumbGui::Item::getChildrenSpanRatio(bool horizontal) const {
+float Item::getChildrenSpanRatio(bool horizontal) const {
     float span = 0.0f;
     for(size_t c = 0; c < children.size(); c++) {
         Item* cPtr = children[c];
@@ -138,7 +139,7 @@ float DumbGui::Item::getChildrenSpanRatio(bool horizontal) const {
  * @param outCenterPxX The X coordinate is returned here.
  * @param outCenterPxY The Y coordinate is returned here.
  */
-void DumbGui::Item::getReferencePxCenter(
+void Item::getReferencePxCenter(
     float* outCenterPxX, float* outCenterPxY
 ) const {
     if(parent) {
@@ -183,7 +184,7 @@ void DumbGui::Item::getReferencePxCenter(
  * @param outSizePxW The width is returned here.
  * @param outSizePxH The height is returned here.
  */
-void DumbGui::Item::getReferencePxSize(
+void Item::getReferencePxSize(
     float* outSizePxW, float* outSizePxH
 ) const {
     float multX = 0.0f;
@@ -231,7 +232,7 @@ void DumbGui::Item::getReferencePxSize(
  * @param cursorPxY Mouse cursor Y coordinate.
  * @return Whether the cursor is on top.
  */
-bool DumbGui::Item::isMouseOn(float cursorPxX, float cursorPxY) const {
+bool Item::isMouseOn(float cursorPxX, float cursorPxY) const {
     if(parent && !parent->isMouseOn(cursorPxX, cursorPxY)) {
         return false;
     }
@@ -255,7 +256,7 @@ bool DumbGui::Item::isMouseOn(float cursorPxX, float cursorPxY) const {
  *
  * @return Whether it is responsive.
  */
-bool DumbGui::Item::isResponsive() const {
+bool Item::isResponsive() const {
     if(!responsive) return false;
     if(parent) return parent->isResponsive();
     return responsive;
@@ -267,7 +268,7 @@ bool DumbGui::Item::isResponsive() const {
  *
  * @return Whether it is visible.
  */
-bool DumbGui::Item::isVisible() const {
+bool Item::isVisible() const {
     if(!visible) return false;
     if(parent) return parent->isVisible();
     return true;
@@ -280,7 +281,7 @@ bool DumbGui::Item::isVisible() const {
  * @param item Child item to remove.
  * @return Whether it succeeded.
  */
-bool DumbGui::Item::removeChild(Item* item) {
+bool Item::removeChild(Item* item) {
     for(size_t c = 0; c < children.size(); c++) {
         if(children[c] == item) {
             children.erase(children.begin() + c);
@@ -303,7 +304,7 @@ bool DumbGui::Item::removeChild(Item* item) {
  * @param item The new item.
  * @return Whether it succeeded.
  */
-bool DumbGui::Manager::addItem(Item* item) {
+bool Manager::addItem(Item* item) {
     if(!item) return false;
     
     items.push_back(item);
@@ -318,7 +319,7 @@ bool DumbGui::Manager::addItem(Item* item) {
  *
  * @return Whether it succeeded.
  */
-bool DumbGui::Manager::destroy() {
+bool Manager::destroy() {
     setFocusedItem(nullptr);
     for(size_t i = 0; i < items.size(); i++) {
         delete items[i];
@@ -334,7 +335,7 @@ bool DumbGui::Manager::destroy() {
  *
  * @return Whether it succeeded.
  */
-bool DumbGui::Manager::draw() {
+bool Manager::draw() {
     if(!visible) return false;
     
     int ocrX = 0;
@@ -343,10 +344,10 @@ bool DumbGui::Manager::draw() {
     int ocrH = 0;
     
     //Sort them by layer.
-    vector<DumbGui::Item*> drawingSortedItems = items;
+    vector<Item*> drawingSortedItems = items;
     std::stable_sort(
         drawingSortedItems.begin(), drawingSortedItems.end(),
-    [] (DumbGui::Item * i1, DumbGui::Item * i2) {
+    [] (Item * i1, Item * i2) {
         return i1->drawingLayer < i2->drawingLayer;
     }
     );
@@ -411,7 +412,7 @@ bool DumbGui::Manager::draw() {
  *
  * @return The tooltip.
  */
-string DumbGui::Manager::getCurrentTooltip() const {
+string Manager::getCurrentTooltip() const {
     if(!focusedItem) return string();
     if(!focusedItem->onGetTooltip) return string();
     return focusedItem->onGetTooltip();
@@ -423,7 +424,7 @@ string DumbGui::Manager::getCurrentTooltip() const {
  *
  * @return The item, or nullptr for none.
  */
-DumbGui::Item* DumbGui::Manager::getFocusedItem() const {
+Item* Manager::getFocusedItem() const {
     return focusedItem;
 }
 
@@ -435,7 +436,7 @@ DumbGui::Item* DumbGui::Manager::getFocusedItem() const {
  * @param draw The information on how to draw is returned here.
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
-bool DumbGui::Manager::getItemDrawInfo(Item* item, DrawInfo* draw) const {
+bool Manager::getItemDrawInfo(Item* item, DrawInfo* draw) const {
     if(!item->isVisible()) return false;
     if(item->rawSizeRatioW == 0.0f) return false;
     
@@ -468,7 +469,7 @@ bool DumbGui::Manager::getItemDrawInfo(Item* item, DrawInfo* draw) const {
  * @param mousePxY Mouse cursor Y coordinate when the click happened.
  * @return Whether the event got handled.
  */
-bool DumbGui::Manager::handleMouseClick(int mousePxX, int mousePxY) {
+bool Manager::handleMouseClick(int mousePxX, int mousePxY) {
     if(!shouldHandleEvents()) return false;
     
     handleMouseMovement(mousePxX, mousePxY);
@@ -488,7 +489,7 @@ bool DumbGui::Manager::handleMouseClick(int mousePxX, int mousePxY) {
  * @param mousePxY The mouse cursor's new Y coordinate.
  * @return Whether the event got handled.
  */
-bool DumbGui::Manager::handleMouseMovement(int mousePxX, int mousePxY) {
+bool Manager::handleMouseMovement(int mousePxX, int mousePxY) {
     if(!shouldHandleEvents()) return false;
     
     Item* focusResult = nullptr;
@@ -519,7 +520,7 @@ bool DumbGui::Manager::handleMouseMovement(int mousePxX, int mousePxY) {
  * @param item Item to remove.
  * @return Whether it succeeded.
  */
-bool DumbGui::Manager::removeItem(Item* item) {
+bool Manager::removeItem(Item* item) {
     if(!item) return false;
     bool success = false;
     
@@ -542,7 +543,7 @@ bool DumbGui::Manager::removeItem(Item* item) {
  * @param item Item to focus, or nullptr for none.
  * @return Whether it succeeded.
  */
-bool DumbGui::Manager::setFocusedItem(Item* item) {
+bool Manager::setFocusedItem(Item* item) {
     if(focusedItem == item) return false;
     
     if(focusedItem) {
@@ -569,7 +570,7 @@ bool DumbGui::Manager::setFocusedItem(Item* item) {
  *
  * @return Whether it should.
  */
-bool DumbGui::Manager::shouldHandleEvents() const {
+bool Manager::shouldHandleEvents() const {
     if(!responsive) return false;
     return true;
 }
@@ -581,7 +582,7 @@ bool DumbGui::Manager::shouldHandleEvents() const {
  * @param deltaT How long the frame's tick is, in seconds.
  * @return Whether it succeeded.
  */
-bool DumbGui::Manager::tick(float deltaT) {
+bool Manager::tick(float deltaT) {
     //Tick all items.
     for(size_t i = 0; i < items.size(); i++) {
         Item* iPtr = items[i];
@@ -596,3 +597,5 @@ bool DumbGui::Manager::tick(float deltaT) {
 
 #pragma endregion
 
+
+}

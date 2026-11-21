@@ -12,7 +12,6 @@
 #include <string>
 #include <vector>
 
-
 using std::function;
 using std::string;
 using std::vector;
