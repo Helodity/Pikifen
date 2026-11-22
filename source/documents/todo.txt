@@ -103,7 +103,6 @@ Next tasks (roughly sorted most important first)
             Maybe: Have an input manager, and all things that want to read inputs subscribe to it. The input manager then sends or does not send the data to the different subscribers based on each one's event propagation rules
             What if I make Inpution work via polling only? You could ask like inputionManager.wasActionPressedThisFrame(ACTION_JUMP) or inputionManager.wasActionPressedSinceLastPoll(ACTION_JUMP)
             Maybe the dev should inform Inpution of what states block input from going to other states. Like Console blocks menus and gameplay, menus block gameplay
-        Split the library between "input --(player control binds)--> action" and the rest
         Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Controls menus
@@ -123,7 +122,6 @@ Next tasks (roughly sorted most important first)
             Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
             If I can't figure this out, then before entering an editor it should detect if the last input was keyboard and mouse. If not, it should show a modal warning the player they'll want a keyboard and mouse to continue
         [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
-        Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
         An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
         If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
         Pressing left or right on a modal with a text input will just move the caret, but HOLDING will make the repeat events trigger

@@ -13,7 +13,7 @@ _Analog stick input value cleanup, made easy._
 
 ## Overview
 
-This is a source-only C++ library that performs some [analog stick](https://en.wikipedia.org/wiki/Analog_stick) input value cleanup. Analog sticks are finicky input sources by nature, whether that's because a human's finger isn't very precise, because the stick's looseness allows for wobbling, or because the plastic shell of the game pad doesn't allow the stick to reach the values it should. As such, with deadzones, value interpolation, and a few more tricks, it's possible to output values much closer to what the player actually wants. It also has simple support for cleaning up analog _button_ input values.
+This is a source-only C++ library that performs some [analog stick](https://en.wikipedia.org/wiki/Analog_stick) input value cleanup. Analog sticks are finicky input sources by nature, whether that's because a human's finger isn't very precise, because the stick's looseness allows for wobbling, or because the plastic shell of the game pad doesn't allow the stick to reach the values it should. As such, with deadzones, value interpolation, and a few more tricks, it's possible to output values much closer to what the player actually wants. On top of providing logic to help do just that, the library also has simple support for cleaning up analog _button_ input values.
 
 The library is entirely stateless and easy to use: you feed it the X and Y coordinates of an analog stick, along with some configuration settings, and it spits out the cleaned coordinate value, all in a single function.
 
@@ -24,7 +24,7 @@ The library is entirely stateless and easy to use: you feed it the X and Y coord
 #include "easy_analog_cleaner.hpp"
 #include "my_game_stuff.hpp"
 
-// (...)
+// (game things...)
 
 while(myGame.running) {
     MyGame::Event event = myGame.getEvent();
@@ -70,7 +70,7 @@ while(myGame.running) {
 
 ## Other usage information
 
-* It's possible that whatever framework you're using sends you two events for analog stick: one axis at a time. If so, make sure to save the raw value of both somewhere, and whenever you receive _either_ event, clean up _both_ raw values together. The library won't work if you just try to clean one axis's value while leaving the other as zero!
+* It's possible that whatever framework you're using sends you two events for the analog stick: one axis at a time. If so, make sure to save the raw value of both somewhere, and whenever you receive _either_ event, clean up _both_ raw values together. The library won't work if you just try to clean one axis's value while leaving the other as zero!
 * You can define `EASY_ANALOG_CLEANER_DEBUG` (or uncomment its line near the top of the source file), to better understand how the input/output values work.
 * For more information on how a part of the library works, read its comments in the header file, or check how the unit tests file does it.
 

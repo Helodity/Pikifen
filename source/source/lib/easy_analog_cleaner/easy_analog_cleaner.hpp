@@ -211,7 +211,8 @@ public:
              * the final coordinates you want to clean, though you should
              * probably avoid that.
              * This essentially stops a common problem where the player can
-             * move their character or their reticle faster than intended.
+             * move their character or their reticle faster than intended when
+             * going diagonally.
              * Using this setting is recommended.
              */
             bool unitCircleClamp = true;

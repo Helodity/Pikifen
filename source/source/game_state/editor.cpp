@@ -844,13 +844,13 @@ void Editor::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
         //Mouse button down, inside the canvas.
         
         switch(ev.mouse.button) {
-        case 1: {
+        case ALLEGRO_MOUSE_BUTTON_LEFT: {
             isM1Pressed = true;
             break;
-        } case 2: {
+        } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
             isM2Pressed = true;
             break;
-        } case 3: {
+        } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
             isM3Pressed = true;
             break;
         }
@@ -876,13 +876,13 @@ void Editor::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
                 
             } else {
                 switch(ev.mouse.button) {
-                case 1: {
+                case ALLEGRO_MOUSE_BUTTON_LEFT: {
                     handleLmbDoubleClick(ev);
                     break;
-                } case 2: {
+                } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
                     handleRmbDoubleClick(ev);
                     break;
-                } case 3: {
+                } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
                     handleMmbDoubleClick(ev);
                     break;
                 }
@@ -904,13 +904,13 @@ void Editor::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
                 lastMouseClickSubState = subState;
                 
                 switch(ev.mouse.button) {
-                case 1: {
+                case ALLEGRO_MOUSE_BUTTON_LEFT: {
                     handleLmbDown(ev);
                     break;
-                } case 2: {
+                } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
                     handleRmbDown(ev);
                     break;
-                } case 3: {
+                } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
                     handleMmbDown(ev);
                     break;
                 }
@@ -931,19 +931,19 @@ void Editor::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
         //Mouse button up.
         
         switch(ev.mouse.button) {
-        case 1: {
+        case ALLEGRO_MOUSE_BUTTON_LEFT: {
             if(isM1Pressed) {
                 isM1Pressed = false;
                 handleLmbUp(ev);
             }
             break;
-        } case 2: {
+        } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
             if(isM2Pressed) {
                 isM2Pressed = false;
                 handleRmbUp(ev);
             }
             break;
-        } case 3: {
+        } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
             if(isM3Pressed) {
                 isM3Pressed = false;
                 handleMmbUp(ev);

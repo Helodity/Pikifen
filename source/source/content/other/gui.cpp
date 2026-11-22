@@ -1121,7 +1121,7 @@ bool GuiManager::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     //Pressing down the left mouse button.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        ev.mouse.button == 1
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT
     ) {
         handled = handleMouseClick(ev.mouse.x, ev.mouse.y);
         if(handled) {
@@ -1133,7 +1133,10 @@ bool GuiManager::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     }
     
     //Releasing the left mouse button.
-    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP &&
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT
+    ) {
         autoRepeater.stop();
         mouseMoved = true;
         handled = true;
@@ -2172,7 +2175,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
 void ScrollGuiItem::defInputEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        ev.mouse.button == 1 &&
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT &&
         isMouseOn(ev.mouse.x, ev.mouse.y)
     ) {
         isMouseDragging = true;
@@ -2180,7 +2183,7 @@ void ScrollGuiItem::defInputEventCode(const ALLEGRO_EVENT& ev) {
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP &&
-        ev.mouse.button == 1
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT
     ) {
         isMouseDragging = false;
         
