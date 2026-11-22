@@ -79,16 +79,16 @@ public:
     Manager* manager = nullptr;
     
     //Raw center X coordinate, in parent ratio.
-    float rawCenterRatioX = 0.0f;
+    float rawCenterRatioX = 0.5f;
     
     //Raw center Y coordinate, in parent ratio.
-    float rawCenterRatioY = 0.0f;
+    float rawCenterRatioY = 0.5f;
     
     //Raw width, in parent ratio.
-    float rawSizeRatioW = 0.0f;
+    float rawSizeRatioW = 0.25f;
     
     //Raw height, in parent ratio.
-    float rawSizeRatioH = 0.0f;
+    float rawSizeRatioH = 0.25f;
     
     
     //What to do when it's time to draw it.
@@ -156,9 +156,15 @@ public:
     //Drawing layer. The lower the number, the sooner it'll be drawn.
     unsigned char drawingLayer = 127;
     
+    //Alpha multiplier. Affects children.
+    float alphaMultiplier = 1.0f;
+    
     //Force its final dimensions to be square, such that they fit inside
     //the reference dimensions.
     bool forceSquare = false;
+    
+    //Name, for whatever it may be needed, like debugging. Optional.
+    string name;
     
     
     //--- Public function declarations ---
@@ -179,6 +185,7 @@ public:
     ) const;
     virtual bool isResponsive() const;
     virtual bool isVisible() const;
+    virtual float getAlphaMultiplier() const;
     
     virtual bool addChild(Item* item);
     virtual bool deleteAllChildren();

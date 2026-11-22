@@ -581,6 +581,8 @@ GuiManager::GuiManager() :
 bool GuiManager::addItemP(GuiItem* item, const string& id) {
     if(!DumbGui::Manager::addItem(item)) return false;
     
+    item->name = id;
+    
     Rect finalRect = item->getRawRatioRect();
     
     auto c = registeredCenters.find(id);
@@ -959,7 +961,7 @@ bool GuiManager::getItemDrawInfo(
     if(!DumbGui::Manager::getItemDrawInfo(item, draw)) return false;
     
     Rect finalRect = ((GuiItem*) item)->getReferencePxRect();
-    float finalAlphaMult = 1.0f;
+    float finalAlphaMult = item->getAlphaMultiplier();
     
     if(animTimer.timeLeft > 0.0f) {
         switch(animType) {
@@ -1073,7 +1075,7 @@ bool GuiManager::getItemDrawInfo(
             
         } case GUI_MANAGER_ANIM_FADE_IN:
         case GUI_MANAGER_ANIM_FADE_OUT: {
-            finalAlphaMult = getFadeAnimationAlpha();
+            finalAlphaMult *= getFadeAnimationAlpha();
             break;
             
         } default: {

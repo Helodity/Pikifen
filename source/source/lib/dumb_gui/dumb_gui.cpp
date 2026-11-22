@@ -110,6 +110,17 @@ bool Item::draw(const DrawInfo& draw) {
 
 
 /**
+ * @brief Returns its alpha multiplier, and also checks the parents.
+ *
+ * @return The alpha multiplier.
+ */
+float Item::getAlphaMultiplier() const {
+    if(parent) return parent->getAlphaMultiplier();
+    return alphaMultiplier;
+}
+
+
+/**
  * @brief Returns the bottommost Y coordinate (in height ratio),
  * or the rightmost X coordinate (in width ratio),
  * of the item's children items.
@@ -443,7 +454,7 @@ bool Manager::getItemDrawInfo(Item* item, DrawInfo* draw) const {
     float finalCenterPxX, finalCenterPxY;
     float finalSizePxW, finalSizePxH;
     float finalAngle = 0.0f;
-    float finalAlphaMult = 1.0f;
+    float finalAlphaMult = item->getAlphaMultiplier();
     
     item->getReferencePxCenter(&finalCenterPxX, &finalCenterPxY);
     item->getReferencePxSize(&finalSizePxW, &finalSizePxH);
