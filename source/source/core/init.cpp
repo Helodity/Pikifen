@@ -1675,6 +1675,8 @@ void initMakerToolTypes() {
     params.back().description =
         "Type of Pikmin to spawn. A proper type's internal name, "
         "or \"next\" to use the next type from the last spawned, "
+        "or \"next_a\" to use the next type alphabetically from "
+        "the last spawned, "
         "or \"same\" to use the same type as the last spawned.";
     queueParam("amount", ptInt, pfOpt, "1");
     params.back().minValue = 1.0f;

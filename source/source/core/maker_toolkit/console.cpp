@@ -907,7 +907,7 @@ int MakerConsoleTerminal::draw(int y) const {
         drawTextLines(
             join(normalLines, "\n"), FONT,
             Point(textX1, suggestionRect.center.y), suggestionRect.size,
-            CONSOLE::COLOR_MUTED,
+            CONSOLE::COLOR_MAIN,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_FIXED_SIZE
         );

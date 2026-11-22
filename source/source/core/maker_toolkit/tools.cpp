@@ -732,20 +732,21 @@ bool MakerToolRunners::spawnPikmin(
         }
         
         const auto getNextType =
-        [&mgr] () {
-            PikminType* result =
-                game.content.mobTypes.list.pikmin.begin()->second;
-            auto p = game.content.mobTypes.list.pikmin.begin();
-            for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
-                if(p->second == mgr.lastPikminType) {
-                    ++p;
-                    if(p != game.content.mobTypes.list.pikmin.end()) {
-                        result = p->second;
-                    }
-                    break;
+        [&mgr] (bool alphabetically) {
+            vector<PikminType*> list = game.config.pikmin.order;
+            
+            if(alphabetically) {
+                std::sort(
+                    list.begin(), list.end(),
+                [] (PikminType * p1, PikminType * p2) {
+                    return
+                        p1->manifest->internalName <
+                        p2->manifest->internalName;
                 }
+                );
             }
-            return result;
+            
+            return getNextInVector(list, mgr.lastPikminType);
         };
         
         PikminType* newPikminType = nullptr;
@@ -754,10 +755,12 @@ bool MakerToolRunners::spawnPikmin(
             if(mgr.lastPikminType) {
                 newPikminType = mgr.lastPikminType;
             } else {
-                newPikminType = getNextType();
+                newPikminType = getNextType(false);
             }
         } else if(typeArg == "next") {
-            newPikminType = getNextType();
+            newPikminType = getNextType(false);
+        } else if(typeArg == "next_a") {
+            newPikminType = getNextType(true);
         } else {
             const auto it = game.content.mobTypes.list.pikmin.find(typeArg);
             if(it != game.content.mobTypes.list.pikmin.end()) {
@@ -1438,6 +1441,7 @@ void MakerTools::update() {
     );
     pikTypeParam.enumValues.insert(pikTypeParam.enumValues.begin(), "same");
     pikTypeParam.enumValues.insert(pikTypeParam.enumValues.begin(), "next");
+    pikTypeParam.enumValues.insert(pikTypeParam.enumValues.begin(), "next_a");
     
     MakerToolType& spawnMobTool = types[MAKER_TOOL_TYPE_SPAWN_MOB];
     CommandParam& mobTypeParam = spawnMobTool.parameters[0];
