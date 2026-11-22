@@ -86,6 +86,9 @@ const float SCORE_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;
 //Ratio of the score gamut to show around the mission score ruler flapper.
 const float SCORE_RULER_RATIO_RANGE = 0.20f;
 
+//Name of the GUI definition file for the standby items.
+const string STANDBY_GUI_FILE_NAME = "gameplay_standby";
+
 //How long the standby swap juice animation lasts for.
 const float STANDBY_SWAP_JUICE_DURATION = 0.5f;
 
@@ -124,6 +127,7 @@ Hud::Hud() :
     gui.registerCoords("leader_2_health",          12,   80,  5,  9);
     gui.registerCoords("leader_3_health",          12, 71.5,  5,  7);
     gui.registerCoords("leader_next_input",         4,   83,  3,  3);
+    gui.registerCoords("standby_item_set",          4,   83,  3,  3);
     gui.registerCoords("standby_icon",             50,   91,  8, 10);
     gui.registerCoords("standby_amount",           50,   97,  8,  4);
     gui.registerCoords("standby_bubble",            0,    0,  0,  0);
@@ -405,199 +409,14 @@ Hud::Hud() :
     gui.addItemP(dayNr, "day_number");
     
     
-    //Standby group member icon.
-    GuiItem* standbyIcon = new GuiItem();
-    standbyIcon->onDrawP =
-    [this] (const DrawInfo & draw) {
-        this->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
-    };
-    gui.addItemP(standbyIcon, "standby_icon");
-    standbyIconMgr.registerBubble(BUBBLE_RELATION_CURRENT, standbyIcon);
+    //Standby item set.
+    standbyItemSet = new GuiItem();
+    standbyItemSet->alphaMultiplier = 0.0f;
+    gui.addItemP(standbyItemSet, "standby_item_set");
     
     
-    //Next standby subgroup icon.
-    GuiItem* standbyNextIcon = new GuiItem();
-    standbyNextIcon->onDrawP =
-    [this] (const DrawInfo & draw) {
-        this->drawStandbyIcon(BUBBLE_RELATION_NEXT);
-    };
-    gui.addItemP(standbyNextIcon, "standby_next_icon");
-    standbyIconMgr.registerBubble(BUBBLE_RELATION_NEXT, standbyNextIcon);
-    
-    
-    //Next standby subgroup input.
-    GuiItem* standbyNextInput = new GuiItem();
-    standbyNextInput->onDrawP =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        if(!player->leaderPtr) return;
-        SubgroupType* nextType;
-        player->leaderPtr->group->getNextStandbyType(
-            false, &nextType
-        );
-        if(
-            nextType ==
-            player->leaderPtr->group->curStandbyType
-        ) {
-            return;
-        }
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_NEXT_TYPE, draw.center, draw.size,
-            true, game.sysContent.fntSlim,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItemP(standbyNextInput, "standby_next_input");
-    
-    
-    //Previous standby subgroup icon.
-    GuiItem* standbyPrevIcon = new GuiItem();
-    standbyPrevIcon->onDrawP =
-    [this] (const DrawInfo & draw) {
-        this->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
-    };
-    gui.addItemP(standbyPrevIcon, "standby_prev_icon");
-    standbyIconMgr.registerBubble(BUBBLE_RELATION_PREVIOUS, standbyPrevIcon);
-    
-    
-    //Previous standby subgroup input.
-    GuiItem* standbyPrevInput = new GuiItem();
-    standbyPrevInput->onDrawP =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        if(!player->leaderPtr) return;
-        SubgroupType* prevType;
-        player->leaderPtr->group->getNextStandbyType(
-            true, &prevType
-        );
-        SubgroupType* nextType;
-        player->leaderPtr->group->getNextStandbyType(
-            false, &nextType
-        );
-        if(
-            prevType ==
-            player->leaderPtr->group->curStandbyType ||
-            prevType == nextType
-        ) {
-            return;
-        }
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_PREV_TYPE, draw.center, draw.size,
-            true, game.sysContent.fntSlim,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItemP(standbyPrevInput, "standby_prev_input");
-    
-    
-    //Standby group member maturity.
-    GuiItem* standbyMaturityIcon = new GuiItem();
-    standbyMaturityIcon->onDrawP =
-    [this, standbyMaturityIcon] (const DrawInfo & draw) {
-        //Standby group member preparations.
-        Leader* lPtr = player->leaderPtr;
-        if(!lPtr || !lPtr->group) return;
-        
-        ALLEGRO_BITMAP* standbyMatBmp = nullptr;
-        Mob* closest =
-            player->closestGroupMember[BUBBLE_RELATION_CURRENT];
-            
-        if(lPtr->group->curStandbyType && closest) {
-            SUBGROUP_TYPE_CATEGORY c =
-                lPtr->group->curStandbyType->getCategory();
-                
-            switch(c) {
-            case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
-                Pikmin* pPtr =
-                    dynamic_cast<Pikmin*>(closest);
-                standbyMatBmp =
-                    pPtr->pikType->bmpMaturityIcon[pPtr->maturity];
-                break;
-                
-            } default: {
-                break;
-                
-            }
-            }
-        }
-        
-        ALLEGRO_COLOR color =
-            mapAlpha(this->standbyItemsAlpha * 255);
-            
-        if(standbyMatBmp) {
-            drawBitmapInBox(
-                standbyMatBmp, draw.center,
-                (draw.size * 0.8) + standbyMaturityIcon->getJuiceValue(),
-                true, true,
-                0.0f, tintColor(color, draw.tint)
-            );
-            drawBitmapInBox(
-                bmpBubble, draw.center,
-                draw.size + standbyMaturityIcon->getJuiceValue(),
-                true, true, 0.0f, tintColor(color, draw.tint)
-            );
-        }
-        
-        if(
-            lPtr->group->curStandbyType != prevStandbyType ||
-            standbyMatBmp != prevMaturityIcon
-        ) {
-            standbyMaturityIcon->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_ICON
-            );
-            prevStandbyType = lPtr->group->curStandbyType;
-            prevMaturityIcon = standbyMatBmp;
-        }
-    };
-    gui.addItemP(standbyMaturityIcon, "standby_maturity_icon");
-    
-    
-    //Standby subgroup member amount bubble.
-    GuiItem* standbyBubble = new GuiItem();
-    standbyBubble->onDrawP =
-    [this] (const DrawInfo & draw) {
-        drawBitmap(
-            bmpCounterBubbleStandby,
-            draw.center, draw.size,
-            0.0f,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItemP(standbyBubble, "standby_bubble");
-    
-    
-    //Standby subgroup member amount.
-    standbyAmount = new GuiItem();
-    standbyAmount->onDrawP =
-    [this] (const DrawInfo & draw) {
-        size_t nStandbyPikmin = 0;
-        Leader* lPtr = player->leaderPtr;
-        
-        if(lPtr && lPtr->group->curStandbyType) {
-            forIdx(m, lPtr->group->members) {
-                Mob* mPtr = lPtr->group->members[m];
-                if(mPtr->subgroupTypePtr == lPtr->group->curStandbyType) {
-                    nStandbyPikmin++;
-                }
-            }
-        }
-        
-        if(nStandbyPikmin != standbyCountNr) {
-            standbyAmount->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-            );
-            standbyCountNr = nStandbyPikmin;
-        }
-        
-        drawText(
-            i2s(nStandbyPikmin), game.sysContent.fntCounter,
-            draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            Point(1.0f + standbyAmount->getJuiceValue())
-        );
-    };
-    gui.addItemP(standbyAmount, "standby_amount");
+    //Standby items.
+    setupStandbyItems(standbyItemSet);
     
     
     //Group Pikmin amount bubble.
@@ -715,8 +534,7 @@ Hud::Hud() :
     countersX->onDrawP =
     [this] (const DrawInfo & draw) {
         drawText(
-            "x", game.sysContent.fntCounter, draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
+            "x", game.sysContent.fntCounter, draw.center, draw.size, draw.tint
         );
     };
     gui.addItemP(countersX, "counters_x");
@@ -935,11 +753,8 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
     
     if(!icon) return;
     
-    ALLEGRO_COLOR color =
-        tintColor(mapAlpha(standbyItemsAlpha * 255), draw.tint);
-        
     drawBitmapInBox(
-        icon, draw.center, draw.size * 0.8, true, true, 0.0f, color
+        icon, draw.center, draw.size * 0.8, true, true, 0.0f, draw.tint
     );
     
     if(
@@ -950,12 +765,12 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
             bmpDistantPikminMarker,
             draw.center,
             draw.size * 0.8,
-            true, true, 0.0f, color
+            true, true, 0.0f, draw.tint
         );
     }
     
     drawBitmapInBox(
-        bmpBubble, draw.center, draw.size, true, true, 0.0f, color
+        bmpBubble, draw.center, draw.size, true, true, 0.0f, draw.tint
     );
 }
 
@@ -1635,6 +1450,213 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
 
 
 /**
+ * @brief Sets up the Pikmin standby HUD items.
+ *
+ * @param parent The parent item that holds all of them.
+ */
+void Hud::setupStandbyItems(GuiItem* parent) {
+    DataNode* guiFile =
+        &game.content.guiDefs.list[HUD::STANDBY_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, parent);
+    
+    //Standby group member icon.
+    GuiItem* standbyIcon = new GuiItem();
+    standbyIcon->onDrawP =
+    [this] (const DrawInfo & draw) {
+        this->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
+    };
+    gui.addItemP(standbyIcon, "icon");
+    parent->addChild(standbyIcon);
+    standbyIconMgr.registerBubble(BUBBLE_RELATION_CURRENT, standbyIcon);
+    
+    
+    //Next standby subgroup icon.
+    GuiItem* standbyNextIcon = new GuiItem();
+    standbyNextIcon->onDrawP =
+    [this] (const DrawInfo & draw) {
+        this->drawStandbyIcon(BUBBLE_RELATION_NEXT);
+    };
+    gui.addItemP(standbyNextIcon, "next_icon");
+    parent->addChild(standbyNextIcon);
+    standbyIconMgr.registerBubble(BUBBLE_RELATION_NEXT, standbyNextIcon);
+    
+    
+    //Next standby subgroup input.
+    GuiItem* standbyNextInput = new GuiItem();
+    standbyNextInput->onDrawP =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        if(!player->leaderPtr) return;
+        SubgroupType* nextType;
+        player->leaderPtr->group->getNextStandbyType(
+            false, &nextType
+        );
+        if(
+            nextType ==
+            player->leaderPtr->group->curStandbyType
+        ) {
+            return;
+        }
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_NEXT_TYPE, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    parent->addChild(standbyNextInput);
+    gui.addItemP(standbyNextInput, "next_input");
+    
+    
+    //Previous standby subgroup icon.
+    GuiItem* standbyPrevIcon = new GuiItem();
+    standbyPrevIcon->onDrawP =
+    [this] (const DrawInfo & draw) {
+        this->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
+    };
+    gui.addItemP(standbyPrevIcon, "prev_icon");
+    parent->addChild(standbyPrevIcon);
+    standbyIconMgr.registerBubble(BUBBLE_RELATION_PREVIOUS, standbyPrevIcon);
+    
+    
+    //Previous standby subgroup input.
+    GuiItem* standbyPrevInput = new GuiItem();
+    standbyPrevInput->onDrawP =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        if(!player->leaderPtr) return;
+        SubgroupType* prevType;
+        player->leaderPtr->group->getNextStandbyType(
+            true, &prevType
+        );
+        SubgroupType* nextType;
+        player->leaderPtr->group->getNextStandbyType(
+            false, &nextType
+        );
+        if(
+            prevType ==
+            player->leaderPtr->group->curStandbyType ||
+            prevType == nextType
+        ) {
+            return;
+        }
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_PREV_TYPE, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    parent->addChild(standbyPrevInput);
+    gui.addItemP(standbyPrevInput, "prev_input");
+    
+    
+    //Standby group member maturity.
+    GuiItem* standbyMaturityIcon = new GuiItem();
+    standbyMaturityIcon->onDrawP =
+    [this, standbyMaturityIcon] (const DrawInfo & draw) {
+        //Standby group member preparations.
+        Leader* lPtr = player->leaderPtr;
+        if(!lPtr || !lPtr->group) return;
+        
+        ALLEGRO_BITMAP* standbyMatBmp = nullptr;
+        Mob* closest =
+            player->closestGroupMember[BUBBLE_RELATION_CURRENT];
+            
+        if(lPtr->group->curStandbyType && closest) {
+            SUBGROUP_TYPE_CATEGORY c =
+                lPtr->group->curStandbyType->getCategory();
+                
+            switch(c) {
+            case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
+                Pikmin* pPtr =
+                    dynamic_cast<Pikmin*>(closest);
+                standbyMatBmp =
+                    pPtr->pikType->bmpMaturityIcon[pPtr->maturity];
+                break;
+                
+            } default: {
+                break;
+                
+            }
+            }
+        }
+        
+        if(standbyMatBmp) {
+            drawBitmapInBox(
+                standbyMatBmp, draw.center,
+                (draw.size * 0.8) + standbyMaturityIcon->getJuiceValue(),
+                true, true,
+                0.0f, draw.tint
+            );
+            drawBitmapInBox(
+                bmpBubble, draw.center,
+                draw.size + standbyMaturityIcon->getJuiceValue(),
+                true, true, 0.0f, draw.tint
+            );
+        }
+        
+        if(
+            lPtr->group->curStandbyType != prevStandbyType ||
+            standbyMatBmp != prevMaturityIcon
+        ) {
+            standbyMaturityIcon->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_ICON
+            );
+            prevStandbyType = lPtr->group->curStandbyType;
+            prevMaturityIcon = standbyMatBmp;
+        }
+    };
+    parent->addChild(standbyMaturityIcon);
+    gui.addItemP(standbyMaturityIcon, "maturity_icon");
+    
+    
+    //Standby subgroup member amount bubble.
+    GuiItem* standbyBubble = new GuiItem();
+    standbyBubble->onDrawP =
+    [this] (const DrawInfo & draw) {
+        drawBitmap(
+            bmpCounterBubbleStandby,
+            draw.center, draw.size,
+            0.0f, draw.tint
+        );
+    };
+    parent->addChild(standbyBubble);
+    gui.addItemP(standbyBubble, "bubble");
+    
+    
+    //Standby subgroup member amount.
+    standbyAmount = new GuiItem();
+    standbyAmount->onDrawP =
+    [this] (const DrawInfo & draw) {
+        size_t nStandbyPikmin = 0;
+        Leader* lPtr = player->leaderPtr;
+        
+        if(lPtr && lPtr->group->curStandbyType) {
+            forIdx(m, lPtr->group->members) {
+                Mob* mPtr = lPtr->group->members[m];
+                if(mPtr->subgroupTypePtr == lPtr->group->curStandbyType) {
+                    nStandbyPikmin++;
+                }
+            }
+        }
+        
+        if(nStandbyPikmin != standbyCountNr) {
+            standbyAmount->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
+            standbyCountNr = nStandbyPikmin;
+        }
+        
+        drawText(
+            i2s(nStandbyPikmin), game.sysContent.fntCounter,
+            draw.center, draw.size, draw.tint,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+            Point(1.0f + standbyAmount->getJuiceValue())
+        );
+    };
+    parent->addChild(standbyAmount);
+    gui.addItemP(standbyAmount, "amount");
+}
+
+
+/**
  * @brief Ticks time by one frame of logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
@@ -1749,17 +1771,18 @@ void Hud::tick(float deltaT) {
         if(standbyItemsFadeTimer > 0.0f) {
             standbyItemsFadeTimer -= deltaT;
         } else {
-            standbyItemsAlpha -=
+            standbyItemSet->alphaMultiplier -=
                 HUD::UNNECESSARY_ITEMS_FADE_OUT_SPEED * deltaT;
         }
     } else {
         standbyItemsFadeTimer =
             HUD::UNNECESSARY_ITEMS_FADE_OUT_DELAY;
-        standbyItemsAlpha +=
+        standbyItemSet->alphaMultiplier +=
             HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * deltaT;
     }
-    standbyItemsAlpha = std::clamp(standbyItemsAlpha, 0.0f, 1.0f);
-    
+    standbyItemSet->alphaMultiplier =
+        std::clamp(standbyItemSet->alphaMultiplier, 0.0f, 1.0f);
+        
     //Update the control guide.
     bool playerIsIdling = false;
     if(

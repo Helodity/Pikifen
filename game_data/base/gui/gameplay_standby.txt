@@ -1,0 +1,48 @@
+name=Gameplay, standby items
+description=GUI for the Pikmin standby icons for the HUD.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+hardcoded_items{
+	icon{
+		center=50.0000 47.0588
+		size=33.3333 58.8235
+		description=Icon of the type of group member in standby. This represents the closest Pikmin or leader to the player's leader, and doesn't include the leaf/bud/flower.
+	}
+	amount{
+		center=50.0000 82.3529
+		size=33.3333 23.5294
+		description=Number of group members of the standby type.
+	}
+	bubble{
+		center=0.0000 0.0000
+		size=0.0000 0.0000
+		description=Bubble surrounding the number of group members of the standby type.
+	}
+	maturity_icon{
+		center=66.6667 29.4118
+		size=16.6667 47.0588
+		description=Icon of the maturity of the Pikmin in standby. It will only appear if there's a Pikmin type in standby.
+	}
+	next_icon{
+		center=83.3333 58.8235
+		size=25.0000 47.0588
+		description=Icon of the next standby type. It will only appear if there is a next type.
+	}
+	next_input{
+		center=91.6667 76.4706
+		size=12.5000 17.6471
+		description=Icon for the player input that switches to the next standby type.
+	}
+	prev_icon{
+		center=16.6667 58.8235
+		size=25.0000 47.0588
+		description=Same as "next_icon", but for the previous type.
+	}
+	prev_input{
+		center=8.3333 76.4706
+		size=12.5000 17.6471
+		description=Same as "next_input", but for the previous standby type.
+	}
+}
+custom_items

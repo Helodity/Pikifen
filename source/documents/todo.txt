@@ -67,9 +67,7 @@ Next tasks (roughly sorted most important first)
     GUI improvements
         Make it possible for GUI items to have children items, or to have a family of group items under a tag. This allows custom items to follow the same alpha, visibility, responsiveness, etc. attributes of the hardcoded ones they're related to
             For HUD items like the Pikmin counter, make the text itself be the item, and have the bubble and the label be their own items (thanks Helodity)
-                https://github.com/Espyo/Pikifen/pull/111
-            Move the "x" and all the "/" to custom items
-        Every annex menu should look different. The area menu is self-contained, so it can probably look radically different, but the others can be accessed from the pause menu, so at most they should have some stickers
+            Move the "x" and all the "/" to custom items that are children of a "standby item set" item
         Better loading screen
             Make the elements be controlled with a GUI definition
             Animate it
@@ -126,7 +124,9 @@ Next tasks (roughly sorted most important first)
         Pressing left or right on a modal with a text input will just move the caret, but HOLDING will make the repeat events trigger
     Visual improvements
         https://github.com/Helodity/Pikifen/tree/graphic-revamp
-        https://github.com/Espyo/Pikifen/pull/113
+        Lighting https://github.com/Espyo/Pikifen/pull/113
+        Every annex menu should look different. The area menu is self-contained, so it can probably look radically different, but the others can be accessed from the pause menu, so at most they should have some stickers
+        Shinier HUD https://github.com/Espyo/Pikifen/pull/111
         Use a screenshot for the title screen
             The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in

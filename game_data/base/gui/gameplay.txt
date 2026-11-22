@@ -2,7 +2,7 @@ name=Gameplay
 description=GUI for regular gameplay. i.e. the game HUD.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 hardcoded_items{
 	time{
 		center=0.0000 0.0000
@@ -54,45 +54,10 @@ hardcoded_items{
 		size=3.0000 3.0000
 		description=Icon of the player input that changes to the next leader.
 	}
-	standby_icon{
-		center=50.0000 91.0000
-		size=8.0000 10.0000
-		description=Icon of the type of group member in standby. This represents the closest Pikmin or leader to the player's leader, and doesn't include the leaf/bud/flower.
-	}
-	standby_amount{
-		center=50.0000 97.0000
-		size=8.0000 4.0000
-		description=Number of group members of the standby type.
-	}
-	standby_bubble{
-		center=0.0000 0.0000
-		size=0.0000 0.0000
-		description=Bubble surrounding the number of group members of the standby type.
-	}
-	standby_maturity_icon{
-		center=54.0000 88.0000
-		size=4.0000 8.0000
-		description=Icon of the maturity of the Pikmin in standby. It will only appear if there's a Pikmin type in standby.
-	}
-	standby_next_icon{
-		center=58.0000 93.0000
-		size=6.0000 8.0000
-		description=Icon of the next standby type. It will only appear if there is a next type.
-	}
-	standby_next_input{
-		center=60.0000 96.0000
-		size=3.0000 3.0000
-		description=Icon for the player input that switches to the next standby type.
-	}
-	standby_prev_icon{
-		center=42.0000 93.0000
-		size=6.0000 8.0000
-		description=Same as "standby_next_icon", but for the previous type.
-	}
-	standby_prev_input{
-		center=40.0000 96.0000
-		size=3.0000 3.0000
-		description=Same as "standby_next_input", but for the previous standby type.
+	standby_item_set{
+		center=50.0000 91.5000
+		size=26.0000 17.0000
+		description=Set of items that indicate the standby type. Hides when there are none.
 	}
 	group_amount{
 		center=73.0000 91.0000

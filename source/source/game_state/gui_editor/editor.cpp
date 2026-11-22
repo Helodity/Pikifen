@@ -864,6 +864,7 @@ void GuiEditor::saveCmd(float inputValue) {
  * @return Whether it succeeded.
  */
 bool GuiEditor::saveGuiDef() {
+    contentMd.engineVersion = getEngineVersionString();
     GuiManager::writeItemDefsToDataFile(&fileNode, hardcodedItems, customItems);
     contentMd.saveMetadataToDataNode(&fileNode);
     

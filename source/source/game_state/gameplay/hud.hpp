@@ -38,6 +38,7 @@ extern const string MISSION_SCORE_GUI_FILE_NAME;
 extern const string MISSION_TEXT_GUI_FILE_NAME;
 extern const float SCORE_INDICATOR_SMOOTHNESS_FACTOR;
 extern const float SCORE_RULER_RATIO_RANGE;
+extern const string STANDBY_GUI_FILE_NAME;
 extern const float STANDBY_SWAP_JUICE_DURATION;
 extern const float SUN_METER_SUN_SPIN_SPEED;
 extern const float UNNECESSARY_ITEMS_FADE_IN_SPEED;
@@ -161,9 +162,6 @@ public:
     //Bubble manager for the standby type.
     HudBubbleManager<ALLEGRO_BITMAP*> standbyIconMgr;
     
-    //Alpha of the standby HUD items [0 - 1].
-    float standbyItemsAlpha = 0.0f;
-    
     //Time left before the standby items start fading out.
     float standbyItemsFadeTimer = 0.0f;
     
@@ -178,6 +176,9 @@ public:
     
     //Time since the player last moved, for the control guide.
     float controlGuideActivityTimer = 0.0f;
+    
+    //Set of standby items. Cache for convenience.
+    GuiItem* standbyItemSet = nullptr;
     
     //Current standby count.
     size_t standbyCountNr = 0;
@@ -215,6 +216,7 @@ private:
     //--- Private function declarations ---
     
     void drawStandbyIcon(BUBBLE_RELATION which);
+    void setupStandbyItems(GuiItem* parent);
     void setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item);
     
 };
