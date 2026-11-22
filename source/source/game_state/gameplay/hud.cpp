@@ -115,47 +115,6 @@ Hud::Hud() :
     leaderHealthMgr(&gui),
     standbyIconMgr(&gui) {
     
-    DataNode* hudFileNode = &game.content.guiDefs.list[HUD::GUI_FILE_NAME];
-    
-    gui.registerCoords("time",                      0,    0,  0,  0);
-    gui.registerCoords("day_bubble",                0,    0,  0,  0);
-    gui.registerCoords("day_number",                0,    0,  0,  0);
-    gui.registerCoords("leader_1_icon",             7,   90,  8, 10);
-    gui.registerCoords("leader_2_icon",             6,   80,  5,  9);
-    gui.registerCoords("leader_3_icon",             6, 71.5,  5,  7);
-    gui.registerCoords("leader_1_health",          16,   90,  8, 10);
-    gui.registerCoords("leader_2_health",          12,   80,  5,  9);
-    gui.registerCoords("leader_3_health",          12, 71.5,  5,  7);
-    gui.registerCoords("leader_next_input",         4,   83,  3,  3);
-    gui.registerCoords("standby_item_set",          4,   83,  3,  3);
-    gui.registerCoords("standby_icon",             50,   91,  8, 10);
-    gui.registerCoords("standby_amount",           50,   97,  8,  4);
-    gui.registerCoords("standby_bubble",            0,    0,  0,  0);
-    gui.registerCoords("standby_maturity_icon",    54,   88,  4,  8);
-    gui.registerCoords("standby_next_icon",        58,   93,  6,  8);
-    gui.registerCoords("standby_next_input",       60,   96,  3,  3);
-    gui.registerCoords("standby_prev_icon",        42,   93,  6,  8);
-    gui.registerCoords("standby_prev_input",       40,   96,  3,  3);
-    gui.registerCoords("group_amount",             73,   91, 15, 14);
-    gui.registerCoords("group_bubble",             73,   91, 15, 14);
-    gui.registerCoords("field_amount",             91,   91, 15, 14);
-    gui.registerCoords("field_bubble",             91,   91, 15, 14);
-    gui.registerCoords("total_amount",              0,    0,  0,  0);
-    gui.registerCoords("total_bubble",              0,    0,  0,  0);
-    gui.registerCoords("counters_x",                0,    0,  0,  0);
-    gui.registerCoords("counters_slash_1",         82,   91,  4,  8);
-    gui.registerCoords("counters_slash_2",          0,    0,  0,  0);
-    gui.registerCoords("counters_slash_3",          0,    0,  0,  0);
-    gui.registerCoords("mission_goal",             18,    8, 32, 12);
-    gui.registerCoords("mission_score",            18,   20, 32, 10);
-    gui.registerCoords("mission_clock",            82,    8, 32, 12);
-    gui.registerCoords("mission_misc",             82,   20, 32, 10);
-    gui.registerCoords("control_guide",            83,   55, 30, 50);
-    gui.registerCoords("inventory_update",         50,   37, 12, 10);
-    gui.registerCoords("watermark_wordmark",     54.5,    8, 19,  8);
-    gui.registerCoords("watermark_logo",           40,    8,  8,  8);
-    gui.readDataFile(hudFileNode);
-    
     //Leader health and icons.
     for(size_t l = 0; l < 3; l++) {
         //Icon.
@@ -687,6 +646,11 @@ Hud::Hud() :
     }
     
     
+    //Add custom items and set the coordinates.
+    DataNode* hudFileNode = &game.content.guiDefs.list[HUD::GUI_FILE_NAME];
+    gui.readDataFile(hudFileNode);
+    
+    
     //Bitmaps.
     DataNode* bitmapsNode = hudFileNode->getChildByName("bitmaps");
     
@@ -791,11 +755,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
     case MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR: {
         //Text.
         
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_TEXT_GUI_FILE_NAME];
-        gui.registerCoords("mission_text_text", 50, 50, 92, 56);
-        gui.readDataFile(guiFile, item);
-        
         //The text.
         GuiItem* text = new GuiItem();
         text->onDrawP =
@@ -815,17 +774,16 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         item->addChild(text);
         gui.addItemP(text, "mission_text_text");
         
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_TEXT_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
+        
         break;
         
     } case MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN:
     case MISSION_HUD_ITEM_DISPLAY_CLOCK_UP: {
         //Clock.
-        
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_CLOCK_GUI_FILE_NAME];
-        gui.registerCoords("mission_clock_analog",  22, 50, 36, 92);
-        gui.registerCoords("mission_clock_digital", 70, 50, 52, 92);
-        gui.readDataFile(guiFile, item);
         
         //Analog clock.
         GuiItem* analog = new GuiItem();
@@ -924,18 +882,15 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         item->addChild(digital);
         gui.addItemP(digital, "mission_clock_digital");
         
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_CLOCK_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
+        
         break;
         
     } case MISSION_HUD_ITEM_DISPLAY_SCORE: {
         //Score.
-        
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_SCORE_GUI_FILE_NAME];
-        gui.registerCoords("mission_score_label",        15, 74, 22, 44);
-        gui.registerCoords("mission_score_points",       50, 74, 40, 44);
-        gui.registerCoords("mission_score_points_label", 85, 80, 22, 32);
-        gui.registerCoords("mission_score_ruler",        50, 26, 88, 40);
-        gui.readDataFile(guiFile, item);
         
         //"Score" label.
         GuiItem* scoreLabel = new GuiItem();
@@ -1249,16 +1204,15 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         item->addChild(ruler);
         gui.addItemP(ruler, "mission_score_ruler");
         
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_SCORE_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
+        
         break;
         
     } case MISSION_HUD_ITEM_DISPLAY_HEALTH: {
         //Health bar.
-        
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_HEALTH_GUI_FILE_NAME];
-        gui.registerCoords("mission_health_label",  22, 50, 36, 92);
-        gui.registerCoords("mission_health_bar",  22, 50, 36, 92);
-        gui.readDataFile(guiFile, item);
         
         //Label.
         GuiItem* text = new GuiItem();
@@ -1311,6 +1265,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         item->addChild(bar);
         gui.addItemP(bar, "mission_health_bar");
         
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_HEALTH_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
+        
         break;
         
     } case MISSION_HUD_ITEM_DISPLAY_CUR_TOT:
@@ -1325,23 +1284,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
             itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
             
-        if(onlyOneAmount) {
-            DataNode* guiFile =
-                &game.content.guiDefs.list[HUD::MISSION_AMT_ONE_GUI_FILE_NAME];
-            gui.registerCoords("mission_amount_1_label", 50, 18, 92, 28);
-            gui.registerCoords("mission_amount_1_first", 50, 65, 92, 58);
-            gui.readDataFile(guiFile, item);
-            
-        } else {
-            DataNode* guiFile =
-                &game.content.guiDefs.list[HUD::MISSION_AMT_TWO_GUI_FILE_NAME];
-            gui.registerCoords("mission_amount_2_label",  50, 18, 92, 28);
-            gui.registerCoords("mission_amount_2_first",  22, 65, 36, 58);
-            gui.registerCoords("mission_amount_2_second", 78, 65, 36, 58);
-            gui.readDataFile(guiFile, item);
-            
-        }
-        
         //Label.
         GuiItem* label = new GuiItem();
         label->onDrawP =
@@ -1442,6 +1384,19 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         }
         
+        //Add custom items and set the coordinates.
+        if(onlyOneAmount) {
+            DataNode* guiFile =
+                &game.content.guiDefs.list[HUD::MISSION_AMT_ONE_GUI_FILE_NAME];
+            gui.readDataFile(guiFile, item);
+            
+        } else {
+            DataNode* guiFile =
+                &game.content.guiDefs.list[HUD::MISSION_AMT_TWO_GUI_FILE_NAME];
+            gui.readDataFile(guiFile, item);
+            
+        }
+        
         break;
         
     }
@@ -1455,10 +1410,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
  * @param parent The parent item that holds all of them.
  */
 void Hud::setupStandbyItems(GuiItem* parent) {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[HUD::STANDBY_GUI_FILE_NAME];
-    gui.readDataFile(guiFile, parent);
-    
     //Standby group member icon.
     GuiItem* standbyIcon = new GuiItem();
     standbyIcon->onDrawP =
@@ -1469,7 +1420,6 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     parent->addChild(standbyIcon);
     standbyIconMgr.registerBubble(BUBBLE_RELATION_CURRENT, standbyIcon);
     
-    
     //Next standby subgroup icon.
     GuiItem* standbyNextIcon = new GuiItem();
     standbyNextIcon->onDrawP =
@@ -1479,7 +1429,6 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     gui.addItemP(standbyNextIcon, "next_icon");
     parent->addChild(standbyNextIcon);
     standbyIconMgr.registerBubble(BUBBLE_RELATION_NEXT, standbyNextIcon);
-    
     
     //Next standby subgroup input.
     GuiItem* standbyNextInput = new GuiItem();
@@ -1505,7 +1454,6 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     parent->addChild(standbyNextInput);
     gui.addItemP(standbyNextInput, "next_input");
     
-    
     //Previous standby subgroup icon.
     GuiItem* standbyPrevIcon = new GuiItem();
     standbyPrevIcon->onDrawP =
@@ -1515,7 +1463,6 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     gui.addItemP(standbyPrevIcon, "prev_icon");
     parent->addChild(standbyPrevIcon);
     standbyIconMgr.registerBubble(BUBBLE_RELATION_PREVIOUS, standbyPrevIcon);
-    
     
     //Previous standby subgroup input.
     GuiItem* standbyPrevInput = new GuiItem();
@@ -1545,7 +1492,6 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     };
     parent->addChild(standbyPrevInput);
     gui.addItemP(standbyPrevInput, "prev_input");
-    
     
     //Standby group member maturity.
     GuiItem* standbyMaturityIcon = new GuiItem();
@@ -1606,7 +1552,6 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     parent->addChild(standbyMaturityIcon);
     gui.addItemP(standbyMaturityIcon, "maturity_icon");
     
-    
     //Standby subgroup member amount bubble.
     GuiItem* standbyBubble = new GuiItem();
     standbyBubble->onDrawP =
@@ -1619,7 +1564,6 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     };
     parent->addChild(standbyBubble);
     gui.addItemP(standbyBubble, "bubble");
-    
     
     //Standby subgroup member amount.
     standbyAmount = new GuiItem();
@@ -1653,6 +1597,11 @@ void Hud::setupStandbyItems(GuiItem* parent) {
     };
     parent->addChild(standbyAmount);
     gui.addItemP(standbyAmount, "amount");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[HUD::STANDBY_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, parent);
 }
 
 

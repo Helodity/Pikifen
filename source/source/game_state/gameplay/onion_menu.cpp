@@ -56,33 +56,6 @@ OnionMenu::OnionMenu(
         );
     }
     
-    DataNode* guiFile = &game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME];
-    gui.registerCoords("cancel",           8.75, 16.25, 12.5, 12.5);
-    gui.registerCoords("cancel_input",      2.5,  22.5,    4,    4);
-    gui.registerCoords("ok",               8.75, 71.25, 12.5, 12.5);
-    gui.registerCoords("ok_input",          2.5,  77.5,    4,    4);
-    gui.registerCoords("field",              50,  87.5,   30,    5);
-    gui.registerCoords("change_ten",          5,    37,    5,    8);
-    gui.registerCoords("change_ten_input",  2.5,    41,    4,    4);
-    gui.registerCoords("select_all",          5,    50,    5,    8);
-    gui.registerCoords("select_all_input",  2.5,    54,    4,    4);
-    gui.registerCoords("list",             57.5, 43.75,   80, 67.5);
-    gui.registerCoords("list_scroll",      57.5, 81.25,   80,  2.5);
-    gui.registerCoords("tooltip",            50,    95,   95,    8);
-    gui.readDataFile(guiFile);
-    
-    DataNode* typeGuiFile =
-        &game.content.guiDefs.list[ONION_MENU::TYPE_GUI_FILE_NAME];
-    gui.registerCoords("onion_button",     11.25,    15, 12.5,  20);
-    gui.registerCoords("onion_amount",     11.25, 33.75, 12.5, 7.5);
-    gui.registerCoords("group_button",     11.25,    85, 12.5,  20);
-    gui.registerCoords("group_amount",     11.25, 66.25, 12.5, 7.5);
-    gui.registerCoords("full_type",         77.5,    50, 12.5,  90);
-    gui.registerCoords("onion_all_button",    40,    15, 12.5,  20);
-    gui.registerCoords("group_all_button",    40,    85, 12.5,  20);
-    gui.registerCoords("full_type_all",     57.5,    50, 12.5,  90);
-    gui.readDataFile(typeGuiFile);
-    
     //Cancel button.
     gui.backItem =
         new ButtonGuiItem(
@@ -568,6 +541,14 @@ OnionMenu::OnionMenu(
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
     gui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
+    
+    DataNode* typeGuiFile =
+        &game.content.guiDefs.list[ONION_MENU::TYPE_GUI_FILE_NAME];
+    gui.readDataFile(typeGuiFile);
     
     //Finishing touches.
     update();

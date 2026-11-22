@@ -726,19 +726,6 @@ bool OptionsMenu::handlePlayerAction(const Inpution::Action& action) {
  * @brief Initializes the audio options menu GUI.
  */
 void OptionsMenu::initGuiAudioPage() {
-    //Menu items.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME];
-    audioGui.registerCoords("back",                  12,  5,   20,  6);
-    audioGui.registerCoords("back_input",             3,  7,    4,  4);
-    audioGui.registerCoords("master_volume",         50, 25,   70, 10);
-    audioGui.registerCoords("gameplay_sound_volume", 50, 37.5, 65, 10);
-    audioGui.registerCoords("music_volume",          50, 50,   65, 10);
-    audioGui.registerCoords("ambiance_sound_volume", 50, 62.5, 65, 10);
-    audioGui.registerCoords("ui_sound_volume",       50, 75,   65, 10);
-    audioGui.registerCoords("tooltip",               50, 96,   96,  4);
-    audioGui.readDataFile(guiFile);
-    
     //Back button.
     audioGui.backItem =
         new ButtonGuiItem(
@@ -857,6 +844,11 @@ void OptionsMenu::initGuiAudioPage() {
         new TooltipGuiItem(&audioGui);
     audioGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME];
+    audioGui.readDataFile(guiFile);
+    
     //Finishing touches.
     audioGui.setFocusedItemP(masterVolPicker, true);
     audioGui.responsive = false;
@@ -868,17 +860,6 @@ void OptionsMenu::initGuiAudioPage() {
  * @brief Initializes the control binds options menu GUI.
  */
 void OptionsMenu::initGuiControlBindsPage() {
-    //Menu items.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME];
-    bindsGui.registerCoords("back",        12,  5, 20,  6);
-    bindsGui.registerCoords("back_input",   3,  7,  4,  4);
-    bindsGui.registerCoords("list",        50, 51, 88, 82);
-    bindsGui.registerCoords("list_scroll", 97, 51,  2, 82);
-    bindsGui.registerCoords("warning",     95,  5,  6,  6);
-    bindsGui.registerCoords("tooltip",     50, 96, 96,  4);
-    bindsGui.readDataFile(guiFile);
-    
     //Back button.
     bindsGui.backItem =
         new ButtonGuiItem(
@@ -954,6 +935,11 @@ void OptionsMenu::initGuiControlBindsPage() {
         new TooltipGuiItem(&bindsGui);
     bindsGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME];
+    bindsGui.readDataFile(guiFile);
+    
     //Finishing touches.
     bindsGui.setFocusedItemP(bindsGui.backItem, true);
     bindsGui.responsive = false;
@@ -966,20 +952,6 @@ void OptionsMenu::initGuiControlBindsPage() {
  * @brief Initializes the controls options menu GUI.
  */
 void OptionsMenu::initGuiControlsPage() {
-    //Menu items.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME];
-    controlsGui.registerCoords("back",                12,    5, 20,  6);
-    controlsGui.registerCoords("back_input",           3,    7,  4,  4);
-    controlsGui.registerCoords("normal_binds",        50,   25, 70, 10);
-    controlsGui.registerCoords("special_binds",       50, 36.5, 58,  9);
-    controlsGui.registerCoords("leader_cursor_mouse", 50, 52.5, 70, 10);
-    controlsGui.registerCoords("leader_cursor_speed", 50,   65, 70, 10);
-    controlsGui.registerCoords("auto_throw",          50, 77.5, 70, 10);
-    controlsGui.registerCoords("fast_inventory",      50, 77.5, 70, 10);
-    controlsGui.registerCoords("tooltip",             50,   96, 96,  4);
-    controlsGui.readDataFile(guiFile);
-    
     //Back button.
     controlsGui.backItem =
         new ButtonGuiItem(
@@ -1134,6 +1106,11 @@ void OptionsMenu::initGuiControlsPage() {
         new TooltipGuiItem(&controlsGui);
     controlsGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME];
+    controlsGui.readDataFile(guiFile);
+    
     //Finishing touches.
     updateControlsPage();
     controlsGui.setFocusedItemP(normalBindsButton, true);
@@ -1146,18 +1123,6 @@ void OptionsMenu::initGuiControlsPage() {
  * @brief Initializes the graphics options menu GUI.
  */
 void OptionsMenu::initGuiGraphicsPage() {
-    //Menu items.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME];
-    graphicsGui.registerCoords("back",            12,  5,   20,  6);
-    graphicsGui.registerCoords("back_input",       3,  7,    4,  4);
-    graphicsGui.registerCoords("fullscreen",      50, 25,   70, 10);
-    graphicsGui.registerCoords("resolution",      50, 42.5, 70, 10);
-    graphicsGui.registerCoords("cam_shake_mult",  50, 60,   70, 10);
-    graphicsGui.registerCoords("tooltip",         50, 96,   96,  4);
-    graphicsGui.registerCoords("restart_warning", 50, 85,   70,  6);
-    graphicsGui.readDataFile(guiFile);
-    
     //Back button.
     graphicsGui.backItem =
         new ButtonGuiItem(
@@ -1274,6 +1239,11 @@ void OptionsMenu::initGuiGraphicsPage() {
         new TooltipGuiItem(&graphicsGui);
     graphicsGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME];
+    graphicsGui.readDataFile(guiFile);
+    
     //Finishing touches.
     graphicsGui.setFocusedItemP(fullscreenCheck, true);
     graphicsGui.responsive = false;
@@ -1285,21 +1255,6 @@ void OptionsMenu::initGuiGraphicsPage() {
  * @brief Initializes the misc. options menu GUI.
  */
 void OptionsMenu::initGuiMiscPage() {
-    //Menu items.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME];
-    miscGui.registerCoords("back",                       12,     5, 20,   6);
-    miscGui.registerCoords("back_input",                  3,     7,  4,   4);
-    miscGui.registerCoords("pikmin_bump",                50, 23.75, 70, 7.5);
-    miscGui.registerCoords("dismiss_all",                50, 33.75, 70, 7.5);
-    miscGui.registerCoords("leader_cursor_cam_weight",   50, 43.75, 70, 7.5);
-    miscGui.registerCoords("show_leader_cursor_counter", 50, 53.75, 70, 7.5);
-    miscGui.registerCoords("show_gui_input_icons",       50, 63.75, 70, 7.5);
-    miscGui.registerCoords("leaving_confirmation",       50, 73.75, 70, 7.5);
-    miscGui.registerCoords("maker_tools_in_play",        50, 83.75, 70, 7.5);
-    miscGui.registerCoords("tooltip",                    50,    96, 96,   4);
-    miscGui.readDataFile(guiFile);
-    
     //Back button.
     miscGui.backItem =
         new ButtonGuiItem(
@@ -1454,6 +1409,11 @@ void OptionsMenu::initGuiMiscPage() {
         new TooltipGuiItem(&miscGui);
     miscGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME];
+    miscGui.readDataFile(guiFile);
+    
     //Finishing touches.
     miscGui.setFocusedItemP(leaderCursorCamWeightPicker, true);
     miscGui.responsive = false;
@@ -1465,25 +1425,6 @@ void OptionsMenu::initGuiMiscPage() {
  * @brief Initializes the inventory shortcuts options menu GUI.
  */
 void OptionsMenu::initGuiShortcutsPage() {
-    //Menu items.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[OPTIONS_MENU::SHORTCUTS_GUI_FILE_NAME];
-    shortcutsGui.registerCoords("back",             12,  5, 20,  6);
-    shortcutsGui.registerCoords("back_input",        3,  7,  4,  4);
-    shortcutsGui.registerCoords("shortcut_a_label", 26, 19, 44,  6);
-    shortcutsGui.registerCoords("shortcut_a",       26, 26, 44,  8);
-    shortcutsGui.registerCoords("shortcut_b_label", 26, 39, 44,  6);
-    shortcutsGui.registerCoords("shortcut_b",       26, 46, 44,  8);
-    shortcutsGui.registerCoords("shortcut_c_label", 26, 59, 44,  6);
-    shortcutsGui.registerCoords("shortcut_c",       26, 66, 44,  8);
-    shortcutsGui.registerCoords("shortcut_d_label", 26, 79, 44,  6);
-    shortcutsGui.registerCoords("shortcut_d",       26, 86, 44,  8);
-    shortcutsGui.registerCoords("list_explanation", 73, 12, 42,  4);
-    shortcutsGui.registerCoords("list",             73, 54, 42, 76);
-    shortcutsGui.registerCoords("list_scroll",      97, 54,  2, 76);
-    shortcutsGui.registerCoords("tooltip",          50, 96, 96,  4);
-    shortcutsGui.readDataFile(guiFile);
-    
     //Back button.
     shortcutsGui.backItem =
         new ButtonGuiItem(
@@ -1529,6 +1470,11 @@ void OptionsMenu::initGuiShortcutsPage() {
         new TooltipGuiItem(&shortcutsGui);
     shortcutsGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::SHORTCUTS_GUI_FILE_NAME];
+    shortcutsGui.readDataFile(guiFile);
+    
     //Finishing touches.
     updateShortcutsPage();
     shortcutsGui.setFocusedItemP(shortcutsGui.backItem, true);
@@ -1556,18 +1502,6 @@ void OptionsMenu::initGuiTopPage() {
     bool audioIconLeft = getIconLeft("audio", "true");
     bool packsIconLeft = getIconLeft("packs", "true");
     bool miscIconLeft = getIconLeft("misc", "true");
-    
-    //Menu items.
-    topGui.registerCoords("back",       12,  5, 20,  6);
-    topGui.registerCoords("back_input",  3,  7,  4,  4);
-    topGui.registerCoords("controls",   50, 25, 65, 10);
-    topGui.registerCoords("graphics",   50, 37, 65, 10);
-    topGui.registerCoords("audio",      50, 49, 65, 10);
-    topGui.registerCoords("packs",      50, 61, 65, 10);
-    topGui.registerCoords("misc",       50, 73, 60, 10);
-    topGui.registerCoords("advanced",   87, 87, 22,  6);
-    topGui.registerCoords("tooltip",    50, 96, 96,  4);
-    topGui.readDataFile(guiFile);
     
     //Back button.
     topGui.backItem =
@@ -1776,6 +1710,9 @@ void OptionsMenu::initGuiTopPage() {
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&topGui);
     topGui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    topGui.readDataFile(guiFile);
     
     //Finishing touches.
     topGui.setFocusedItemP(controlsButton, true);

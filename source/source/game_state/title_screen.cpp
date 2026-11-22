@@ -82,19 +82,6 @@ void MainMenu::initGuiMainPage() {
     bool statsIconLeft = getIconLeft("statistics", "true");
     bool quitIconLeft = getIconLeft("quit", "false");
     
-    //Menu items.
-    mainGui.registerCoords("play",       42, 58, 44, 12);
-    mainGui.registerCoords("make",       58, 72, 44, 12);
-    mainGui.registerCoords("help",       24, 83, 24,  6);
-    mainGui.registerCoords("options",    50, 83, 24,  6);
-    mainGui.registerCoords("stats",      76, 83, 24,  6);
-    mainGui.registerCoords("discord",    74, 91,  4,  5);
-    mainGui.registerCoords("github",     80, 91,  4,  5);
-    mainGui.registerCoords("exit",       91, 91, 14,  6);
-    mainGui.registerCoords("exit_input", 97, 93,  4,  4);
-    mainGui.registerCoords("tooltip",    50, 96, 96,  4);
-    mainGui.readDataFile(guiFile);
-    
     //Play button.
     ButtonGuiItem* playButton =
         new ButtonGuiItem("Play", game.sysContent.fntAreaName);
@@ -382,6 +369,9 @@ void MainMenu::initGuiMainPage() {
         new TooltipGuiItem(&mainGui);
     mainGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    mainGui.readDataFile(guiFile);
+    
     //Finishing touches.
     mainGui.setFocusedItemP(playButton, true);
     mainGui.responsive = false;
@@ -407,17 +397,6 @@ void MainMenu::initGuiMakePage() {
     bool areaEditorIconLeft = getIconLeft("area_editor", "false");
     bool particleEditorIconLeft = getIconLeft("particle_editor", "true");
     bool guiEditorIconLeft = getIconLeft("gui_editor", "false");
-    
-    //Menu items.
-    makeGui.registerCoords("animation_editor", 27.5, 63, 43, 12);
-    makeGui.registerCoords("area_editor",      72.5, 63, 43, 12);
-    makeGui.registerCoords("gui_editor",         69, 78, 34,  8);
-    makeGui.registerCoords("particle_editor",    31, 78, 34,  8);
-    makeGui.registerCoords("back",                9, 91, 14,  6);
-    makeGui.registerCoords("back_input",          3, 93,  4,  4);
-    makeGui.registerCoords("more",               91, 91, 14,  6);
-    makeGui.registerCoords("tooltip",            50, 96, 96,  4);
-    makeGui.readDataFile(guiFile);
     
     //Animation editor button.
     ButtonGuiItem* animEdButton =
@@ -589,6 +568,9 @@ void MainMenu::initGuiMakePage() {
         new TooltipGuiItem(&makeGui);
     makeGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    makeGui.readDataFile(guiFile);
+    
     //Finishing touches.
     makeGui.setFocusedItemP(animEdButton, true);
     makeGui.responsive = false;
@@ -612,14 +594,6 @@ void MainMenu::initGuiPlayPage() {
     
     bool simpleAreasIconLeft = getIconLeft("simple_areas", "true");
     bool missionsIconLeft = getIconLeft("missions", "true");
-    
-    //Menu items.
-    playGui.registerCoords("simple",     42, 60, 60, 12.5);
-    playGui.registerCoords("mission",    44, 78, 60, 12.5);
-    playGui.registerCoords("back",        9, 91, 14,    6);
-    playGui.registerCoords("back_input",  3, 93,  4,    4);
-    playGui.registerCoords("tooltip",    50, 96, 96,    4);
-    playGui.readDataFile(guiFile);
     
     //Play a simple area button.
     ButtonGuiItem* simpleButton =
@@ -710,6 +684,9 @@ void MainMenu::initGuiPlayPage() {
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&playGui);
     playGui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    playGui.readDataFile(guiFile);
     
     //Finishing touches.
     playGui.setFocusedItemP(simpleButton, true);

@@ -583,20 +583,6 @@ bool GuiManager::addItemP(GuiItem* item, const string& id) {
     
     item->name = id;
     
-    Rect finalRect = item->getRawRatioRect();
-    
-    auto c = registeredCenters.find(id);
-    if(c != registeredCenters.end()) {
-        finalRect.center = c->second;
-    }
-    
-    auto s = registeredSizes.find(id);
-    if(s != registeredSizes.end()) {
-        finalRect.size = s->second;
-    }
-    
-    item->setRawRatioRect(finalRect);
-    
     return true;
 }
 
@@ -757,8 +743,6 @@ bool GuiManager::destroy() {
     DumbGui::Manager::destroy();
     
     backItem = nullptr;
-    registeredCenters.clear();
-    registeredSizes.clear();
     forIdx(i, customItemDefs) {
         customItemDefs[i].clearBitmap();
     }
@@ -1327,15 +1311,15 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
 
 
 /**
- * @brief Reads item default centers and sizes, and records them.
- * Then it reads the custom item definitions and creates the items.
+ * @brief Places all hardcoded items according to their names.
+ * Then, reads the custom item definitions and creates those items.
  *
  * @param node Data file to read from.
- * @param customChildrenParent Custom items become children of this parent,
- * if not nullptr.
+ * @param customChildrenParent If not nullptr, create custom items as
+ * children of this item, and only position child items of this item.
  * @return Whether it succeeded.
  */
-bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
+bool GuiManager::readDataFile(DataNode* node, GuiItem* parent) {
     vector<HardcodedGuiItemDef> hardcodedItemDefs;
     vector<CustomGuiItemDef> newCustomItemDefs;
     bool success =
@@ -1343,42 +1327,29 @@ bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
         
     if(!success) return false;
     
-    forIdx(i, hardcodedItemDefs) {
-        registerCoords(
-            hardcodedItemDefs[i].name,
-            hardcodedItemDefs[i].rect.center.x,
-            hardcodedItemDefs[i].rect.center.y,
-            hardcodedItemDefs[i].rect.size.x,
-            hardcodedItemDefs[i].rect.size.y
-        );
+    //Position the hardcoded items.
+    vector<DumbGui::Item*> itemsToPosition = parent ? parent->children : items;
+    forIdx(id, hardcodedItemDefs) {
+        forIdx(i, itemsToPosition) {
+            GuiItem* iPtr = (GuiItem*) itemsToPosition[i];
+            if(iPtr->name != hardcodedItemDefs[id].name) continue;
+            Rect finalRect = hardcodedItemDefs[id].rect;
+            finalRect.center.x /= 100.0f;
+            finalRect.center.y /= 100.0f;
+            finalRect.size.x /= 100.0f;
+            finalRect.size.y /= 100.0f;
+            iPtr->setRawRatioRect(finalRect);
+        }
     }
     
+    //Create the custom items.
     size_t newCustomItemDefsIdx = customItemDefs.size();
     customItemDefs.insert(
         customItemDefs.end(),
         newCustomItemDefs.begin(), newCustomItemDefs.end()
     );
-    createAndAddCustomItems(newCustomItemDefsIdx, customChildrenParent);
+    createAndAddCustomItems(newCustomItemDefsIdx, parent);
     
-    return true;
-}
-
-
-/**
- * @brief Registers an item's default center and size.
- *
- * @param id String ID of the item.
- * @param cx Center X, in window percentage.
- * @param cy Center Y, in window percentage.
- * @param w Width, in window percentage.
- * @param h Height, in window percentage.
- * @return Whether it succeeded.
- */
-bool GuiManager::registerCoords(
-    const string& id, float cx, float cy, float w, float h
-) {
-    registeredCenters[id] = Point(cx / 100.0f, cy / 100.0f);
-    registeredSizes[id] = Point(w / 100.0f, h / 100.0f);
     return true;
 }
 

@@ -1711,25 +1711,6 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
  * @brief Initializes the pause menu's main menu.
  */
 void PauseMenu::initMainPauseMenu() {
-    //Menu items.
-    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME];
-    gui.registerCoords("left_page",        12,    5, 20,  6);
-    gui.registerCoords("left_page_input",   3,    7,  4,  4);
-    gui.registerCoords("right_page",       88,    5, 20,  6);
-    gui.registerCoords("right_page_input", 97,    7,  4,  4);
-    gui.registerCoords("area_name",        50,   20, 96,  8);
-    gui.registerCoords("area_subtitle",    50, 28.5, 88,  9);
-    gui.registerCoords("continue",         13,   88, 22,  8);
-    gui.registerCoords("continue_input",    3,   91,  4,  4);
-    gui.registerCoords("retry",            28,   44, 38, 12);
-    gui.registerCoords("end",              72,   44, 38, 12);
-    gui.registerCoords("help",             19,   65, 26, 10);
-    gui.registerCoords("options",          50,   65, 26, 10);
-    gui.registerCoords("stats",            81,   65, 26, 10);
-    gui.registerCoords("quit",             87,   88, 22,  8);
-    gui.registerCoords("tooltip",          50,   96, 96,  4);
-    gui.readDataFile(guiFile);
-    
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_SYSTEM, &gui);
     
@@ -1932,6 +1913,10 @@ void PauseMenu::initMainPauseMenu() {
         new TooltipGuiItem(&gui);
     gui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
+    
     //Finishing touches.
     gui.setFocusedItemP(gui.backItem, true);
     gui.responsive = false;
@@ -1943,27 +1928,6 @@ void PauseMenu::initMainPauseMenu() {
  * @brief Initializes the mission page.
  */
 void PauseMenu::initMissionPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
-        
-    //Menu items.
-    missionGui.registerCoords("left_page",          12,  5, 20,  6);
-    missionGui.registerCoords("left_page_input",     3,  7,  4,  4);
-    missionGui.registerCoords("right_page",         88,  5, 20,  6);
-    missionGui.registerCoords("right_page_input",   97,  7,  4,  4);
-    missionGui.registerCoords("continue",           10, 16, 16,  4);
-    missionGui.registerCoords("continue_input",      3, 17,  4,  4);
-    missionGui.registerCoords("objective_header",   50, 16, 60,  4);
-    missionGui.registerCoords("objective",          50, 24, 96,  8);
-    missionGui.registerCoords("notes_header",       50, 32, 96,  4);
-    missionGui.registerCoords("notes_list",         48, 48, 92, 24);
-    missionGui.registerCoords("notes_scroll",       97, 48,  2, 24);
-    missionGui.registerCoords("medal_award_header", 50, 64, 96,  4);
-    missionGui.registerCoords("medal_award_list",   48, 80, 92, 24);
-    missionGui.registerCoords("medal_award_scroll", 97, 80,  2, 24);
-    missionGui.registerCoords("tooltip",            50, 96, 96,  4);
-    missionGui.readDataFile(guiFile);
-    
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_MISSION, &missionGui);
     
@@ -2042,6 +2006,11 @@ void PauseMenu::initMissionPage() {
         new TooltipGuiItem(&missionGui);
     missionGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
+    missionGui.readDataFile(guiFile);
+    
     //Finishing touches.
     missionGui.setFocusedItemP(missionGui.backItem, true);
     missionGui.responsive = false;
@@ -2079,25 +2048,6 @@ void PauseMenu::initRadarPage() {
     loader(bmpRadarOnionBulb,     "onion_bulb");
     loader(bmpRadarShip,          "ship");
     loader(bmpRadarPath,          "path");
-    
-    //Menu items.
-    radarGui.registerCoords("left_page",              12,     5,   20,    6);
-    radarGui.registerCoords("left_page_input",         3,     7,    4,    4);
-    radarGui.registerCoords("right_page",             88,     5,   20,    6);
-    radarGui.registerCoords("right_page_input",       97,     7,    4,    4);
-    radarGui.registerCoords("continue",               10,    16,   16,    4);
-    radarGui.registerCoords("continue_input",          3,    17,    4,    4);
-    radarGui.registerCoords("radar",                37.5, 56.25,   70, 72.5);
-    radarGui.registerCoords("group_pikmin_label",  86.25,  47.5, 22.5,    5);
-    radarGui.registerCoords("group_pikmin_number", 86.25,    55, 22.5,    5);
-    radarGui.registerCoords("idle_pikmin_label",   86.25,  62.5, 22.5,    5);
-    radarGui.registerCoords("idle_pikmin_number",  86.25,    70, 22.5,    5);
-    radarGui.registerCoords("field_pikmin_label",  86.25,  77.5, 22.5,    5);
-    radarGui.registerCoords("field_pikmin_number", 86.25,    85, 22.5,    5);
-    radarGui.registerCoords("cursor_info",         86.25, 33.75, 22.5, 17.5);
-    radarGui.registerCoords("instructions",        58.75,    16, 77.5,    4);
-    radarGui.registerCoords("tooltip",                50,    96,   96,    4);
-    radarGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_RADAR, &radarGui);
@@ -2311,6 +2261,9 @@ void PauseMenu::initRadarPage() {
         new TooltipGuiItem(&radarGui);
     radarGui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    radarGui.readDataFile(guiFile);
+    
     //Finishing touches.
     radarGui.setFocusedItem(nullptr);
     radarGui.responsive = false;
@@ -2322,23 +2275,6 @@ void PauseMenu::initRadarPage() {
  * @brief Initializes the status page.
  */
 void PauseMenu::initStatusPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
-        
-    //Menu items.
-    statusGui.registerCoords("left_page",        12,    5, 20,  6);
-    statusGui.registerCoords("left_page_input",   3,    7,  4,  4);
-    statusGui.registerCoords("right_page",       88,    5, 20,  6);
-    statusGui.registerCoords("right_page_input", 97,    7,  4,  4);
-    statusGui.registerCoords("continue",         10,   16, 16,  4);
-    statusGui.registerCoords("continue_input",    3,   17,  4,  4);
-    statusGui.registerCoords("list_header",      50, 23.5, 88,  7);
-    statusGui.registerCoords("list",             50,   56, 88, 56);
-    statusGui.registerCoords("list_scroll",      97,   56,  2, 56);
-    statusGui.registerCoords("totals",           50,   89, 88,  8);
-    statusGui.registerCoords("tooltip",          50,   96, 96,  4);
-    statusGui.readDataFile(guiFile);
-    
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_STATUS, &statusGui);
     
@@ -2472,6 +2408,11 @@ void PauseMenu::initStatusPage() {
         i2s(totalLost),
         true, true
     );
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
+    statusGui.readDataFile(guiFile);
     
     //Finishing touches.
     statusGui.setFocusedItemP(statusGui.backItem, true);

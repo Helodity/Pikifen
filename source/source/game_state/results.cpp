@@ -578,25 +578,6 @@ void Results::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
  * @brief Initializes the main GUI items.
  */
 void Results::initGuiMain() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::GUI_FILE_NAME];
-    gui.registerCoords("area_name",         50,  7, 45, 10);
-    gui.registerCoords("area_subtitle",     50, 18, 40, 10);
-    gui.registerCoords("medal",             85, 15, 22, 22);
-    gui.registerCoords("final_score",       14, 10, 24,  8);
-    gui.registerCoords("final_score_label", 14, 18, 24,  8);
-    gui.registerCoords("end_reason",        50, 32, 96,  4);
-    gui.registerCoords("conclusion",        50, 36, 96,  4);
-    gui.registerCoords("stats_page",        50, 61, 96, 42);
-    gui.registerCoords("scoring_page",      50, 61, 96, 42);
-    gui.registerCoords("score_chart_page",  50, 61, 96, 42);
-    gui.registerCoords("retry",             20, 88, 24,  8);
-    gui.registerCoords("continue",          50, 88, 24,  8);
-    gui.registerCoords("pick_area",         80, 88, 24,  8);
-    gui.registerCoords("pick_area_input",   91, 91,  4,  4);
-    gui.registerCoords("tooltip",           50, 96, 96,  4);
-    gui.readDataFile(guiFile);
-    
     //Area name text.
     TextGuiItem* areaNameText =
         new TextGuiItem(
@@ -876,6 +857,11 @@ void Results::initGuiMain() {
         new TooltipGuiItem(&gui);
     gui.addItemP(tooltipText, "tooltip");
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
+    
     //Finishing touches.
     gui.setFocusedItemP(gui.backItem, true);
 }
@@ -885,16 +871,6 @@ void Results::initGuiMain() {
  * @brief Initializes the score chart GUI items.
  */
 void Results::initGuiScoreChart() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::SCORE_CHART_GUI_FILE_NAME];
-    gui.registerCoords("score_chart_left_page",        13,  7, 18, 14);
-    gui.registerCoords("score_chart_left_page_input",   4, 12,  8,  8);
-    gui.registerCoords("score_chart_right_page",       87,  7, 18, 14);
-    gui.registerCoords("score_chart_right_page_input", 96, 12,  8,  8);
-    gui.registerCoords("score_chart_chart",            79, 59, 34, 82);
-    gui.registerCoords("score_chart_list",             31, 59, 54, 82);
-    gui.readDataFile(guiFile, scoreChartPageBox);
-    
     //Score chart item list.
     scoreChartList = new ListGuiItem();
     scoreChartPageBox->addChild(scoreChartList);
@@ -915,6 +891,11 @@ void Results::initGuiScoreChart() {
     addNewPageItems(
         RESULTS_MENU_PAGE_SCORE_CHART, scoreChartPageBox, "score_chart"
     );
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::SCORE_CHART_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, scoreChartPageBox);
 }
 
 
@@ -922,16 +903,6 @@ void Results::initGuiScoreChart() {
  * @brief Initializes the scoring criteria GUI items.
  */
 void Results::initGuiScoring() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::SCORING_GUI_FILE_NAME];
-    gui.registerCoords("scoring_left_page",        13,  7, 18, 14);
-    gui.registerCoords("scoring_left_page_input",   4, 12,  8,  8);
-    gui.registerCoords("scoring_right_page",       87,  7, 18, 14);
-    gui.registerCoords("scoring_right_page_input", 96, 12,  8,  8);
-    gui.registerCoords("scoring_list",             50, 59, 92, 82);
-    gui.registerCoords("scoring_scroll",           99, 59,  2, 82);
-    gui.readDataFile(guiFile, scoringPageBox);
-    
     //Scoring criteria list.
     scoringList = new ListGuiItem();
     scoringPageBox->addChild(scoringList);
@@ -945,6 +916,11 @@ void Results::initGuiScoring() {
     gui.addItemP(scoringScroll, "scoring_scroll");
     
     addNewPageItems(RESULTS_MENU_PAGE_SCORING, scoringPageBox, "scoring");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::SCORING_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, scoringPageBox);
 }
 
 
@@ -952,16 +928,6 @@ void Results::initGuiScoring() {
  * @brief Initializes the stats GUI items.
  */
 void Results::initGuiStats() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::STATS_GUI_FILE_NAME];
-    gui.registerCoords("stats_left_page",        13,  7, 18, 14);
-    gui.registerCoords("stats_left_page_input",   4, 12,  8,  8);
-    gui.registerCoords("stats_right_page",       87,  7, 18, 14);
-    gui.registerCoords("stats_right_page_input", 96, 12,  8,  8);
-    gui.registerCoords("stats_list",             50, 59, 92, 82);
-    gui.registerCoords("stats_scroll",           99, 59,  2, 82);
-    gui.readDataFile(guiFile, statsPageBox);
-    
     //Stats list.
     statsList = new ListGuiItem();
     statsPageBox->addChild(statsList);
@@ -980,6 +946,11 @@ void Results::initGuiStats() {
     ) {
         addNewPageItems(RESULTS_MENU_PAGE_STATS, statsPageBox, "stats");
     }
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::STATS_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, statsPageBox);
 }
 
 

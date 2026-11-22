@@ -98,24 +98,6 @@ void PacksMenu::changeInfo(int idx) {
  * @brief Initializes the main GUI.
  */
 void PacksMenu::initGuiMain() {
-    //Menu items.
-    DataNode* guiFile = &game.content.guiDefs.list[PACKS_MENU::GUI_FILE_NAME];
-    gui.registerCoords("back",               12,    5, 20,  6);
-    gui.registerCoords("back_input",          3,    7,  4,  4);
-    gui.registerCoords("list",               26,   47, 48, 74);
-    gui.registerCoords("list_scroll",        52,   47,  2, 74);
-    gui.registerCoords("info_box",           76,   47, 44, 74);
-    gui.registerCoords("pack_name",        67.5,   19, 25, 16);
-    gui.registerCoords("pack_thumbnail",     89,   19, 16, 16);
-    gui.registerCoords("pack_description",   76, 48.5, 42, 41);
-    gui.registerCoords("pack_tags",          76,   73, 42,  6);
-    gui.registerCoords("pack_maker",         65,   80, 20,  6);
-    gui.registerCoords("pack_version",       87,   80, 20,  6);
-    gui.registerCoords("restart_warning",  35.5, 88.5, 67,  5);
-    gui.registerCoords("open_folder",        84, 88.5, 28,  5);
-    gui.registerCoords("tooltip",            50,   96, 96,  4);
-    gui.readDataFile(guiFile);
-    
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
@@ -401,6 +383,10 @@ void PacksMenu::initGuiMain() {
     gui.addItemP(tooltipText, "tooltip");
     
     populatePacksList();
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[PACKS_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
     
     //Finishing touches.
     gui.setFocusedItemP(gui.backItem, true);

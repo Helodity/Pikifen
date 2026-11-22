@@ -144,17 +144,6 @@ bool Inventory::handlePlayerAction(const Inpution::Action& action) {
  * @brief Initializes the base inventory GUI.
  */
 void Inventory::initGui() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[INVENTORY::GUI_FILE_NAME];
-        
-    gui.registerCoords("list",        50, 50, 32, 28);
-    gui.registerCoords("list_scroll", 50, 67, 32,  2);
-    gui.registerCoords("info",        57, 31, 18,  6);
-    gui.registerCoords("close",       40, 31, 12,  6);
-    gui.registerCoords("close_input", 34, 34,  4,  4);
-    gui.registerCoords("extra_info",  57, 32, 18,  4);
-    gui.readDataFile(guiFile);
-    
     //Item list box.
     itemList = new ListGuiItem();
     itemList->horizontal = true;
@@ -210,6 +199,11 @@ void Inventory::initGui() {
     
     //Close input icon.
     guiCreateBackInputIcon(&gui, "close_input");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[INVENTORY::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
     
     //Finishing touches.
     gui.onFocusChanged =

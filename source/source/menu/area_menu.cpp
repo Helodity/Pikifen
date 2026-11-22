@@ -235,19 +235,6 @@ void AreaMenu::changeInfo(size_t areaIdx) {
  * @brief Initializes the mission briefing page GUI items.
  */
 void AreaMenu::initGuiBriefingPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
-    gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
-    gui.registerCoords("objective_header",   50, 13, 96,  6);
-    gui.registerCoords("objective",          50, 24, 96, 12);
-    gui.registerCoords("notes_header",       50, 35, 96,  6);
-    gui.registerCoords("notes_list",         47, 52, 90, 24);
-    gui.registerCoords("notes_scroll",       96, 52,  4, 24);
-    gui.registerCoords("medal_award_header", 50, 69, 96,  6);
-    gui.registerCoords("medal_award_list",   47, 86, 90, 24);
-    gui.registerCoords("medal_award_scroll", 96, 86,  4, 24);
-    gui.readDataFile(guiFile);
-    
     if(!game.content.areas.list[areaType].empty()) {
         //Name text.
         briefingNameText =
@@ -313,6 +300,11 @@ void AreaMenu::initGuiBriefingPage() {
         briefingBox->addChild(medalAwardScroll);
         gui.addItemP(medalAwardScroll, "medal_award_scroll");
     }
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
 }
 
 
@@ -321,22 +313,6 @@ void AreaMenu::initGuiBriefingPage() {
  */
 void AreaMenu::initGuiInfoPage() {
     const ALLEGRO_COLOR RECORD_DATE_COLOR = al_map_rgb(128, 128, 128);
-    
-    DataNode* guiFile =
-        &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
-    gui.registerCoords("name",         36,  6, 68,  8);
-    gui.registerCoords("subtitle",     36, 16, 68,  8);
-    gui.registerCoords("thumbnail",    85, 14, 26, 24);
-    gui.registerCoords("description",  50, 40, 96, 24);
-    gui.registerCoords("record_label", 16, 64, 24,  4);
-    gui.registerCoords("record_info",  50, 64, 36,  4);
-    gui.registerCoords("record_medal", 84, 64, 16, 12);
-    gui.registerCoords("record_date",  50, 68, 28,  4);
-    gui.registerCoords("difficulty",   50, 79, 96,  6);
-    gui.registerCoords("tags",         50, 87, 96,  6);
-    gui.registerCoords("maker",        28, 95, 52,  6);
-    gui.registerCoords("version",      76, 95, 44,  6);
-    gui.readDataFile(guiFile);
     
     if(!game.content.areas.list[areaType].empty()) {
         //Name text.
@@ -484,6 +460,11 @@ void AreaMenu::initGuiInfoPage() {
         gui.addItemP(versionText, "version");
         
     }
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
 }
 
 
@@ -491,19 +472,6 @@ void AreaMenu::initGuiInfoPage() {
  * @brief Initializes the main GUI items.
  */
 void AreaMenu::initGuiMain() {
-    DataNode* guiFile = &game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME];
-    gui.registerCoords("back",          12,  5, 20,  6);
-    gui.registerCoords("back_input",     3,  7,  4,  4);
-    gui.registerCoords("list",          20, 51, 36, 82);
-    gui.registerCoords("list_scroll",   40, 51,  2, 82);
-    gui.registerCoords("view_toggle",   74,  5, 32,  6);
-    gui.registerCoords("info_box",      70, 51, 56, 82);
-    gui.registerCoords("briefing_box",  70, 51, 56, 82);
-    gui.registerCoords("random",        95,  5,  6,  6);
-    gui.registerCoords("tooltip",       50, 96, 96,  4);
-    gui.registerCoords("no_areas_text", 50, 50, 96, 10);
-    gui.readDataFile(guiFile);
-    
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
@@ -727,6 +695,10 @@ void AreaMenu::initGuiMain() {
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
     gui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
 }
 
 

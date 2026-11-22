@@ -705,10 +705,6 @@ public:
     );
     
     bool readDataFile(DataNode* node, GuiItem* customChildrenParent = nullptr);
-    bool registerCoords(
-        const string& id,
-        float cx, float cy, float w, float h
-    );
     static bool getItemDefsFromDataFile(
         DataNode* file,
         vector<HardcodedGuiItemDef>* outHardcodedItemDefs,
@@ -742,12 +738,6 @@ public:
 protected:
 
     //--- Protected members ---
-    
-    //Registered default centers.
-    map<string, Point> registeredCenters;
-    
-    //Registered default sizes.
-    map<string, Point> registeredSizes;
     
     //Custom items.
     vector<CustomGuiItemDef> customItemDefs;

@@ -91,22 +91,6 @@ void HelpMenu::drawTidbit(
  * @param guiFile The GUI definition's file.
  */
 void HelpMenu::initGuiMain(DataNode* guiFile) {
-    //Menu items.
-    gui.registerCoords("back",        12,  5, 20,  6);
-    gui.registerCoords("back_input",   3,  7,  4,  4);
-    gui.registerCoords("gameplay1",   22, 15, 36,  6);
-    gui.registerCoords("gameplay2",   22, 23, 36,  6);
-    gui.registerCoords("controls",    22, 31, 36,  6);
-    gui.registerCoords("pikmin",      22, 39, 36,  6);
-    gui.registerCoords("objects",     22, 47, 36,  6);
-    gui.registerCoords("manual",      22, 54, 28,  4);
-    gui.registerCoords("category",    71,  5, 54,  6);
-    gui.registerCoords("list",        69, 39, 50, 54);
-    gui.registerCoords("list_scroll", 96, 39,  2, 54);
-    gui.registerCoords("image",       16, 83, 28, 30);
-    gui.registerCoords("tooltip",     65, 83, 66, 30);
-    gui.readDataFile(guiFile);
-    
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
@@ -273,6 +257,9 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         );
     };
     gui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    gui.readDataFile(guiFile);
     
     //Finishing touches.
     gui.setFocusedItemP(gui.backItem, true);

@@ -184,17 +184,6 @@ void ModalGuiManager::updateItems() {
     destroy();
     buttonItems.clear();
     
-    //Default coordinates.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[MODAL::GUI_FILE_NAME];
-    registerCoords("title",       50,  9, 92, 10);
-    registerCoords("prompt",      50, 50, 92, 32);
-    registerCoords("text_input",  50, 50, 92, 32);
-    registerCoords("button_area", 50, 83, 92, 10);
-    registerCoords("back_input",   5, 87,  4,  4);
-    registerCoords("tooltip",     50, 96, 96,  4);
-    readDataFile(guiFile);
-    
     //Title text.
     TextGuiItem* titleItem = new TextGuiItem(
         title, game.sysContent.fntAreaName
@@ -314,6 +303,11 @@ void ModalGuiManager::updateItems() {
         buttonItems[b]->setRawRatioRect(rect);
         curX += buttonWidth + MODAL::BUTTON_MARGIN;
     }
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[MODAL::GUI_FILE_NAME];
+    readDataFile(guiFile);
     
     //Finishing touches.
     setFocusedItemP(buttonItems[defaultFocusButtonIdx], true);
