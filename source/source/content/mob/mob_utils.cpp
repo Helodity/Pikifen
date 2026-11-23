@@ -1191,7 +1191,7 @@ void PikminNestType::createColormap() {
     //Create the texture.
     ALLEGRO_BITMAP* oldTargetBmp = al_get_target_bitmap();
     int oldBmpFlags = al_get_new_bitmap_flags();
-    al_set_new_bitmap_flags(0); //Prevents automatic smoothing -- leads to gaps.
+    al_set_new_bitmap_flags(ALLEGRO_CONVERT_BITMAP); //Prevents automatic smoothing -- leads to gaps.
     int bitmapSize = pikTypes.size() * 50;
     menuColormap = al_create_bitmap(bitmapSize, 1);
     al_set_target_bitmap(menuColormap);

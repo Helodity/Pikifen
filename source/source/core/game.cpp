@@ -446,7 +446,8 @@ void Game::mainLoop() {
         
         if(isAllegroEventUserInput(ev)) {
             globalHandleAllegroInputEvent(ev);
-            curState->handleAllegroInputEvent(ev);
+            if(curState->loaded)
+                curState->handleAllegroInputEvent(ev);
             if(!skipEventForControlMediator) {
                 controls.handleAllegroInputEvent(ev);
             }
@@ -454,7 +455,8 @@ void Game::mainLoop() {
             
         } else {
             globalHandleAllegroOtherEvent(ev);
-            curState->handleAllegroOtherEvent(ev);
+            if (curState->loaded)
+                curState->handleAllegroOtherEvent(ev);
             
         }
         
@@ -504,15 +506,6 @@ void Game::processFrame() {
         } else {
             ImGui::EndFrame();
         }
-    }
-    
-    if(curState == prevState) {
-        //Only draw if we didn't change states in the meantime.
-        curState->doDrawing();
-        globalDrawing();
-        al_flip_display();
-    } else {
-        ImGui::EndFrame();
     }
     
     double curFrameEndTime = al_get_time();
