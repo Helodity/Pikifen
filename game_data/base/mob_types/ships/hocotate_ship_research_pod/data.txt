@@ -1,0 +1,65 @@
+name = Hocotate ship research pod
+description = The detachable research pod of the Hocotate ship. Since it's smaller than the whole ship, it can go inside caves.
+
+can_heal = true
+control_point_offset = 0 0
+control_point_radius = 80
+height = 90
+peek_underneath_opacity = 50
+pushable = false
+pushes = true
+radius = 55
+receptacle_offset = 0 0
+
+sounds {
+    beam {
+        sound = effects/beam
+        volume = 30
+        speed = 95
+        speed_deviation = 5
+        loop = true
+    }
+    reception {
+        sound = effects/poof
+        volume = 40
+        speed = 95
+        speed_deviation = 15
+    }
+    hum {
+        sound = misc/hum_1
+        volume = 15
+        speed = 100
+        loop = true
+    }
+    pistons {
+        sound = misc/pistons
+        volume = 25
+        speed = 110
+        loop = true
+    }
+}
+
+children {
+    propeller {
+        spawn = propeller
+        parent_holds = true
+        hold_offset_vertical_distance = 1.1
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+}
+
+spawns {
+    propeller {
+        object = hocotate_ship_propeller
+        relative = true
+        angle = 0
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

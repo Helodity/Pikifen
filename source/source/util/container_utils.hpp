@@ -18,6 +18,59 @@ using std::vector;
 
 
 /**
+ * @brief Shorthand for returning the iterator of an item in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam ContentT Type of contents of the container.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename ContentT>
+typename ContainerT::const_iterator findInContainer(
+    const ContainerT& cont, const ContentT& item
+) {
+    return std::find(cont.begin(), cont.end(), item);
+}
+
+
+/**
+ * @brief Shorthand for returning the iterator of an item that
+ * matches a comparison predicate in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam PredicateT Type of the predicate.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename PredicateT>
+typename ContainerT::iterator findInContainerIf(
+    ContainerT& cont, const PredicateT& pred
+) {
+    return std::find_if(cont.begin(), cont.end(), pred);
+}
+
+
+/**
+ * @brief Shorthand for returning the iterator of an item that
+ * matches a comparison predicate in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam PredicateT Type of the predicate.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename PredicateT>
+typename ContainerT::const_iterator findInContainerIf(
+    const ContainerT& cont, const PredicateT& pred
+) {
+    return std::find_if(cont.begin(), cont.end(), pred);
+}
+
+
+/**
  * @brief Shorthand for figuring out if a given item is in a container.
  *
  * @tparam ContainerT Type of container.
@@ -33,6 +86,24 @@ bool isInContainer(const ContainerT& cont, const ContentT& item) {
 
 
 /**
+ * @brief Shorthand for figuring out if a given item that
+ * matches a comparison predicate is in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam PredicateT Type of the predicate.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename PredicateT>
+bool isInContainerIf(
+    const ContainerT& cont, const PredicateT& pred
+) {
+    return std::find_if(cont.begin(), cont.end(), pred) != cont.end();
+}
+
+
+/**
  * @brief Removes the items at the given indexes of a vector. This takes
  * re-indexation into account.
  *
@@ -42,7 +113,7 @@ bool isInContainer(const ContainerT& cont, const ContentT& item) {
  * @param v The vector.
  */
 template<typename IdxContainerT, typename ContentT>
-void eraseIndexesInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
+void eraseIdxsInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
     //First, get the list of indexes in vector format.
     vector<size_t> idxsV;
     for(auto i : idxs) {
@@ -56,8 +127,22 @@ void eraseIndexesInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
     //Go one by one and delete them.
     for(size_t i = 0; i < idxsV.size(); i++) {
         size_t iToUse = idxsV.size() - i - 1;
-        v.erase(v.begin() + idxsV[iToUse]);
+        eraseInVector(v, idxsV[iToUse]);
     }
+}
+
+
+/**
+ * @brief Removes the item at the given index of a vector. This does
+ * not perform bounds checks.
+ *
+ * @tparam ContainerT Type of container.
+ * @param v The vector.
+ * @param idx The index.
+ */
+template<typename ContainerT>
+void eraseInVector(ContainerT& v, size_t idx) {
+    v.erase(v.begin() + idx);
 }
 
 
@@ -76,7 +161,7 @@ vector<ContentT> filterVectorWithBanList(
     vector<ContentT> result = v;
     for(size_t i = 0; i < result.size();) {
         if(isInContainer(banList, result[i])) {
-            result.erase(result.begin() + i);
+            eraseInVector(result, i);
         } else {
             i++;
         }
@@ -279,7 +364,7 @@ vector<ContentT> shuffleVector(
         //Add a safeguard for if the float is exactly 1.0.
         pick = std::min(pick, itemsAvailable.size() - 1);
         result.push_back(itemsAvailable[pick]);
-        itemsAvailable.erase(itemsAvailable.begin() + pick);
+        eraseInVector(itemsAvailable, pick);
     }
     return result;
 }

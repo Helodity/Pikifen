@@ -59,14 +59,12 @@ void Particle::draw() {
     float finalSize = size.get(t);
     if(finalSize <= 0.0f) return;
     
-    bool usedCustomBlend = false;
-    int oldOp = 0, oldSource = 0, oldDest = 0;
+    AllegroBlenderState prevBlender;
     
     switch(blendType) {
     case PARTICLE_BLEND_TYPE_ADDITIVE: {
-        al_get_blender(&oldOp, &oldSource, &oldDest);
+        prevBlender.save();
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
-        usedCustomBlend = true;
         break;
     } default: {
         break;
@@ -86,9 +84,7 @@ void Particle::draw() {
         );
     }
     
-    if(usedCustomBlend) {
-        al_set_blender(oldOp, oldSource, oldDest);
-    }
+    prevBlender.loadIfHasData();
 }
 
 
@@ -143,7 +139,7 @@ void Particle::tick(const float deltaT) {
     float t = 1.0f - time / duration;
     
     Point totalVelocity = linearSpeed.get(t);
-    float outwardsAngle = getAngle(center - origin);
+    Angle outwardsAngle = getAngle(center - origin);
     
     if(center == origin) {
         outwardsAngle = game.rng.f(-180, 180);
@@ -336,7 +332,7 @@ void ParticleGenerator::emit(ParticleManager& manager) {
             newP.size.setKeyframeValue((int) s, kf.second + sDev);
         }
         
-        float angleToUse =
+        Angle angleToUse =
             game.rng.f(
                 -linearSpeedAngleDeviation,
                 linearSpeedAngleDeviation
@@ -550,7 +546,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     GetterWriter pGW(baseParticleNode);
     
     pGW.write("bitmap", baseParticle.bmpName);
-    pGW.write("bitmap_angle", baseParticle.bmpAngle);
+    pGW.write("bitmap_angle", radToDeg(baseParticle.bmpAngle));
     pGW.write("bitmap_angle_type", baseParticle.bmpAngleType);
     pGW.write("duration", baseParticle.duration);
     pGW.write("friction", baseParticle.friction);
@@ -683,7 +679,6 @@ ParticleManager::ParticleManager(const ParticleManager& pm2) :
 ParticleManager& ParticleManager::operator =(
     const ParticleManager& pm2
 ) {
-
     if(this != &pm2) {
         if(this->particles) {
             delete[] this->particles;
@@ -797,7 +792,6 @@ void ParticleManager::fillComponentList(
     vector<WorldComponent>& list, const RectCorners& camera
 ) {
     for(size_t c = 0; c < count; c++) {
-    
         Particle* pPtr = &particles[c];
         float pSize =
             pPtr->size.get((pPtr->duration - pPtr->time) / pPtr->duration);

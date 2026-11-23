@@ -126,8 +126,8 @@ private:
     //Comparison sprite to use in sprite comparison mode.
     Sprite* comparisonSprite = nullptr;
     
-    //Is the comparison sprite mode tinting the sprites?
-    bool comparisonTint = true;
+    //Is the comparison sprite mode colorizing the sprites?
+    bool comparisonColorize = true;
     
     //Animation instance, for when the user is editing animations.
     AnimationInstance curAnimInst;
@@ -139,7 +139,7 @@ private:
     SelectionController hitboxSelCtrl;
     
     //Current maturity to display on the Pikmin's top.
-    unsigned char curMaturity = 0;
+    MATURITY curMaturity = MATURITY_LEAF;
     
     //Current sprite, for when the user is editing sprites.
     Sprite* curSprite = nullptr;
@@ -223,6 +223,8 @@ private:
     
     //Info about the "new" dialog.
     struct {
+
+    public:
     
         //Selected pack.
         string pack;
@@ -362,8 +364,12 @@ private:
     void processGuiDialogLoad();
     void processGuiDialogNew();
     void processGuiDialogOptions();
+    void processGuiDialogOptionsControls();
+    void processGuiDialogOptionsMisc();
     void processGuiHitboxHazards();
     void processGuiMenuBar();
+    void processGuiMenuBarEditor();
+    void processGuiMenuBarView();
     void processGuiPanelAnimation();
     void processGuiPanelAnimationData();
     void processGuiPanelAnimationHeader();

@@ -137,7 +137,7 @@ AnimationEditor::AnimationEditor() :
     hitboxSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         if(!sideView) {
             curSprite->hitboxes[idx].center = newCenter;
@@ -504,7 +504,7 @@ string AnimationEditor::getFileTooltip(const string& path) const {
         return
             "File path: " + path + "\n"
             "Pack: " + game.content.packs.list[tempManif.pack].name + "\n"
-            "Mob's internal name: " + type + " (category " + cat + ")";
+            "Mob's internal name: " + type + " (category: " + cat + ")";
     } else {
         ContentManifest tempManif;
         game.content.globalAnimDbs.pathToManifest(
@@ -1763,7 +1763,7 @@ void AnimationEditor::setupForNewAnimDbPost() {
     ) {
         topBmp[0] = ((LeaderType*) loadedMobType)->bmpLight;
         topTint = ((LeaderType*) loadedMobType)->lightBmpTint;
-        curMaturity = 0;
+        curMaturity = MATURITY_LEAF;
     }
     
     if(loadedMobType && db.name == "animations") {
@@ -1878,6 +1878,8 @@ void AnimationEditor::spriteBmpFloodFill(
      * @brief A point, but with integer coordinates.
      */
     struct IntPoint {
+
+    public:
     
         //--- Public members ---
         
@@ -2043,7 +2045,6 @@ void AnimationEditor::unload() {
  */
 void AnimationEditor::updateHitboxes() {
     forIdx(s, db.sprites) {
-    
         Sprite* sPtr = db.sprites[s];
         
         //Start by deleting non-existent hitboxes.
@@ -2059,9 +2060,7 @@ void AnimationEditor::updateHitboxes() {
             }
             
             if(!nameFound) {
-                sPtr->hitboxes.erase(
-                    sPtr->hitboxes.begin() + h
-                );
+                eraseInVector(sPtr->hitboxes, h);
             } else {
                 h++;
             }

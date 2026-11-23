@@ -75,7 +75,7 @@ private:
     bool genRunning = false;
     
     //Offset the generator's angle in the editor by this much.
-    float generatorAngleOffset = 0.0f;
+    Angle generatorAngleOffset = 0.0f;
     
     //Offset the generator's position in the editor by this much.
     Point generatorPosOffset;
@@ -111,6 +111,8 @@ private:
     bool useBg = false;
     
     struct {
+
+    public:
     
         //Selected pack.
         string pack;
@@ -181,8 +183,15 @@ private:
     void processGuiDialogLoad();
     void processGuiDialogNew();
     void processGuiDialogOptions();
+    void processGuiDialogOptionsControls();
+    void processGuiDialogOptionsMisc();
     void processGuiMenuBar();
+    void processGuiMenuBarEditor();
+    void processGuiMenuBarView();
     void processGuiPanelGenerator();
+    void processGuiPanelGeneratorAppearance();
+    void processGuiPanelGeneratorEmission();
+    void processGuiPanelGeneratorPBehavior();
     void processGuiStatusBar();
     void processGuiToolbar();
     void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;

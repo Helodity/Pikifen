@@ -738,7 +738,6 @@ void AudioManager::setCameraPos(const RectCorners& camera) {
 bool AudioManager::setCurrentSong(
     const string& name, bool fromStart, bool fadeIn, bool loop
 ) {
-
     //Stop all other songs first.
     for(auto& s : game.content.songs.list) {
         Song* songPtr = &s.second;
@@ -808,10 +807,12 @@ bool AudioManager::setCurrentSong(
 /**
  * @brief Sets the current position of all songs to be near the loop point.
  * This is helpful for when you want to test said loop point.
+ *
+ * @param seconds How many seconds before the loop point.
  */
-void AudioManager::setSongPosNearLoop() {
+void AudioManager::setSongPosNearLoop(float seconds) {
     for(auto s : game.content.songs.list) {
-        double pos = std::max(0.0, s.second.loopEnd - 4.0f);
+        double pos = std::max(0.0, s.second.loopEnd - seconds);
         al_seek_audio_stream_secs(s.second.mainTrack, pos);
         for(auto const& m : s.second.mixTracks) {
             al_seek_audio_stream_secs(m.second, pos);
@@ -1025,7 +1026,7 @@ void AudioManager::tick(float deltaT) {
     //Delete destroyed playbacks.
     for(size_t p = 0; p < playbacks.size();) {
         if(playbacks[p].state == SOUND_PLAYBACK_STATE_DESTROYED) {
-            playbacks.erase(playbacks.begin() + p);
+            eraseInVector(playbacks, p);
         } else {
             p++;
         }
@@ -1380,7 +1381,8 @@ void Song::loadFromDataNode(DataNode* node) {
         if(mixTrackNode->name == "enemy") {
             trigger = MIX_TRACK_TYPE_ENEMY;
         } else {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown mix track trigger \"" +
                 mixTrackNode->name +
                 "\"!", mixTrackNode
@@ -1392,7 +1394,7 @@ void Song::loadFromDataNode(DataNode* node) {
             game.content.songTracks.list.get(mixTrackNode->value, mixTrackNode);
     }
     
-    if(loopEnd == 0.0f) {
+    if(loopEnd == 0.0f && mainTrack) {
         loopEnd = al_get_audio_stream_length_secs(mainTrack);
     }
     if(loopEnd < loopStart) {

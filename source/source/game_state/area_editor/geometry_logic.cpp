@@ -529,26 +529,35 @@ bool AreaEditor::deleteSelectedEdges() {
  */
 void AreaEditor::deleteSelectedMobs() {
     const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
+    vector<size_t> mobIdxsToDelete(selectedMobs.begin(), selectedMobs.end());
     
-    for(size_t mIdx : selectedMobs) {
+    while(!mobIdxsToDelete.empty()) {
+        size_t mobIdxToDelete = mobIdxsToDelete[0];
+        
         //Update links.
         forIdx(m2, game.curArea->mobGenerators) {
+            if(m2 == mobIdxToDelete) continue;
             MobGen* m2Ptr = game.curArea->mobGenerators[m2];
             if(!m2Ptr) continue;
-            forIdx(l, m2Ptr->links) {
-                if(m2Ptr->linkIdxs[l] == mIdx) {
-                    m2Ptr->links.erase(m2Ptr->links.begin() + l);
-                    m2Ptr->linkIdxs.erase(m2Ptr->linkIdxs.begin() + l);
+            for(size_t l = 0; l < m2Ptr->links.size(); ) {
+                if(m2Ptr->linkIdxs[l] == mobIdxToDelete) {
+                    eraseInVector(m2Ptr->links, l);
+                    eraseInVector(m2Ptr->linkIdxs, l);
                 } else {
-                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mIdx, false);
+                    adjustMisalignedIdx(
+                        m2Ptr->linkIdxs[l], mobIdxToDelete, false
+                    );
+                    l++;
                 }
             }
             
             if(m2Ptr->storedInside != INVALID) {
-                if(m2Ptr->storedInside == mIdx) {
+                if(m2Ptr->storedInside == mobIdxToDelete) {
                     m2Ptr->storedInside = INVALID;
                 } else {
-                    adjustMisalignedIndex(m2Ptr->storedInside, mIdx, false);
+                    adjustMisalignedIdx(
+                        m2Ptr->storedInside, mobIdxToDelete, false
+                    );
                 }
             }
         }
@@ -557,22 +566,27 @@ void AreaEditor::deleteSelectedMobs() {
         forIdx(c, game.curArea->mission.mobGroups) {
             MissionMobGroup* cPtr = &game.curArea->mission.mobGroups[c];
             for(size_t m = 0; m < cPtr->mobIdxs.size();) {
-                if(cPtr->mobIdxs[m] == mIdx) {
-                    cPtr->mobIdxs.erase(cPtr->mobIdxs.begin() + m);
+                if(cPtr->mobIdxs[m] == mobIdxToDelete) {
+                    eraseInVector(cPtr->mobIdxs, m);
                 } else {
-                    adjustMisalignedIndex(cPtr->mobIdxs[m], mIdx, false);
+                    adjustMisalignedIdx(
+                        cPtr->mobIdxs[m], mobIdxToDelete, false
+                    );
                     m++;
                 }
             }
         }
         
         //Delete it.
-        delete game.curArea->mobGenerators[mIdx];
-        game.curArea->mobGenerators[mIdx] = nullptr;
+        delete game.curArea->mobGenerators[mobIdxToDelete];
+        eraseInVector(game.curArea->mobGenerators, mobIdxToDelete);
+        
+        //Adjust the indexes of the next ones to process.
+        mobIdxsToDelete.erase(mobIdxsToDelete.begin());
+        forIdx(m, mobIdxsToDelete) {
+            adjustMisalignedIdx(mobIdxsToDelete[m], mobIdxToDelete, false);
+        }
     }
-    
-    //Finally, erase them from the vector.
-    eraseIndexesInVector(selectedMobs, game.curArea->mobGenerators);
 }
 
 
@@ -581,18 +595,29 @@ void AreaEditor::deleteSelectedMobs() {
  */
 void AreaEditor::deleteSelectedPathLinks() {
     const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
+    vector<size_t> linksIdxsToDelete(
+        selectedLinks.begin(), selectedLinks.end()
+    );
     
-    for(size_t lIdx : selectedLinks) {
-        EditorPathLink* elPtr = &game.curArea->editorPathLinks[lIdx];
+    while(!linksIdxsToDelete.empty()) {
+        size_t linkIdxToDelete = linksIdxsToDelete[0];
+        
+        EditorPathLink* elPtr = &game.curArea->editorPathLinks[linkIdxToDelete];
         //Delete it from the start path stop.
         elPtr->link1->startPtr->deleteLink(elPtr->link1);
         
         //Delete it from the end path stop.
         if(elPtr->link2) elPtr->link2->startPtr->deleteLink(elPtr->link2);
+        
+        //Delete it.
+        eraseInVector(game.curArea->editorPathLinks, linkIdxToDelete);
+        
+        //Adjust the indexes of the next ones to process.
+        linksIdxsToDelete.erase(linksIdxsToDelete.begin());
+        forIdx(l, linksIdxsToDelete) {
+            adjustMisalignedIdx(linksIdxsToDelete[l], linkIdxToDelete, false);
+        }
     }
-    
-    //Finally, erase them from the vector.
-    eraseIndexesInVector(selectedLinks, game.curArea->editorPathLinks);
 }
 
 
@@ -601,20 +626,29 @@ void AreaEditor::deleteSelectedPathLinks() {
  */
 void AreaEditor::deleteSelectedPathStops() {
     const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
+    vector<size_t> stopIdxsToDelete(
+        selectedStops.begin(), selectedStops.end()
+    );
     
-    for(auto const& sIdx : selectedStops) {
+    while(!stopIdxsToDelete.empty()) {
+        size_t stopIdxToDelete = stopIdxsToDelete[0];
+        
         //Check all links that end at this stop.
         forIdx(s2, game.curArea->pathStops) {
             PathStop* s2Ptr = game.curArea->pathStops[s2];
-            s2Ptr->deleteLink(game.curArea->pathStops[sIdx]);
+            s2Ptr->deleteLink(game.curArea->pathStops[stopIdxToDelete]);
         }
         
         //Delete it.
-        delete game.curArea->pathStops[sIdx];
+        delete game.curArea->pathStops[stopIdxToDelete];
+        eraseInVector(game.curArea->pathStops, stopIdxToDelete);
+        
+        //Adjust the indexes of the next ones to process.
+        stopIdxsToDelete.erase(stopIdxsToDelete.begin());
+        forIdx(s, stopIdxsToDelete) {
+            adjustMisalignedIdx(stopIdxsToDelete[s], stopIdxToDelete, false);
+        }
     }
-    
-    //Finally, erase them from the vector.
-    eraseIndexesInVector(selectedStops, game.curArea->pathStops);
 }
 
 
@@ -623,8 +657,13 @@ void AreaEditor::deleteSelectedPathStops() {
  */
 void AreaEditor::deleteSelectedRegions() {
     const set<size_t>& selectedRegions = regionSelection.getItemIdxs();
+    vector<size_t> regionIdxsToDelete(
+        selectedRegions.begin(), selectedRegions.end()
+    );
     
-    for(size_t rIdx : selectedRegions) {
+    while(!regionIdxsToDelete.empty()) {
+        size_t regionIdxToDelete = regionIdxsToDelete[0];
+        
         //Update end conditions.
         forIdx(e, game.curArea->mission.endConds) {
             MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
@@ -633,17 +672,23 @@ void AreaEditor::deleteSelectedRegions() {
                 continue;
             }
             if(ePtr->idxParam == 0) continue;
-            adjustMisalignedIndex(
-                ePtr->idxParam, rIdx, false
+            adjustMisalignedIdx(
+                ePtr->idxParam, regionIdxToDelete, false
             );
         }
         
         //Delete it.
-        delete game.curArea->regions[rIdx];
+        delete game.curArea->regions[regionIdxToDelete];
+        eraseInVector(game.curArea->regions, regionIdxToDelete);
+        
+        //Adjust the indexes of the next ones to process.
+        regionIdxsToDelete.erase(regionIdxsToDelete.begin());
+        forIdx(r, regionIdxsToDelete) {
+            adjustMisalignedIdx(
+                regionIdxsToDelete[r], regionIdxToDelete, false
+            );
+        }
     }
-    
-    //Finally, erase them from the vector.
-    eraseIndexesInVector(selectedRegions, game.curArea->regions);
 }
 
 
@@ -652,14 +697,25 @@ void AreaEditor::deleteSelectedRegions() {
  */
 void AreaEditor::deleteSelectedTreeShadows() {
     const set<size_t>& selectedShadows = shadowSelection.getItemIdxs();
+    vector<size_t> shadowIdxsToDelete(
+        selectedShadows.begin(), selectedShadows.end()
+    );
     
-    for(size_t sIdx : selectedShadows) {
+    while(!shadowIdxsToDelete.empty()) {
+        size_t shadowIdxToDelete = shadowIdxsToDelete[0];
+        
         //Delete it.
-        delete game.curArea->treeShadows[sIdx];
+        delete game.curArea->treeShadows[shadowIdxToDelete];
+        eraseInVector(game.curArea->treeShadows, shadowIdxToDelete);
+        
+        //Adjust the indexes of the next ones to process.
+        shadowIdxsToDelete.erase(shadowIdxsToDelete.begin());
+        forIdx(s, shadowIdxsToDelete) {
+            adjustMisalignedIdx(
+                shadowIdxsToDelete[s], shadowIdxToDelete, false
+            );
+        }
     }
-    
-    //Finally, erase them from the vector.
-    eraseIndexesInVector(selectedShadows, game.curArea->treeShadows);
 }
 
 
@@ -1211,7 +1267,6 @@ void AreaEditor::findProblemsMobInsideWalls() {
                     nullptr, nullptr
                 )
             ) {
-            
                 if(
                     ePtr->sectors[0] && ePtr->sectors[1] &&
                     ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ
@@ -1769,12 +1824,12 @@ void AreaEditor::getAffectedSectors(
  * @return The closest edge.
  */
 Edge* AreaEditor::getClosestEdgeToAngle(
-    Vertex* vPtr, float angle, bool clockwise,
-    float* outClosestEdgeAngle
+    Vertex* vPtr, Angle angle, bool clockwise,
+    Angle* outClosestEdgeAngle
 ) const {
     Edge* bestEdge = nullptr;
-    float bestAngleDiff = 0;
-    float bestEdgeAngle = 0;
+    Angle bestAngleDiff = 0;
+    Angle bestEdgeAngle = 0;
     
     forIdx(e, vPtr->edges) {
         Edge* ePtr = vPtr->edges[e];
@@ -2408,12 +2463,10 @@ void AreaEditor::mergeVertex(
     vector<Edge*> edges = v1->edges;
     //Find out what to do with every edge of the dragged vertex.
     forIdx(e, edges) {
-    
         Edge* ePtr = edges[e];
         Vertex* otherVertex = ePtr->getOtherVertex(v1);
         
         if(otherVertex == v2) {
-        
             //Squashed into non-existence.
             affectedSectors->insert(ePtr->sectors[0]);
             affectedSectors->insert(ePtr->sectors[1]);
@@ -2422,13 +2475,11 @@ void AreaEditor::mergeVertex(
             deleteEdge(ePtr);
             
         } else {
-        
             bool hasMerged = false;
             //Check if the edge will be merged with another one.
             //These are edges that share a common vertex,
             //plus the moved/destination vertex.
             forIdx(de, v2->edges) {
-            
                 Edge* dePtr = v2->edges[de];
                 Vertex* dOtherVertex = dePtr->getOtherVertex(v2);
                 
@@ -2830,7 +2881,7 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
             for(size_t vIdx : selectedVertexes) {
                 forIdx(v2, vertexesToCheck) {
                     if(vertexesToCheck[v2] == game.curArea->vertexes[vIdx]) {
-                        vertexesToCheck.erase(vertexesToCheck.begin() + v2);
+                        eraseInVector(vertexesToCheck, v2);
                         break;
                     }
                 }

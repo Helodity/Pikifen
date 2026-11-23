@@ -16,7 +16,7 @@ _From input to action._
 
 ## Overview
 
-**Inpution** is a source-only C++ piece of middleware that abstracts and simplifies control binds in game development. The way it works is pretty simple:
+**Inpution** is a source-only C++ middleware library that abstracts and simplifies control binds in game development. The way it works is pretty simple:
 
 * ⇥ The game must...
   * _At startup_: Teach Inpution what action types exist in this game.
@@ -233,9 +233,9 @@ int main() {
 * How can I detect whether something is an analog stick or an analog button?
   * You have a few ways. Whatever library you're using to get input from might be able to give you more information about a stick; if it reports it only has one axis then it may be an analog button. In addition, you can check the controller's name and/or GUID and cross-reference a list of known brands, like the [SDL Game Controller DB](https://github.com/mdqinc/SDL_GameControllerDB).
 * The player Alt+Tab'd and now some inputs are stuck. What can I do?
-  * Whatever engine you're using probably has ways to detect the window is out of focus. When that happens, call `Manager::releaseEverything()`.
+  * Whatever library you're using probably has ways to detect the window is out of focus. When that happens, call `Manager::releaseEverything()`.
 * I don't want to receive actions right now (e.g. I have a textbox focused and don't want the key presses to be turned to actions). What can I do?
-  * Let Inpution work like normal, but simply discard the list of actions returned by `Manager::newFrame()`. This is preferred over not calling anything Inpution-related, since you still want the library to receive key-up events, do auto-repeat logic, etc.
+  * Let Inpution work like normal, but simply discard the list of actions returned by `Manager::newFrame()`. This is preferred over not calling anything Inpution-related, since you still want the library to receive key-up events, do auto-repeat logic, etc. Alternatively, if you detect an event that you don't want to be translated to actions, set `Manager::ignoringActions` to true, then set it to false at the end of the frame.
 
 
 ## Inner workings notes

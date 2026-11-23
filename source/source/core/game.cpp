@@ -181,11 +181,11 @@ void Game::globalDrawing() {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
+void Game::globalHandleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
@@ -203,25 +203,6 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY) {
         //Mouse cursor entered window.
         mouseCursor.onWindow = true;
-        
-    } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
-        //Audio stream finished.
-        audio.handleStreamFinished(
-            (ALLEGRO_AUDIO_STREAM*) (ev.any.source)
-        );
-        
-    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-        //Hitting the X on the game window.
-        isGameRunning = false;
-        
-    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
-        //Switching to another window.
-        controls.releaseAll();
-        
-    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
-        //On Windows, when you tab out then back in, sometimes you'd see
-        //weird artifacts. This workaround fixes it.
-        al_resize_display(display, winW, winH);
         
     }
     
@@ -243,12 +224,49 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
         
         if(!line.empty()) {
-            console.write(line, false, 5.0f);
+            console.write(LOG_LEVEL_INFO, line, 5.0f);
         }
     }
     
     //Hardware mediator.
-    hardware.handleAllegroEvent(ev);
+    hardware.handleAllegroInputEvent(ev);
+    
+    //Maker console.
+    if(console.handleAllegroInputEvent(ev)) {
+        skipEventForControlMediator = true;
+    }
+    
+    //Dear ImGui.
+    ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void Game::globalHandleAllegroOtherEvent(const ALLEGRO_EVENT& ev) {
+    if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
+        //Audio stream finished.
+        audio.handleStreamFinished(
+            (ALLEGRO_AUDIO_STREAM*) (ev.any.source)
+        );
+        
+    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        //Hitting the X on the game window.
+        isGameRunning = false;
+        
+    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
+        //Switching to another window.
+        controls.releaseAll();
+        
+    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
+        //On Windows, when you tab out then back in, sometimes you'd see
+        //weird artifacts. This workaround fixes it.
+        al_resize_display(display, winW, winH);
+        
+    }
     
     //Dear ImGui.
     ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);
@@ -337,6 +355,11 @@ void Game::globalLogicPost() {
             mouseCursor.intendedAlpha = 0.0f;
         }
     }
+    if(mouseCursor.purposely0Alpha) {
+        mouseCursor.alpha = 0.0f;
+        mouseCursor.intendedAlpha = 0.0f;
+    }
+    
     mouseCursor.alpha =
         inchTowards(
             mouseCursor.alpha, mouseCursor.intendedAlpha,
@@ -369,15 +392,15 @@ void Game::globalLogicPre() {
                 str += " | ";
             }
         }
-        console.write(str, false, 5.0f);
+        console.write(LOG_LEVEL_INFO, str, 5.0f);
     }
     
     //Player action handling.
     for(size_t a = 0; a < controls.actionQueue.size();) {
         if(makerTools.handleGeneralPlayerAction(controls.actionQueue[a])) {
-            controls.actionQueue.erase(controls.actionQueue.begin() + a);
+            eraseInVector(controls.actionQueue, a);
         } else if(globalHandleSystemPlayerAction(controls.actionQueue[a])) {
-            controls.actionQueue.erase(controls.actionQueue.begin() + a);
+            eraseInVector(controls.actionQueue, a);
         } else {
             a++;
         }
@@ -413,80 +436,90 @@ void Game::globalLogicPre() {
  * ticks frames of gameplay, etc.
  */
 void Game::mainLoop() {
-    //Used to calculate the time difference between the current and last frames.
-    double prevFrameStartTime = 0.0;
     ALLEGRO_EVENT ev;
     
-    //Main loop.
+    prevFrameStartTime = 0.0;
     al_start_timer(mainTimer);
-    while(isGameRunning) {
     
-        /*  ************************************************
-          *** | _ |                                  | _ | ***
-        *****  \_/           EVENT HANDLING           \_/  *****
-          *** +---+                                  +---+ ***
-            ************************************************/
-        
+    while(isGameRunning) {
         al_wait_for_event(eventQueue, &ev);
         
-        globalHandleAllegroEvent(ev);
-        if(curState->loaded){
-            curState->handleAllegroEvent(ev);
-        }
-        controls.handleAllegroEvent(ev);
-        
-        switch(ev.type) {
-        case ALLEGRO_EVENT_TIMER: {
-            if(al_is_event_queue_empty(eventQueue)) {
-            
-                double curFrameStartTime = al_get_time();
-                if(resetDeltaT) {
-                    //Failsafe.
-                    prevFrameStartTime =
-                        curFrameStartTime -
-                        1.0f / options.advanced.targetFps;
-                    resetDeltaT = false;
-                }
-                
-                float realDeltaT =
-                    curFrameStartTime - prevFrameStartTime;
-                statistics.runtime += realDeltaT;
-                
-                //Anti speed-burst cap.
-                deltaT = std::min(realDeltaT, 0.2f);
-                
-                timePassed += deltaT;
-                GameState* prevState = curState;
-                
-                //Currently loading, break because we cannot run any other logic.
-                if(handleStateLoading()) {
-                    controls.newFrame(deltaT);
-                    globalLogicPre();
-                    curState->doLogic();
-                    globalLogicPost();
-                    
-                    if(curState == prevState && curState->loaded) {
-                        //Only draw if we didn't change states in the meantime.
-                        curState->doDrawing();
-                        globalDrawing();
-                        al_flip_display();
-                    } else {
-                        ImGui::EndFrame();
-                    }
-                }
-                
-                double curFrameEndTime = al_get_time();
-                curFrameProcessTime =
-                    curFrameEndTime - curFrameStartTime;
-                    
-                prevFrameStartTime = curFrameStartTime;
-                
+        if(isAllegroEventUserInput(ev)) {
+            globalHandleAllegroInputEvent(ev);
+            curState->handleAllegroInputEvent(ev);
+            if(!skipEventForControlMediator) {
+                controls.handleAllegroInputEvent(ev);
             }
-            break;
+            skipEventForControlMediator = false;
+            
+        } else {
+            globalHandleAllegroOtherEvent(ev);
+            curState->handleAllegroOtherEvent(ev);
             
         }
+        
+        if(ev.type == ALLEGRO_EVENT_TIMER) {
+            processFrame();
         }
     }
+}
+
+
+/**
+ * @brief Processes one frame of gameplay.
+ */
+void Game::processFrame() {
+    if(!al_is_event_queue_empty(eventQueue)) return;
+    
+    double curFrameStartTime = al_get_time();
+    if(resetDeltaT) {
+        //Failsafe.
+        prevFrameStartTime =
+            curFrameStartTime -
+            1.0f / options.advanced.targetFps;
+        resetDeltaT = false;
+    }
+    
+    float realDeltaT =
+        curFrameStartTime - prevFrameStartTime;
+    statistics.runtime += realDeltaT;
+    
+    //Anti speed-burst cap.
+    deltaT = std::min(realDeltaT, 0.2f);
+    
+    timePassed += deltaT;
+    GameState* prevState = curState;
+    
+    if(handleStateLoading()) {
+        controls.newFrame(deltaT);
+        globalLogicPre();
+        curState->doLogic();
+        globalLogicPost();
+                    
+        if(curState == prevState && curState->loaded) {
+            //Only draw if we didn't change states in the meantime.
+            curState->doDrawing();
+            globalDrawing();
+            al_flip_display();
+        } else {
+            ImGui::EndFrame();
+        }
+    }
+    
+    if(curState == prevState) {
+        //Only draw if we didn't change states in the meantime.
+        curState->doDrawing();
+        globalDrawing();
+        al_flip_display();
+    } else {
+        ImGui::EndFrame();
+    }
+    
+    double curFrameEndTime = al_get_time();
+    curFrameProcessTime =
+        curFrameEndTime - curFrameStartTime;
+        
+    prevFrameStartTime = curFrameStartTime;
 }
 
 
@@ -502,11 +535,8 @@ void Game::processSystemInfo() {
     
     //Make sure that speed changes don't affect the FPS calculation.
     double realDeltaT = deltaT;
-    if(makerTools.changeSpeed) {
-        realDeltaT /=
-            makerTools.changeSpeedSettings[
-                makerTools.changeSpeedSettingIdx
-            ];
+    if(makerTools.changingSpeed) {
+        realDeltaT /= makerTools.changedSpeedMultiplier;
     }
     
     framerateHistory.push_back(curFrameProcessTime);
@@ -789,6 +819,7 @@ int Game::start() {
     initMobCategories();
     initMiscDatabases();
     initInventoryItems();
+    initMakerToolTypes();
     loadMakerTools();
     saveMakerTools();
     

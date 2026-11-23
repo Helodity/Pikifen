@@ -202,6 +202,9 @@ const float CAM_SHAKE_MULT = 1.0f;
 //Default value for whether to use true fullscreen.
 const bool TRUE_FULLSCREEN = false;
 
+//Default value for whether to force VSync.
+const bool VSYNC = false;
+
 //Default value for whether to use fullscreen.
 const bool WIN_FULLSCREEN = false;
 
@@ -252,6 +255,9 @@ const bool SHOW_GUI_INPUT_ICONS = true;
 //counter on the leader cursor.
 const bool SHOW_LEADER_CURSOR_COUNTER = false;
 
+//Default value for whether to show warnings in the console.
+const bool SHOW_WARNINGS = false;
+
 }
 
 
@@ -293,6 +299,9 @@ vector<pair<string, string> > Options::loadEditorHistory(
 
 /**
  * @brief Loads the player options from a file.
+ * Most deprecated options are loaded too, but are not reported, since
+ * loading Pikifen in the first place already ports them to the new
+ * properties, unless specified otherwise.
  *
  * @param file File to read from.
  */
@@ -304,7 +313,7 @@ void Options::loadFromDataNode(DataNode* file) {
         //DEPRECATED in 1.1.0 by "controls" > "p*_mouse_moves_leader_cursor".
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
             aRS.set(
-                "p" + i2s((p + 1)) + "_mouse_moves_cursor",
+                "p" + i2s(p + 1) + "_mouse_moves_cursor",
                 controls.mouseMovesLeaderCursor[p]
             );
         }
@@ -498,6 +507,7 @@ void Options::loadFromDataNode(DataNode* file) {
         gRS.set("fullscreen", graphics.intendedWinFullscreen);
         gRS.set("resolution", resolutionStr);
         gRS.set("true_fullscreen", graphics.trueFullscreen);
+        gRS.set("vsync", graphics.vsync);
         
         vector<string> resolutionParts = split(resolutionStr);
         if(resolutionParts.size() >= 2) {
@@ -541,9 +551,10 @@ void Options::loadFromDataNode(DataNode* file) {
         mRS.set("leaving_confirmation_mode", leavingConfModeChar);
         mRS.set("maker_tools_in_play", misc.makerToolsInPlay);
         mRS.set("pikmin_bump_dist", misc.pikminBumpDist);
-        mRS.set("show_leader_cursor_counter", misc.showLeaderCursorCounter);
         mRS.set("show_control_guide", misc.showControlGuide);
         mRS.set("show_gui_input_icons", misc.showGuiInputIcons);
+        mRS.set("show_leader_cursor_counter", misc.showLeaderCursorCounter);
+        mRS.set("show_warnings", misc.showWarnings);
         
         leavingConfModeChar =
             std::min(
@@ -737,6 +748,7 @@ void Options::saveToDataNode(DataNode* file) const {
         gGW.write("fullscreen", graphics.intendedWinFullscreen);
         gGW.write("resolution", resolutionStr);
         gGW.write("true_fullscreen", graphics.trueFullscreen);
+        gGW.write("vsync", graphics.vsync);
     }
     
     //Gui editor.
@@ -759,9 +771,10 @@ void Options::saveToDataNode(DataNode* file) const {
         mGW.write("leaving_confirmation_mode", misc.leavingConfMode);
         mGW.write("maker_tools_in_play", misc.makerToolsInPlay);
         mGW.write("pikmin_bump_dist", misc.pikminBumpDist);
-        mGW.write("show_leader_cursor_counter", misc.showLeaderCursorCounter);
         mGW.write("show_control_guide", misc.showControlGuide);
         mGW.write("show_gui_input_icons", misc.showGuiInputIcons);
+        mGW.write("show_leader_cursor_counter", misc.showLeaderCursorCounter);
+        mGW.write("show_warnings", misc.showWarnings);
     }
     
     //Packs.

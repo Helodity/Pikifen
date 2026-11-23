@@ -102,7 +102,7 @@ size_t AutoRepeater::tick(float deltaT) {
  * @param magnitude Magnitude from the center.
  */
 void MovementInfo::getInfo(
-    Point* coords, float* angle, float* magnitude
+    Point* coords, Angle* angle, float* magnitude
 ) const {
     *coords = Point(right - left, down - up);
     coordinatesToAngle(*coords, angle, magnitude);
@@ -152,7 +152,7 @@ Shaker::Shaker(std::function<float(float, float)> getRandomFloat) :
  * returned here.
  */
 void Shaker::getOffsets(
-    float* xOffset, float* yOffset, float* angleOffset
+    float* xOffset, float* yOffset, Angle* angleOffset
 ) const {
     if(!getRandomFloat || trauma == 0.0f) {
         if(xOffset) *xOffset = 0.0f;
@@ -305,12 +305,12 @@ void Timer::tick(float deltaT) {
  * @brief Adjusts an item index number, based on whether an item
  * in the list that's being indexed got added or removed.
  *
- * @param idxToAlign Index number to be aligned, if necessary.
+ * @param idxToAlign Index number to be aligned.
  * @param changedItemIdx Index number of the item that got added or removed.
  * @param addition True for a new index addition, false for a removal.
  * @return Whether the number changed.
  */
-bool adjustMisalignedIndex(
+bool adjustMisalignedIdx(
     size_t& idxToAlign, size_t changedItemIdx, bool addition
 ) {
     if(addition) {

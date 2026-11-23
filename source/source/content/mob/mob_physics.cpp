@@ -45,52 +45,22 @@ Mob* Mob::getMobToWalkOn() const {
         if(bestCandidate && mPtr->bottomZ <= bestCandidate->bottomZ) {
             continue;
         }
-        
-        //Check if they collide on X+Y.
-        if(
-            rectangularDim.x != 0 &&
-            mPtr->rectangularDim.x != 0
-        ) {
-            //Rectangle vs rectangle.
-            if(
-                !rectanglesIntersect(
-                    Rect(center, rectangularDim), angle,
-                    Rect(mPtr->center, mPtr->rectangularDim), mPtr->angle
-                )
-            ) {
-                continue;
-            }
-        } else if(rectangularDim.x != 0) {
-            //Rectangle vs circle.
-            if(
-                !circleIntersectsRectangle(
-                    mPtr->center, mPtr->radius,
-                    center, rectangularDim,
-                    angle
-                )
-            ) {
-                continue;
-            }
-        } else if(mPtr->rectangularDim.x != 0) {
-            //Circle vs rectangle.
-            if(
-                !circleIntersectsRectangle(
-                    center, radius,
-                    mPtr->center, mPtr->rectangularDim,
-                    mPtr->angle
-                )
-            ) {
-                continue;
-            }
-        } else {
-            //Circle vs circle.
-            if(
-                Distance(center, mPtr->center) >
-                (radius + mPtr->radius)
-            ) {
+        if(type->category->id == MOB_CATEGORY_PIKMIN) {
+            if(((Pikmin*) this)->carryingMob == mPtr) {
                 continue;
             }
         }
+        
+        //Check if they collide on X+Y.
+        if(
+            !circlesOrRectanglesIntersect(
+                center, radius, rectangularDim, angle,
+                mPtr->center, mPtr->radius, mPtr->rectangularDim, mPtr->angle
+            )
+        ) {
+            continue;
+        }
+        
         bestCandidate = mPtr;
     }
     return bestCandidate;
@@ -136,7 +106,6 @@ HORIZ_MOVE_RESULT Mob::getMovementEdgeIntersections(
     
     //Go through each edge, and figure out if it is a valid wall for our mob.
     for(auto& ePtr : candidateEdges) {
-    
         bool isEdgeBlocking = false;
         
         if(
@@ -234,7 +203,6 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
         Point finalTargetPos = getChaseTarget();
         
         if(hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORT)) {
-        
             Sector* sec =
                 getSector(finalTargetPos, nullptr, true);
                 
@@ -259,7 +227,6 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
             return HORIZ_MOVE_RESULT_TELEPORTED;
             
         } else {
-        
             //Make it go to the direction it wants.
             float d = Distance(center, finalTargetPos).toFloat();
             
@@ -278,7 +245,7 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
                 hasFlag(chaseInfo.flags, CHASE_FLAG_ANY_ANGLE) ||
                 d <= MOB::FREE_MOVE_THRESHOLD;
                 
-            float movementAngle =
+            Angle movementAngle =
                 canFreeMove ?
                 getAngle(center, finalTargetPos) :
                 angle;
@@ -337,8 +304,8 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
  * if the mob can't slide against this wall.
  */
 HORIZ_MOVE_RESULT Mob::getWallSlideAngle(
-    const Edge* ePtr, unsigned char wallSector, float moveAngle,
-    float* slideAngle
+    const Edge* ePtr, unsigned char wallSector, Angle moveAngle,
+    Angle* slideAngle
 ) const {
     //The wall's normal is the direction the wall is facing.
     //i.e. the direction from the top floor to the bottom floor.
@@ -349,7 +316,7 @@ HORIZ_MOVE_RESULT Mob::getWallSlideAngle(
     //Sector 0 will always be on your left.
     
     float wallNormal;
-    float wallAngle =
+    Angle wallAngle =
         getAngle(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]));
         
     if(wallSector == 0) {
@@ -406,7 +373,6 @@ void Mob::tickHorizontalMovementPhysics(
     //Try placing it in the place it should be at, judging
     //from the movement speed.
     while(!finishedMoving) {
-    
         //Start by checking sector collisions.
         //For this, we will only check if the mob is intersecting
         //with any edge. With this, we trust that mobs can't go so fast
@@ -485,16 +451,16 @@ void Mob::tickHorizontalMovementPhysics(
         if(bottomZ < stepSector->floorZ) newZ = stepSector->floorZ;
         
         //Figure out sliding logic now, if needed.
-        float moveAngle;
+        Angle moveAngle;
         float totalMoveSpeed;
         coordinatesToAngle(
             moveSpeed, &moveAngle, &totalMoveSpeed
         );
         
         //Angle to slide towards.
-        float slideAngle = moveAngle;
+        Angle slideAngle = moveAngle;
         //Difference between the movement angle and the slide.
-        float slideAngleDiff = 0;
+        Angle slideAngleDiff = 0;
         
         //Check the sector heights of the intersecting edges to figure out
         //which are really walls, and how to slide against them.
@@ -526,7 +492,7 @@ void Mob::tickHorizontalMovementPhysics(
             //wall the mob will slide on.
             
             if(!doingSlide) {
-                float tentativeSlideAngle;
+                Angle tentativeSlideAngle;
                 if(
                     getWallSlideAngle(
                         ePtr, wallSector, moveAngle, &tentativeSlideAngle
@@ -573,7 +539,6 @@ void Mob::tickHorizontalMovementPhysics(
             finishedMoving = true;
             
         } else {
-        
             //Try sliding.
             if(doingSlide) {
                 //We already tried sliding, and we still hit something...
@@ -675,7 +640,7 @@ void Mob::tickRotationPhysics(
     if(intendedTurnAngle > TAU / 2)  intendedTurnAngle -= TAU;
     if(intendedTurnAngle < -TAU / 2) intendedTurnAngle += TAU;
     
-    float angleDiff = intendedTurnAngle - angle;
+    Angle angleDiff = intendedTurnAngle - angle;
     if(angleDiff > TAU / 2)  angleDiff -= TAU;
     if(angleDiff < -TAU / 2) angleDiff += TAU;
     
@@ -850,13 +815,7 @@ void Mob::tickVerticalMovementPhysics(
             (void*) onHazard
         );
         
-        forIdx(s, statuses) {
-            if(statuses[s].type->removeOnHazardLeave) {
-                statuses[s].prevState = statuses[s].state;
-                statuses[s].state = STATUS_STATE_TO_DELETE;
-            }
-        }
-        deleteOldStatusEffects();
+        statuses.handleHazardLeave();
     }
     onHazard = newOnHazard;
     

@@ -196,7 +196,9 @@ void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
         );
         
         HitboxInteraction evInfo(resPtr, nullptr, nullptr);
-        resPtr->scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo);
+        resPtr->scriptVM.fsm.runEvent(
+            FSM_EV_DAMAGE, (void*) &evInfo, &resPtr->resType->damageMobAmount
+        );
     }
 }
 
@@ -307,14 +309,13 @@ void ResourceFsm::startWaiting(ScriptVM* scriptVM, void* info1, void* info2) {
     if(resPtr->toDelete) return;
     
     if(resPtr->originPile) {
-        resPtr->carryInfo->mustReturn = true;
-        resPtr->carryInfo->returnPoint = resPtr->originPile->center;
+        resPtr->carryInfo->returnPointMobId = resPtr->originPile->id;
         resPtr->carryInfo->returnDist =
             resPtr->originPile->radius +
             game.config.pikmin.standardRadius +
             game.config.pikmin.idleTaskRange / 2.0f;
     } else {
-        resPtr->carryInfo->mustReturn = false;
+        resPtr->carryInfo->returnPointMobId = 0;
     }
     
     resPtr->setAnimation(

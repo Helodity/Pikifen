@@ -1,6 +1,10 @@
 first_state = hidden
 death_state = dying
 
+init {
+	set_shadow_visibility false
+}
+
 script {
     hidden {
         on_enter {
@@ -19,9 +23,25 @@ script {
     
     emerging {
         on_enter {
+			move_to_relative 20 0 0
+			start_particles sheargrub_digging 0 0 10
             set_animation emerging
         }
+		on_frame_signal {
+			get_event_info temp frame_signal
+			
+			if $temp = 0
+				set_radius 10
+				set_shadow_visibility true
+			else_if $temp = 1
+				set_radius 12
+			else_if $temp = 2
+				set_radius 14
+			end_if
+		}
         on_animation_end {
+			stop
+			stop_particles
             set_state examining
         }
     }
@@ -40,13 +60,34 @@ script {
         on_pikmin_land {
             set_state crushed
         }
+        on_touch_hazard {
+            get_event_info temp hazard
+            if $temp = water
+                receive_status drowning_enemy
+            end_if
+        }
     }
     
     burying {
         on_enter {
+			move_to_relative 20 0 0
+			start_particles sheargrub_digging 12 0 10
             set_animation burying
         }
+		on_frame_signal {
+			get_event_info temp frame_signal
+			
+			if $temp = 2
+				set_radius 12
+			else_if $temp = 1
+				set_radius 8
+			else_if $temp = 0
+				stop_particles
+				set_shadow_visibility false
+			end_if
+		}
         on_animation_end {
+			set_radius 14
             set_state hidden
         }
     }
@@ -65,6 +106,12 @@ script {
         on_pikmin_land {
             set_state crushed
         }
+        on_touch_hazard {
+            get_event_info temp hazard
+            if $temp = water
+                receive_status drowning_enemy
+            end_if
+        }
     }
     
     going_home {
@@ -77,6 +124,12 @@ script {
         }
         on_pikmin_land {
             set_state crushed
+        }
+        on_touch_hazard {
+            get_event_info temp hazard
+            if $temp = water
+                receive_status drowning_enemy
+            end_if
         }
     }
     

@@ -16,76 +16,6 @@ namespace Inpution {
 
 
 /**
- * @brief Returns whether two input sources are the same.
- *
- * @param s2 The other input source.
- * @return Whether they are the same.
- */
-bool InputSource::operator==(const InputSource& s2) const {
-    return
-        type == s2.type &&
-        deviceNr == s2.deviceNr &&
-        buttonNr == s2.buttonNr &&
-        stickNr == s2.stickNr &&
-        axisNr == s2.axisNr;
-}
-
-
-/**
- * @brief Returns which input source should come first when sorting.
- *
- * @param s2 The other input source.
- * @return Whether the current should come before s2.
- */
-bool InputSource::operator<(const InputSource& s2) const {
-    if(type != s2.type) {
-        return type < s2.type;
-    }
-    
-    if(deviceNr != s2.deviceNr) {
-        return deviceNr < s2.deviceNr;
-    }
-    
-    if(buttonNr != s2.buttonNr) {
-        return buttonNr < s2.buttonNr;
-    }
-    
-    if(stickNr != s2.stickNr) {
-        return stickNr < s2.stickNr;
-    }
-    
-    return axisNr < s2.axisNr;
-    
-}
-
-
-/**
- * @brief Returns whether a bind's requirement modifiers are being met.
- *
- * @param bind Bind to use.
- * @return Whether they are met.
- */
-bool Manager::areBindRequirementsMet(const Bind& bind) const {
-    if(!bind.requireModifiers) return true;
-    
-    for(const auto& m : modifiers) {
-        bool modIsDown =
-            getInputSourceValue(m.second) >= options.digitalThreshold;
-        bool needsDown =
-            std::find(
-                bind.modifiers.begin(),
-                bind.modifiers.end(),
-                m.first
-            ) != bind.modifiers.end();
-            
-        if(needsDown != modIsDown) return false;
-    }
-    
-    return true;
-}
-
-
-/**
  * @brief Given an input value, converts it to an analog or boolean value,
  * according to the action type.
  *
@@ -117,26 +47,6 @@ float Manager::convertActionValue(
 
 
 /**
- * @brief Returns a list of action types that get triggered by the given input.
- *
- * @param input The input.
- * @return The action types.
- */
-vector<ActionTypeId> Manager::getActionTypesFromInput(const Input& input) {
-    vector<ActionTypeId> actionTypes;
-    
-    for(size_t b = 0; b < binds.size(); b++) {
-        const Bind& bind = binds[b];
-        if(!(bind.inputSource == input.source)) continue;
-        if(!areBindRequirementsMet(bind)) continue;
-        actionTypes.push_back(bind.actionTypeId);
-    }
-    
-    return actionTypes;
-}
-
-
-/**
  * @brief Returns the current value of an input source.
  * Ignored input sources return 0.
  *
@@ -146,15 +56,31 @@ vector<ActionTypeId> Manager::getActionTypesFromInput(const Input& input) {
 float Manager::getInputSourceValue(
     const Inpution::InputSource& source
 ) const {
-    const auto it = inputSourceValues.find(source);
-    if(it == inputSourceValues.end()) return 0.0f;
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
         if(ignoredInputSources[i].source == source) {
             //It's currently ignored.
             return 0.0f;
         }
     }
-    return it->second;
+    return hardware.getInputSourceValue(source);
+}
+
+
+/**
+ * @brief Returns which modifier action types are currently pressed down.
+ *
+ * @return The modifiers.
+ */
+vector<ActionTypeId> Manager::getModifiersPressed() const {
+    vector<ActionTypeId> result;
+    
+    for(const auto& m : translator.modifiers) {
+        if(getInputSourceValue(m.second) >= options.digitalThreshold) {
+            result.push_back(m.first);
+        }
+    }
+    
+    return result;
 }
 
 
@@ -166,58 +92,15 @@ float Manager::getInputSourceValue(
  */
 float Manager::getValue(ActionTypeId actionTypeId) const {
     float highestValue = 0.0f;
-    for(const auto& bind : binds) {
+    for(const auto& bind : translator.binds) {
         if(bind.actionTypeId != actionTypeId) continue;
-        if(!areBindRequirementsMet(bind)) continue;
+        if(!translator.areBindRequirementsMet(bind, getModifiersPressed())) {
+            continue;
+        }
         float value = getInputSourceValue(bind.inputSource);
         highestValue = std::max(highestValue, value);
     }
     return convertActionValue(actionTypeId, highestValue);
-}
-
-
-/**
- * @brief Handles a final clean input.
- *
- * @param input Input to process.
- * @param forceDirectEvent If true, the actions bound to this input will
- * forcefully be added to the queue of actions directly.
- * If false, use the action type's discretion.
- */
-void Manager::handleCleanInput(
-    const Input& input, bool forceDirectEvent
-) {
-    if(!forceDirectEvent) {
-        inputSourceValues[input.source] = input.value;
-        
-        if(processInputIgnoring(input)) {
-            //We have to ignore this one.
-            return;
-        }
-    }
-    
-    //Find what game action types are bound to this input.
-    vector<ActionTypeId> actionTypesIds = getActionTypesFromInput(input);
-    
-    for(size_t a = 0; a < actionTypesIds.size(); a++) {
-        const ActionType& actionType = actionTypes[actionTypesIds[a]];
-        bool mustAddDirectly =
-            forceDirectEvent ||
-            actionType.directEvents ||
-            actionType.valueType == ACTION_VALUE_TYPE_1_ONLY;
-            
-        if(mustAddDirectly) {
-            //Add it to the action queue directly.
-            Action newAction;
-            newAction.actionTypeId = actionTypesIds[a];
-            newAction.value =
-                convertActionValue(actionTypesIds[a], input.value);
-            newAction.flags |= ACTION_FLAG_DIRECT;
-            newAction.reinsertionLifetime =
-                actionTypes[actionTypesIds[a]].reinsertionTTL;
-            actionQueue.push_back(newAction);
-        }
-    }
 }
 
 
@@ -228,61 +111,48 @@ void Manager::handleCleanInput(
  * @return Whether it succeeded.
  */
 bool Manager::handleInput(const Input& input) {
-    if(
-        input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
-        input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
-    ) {
-        //We need to process imaginary tilts in the opposite direction.
-        //If a player goes from tilting left to tilting right very quickly
-        //in one frame, the "walking right" action will work fine but the
-        //"walking left" action may never receive a zero value.
-        //So we should inject the zero manually with an extra input.
-        handleCleanInput(input, false);
-        Input zeroInput = input;
-        zeroInput.source.type =
-            input.source.type ==
-            INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
-            INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG :
-            INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
-        zeroInput.value = 0.0f;
-        handleCleanInput(zeroInput, false);
+    vector<Input> simpleInputs = hardware.handleInputAndSimplify(input);
+    
+    for(size_t i = 0; i < simpleInputs.size(); i++) {
+        Input& simpleInput = simpleInputs[i];
         
-    } else if(
-        input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
-    ) {
-        //Game controller analog buttons have a value ranging from -1 to 1.
-        //Let's normalize it.
-        Input normalizedInput = input;
-        normalizedInput.value = (input.value + 1.0f) / 2.0f;
-        handleCleanInput(normalizedInput, false);
-        
-    } else if(
-        input.source.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP ||
-        input.source.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN
-    ) {
-        //Mouse wheel inputs can have values over 1 to indicate the wheel
-        //spun a lot. We should process each one as an individual input.
-        //Plus, because mouse wheels have no physical state, the player
-        //has no way of changing the value of a player action back to 0
-        //using the mouse wheel. So whatever player actions we decide here
-        //have to be added to this frame's action queue directly.
-        for(unsigned int i = 0; i < input.value; i++) {
-            Input singleInput = input;
-            singleInput.value = 1.0f;
-            handleCleanInput(singleInput, true);
+        bool forceDirectEvent =
+            HardwareMediator::isInputSourceTypeStateless(
+                simpleInput.source.type
+            );
+            
+        if(!forceDirectEvent) {
+            if(processInputIgnoring(simpleInput)) {
+                //We have to ignore this one.
+                return true;
+            }
         }
         
-    } else if(
-        input.source.type == INPUT_SOURCE_TYPE_KEYBOARD_CHAR
-    ) {
-        //Written characters are stateless. For instance, the user can insert
-        //the a-with-a-tilde character, but can't "release" that character.
-        handleCleanInput(input, true);
-        
-    } else {
-        //Regular input.
-        handleCleanInput(input, false);
-        
+        //Find what game actions result from this input.
+        vector<Action> actions =
+            translator.getActionsFromInput(simpleInput, getModifiersPressed());
+            
+        for(size_t a = 0; a < actions.size(); a++) {
+            const ActionType& actionType = actionTypes[actions[a].actionTypeId];
+            bool mustAddDirectly =
+                forceDirectEvent ||
+                actionType.directEvents ||
+                actionType.valueType == ACTION_VALUE_TYPE_1_ONLY;
+                
+            if(mustAddDirectly) {
+                //Add it to the action queue directly.
+                Action newAction;
+                newAction.actionTypeId = actions[a].actionTypeId;
+                newAction.value =
+                    convertActionValue(
+                        actions[a].actionTypeId, simpleInput.value
+                    );
+                newAction.flags |= ACTION_FLAG_DIRECT;
+                newAction.reinsertionLifetime =
+                    actionTypes[actions[a].actionTypeId].reinsertionTTL;
+                actionQueue.push_back(newAction);
+            }
+        }
     }
     
     return true;
@@ -346,7 +216,7 @@ vector<Action> Manager::newFrame(float deltaT) {
     for(size_t i = 0; i < ignoredInputSources.size();) {
         if(
             ignoredInputSources[i].nowOnly &&
-            inputSourceValues[ignoredInputSources[i].source] == 0.0f
+            hardware.getInputSourceValue(ignoredInputSources[i].source) == 0.0f
         ) {
             ignoredInputSources.erase(ignoredInputSources.begin() + i);
         } else {
@@ -492,7 +362,7 @@ bool Manager::reinsertAction(const Action& action) {
  * @return Whether it succeeded.
  */
 bool Manager::releaseEverything() {
-    inputSourceValues.clear();
+    hardware.releaseEverything();
     return true;
 }
 
@@ -536,8 +406,8 @@ bool Manager::startIgnoringActionInputSources(
     ActionTypeId actionTypeId, bool nowOnly
 ) {
     bool result = false;
-    for(size_t b = 0; b < binds.size(); b++) {
-        Bind* bPtr = &binds[b];
+    for(size_t b = 0; b < translator.binds.size(); b++) {
+        Bind* bPtr = &translator.binds[b];
         if(bPtr->actionTypeId != actionTypeId) continue;
         result |= startIgnoringInputSource(bPtr->inputSource, nowOnly);
     }

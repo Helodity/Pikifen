@@ -13,6 +13,7 @@ itch_time = 5
 max_carriers = 5
 max_health = 2000
 move_speed = 110
+peek_underneath_opacity = 140
 pikmin_seeds = 8
 points = 40
 pushable = true

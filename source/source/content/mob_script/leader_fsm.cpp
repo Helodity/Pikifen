@@ -358,6 +358,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::notifyPikminRelease);
             efc.run(LeaderFsm::release);
             efc.run(LeaderFsm::fallDownPit);
+            efc.changeState("active");
         }
     }
     
@@ -1046,15 +1047,14 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState("sleeping", LEADER_STATE_SLEEPING); {
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("waking_up");
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
             efc.run(LeaderFsm::becomeInactive);
             efc.changeState("inactive_sleeping");
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
             efc.run(LeaderFsm::startWakingUp);
+            efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(GenMobFsm::touchHazard);
@@ -1067,7 +1067,6 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
         }
     }
     
@@ -1076,15 +1075,14 @@ void LeaderFsm::createFsm(MobType* typ) {
     ); {
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("inactive_waking_up");
         }
         efc.newEvent(LEADER_EV_ACTIVATED); {
             efc.run(LeaderFsm::becomeActive);
             efc.changeState("sleeping");
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
             efc.run(LeaderFsm::startWakingUp);
+            efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(GenMobFsm::touchHazard);
@@ -1097,7 +1095,6 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
         }
     }
     
@@ -1105,11 +1102,17 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("active");
         }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("ko");
+        }
     }
     
     efc.newState("inactive_waking_up", LEADER_STATE_INACTIVE_WAKING_UP); {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("ko");
         }
     }
     
@@ -1308,17 +1311,13 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         return;
     }
     
-    //Behavior changes.
-    leaPtr->stopChasing();
-    leaPtr->leaveGroup();
-    
     //Damage.
     leaPtr->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
     
     //Knockback.
     bool knockbackExists = false;
     float knockbackStrength = 0.0f;
-    float knockbackAngle = 0.0f;
+    Angle knockbackAngle = 0.0f;
     info->mob2->calculateAttackKnockback(
         leaPtr, info->h2, info->h1, offenseMultiplier, defenseMultiplier,
         &knockbackExists, &knockbackStrength, &knockbackAngle
@@ -1338,9 +1337,13 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         game.states.gameplay->lastHurtLeaderPos = leaPtr->center;
         game.statistics.leaderDamageSuffered += healthBefore - leaPtr->health;
     }
-    
+
     //Next state.
     if(knockbackExists) {
+        //Behavior changes.
+        leaPtr->stopChasing();
+        leaPtr->leaveGroup();
+        
         if(knockbackStrength > 0) {
             leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
             if(leaPtr->player) {
@@ -1812,7 +1815,9 @@ void LeaderFsm::fallAsleep(ScriptVM* scriptVM, void* info1, void* info2) {
     
     leaPtr->setAnimation(LEADER_ANIM_SLEEPING);
     if(leaPtr->leaType->sleepingStatus) {
-        leaPtr->applyStatus(leaPtr->leaType->sleepingStatus, false, false);
+        leaPtr->handleStatusSource(
+            leaPtr->leaType->sleepingStatus, false, false
+        );
     }
 }
 
@@ -1888,7 +1893,7 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        leaPtr->applyStatus(
+        leaPtr->handleStatusSource(
             droPtr->droType->statusToGive, false, false, droPtr
         );
         break;
@@ -2212,7 +2217,7 @@ void LeaderFsm::move(ScriptVM* scriptVM, void* info1, void* info2) {
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     Point finalCoords;
-    float dummyAngle;
+    Angle dummyAngle;
     float dummyMagnitude;
     mov->getInfo(
         &finalCoords, &dummyAngle, &dummyMagnitude
@@ -2513,7 +2518,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
         return;
     }
     
-    float shootAngle =
+    Angle shootAngle =
         leaPtr->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
         
     unordered_set<Mob*> affectedMobs;
@@ -2551,7 +2556,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
                 continue;
             }
             
-            float angleDiff =
+            Angle angleDiff =
                 getAngleSmallestDiff(
                     shootAngle,
                     getAngle(leaPtr->center, amPtr->center)
@@ -2827,15 +2832,13 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
-    
-    if(leaPtr->leaType->sleepingStatus) {
-        forIdx(s, leaPtr->statuses) {
-            if(leaPtr->statuses[s].type == leaPtr->leaType->sleepingStatus) {
-                leaPtr->statuses[s].prevState = leaPtr->statuses[s].state;
-                leaPtr->statuses[s].state = STATUS_STATE_TO_DELETE;
-            }
-        }
+    if(leaPtr->player) {
+        scriptVM->fsm.setState(LEADER_STATE_WAKING_UP);
+    } else {
+        scriptVM->fsm.setState(LEADER_STATE_INACTIVE_WAKING_UP);
     }
+    
+    leaPtr->statuses.handleWakingUp();
 }
 
 
@@ -2987,7 +2990,7 @@ void LeaderFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     forIdx(e, s->effects) {
-        leaPtr->applyStatus(s->effects[e], false, false, sprayer);
+        leaPtr->handleStatusSource(s->effects[e], false, false, sprayer);
     }
 }
 
@@ -3028,8 +3031,8 @@ void LeaderFsm::trySetCorrectStandingAnim(
  * another leader.
  *
  * @param scriptVM The script VM responsible.
- * @param info1 Points to the position struct with the final destination.
- *   If nullptr, the final destination is calculated in this function.
+ * @param info1 Points to the position object with the final destination.
+ * If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
 void LeaderFsm::updateInGroupChasing(

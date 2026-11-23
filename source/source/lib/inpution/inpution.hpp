@@ -14,6 +14,8 @@
 #include <tuple>
 #include <vector>
 
+#include "translator.hpp"
+
 
 using std::map;
 using std::string;
@@ -28,52 +30,6 @@ typedef int ActionTypeId;
 
 
 #pragma region Constants
-
-
-//Possible types of hardware sources for inputs.
-enum INPUT_SOURCE_TYPE {
-
-    //None.
-    INPUT_SOURCE_TYPE_NONE,
-    
-    //Keyboard key.
-    INPUT_SOURCE_TYPE_KEYBOARD_KEY,
-    
-    //Written character via keyboard.
-    INPUT_SOURCE_TYPE_KEYBOARD_CHAR,
-    
-    //Mouse button.
-    INPUT_SOURCE_TYPE_MOUSE_BUTTON,
-    
-    //Mouse wheel scrolled up.
-    INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP,
-    
-    //Mouse wheel scrolled down.
-    INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN,
-    
-    //Mouse wheel scrolled left.
-    INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT,
-    
-    //Mouse wheel scrolled right.
-    INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT,
-    
-    //Game controller button.
-    INPUT_SOURCE_TYPE_CONTROLLER_BUTTON,
-    
-    //Game controller stick/D-pad axis tilted in a positive position.
-    INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS,
-    
-    //Game controller stick/D-pad axis tilted in a negative position.
-    INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG,
-    
-    //Game controller analog button.
-    //Input value ranges [-1 - 1] before Inpution normalizes it.
-    INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON,
-    
-    //Some unknown type.
-    INPUT_SOURCE_TYPE_UNKNOWN,
-    
-};
 
 
 //Possible flags for emitted actions.
@@ -116,87 +72,11 @@ enum ACTION_VALUE_TYPE {
 
 
 /**
- * @brief Defines a specific interactable thing in the player's hardware,
- * like a specific button on a specific game controller, a specific key on
- * the keyboard, etc.
- */
-struct InputSource {
-
-    //--- Public members ---
-    
-    //Type of input source.
-    INPUT_SOURCE_TYPE type = INPUT_SOURCE_TYPE_NONE;
-    
-    //Device number. i.e. the game controller number. 0 if N/A.
-    int deviceNr = 0;
-    
-    //Game controller button, keyboard key, mouse button, etc. 0 if N/A.
-    int buttonNr = 0;
-    
-    //Game controller stick. Also used for analog buttons. 0 if N/A.
-    int stickNr = 0;
-    
-    //Game controller stick axis. Also used for analog buttons. 0 if N/A.
-    int axisNr = 0;
-    
-    
-    //--- Public function declarations ---
-    
-    bool operator==(const InputSource& s2) const;
-    bool operator<(const InputSource& s2) const;
-    
-};
-
-
-/**
- * @brief Defines an instance of a specific input: a specific gesture made
- * by a human on a specific source of a specific piece of hardware.
- */
-struct Input {
-
-    //--- Public members ---
-    
-    //Hardware source.
-    InputSource source;
-    
-    //Value associated, if applicable, [0 - 1].
-    float value = 0.0f;
-    
-};
-
-
-/**
- * @brief Defines a bind between a specific input source and
- * an action type. This is what's typically set in the game's options.
- */
-struct Bind {
-
-    //--- Public members ---
-    
-    //Action type ID.
-    ActionTypeId actionTypeId = 0;
-    
-    //Player number, starting at 1. 0 if N/A.
-    int playerNr = 0;
-    
-    //Main input source bound.
-    InputSource inputSource;
-    
-    //If true, the modifiers have to be respected.
-    //See Manager::modifiers.
-    bool requireModifiers = false;
-    
-    //List of modifiers that need to be on for the bind to work.
-    //See Manager::modifiers.
-    vector<ActionTypeId> modifiers;
-    
-};
-
-
-/**
  * @brief Represents one of the game's possible actions.
  */
-struct ActionType {
+class ActionType {
+
+public:
 
     //--- Public members ---
     
@@ -244,36 +124,11 @@ struct ActionType {
 
 
 /**
- * @brief Defines an instance of a specific action. This is an abstract
- * gameplay activity, without any notion of hardware input. It's a pure
- * representation of what the player wants to do regardless of how they did it.
- */
-struct Action {
-
-    //--- Public members ---
-    
-    //Action type ID.
-    ActionTypeId actionTypeId = 0;
-    
-    //Player number, starting at 1. 0 if N/A.
-    int playerNr = 0;
-    
-    //Value associated, if applicable, [0 - 1].
-    float value = 0.0f;
-    
-    //Flags. Use ACTION_FLAG.
-    uint8_t flags = 0;
-    
-    //Queue reinsertion lifetime. See ActionType::insertionTTL.
-    float reinsertionLifetime = 0.0f;
-    
-};
-
-
-/**
  * @brief Info about a control manager's options.
  */
-struct ManagerOptions {
+class ManagerOptions {
+
+public:
 
     //--- Public members ---
     
@@ -312,24 +167,20 @@ struct ManagerOptions {
  * It also has logic to do some cleanup like normalizing a game controller's
  * analog stick positions.
  */
-struct Manager {
+class Manager {
+
+public:
 
     //--- Public members ---
     
     //Map of all registered action types, using their IDs as the key.
     map<ActionTypeId, ActionType> actionTypes;
     
-    //All registered control binds.
-    vector<Bind> binds;
+    //Hardware state mediator.
+    HardwareMediator hardware;
     
-    //Map of all modifiers, using their IDs as the key.
-    //Modifiers are like Shift, Ctrl, and Alt, though they can be anything.
-    //Binds that have modifier requirements will only work if those exact
-    //modifiers are pressed down, and others aren't.
-    //For example, a bind for a "save" action bound to Ctrl + S will only
-    //trigger if Ctrl is held before S, and won't work for Ctrl + Shift + S
-    //in case Shift is also registered as a modifier.
-    map<ActionTypeId, InputSource> modifiers;
+    //Input to action translator.
+    Translator translator;
     
     //Are we ignoring actions right now?
     bool ignoringActions = false;
@@ -353,8 +204,8 @@ struct Manager {
     bool startIgnoringInputSource(const InputSource& inputSource, bool nowOnly);
     
     
-    protected:
-    
+protected:
+
     //--- Protected structs ---
     
     /**
@@ -362,6 +213,8 @@ struct Manager {
      */
     struct ActionTypeStatus {
     
+        public:
+        
         //--- Public members ---
         
         //Current value [0 - 1].
@@ -384,6 +237,8 @@ struct Manager {
      */
     struct GameState {
     
+        public:
+        
         //--- Public members ---
         
         //Status of each action type in this game state.
@@ -397,6 +252,8 @@ struct Manager {
      */
     struct IgnoreRule {
     
+        public:
+        
         //--- Public members ---
         
         //The input source to ignore.
@@ -413,10 +270,6 @@ struct Manager {
     
     //Queue of actions the game needs to handle this frame.
     vector<Action> actionQueue;
-    
-    //Values of each input source. This basically reflects the current
-    //hardware state.
-    map<InputSource, float> inputSourceValues;
     
     //Input sources currently being ignored.
     vector<IgnoreRule> ignoredInputSources;
@@ -436,10 +289,8 @@ struct Manager {
     
     //--- Protected function declarations ---
     
-    bool areBindRequirementsMet(const Bind& bind) const;
     float convertActionValue(ActionTypeId actionTypeId, float value) const;
-    vector<ActionTypeId> getActionTypesFromInput(const Input& input);
-    void handleCleanInput(const Input& input, bool forceDirectEvent);
+    vector<ActionTypeId> getModifiersPressed() const;
     void processAutoRepeats(
         ActionTypeStatus& status, ActionTypeId actionTypeId,
         const ActionType& actionType, float deltaT

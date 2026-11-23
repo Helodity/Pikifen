@@ -19,10 +19,9 @@ using std::vector;
 
 
 /**
- * @brief Construct a new replay object.
+ * @brief Constructs a new replay object.
  */
 Replay::Replay() {
-
     clear();
 }
 

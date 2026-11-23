@@ -139,6 +139,7 @@ extern const bool USE_CUSTOM_STYLE;
 namespace GRAPHICS_D {
 extern const float CAM_SHAKE_MULT;
 extern const bool TRUE_FULLSCREEN;
+extern const bool VSYNC;
 extern const bool WIN_FULLSCREEN;
 extern const unsigned int WIN_H;
 extern const unsigned int WIN_W;
@@ -160,6 +161,7 @@ extern const float PIKMIN_BUMP_DIST;
 extern const bool SHOW_CONTROL_GUIDE;
 extern const bool SHOW_GUI_INPUT_ICONS;
 extern const bool SHOW_LEADER_CURSOR_COUNTER;
+extern const bool SHOW_WARNINGS;
 }
 
 
@@ -182,12 +184,16 @@ using namespace OPTIONS;
 /**
  * @brief Game options.
  */
-struct Options {
+class Options {
+
+    public:
 
     //--- Public members ---
     
     //Advanced. These typically don't appear in any options menu.
     struct {
+
+    public:
     
         //Draw a trail behind the mouse cursor?
         bool drawCursorTrail = ADVANCED_D::DRAW_CURSOR_TRAIL;
@@ -229,7 +235,7 @@ struct Options {
         int targetFps = ADVANCED_D::TARGET_FPS;
         
         //Should we force the window's positioning?
-        //(on some machines it appears out-of-bounds by default)
+        //On some devices it appears out-of-bounds by default.
         bool windowPosHack = ADVANCED_D::WINDOW_POS_HACK;
         
         //Set the camera's middle zoom level to this amount.
@@ -239,6 +245,8 @@ struct Options {
     
     //Animation editor.
     struct {
+
+    public:
     
         //Background texture for the animation editor, if any.
         string bgPath = ANIM_ED_D::BG_PATH;
@@ -254,6 +262,8 @@ struct Options {
     
     //Area editor.
     struct {
+
+    public:
     
         //Use the advanced interface mode in the area editor?
         bool advancedMode = AREA_ED_D::ADVANCED_MODE;
@@ -299,6 +309,8 @@ struct Options {
     
     //Audio.
     struct {
+
+    public:
     
         //Ambiance sound volume [0 - 1].
         float ambianceSoundVol = AUDIO_D::AMBIANCE_SOUND_VOl;
@@ -319,6 +331,8 @@ struct Options {
     
     //Controls. These do not include control binds.
     struct {
+
+    public:
     
         //Auto-throw mode.
         AUTO_THROW_MODE autoThrowMode = CONTROLS_D::AUTO_THROW;
@@ -352,6 +366,8 @@ struct Options {
     
     //Editors in general.
     struct {
+
+    public:
     
         //Editor's custom style highlight color.
         ALLEGRO_COLOR highlightColor = EDITORS_D::HIGHLIGHT_COLOR;
@@ -384,6 +400,8 @@ struct Options {
     
     //Graphics.
     struct {
+
+    public:
     
         //Camera shake strength multiplier.
         float camShakeMult = GRAPHICS_D::CAM_SHAKE_MULT;
@@ -402,10 +420,15 @@ struct Options {
         //When using fullscreen, is this true fullscreen, or borderless window?
         bool trueFullscreen = GRAPHICS_D::TRUE_FULLSCREEN;
         
+        //Force VSync?
+        bool vsync = GRAPHICS_D::VSYNC;
+        
     } graphics;
     
     //GUI editor.
     struct {
+
+    public:
     
         //Grid interval in the GUI editor, in units.
         float gridInterval = GUI_ED_D::GRID_INTERVAL;
@@ -424,6 +447,8 @@ struct Options {
     
     //Misc.
     struct {
+
+    public:
     
         //Dismissing dismisses all.
         bool dismissAll = OPTIONS::MISC_D::DISMISS_ALL;
@@ -440,20 +465,25 @@ struct Options {
         //Idle Pikmin leader bumping distance.
         float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;
         
-        //Show a standby type counter on the leader cursor?
-        bool showLeaderCursorCounter =
-            OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
-            
         //Show a control guide when idling?
         bool showControlGuide = OPTIONS::MISC_D::SHOW_CONTROL_GUIDE;
         
         //Show control bind icons on top of GUI elements?
         bool showGuiInputIcons = OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS;
         
+        //Show a standby type counter on the leader cursor?
+        bool showLeaderCursorCounter =
+            OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
+            
+        //Show warnings in the console?
+        bool showWarnings = OPTIONS::MISC_D::SHOW_WARNINGS;
+        
     } misc;
     
     //Packs.
     struct {
+
+    public:
     
         //Disabled packs.
         vector<string> disabled;
@@ -465,6 +495,8 @@ struct Options {
     
     //Particle editor.
     struct {
+
+    public:
     
         //Background texture for the particle editor, if any.
         string bgPath = PART_ED_D::BG_PATH;

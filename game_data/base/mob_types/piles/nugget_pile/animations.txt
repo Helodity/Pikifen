@@ -1,5 +1,5 @@
-name=Nugget Pile animations
-description=Animations for the Nugget Pile.
+name=Nugget pile animations
+description=Animations for the Nugget pile.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

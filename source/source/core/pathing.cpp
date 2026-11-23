@@ -369,7 +369,7 @@ void PathStop::deleteLink(const PathLink* linkPtr) {
     forIdx(l, links) {
         if(links[l] == linkPtr) {
             delete links[l];
-            links.erase(links.begin() + l);
+            eraseInVector(links, l);
             return;
         }
     }
@@ -386,7 +386,7 @@ void PathStop::deleteLink(const PathStop* otherStop) {
     forIdx(l, links) {
         if(links[l]->endPtr == otherStop) {
             delete links[l];
-            links.erase(links.begin() + l);
+            eraseInVector(links, l);
             return;
         }
     }
@@ -436,6 +436,9 @@ PATH_RESULT aStar(
      * @brief Represents a node's data in the algorithm.
      */
     struct Node {
+
+    public:
+        
         //In the best known path to this node, this is the known
         //distance from the start node to this one.
         float sinceStart = FLT_MAX;
@@ -446,6 +449,7 @@ PATH_RESULT aStar(
         
         //Estimated distance if the final path takes this node.
         float estimated = FLT_MAX;
+        
     };
     
     //All nodes that we want to visit.
@@ -460,7 +464,6 @@ PATH_RESULT aStar(
     
     //Start iterating.
     while(!toVisit.empty()) {
-    
         //Part 2: Figure out what node to work on in this iteration.
         PathStop* curNode = nullptr;
         float curNodeDist = 0.0f;
@@ -480,7 +483,6 @@ PATH_RESULT aStar(
         //Part 3: If the node we're processing is the end node, then
         //that's it, best path found!
         if(curNode == endNode) {
-        
             //Construct the path.
             float td = data[endNode].sinceStart;
             outPath.clear();
@@ -788,7 +790,6 @@ PATH_RESULT getPath(
     vector<PathStop*>& fullPath, float* outTotalDist,
     PathStop** outStartStop, PathStop** outEndStop
 ) {
-
     fullPath.clear();
     
     if(game.curArea->pathStops.empty()) {

@@ -37,7 +37,7 @@ const float BORED_ANIM_MAX_DELAY = 5.0f;
 const float BORED_ANIM_MIN_DELAY = 1.0f;
 
 //Members cannot go past this range from the angle of dismissal.
-const float DISMISS_ANGLE_RANGE = TAU / 2;
+const Angle DISMISS_ANGLE_RANGE = TAU / 2;
 
 //Multiply the space members take up by this. Lower = more compact subgroups.
 const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
@@ -76,7 +76,7 @@ const float HEALTH_CAUTION_RATIO = 0.3f;
 const float HEALTH_CAUTION_RING_DURATION = 1.5f;
 
 //Angle at which leaders hold their group members.
-const float HELD_GROUP_MEMBER_ANGLE = TAU / 2;
+const Angle HELD_GROUP_MEMBER_ANGLE = TAU / 2;
 
 //How far away from the leader is a held group member placed, horizontally.
 const float HELD_GROUP_MEMBER_H_DIST = 1.2f;
@@ -97,7 +97,7 @@ const float SWARM_ARROW_INTERVAL = 0.1f;
 const float SWARM_PARTICLE_ALPHA = 0.8f;
 
 //Swarm particle random angle deviation.
-const float SWARM_PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
+const Angle SWARM_PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
 
 //Swarm particle friction.
 const float SWARM_PARTICLE_FRICTION = 2.0f;
@@ -145,7 +145,7 @@ const float TIDY_SINGLE_DISMISS_DURATION = 3.0f;
  * @param type Leader type this mob belongs to.
  * @param angle Starting angle.
  */
-Leader::Leader(const Point& center, LeaderType* type, float angle) :
+Leader::Leader(const Point& center, LeaderType* type, Angle angle) :
     Mob(center, type, angle),
     leaType(type),
     autoThrowRepeater(&game.autoThrowSettings),
@@ -194,7 +194,7 @@ Leader::Leader(const Point& center, LeaderType* type, float angle) :
                 -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
                 LEADER::SWARM_PARTICLE_SPEED_DEVIATION
             );
-        float pAngle =
+        Angle pAngle =
             player->swarmAngle +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
@@ -386,7 +386,7 @@ void Leader::dismissDetails() {
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
         if(group->members.empty()) parSpeed *= 0.75f;
-        float parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
+        Angle parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
         par.linearSpeed =
             KeyframeInterpolator<Point>(
                 rotatePoint(Point(parSpeed, 0.0f), parAngle)
@@ -411,7 +411,7 @@ void Leader::dismissLogic(bool forceDismissAll) {
     
     //They are dismissed towards this angle.
     //This is then offset a bit for each subgroup, depending on a few factors.
-    float baseAngle;
+    Angle baseAngle;
     
     //First, calculate what direction the group should be dismissed to.
     if(player->swarmMagnitude > 0) {
@@ -443,6 +443,8 @@ void Leader::dismissLogic(bool forceDismissAll) {
      * @brief Info about a group subgroup when being dismissed.
      */
     struct DismissSubgroup {
+
+    public:
     
         //--- Public members ---
         
@@ -467,14 +469,12 @@ void Leader::dismissLogic(bool forceDismissAll) {
     SubgroupType* curType = firstType;
     
     do {
-    
         if(
             curType !=
             game.states.gameplay->subgroupTypes.getType(
                 SUBGROUP_TYPE_CATEGORY_LEADER
             )
         ) {
-        
             bool subgroupExists = false;
             
             forIdx(m, group->members) {
@@ -507,8 +507,8 @@ void Leader::dismissLogic(bool forceDismissAll) {
     //there will be a gap where that group would go, and dismissing again
     //will place those Pikmin in that missing group's place.
     auto firstSubgroup =
-        std::find_if(
-            subgroupsInfo.begin(), subgroupsInfo.end(),
+        findInContainerIf(
+            subgroupsInfo,
     [this] (const auto & s) -> bool {
         return s.type == this->group->curStandbyType;
     }
@@ -547,6 +547,8 @@ void Leader::dismissLogic(bool forceDismissAll) {
      * etc. For every subgroup we place, we must update the thickness.
      */
     struct Row {
+
+    public:
     
         //--- Public members ---
         
@@ -560,7 +562,7 @@ void Leader::dismissLogic(bool forceDismissAll) {
         float thickness;
         
         //How much is taken up by Pikmin and padding.
-        float angleOccupation;
+        Angle angleOccupation;
         
         
         //--- Public function definitions ---
@@ -585,7 +587,7 @@ void Leader::dismissLogic(bool forceDismissAll) {
                 curRow.thickness, subgroupsInfo[curSubgroupIdx].radius * 2
             );
             
-        float newAngleOccupation = 0;
+        Angle newAngleOccupation = 0;
         forIdx(s, curRow.subgroups) {
             newAngleOccupation +=
                 linearDistToAngular(
@@ -648,12 +650,12 @@ void Leader::dismissLogic(bool forceDismissAll) {
     //Now that we know which subgroups go into which row,
     //simply decide the positioning.
     forIdx(r, rows) {
-        float startAngle = -(rows[r].angleOccupation / 2.0f);
-        float curAngle = startAngle;
+        Angle startAngle = -(rows[r].angleOccupation / 2.0f);
+        Angle curAngle = startAngle;
         
         forIdx(s, rows[r].subgroups) {
             size_t sIdx = rows[r].subgroups[s];
-            float subgroupAngle = curAngle;
+            Angle subgroupAngle = curAngle;
             
             curAngle +=
                 linearDistToAngular(
@@ -685,7 +687,11 @@ void Leader::dismissLogic(bool forceDismissAll) {
     }
     
     //Now, dismiss!
-    if(tidySingleDismissTime > 0.0f && subgroupsInfo.size() == 1) {
+    if(
+        tidySingleDismissTime > 0.0f &&
+        subgroupsInfo.size() == 1 &&
+        player->swarmMagnitude == 0.0f
+    ) {
         //We recently dismissed all other subgroups except this one.
         //Let's dismiss this single one towards where it would go if it got
         //dismissed alongside. That way all the Pikmin are organized tidily.
@@ -745,16 +751,16 @@ void Leader::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        SPRITE_BMP_EFFECT_CARRY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_CARRY |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     BitmapEffect leaSpriteEff = mobEff;
     getSpriteBitmapEffects(
         curSPtr, nextSPtr, interpolationFactor,
         &leaSpriteEff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     drawBitmapWithEffects(curSPtr->bitmap, leaSpriteEff);
@@ -770,19 +776,20 @@ void Leader::drawMob() {
             break;
         }
     }
-    antennaPG->canEmit = false;
+    if(antennaPG) {
+        antennaPG->canEmit = false;
+    }
     
     if(curSPtr->topVisible && leaType->bmpLight && isGenerallyVisible()) {
         Point lightCoords;
-        float lightAngle;
+        Angle lightAngle;
         Point lightSize;
         BitmapEffect lightEff = mobEff;
         ALLEGRO_BITMAP* lightBmp = leaType->bmpLight;
         
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->topReplacementBmp) {
-                lightBmp = statuses[s].type->topReplacementBmp;
+        forIdx(s, statuses.getList()) {
+            if(statuses.getList()[s].type->topReplacementBmp) {
+                lightBmp = statuses.getList()[s].type->topReplacementBmp;
             }
         }
         
@@ -807,17 +814,19 @@ void Leader::drawMob() {
         
         drawBitmapWithEffects(lightBmp, lightEff);
         
-        //This is the best place to position the light particles, so do that.
-        antennaPG->baseParticle.center = lightEff.tf.trans;
-        antennaPG->baseParticle.bmpAngle = lightEff.tf.rot;
-        antennaPG->baseParticle.z = bottomZ + height + 1.0f;
-        adjustKeyframeInterpolatorValues<float>(
-            antennaPG->baseParticle.size,
-        [ = ] (float s) {
-            return std::max(lightSize.x, lightSize.y);
+        if(antennaPG) {
+            //This is the best place to position the light particles, so do that.
+            antennaPG->baseParticle.center = lightEff.tf.trans;
+            antennaPG->baseParticle.bmpAngle = lightEff.tf.rot;
+            antennaPG->baseParticle.z = bottomZ + height + 1.0f;
+            adjustKeyframeInterpolatorValues<float>(
+                antennaPG->baseParticle.size,
+            [ = ] (float s) {
+                return std::max(lightSize.x, lightSize.y);
+            }
+            );
+            antennaPG->canEmit = true;
         }
-        );
-        antennaPG->canEmit = true;
     }
     
     //Invulnerability sparks.
@@ -833,8 +842,8 @@ void Leader::drawMob() {
                 curSPtr, nextSPtr, interpolationFactor,
                 &sparkEff,
                 SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-                SPRITE_BMP_EFFECT_DELIVERY |
-                SPRITE_BMP_EFFECT_CARRY
+                SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+                SPRITE_BMP_EFFECT_FLAG_CARRY
             );
             sparkEff.tf.trans = center;
             Point leaderBmpSize =
@@ -998,7 +1007,6 @@ bool Leader::orderPikminToOnion(
     
     //Order Pikmin, in order.
     forIdx(p, candidates) {
-    
         Pikmin* pikPtr = candidates[p].second;
         FsmEventDef* ev = pikPtr->scriptVM.fsm.getEvent(FSM_EV_GO_TO_ONION);
         if(!ev) continue;
@@ -1073,7 +1081,7 @@ void Leader::specificDismiss(
             //The first Pikmin always goes to the dead center.
             destination = relCenter;
         } else {
-            float memberAngle = ((float) curRowSpotIdx / curRowSpots) * TAU;
+            Angle memberAngle = ((float) curRowSpotIdx / curRowSpots) * TAU;
             destination =
                 relCenter +
                 angleToCoordinates(

@@ -1,5 +1,7 @@
 1. Before everything
-    Confirm that there are no more tasks in the todo document, open bug reports, etc.
+    Last minute bug tests
+        Area cloning -- Enter the area editor, choose an area, make one change, undo, then save. Check the area's files in git to make sure nothing broke
+    Confirm that there are no more tasks in the todo document, open bug reports, open PRs, etc.
     Confirm that there are no staged or unstaged changes on git
     Make sure the documentation is up-to-date, especially the following:
         Main tutorials
@@ -40,7 +42,7 @@
             Title: <Object name> spritesheet
             Author: André "Espyo" Silva
             Keywords: Pikifen spritesheet
-            Description: Spritesheet for the <object name> in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
+            Description: Spritesheet for the <object name> in the base content of Pikifen. See https://github.com/Espyo/Pikifen
     Place any changes made to the .vscode folder in the source/vs_code folder
 3. Release candidate
     Compile it for Windows
@@ -51,20 +53,20 @@
     Point down all changes that were necessary for it to compile
     Create a zip file (see below)
     Send it to beta testers so they can check for stuff that's immediately wrong
-    After they're done, tell them to confirm that error_log.txt reported nothing
+    After they're done, tell them to confirm that log.txt reported nothing
 4. Final preparations
     Change version information in the code
         In-development is false, apply the correct release date
         Use the helper tool, or edit const.h and the *.rc files
-    Update all area version numbers and engine version numbers
+    Update the base content pack's version number and engine version number
     Update the Allegro version number on the Compiling page of the manual, if it changed
     Check any changes made on Windows in order to compile, and port them over
 5. Final build
     Compile it once more on Linux just to be sure (full build)
-    Delete error_log.txt
+    Delete log.txt
     Make sure the title screen shows the right version
     Test it out by playing a bit
-    Confirm that error_log.txt reported no errors
+    Confirm that log.txt reported no errors
 6. Release
     Commit all changes made in preparation for the next version, and push
     Compile it on Windows with a release x64 target build

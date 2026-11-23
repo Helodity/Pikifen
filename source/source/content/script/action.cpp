@@ -12,6 +12,7 @@
 #include "action.hpp"
 
 #include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
 #include "script_utils.hpp"
 
 
@@ -91,10 +92,21 @@ bool ScriptActionDef::loadFromDataNode(
     
     //Check if it is recognized.
     if(!actionType) {
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "Unknown script action name \"" + name + "\"!", node
         );
         return false;
+    }
+    
+    //Check if it's deprecated.
+    if(!actionType->deprecationReplacement.empty()) {
+        game.log.write(
+            LOG_LEVEL_WARNING,
+            "The action \"" + actionType->name + "\" is deprecated "
+            "and may be removed in the future! Please use \"" +
+            actionType->deprecationReplacement + "\" instead."
+        );
     }
     
     //Check if this action is allowed in the current context.
@@ -112,7 +124,8 @@ bool ScriptActionDef::loadFromDataNode(
             }
         }
         if(!canUse) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "The action \"" + name + "\" can't be used in an " +
                 scriptDef->getContextName() + " script context!", node
             );
@@ -120,102 +133,11 @@ bool ScriptActionDef::loadFromDataNode(
         }
     }
     
-    //Check if there are too many or too few arguments.
-    size_t nMandatoryParams = 0;
-    size_t nFixedParams = 0;
-    bool hasVectorParam = false;
-    forIdx(p, actionType->parameters) {
-        ScriptActionTypeParam* pPtr = &actionType->parameters[p];
-        if(hasFlag(pPtr->flags, SCRIPT_ACTION_PARAM_FLAG_VECTOR)) {
-            hasVectorParam = true;
-        } else {
-            nFixedParams++;
-        }
-        if(!hasFlag(pPtr->flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL)) {
-            nMandatoryParams++;
-        }
-    }
-    
-    if(words.size() < nMandatoryParams) {
-        game.errors.report(
-            "The \"" + actionType->name + "\" action needs " +
-            i2s(nMandatoryParams) + " arguments, but this call only "
-            "has " + i2s(words.size()) + "! You're missing the \"" +
-            actionType->parameters[words.size()].name + "\" parameter.",
-            node
-        );
-        return false;
-    }
-    
-    if(!hasVectorParam) {
-        if(words.size() > nFixedParams) {
-            game.errors.report(
-                "The \"" + actionType->name + "\" action only needs " +
-                i2s(actionType->parameters.size()) + " arguments, "
-                "but this call has " + i2s(words.size()) + "!",
-                node
-            );
-            return false;
-        }
-    }
-    
-    //Fetch the arguments, and check if any of them are not allowed.
-    forIdx(w, words) {
-        size_t paramIdx = w;
-        if(hasVectorParam && w > actionType->parameters.size() - 1) {
-            //This word just belongs to the final parameter.
-            paramIdx = actionType->parameters.size() - 1;
-        }
-        bool isVar = (words[w][0] == '$' && words[w].size() > 1);
-        
-        if(isVar && words[w].size() >= 2 && words[w][1] == '$') {
-            //Two '$' in a row means it's meant to use a literal '$'.
-            isVar = false;
-            words[w].erase(words[w].begin());
-        }
-        
-        if(isVar) {
-            if(
-                hasFlag(
-                    actionType->parameters[paramIdx].flags,
-                    SCRIPT_ACTION_PARAM_FLAG_CONST
-                )
-            ) {
-                game.errors.report(
-                    "Argument #" + i2s(w + 1) + " (\"" + words[w] + "\") is a "
-                    "variable, but the parameter \"" +
-                    actionType->parameters[paramIdx].name + "\" can only be "
-                    "constant!",
-                    node
-                );
-                return false;
-            }
-            
-            words[w].erase(words[w].begin()); //Remove the '$'.
-            
-            if(words[w].empty()) {
-                game.errors.report(
-                    "Argument #" + i2s(w) + " is trying to use a variable "
-                    "with no name!",
-                    node
-                );
-                return false;
-            }
-        }
-        
-        args.push_back(words[w]);
-        argIsVar.push_back(isVar);
-    }
-    
-    //Check if any optional parameters were left out.
-    while(words.size() < nFixedParams) {
-        size_t paramIdx = words.size();
-        words.push_back(actionType->parameters[paramIdx].defValue);
-        args.push_back(words.back());
-        argIsVar.push_back(false);
-    }
-    
-    return true;
+    return compileCommandArgs(
+               actionType->parameters, words,
+               "The \"" + actionType->name + "\" action", true,
+               &args, &argIsVar, node
+           );
 }
 
 
@@ -272,7 +194,7 @@ void ScriptActionDef::unload() {
  * loop-related, and jump-related actions are all okay, and that there are no
  * mismatches, like for instance, an "else" without an "if".
  * Also checks if there are actions past a "set_state" action, and more.
- * If something goes wrong, it throws the errors to the error log.
+ * If something goes wrong, it throws the errors to the log.
  *
  * @param dn Data node from where these actions came. Used for reporting errors.
  * @return Whether everything is okay.
@@ -303,7 +225,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
                     enumGetName(
                         constructTypeActionNames, curExpectedConstruct
                     );
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Found " + aAn(foundActionStr, true) + " \"" +
                     foundActionStr + "\" action outside of " +
                     aAn(expectedBlockStr, true) + " \"" +
@@ -345,7 +268,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         case SCRIPT_ACTION_ELSE_IF: {
             assertStack(SCRIPT_CONSTRUCT_TYPE_IF);
             if(seenElseStack.back()) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Found an \"else_if\" action after an \"else\" action!",
                     dn
                 );
@@ -400,7 +324,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             enumGetName(
                 constructTypeActionNames, constructStack.back()
             );
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "Found " + aAn(foundBlockStr, true) + " \"" +
             foundBlockStr + "\" block that has no end!",
             dn
@@ -419,7 +344,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } case SCRIPT_ACTION_ELSE: {
             if(depth == 0) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Found an \"else\" action without a matching "
                     "\"if\" action!", dn
                 );
@@ -429,14 +355,16 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } case SCRIPT_ACTION_ELSE_IF: {
             if(depth == 0) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Found an \"else_if\" action without a matching "
                     "\"if\" action!", dn
                 );
                 return false;
             }
             if(seenElseAction.back()) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Found an \"else_if\" action after an \"else\" action!",
                     dn
                 );
@@ -445,7 +373,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } case SCRIPT_ACTION_END_IF: {
             if(depth == 0) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Found an \"end_if\" action without a matching "
                     "\"if\" action!", dn
                 );
@@ -460,7 +389,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         }
     }
     if(depth > 0) {
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "Some \"if\" actions don't have a matching \"end_if\" action!",
             dn
         );
@@ -473,7 +403,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         if(list[a]->actionType->type == SCRIPT_ACTION_LABEL) {
             const string& name = list[a]->args[0];
             if(isInContainer(labels, name)) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "There are multiple labels called \"" + name + "\"!", dn
                 );
                 return false;
@@ -485,7 +416,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         if(list[a]->actionType->type == SCRIPT_ACTION_GOTO) {
             const string& name = list[a]->args[0];
             if(!isInContainer(labels, name)) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "There is no label called \"" + name + "\", even though "
                     "there are \"goto\" actions that need it!", dn
                 );
@@ -527,7 +459,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } default: {
             if(passedSetState) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "There is an action \"" + list[a]->actionType->name + "\" "
                     "placed after a \"set_state\" action, which means it will "
                     "never get run! Make sure you didn't mean to call it "
@@ -544,7 +477,8 @@ bool ScriptActionListDef::compile(DataNode* dn) {
     forIdx(a, list) {
         if(list[a]->actionType->type == SCRIPT_ACTION_RUN_NEXT_ACTION_AS) {
             if(a == list.size() - 1) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "There is a \"" + list[a]->actionType->name + "\" "
                     "with no other action after it!", dn
                 );

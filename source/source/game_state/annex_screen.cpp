@@ -22,9 +22,11 @@
 void AnnexScreen::doDrawing() {
     al_clear_to_color(COLOR_BLACK);
     
-    drawBitmap(
+    drawBitmapInBox(
         bmpBg, Point(game.winW * 0.5, game.winH * 0.5),
-        Point(game.winW, game.winH), 0, mapGray(64)
+        Point(game.winW, game.winH) *
+        game.config.aestheticGen.titleScreenBgFinalZoom,
+        true, false, 0, mapGray(64)
     );
     
     if(curMenu) curMenu->draw();
@@ -70,14 +72,23 @@ string AnnexScreen::getName() const {
 
 
 /**
- * @brief Handles Allegro events.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void AnnexScreen::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
-    if(curMenu) curMenu->handleAllegroEvent(ev);
+    if(curMenu) curMenu->handleAllegroInputEvent(ev);
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void AnnexScreen::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 

@@ -18,6 +18,7 @@
 
 #include "../lib/data_file/data_file.hpp"
 #include "allegro_utils.hpp"
+#include "container_utils.hpp"
 #include "geometry_utils.hpp"
 #include "math_utils.hpp"
 #include "string_utils.hpp"
@@ -75,7 +76,9 @@ Point fromString<Point>(const string& s);
  * @brief Customizes how an auto-repeater's triggers change in frequency
  * over time.
  */
-struct AutoRepeaterSettings {
+class AutoRepeaterSettings {
+
+public:
 
     //--- Public members ---
     
@@ -95,7 +98,9 @@ struct AutoRepeaterSettings {
  * @brief Allows something to be automatically repeated over time, with logic
  * to repeat more quickly the longer it's active for.
  */
-struct AutoRepeater {
+class AutoRepeater {
+
+public:
 
     //--- Public members ---
     
@@ -120,12 +125,14 @@ struct AutoRepeater {
 
 
 /**
- * @brief A struct that makes it simpler to obtain data
+ * @brief An object that makes it simpler to obtain data
  * for a given simple keyframe animation based on interpolation.
  * Keyframe times go from 0 (beginning) to 1 (end).
  */
 template<typename InterT>
-struct KeyframeInterpolator {
+class KeyframeInterpolator {
+
+public:
 
     public:
     
@@ -226,9 +233,9 @@ struct KeyframeInterpolator {
      * @param idx Its index.
      */
     void deleteKeyframe(size_t idx) {
-        keyframeTimes.erase(keyframeTimes.begin() + idx);
-        keyframeValues.erase(keyframeValues.begin() + idx);
-        keyframeEases.erase(keyframeEases.begin() + idx);
+        eraseInVector(keyframeTimes, idx);
+        eraseInVector(keyframeValues, idx);
+        eraseInVector(keyframeEases, idx);
     }
     
     
@@ -424,7 +431,9 @@ private:
  * @brief Info about where the player wants a leader
  * (or something else) to go, based on the player's inputs.
  */
-struct MovementInfo {
+class MovementInfo {
+
+public:
 
     //--- Public members ---
     
@@ -443,7 +452,7 @@ struct MovementInfo {
     
     //--- Public function declarations ---
     
-    void getInfo(Point* coords, float* angle, float* magnitude) const;
+    void getInfo(Point* coords, Angle* angle, float* magnitude) const;
     void reset();
     
 };
@@ -454,7 +463,9 @@ struct MovementInfo {
  *
  * Special thanks to https://www.youtube.com/watch?v=tu-Qe66AvtY
  */
-struct Shaker {
+class Shaker {
+
+public:
 
     //--- Public members ---
     
@@ -474,7 +485,7 @@ struct Shaker {
     void shake(float strength);
     void getOffsets(
         float* xOffset = nullptr, float* yOffset = nullptr,
-        float* angleOffset = nullptr
+        Angle* angleOffset = nullptr
     ) const;
     float getTrauma() const;
     void tick(float deltaT);
@@ -484,7 +495,7 @@ struct Shaker {
     
     //--- Private members ---
     
-    //Current trauma amount (raw shake factor).
+    //Current trauma amount (raw shake factor) [0 - 1].
     float trauma = 0.0f;
     
     //Time spent so far.
@@ -501,7 +512,9 @@ struct Shaker {
  * @brief A timer. You can set it to start at a pre-determined time,
  * to tick, etc.
  */
-struct Timer {
+class Timer {
+
+public:
 
     //--- Public members ---
     
@@ -531,7 +544,7 @@ struct Timer {
 };
 
 
-bool adjustMisalignedIndex(
+bool adjustMisalignedIdx(
     size_t& idxToAlign, size_t changedItemIdx, bool addition
 );
 string incrementNameTillUnique(

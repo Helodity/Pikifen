@@ -31,7 +31,7 @@ enum FILE_DIALOG_RESULT {
     //The option picked is not in the expected folder.
     FILE_DIALOG_RESULT_WRONG_FOLDER,
     
-    //The player cancelled the dialog.
+    //The player canceled the dialog.
     FILE_DIALOG_RESULT_CANCELED,
     
 };
@@ -63,6 +63,51 @@ enum FS_DELETE_RESULT {
 #define mapGray(g) al_map_rgb((g), (g), (g))
 
 
+/**
+ * @brief State of the Allegro blender.
+ */
+class AllegroBlenderState {
+
+public:
+
+    //--- Public members ---
+    
+    //Whether any data has been saved to this object yet.
+    bool hasData = false;
+    
+    
+    //--- Public function declarations ---
+    
+    void save();
+    void load() const;
+    void loadIfHasData() const;
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //Operation mode.
+    int op = 0;
+    
+    //Source.
+    int src = 0;
+    
+    //Destination.
+    int dst = 0;
+    
+    //Alpha operation.
+    int aOp = 0;
+    
+    //Alpha source.
+    int aSrc = 0;
+    
+    //Alpha destination.
+    int aDst = 0;
+    
+};
+
+
 bool operator==(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2);
 bool operator!=(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2);
 void al_fwrite(ALLEGRO_FILE* f, const string& s);
@@ -70,6 +115,7 @@ string c2s(const ALLEGRO_COLOR& c);
 ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a);
 ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR& c, float l);
 FS_DELETE_RESULT deleteFile(const string& filePath);
+string getAllegroKeyName(int keycode);
 Point getBitmapDimensions(ALLEGRO_BITMAP* bmp);
 void getShiftCtrlAltState(
     bool* outShiftState, bool* outCtrlState, bool* outAltState
@@ -87,6 +133,7 @@ ALLEGRO_COLOR interpolateColor(
     float input, float inputStart, float inputEnd,
     const ALLEGRO_COLOR& outputStart, const ALLEGRO_COLOR& outputEnd
 );
+bool isAllegroEventUserInput(ALLEGRO_EVENT& ev);
 ALLEGRO_COLOR multAlpha(const ALLEGRO_COLOR& c, float mult);
 vector<string> promptFileDialog(
     const string& initialPath, const string& title,

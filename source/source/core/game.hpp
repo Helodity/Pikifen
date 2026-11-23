@@ -10,6 +10,7 @@
 
 #pragma once
 
+#define ALLEGRO_UNSTABLE
 #include <allegro5/allegro.h>
 
 #include "../game_state/game_state.hpp"
@@ -29,6 +30,9 @@
 #include "audio.hpp"
 #include "game_config.hpp"
 #include "hardware_mediator.hpp"
+#include "maker_toolkit/console.hpp"
+#include "maker_toolkit/display.hpp"
+#include "maker_toolkit/tools.hpp"
 #include "misc_structs.hpp"
 #include "modal_gui.hpp"
 #include "options.hpp"
@@ -52,7 +56,9 @@ extern const size_t MAX_CONSECUTIVE_SCRIPT_ACTIONS;
 /**
  * @brief List of all game states.
  */
-struct GameStateList {
+class GameStateList {
+
+public:
 
     //--- Public members ---
     
@@ -143,8 +149,8 @@ public:
     //Auxiliary data used by the current script that is running.
     ScriptExecutionAuxData scriptExecAuxData;
     
-    //Error manager.
-    ErrorManager errors;
+    //Log manager.
+    LogManager log;
     
     //Shader manager.
     ShaderManager shaders;
@@ -267,6 +273,8 @@ public:
     
     //Data for when the quick play feature is used in an editor.
     struct {
+
+    public:
     
         //--- Public members ---
         
@@ -289,6 +297,8 @@ public:
     
     //Engine debugging tools.
     struct {
+
+    public:
     
         //--- Public members ---
         
@@ -342,6 +352,12 @@ private:
     
     //Is deltaT meant to be reset for the next frame?
     bool resetDeltaT = true;
+
+    //Used to calculate the time difference between the current and last frames.
+    double prevFrameStartTime = 0.0;
+    
+    //Is the control mediator meant to ignore the next Allegro event?
+    bool skipEventForControlMediator = false;
     
     
     //--- Private function declarations ---
@@ -350,8 +366,10 @@ private:
     void globalDrawing();
     void globalLogicPost();
     void globalLogicPre();
-    void globalHandleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void globalHandleAllegroInputEvent(const ALLEGRO_EVENT& ev);
+    void globalHandleAllegroOtherEvent(const ALLEGRO_EVENT& ev);
     bool globalHandleSystemPlayerAction(const Inpution::Action& action);
+    void processFrame();
     void processSystemInfo();
     bool handleStateLoading();
     static void *loadStateThreaded(ALLEGRO_THREAD *thread, void *arg);

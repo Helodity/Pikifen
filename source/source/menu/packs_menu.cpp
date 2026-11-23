@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Pack management menu struct and functions.
+ * Pack management menu object and functions.
  */
 
 #include "packs_menu.hpp"
@@ -98,31 +98,13 @@ void PacksMenu::changeInfo(int idx) {
  * @brief Initializes the main GUI.
  */
 void PacksMenu::initGuiMain() {
-    //Menu items.
-    DataNode* guiFile = &game.content.guiDefs.list[PACKS_MENU::GUI_FILE_NAME];
-    gui.registerCoords("back",               12,    5, 20,  6);
-    gui.registerCoords("back_input",          3,    7,  4,  4);
-    gui.registerCoords("list",               26,   47, 48, 74);
-    gui.registerCoords("list_scroll",        52,   47,  2, 74);
-    gui.registerCoords("info_box",           76,   47, 44, 74);
-    gui.registerCoords("pack_name",        67.5,   19, 25, 16);
-    gui.registerCoords("pack_thumbnail",     89,   19, 16, 16);
-    gui.registerCoords("pack_description",   76, 48.5, 42, 41);
-    gui.registerCoords("pack_tags",          76,   73, 42,  6);
-    gui.registerCoords("pack_maker",         65,   80, 20,  6);
-    gui.registerCoords("pack_version",       87,   80, 20,  6);
-    gui.registerCoords("restart_warning",  35.5, 88.5, 67,  5);
-    gui.registerCoords("open_folder",        84, 88.5, 28,  5);
-    gui.registerCoords("tooltip",            50,   96, 96,  4);
-    gui.readDataFile(guiFile);
-    
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         game.options.packs.order = packOrder;
         game.options.packs.disabled = packsDisabled;
         saveOptions();
@@ -130,14 +112,14 @@ void PacksMenu::initGuiMain() {
     };
     gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.backItem, "back");
+    gui.addItemP(gui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&gui);
     
     //Packs list.
     packsList = new ListGuiItem();
-    gui.addItem(packsList, "list");
+    gui.addItemP(packsList, "list");
     
     const float ITEM_HEIGHT = 0.08f;
     const float ITEM_PADDING = 0.02f;
@@ -148,17 +130,19 @@ void PacksMenu::initGuiMain() {
         new BulletGuiItem(
         "Base", game.sysContent.fntStandard, game.config.guiColors.gold
     );
-    baseBullet->ratioRect.center =
-        Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
-    baseBullet->ratioRect.size =
-        Point(0.70f, ITEM_HEIGHT);
+    baseBullet->setRawRatioRect(
+        Rect(
+            Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f),
+            Point(0.70f, ITEM_HEIGHT)
+        )
+    );
     baseBullet->onFocused =
     [this] () { changeInfo(-1); };
     packsList->addChild(baseBullet);
-    gui.addItem(baseBullet);
+    gui.addItemP(baseBullet);
     
     forIdx(p, packOrder) {
-        float listBottomY = packsList->getChildrenSpan();
+        float listBottomY = packsList->getChildrenSpanRatio();
         float rowCenterY = listBottomY + ITEM_PADDING + ITEM_HEIGHT / 2.0f;
         
         //Pack bullet.
@@ -167,11 +151,14 @@ void PacksMenu::initGuiMain() {
             "",
             game.sysContent.fntStandard
         );
-        bullet->ratioRect.center = Point(0.37f, rowCenterY);
-        bullet->ratioRect.size = Point(0.70f, ITEM_HEIGHT);
+        bullet->setRawRatioRect(
+            Rect(
+                Point(0.37f, rowCenterY), Point(0.70f, ITEM_HEIGHT)
+            )
+        );
         bullet->onFocused = [p, this] () { changeInfo((int) p); };
         packsList->addChild(bullet);
-        gui.addItem(bullet);
+        gui.addItemP(bullet);
         packBullets.push_back(bullet);
         
         //Enable/disable checkbox.
@@ -180,17 +167,17 @@ void PacksMenu::initGuiMain() {
             false, "", game.sysContent.fntStandard
         );
         check->forceSquare = true;
-        check->ratioRect.center = Point(0.78f, rowCenterY);
-        check->ratioRect.size = Point(0.08f, ITEM_HEIGHT);
+        check->setRawRatioRect(
+            Rect(
+                Point(0.78f, rowCenterY), Point(0.08f, ITEM_HEIGHT)
+            )
+        );
         check->onActivate =
-        [p, check, this] (const Point & pos) {
+        [p, check, this] (float, float) {
             check->defActivateCode();
             if(check->value) {
                 packsDisabled.erase(
-                    std::find(
-                        packsDisabled.begin(), packsDisabled.end(),
-                        packOrder[p]
-                    )
+                    findInContainer(packsDisabled, packOrder[p])
                 );
             } else {
                 packsDisabled.push_back(packOrder[p]);
@@ -203,7 +190,7 @@ void PacksMenu::initGuiMain() {
             return "Enable or disable this pack.";
         };
         packsList->addChild(check);
-        gui.addItem(check);
+        gui.addItemP(check);
         packChecks.push_back(check);
         
         //Move up button.
@@ -211,18 +198,21 @@ void PacksMenu::initGuiMain() {
             ButtonGuiItem* upButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             upButton->forceSquare = true;
-            upButton->ratioRect.center = Point(0.87f, rowCenterY);
-            upButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
-            upButton->onDraw =
+            upButton->setRawRatioRect(
+                Rect(
+                    Point(0.87f, rowCenterY), Point(0.08f, ITEM_HEIGHT) * 0.80f
+                )
+            );
+            upButton->onDrawP =
             [upButton] (const DrawInfo & draw) {
                 upButton->defDrawCode(draw);
                 drawBitmapInBox(
                     game.sysContent.bmpArrowUp, draw.center,
-                    draw.size * 0.80f, true, 0.0f, draw.tint
+                    draw.size * 0.80f, true, true, 0.0f, draw.tint
                 );
             };
             upButton->onActivate =
-            [p, this] (const Point&) {
+            [p, this] (float, float) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p - 1)
                 );
@@ -241,7 +231,7 @@ void PacksMenu::initGuiMain() {
                 return "Move up on the list (make it be loaded earlier).";
             };
             packsList->addChild(upButton);
-            gui.addItem(upButton);
+            gui.addItemP(upButton);
         }
         
         //Move down button.
@@ -249,18 +239,21 @@ void PacksMenu::initGuiMain() {
             ButtonGuiItem* downButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             downButton->forceSquare = true;
-            downButton->ratioRect.center = Point(0.95f, rowCenterY);
-            downButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
-            downButton->onDraw =
+            downButton->setRawRatioRect(
+                Rect(
+                    Point(0.95f, rowCenterY), Point(0.08f, ITEM_HEIGHT) * 0.80f
+                )
+            );
+            downButton->onDrawP =
             [downButton] (const DrawInfo & draw) {
                 downButton->defDrawCode(draw);
                 drawBitmapInBox(
                     game.sysContent.bmpArrowDown, draw.center,
-                    draw.size * 0.80f, true, 0.0f, draw.tint
+                    draw.size * 0.80f, true, true, 0.0f, draw.tint
                 );
             };
             downButton->onActivate =
-            [p, this] (const Point&) {
+            [p, this] (float, float) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p + 1)
                 );
@@ -279,25 +272,25 @@ void PacksMenu::initGuiMain() {
                 return "Move down on the list (make it be loaded later).";
             };
             packsList->addChild(downButton);
-            gui.addItem(downButton);
+            gui.addItemP(downButton);
         }
     }
     
     //Packs list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = packsList;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Info box item.
     GuiItem* infoBox = new GuiItem();
-    infoBox->onDraw =
+    infoBox->onDrawP =
     [] (const DrawInfo & draw) {
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
             tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };
-    gui.addItem(infoBox, "info_box");
+    gui.addItemP(infoBox, "info_box");
     
     //Pack name text.
     packNameText =
@@ -305,12 +298,12 @@ void PacksMenu::initGuiMain() {
         "", game.sysContent.fntAreaName,
         game.config.guiColors.gold, ALLEGRO_ALIGN_LEFT
     );
-    gui.addItem(packNameText, "pack_name");
+    gui.addItemP(packNameText, "pack_name");
     
     //Pack thumbnail.
     GuiItem* packThumbItem = new GuiItem();
     packThumbItem->forceSquare = true;
-    packThumbItem->onDraw =
+    packThumbItem->onDrawP =
     [this] (const DrawInfo & draw) {
         //Align it to the top-right corner.
         Point finalCenter(
@@ -328,7 +321,7 @@ void PacksMenu::initGuiMain() {
             tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };
-    gui.addItem(packThumbItem, "pack_thumbnail");
+    gui.addItemP(packThumbItem, "pack_thumbnail");
     
     //Pack description text.
     packDescriptionText =
@@ -336,28 +329,28 @@ void PacksMenu::initGuiMain() {
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     packDescriptionText->lineWrap = true;
-    gui.addItem(packDescriptionText, "pack_description");
+    gui.addItemP(packDescriptionText, "pack_description");
     
     //Pack tags text.
     packTagsText =
         new TextGuiItem(
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    gui.addItem(packTagsText, "pack_tags");
+    gui.addItemP(packTagsText, "pack_tags");
     
     //Pack maker text.
     packMakerText =
         new TextGuiItem(
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    gui.addItem(packMakerText, "pack_maker");
+    gui.addItemP(packMakerText, "pack_maker");
     
     //Pack version text.
     packVersionText =
         new TextGuiItem(
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    gui.addItem(packVersionText, "pack_version");
+    gui.addItemP(packVersionText, "pack_version");
     
     //Restart warning text.
     warningText =
@@ -367,13 +360,13 @@ void PacksMenu::initGuiMain() {
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     warningText->visible = false;
-    gui.addItem(warningText, "restart_warning");
+    gui.addItemP(warningText, "restart_warning");
     
     //Open folder button.
     ButtonGuiItem* openFolderButton =
         new ButtonGuiItem("Open folder", game.sysContent.fntStandard);
     openFolderButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
     };
     openFolderButton->onGetTooltip =
@@ -382,17 +375,21 @@ void PacksMenu::initGuiMain() {
             "Opens the packs folder on your operative system. "
             "Place downloaded pack folders here!";
     };
-    gui.addItem(openFolderButton, "open_folder");
+    gui.addItemP(openFolderButton, "open_folder");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
     
     populatePacksList();
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[PACKS_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
+    
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
     changeInfo(-1);
 }
 

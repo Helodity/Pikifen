@@ -25,6 +25,18 @@ sounds {
         speed = 95
         speed_deviation = 15
     }
+    steam {
+        sound = misc/steam_puff
+        volume = 10
+        speed_deviation = 20
+        volume_deviation = 3
+    }
+    sci_fi {
+        sound = misc/sci_fi_loop_1
+        volume = 3
+        speed = 100
+        loop = true
+    }
 }
 
 maker = Espyo

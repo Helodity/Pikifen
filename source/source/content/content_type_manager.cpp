@@ -1295,7 +1295,8 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         if(isInMap(list.pikmin, s)) {
             game.config.pikmin.order.push_back(list.pikmin[s]);
         } else {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + s + "\" found "
                 "in the Pikmin order list in the game configuration!"
             );
@@ -1326,7 +1327,8 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         if(isInMap(list.leader, s)) {
             game.config.leaders.order.push_back(list.leader[s]);
         } else {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown leader type \"" + s + "\" found "
                 "in the leader order list in the game configuration!"
             );
@@ -1459,7 +1461,6 @@ void MobTypeContentManager::unloadMobType(
 void MobTypeContentManager::unloadMobTypesOfCategory(
     MobCategory* category, CONTENT_LOAD_LEVEL level
 ) {
-
     vector<string> typeNames;
     category->getTypeNames(typeNames);
     
@@ -2108,7 +2109,8 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         if(isInMap(list, s)) {
             game.config.misc.sprayOrder.push_back(&list[s]);
         } else {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown spray type \"" + s + "\" found "
                 "in the spray order list in the game configuration!"
             );
@@ -2259,7 +2261,8 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         }
         if(found) continue;
         
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "The status effect type \"" +
             typesWithReplacements[s]->name +
             "\" has a replacement effect called \"" + rn + "\", but there is "

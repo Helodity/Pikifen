@@ -46,12 +46,14 @@ using std::vector;
 
 
 class Mob;
-struct MobGen;
+class MobGen;
 
 /**
  * @brief Info on a carrying spot around a mob's perimeter.
  */
-struct CarrierSpot {
+class CarrierSpot {
+
+public:
 
     //--- Public members ---
     
@@ -75,11 +77,13 @@ struct CarrierSpot {
 /**
  * @brief Info on how the mob should be carried.
  */
-struct CarryInfo {
+class CarryInfo {
+
+public:
 
     //--- Public members ---
     
-    //Mob that this struct belongs to.
+    //Mob that this info belongs to.
     Mob* m = nullptr;
     
     //Generic type of delivery destination.
@@ -109,14 +113,11 @@ struct CarryInfo {
     //True if a destination does exist, false otherwise.
     bool destinationExists = false;
     
-    //Is the Pikmin meant to return somewhere after carrying?
-    bool mustReturn = false;
-    
     //Does a new target need to be calculated?
     bool mustRecalculate = false;
     
-    //Location to return to once they finish carrying.
-    Point returnPoint;
+    //ID of the mob to return to once it finishes carrying. 0 for none.
+    size_t returnPointMobId = 0;
     
     //Distance from the return point to stop at.
     float returnDist = 0.0f;
@@ -131,7 +132,7 @@ struct CarryInfo {
     bool canFly() const;
     size_t getPlayerTeamIdx() const;
     float getSpeed() const;
-    void rotatePoints(float angle);
+    void rotatePoints(Angle angle);
     
 };
 
@@ -139,7 +140,9 @@ struct CarryInfo {
 /**
  * @brief Info on what point the mob is chasing after.
  */
-struct ChaseInfo {
+class ChaseInfo {
+
+public:
 
     //--- Public members ---
     
@@ -183,11 +186,13 @@ struct ChaseInfo {
  * @brief Info about what mob or point that this mob is circling around,
  * if any.
  */
-struct CirclingInfo {
+class CirclingInfo {
+
+public:
 
     //--- Public members ---
     
-    //Mob that this struct belongs to.
+    //Mob that this info belongs to.
     Mob* m = nullptr;
     
     //Mob that it is circling.
@@ -209,7 +214,7 @@ struct CirclingInfo {
     bool canFreeMove = false;
     
     //Angle of the circle to go to.
-    float curAngle = 0.0f;
+    Angle curAngle = 0.0f;
     
     
     //--- Public function declarations ---
@@ -222,7 +227,9 @@ struct CirclingInfo {
 /**
  * @brief Info on a mob that's being delivered to an Onion, ship, etc.
  */
-struct DeliveryInfo {
+class DeliveryInfo {
+
+public:
 
     //--- Public members ---
     
@@ -258,7 +265,9 @@ struct DeliveryInfo {
  * and the location and info of the spots in the
  * circle, when the members are following the mob.
  */
-struct Group {
+class Group {
+
+public:
 
     //--- Public misc. declarations ---
     
@@ -280,6 +289,8 @@ struct Group {
      * @brief A spot in the group.
      */
     struct GroupSpot {
+
+    public:
     
         //--- Public members ---
         
@@ -313,7 +324,7 @@ struct Group {
     Point anchor;
     
     //Angle from the leader to the anchor.
-    float anchorAngle = TAU / 2.0f;
+    Angle anchorAngle = TAU / 2.0f;
     
     //Transformation to apply to the group, like from swarming.
     ALLEGRO_TRANSFORM transform;
@@ -349,7 +360,9 @@ struct Group {
 /**
  * @brief Info about how two hitboxes interacted.
  */
-struct HitboxInteraction {
+class HitboxInteraction {
+
+public:
 
     //--- Public members ---
     
@@ -377,7 +390,9 @@ struct HitboxInteraction {
  * @brief Info about how this mob is currently being held by
  * another, if it is.
  */
-struct HoldInfo {
+class HoldInfo {
+
+public:
 
     //--- Public members ---
     
@@ -395,7 +410,7 @@ struct HoldInfo {
     float offsetDist = 0.0f;
     
     //Angle the mob makes with the center of the hitbox/body.
-    float offsetAngle = 0.0f;
+    Angle offsetAngle = 0.0f;
     
     //Ratio of distance from the hitbox/body's bottom. 1 is the very top.
     float verticalDist = 0.0f;
@@ -441,7 +456,9 @@ class ShipType;
 /**
  * @brief Lists of all mobs in the area.
  */
-struct MobLists {
+class MobLists {
+
+public:
 
     //--- Public members ---
     
@@ -514,7 +531,9 @@ struct MobLists {
 /**
  * @brief Lists of all mob types.
  */
-struct MobTypeLists {
+class MobTypeLists {
+
+public:
 
     //--- Public members ---
     
@@ -584,7 +603,9 @@ struct MobTypeLists {
 /**
  * @brief Info about this mob's parent, if any.
  */
-struct Parent {
+class Parent {
+
+public:
 
     //--- Public members ---
     
@@ -642,11 +663,13 @@ struct Parent {
  * @brief Info on how to travel through the path graph that
  * the mob currently intends to travel.
  */
-struct Path {
+class Path {
+
+public:
 
     //--- Public members ---
     
-    //Mob that this struct belongs to.
+    //Mob that this info belongs to.
     Mob* m = nullptr;
     
     //Path to take the mob to while being carried.
@@ -683,7 +706,9 @@ struct Path {
  * @brief Info that a mob type may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct PikminNestType {
+class PikminNestType {
+
+public:
 
     //--- Public members ---
     
@@ -731,7 +756,9 @@ struct PikminNestType {
  * @brief Info that a mob may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct PikminNest {
+class PikminNest {
+
+public:
 
     //--- Public members ---
     
@@ -777,7 +804,9 @@ struct PikminNest {
  * @brief Info about the track mob that a mob is currently
  * riding. Includes things like current progress.
  */
-struct TrackRideInfo {
+class TrackRideInfo {
+
+public:
 
     //--- Public members ---
     
@@ -813,7 +842,7 @@ float calculateMobPhysicalSpan(
 );
 Mob* createMob(
     MobCategory* category, const Point& pos, MobType* type,
-    float angle, const string& varsStr,
+    Angle angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation = nullptr,
     size_t firstStateOverride = INVALID
 );
@@ -827,5 +856,5 @@ MobType::SpawnInfo* getSpawnInfoFromChildInfo(
     MobType* type, const MobType::Child* childInfo
 );
 bool isMobInReach(
-    MobType::Reach* reachTPtr, const Distance& distBetween, float angleDiff
+    MobType::Reach* reachTPtr, const Distance& distBetween, Angle angleDiff
 );

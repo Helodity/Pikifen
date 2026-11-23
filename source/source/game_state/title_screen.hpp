@@ -21,10 +21,13 @@ using std::string;
 
 
 namespace MAIN_MENU {
+extern const float FADE_IN_FAST_DURATION;
+extern const float FADE_IN_DURATION;
 extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const string MAKE_GUI_FILE_NAME;
 extern const string PLAY_GUI_FILE_NAME;
+extern const float ZOOM_DURATION;
 }
 
 
@@ -68,6 +71,9 @@ public:
     //--- Public function declarations ---
     
     void load() override;
+    void hide();
+    void startFadingIn();
+    void speedUpFadeIn();
     
     
 private:
@@ -99,7 +105,8 @@ public:
     
     void load() override;
     void unload() override;
-    void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroInputEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroOtherEvent(ALLEGRO_EVENT& ev) override;
     void doLogic() override;
     void doDrawing() override;
     string getName() const override;
@@ -113,6 +120,8 @@ private:
      * @brief Represents a Pikmin in the game's wordmark.
      */
     struct WordmarkPikmin {
+
+    public:
     
         //--- Public members ---
         
@@ -120,7 +129,7 @@ private:
         Point center;
         
         //Current angle.
-        float angle = 0.0f;
+        Angle angle = 0.0f;
         
         //Forward movement speed.
         float speed = 0.0f;
@@ -188,5 +197,17 @@ private:
     
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> wordmarkTypeBitmaps;
+    
+    //Time left until we start fading the GUI in.
+    float guiFadeTimer = 0.0f;
+    
+    //Time left for the zoom-in effect.
+    float zoomInTimer = 0.0f;
+    
+    
+    //--- Private function declarations ---
+    
+    void drawDecorations(bool justWordmark) const;
+    void drawFixedText() const;
     
 };

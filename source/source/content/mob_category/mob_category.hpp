@@ -143,7 +143,7 @@ public:
     virtual MobType* createType() = 0;
     virtual void registerType(const string& internalName, MobType* type) = 0;
     virtual Mob* createMob(
-        const Point& pos, MobType* type, float angle
+        const Point& pos, MobType* type, Angle angle
     ) = 0;
     virtual void deleteMob(Mob* m) = 0;
     virtual void clearTypes() = 0;
@@ -157,7 +157,9 @@ public:
  *
  * Read the sector type manager's comments for more info.
  */
-struct CategoryManager {
+class CategoryManager {
+
+public:
 
     //--- Public function declarations ---
     
@@ -195,7 +197,7 @@ public:
     MobType* createType() override;
     void registerType(const string& internalName, MobType* type) override;
     Mob* createMob(
-        const Point& pos, MobType* type, float angle
+        const Point& pos, MobType* type, Angle angle
     ) override;
     void deleteMob(Mob* m) override;
     void clearTypes() override;

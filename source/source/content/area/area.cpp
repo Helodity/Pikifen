@@ -222,9 +222,10 @@ void Area::clear() {
     dayTimeStart = AREA::DEF_DAY_TIME_START;
     dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
     bgBmpName.clear();
-    bgColor = COLOR_BLACK;
-    bgDist = 2.0f;
-    bgBmpZoom = 1.0f;
+    bgBmpTrans = Transform2d();
+    bgBmpTint = COLOR_WHITE;
+    bgBmpDist = 2.0f;
+    bgVoidColor = COLOR_BLACK;
     mission = MissionData();
     
     problems.nonSimples.clear();
@@ -249,9 +250,10 @@ void Area::clone(Area& other) {
     } else {
         other.bgBmp = game.content.bitmaps.list.get(bgBmpName, nullptr, false);
     }
-    other.bgBmpZoom = bgBmpZoom;
-    other.bgColor = bgColor;
-    other.bgDist = bgDist;
+    other.bgBmpTrans = bgBmpTrans;
+    other.bgBmpTint = bgBmpTint;
+    other.bgBmpDist = bgBmpDist;
+    other.bgVoidColor = bgVoidColor;
     other.bmap = bmap;
     
     other.vertexes.reserve(vertexes.size());
@@ -411,6 +413,7 @@ void Area::clone(Area& other) {
     other.difficulty = difficulty;
     other.maker = maker;
     other.version = version;
+    other.license = license;
     other.makerNotes = makerNotes;
     other.sprayAmounts = sprayAmounts;
     other.songName = songName;
@@ -426,15 +429,18 @@ void Area::clone(Area& other) {
     other.mission.preset = mission.preset;
     other.mission.endConds = mission.endConds;
     other.mission.mobGroups = mission.mobGroups;
-    other.mission.hudItems = mission.hudItems;
-    other.mission.timeLimit = mission.timeLimit;
     other.mission.medalAwardMode = mission.medalAwardMode;
+    other.mission.timeLimit = mission.timeLimit;
+    other.mission.hudItems = mission.hudItems;
+    other.mission.scoreCriteria = mission.scoreCriteria;
     other.mission.startingPoints = mission.startingPoints;
     other.mission.pointsCanBeNegative = mission.pointsCanBeNegative;
     other.mission.bronzeReq = mission.bronzeReq;
     other.mission.silverReq = mission.silverReq;
     other.mission.goldReq = mission.goldReq;
     other.mission.platinumReq = mission.platinumReq;
+    other.mission.briefingObjective = mission.briefingObjective;
+    other.mission.briefingNotes = mission.briefingNotes;
     other.mission.makerRecord = mission.makerRecord;
     other.mission.makerRecordDate = mission.makerRecordDate;
     
@@ -546,7 +552,7 @@ void Area::deleteEdge(size_t eIdx) {
         Vertex* vPtr = vertexes[v];
         forIdx(e, vPtr->edges) {
             if(vPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 vPtr->edgeIdxs[e], eIdx, false
             );
         }
@@ -556,14 +562,14 @@ void Area::deleteEdge(size_t eIdx) {
         Sector* sPtr = sectors[s];
         forIdx(e, sPtr->edges) {
             if(sPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 sPtr->edgeIdxs[e], eIdx, false
             );
         }
     }
     
     delete edges[eIdx];
-    edges.erase(edges.begin() + eIdx);
+    eraseInVector(edges, eIdx);
 }
 
 
@@ -592,14 +598,14 @@ void Area::deleteSector(size_t sIdx) {
         Edge* ePtr = edges[e];
         for(size_t s = 0; s < 2; s++) {
             if(ePtr->sectorIdxs[s] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 ePtr->sectorIdxs[s], sIdx, false
             );
         }
     }
     
     delete sectors[sIdx];
-    sectors.erase(sectors.begin() + sIdx);
+    eraseInVector(sectors, sIdx);
 }
 
 
@@ -628,14 +634,14 @@ void Area::deleteVertex(size_t vIdx) {
         Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             if(ePtr->vertexIdxs[v] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 ePtr->vertexIdxs[v], vIdx, false
             );
         }
     }
     
     delete vertexes[vIdx];
-    vertexes.erase(vertexes.begin() + vIdx);
+    eraseInVector(vertexes, vIdx);
 }
 
 
@@ -967,7 +973,6 @@ void Area::generateBlockmap() {
      */
     for(size_t bx = 0; bx < bmap.nCols; bx++) {
         for(size_t by = 0; by < bmap.nRows; by++) {
-        
             if(!bmap.sectors[bx][by].empty()) continue;
             
             if(
@@ -1012,7 +1017,6 @@ void Area::generateBlockmap() {
  */
 void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
     forIdx(e, edgeList) {
-    
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
         
@@ -1027,7 +1031,6 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
         
         for(size_t bx = bMinX; bx <= bMaxX; bx++) {
             for(size_t by = bMinY; by <= bMaxY; by++) {
-            
                 //Get the block's coordinates.
                 Point corner = bmap.getCellTopLeftCorner(bx, by);
                 
@@ -1039,7 +1042,6 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
                         v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1])
                     )
                 ) {
-                
                     //If it is, add it and the sectors to the list.
                     bool addEdge = true;
                     if(ePtr->sectors[0] && ePtr->sectors[1]) {
@@ -1162,8 +1164,9 @@ void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
             
         } case MOB_CATEGORY_PILES: {
             PileType* pilType = (PileType*) mPtr->type;
+            if(!pilType->contentsResource) continue;
             if(
-                pilType->contents->deliveryResult !=
+                pilType->contentsResource->deliveryResult !=
                 RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
             ) {
                 continue;
@@ -1174,7 +1177,7 @@ void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
             amountInPile =
                 std::clamp(amountInPile, (size_t) 0, pilType->maxAmount);
             amount += amountInPile;
-            points += amountInPile * pilType->contents->pointAmount;
+            points += amountInPile * pilType->contentsResource->pointAmount;
             break;
             
         } case MOB_CATEGORY_RESOURCES: {
@@ -1313,7 +1316,8 @@ void Area::loadGeometryFromDataNode(
         
         if(!hazardStr.empty()) {
             if(!isInMap(game.content.hazards.list, hazardStr)) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Unknown hazard \"" + hazardStr + "\"!", hazardNode
                 );
             } else {
@@ -1346,7 +1350,9 @@ void Area::loadGeometryFromDataNode(
         bool isBossBool = false;
         
         //DEPRECATED in 1.2.0 by "boss" as a script var.
-        mRS.set("boss", isBossBool);
+        deprecatedReaderSetter(
+            mRS, "boss", "use the \"boss\" script var", isBossBool
+        );
         
         mRS.set("p", newMob->center);
         mRS.set("angle", newMob->angle);
@@ -1380,7 +1386,8 @@ void Area::loadGeometryFromDataNode(
         if(!valid) {
             //Error.
             if(level >= CONTENT_LOAD_LEVEL_FULL) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Unknown mob type \"" + typeStr + "\" of category \"" +
                     mobNode->name + "\"!",
                     mobNode
@@ -1460,7 +1467,9 @@ void Area::loadGeometryFromDataNode(
         DataNode* alphaNode = nullptr;
         
         //DEPRECATED in 1.2.0 by "tint".
-        sRS.set("alpha", alphaC, &alphaNode);
+        deprecatedReaderSetter(
+            sRS, "alpha", "use \"tint\"", alphaC, &alphaNode
+        );
         if(alphaNode) {
             newShadow->tint.a = alphaC / 255.0f;
         }
@@ -1478,7 +1487,8 @@ void Area::loadGeometryFromDataNode(
             newShadow->bitmap == game.bmpError &&
             level >= CONTENT_LOAD_LEVEL_FULL
         ) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown tree shadow texture \"" + newShadow->bmpName + "\"!",
                 shadowNode
             );
@@ -1593,10 +1603,20 @@ void Area::loadMainDataFromDataNode(
     //Area configuration data.
     ReaderSetter aRS(node);
     
+    float bgBmpZoom = 1.0f;
+    DataNode* bgBmpZoomNode = nullptr;
     DataNode* weatherNode = nullptr;
     DataNode* songNode = nullptr;
     DataNode* bossSongOverrideNode = nullptr;
     DataNode* bossVictorySongOverrideNode = nullptr;
+    
+    //DEPRECATED in 1.2.0 by "bg_scale".
+    deprecatedReaderSetter(
+        aRS, "bg_zoom", "use \"bg_scale\"", bgBmpZoom, &bgBmpZoomNode
+    );
+    if(bgBmpZoomNode) {
+        bgBmpTrans.scale = Point(bgBmpZoom);
+    }
     
     aRS.set("subtitle", subtitle);
     aRS.set("difficulty", difficulty);
@@ -1610,10 +1630,13 @@ void Area::loadMainDataFromDataNode(
     aRS.set("weather", weatherName, &weatherNode);
     aRS.set("day_time_start", dayTimeStart);
     aRS.set("day_time_speed", dayTimeSpeed);
+    aRS.set("bg_angle", bgBmpTrans.rot);
     aRS.set("bg_bmp", bgBmpName);
-    aRS.set("bg_color", bgColor);
-    aRS.set("bg_dist", bgDist);
-    aRS.set("bg_zoom", bgBmpZoom);
+    aRS.set("bg_color", bgVoidColor);
+    aRS.set("bg_dist", bgBmpDist);
+    aRS.set("bg_offset", bgBmpTrans.trans);
+    aRS.set("bg_scale", bgBmpTrans.scale);
+    aRS.set("bg_tint", bgBmpTint);
     aRS.set("max_pikmin_in_field", maxPikminInField);
     aRS.set("onions_auto_eject", onionsAutoEject);
     aRS.set("onions_eject_grown_pikmin", onionsEjectGrownPikmin);
@@ -1624,7 +1647,8 @@ void Area::loadMainDataFromDataNode(
             weatherCondition = Weather();
             
         } else if(!isInMap(game.content.weatherConditions.list, weatherName)) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown weather condition \"" + weatherName + "\"!",
                 weatherNode
             );
@@ -1641,7 +1665,8 @@ void Area::loadMainDataFromDataNode(
             !songName.empty() &&
             !isInMap(game.content.songs.list, songName)
         ) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown song \"" + songName + "\"!",
                 songNode
             );
@@ -1650,7 +1675,8 @@ void Area::loadMainDataFromDataNode(
             !bossSongOverrideName.empty() &&
             !isInMap(game.content.songs.list, bossSongOverrideName)
         ) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown boss song \"" + bossSongOverrideName + "\"!",
                 bossSongOverrideNode
             );
@@ -1659,7 +1685,8 @@ void Area::loadMainDataFromDataNode(
             !bossVictoryOverrideSongName.empty() &&
             !isInMap(game.content.songs.list, bossVictoryOverrideSongName)
         ) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown boss victory song \"" +
                 bossVictoryOverrideSongName + "\"!",
                 bossVictorySongOverrideNode
@@ -1667,7 +1694,7 @@ void Area::loadMainDataFromDataNode(
         }
     }
     
-    if(level >= CONTENT_LOAD_LEVEL_FULL && !bgBmpName.empty()) {
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR && !bgBmpName.empty()) {
         bgBmp = game.content.bitmaps.list.get(bgBmpName, node);
     }
 }
@@ -1679,12 +1706,6 @@ void Area::loadMainDataFromDataNode(
  * @param node Data node to load from.
  */
 void Area::loadMissionDataFromDataNode(DataNode* node) {
-    mission.hudItems.clear();
-    mission.hudItems.insert(
-        mission.hudItems.begin(),
-        enumGetCount(missionHudItemIdNames), MissionHudItem()
-    );
-    
     ReaderSetter mRS(node);
     string presetStr;
     string medalAwardModeStr;
@@ -1694,6 +1715,14 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     //DEPRECATED in 1.2.0 by the new mission system.
     if(node->getNrOfChildrenByName("mission_goal") > 0) {
+        game.log.write(
+            LOG_LEVEL_WARNING,
+            "The mission system used before Pikifen 1.2.0 "
+            "is deprecated and may be removed in the future! "
+            "Please rework the mission in the area editor so that "
+            "it uses the new system.",
+            node
+        );
         loadOldMissionSystem(node);
     }
     
@@ -1847,6 +1876,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         cRS.set("index_param", newCriterion.idxParam);
         cRS.set("points", newCriterion.points);
         cRS.set("affects_hud", newCriterion.affectsHud);
+        cRS.set("custom_name", newCriterion.customName);
         
         readEnumProp(
             missionMetricNames, metricTypeStr,
@@ -1926,13 +1956,17 @@ void Area::loadOldMissionSystem(DataNode* node) {
     
     //Goal.
     goal = enumGetValue(missionGoalNames, goalStr);
-    vector<string> missionRequiredMobsStr =
-        semicolonListToVector(requiredMobsStr);
-    goalMobIdxs.reserve(missionRequiredMobsStr.size());
-    forIdx(m, missionRequiredMobsStr) {
-        goalMobIdxs.insert(
-            s2i(missionRequiredMobsStr[m])
-        );
+    
+    if(!requiredMobsStr.empty()) {
+        vector<string> missionRequiredMobsStr =
+            semicolonListToVector(requiredMobsStr);
+        goalMobIdxs.reserve(missionRequiredMobsStr.size());
+        forIdx(m, missionRequiredMobsStr) {
+            goalMobIdxs.insert(
+                s2i(missionRequiredMobsStr[m])
+            );
+        }
+        if(goalAmount == 0) goalAmount = goalMobIdxs.size();
     }
     
     //Automatically turn the pause menu fail condition on/off for convenience.
@@ -1979,7 +2013,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "Collect treasures!";
         mission.mobGroups.push_back(
         MissionMobGroup {
-            .type = MISSION_MOB_GROUP_TREASURES,
+            .type =
+            goalMobIdxs.empty() ?
+            MISSION_MOB_GROUP_TREASURES :
+            MISSION_MOB_GROUP_CUSTOM,
             .highlightOnRadar = true,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
@@ -2013,7 +2050,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "Battle enemies!";
         mission.mobGroups.push_back(
         MissionMobGroup {
-            .type = MISSION_MOB_GROUP_ENEMIES,
+            .type =
+            goalMobIdxs.empty() ?
+            MISSION_MOB_GROUP_ENEMIES :
+            MISSION_MOB_GROUP_CUSTOM,
             .enemiesNeedCollection = enemyPointsOnCollection,
             .highlightOnRadar = true,
             .mobIdxs =
@@ -2572,7 +2612,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Vertexes.
     DataNode* vertexesNode = node->addNew("vertexes");
     forIdx(v, vertexes) {
-    
         //Vertex.
         Vertex* vPtr = vertexes[v];
         vertexesNode->addNew("v", p2s(v2p(vPtr)));
@@ -2581,7 +2620,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Edges.
     DataNode* edgesNode = node->addNew("edges");
     forIdx(e, edges) {
-    
         //Edge.
         Edge* ePtr = edges[e];
         DataNode* edgeNode = edgesNode->addNew("e");
@@ -2620,7 +2658,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Sectors.
     DataNode* sectorsNode = node->addNew("sectors");
     forIdx(s, sectors) {
-    
         //Sector.
         Sector* sPtr = sectors[s];
         DataNode* sectorNode = sectorsNode->addNew("s");
@@ -2680,7 +2717,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Mobs.
     DataNode* mobsNode = node->addNew("mobs");
     forIdx(m, mobGenerators) {
-    
         //Mob.
         MobGen* mPtr = mobGenerators[m];
         string catName = "unknown";
@@ -2719,7 +2755,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Path stops.
     DataNode* pathStopsNode = node->addNew("path_stops");
     forIdx(s, pathStops) {
-    
         //Path stop.
         PathStop* sPtr = pathStops[s];
         DataNode* pathStopNode = pathStopsNode->addNew("s");
@@ -2751,7 +2786,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Tree shadows.
     DataNode* shadowsNode = node->addNew("tree_shadows");
     forIdx(s, treeShadows) {
-    
         //Tree shadow.
         TreeShadow* sPtr = treeShadows[s];
         DataNode* shadowNode = shadowsNode->addNew("shadow");
@@ -2769,7 +2803,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     //Regions.
     DataNode* regionsNode = node->addNew("regions");
     forIdx(r, regions) {
-    
         //Region.
         AreaRegion* rPtr = regions[r];
         DataNode* regionNode = regionsNode->addNew("region");
@@ -2798,10 +2831,13 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     //Main data.
     aGW.write("subtitle", subtitle);
     aGW.write("difficulty", difficulty);
+    aGW.write("bg_angle", bgBmpTrans.rot);
     aGW.write("bg_bmp", bgBmpName);
-    aGW.write("bg_color", bgColor);
-    aGW.write("bg_dist", bgDist);
-    aGW.write("bg_zoom", bgBmpZoom);
+    aGW.write("bg_color", bgVoidColor);
+    aGW.write("bg_dist", bgBmpDist);
+    aGW.write("bg_offset", bgBmpTrans.trans);
+    aGW.write("bg_scale", bgBmpTrans.scale);
+    aGW.write("bg_tint", bgBmpTint);
     aGW.write("song", songName);
     aGW.write("boss_song", bossSongOverrideName);
     aGW.write("boss_victory_song", bossVictoryOverrideSongName);
@@ -2937,6 +2973,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         cGW.write("index_param", criterionPtr->idxParam);
         cGW.write("points", criterionPtr->points);
         cGW.write("affects_hud", criterionPtr->affectsHud);
+        cGW.write("custom_name", criterionPtr->customName);
     }
 }
 
@@ -3087,7 +3124,6 @@ bool Blockmap::getEdgesInRect(
     
     for(size_t bx = bx1; bx <= bx2; bx++) {
         for(size_t by = by1; by <= by2; by++) {
-        
             const vector<Edge*>& blockEdges = edges[bx][by];
             
             forIdx(e, blockEdges) {
@@ -3127,7 +3163,7 @@ size_t Blockmap::getRow(float y) const {
  * @param vars String representation of the script vars.
  */
 MobGen::MobGen(
-    const Point& center, MobType* type, float angle, const string& vars
+    const Point& center, MobType* type, Angle angle, const string& vars
 ) :
     type(type),
     center(center),
@@ -3166,7 +3202,7 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
  * vertically.
  */
 TreeShadow::TreeShadow(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     const ALLEGRO_COLOR& tint, const string& bmpName, const Point& sway
 ) :
     bmpName(bmpName),

@@ -26,9 +26,9 @@ using std::unordered_set;
 using std::vector;
 
 
-struct Edge;
-struct Sector;
-struct Vertex;
+class Edge;
+class Sector;
+class Vertex;
 
 
 namespace GEOMETRY {
@@ -75,7 +75,9 @@ enum TRIANGULATION_ERROR {
  * These are used to detect whether a point is inside a sector,
  * and to draw, seeing as OpenGL cannot draw concave polygons.
  */
-struct Triangle {
+class Triangle {
+
+public:
 
     //--- Public members ---
     
@@ -99,7 +101,9 @@ struct Triangle {
  * in a polygon tree. If it has no vertexes, then instead it represents the
  * root of said tree.
  */
-struct Polygon {
+class Polygon {
+
+public:
 
     //--- Public members ---
     
@@ -128,7 +132,9 @@ struct Polygon {
 /**
  * @brief Info about the geometry problems the area currently has.
  */
-struct GeometryProblems {
+class GeometryProblems {
+
+public:
 
     //--- Public members ---
     
@@ -143,8 +149,8 @@ struct GeometryProblems {
 
 void findTraceEdge(
     Vertex* vptr, const Vertex* prevVPtr, const Sector* sPtr,
-    float prevEAngle, bool bestIsClosestCw,
-    Edge** nextEPtr, float* nextEAngle, Vertex** nextVPtr,
+    Angle prevEAngle, bool bestIsClosestCw,
+    Edge** nextEPtr, Angle* nextEAngle, Vertex** nextVPtr,
     unordered_set<Edge*>* excludedEdges
 );
 void getCCE(

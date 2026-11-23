@@ -175,7 +175,9 @@ enum PLAYER_INPUT_ICON_SPRITE {
 /**
  * @brief Mediates everything related to hardware, in the context of controls.
  */
-struct HardwareMediator {
+class HardwareMediator {
+
+public:
 
     //--- Public members ---
     
@@ -192,7 +194,8 @@ struct HardwareMediator {
         PLAYER_INPUT_ICON_SPRITE* outBitmapSprite,
         string* outExtra
     ) const;
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
+    void handleAllegroOtherEvent(const ALLEGRO_EVENT& ev);
     Inpution::InputSource sanitizeStick(
         const Inpution::InputSource& source
     ) const;
@@ -204,6 +207,8 @@ struct HardwareMediator {
     //--- Private misc. definitions ---
     
     struct Controller {
+
+    public:
     
         //--- Public members ---
         
@@ -216,6 +221,8 @@ struct HardwareMediator {
     };
     
     struct InputSourceMapEntry {
+
+    public:
     
         //--- Public members ---
         
@@ -245,6 +252,8 @@ struct HardwareMediator {
     };
     
     struct InputSourceIcon {
+
+    public:
     
         //--- Public members ---
         
@@ -258,6 +267,8 @@ struct HardwareMediator {
     };
     
     struct DeviceBrand {
+
+    public:
     
         //--- Public members ---
         

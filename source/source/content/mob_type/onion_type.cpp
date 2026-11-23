@@ -39,6 +39,8 @@ OnionType::OnionType() :
     areaEditorProps.push_back(aepPikInside);
     
     OnionFsm::createFsm(this);
+    
+    peekUnderneathAlpha = 0.2f;
 }
 
 
@@ -59,6 +61,7 @@ AnimConversionVector OnionType::getAnimConversions() const {
     AnimConversionVector v;
     v.push_back(std::make_pair(ONION_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(ONION_ANIM_GENERATING, "generating"));
+    v.push_back(std::make_pair(ONION_ANIM_RECEIVED, "received"));
     v.push_back(
         std::make_pair(ONION_ANIM_STOPPING_GENERATION, "stopping_generation")
     );
@@ -81,7 +84,6 @@ void OnionType::loadCatProperties(DataNode* file) {
     DataNode* nutrientFamiliesNode;
     
     oRS.set("auto_eject", autoEject);
-    oRS.set("can_turn_see_through", canTurnSeeThrough);
     oRS.set("delivery_animation", deliveryAnimStr, &deliveryAnimNode);
     oRS.set("delivery_area_radius", deliveryAreaRadius);
     oRS.set("eject_grown_pikmin", ejectGrownPikmin);
@@ -123,7 +125,8 @@ void OnionType::loadCatResources(DataNode* file) {
     //Now's a good time to check the leg body parts.
     forIdx(b, nest->legBodyParts) {
         if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "The Onion type \"" + name + "\" specifies a leg body part "
                 "called \"" + nest->legBodyParts[b] + "\", "
                 "but no such body part exists!"

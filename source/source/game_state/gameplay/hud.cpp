@@ -86,6 +86,9 @@ const float SCORE_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;
 //Ratio of the score gamut to show around the mission score ruler flapper.
 const float SCORE_RULER_RATIO_RANGE = 0.20f;
 
+//Name of the GUI definition file for the standby items.
+const string STANDBY_GUI_FILE_NAME = "gameplay_standby";
+
 //How long the standby swap juice animation lasts for.
 const float STANDBY_SWAP_JUICE_DURATION = 0.5f;
 
@@ -105,59 +108,18 @@ const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
 
 
 /**
- * @brief Constructs a new HUD struct object.
+ * @brief Constructs a new HUD object.
  */
 Hud::Hud() :
     leaderIconMgr(&gui),
     leaderHealthMgr(&gui),
     standbyIconMgr(&gui) {
     
-    DataNode* hudFileNode = &game.content.guiDefs.list[HUD::GUI_FILE_NAME];
-    
-    gui.registerCoords("time",                      0,    0,  0,  0);
-    gui.registerCoords("day_bubble",                0,    0,  0,  0);
-    gui.registerCoords("day_number",                0,    0,  0,  0);
-    gui.registerCoords("leader_1_icon",             7,   90,  8, 10);
-    gui.registerCoords("leader_2_icon",             6,   80,  5,  9);
-    gui.registerCoords("leader_3_icon",             6, 71.5,  5,  7);
-    gui.registerCoords("leader_1_health",          16,   90,  8, 10);
-    gui.registerCoords("leader_2_health",          12,   80,  5,  9);
-    gui.registerCoords("leader_3_health",          12, 71.5,  5,  7);
-    gui.registerCoords("leader_next_input",         4,   83,  3,  3);
-    gui.registerCoords("standby_icon",             50,   91,  8, 10);
-    gui.registerCoords("standby_amount",           50,   97,  8,  4);
-    gui.registerCoords("standby_bubble",            0,    0,  0,  0);
-    gui.registerCoords("standby_maturity_icon",    54,   88,  4,  8);
-    gui.registerCoords("standby_next_icon",        58,   93,  6,  8);
-    gui.registerCoords("standby_next_input",       60,   96,  3,  3);
-    gui.registerCoords("standby_prev_icon",        42,   93,  6,  8);
-    gui.registerCoords("standby_prev_input",       40,   96,  3,  3);
-    gui.registerCoords("group_amount",             73,   91, 15, 14);
-    gui.registerCoords("group_bubble",             73,   91, 15, 14);
-    gui.registerCoords("field_amount",             91,   91, 15, 14);
-    gui.registerCoords("field_bubble",             91,   91, 15, 14);
-    gui.registerCoords("total_amount",              0,    0,  0,  0);
-    gui.registerCoords("total_bubble",              0,    0,  0,  0);
-    gui.registerCoords("counters_x",                0,    0,  0,  0);
-    gui.registerCoords("counters_slash_1",         82,   91,  4,  8);
-    gui.registerCoords("counters_slash_2",          0,    0,  0,  0);
-    gui.registerCoords("counters_slash_3",          0,    0,  0,  0);
-    gui.registerCoords("mission_goal",             18,    8, 32, 12);
-    gui.registerCoords("mission_score",            18,   20, 32, 10);
-    gui.registerCoords("mission_clock",            82,    8, 32, 12);
-    gui.registerCoords("mission_misc",             82,   20, 32, 10);
-    gui.registerCoords("control_guide",            83,   55, 30, 50);
-    gui.registerCoords("inventory_update",         50,   37, 12, 10);
-    gui.registerCoords("watermark_wordmark",     54.5,    8, 19,  8);
-    gui.registerCoords("watermark_logo",           40,    8,  8,  8);
-    gui.readDataFile(hudFileNode);
-    
     //Leader health and icons.
     for(size_t l = 0; l < 3; l++) {
-    
         //Icon.
         GuiItem* leaderIcon = new GuiItem();
-        leaderIcon->onDraw =
+        leaderIcon->onDrawP =
         [this, l] (const DrawInfo & draw) {
             LeaderIconBubble icon;
             DrawInfo finalDraw;
@@ -177,20 +139,20 @@ Hud::Hud() :
             );
             drawBitmapInBox(
                 icon.bmp,
-                finalDraw.center, finalDraw.size, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
             );
             drawBitmapInBox(
                 bmpBubble,
-                finalDraw.center, finalDraw.size, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
             );
         };
-        gui.addItem(leaderIcon, "leader_" + i2s(l + 1) + "_icon");
+        gui.addItemP(leaderIcon, "leader_" + i2s(l + 1) + "_icon");
         leaderIconMgr.registerBubble(l, leaderIcon);
         
         
         //Health wheel.
         GuiItem* leaderHealth = new GuiItem();
-        leaderHealth->onDraw =
+        leaderHealth->onDrawP =
         [this, l] (const DrawInfo & draw) {
             const ALLEGRO_COLOR DANGER_COLOR = al_map_rgb(255, 0, 0);
             LeaderHealthBubble health;
@@ -213,7 +175,7 @@ Hud::Hud() :
                 bmpHardBubble,
                 finalDraw.center,
                 finalDraw.size,
-                true, 0.0f,
+                true, true, 0.0f,
                 tintColor(
                     interpolateColor(
                         health.redness, 0.0f, 1.0f,
@@ -254,7 +216,7 @@ Hud::Hud() :
                 );
             }
         };
-        gui.addItem(leaderHealth, "leader_" + i2s(l + 1) + "_health");
+        gui.addItemP(leaderHealth, "leader_" + i2s(l + 1) + "_health");
         leaderHealthMgr.registerBubble(l, leaderHealth);
         
     }
@@ -262,7 +224,7 @@ Hud::Hud() :
     
     //Next leader input.
     GuiItem* leaderNextInput = new GuiItem();
-    leaderNextInput->onDraw =
+    leaderNextInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         if(game.states.gameplay->availableLeaders.size() < 2) return;
@@ -271,12 +233,12 @@ Hud::Hud() :
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    gui.addItem(leaderNextInput, "leader_next_input");
+    gui.addItemP(leaderNextInput, "leader_next_input");
     
     
     //Sun Meter.
     GuiItem* sunMeter = new GuiItem();
-    sunMeter->onDraw =
+    sunMeter->onDrawP =
     [this, sunMeter] (const DrawInfo & draw) {
         const ALLEGRO_COLOR SUN_BUBBLE_COLOR = al_map_rgb(255, 192, 128);
         unsigned char nHours =
@@ -299,7 +261,7 @@ Hud::Hud() :
         //Width, from the center of the first dot to the center of the last.
         float dotsSpan = lastDotX - firstDotX;
         float dotInterval = dotsSpan / (float) nHours;
-        float sunMeterSunAngle =
+        Angle sunMeterSunAngle =
             game.states.gameplay->areaTimePassed *
             HUD::SUN_METER_SUN_SPIN_SPEED;
             
@@ -379,23 +341,23 @@ Hud::Hud() :
             }
         }
     };
-    gui.addItem(sunMeter, "time");
+    gui.addItemP(sunMeter, "time");
     
     
     //Day number bubble.
     GuiItem* dayBubble = new GuiItem();
-    dayBubble->onDraw =
+    dayBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         drawBitmapInBox(
-            bmpDayBubble, draw.center, draw.size, true, 0.0f, draw.tint
+            bmpDayBubble, draw.center, draw.size, true, true, 0.0f, draw.tint
         );
     };
-    gui.addItem(dayBubble, "day_bubble");
+    gui.addItemP(dayBubble, "day_bubble");
     
     
     //Day number text.
     GuiItem* dayNr = new GuiItem();
-    dayNr->onDraw =
+    dayNr->onDrawP =
     [this] (const DrawInfo & draw) {
         drawText(
             i2s(game.states.gameplay->day),
@@ -403,207 +365,22 @@ Hud::Hud() :
             Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint
         );
     };
-    gui.addItem(dayNr, "day_number");
+    gui.addItemP(dayNr, "day_number");
     
     
-    //Standby group member icon.
-    GuiItem* standbyIcon = new GuiItem();
-    standbyIcon->onDraw =
-    [this] (const DrawInfo & draw) {
-        this->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
-    };
-    gui.addItem(standbyIcon, "standby_icon");
-    standbyIconMgr.registerBubble(BUBBLE_RELATION_CURRENT, standbyIcon);
+    //Standby item set.
+    standbyItemSet = new GuiItem();
+    standbyItemSet->alphaMultiplier = 0.0f;
+    gui.addItemP(standbyItemSet, "standby_item_set");
     
     
-    //Next standby subgroup icon.
-    GuiItem* standbyNextIcon = new GuiItem();
-    standbyNextIcon->onDraw =
-    [this] (const DrawInfo & draw) {
-        this->drawStandbyIcon(BUBBLE_RELATION_NEXT);
-    };
-    gui.addItem(standbyNextIcon, "standby_next_icon");
-    standbyIconMgr.registerBubble(BUBBLE_RELATION_NEXT, standbyNextIcon);
-    
-    
-    //Next standby subgroup input.
-    GuiItem* standbyNextInput = new GuiItem();
-    standbyNextInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        if(!player->leaderPtr) return;
-        SubgroupType* nextType;
-        player->leaderPtr->group->getNextStandbyType(
-            false, &nextType
-        );
-        if(
-            nextType ==
-            player->leaderPtr->group->curStandbyType
-        ) {
-            return;
-        }
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_NEXT_TYPE, draw.center, draw.size,
-            true, game.sysContent.fntSlim,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItem(standbyNextInput, "standby_next_input");
-    
-    
-    //Previous standby subgroup icon.
-    GuiItem* standbyPrevIcon = new GuiItem();
-    standbyPrevIcon->onDraw =
-    [this] (const DrawInfo & draw) {
-        this->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
-    };
-    gui.addItem(standbyPrevIcon, "standby_prev_icon");
-    standbyIconMgr.registerBubble(BUBBLE_RELATION_PREVIOUS, standbyPrevIcon);
-    
-    
-    //Previous standby subgroup input.
-    GuiItem* standbyPrevInput = new GuiItem();
-    standbyPrevInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        if(!player->leaderPtr) return;
-        SubgroupType* prevType;
-        player->leaderPtr->group->getNextStandbyType(
-            true, &prevType
-        );
-        SubgroupType* nextType;
-        player->leaderPtr->group->getNextStandbyType(
-            false, &nextType
-        );
-        if(
-            prevType ==
-            player->leaderPtr->group->curStandbyType ||
-            prevType == nextType
-        ) {
-            return;
-        }
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_PREV_TYPE, draw.center, draw.size,
-            true, game.sysContent.fntSlim,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItem(standbyPrevInput, "standby_prev_input");
-    
-    
-    //Standby group member maturity.
-    GuiItem* standbyMaturityIcon = new GuiItem();
-    standbyMaturityIcon->onDraw =
-    [this, standbyMaturityIcon] (const DrawInfo & draw) {
-        //Standby group member preparations.
-        Leader* lPtr = player->leaderPtr;
-        if(!lPtr || !lPtr->group) return;
-        
-        ALLEGRO_BITMAP* standbyMatBmp = nullptr;
-        Mob* closest =
-            player->closestGroupMember[BUBBLE_RELATION_CURRENT];
-            
-        if(lPtr->group->curStandbyType && closest) {
-            SUBGROUP_TYPE_CATEGORY c =
-                lPtr->group->curStandbyType->getCategory();
-                
-            switch(c) {
-            case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
-                Pikmin* pPtr =
-                    dynamic_cast<Pikmin*>(closest);
-                standbyMatBmp =
-                    pPtr->pikType->bmpMaturityIcon[pPtr->maturity];
-                break;
-                
-            } default: {
-                break;
-                
-            }
-            }
-        }
-        
-        ALLEGRO_COLOR color =
-            mapAlpha(this->standbyItemsAlpha * 255);
-            
-        if(standbyMatBmp) {
-            drawBitmapInBox(
-                standbyMatBmp, draw.center,
-                (draw.size * 0.8) + standbyMaturityIcon->getJuiceValue(),
-                true,
-                0.0f, tintColor(color, draw.tint)
-            );
-            drawBitmapInBox(
-                bmpBubble, draw.center,
-                draw.size + standbyMaturityIcon->getJuiceValue(),
-                true, 0.0f, tintColor(color, draw.tint)
-            );
-        }
-        
-        if(
-            lPtr->group->curStandbyType != prevStandbyType ||
-            standbyMatBmp != prevMaturityIcon
-        ) {
-            standbyMaturityIcon->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_ICON
-            );
-            prevStandbyType = lPtr->group->curStandbyType;
-            prevMaturityIcon = standbyMatBmp;
-        }
-    };
-    gui.addItem(standbyMaturityIcon, "standby_maturity_icon");
-    
-    
-    //Standby subgroup member amount bubble.
-    GuiItem* standbyBubble = new GuiItem();
-    standbyBubble->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawBitmap(
-            bmpCounterBubbleStandby,
-            draw.center, draw.size,
-            0.0f,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItem(standbyBubble, "standby_bubble");
-    
-    
-    //Standby subgroup member amount.
-    standbyAmount = new GuiItem();
-    standbyAmount->onDraw =
-    [this] (const DrawInfo & draw) {
-        size_t nStandbyPikmin = 0;
-        Leader* lPtr = player->leaderPtr;
-        
-        if(lPtr && lPtr->group->curStandbyType) {
-            forIdx(m, lPtr->group->members) {
-                Mob* mPtr = lPtr->group->members[m];
-                if(mPtr->subgroupTypePtr == lPtr->group->curStandbyType) {
-                    nStandbyPikmin++;
-                }
-            }
-        }
-        
-        if(nStandbyPikmin != standbyCountNr) {
-            standbyAmount->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-            );
-            standbyCountNr = nStandbyPikmin;
-        }
-        
-        drawText(
-            i2s(nStandbyPikmin), game.sysContent.fntCounter,
-            draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint),
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            Point(1.0f + standbyAmount->getJuiceValue())
-        );
-    };
-    gui.addItem(standbyAmount, "standby_amount");
+    //Standby items.
+    setupStandbyItems(standbyItemSet);
     
     
     //Group Pikmin amount bubble.
     GuiItem* groupBubble = new GuiItem();
-    groupBubble->onDraw =
+    groupBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!player->leaderPtr) return;
         drawBitmap(
@@ -611,12 +388,12 @@ Hud::Hud() :
             draw.center, draw.size, 0.0f, draw.tint
         );
     };
-    gui.addItem(groupBubble, "group_bubble");
+    gui.addItemP(groupBubble, "group_bubble");
     
     
     //Group Pikmin amount.
     groupAmount = new GuiItem();
-    groupAmount->onDraw =
+    groupAmount->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!player->leaderPtr) return;
         size_t curAmount = game.states.gameplay->getAmountOfGroupPikmin(player);
@@ -636,24 +413,24 @@ Hud::Hud() :
             Point(1.0f + groupAmount->getJuiceValue())
         );
     };
-    gui.addItem(groupAmount, "group_amount");
+    gui.addItemP(groupAmount, "group_amount");
     
     
     //Field Pikmin amount bubble.
     GuiItem* fieldBubble = new GuiItem();
-    fieldBubble->onDraw =
+    fieldBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         drawBitmap(
             bmpCounterBubbleField,
             draw.center, draw.size, 0.0f, draw.tint
         );
     };
-    gui.addItem(fieldBubble, "field_bubble");
+    gui.addItemP(fieldBubble, "field_bubble");
     
     
     //Field Pikmin amount.
     fieldAmount = new GuiItem();
-    fieldAmount->onDraw =
+    fieldAmount->onDrawP =
     [this] (const DrawInfo & draw) {
         size_t curAmount = game.states.gameplay->getAmountOfFieldPikmin();
         
@@ -672,24 +449,24 @@ Hud::Hud() :
             Point(1.0f + fieldAmount->getJuiceValue())
         );
     };
-    gui.addItem(fieldAmount, "field_amount");
+    gui.addItemP(fieldAmount, "field_amount");
     
     
     //Total Pikmin amount bubble.
     GuiItem* totalBubble = new GuiItem();
-    totalBubble->onDraw =
+    totalBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         drawBitmap(
             bmpCounterBubbleTotal,
             draw.center, draw.size, 0.0f, draw.tint
         );
     };
-    gui.addItem(totalBubble, "total_bubble");
+    gui.addItemP(totalBubble, "total_bubble");
     
     
     //Total Pikmin amount.
     totalAmount = new GuiItem();
-    totalAmount->onDraw =
+    totalAmount->onDrawP =
     [this] (const DrawInfo & draw) {
         size_t curAmount = game.states.gameplay->getAmountOfTotalPikmin();
         
@@ -708,25 +485,24 @@ Hud::Hud() :
             Point(1.0f + totalAmount->getJuiceValue())
         );
     };
-    gui.addItem(totalAmount, "total_amount");
+    gui.addItemP(totalAmount, "total_amount");
     
     
     //Pikmin counter "x".
     GuiItem* countersX = new GuiItem();
-    countersX->onDraw =
+    countersX->onDrawP =
     [this] (const DrawInfo & draw) {
         drawText(
-            "x", game.sysContent.fntCounter, draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
+            "x", game.sysContent.fntCounter, draw.center, draw.size, draw.tint
         );
     };
-    gui.addItem(countersX, "counters_x");
+    gui.addItemP(countersX, "counters_x");
     
     
     //Pikmin counter slashes.
     for(size_t s = 0; s < 3; s++) {
         GuiItem* counterSlash = new GuiItem();
-        counterSlash->onDraw =
+        counterSlash->onDrawP =
         [this] (const DrawInfo & draw) {
             if(!player->leaderPtr) return;
             drawText(
@@ -734,29 +510,29 @@ Hud::Hud() :
                 draw.tint
             );
         };
-        gui.addItem(counterSlash, "counters_slash_" + i2s(s + 1));
+        gui.addItemP(counterSlash, "counters_slash_" + i2s(s + 1));
     }
     
     
     if(game.curArea->type == AREA_TYPE_MISSION) {
         //Mission "goal" item.
         GuiItem* missionGoalItem = new GuiItem();
-        gui.addItem(missionGoalItem, "mission_goal");
+        gui.addItemP(missionGoalItem, "mission_goal");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL, missionGoalItem);
         
         //Mission "score" item.
         GuiItem* missionScoreItem = new GuiItem();
-        gui.addItem(missionScoreItem, "mission_score");
+        gui.addItemP(missionScoreItem, "mission_score");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_SCORE, missionScoreItem);
         
         //Mission "clock" item.
         GuiItem* missionClockItem = new GuiItem();
-        gui.addItem(missionClockItem, "mission_clock");
+        gui.addItemP(missionClockItem, "mission_clock");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_CLOCK, missionClockItem);
         
         //Mission "misc." item.
         GuiItem* missionMiscItem = new GuiItem();
-        gui.addItem(missionMiscItem, "mission_misc");
+        gui.addItemP(missionMiscItem, "mission_misc");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_MISC, missionMiscItem);
     }
     
@@ -782,7 +558,7 @@ Hud::Hud() :
     controlGuide->flags = ALLEGRO_ALIGN_LEFT;
     controlGuide->lineWrap = true;
     controlGuide->controlCondensed = true;
-    controlGuide->onDraw =
+    controlGuide->onDrawP =
     [this, controlGuide] (const DrawInfo & draw) {
         if(
             !game.options.misc.showControlGuide &&
@@ -800,12 +576,12 @@ Hud::Hud() :
         drawSmaller.size *= 0.95f;
         controlGuide->defDrawCode(drawSmaller);
     };
-    gui.addItem(controlGuide, "control_guide");
+    gui.addItemP(controlGuide, "control_guide");
     
     
     //Inventory update display.
     GuiItem* inventoryUpdate = new GuiItem();
-    inventoryUpdate->onDraw =
+    inventoryUpdate->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!player->inventoryUpdateDisplayIName.empty()) {
             KeyframeInterpolator<float> alphaKI;
@@ -827,7 +603,7 @@ Hud::Hud() :
             Point offset(0.0f, yOffsetKI.get(timeRatio));
             
             drawBitmapInBox(
-                iPtr->icon, draw.center + offset, draw.size, true, 0.0f,
+                iPtr->icon, draw.center + offset, draw.size, true, true, 0.0f,
                 multAlpha(draw.tint, alphaMult)
             );
             if(iPtr->onGetAmount) {
@@ -843,33 +619,36 @@ Hud::Hud() :
         }
     };
     inventoryUpdate->forceSquare = true;
-    gui.addItem(inventoryUpdate, "inventory_update");
+    gui.addItemP(inventoryUpdate, "inventory_update");
     
     if(game.options.advanced.expoMode) {
-    
         //Watermark wordmark.
         GuiItem* watermarkWordmark = new GuiItem();
-        watermarkWordmark->onDraw =
+        watermarkWordmark->onDrawP =
         [this] (const DrawInfo & draw) {
             drawBitmapInBox(
-                game.sysContent.bmpWordmark, draw.center, draw.size, true, 0.0f,
-                multAlpha(draw.tint, 0.80f)
+                game.sysContent.bmpWordmark, draw.center, draw.size,
+                true, true, 0.0f, multAlpha(draw.tint, 0.80f)
             );
         };
-        gui.addItem(watermarkWordmark, "watermark_wordmark");
+        gui.addItemP(watermarkWordmark, "watermark_wordmark");
         
         //Watermark logo.
         GuiItem* watermarkLogo = new GuiItem();
-        watermarkLogo->onDraw =
+        watermarkLogo->onDrawP =
         [this] (const DrawInfo & draw) {
             drawBitmapInBox(
-                game.sysContent.bmpIcon, draw.center, draw.size, true, 0.0f,
-                multAlpha(draw.tint, 0.80f)
+                game.sysContent.bmpIcon, draw.center, draw.size,
+                true, true, 0.0f, multAlpha(draw.tint, 0.80f)
             );
         };
-        gui.addItem(watermarkLogo, "watermark_logo");
-        
+        gui.addItemP(watermarkLogo, "watermark_logo");
     }
+    
+    
+    //Add custom items and set the coordinates.
+    DataNode* hudFileNode = &game.content.guiDefs.list[HUD::GUI_FILE_NAME];
+    gui.readDataFile(hudFileNode);
     
     
     //Bitmaps.
@@ -905,7 +684,7 @@ Hud::Hud() :
 
 
 /**
- * @brief Destroys the HUD struct object.
+ * @brief Destroys the HUD object.
  */
 Hud::~Hud() {
     game.content.bitmaps.list.free(bmpBubble);
@@ -938,10 +717,9 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
     
     if(!icon) return;
     
-    ALLEGRO_COLOR color =
-        tintColor(mapAlpha(standbyItemsAlpha * 255), draw.tint);
-        
-    drawBitmapInBox(icon, draw.center, draw.size * 0.8, true, 0.0f, color);
+    drawBitmapInBox(
+        icon, draw.center, draw.size * 0.8, true, true, 0.0f, draw.tint
+    );
     
     if(
         player->closestGroupMemberDistant &&
@@ -951,12 +729,13 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
             bmpDistantPikminMarker,
             draw.center,
             draw.size * 0.8,
-            true,
-            0.0f, color
+            true, true, 0.0f, draw.tint
         );
     }
     
-    drawBitmapInBox(bmpBubble, draw.center, draw.size, true, 0.0f, color);
+    drawBitmapInBox(
+        bmpBubble, draw.center, draw.size, true, true, 0.0f, draw.tint
+    );
 }
 
 
@@ -972,26 +751,33 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
     if(!itemInfo->enabled) return;
     
     switch(itemInfo->displayType) {
-    case MISSION_HUD_ITEM_DISPLAY_TEXT: {
+    case MISSION_HUD_ITEM_DISPLAY_TEXT:
+    case MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR: {
         //Text.
-        
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_TEXT_GUI_FILE_NAME];
-        gui.registerCoords("mission_text_text", 50, 50, 92, 56);
-        gui.readDataFile(guiFile, item);
         
         //The text.
         GuiItem* text = new GuiItem();
-        text->onDraw =
+        text->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
+            string str = itemInfo->text;
+            if(itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR) {
+                game.states.gameplay->scriptVM.vars.getValue(
+                    itemInfo->text, str
+                );
+            }
             drawText(
-                itemInfo->text, game.sysContent.fntStandard,
+                str, game.sysContent.fntStandard,
                 draw.center, draw.size,
                 tintColor(mapAlpha(224), draw.tint)
             );
         };
         item->addChild(text);
-        gui.addItem(text, "mission_text_text");
+        gui.addItemP(text, "mission_text_text");
+        
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_TEXT_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
         
         break;
         
@@ -999,21 +785,15 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
     case MISSION_HUD_ITEM_DISPLAY_CLOCK_UP: {
         //Clock.
         
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_CLOCK_GUI_FILE_NAME];
-        gui.registerCoords("mission_clock_analog",  22, 50, 36, 92);
-        gui.registerCoords("mission_clock_digital", 70, 50, 52, 92);
-        gui.readDataFile(guiFile, item);
-        
         //Analog clock.
         GuiItem* analog = new GuiItem();
-        analog->onDraw =
+        analog->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             drawBitmap(
                 game.sysContent.bmpClock,
                 draw.center, draw.size, 0.0f, draw.tint
             );
-            float clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
+            Angle clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
             float clockHandAlpha = 1.0f;
             if(game.states.gameplay->afterHours) {
                 clockHandAlpha = 0.3f;
@@ -1045,11 +825,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         };
         analog->forceSquare = true;
         item->addChild(analog);
-        gui.addItem(analog, "mission_clock_analog");
+        gui.addItemP(analog, "mission_clock_analog");
         
         //Digital clock.
         GuiItem* digital = new GuiItem();
-        digital->onDraw =
+        digital->onDrawP =
         [itemInfo, digital, which, this] (const DrawInfo & draw) {
             string text;
             ALLEGRO_FONT* font = game.sysContent.fntCounter;
@@ -1100,24 +880,21 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(digital);
-        gui.addItem(digital, "mission_clock_digital");
+        gui.addItemP(digital, "mission_clock_digital");
+        
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_CLOCK_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
         
         break;
         
     } case MISSION_HUD_ITEM_DISPLAY_SCORE: {
         //Score.
         
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_SCORE_GUI_FILE_NAME];
-        gui.registerCoords("mission_score_label",        15, 74, 22, 44);
-        gui.registerCoords("mission_score_points",       50, 74, 40, 44);
-        gui.registerCoords("mission_score_points_label", 85, 80, 22, 32);
-        gui.registerCoords("mission_score_ruler",        50, 26, 88, 40);
-        gui.readDataFile(guiFile, item);
-        
         //"Score" label.
         GuiItem* scoreLabel = new GuiItem();
-        scoreLabel->onDraw =
+        scoreLabel->onDrawP =
         [this] (const DrawInfo & draw) {
             drawText(
                 "Score:", game.sysContent.fntStandard,
@@ -1127,11 +904,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(scoreLabel);
-        gui.addItem(scoreLabel, "mission_score_label");
+        gui.addItemP(scoreLabel, "mission_score_label");
         
         //Score points.
         GuiItem* points = new GuiItem();
-        points->onDraw =
+        points->onDrawP =
             [this, which, points]
         (const DrawInfo & draw) {
             if(
@@ -1153,11 +930,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(points);
-        gui.addItem(points, "mission_score_points");
+        gui.addItemP(points, "mission_score_points");
         
         //"Points" label.
         GuiItem* pointsLabel = new GuiItem();
-        pointsLabel->onDraw =
+        pointsLabel->onDrawP =
         [this] (const DrawInfo & draw) {
             drawText(
                 "pts", game.sysContent.fntStandard,
@@ -1169,11 +946,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(pointsLabel);
-        gui.addItem(pointsLabel, "mission_score_points_label");
+        gui.addItemP(pointsLabel, "mission_score_points_label");
         
         //Ruler.
         GuiItem* ruler = new GuiItem();
-        ruler->onDraw =
+        ruler->onDrawP =
         [this] (const DrawInfo & draw) {
             const ALLEGRO_COLOR MARKING_COLOR = al_map_rgb(100, 110, 180);
             const ALLEGRO_COLOR FLAPPER_DARK_COLOR = al_map_rgb(64, 186, 64);
@@ -1425,22 +1202,21 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(ruler);
-        gui.addItem(ruler, "mission_score_ruler");
+        gui.addItemP(ruler, "mission_score_ruler");
+        
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_SCORE_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
         
         break;
         
     } case MISSION_HUD_ITEM_DISPLAY_HEALTH: {
         //Health bar.
         
-        DataNode* guiFile =
-            &game.content.guiDefs.list[HUD::MISSION_HEALTH_GUI_FILE_NAME];
-        gui.registerCoords("mission_health_label",  22, 50, 36, 92);
-        gui.registerCoords("mission_health_bar",  22, 50, 36, 92);
-        gui.readDataFile(guiFile, item);
-        
         //Label.
         GuiItem* text = new GuiItem();
-        text->onDraw =
+        text->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             drawText(
                 itemInfo->text, game.sysContent.fntStandard,
@@ -1449,11 +1225,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(text);
-        gui.addItem(text, "mission_health_label");
+        gui.addItemP(text, "mission_health_label");
         
         //Bar proper.
         GuiItem* bar = new GuiItem();
-        bar->onDraw =
+        bar->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             MissionMetricType* metricType =
                 game.missionMetricTypes[itemInfo->metricType];
@@ -1487,7 +1263,12 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             }
         };
         item->addChild(bar);
-        gui.addItem(bar, "mission_health_bar");
+        gui.addItemP(bar, "mission_health_bar");
+        
+        //Add custom items and set the coordinates.
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_HEALTH_GUI_FILE_NAME];
+        gui.readDataFile(guiFile, item);
         
         break;
         
@@ -1503,26 +1284,9 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
             itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
             
-        if(onlyOneAmount) {
-            DataNode* guiFile =
-                &game.content.guiDefs.list[HUD::MISSION_AMT_ONE_GUI_FILE_NAME];
-            gui.registerCoords("mission_amount_1_label", 50, 18, 92, 28);
-            gui.registerCoords("mission_amount_1_first", 50, 65, 92, 58);
-            gui.readDataFile(guiFile, item);
-            
-        } else {
-            DataNode* guiFile =
-                &game.content.guiDefs.list[HUD::MISSION_AMT_TWO_GUI_FILE_NAME];
-            gui.registerCoords("mission_amount_2_label",  50, 18, 92, 28);
-            gui.registerCoords("mission_amount_2_first",  22, 65, 36, 58);
-            gui.registerCoords("mission_amount_2_second", 78, 65, 36, 58);
-            gui.readDataFile(guiFile, item);
-            
-        }
-        
         //Label.
         GuiItem* label = new GuiItem();
-        label->onDraw =
+        label->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             drawText(
                 itemInfo->text, game.sysContent.fntStandard,
@@ -1531,14 +1295,14 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(label);
-        gui.addItem(
+        gui.addItemP(
             label,
             onlyOneAmount ? "mission_amount_1_label" : "mission_amount_2_label"
         );
         
         //First amount.
         GuiItem* amt1Text = new GuiItem();
-        amt1Text->onDraw =
+        amt1Text->onDrawP =
         [itemInfo, which, amt1Text] (const DrawInfo & draw) {
             int amt1 = 0;
             MissionMetricType* metricType =
@@ -1581,16 +1345,15 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(amt1Text);
-        gui.addItem(
+        gui.addItemP(
             amt1Text,
             onlyOneAmount ? "mission_amount_1_first" : "mission_amount_2_first"
         );
         
         if(!onlyOneAmount) {
-        
             //Second amount.
             GuiItem* amt2Text = new GuiItem();
-            amt2Text->onDraw =
+            amt2Text->onDrawP =
             [itemInfo, which, amt2Text] (const DrawInfo & draw) {
                 int amt2 = 0;
                 
@@ -1616,9 +1379,21 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 );
             };
             item->addChild(amt2Text);
-            gui.addItem(
+            gui.addItemP(
                 amt2Text, "mission_amount_2_second"
             );
+        }
+        
+        //Add custom items and set the coordinates.
+        if(onlyOneAmount) {
+            DataNode* guiFile =
+                &game.content.guiDefs.list[HUD::MISSION_AMT_ONE_GUI_FILE_NAME];
+            gui.readDataFile(guiFile, item);
+            
+        } else {
+            DataNode* guiFile =
+                &game.content.guiDefs.list[HUD::MISSION_AMT_TWO_GUI_FILE_NAME];
+            gui.readDataFile(guiFile, item);
             
         }
         
@@ -1626,6 +1401,207 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
     }
     }
+}
+
+
+/**
+ * @brief Sets up the Pikmin standby HUD items.
+ *
+ * @param parent The parent item that holds all of them.
+ */
+void Hud::setupStandbyItems(GuiItem* parent) {
+    //Standby group member icon.
+    GuiItem* standbyIcon = new GuiItem();
+    standbyIcon->onDrawP =
+    [this] (const DrawInfo & draw) {
+        this->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
+    };
+    gui.addItemP(standbyIcon, "icon");
+    parent->addChild(standbyIcon);
+    standbyIconMgr.registerBubble(BUBBLE_RELATION_CURRENT, standbyIcon);
+    
+    //Next standby subgroup icon.
+    GuiItem* standbyNextIcon = new GuiItem();
+    standbyNextIcon->onDrawP =
+    [this] (const DrawInfo & draw) {
+        this->drawStandbyIcon(BUBBLE_RELATION_NEXT);
+    };
+    gui.addItemP(standbyNextIcon, "next_icon");
+    parent->addChild(standbyNextIcon);
+    standbyIconMgr.registerBubble(BUBBLE_RELATION_NEXT, standbyNextIcon);
+    
+    //Next standby subgroup input.
+    GuiItem* standbyNextInput = new GuiItem();
+    standbyNextInput->onDrawP =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        if(!player->leaderPtr) return;
+        SubgroupType* nextType;
+        player->leaderPtr->group->getNextStandbyType(
+            false, &nextType
+        );
+        if(
+            nextType ==
+            player->leaderPtr->group->curStandbyType
+        ) {
+            return;
+        }
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_NEXT_TYPE, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    parent->addChild(standbyNextInput);
+    gui.addItemP(standbyNextInput, "next_input");
+    
+    //Previous standby subgroup icon.
+    GuiItem* standbyPrevIcon = new GuiItem();
+    standbyPrevIcon->onDrawP =
+    [this] (const DrawInfo & draw) {
+        this->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
+    };
+    gui.addItemP(standbyPrevIcon, "prev_icon");
+    parent->addChild(standbyPrevIcon);
+    standbyIconMgr.registerBubble(BUBBLE_RELATION_PREVIOUS, standbyPrevIcon);
+    
+    //Previous standby subgroup input.
+    GuiItem* standbyPrevInput = new GuiItem();
+    standbyPrevInput->onDrawP =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        if(!player->leaderPtr) return;
+        SubgroupType* prevType;
+        player->leaderPtr->group->getNextStandbyType(
+            true, &prevType
+        );
+        SubgroupType* nextType;
+        player->leaderPtr->group->getNextStandbyType(
+            false, &nextType
+        );
+        if(
+            prevType ==
+            player->leaderPtr->group->curStandbyType ||
+            prevType == nextType
+        ) {
+            return;
+        }
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_PREV_TYPE, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    parent->addChild(standbyPrevInput);
+    gui.addItemP(standbyPrevInput, "prev_input");
+    
+    //Standby group member maturity.
+    GuiItem* standbyMaturityIcon = new GuiItem();
+    standbyMaturityIcon->onDrawP =
+    [this, standbyMaturityIcon] (const DrawInfo & draw) {
+        //Standby group member preparations.
+        Leader* lPtr = player->leaderPtr;
+        if(!lPtr || !lPtr->group) return;
+        
+        ALLEGRO_BITMAP* standbyMatBmp = nullptr;
+        Mob* closest =
+            player->closestGroupMember[BUBBLE_RELATION_CURRENT];
+            
+        if(lPtr->group->curStandbyType && closest) {
+            SUBGROUP_TYPE_CATEGORY c =
+                lPtr->group->curStandbyType->getCategory();
+                
+            switch(c) {
+            case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
+                Pikmin* pPtr =
+                    dynamic_cast<Pikmin*>(closest);
+                standbyMatBmp =
+                    pPtr->pikType->bmpMaturityIcon[pPtr->maturity];
+                break;
+                
+            } default: {
+                break;
+                
+            }
+            }
+        }
+        
+        if(standbyMatBmp) {
+            drawBitmapInBox(
+                standbyMatBmp, draw.center,
+                (draw.size * 0.8) + standbyMaturityIcon->getJuiceValue(),
+                true, true,
+                0.0f, draw.tint
+            );
+            drawBitmapInBox(
+                bmpBubble, draw.center,
+                draw.size + standbyMaturityIcon->getJuiceValue(),
+                true, true, 0.0f, draw.tint
+            );
+        }
+        
+        if(
+            lPtr->group->curStandbyType != prevStandbyType ||
+            standbyMatBmp != prevMaturityIcon
+        ) {
+            standbyMaturityIcon->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_ICON
+            );
+            prevStandbyType = lPtr->group->curStandbyType;
+            prevMaturityIcon = standbyMatBmp;
+        }
+    };
+    parent->addChild(standbyMaturityIcon);
+    gui.addItemP(standbyMaturityIcon, "maturity_icon");
+    
+    //Standby subgroup member amount bubble.
+    GuiItem* standbyBubble = new GuiItem();
+    standbyBubble->onDrawP =
+    [this] (const DrawInfo & draw) {
+        drawBitmap(
+            bmpCounterBubbleStandby,
+            draw.center, draw.size,
+            0.0f, draw.tint
+        );
+    };
+    parent->addChild(standbyBubble);
+    gui.addItemP(standbyBubble, "bubble");
+    
+    //Standby subgroup member amount.
+    standbyAmount = new GuiItem();
+    standbyAmount->onDrawP =
+    [this] (const DrawInfo & draw) {
+        size_t nStandbyPikmin = 0;
+        Leader* lPtr = player->leaderPtr;
+        
+        if(lPtr && lPtr->group->curStandbyType) {
+            forIdx(m, lPtr->group->members) {
+                Mob* mPtr = lPtr->group->members[m];
+                if(mPtr->subgroupTypePtr == lPtr->group->curStandbyType) {
+                    nStandbyPikmin++;
+                }
+            }
+        }
+        
+        if(nStandbyPikmin != standbyCountNr) {
+            standbyAmount->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
+            standbyCountNr = nStandbyPikmin;
+        }
+        
+        drawText(
+            i2s(nStandbyPikmin), game.sysContent.fntCounter,
+            draw.center, draw.size, draw.tint,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+            Point(1.0f + standbyAmount->getJuiceValue())
+        );
+    };
+    parent->addChild(standbyAmount);
+    gui.addItemP(standbyAmount, "amount");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[HUD::STANDBY_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, parent);
 }
 
 
@@ -1678,7 +1654,6 @@ void Hud::tick(float deltaT) {
     
     //Update standby bubbles.
     for(unsigned char s = 0; s < 3; s++) {
-    
         ALLEGRO_BITMAP* icon = nullptr;
         Leader* curLeaderPtr = player->leaderPtr;
         Mob* member = player->closestGroupMember[s];
@@ -1745,17 +1720,18 @@ void Hud::tick(float deltaT) {
         if(standbyItemsFadeTimer > 0.0f) {
             standbyItemsFadeTimer -= deltaT;
         } else {
-            standbyItemsAlpha -=
+            standbyItemSet->alphaMultiplier -=
                 HUD::UNNECESSARY_ITEMS_FADE_OUT_SPEED * deltaT;
         }
     } else {
         standbyItemsFadeTimer =
             HUD::UNNECESSARY_ITEMS_FADE_OUT_DELAY;
-        standbyItemsAlpha +=
+        standbyItemSet->alphaMultiplier +=
             HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * deltaT;
     }
-    standbyItemsAlpha = std::clamp(standbyItemsAlpha, 0.0f, 1.0f);
-    
+    standbyItemSet->alphaMultiplier =
+        std::clamp(standbyItemSet->alphaMultiplier, 0.0f, 1.0f);
+        
     //Update the control guide.
     bool playerIsIdling = false;
     if(

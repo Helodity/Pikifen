@@ -108,6 +108,25 @@ bool areWallsBetween(
 
 
 /**
+ * @brief Calls al_build_transform and returns the Allegro transform,
+ * using the data from the specified Transform2d structure.
+ *
+ * @param data The Transform2d data.
+ * @return The Allegro transform data.
+ */
+ALLEGRO_TRANSFORM buildTransform2d(const Transform2d& data) {
+    ALLEGRO_TRANSFORM tf;
+    al_build_transform(
+        &tf,
+        -data.trans.x, -data.trans.y,
+        1.0f / data.scale.x, 1.0f / data.scale.y,
+        -data.rot
+    );
+    return tf;
+}
+
+
+/**
  * @brief Clears the textures of the area's sectors from memory.
  */
 void clearAreaTextures() {
@@ -127,6 +146,128 @@ void clearAreaTextures() {
 
 
 /**
+ * @brief Given a list of arguments, it validates them against the given
+ * command-like parameter data, and treats it, like adding default values
+ * to the optional missing arguments.
+ *
+ * @param params Command parameter data.
+ * @param inputArgs The arguments that were input.
+ * @param context Description for the context of what is holding
+ * these parameters, to show in the error message.
+ * @param allowVars Whether arguments are allowed to be variables.
+ * @param outArgs If not nullptr, the final list of arguments is returned here.
+ * @param outArgIsVar If not nullptr, the final list of what
+ * arguments are variables is returned here.
+ * @param node Data node, if any, used to report errors with.
+ * @return Whether it succeeded.
+ */
+bool compileCommandArgs(
+    const vector<CommandParam>& params, const vector<string>& inputArgs,
+    const string& context, bool allowVars,
+    vector<string>* outArgs, vector<bool>* outArgIsVar,
+    DataNode* node
+) {
+    //Check if there are too many or too few arguments.
+    size_t nMandatoryParams = 0;
+    size_t nFixedParams = 0;
+    bool hasVectorParam = false;
+    forIdx(p, params) {
+        const CommandParam& param = params[p];
+        if(hasFlag(param.flags, COMMAND_PARAM_FLAG_VECTOR)) {
+            hasVectorParam = true;
+        } else {
+            nFixedParams++;
+        }
+        if(!hasFlag(param.flags, COMMAND_PARAM_FLAG_OPTIONAL)) {
+            nMandatoryParams++;
+        }
+    }
+    
+    if(inputArgs.size() < nMandatoryParams) {
+        game.log.write(
+            LOG_LEVEL_ERROR,
+            context + " needs " +
+            i2s(nMandatoryParams) + " arguments, but this call only "
+            "has " + i2s(inputArgs.size()) + "! You're missing the \"" +
+            params[inputArgs.size()].name + "\" parameter.",
+            node
+        );
+        return false;
+    }
+    
+    if(!hasVectorParam) {
+        if(inputArgs.size() > nFixedParams) {
+            game.log.write(
+                LOG_LEVEL_ERROR,
+                context + " only needs " + i2s(params.size()) + " arguments, "
+                "but this call has " + i2s(inputArgs.size()) + "!",
+                node
+            );
+            return false;
+        }
+    }
+    
+    //Fetch the arguments, and check if any of them are not allowed.
+    forIdx(a, inputArgs) {
+        size_t paramIdx = a;
+        if(hasVectorParam && a > params.size() - 1) {
+            //This word just belongs to the final parameter.
+            paramIdx = params.size() - 1;
+        }
+        string finalWord = inputArgs[a];
+        bool isVar =
+            allowVars && (finalWord[0] == '$' && finalWord.size() > 1);
+            
+        if(isVar && finalWord.size() >= 2 && finalWord[1] == '$') {
+            //Two '$' in a row means it's meant to use a literal '$'.
+            isVar = false;
+            finalWord.erase(finalWord.begin());
+        }
+        
+        if(isVar) {
+            if(hasFlag(params[paramIdx].flags, COMMAND_PARAM_FLAG_CONST)) {
+                game.log.write(
+                    LOG_LEVEL_ERROR,
+                    "Argument #" + i2s(a + 1) + " (\"" + inputArgs[a] +
+                    "\") is a variable, but the parameter \"" +
+                    params[paramIdx].name + "\" can only be "
+                    "constant!",
+                    node
+                );
+                return false;
+            }
+            
+            finalWord.erase(finalWord.begin()); //Remove the '$'.
+            
+            if(finalWord.empty()) {
+                game.log.write(
+                    LOG_LEVEL_ERROR,
+                    "Argument #" + i2s(a) + " is trying to use a variable "
+                    "with no name!",
+                    node
+                );
+                return false;
+            }
+        }
+        
+        if(outArgs) outArgs->push_back(finalWord);
+        if(outArgIsVar) outArgIsVar->push_back(isVar);
+    }
+    
+    //Check if any optional parameters were left out.
+    if(outArgs) {
+        while(outArgs->size() < nFixedParams) {
+            size_t paramIdx = outArgs->size();
+            if(outArgs) outArgs->push_back(params[paramIdx].defValue);
+            if(outArgIsVar) outArgIsVar->push_back(false);
+        }
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Purposely crashes the engine, reporting as much information
  * as possible to the logs. Used when a fatal problem occurs.
  *
@@ -135,16 +276,14 @@ void clearAreaTextures() {
  * @param exitStatus Program exit status.
  */
 void crash(const string& reason, const string& info, int exitStatus) {
-
     if(game.display) {
-        ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(game.display);
-        if(backbuffer) {
+        if(al_get_backbuffer(game.display)) {
             al_save_bitmap(
                 (
                     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" +
                     "crash_" + getCurrentTime(true) + ".png"
                 ).c_str(),
-                backbuffer
+                getBackBufferOpaqueCopy()
             );
         }
         
@@ -156,8 +295,8 @@ void crash(const string& reason, const string& info, int exitStatus) {
         "  Reason: " + reason + ".\n"
         "  Info: " + info + "\n"
         "  Time: " + getCurrentTime(false) + ".\n";
-    if(game.errors.sessionHasErrors()) {
-        errorStr += "  Error log has messages!\n";
+    if(game.log.getSessionHasMessages()) {
+        errorStr += "  Log has messages!\n";
     }
     errorStr +=
         "  Game state: " + game.getCurStateName() + ". deltaT: " +
@@ -224,7 +363,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
         errorStr += "none.";
     }
     
-    game.errors.report(errorStr);
+    game.log.write(LOG_LEVEL_ERROR, errorStr);
     
     showOSMessageBox(
         nullptr, "Program crash!",
@@ -375,6 +514,39 @@ bool doesEdgeHaveWallShadow(
             (*outUnaffectedSector)->floorZ >
             (*outAffectedSector)->floorZ + GEOMETRY::STEP_HEIGHT;
     }
+}
+
+
+/**
+ * @brief Returns an opaque copy of the current display backbuffer.
+ * This is useful because alpha operations on the backbuffer behave weirdly.
+ * On some devices, when saving to a bitmap, it will use those weird
+ * alpha values, which may be harmless on the backbuffer, but not so much
+ * on a saved PNG file.
+ *
+ * @return The copy.
+ */
+ALLEGRO_BITMAP* getBackBufferOpaqueCopy() {
+    ALLEGRO_BITMAP* result = al_clone_bitmap(al_get_backbuffer(game.display));
+    ALLEGRO_LOCKED_REGION* region =
+        al_lock_bitmap(
+            result,
+            ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READWRITE
+        );
+        
+    unsigned char* row = (unsigned char*) region->data;
+    int bmpW = al_get_bitmap_width(result);
+    int bmpH = al_get_bitmap_height(result);
+    for(int y = 0; y < bmpH; y++) {
+        for(int x = 0; x < bmpW; x++) {
+            row[(x) * 4 + 3] = 255;
+        }
+        row += region->pitch;
+    }
+    
+    al_unlock_bitmap(result);
+    
+    return result;
 }
 
 
@@ -553,12 +725,12 @@ Mob* getNextMobNearCursor(
  */
 void getPikminSpitData(
     uint32_t spitNr, float baseHorizontalSpeed,
-    float maxHorizontalSpeedDeviation, float* outAngle,
+    float maxHorizontalSpeedDeviation, Angle* outAngle,
     Point* outHorizontalSpeed
 ) {
     uint32_t angleI = hashNr(spitNr);
     uint32_t horizontalDevMultI = hashNr(spitNr + 1);
-    float angle = angleI / (float) UINT32_MAX;
+    Angle angle = angleI / (float) UINT32_MAX;
     angle *= TAU;
     float horizontalDevMult = horizontalDevMultI / (float) UINT32_MAX;
     horizontalDevMult = horizontalDevMult * 2.0f - 1.0f;
@@ -792,7 +964,7 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
  */
 void guiCreateBackInputIcon(GuiManager* gui, const string& itemName) {
     GuiItem* backInput = new GuiItem();
-    backInput->onDraw =
+    backInput->onDrawP =
     [] (const GuiItem::DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -800,7 +972,20 @@ void guiCreateBackInputIcon(GuiManager* gui, const string& itemName) {
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    gui->addItem(backInput, itemName);
+    gui->addItemP(backInput, itemName);
+}
+
+
+/**
+ * @brief Returns whether the player currently wants to write some sort
+ * of text in some sort of text input.
+ *
+ * @return Whether the player is writing text.
+ */
+bool isPlayerWritingText() {
+    if(ImGui::GetIO().WantTextInput) return true;
+    if(game.modal.isActive() && game.modal.useTextInput) return true;
+    return false;
 }
 
 
@@ -1138,7 +1323,7 @@ bool openManual(const string& page) {
  * @param dn File to log the error into, if any.
  */
 void reportFatalError(const string& s, const DataNode* dn) {
-    game.errors.report(s, dn);
+    game.log.write(LOG_LEVEL_ERROR, s, dn);
     
     showOSMessageBox(
         nullptr, "Fatal error!",
@@ -1228,30 +1413,7 @@ void saveScreenshot() {
     "_"
         );
         
-    //Before saving, let's set every pixel's alpha to 255.
-    //This is because alpha operations on the backbuffer behave weirdly.
-    //On some machines, when saving to a bitmap, it will use those weird
-    //alpha values, which may be harmless on the backbuffer, but not so much
-    //on a saved PNG file.
-    ALLEGRO_BITMAP* screenshot =
-        al_clone_bitmap(al_get_backbuffer(game.display));
-    ALLEGRO_LOCKED_REGION* region =
-        al_lock_bitmap(
-            screenshot,
-            ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READWRITE
-        );
-        
-    unsigned char* row = (unsigned char*) region->data;
-    int bmpW = al_get_bitmap_width(screenshot);
-    int bmpH = al_get_bitmap_height(screenshot);
-    for(int y = 0; y < bmpH; y++) {
-        for(int x = 0; x < bmpW; x++) {
-            row[(x) * 4 + 3] = 255;
-        }
-        row += region->pitch;
-    }
-    
-    al_unlock_bitmap(screenshot);
+    ALLEGRO_BITMAP* screenshot = getBackBufferOpaqueCopy();
     
     al_save_bitmap(
         (
@@ -1389,7 +1551,7 @@ void spitPikminSeed(
     uint32_t spitNr, float baseHorizontalSpeed,
     float maxHorizontalSpeedDeviation, float verticalSpeed
 ) {
-    float angle;
+    Angle angle;
     Point horizontalSpeed;
     
     getPikminSpitData(
@@ -1408,7 +1570,7 @@ void spitPikminSeed(
     newPikmin->bottomZ = z;
     newPikmin->speed = horizontalSpeed;
     newPikmin->speedZ = verticalSpeed;
-    newPikmin->maturity = 0;
+    newPikmin->maturity = MATURITY_LEAF;
 }
 
 
@@ -1434,7 +1596,6 @@ vector<vector<StringToken> > splitLongStringWithTokens(
     unsigned int wordBufferWidth = 0;
     
     for(size_t t = 0; t < tokens.size() + 1; t++) {
-    
         bool tokenIsSpace =
             t != tokens.size() &&
             tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == " ";
@@ -1702,4 +1863,52 @@ string unescapeString(const string& s) {
  */
 Point v2p(const Vertex* v) {
     return Point(v->x, v->y);
+}
+
+
+/**
+ * @brief Given a series of command-like parameters, validates that everything
+ * is okay with them. If not, the engine trips an assert.
+ *
+ * @param params The list.
+ * @param context Description for the context of what is holding
+ * these parameters, to show in the error message.
+ * @return Whether everything is okay.
+ */
+bool validateCommandParams(
+    const vector<CommandParam>& params, const string& context
+) {
+    bool seenOptional = false;
+    forIdx(p, params) {
+        if(
+            hasFlag(params[p].flags, COMMAND_PARAM_FLAG_VECTOR) &&
+            p != params.size() - 1
+        ) {
+            engineAssert(
+                false,
+                context +
+                " has a vector parameter that is not the last parameter."
+            );
+            return false;
+        }
+        if(
+            !hasFlag(params[p].flags, COMMAND_PARAM_FLAG_OPTIONAL) &&
+            seenOptional
+        ) {
+            engineAssert(
+                false,
+                context +
+                " has a mandatory parameter that comes after "
+                "an optional parameter."
+            );
+            return false;
+        }
+        if(
+            hasFlag(params[p].flags, COMMAND_PARAM_FLAG_OPTIONAL)
+        ) {
+            seenOptional = true;
+        }
+    }
+    
+    return true;
 }

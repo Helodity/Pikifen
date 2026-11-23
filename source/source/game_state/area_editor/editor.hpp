@@ -136,6 +136,8 @@ private:
      * @brief Represents a suggested texture.
      */
     struct TextureSuggestion {
+
+    public:
     
         //--- Public members ---
         
@@ -157,6 +159,8 @@ private:
      * @brief Represents a point in the current layout drawing.
      */
     struct LayoutDrawingNode {
+
+    public:
     
         //--- Public members ---
         
@@ -201,6 +205,8 @@ private:
      * @brief Info pertaining to a sector split operation.
      */
     struct SectorSplit {
+
+    public:
     
         //--- Public members ---
         
@@ -229,6 +235,8 @@ private:
     
     //Style of the different things to draw in the canvas.
     struct AreaEdCanvasStyle : CanvasStyle {
+
+    public:
     
         //Texture alpha, [0 - 1].
         float textureAlpha = 1.0f;
@@ -241,6 +249,12 @@ private:
         
         //Mob alpha, [0 - 1].
         float mobAlpha = 1.0f;
+        
+        //Tree shadow alpha, [0 - 1].
+        float treeShadowAlpha = 1.0f;
+        
+        //Background void and texture alpha, [0 - 1].
+        float backgroundAlpha = 0.0f;
         
         //Selection, error, etc. effect alpha, [0 - 1].
         float overlayAlpha = 1.0f;
@@ -643,7 +657,7 @@ private:
     Point octeeDragStart;
     
     //Texture's original angle, when using on-canvas texture effect editing.
-    float octeeOrigAngle = 0.0f;
+    Angle octeeOrigAngle = 0.0f;
     
     //Texture's original offset, when using on-canvas texture effect editing.
     Point octeeOrigOffset;
@@ -872,6 +886,8 @@ private:
     MISSION_PRESET missionPresetDialogPreset = MISSION_PRESET_CUSTOM;
     
     struct {
+
+    public:
     
         //Selected pack.
         string pack;
@@ -991,8 +1007,8 @@ private:
         Vertex** clickedVertex, Edge** clickedEdge, Sector** clickedSector
     ) const;
     Edge* getClosestEdgeToAngle(
-        Vertex* vPtr, float angle, bool clockwise,
-        float* outClosestEdgeAngle
+        Vertex* vPtr, Angle angle, bool clockwise,
+        Angle* outClosestEdgeAngle
     ) const;
     bool getCommonSector(
         vector<Vertex*>& vertexes, vector<Edge*>& edges, Sector** result
@@ -1172,6 +1188,7 @@ private:
     void zoomEverythingCmd(float inputValue);
     void zoomInCmd(float inputValue);
     void zoomOutCmd(float inputValue);
+    void zoomSelectionCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
     void processGuiDialogDeleteArea();
@@ -1179,11 +1196,24 @@ private:
     void processGuiDialogMissionPreset();
     void processGuiDialogNew();
     void processGuiDialogOptions();
+    void processGuiDialogOptionsControls();
+    void processGuiDialogOptionsMisc();
+    void processGuiDialogOptionsView();
     void processGuiMenuBar();
+    void processGuiMenuBarEdit();
+    void processGuiMenuBarEditor();
+    void processGuiMenuBarView();
     void processGuiMobScriptVars(MobGen* gen);
     void processGuiPanelDetails();
+    void processGuiPanelDetailsAmbiance();
+    void processGuiPanelDetailsBackground();
+    void processGuiPanelDetailsShadows();
     void processGuiPanelEdge();
+    void processGuiPanelEdgeShadow(Edge* ePtr);
+    void processGuiPanelEdgeSmoothing(Edge* ePtr);
     void processGuiPanelGameplay();
+    void processGuiPanelGameplayRegions();
+    void processGuiPanelGameplayRules();
     void processGuiPanelInfo();
     void processGuiPanelLayout();
     void processGuiPanelMain();
@@ -1200,8 +1230,12 @@ private:
     void processGuiPanelPathLink();
     void processGuiPanelPathStop();
     void processGuiPanelPaths();
+    void processGuiPanelPathsDrawing();
+    void processGuiPanelPathsPreview();
     void processGuiPanelReview();
     void processGuiPanelSector();
+    void processGuiPanelSectorAppearance(Sector* sPtr);
+    void processGuiPanelSectorBehavior(Sector* sPtr);
     void processGuiPanelTools();
     void processGuiStatusBar();
     void processGuiToolbar();

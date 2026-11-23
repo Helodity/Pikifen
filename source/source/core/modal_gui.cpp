@@ -37,7 +37,7 @@ const float FADE_DURATION = 0.3f;
 const string GUI_FILE_NAME = "modal";
 
 //Maximum number of characters for the text input.
-const size_t TEXT_INPUT_MAX_SIZE = 50;
+const size_t TEXT_INPUT_MAX_SIZE = 80;
 
 };
 
@@ -46,9 +46,10 @@ const size_t TEXT_INPUT_MAX_SIZE = 50;
  * @brief Constructs a new modal GUI manager object.
  */
 ModalGuiManager::ModalGuiManager() {
+    textInput.maxSize = MODAL::TEXT_INPUT_MAX_SIZE;
     reset();
-    hideItems();
     responsive = false;
+    visible = false;
 }
 
 
@@ -63,9 +64,11 @@ void ModalGuiManager::close() {
 
 /**
  * @brief Draws the manager.
+ *
+ * @return Whether it succeeded.
  */
-void ModalGuiManager::draw() {
-    if(!visible) return;
+bool ModalGuiManager::draw() {
+    if(!visible) return false;
     
     float alphaMult;
     if(animType == GUI_MANAGER_ANIM_FADE_OUT) {
@@ -84,27 +87,23 @@ void ModalGuiManager::draw() {
         multAlpha(game.config.guiColors.pauseVignette, alphaMult)
     );
     
-    GuiManager::draw();
+    return GuiManager::draw();
 }
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  * @return Whether it got handled.
  */
-bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool ModalGuiManager::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
+    if(!shouldHandleEvents()) return false;
+    
     bool handled = false;
     
     if(useTextInput && ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
-            if(!textInput.empty()) {
-                textInput.pop_back();
-            }
-            handled = true;
-            
-        } else if(
+        if(
             ev.keyboard.keycode == ALLEGRO_KEY_ENTER ||
             ev.keyboard.keycode == ALLEGRO_KEY_PAD_ENTER
         ) {
@@ -117,16 +116,23 @@ bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         ) {
             //Do nothing.
             
-        } else if(ev.keyboard.unichar != 0) {
-            if(textInput.size() < MODAL::TEXT_INPUT_MAX_SIZE) {
-                textInput.push_back(ev.keyboard.unichar);
+        }
+        
+        if(textInput.handleAllegroInputEvent(ev)) {
+            game.audio.addNewUiSoundSource(
+            game.sysContent.sndCutsceneMsgChar, {
+                .stackMinPos = 0.05f,
+                .volume = 0.5f,
+                .volumeDeviation = 0.1f,
+                .speedDeviation = 0.1f,
             }
+            );
             handled = true;
-            
+            game.controls.ignoreActionsForOneFrame();
         }
     }
     
-    handled |= GuiManager::handleAllegroEvent(ev);
+    handled |= GuiManager::handleAllegroInputEvent(ev);
     
     return handled;
 }
@@ -146,7 +152,6 @@ bool ModalGuiManager::isActive() const {
  * @brief Opens the modal.
  */
 void ModalGuiManager::open() {
-    showItems();
     startAnimation(GUI_MANAGER_ANIM_FADE_IN, MODAL::FADE_DURATION);
     responsive = true;
 }
@@ -164,7 +169,7 @@ void ModalGuiManager::reset() {
     defaultFocusButtonIdx = 0;
     textInputEnterButtonIdx = 0;
     useTextInput = false;
-    textInput.clear();
+    textInput.reset();
     setFocusedItem(nullptr);
     focusCursor.alpha = 0.0f;
 }
@@ -179,58 +184,63 @@ void ModalGuiManager::updateItems() {
     destroy();
     buttonItems.clear();
     
-    //Default coordinates.
-    DataNode* guiFile =
-        &game.content.guiDefs.list[MODAL::GUI_FILE_NAME];
-    registerCoords("title",       50,  9, 92, 10);
-    registerCoords("prompt",      50, 50, 92, 32);
-    registerCoords("text_input",  50, 50, 92, 32);
-    registerCoords("button_area", 50, 83, 92, 10);
-    registerCoords("back_input",   5, 87,  4,  4);
-    registerCoords("tooltip",     50, 96, 96,  4);
-    readDataFile(guiFile);
-    
     //Title text.
     TextGuiItem* titleItem = new TextGuiItem(
         title, game.sysContent.fntAreaName
     );
-    addItem(titleItem, "title");
+    addItemP(titleItem, "title");
     
     //Prompt text.
     TextGuiItem* promptItem = new TextGuiItem(
         prompt, game.sysContent.fntStandard
     );
     promptItem->lineWrap = true;
-    addItem(promptItem, "prompt");
+    addItemP(promptItem, "prompt");
     
     //Text input.
     if(useTextInput) {
         TextGuiItem* textInputItem = new TextGuiItem(
             "", game.sysContent.fntStandard, game.config.guiColors.gold
         );
-        textInputItem->onDraw =
+        textInputItem->onDrawP =
         [textInputItem, this] (const DrawInfo & draw) {
-            textInputItem->text = textInput;
+            textInputItem->text = textInput.getString();
             textInputItem->defDrawCode(draw);
             float t = fmod(game.timePassed, MODAL::CARET_BLINK_INTERVAL);
+            
             if(t < MODAL::CARET_BLINK_INTERVAL / 2.0f) {
                 int textWidth =
                     al_get_text_width(
-                        game.sysContent.fntStandard, textInput.c_str()
+                        game.sysContent.fntStandard, textInputItem->text.c_str()
                     );
+                float textScale = 1.0f;
+                if(textWidth > draw.size.x) {
+                    textScale = draw.size.x / (float) textWidth;
+                }
                 int textHeight =
                     al_get_font_line_height(game.sysContent.fntStandard);
-                textWidth = std::min((float) textWidth, draw.size.x);
+                int textX1 = draw.center.x - textWidth / 2.0f;
+                textX1 =
+                    std::max(
+                        textX1, (int) (draw.center.x - draw.size.x / 2.0f)
+                    );
+                    
+                string preCaretText =
+                    textInputItem->text.substr(0, textInput.getCaretPos());
+                int preCaretTextWidth =
+                    al_get_text_width(
+                        game.sysContent.fntStandard, preCaretText.c_str()
+                    );
+                    
+                int caretX = textX1 + preCaretTextWidth * textScale;
                 al_draw_line(
-                    draw.center.x + textWidth / 2.0f,
-                    draw.center.y - textHeight / 2.0f,
-                    draw.center.x + textWidth / 2.0f,
-                    draw.center.y + textHeight / 2.0f,
+                    caretX, draw.center.y - textHeight / 2.0f,
+                    caretX, draw.center.y + textHeight / 2.0f,
                     game.config.guiColors.gold, 2.0f
                 );
             }
         };
-        addItem(textInputItem, "text_input");
+        addItemP(textInputItem, "text_input");
     }
     
     //Back button.
@@ -243,11 +253,11 @@ void ModalGuiManager::updateItems() {
         return backTooltip;
     };
     backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         if(onBack) onBack();
         close();
     };
-    addItem(backItem, "button_area");
+    addItemP(backItem, "button_area");
     buttonItems.push_back(backItem);
     
     //Back input icon.
@@ -260,26 +270,26 @@ void ModalGuiManager::updateItems() {
             extraButtons[b].text, game.sysContent.fntStandard,
             extraButtons[b].color
         );
-        button->onActivate = [this, b] (const Point & cursorPos) {
+        button->onActivate = [this, b] (float cursorPxX, float cursorPxY) {
             close();
             if(extraButtons[b].onActivate) {
-                extraButtons[b].onActivate(cursorPos);
+                extraButtons[b].onActivate(cursorPxX, cursorPxY);
             }
         };
         button->onGetTooltip =
         [this, b] () {
             return extraButtons[b].tooltip;
         };
-        addItem(button, "button_area");
+        addItemP(button, "button_area");
         buttonItems.push_back(button);
     }
     
     //Tooltip text.
     TooltipGuiItem* tooltipItem = new TooltipGuiItem(this);
-    addItem(tooltipItem, "tooltip");
+    addItemP(tooltipItem, "tooltip");
     
     //Position the buttons.
-    Rect buttonArea = backItem->ratioRect;
+    Rect buttonArea = backItem->getRawRatioRect();
     const float totalEmptySpace =
         MODAL::BUTTON_MARGIN * (buttonItems.size() - 1);
     const float buttonWidth =
@@ -287,11 +297,18 @@ void ModalGuiManager::updateItems() {
     float curX = buttonArea.center.x - buttonArea.size.x / 2.0f;
     
     forIdx(b, buttonItems) {
-        buttonItems[b]->ratioRect.center.x = curX + buttonWidth / 2.0f;
-        buttonItems[b]->ratioRect.size.x = buttonWidth;
+        Rect rect = buttonItems[b]->getRawRatioRect();
+        rect.center.x = curX + buttonWidth / 2.0f;
+        rect.size.x = buttonWidth;
+        buttonItems[b]->setRawRatioRect(rect);
         curX += buttonWidth + MODAL::BUTTON_MARGIN;
     }
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[MODAL::GUI_FILE_NAME];
+    readDataFile(guiFile);
+    
     //Finishing touches.
-    setFocusedItem(buttonItems[defaultFocusButtonIdx], true);
+    setFocusedItemP(buttonItems[defaultFocusButtonIdx], true);
 }

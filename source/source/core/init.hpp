@@ -24,6 +24,7 @@ void initEssentials();
 void initEventThings(ALLEGRO_TIMER*& timer, ALLEGRO_EVENT_QUEUE*& queue);
 void initFsmEventTypes();
 void initInventoryItems();
+void initMakerToolTypes();
 void initMisc();
 void initMiscDatabases();
 void initScriptActionTypes();

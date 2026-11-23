@@ -88,24 +88,22 @@ void Results::addNewBulletPoint(
         new BulletGuiItem(
         label, game.sysContent.fntStandard, color
     );
-    labelBullet->ratioRect.center =
-        Point(0.50f, centerY);
-    labelBullet->ratioRect.size =
-        Point(0.96f, BP_HEIGHT);
+    labelBullet->setRawRatioRect(
+        Rect(Point(0.50f, centerY), Point(0.96f, BP_HEIGHT))
+    );
     list->addChild(labelBullet);
-    gui.addItem(labelBullet);
+    gui.addItemP(labelBullet);
     pageTextToAnimate.push_back(labelBullet);
     
     TextGuiItem* valueText =
         new TextGuiItem(
         value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioRect.center =
-        Point(0.75f, centerY);
-    valueText->ratioRect.size =
-        Point(0.44f, BP_HEIGHT);
+    valueText->setRawRatioRect(
+        Rect(Point(0.75f, centerY), Point(0.44f, BP_HEIGHT))
+    );
     list->addChild(valueText);
-    gui.addItem(valueText);
+    gui.addItemP(valueText);
     pageTextToAnimate.push_back(valueText);
     textToAnimate.push_back(valueText);
 }
@@ -151,7 +149,7 @@ ButtonGuiItem* Results::addNewPageItem(
         game.config.guiColors.pageChange
     );
     newButton->onActivate =
-    [this, targetPage] (const Point&) {
+    [this, targetPage] (float, float) {
         switchPage(targetPage);
     };
     newButton->onGetTooltip =
@@ -184,13 +182,13 @@ void Results::addNewPageItems(
     ButtonGuiItem* leftPageButton =
         addNewPageItem(leftPage, true, curBox);
     curBox->addChild(leftPageButton);
-    gui.addItem(leftPageButton, itemNamePrefix + "_left_page");
+    gui.addItemP(leftPageButton, itemNamePrefix + "_left_page");
     pageTextToAnimate.push_back(leftPageButton);
     leftPageButtons.push_back(leftPageButton);
     
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
-    leftPageInput->onDraw =
+    leftPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -199,19 +197,19 @@ void Results::addNewPageItems(
         );
     };
     curBox->addChild(leftPageInput);
-    gui.addItem(leftPageInput, itemNamePrefix + "_left_page_input");
+    gui.addItemP(leftPageInput, itemNamePrefix + "_left_page_input");
     
     //Right page button.
     ButtonGuiItem* rightPageButton =
         addNewPageItem(rightPage, false, curBox);
     curBox->addChild(rightPageButton);
-    gui.addItem(rightPageButton, itemNamePrefix + "_right_page");
+    gui.addItemP(rightPageButton, itemNamePrefix + "_right_page");
     pageTextToAnimate.push_back(rightPageButton);
     rightPageButtons.push_back(rightPageButton);
     
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
-    rightPageInput->onDraw =
+    rightPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -220,7 +218,7 @@ void Results::addNewPageItems(
         );
     };
     curBox->addChild(rightPageInput);
-    gui.addItem(rightPageInput, itemNamePrefix + "_right_page_input");
+    gui.addItemP(rightPageInput, itemNamePrefix + "_right_page_input");
 }
 
 
@@ -252,24 +250,22 @@ void Results::addNewScoreMarkerBulletPoint(
         new BulletGuiItem(
         label, game.sysContent.fntStandard, color
     );
-    labelBullet->ratioRect.center =
-        Point(0.50f, bPCenterY);
-    labelBullet->ratioRect.size =
-        Point(0.96f, bPHeight);
+    labelBullet->setRawRatioRect(
+        Rect(Point(0.50f, bPCenterY), Point(0.96f, bPHeight))
+    );
     scoreChartList->addChild(labelBullet);
-    gui.addItem(labelBullet);
+    gui.addItemP(labelBullet);
     pageTextToAnimate.push_back(labelBullet);
     
     TextGuiItem* valueText =
         new TextGuiItem(
         value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioRect.center =
-        Point(0.75f, bPCenterY);
-    valueText->ratioRect.size =
-        Point(0.44f, bPHeight);
+    valueText->setRawRatioRect(
+        Rect(Point(0.75f, bPCenterY), Point(0.44f, bPHeight))
+    );
     scoreChartList->addChild(valueText);
-    gui.addItem(valueText);
+    gui.addItemP(valueText);
     textToAnimate.push_back(valueText);
     pageTextToAnimate.push_back(valueText);
     
@@ -359,10 +355,10 @@ void Results::doLogic() {
     const float oldTimeRatio = oldAnimTime / TEXT_ANIM_FALL_DURATION;
     
     forIdx(t, textToAnimate) {
-        DrawInfo itemDrawInfo;
+        DumbGui::DrawInfo itemDrawInfo;
         bool itemVisible = gui.getItemDrawInfo(textToAnimate[t], &itemDrawInfo);
         if(!itemVisible) continue;
-        const float itemRatioY = itemDrawInfo.center.y / game.winH;
+        const float itemRatioY = itemDrawInfo.centerPxY / game.winH;
         if(passedBy(oldTimeRatio, newTimeRatio, itemRatioY)) {
             textToAnimate[t]->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
@@ -383,21 +379,21 @@ void Results::drawScoreChartConnections() {
     const ALLEGRO_COLOR LINE_COLOR = COLOR_BLACK;
     const ALLEGRO_COLOR SCORE_CIRCLE_COLOR = al_map_rgb(96, 96, 192);
     const ALLEGRO_COLOR MINOR_CIRCLE_COLOR = al_map_rgb(0, 0, 96);
-    DrawInfo chartDraw;
+    DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     
     //The connector lines.
     forIdx(i, scoreMarkerGuiItems) {
         GuiItem* iPtr =
             scoreMarkerGuiItems[scoreMarkerGuiItems.size() - (1 + i)];
-        DrawInfo itemDraw;
+        DumbGui::DrawInfo itemDraw;
         gui.getItemDrawInfo(iPtr, &itemDraw);
         
-        const float x1 = itemDraw.center.x + itemDraw.size.x / 2.0f;
+        const float x1 = itemDraw.centerPxX + itemDraw.sizePxW / 2.0f;
         const float x2 = x1 + 24.0f;
-        const float x3 = chartDraw.center.x - 24.0f;
-        const float x4 = chartDraw.center.x;
-        const float y1 = itemDraw.center.y;
+        const float x3 = chartDraw.centerPxX - 24.0f;
+        const float x4 = chartDraw.centerPxX;
+        const float y1 = itemDraw.centerPxY;
         const float y2 = getScoreChartY(scoreMarkers[i].second) - 1.0f;
         const ALLEGRO_COLOR color =
             multAlpha(LINE_COLOR, iPtr->focused ? 0.75f : 0.20f);
@@ -410,7 +406,7 @@ void Results::drawScoreChartConnections() {
     
     //Circle for the player's score.
     al_draw_filled_circle(
-        chartDraw.center.x, getScoreChartY(finalMissionScore),
+        chartDraw.centerPxX, getScoreChartY(finalMissionScore),
         16.0f +
         sin(game.timePassed * RESULTS::CHART_CIRCLE_TIME_SCALE) *
         RESULTS::CHART_CIRCLE_SIZE_OFFSET, SCORE_CIRCLE_COLOR
@@ -419,7 +415,7 @@ void Results::drawScoreChartConnections() {
     //Circle for the old record.
     if(!oldRecord.date.empty()) {
         al_draw_filled_circle(
-            chartDraw.center.x,
+            chartDraw.centerPxX,
             getScoreChartY(oldRecord.score),
             12.0f, MINOR_CIRCLE_COLOR
         );
@@ -428,7 +424,7 @@ void Results::drawScoreChartConnections() {
     //Circle for the maker's record.
     if(!game.curArea->mission.makerRecordDate.empty()) {
         al_draw_filled_circle(
-            chartDraw.center.x,
+            chartDraw.centerPxX,
             getScoreChartY(game.curArea->mission.makerRecord),
             12.0f, MINOR_CIRCLE_COLOR
         );
@@ -547,25 +543,34 @@ string Results::getName() const {
  * @return The Y coordinate.
  */
 float Results::getScoreChartY(int score) const {
-    DrawInfo chartDraw;
+    DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     const int chartRange = scoreChartTop - scoreChartBottom;
-    const float chartBottomY = chartDraw.center.y + chartDraw.size.y / 2.0f;
+    const float chartBottomY = chartDraw.centerPxY + chartDraw.sizePxH / 2.0f;
     return
-        chartBottomY - chartDraw.size.y *
+        chartBottomY - chartDraw.sizePxH *
         ((score - scoreChartBottom) / (float) chartRange);
 }
 
 
 /**
- * @brief Handles Allegro events.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void Results::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void Results::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
-    gui.handleAllegroEvent(ev);
+    gui.handleAllegroInputEvent(ev);
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void Results::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 
@@ -573,32 +578,13 @@ void Results::handleAllegroEvent(ALLEGRO_EVENT& ev) {
  * @brief Initializes the main GUI items.
  */
 void Results::initGuiMain() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::GUI_FILE_NAME];
-    gui.registerCoords("area_name",         50,  7, 45, 10);
-    gui.registerCoords("area_subtitle",     50, 18, 40, 10);
-    gui.registerCoords("medal",             85, 15, 22, 22);
-    gui.registerCoords("final_score",       14, 10, 24,  8);
-    gui.registerCoords("final_score_label", 14, 18, 24,  8);
-    gui.registerCoords("end_reason",        50, 32, 96,  4);
-    gui.registerCoords("conclusion",        50, 36, 96,  4);
-    gui.registerCoords("stats_page",        50, 61, 96, 42);
-    gui.registerCoords("scoring_page",      50, 61, 96, 42);
-    gui.registerCoords("score_chart_page",  50, 61, 96, 42);
-    gui.registerCoords("retry",             20, 88, 24,  8);
-    gui.registerCoords("continue",          50, 88, 24,  8);
-    gui.registerCoords("pick_area",         80, 88, 24,  8);
-    gui.registerCoords("pick_area_input",   91, 91,  4,  4);
-    gui.registerCoords("tooltip",           50, 96, 96,  4);
-    gui.readDataFile(guiFile);
-    
     //Area name text.
     TextGuiItem* areaNameText =
         new TextGuiItem(
         game.curArea->name, game.sysContent.fntAreaName,
         game.config.guiColors.gold
     );
-    gui.addItem(areaNameText, "area_name");
+    gui.addItemP(areaNameText, "area_name");
     textToAnimate.push_back(areaNameText);
     
     //Area subtitle text.
@@ -607,7 +593,7 @@ void Results::initGuiMain() {
             new TextGuiItem(
             game.curArea->subtitle, game.sysContent.fntAreaName
         );
-        gui.addItem(areaSubtitleText, "area_subtitle");
+        gui.addItemP(areaSubtitleText, "area_subtitle");
         textToAnimate.push_back(areaSubtitleText);
     }
     
@@ -631,7 +617,7 @@ void Results::initGuiMain() {
             finalScoreTextStr, game.sysContent.fntAreaName,
             finalScoreTextColor
         );
-        finalScoreText->onDraw =
+        finalScoreText->onDrawP =
         [finalScoreText] (const DrawInfo & draw) {
             DrawInfo swayDraw = draw;
             swayDraw.center.x +=
@@ -639,7 +625,7 @@ void Results::initGuiMain() {
                 sin(game.timePassed * RESULTS::FINAL_SCORE_SWAY_TIME_SCALE);
             finalScoreText->defDrawCode(swayDraw);
         };
-        gui.addItem(finalScoreText, "final_score");
+        gui.addItemP(finalScoreText, "final_score");
     }
     
     //Final score label text.
@@ -653,7 +639,7 @@ void Results::initGuiMain() {
             new TextGuiItem(
             finalScoreLabelStr, game.sysContent.fntAreaName
         );
-        finalScoreLabelText->onDraw =
+        finalScoreLabelText->onDrawP =
         
         [finalScoreLabelText] (const DrawInfo & draw) {
             DrawInfo swayDraw = draw;
@@ -668,13 +654,13 @@ void Results::initGuiMain() {
                 );
             finalScoreLabelText->defDrawCode(swayDraw);
         };
-        gui.addItem(finalScoreLabelText, "final_score_label");
+        gui.addItemP(finalScoreLabelText, "final_score_label");
     }
     
     //Medal image.
     if(game.curArea->type == AREA_TYPE_MISSION) {
         GuiItem* medalItem = new GuiItem;
-        medalItem->onDraw =
+        medalItem->onDrawP =
         [this] (const DrawInfo & draw) {
             ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
@@ -698,17 +684,18 @@ void Results::initGuiMain() {
             if(medal != MISSION_MEDAL_NONE) {
                 drawBitmapInBox(
                     game.sysContent.bmpIdleGlow,
-                    draw.center, draw.size * RESULTS::MEDAL_SHINE_SCALE, true,
+                    draw.center, draw.size * RESULTS::MEDAL_SHINE_SCALE,
+                    true, true,
                     game.timePassed * RESULTS::MEDAL_SHINE_ROT_TIME_SCALE,
                     draw.tint
                 );
             }
             drawBitmapInBox(
                 bmp, draw.center, draw.size * RESULTS::MEDAL_SCALE,
-                true, 0.0f, draw.tint
+                true, true, 0.0f, draw.tint
             );
         };
-        gui.addItem(medalItem, "medal");
+        gui.addItemP(medalItem, "medal");
     }
     
     //End reason text, if any.
@@ -728,7 +715,7 @@ void Results::initGuiMain() {
                 game.config.guiColors.good :
                 game.config.guiColors.bad
             );
-            gui.addItem(endReasonText, "end_reason");
+            gui.addItemP(endReasonText, "end_reason");
             textToAnimate.push_back(endReasonText);
         }
     }
@@ -786,42 +773,50 @@ void Results::initGuiMain() {
     }
     TextGuiItem* conclusionText =
         new TextGuiItem(conclusion, game.sysContent.fntStandard);
-    gui.addItem(conclusionText, "conclusion");
+    gui.addItemP(conclusionText, "conclusion");
     textToAnimate.push_back(conclusionText);
     
     //Stats page box.
     statsPageBox = new GuiItem();
-    gui.addItem(statsPageBox, "stats_page");
+    gui.addItemP(statsPageBox, "stats_page");
     
     //Scoring page box.
     scoringPageBox = new GuiItem();
-    gui.addItem(scoringPageBox, "scoring_page");
+    gui.addItemP(scoringPageBox, "scoring_page");
     
     //Score chart page box.
     scoreChartPageBox = new GuiItem();
-    gui.addItem(scoreChartPageBox, "score_chart_page");
+    gui.addItemP(scoreChartPageBox, "score_chart_page");
     
     //Retry button.
     ButtonGuiItem* retryButton =
         new ButtonGuiItem("Retry", game.sysContent.fntStandard);
     retryButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         retryArea();
     };
     retryButton->onGetTooltip =
     [] () { return "Retry the area from the start."; };
-    gui.addItem(retryButton, "retry");
+    gui.addItemP(retryButton, "retry");
     
     //Keep playing button.
     if(
         endCond &&
-        endCond->type == MISSION_END_COND_METRIC_OR_LESS &&
-        endCond->metricType == MISSION_METRIC_SECS_LEFT
+        (
+            (
+                endCond->type == MISSION_END_COND_METRIC_OR_LESS &&
+                endCond->metricType == MISSION_METRIC_SECS_LEFT
+            ) ||
+            (
+                endCond->type == MISSION_END_COND_METRIC_OR_MORE &&
+                endCond->metricType == MISSION_METRIC_SECS_PASSED
+            )
+        )
     ) {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
-        [this] (const Point&) {
+        [this] (float, float) {
             continuePlaying();
         };
         continueButton->onGetTooltip =
@@ -830,7 +825,7 @@ void Results::initGuiMain() {
                 "Continue playing anyway, from where you left off. "
                 "Your result after this point won't count.";
         };
-        gui.addItem(continueButton, "continue");
+        gui.addItemP(continueButton, "continue");
     }
     
     //Pick an area button.
@@ -842,7 +837,7 @@ void Results::initGuiMain() {
         game.sysContent.fntStandard
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leave();
     };
     gui.backItem->onGetTooltip =
@@ -852,7 +847,7 @@ void Results::initGuiMain() {
             "Return to the area selection menu." :
             "Return to the editor.";
     };
-    gui.addItem(gui.backItem, "pick_area");
+    gui.addItemP(gui.backItem, "pick_area");
     
     //Pick an area input icon.
     guiCreateBackInputIcon(&gui, "pick_area_input");
@@ -860,10 +855,15 @@ void Results::initGuiMain() {
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
 }
 
 
@@ -871,36 +871,31 @@ void Results::initGuiMain() {
  * @brief Initializes the score chart GUI items.
  */
 void Results::initGuiScoreChart() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::SCORE_CHART_GUI_FILE_NAME];
-    gui.registerCoords("score_chart_left_page",        13,  7, 18, 14);
-    gui.registerCoords("score_chart_left_page_input",   4, 12,  8,  8);
-    gui.registerCoords("score_chart_right_page",       87,  7, 18, 14);
-    gui.registerCoords("score_chart_right_page_input", 96, 12,  8,  8);
-    gui.registerCoords("score_chart_chart",            79, 59, 34, 82);
-    gui.registerCoords("score_chart_list",             31, 59, 54, 82);
-    gui.readDataFile(guiFile, scoreChartPageBox);
-    
     //Score chart item list.
     scoreChartList = new ListGuiItem();
     scoreChartPageBox->addChild(scoreChartList);
-    gui.addItem(scoreChartList, "score_chart_list");
+    gui.addItemP(scoreChartList, "score_chart_list");
     
     //Score chart graphic.
     scoreChartChart = new ListGuiItem();
     scoreChartPageBox->addChild(scoreChartChart);
-    scoreChartChart->onDraw =
+    scoreChartChart->onDrawP =
     [this] (const DrawInfo & draw) {
         drawScoreChartGraphic(draw);
         scoreChartChart->defDrawCode(draw);
     };
-    gui.addItem(scoreChartChart, "score_chart_chart");
+    gui.addItemP(scoreChartChart, "score_chart_chart");
     
     populateScoreChart();
     
     addNewPageItems(
         RESULTS_MENU_PAGE_SCORE_CHART, scoreChartPageBox, "score_chart"
     );
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::SCORE_CHART_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, scoreChartPageBox);
 }
 
 
@@ -908,29 +903,24 @@ void Results::initGuiScoreChart() {
  * @brief Initializes the scoring criteria GUI items.
  */
 void Results::initGuiScoring() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::SCORING_GUI_FILE_NAME];
-    gui.registerCoords("scoring_left_page",        13,  7, 18, 14);
-    gui.registerCoords("scoring_left_page_input",   4, 12,  8,  8);
-    gui.registerCoords("scoring_right_page",       87,  7, 18, 14);
-    gui.registerCoords("scoring_right_page_input", 96, 12,  8,  8);
-    gui.registerCoords("scoring_list",             50, 59, 92, 82);
-    gui.registerCoords("scoring_scroll",           99, 59,  2, 82);
-    gui.readDataFile(guiFile, scoringPageBox);
-    
     //Scoring criteria list.
     scoringList = new ListGuiItem();
     scoringPageBox->addChild(scoringList);
-    gui.addItem(scoringList, "scoring_list");
+    gui.addItemP(scoringList, "scoring_list");
     populateScoringList();
     
     //Scoring criteria list scrollbar.
     ScrollGuiItem* scoringScroll = new ScrollGuiItem();
     scoringScroll->listItem = scoringList;
     scoringPageBox->addChild(scoringScroll);
-    gui.addItem(scoringScroll, "scoring_scroll");
+    gui.addItemP(scoringScroll, "scoring_scroll");
     
     addNewPageItems(RESULTS_MENU_PAGE_SCORING, scoringPageBox, "scoring");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::SCORING_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, scoringPageBox);
 }
 
 
@@ -938,27 +928,17 @@ void Results::initGuiScoring() {
  * @brief Initializes the stats GUI items.
  */
 void Results::initGuiStats() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[RESULTS::STATS_GUI_FILE_NAME];
-    gui.registerCoords("stats_left_page",        13,  7, 18, 14);
-    gui.registerCoords("stats_left_page_input",   4, 12,  8,  8);
-    gui.registerCoords("stats_right_page",       87,  7, 18, 14);
-    gui.registerCoords("stats_right_page_input", 96, 12,  8,  8);
-    gui.registerCoords("stats_list",             50, 59, 92, 82);
-    gui.registerCoords("stats_scroll",           99, 59,  2, 82);
-    gui.readDataFile(guiFile, statsPageBox);
-    
     //Stats list.
     statsList = new ListGuiItem();
     statsPageBox->addChild(statsList);
-    gui.addItem(statsList, "stats_list");
+    gui.addItemP(statsList, "stats_list");
     populateStatsList();
     
     //Stats list scrollbar.
     ScrollGuiItem* statsScroll = new ScrollGuiItem();
     statsScroll->listItem = statsList;
     statsPageBox->addChild(statsScroll);
-    gui.addItem(statsScroll, "stats_scroll");
+    gui.addItemP(statsScroll, "stats_scroll");
     
     if(
         game.curArea->type == AREA_TYPE_MISSION &&
@@ -966,6 +946,11 @@ void Results::initGuiStats() {
     ) {
         addNewPageItems(RESULTS_MENU_PAGE_STATS, statsPageBox, "stats");
     }
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::STATS_GUI_FILE_NAME];
+    gui.readDataFile(guiFile, statsPageBox);
 }
 
 
@@ -1153,10 +1138,10 @@ void Results::populateScoreChart() {
     //Add a bit of padding so the arrow and 0 marker can breathe
     //and so that the platinum region can be more than a few pixels.
     const float range = scoreChartTop - scoreChartBottom;
-    DrawInfo chartDraw;
+    DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
-    const float topPaddingHeightRatio = 32.0f / chartDraw.size.y;
-    const float bottomPaddingHeightRatio = 4.0f / chartDraw.size.y;
+    const float topPaddingHeightRatio = 32.0f / chartDraw.sizePxH;
+    const float bottomPaddingHeightRatio = 4.0f / chartDraw.sizePxH;
     scoreChartTop += std::max(range * topPaddingHeightRatio, 1.0f);
     scoreChartBottom -= std::max(range * bottomPaddingHeightRatio, 1.0f);
     
@@ -1225,7 +1210,7 @@ void Results::populateScoringList() {
         } else {
             value = typePtr->getAmount(cPtr->idxParam) * cPtr->points;
         }
-        string name = typePtr->getInfo().friendlyName;
+        string name = cPtr->customName;
         if(name.empty()) name = typePtr->getInfo().name;
         addNewBulletPoint(
             scoringList,

@@ -96,7 +96,7 @@ public:
     //How quickly riders ride the track, in ratio per second.
     float rideSpeed = 0.5f;
     
-    //Can the ride be cancelled if the rider is whistled?
+    //Can the ride be canceled if the rider is whistled?
     bool cancellableWithWhistle = false;
     
     

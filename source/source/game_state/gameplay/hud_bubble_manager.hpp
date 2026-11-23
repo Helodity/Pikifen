@@ -50,7 +50,9 @@ enum HUD_BUBBLE_MOVE_METHOD {
  * @tparam ContentT Type of content the bubble holds.
  */
 template<typename ContentT>
-struct HudBubbleManager {
+class HudBubbleManager {
+
+public:
 
     //--- Public misc. declarations ---
     
@@ -58,6 +60,8 @@ struct HudBubbleManager {
      * @brief Represents a bubble GUI item.
      */
     struct Bubble {
+
+    public:
     
         //--- Public members ---
         
@@ -136,7 +140,9 @@ struct HudBubbleManager {
             return;
         }
         
-        bool visible = hud->getItemDrawInfo(it->second.bubble, draw);
+        DumbGui::DrawInfo dumbDraw;
+        bool visible = hud->getItemDrawInfo(it->second.bubble, &dumbDraw);
+        *draw = GuiItem::fromDumbDrawInfo(dumbDraw);
         
         if(!visible) {
             *content = ContentT();
@@ -180,12 +186,12 @@ struct HudBubbleManager {
         
         if(matchIt != bubbles.end()) {
             matchPtr = matchIt->second.bubble;
-            DrawInfo matchDraw;
+            DumbGui::DrawInfo matchDraw;
             if(
                 hud->getItemDrawInfo(matchPtr, &matchDraw)
             ) {
-                matchPos = matchDraw.center;
-                matchSize = matchDraw.size;
+                matchPos = Point(matchDraw.centerPxX, matchDraw.centerPxY);
+                matchSize = Point(matchDraw.sizePxW, matchDraw.sizePxH);
             } else {
                 matchPtr = nullptr;
             }
@@ -216,7 +222,7 @@ struct HudBubbleManager {
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float matchStartAngle = getAngle(matchPivot, draw->center);
+                    Angle matchStartAngle = getAngle(matchPivot, draw->center);
                     draw->center =
                         matchPivot +
                         rotatePoint(
@@ -245,7 +251,7 @@ struct HudBubbleManager {
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float matchStartAngle = getAngle(matchPivot, matchPos);
+                    Angle matchStartAngle = getAngle(matchPivot, matchPos);
                     draw->center =
                         matchPivot +
                         rotatePoint(

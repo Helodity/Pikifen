@@ -31,7 +31,7 @@ void TrackFsm::createFsm(MobType* typ) {
             efc.run(TrackFsm::spawn);
         }
         efc.newEvent(FSM_EV_TOUCHED_OBJECT); {
-            efc.run(TrackFsm::onTouched);
+            efc.run(TrackFsm::beTouched);
         }
     }
     
@@ -59,7 +59,7 @@ void TrackFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
+void TrackFsm::beTouched(ScriptVM* scriptVM, void* info1, void* info2) {
     Track* traPtr = (Track*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
     
@@ -70,7 +70,6 @@ void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
         hasFlag(traPtr->traType->riders, TRACK_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
-    
         //Pikmin is about to ride it.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_TRACK);
         
@@ -78,7 +77,6 @@ void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
         hasFlag(traPtr->traType->riders, TRACK_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
-    
         //Leader is about to ride it.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_TRACK);
         

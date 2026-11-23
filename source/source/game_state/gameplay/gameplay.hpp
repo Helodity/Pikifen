@@ -18,7 +18,7 @@
 #include "../../content/mob/ship.hpp"
 #include "../../content/other/gui.hpp"
 #include "../../core/controls_mediator.hpp"
-#include "../../core/maker_tools.hpp"
+#include "../../core/maker_toolkit/tools.hpp"
 #include "../../core/player.hpp"
 #include "../../core/replay.hpp"
 #include "../../util/general_utils.hpp"
@@ -54,10 +54,10 @@ extern const float BOSS_MUSIC_DISTANCE;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_FACTOR;
 extern const float COLLISION_ALPHA;
+extern const float CONTROL_CAM_ACCELERATION;
+extern const float CONTROL_CAM_MAX_SPEED;
 extern const float ENEMY_MIX_DISTANCE;
 extern const int FOG_BITMAP_SIZE;
-extern const float FREE_CAM_ACCELERATION;
-extern const float FREE_CAM_MAX_SPEED;
 extern const float LEADER_LAND_PART_MAX_SIZE;
 extern const float LEADER_LAND_PART_SIZE_MULT;
 extern const float LEADER_MOVEMENT_MAGNITUDE_THRESHOLD;
@@ -142,13 +142,15 @@ enum BOSS_MUSIC_STATE {
 #pragma region Classes
 
 
-struct CutsceneMessageBox;
+class CutsceneMessageBox;
 
 
 /**
  * @brief Basic information about the current interlude.
  */
-struct InterludeInfo {
+class InterludeInfo {
+
+public:
 
     //--- Public function declarations ---
     
@@ -175,7 +177,9 @@ struct InterludeInfo {
 /**
  * @brief Basic information about the current big message.
  */
-struct BigMessageInfo {
+class BigMessageInfo {
+
+public:
 
     //--- Public function declarations ---
     
@@ -202,7 +206,9 @@ struct BigMessageInfo {
 /**
  * @brief Information about how an area region is doing.
  */
-struct AreaRegionStatus {
+class AreaRegionStatus {
+
+public:
 
     //--- Public members ---
     
@@ -215,7 +221,9 @@ struct AreaRegionStatus {
 /**
  * @brief Information about how a mission mob group is doing.
  */
-struct MissionMobGroupStatus {
+class MissionMobGroupStatus {
+
+public:
 
     //--- Public members ---
     
@@ -464,9 +472,7 @@ public:
     
     //--- Public function declarations ---
     
-    ALLEGRO_BITMAP* drawToBitmap(
-        const MakerTools::AreaImageSettings& settings
-    );
+    ALLEGRO_BITMAP* drawToBitmap(int size, int padding, bool treeShadows);
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
@@ -505,7 +511,8 @@ public:
     void stopAllLeaders();
     void load() override;
     void unload() override;
-    void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroInputEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroOtherEvent(ALLEGRO_EVENT& ev) override;
     void doLogic() override;
     void doDrawing() override;
     string getName() const override;
@@ -545,8 +552,7 @@ private:
     void doGameDrawing(
         ALLEGRO_BITMAP* bmpOutput = nullptr,
         const ALLEGRO_TRANSFORM* bmpTransform = nullptr,
-        const MakerTools::AreaImageSettings& bmpSettings =
-            MakerTools::AreaImageSettings()
+        bool treeShadows = true
     );
     void doGameplayLeaderLogic(Player* player, float deltaT);
     void doGameplayLogic(float deltaT);
@@ -566,7 +572,6 @@ private:
     void doPlayerActionToggleZoom(Player* player, bool isDown);
     void doPlayerActionWhistle(Player* player, bool isDown);
     void doPlayerActionZoom(Player* player, float inputValue, bool zoomIn);
-    void drawBackground(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);
     void drawDebugTools(Player* player);
     void drawLeaderCursor(Player* player, const ALLEGRO_COLOR& color);
     void drawInGameText(Player* player);
@@ -577,8 +582,8 @@ private:
     void drawPauseMenu();
     void drawPrecipitation();
     void drawReach(
-        const Point& center, float angle, float radius,
-        float reachAngle, float reachRadius,
+        const Point& center, Angle angle, float radius,
+        Angle reachAngle, float reachRadius,
         const ALLEGRO_COLOR& color
     );
     void drawThrowPreview(Player* player);
@@ -623,7 +628,9 @@ private:
 /**
  * @brief Info about the current cutscene message box, if any.
  */
-struct CutsceneMessageBox {
+class CutsceneMessageBox {
+
+public:
 
     //--- Public members ---
     

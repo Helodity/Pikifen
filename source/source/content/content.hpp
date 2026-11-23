@@ -99,7 +99,9 @@ enum CONTENT_LOAD_LEVEL {
 /**
  * @brief A manifest record of a piece of content in the disk.
  */
-struct ContentManifest {
+class ContentManifest {
+
+public:
 
     //--- Public members ---
     
@@ -165,6 +167,10 @@ public:
     //Optional version of the engine it was made for.
     string engineVersion;
     
+    //Optional content license. Uses the pack's license if empty.
+    //If no license can be found, assume all rights reserved.
+    string license;
+    
     //Optional notes for other makers to see.
     string makerNotes;
     
@@ -184,7 +190,9 @@ public:
 /**
  * @brief Data about an installed pack.
  */
-struct Pack {
+class Pack {
+
+public:
 
     //--- Public members ---
     
@@ -211,6 +219,10 @@ struct Pack {
     
     //Optional list of packs it conflicts with.
     string conflicts;
+    
+    //Optional pack and content license.
+    //If no license can be found, assume all rights reserved.
+    string license;
     
     //Optional notes of any kind.
     string notes;

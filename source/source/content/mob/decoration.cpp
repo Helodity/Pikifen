@@ -24,7 +24,7 @@
  * @param angle Starting angle.
  */
 Decoration::Decoration(
-    const Point& center, DecorationType* type, float angle
+    const Point& center, DecorationType* type, Angle angle
 ) :
     Mob(center, type, angle),
     decType(type) {
@@ -79,8 +79,9 @@ void Decoration::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     eff.tintColor.r *= individualTint.r;
@@ -89,7 +90,6 @@ void Decoration::drawMob() {
     eff.tintColor.a *= individualTint.a;
     
     eff.tf.scale *= individualScale;
-    eff.tf.rot += individualRotation;
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
 }

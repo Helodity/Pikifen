@@ -32,31 +32,27 @@
  *
  * @param bmpOutput If not nullptr, draw the area onto this.
  * @param bmpTransform Transformation to use when drawing to a bitmap.
- * @param bmpSettings Settings to use when drawing to a bitmap.
+ * @param treeShadows Whether to draw tree shadows. Only applicable when
+ * drawing to a bitmap.
  */
 void GameplayState::doGameDrawing(
     ALLEGRO_BITMAP* bmpOutput, const ALLEGRO_TRANSFORM* bmpTransform,
-    const MakerTools::AreaImageSettings& bmpSettings
+    bool treeShadows
 ) {
-
     /*  ***************************************
       *** |  |                           |  | ***
     ***** |__|          DRAWING          |__| *****
       ***  \/                             \/  ***
         ***************************************/
     
-    ALLEGRO_TRANSFORM oldWorldToWindowTransform;
-    int blendOldOp, blendOldSrc, blendOldDst,
-        blendOldAOp, blendOldASrc, blendOldADst;
-        
+    ALLEGRO_TRANSFORM prevWorldToWindowTransform;
+    AllegroBlenderState prevBlender;
+    
     if(bmpOutput) {
-        oldWorldToWindowTransform = players[0].view.worldToWindowTransform;
+        prevWorldToWindowTransform = players[0].view.worldToWindowTransform;
         players[0].view.worldToWindowTransform = *bmpTransform;
         al_set_target_bitmap(bmpOutput);
-        al_get_separate_blender(
-            &blendOldOp, &blendOldSrc, &blendOldDst,
-            &blendOldAOp, &blendOldASrc, &blendOldADst
-        );
+        prevBlender.save();
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
             ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
@@ -66,13 +62,13 @@ void GameplayState::doGameDrawing(
     
     forIdx(p, players) {
         Player& player = players[p];
-        al_clear_to_color(game.curArea->bgColor);
+        al_clear_to_color(changeAlpha(game.curArea->bgVoidColor, 255));
         
         //Layer 1 -- Background.
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- Background");
         }
-        drawBackground(player.view, bmpOutput);
+        drawAreaBackgroundTexture(player.view, 1.0f, bmpOutput);
         if(game.perfMon) {
             game.perfMon->finishMeasurement();
         }
@@ -91,7 +87,7 @@ void GameplayState::doGameDrawing(
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- In-game text");
         }
-        if(!bmpOutput && game.makerTools.hud) {
+        if(!bmpOutput && game.makerTools.showingHud) {
             drawInGameText(&player);
         }
         if(game.perfMon) {
@@ -113,7 +109,7 @@ void GameplayState::doGameDrawing(
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- Tree shadows");
         }
-        if(!(bmpOutput && !bmpSettings.shadows)) {
+        if(!(bmpOutput && !treeShadows)) {
             drawTreeShadows();
         }
         if(game.perfMon) {
@@ -122,11 +118,8 @@ void GameplayState::doGameDrawing(
         
         //Finish dumping to a bitmap image here.
         if(bmpOutput) {
-            al_set_separate_blender(
-                blendOldOp, blendOldSrc, blendOldDst,
-                blendOldAOp, blendOldASrc, blendOldADst
-            );
-            players[0].view.worldToWindowTransform = oldWorldToWindowTransform;
+            prevBlender.load();
+            players[0].view.worldToWindowTransform = prevWorldToWindowTransform;
             al_set_target_backbuffer(game.display);
             return;
         }
@@ -148,7 +141,7 @@ void GameplayState::doGameDrawing(
                 player.closestGroupMember[BUBBLE_RELATION_CURRENT]->
                 type->mainColor;
         }
-        if(player.leaderPtr && game.makerTools.hud) {
+        if(player.leaderPtr && game.makerTools.showingHud) {
             cursorColor =
                 changeColorLighting(
                     cursorColor, player.leaderCursorHeightDiffLight
@@ -163,7 +156,7 @@ void GameplayState::doGameDrawing(
             game.perfMon->startMeasurement("Drawing -- HUD");
         }
         
-        if(game.makerTools.hud) {
+        if(game.makerTools.showingHud) {
             player.hud->gui.draw();
             player.inventory->gui.draw();
             
@@ -191,7 +184,7 @@ void GameplayState::doGameDrawing(
     }
     
     //Layer 9 -- System stuff.
-    if(game.makerTools.hud) {
+    if(game.makerTools.showingHud) {
         if(areaTitleFadeTimer.timeLeft > 0) {
             drawLoadingScreen(
                 game.curArea->name, game.curArea->subtitle,
@@ -206,76 +199,6 @@ void GameplayState::doGameDrawing(
 
 
 #pragma warning(default: 4701)
-
-
-/**
- * @brief Draws the area background.
- *
- * @param view Viewport to draw to.
- * @param bmpOutput If not nullptr, draw the background onto this.
- */
-void GameplayState::drawBackground(
-    const Viewport& view, ALLEGRO_BITMAP* bmpOutput
-) {
-    if(!game.curArea->bgBmp) return;
-    
-    ALLEGRO_VERTEX bgV[4];
-    for(unsigned char v = 0; v < 4; v++) {
-        bgV[v].color = COLOR_WHITE;
-        bgV[v].z = 0;
-    }
-    
-    //Not gonna lie, this uses some fancy-shmancy numbers.
-    //I mostly got here via trial and error.
-    //I apologize if you're trying to understand what it means.
-    int bmpW =
-        bmpOutput ? al_get_bitmap_width(bmpOutput) : view.windowRect.size.x;
-    int bmpH =
-        bmpOutput ? al_get_bitmap_height(bmpOutput) : view.windowRect.size.y;
-    float zoomToUse = bmpOutput ? 0.5 : view.cam.zoom;
-    Point finalZoom(
-        bmpW * 0.5 * game.curArea->bgDist / zoomToUse,
-        bmpH * 0.5 * game.curArea->bgDist / zoomToUse
-    );
-    
-    bgV[0].x =
-        0;
-    bgV[0].y =
-        0;
-    bgV[0].u =
-        (view.cam.center.x - finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[0].v =
-        (view.cam.center.y - finalZoom.y) / game.curArea->bgBmpZoom;
-    bgV[1].x =
-        bmpW;
-    bgV[1].y =
-        0;
-    bgV[1].u =
-        (view.cam.center.x + finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[1].v =
-        (view.cam.center.y - finalZoom.y) / game.curArea->bgBmpZoom;
-    bgV[2].x =
-        bmpW;
-    bgV[2].y =
-        bmpH;
-    bgV[2].u =
-        (view.cam.center.x + finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[2].v =
-        (view.cam.center.y + finalZoom.y) / game.curArea->bgBmpZoom;
-    bgV[3].x =
-        0;
-    bgV[3].y =
-        bmpH;
-    bgV[3].u =
-        (view.cam.center.x - finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[3].v =
-        (view.cam.center.y + finalZoom.y) / game.curArea->bgBmpZoom;
-        
-    al_draw_prim(
-        bgV, nullptr, game.curArea->bgBmp,
-        0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
-    );
-}
 
 
 /**
@@ -322,7 +245,6 @@ void GameplayState::drawBigMsg() {
         break;
         
     } case BIG_MESSAGE_GO: {
-
         const float TEXT_GROW_STOP_T = 0.10f;
         const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_GO_DUR;
         
@@ -660,7 +582,7 @@ void GameplayState::drawDebugTools(Player* player) {
     //rawStickCoords.y = game.controls.mgr.rawSticks[0][0][1];
     rawStickCoords.x = inputAnalogStick[0];
     rawStickCoords.y = inputAnalogStick[1];
-    float rawStickAngle, rawStickMag;
+    Angle rawStickAngle, rawStickMag;
     coordinatesToAngle(
         rawStickCoords, &rawStickAngle, &rawStickMag
     );
@@ -770,7 +692,7 @@ void GameplayState::drawDebugTools(Player* player) {
     //cleanStickCoords.y =
     //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_DOWN) -
     //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
-    float cleanStickAngle;
+    Angle cleanStickAngle;
     float cleanStickMag;
     coordinatesToAngle(
         cleanStickCoords, &cleanStickAngle, &cleanStickMag
@@ -934,7 +856,7 @@ void GameplayState::drawInGameText(Player* player) {
         }
         
         //Maker tool -- draw hitboxes.
-        if(game.makerTools.hitboxes) {
+        if(game.makerTools.showingHitboxes) {
             Sprite* s;
             mobPtr->getSpriteData(&s, nullptr, nullptr);
             if(s) {
@@ -964,7 +886,7 @@ void GameplayState::drawInGameText(Player* player) {
         }
         
         //Maker tool -- draw collision.
-        if(game.makerTools.collision) {
+        if(game.makerTools.showingCollision) {
             if(mobPtr->type->pushesWithHitboxes) {
                 Sprite* s;
                 mobPtr->getSpriteData(&s, nullptr, nullptr);
@@ -1021,7 +943,7 @@ void GameplayState::drawInGameText(Player* player) {
     //Maker tool -- draw path info.
     if(
         game.makerTools.inspectedMob &&
-        game.makerTools.pathInfo &&
+        game.makerTools.showingPathInfo &&
         game.makerTools.inspectedMob->pathInfo
     ) {
         const ALLEGRO_COLOR BLOCKED_LINE_COLOR = al_map_rgba(255, 0, 0, 200);
@@ -1044,7 +966,6 @@ void GameplayState::drawInGameText(Player* player) {
             path->settings.targetPoint;
             
         if(!path->path.empty()) {
-        
             //Faint lines for the entire path.
             for(size_t s = 0; s < path->path.size() - 1; s++) {
                 bool isBlocked = false;
@@ -1139,7 +1060,7 @@ void GameplayState::drawInGameText(Player* player) {
     }
     
     //Maker tool -- draw reaches.
-    if(game.makerTools.inspectedMob && game.makerTools.reaches) {
+    if(game.makerTools.inspectedMob && game.makerTools.showingReaches) {
         const ALLEGRO_COLOR FAR_REACH_COLOR = al_map_rgba(192, 64, 64, 192);
         const ALLEGRO_COLOR NEAR_REACH_COLOR = al_map_rgba(64, 192, 64, 192);
         
@@ -1242,7 +1163,7 @@ void GameplayState::drawLeaderCursor(
     
     //Whistle rings.
     size_t nRings = player->whistle.rings.size();
-    float leaderCursorAngle =
+    Angle leaderCursorAngle =
         getAngle(player->leaderPtr->center, player->leaderCursorWorld);
     float leaderCursorDist =
         Distance(
@@ -1298,7 +1219,7 @@ void GameplayState::drawLeaderCursor(
         for(unsigned char d = 0; d < WHISTLE::N_DOT_COLORS; d++) {
             for(unsigned char d2 = 0; d2 < 16; d2++) {
                 unsigned char currentDot = d2 * WHISTLE::N_DOT_COLORS + d;
-                float angle =
+                Angle angle =
                     TAU / nDots *
                     currentDot -
                     WHISTLE::DOT_SPIN_SPEED * areaTimePassed;
@@ -1351,7 +1272,8 @@ void GameplayState::drawLeaderCursor(
     size_t nStandbyPikmin = 0;
     if(
         game.options.misc.showLeaderCursorCounter &&
-        player->leaderPtr->group->curStandbyType
+        player->leaderPtr->group->curStandbyType &&
+        !(game.makerTools.inControlCam && !game.makerTools.controlCamFrozen)
     ) {
         forIdx(m, player->leaderPtr->group->members) {
             Mob* mPtr = player->leaderPtr->group->members[m];
@@ -1472,10 +1394,8 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         //For starters, the whole window is dark (white in the map).
         al_clear_to_color(mapGray(blackoutS));
         
-        int oldOp, oldSrc, oldDst, oldAOp, oldASrc, oldADst;
-        al_get_separate_blender(
-            &oldOp, &oldSrc, &oldDst, &oldAOp, &oldASrc, &oldADst
-        );
+        AllegroBlenderState prevBlender;
+        prevBlender.save();
         al_set_separate_blender(
             ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
             ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
@@ -1520,9 +1440,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         
         al_draw_bitmap(lightmapBmp, 0, 0, 0);
         
-        al_set_separate_blender(
-            oldOp, oldSrc, oldDst, oldAOp, oldASrc, oldADst
-        );
+        prevBlender.load();
         
     }
     
@@ -1611,16 +1529,16 @@ void GameplayState::drawPrecipitation() {
  * @param color Color to draw with.
  */
 void GameplayState::drawReach(
-    const Point& center, float angle, float radius,
-    float reachAngle, float reachRadius,
+    const Point& center, Angle angle, float radius,
+    Angle reachAngle, float reachRadius,
     const ALLEGRO_COLOR& color
 ) {
     const float THICKNESS = 3.0f;
     
     if(reachAngle <= 0.0f || reachRadius <= 0.0f) return;
     
-    float angle1 = angle - reachAngle / 2.0f;
-    float angle2 = angle + reachAngle / 2.0f;
+    Angle angle1 = angle - reachAngle / 2.0f;
+    Angle angle2 = angle + reachAngle / 2.0f;
     al_draw_arc(
         center.x, center.y, radius + reachRadius, angle1, angle2 - angle1,
         color, THICKNESS
@@ -1695,8 +1613,8 @@ void GameplayState::drawThrowPreview(Player* player) {
     Distance leaderToDestDist(
         player->leaderPtr->center, player->throwDest
     );
-    float throwHAngle = 0.0f;
-    float throwVAngle = 0.0f;
+    Angle throwHAngle = 0.0f;
+    Angle throwVAngle = 0.0f;
     float throwSpeed = 0.0f;
     float throwHSpeed = 0.0f;
     coordinatesToAngle(
@@ -1904,11 +1822,14 @@ void GameplayState::drawThrowPreview(Player* player) {
 /**
  * @brief Draws the current area and mobs to a bitmap and returns it.
  *
- * @param settings What settings to use.
+ * @param size Maximum image width or height, in pixels.
+ * @param padding Padding around the actual area, in area pixels. Each side
+ * of the area receives these many pixels divided by two.
+ * @param treeShadows Whether to draw tree shadows.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* GameplayState::drawToBitmap(
-    const MakerTools::AreaImageSettings& settings
+    int size, int padding, bool treeShadows
 ) {
     //First, get the full dimensions of the map.
     RectCorners corners = RectCorners::readyForSearch;
@@ -1919,17 +1840,17 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     }
     
     //Figure out the scale that will fit on the image.
-    float areaW = corners.br.x - corners.tl.x + settings.padding;
-    float areaH = corners.br.y - corners.tl.y + settings.padding;
-    float finalBmpW = settings.size;
-    float finalBmpH = settings.size;
+    float areaW = corners.br.x - corners.tl.x + padding;
+    float areaH = corners.br.y - corners.tl.y + padding;
+    float finalBmpW = size;
+    float finalBmpH = size;
     float scale;
     
     if(areaW > areaH) {
-        scale = settings.size / areaW;
+        scale = size / areaW;
         finalBmpH *= areaH / areaW;
     } else {
-        scale = settings.size / areaH;
+        scale = size / areaH;
         finalBmpW *= areaW / areaH;
     }
     
@@ -1940,13 +1861,13 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     al_identity_transform(&t);
     al_translate_transform(
         &t,
-        -corners.tl.x + settings.padding / 2.0f,
-        -corners.tl.y + settings.padding / 2.0f
+        -corners.tl.x + padding / 2.0f,
+        -corners.tl.y + padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
     
     //Begin drawing!
-    doGameDrawing(bmp, &t);
+    doGameDrawing(bmp, &t, treeShadows);
     
     return bmp;
 }
@@ -2261,7 +2182,6 @@ void GameplayState::drawWorldComponents(
             );
             
         } else if(cPtr->mobShadowPtr) {
-        
             float deltaZ = 0;
             if(!cPtr->mobShadowPtr->standingOnMob) {
                 deltaZ =
@@ -2275,13 +2195,11 @@ void GameplayState::drawWorldComponents(
             );
             
         } else if(cPtr->mobLimbPtr) {
-        
             if(!hasFlag(cPtr->mobLimbPtr->flags, MOB_FLAG_HIDDEN)) {
                 cPtr->mobLimbPtr->drawLimb();
             }
             
         } else if(cPtr->mobPtr) {
-        
             if(!hasFlag(cPtr->mobPtr->flags, MOB_FLAG_HIDDEN)) {
                 cPtr->mobPtr->drawMob();
                 if(cPtr->mobPtr->type->drawMobCallback) {
@@ -2290,7 +2208,6 @@ void GameplayState::drawWorldComponents(
             }
             
         } else if(cPtr->particlePtr) {
-        
             cPtr->particlePtr->draw();
             
         }

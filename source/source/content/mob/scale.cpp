@@ -20,7 +20,7 @@
  * @param type Scale type this mob belongs to.
  * @param angle Starting angle.
  */
-Scale::Scale(const Point& center, ScaleType* type, float angle) :
+Scale::Scale(const Point& center, ScaleType* type, Angle angle) :
     Mob(center, type, angle),
     scaType(type),
     goalNumber(type->goalNumber) {
@@ -35,7 +35,6 @@ Scale::Scale(const Point& center, ScaleType* type, float angle) :
  * @return The weight.
  */
 float Scale::calculateCurWeight() const {
-
     //Start by figuring out which mobs are applying weight.
     set<Mob*> weighingMobs;
     

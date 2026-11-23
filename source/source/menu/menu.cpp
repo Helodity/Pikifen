@@ -41,22 +41,22 @@ void Menu::enter() {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The event.
  */
-void Menu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+void Menu::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!loaded || !active) return;
     
     if(!game.modal.isActive()) {
         forIdx(g, guis) {
             if(guis[g]) {
-                guis[g]->handleAllegroEvent(ev);
+                guis[g]->handleAllegroInputEvent(ev);
             }
         }
     }
     
-    game.modal.handleAllegroEvent(ev);
+    game.modal.handleAllegroInputEvent(ev);
 }
 
 

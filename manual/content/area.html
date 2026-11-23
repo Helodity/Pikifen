@@ -364,8 +364,8 @@
     <p>The sector-based system works well for areas in the engine, but has a few drawbacks. If you mess with the sectors, edges, or vertexes in <a href="#precautions">ways that aren't expected</a>, the sectors will have problems and will not work properly in-game. Even if everything works okay, it may not look exactly like you envisioned in the editor. You can use the review mode, accessible by the "Review" button on the main menu panel, to make sure everything is all right with your area, and that it matches up with what you want.</p>
 
     <dl>
-      <dt><b>Use the "Find errors" button to search for problems with the area, from logical mistakes to parts of the geometry being corrupted.</b></dt>
-      <dd>If the area editor finds a problem, it will tell you what it is, and will explain a possible way to fix it. Some problems also unlock the "Go to error" button, which will move and zoom the camera to focus on the problem. This process is important to follow often, because if you ended up corrupting something, you will want to fix it sooner rather than later. To note is that this tool reports the most important problems first, so if you only get minor problems, that means there's nothing else more serious going on.</dd>
+      <dt><b>Use the "Find problems" button to search for problems with the area, from logical mistakes to parts of the geometry being corrupted.</b></dt>
+      <dd>If the area editor finds a problem, it will tell you what it is, and will explain a possible way to fix it. Some problems also unlock the "Go to problem" button, which will move and zoom the camera to focus on the problem. This process is important to follow often, because if you ended up corrupting something, you will want to fix it sooner rather than later. To note is that this tool reports the most important problems first, so if you only get minor problems, that means there's nothing else more serious going on.</dd>
       <dt><b>You can use the "Preview area" button to visualize how the area will look like.</b></dt>
       <dd>This will show the textures painted out fully and walls casting shadows. You can also enable the "See tree shadows" option to show the tree shadows, if any. This allows you to get a nice feel of the overall aesthetic of your area.</dd>
     </dl>
@@ -413,7 +413,7 @@
     
     <p>If instead of a black void, you want the area to have a background, like the steel plates at the background of sublevel 1 of the <a href="https://www.pikminwiki.com/Secret_Testing_Range">Secret Testing Range</a>, or if you just want the background to be a color that isn't black, you can.</p>
 
-    <p>In the area information panel, you can set the background's information here. Press "Choose image..." and you will be given a list of bitmaps in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders, filtered by default for the <code>textures</code> subfolder. This texture will be tiled across the background, and you can change how far away the texture is (which affects the scrolling when you move the camera around), as well as how zoomed in it is. You will not be able to see the background in the area editor.</p>
+    <p>In the area information panel, you can set the background's information here. Press "Choose image..." and you will be given a list of bitmaps in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders, filtered by default for the <code>textures</code> subfolder. This texture will be tiled across the background, and you can change how far away the texture is (which affects <a href="https://en.wikipedia.org/wiki/Parallax_scrolling">the scrolling when you move the camera around</a>), as well as the texture's offset, scale, rotation, and tint. You will not be able to see the background in the area editor.</p>
 
     <h3 id="weather">Subtitle, weather, and more</h3>
     
@@ -472,7 +472,7 @@
       <li>Sector creation is equally complex. So long as you don't try to cut corners or do anything too fancy when creating a sector, it should all go fine.</li>
     </ul>
 
-    <p>The "Find errors" feature might detect some of the more common problems you may get yourself into, but don't rely on it for everything.</p>
+    <p>The "Find problems" feature might detect some of the more common problems you may get yourself into, but don't rely on it for everything.</p>
     
     <figure>
       <img src="../images/area_tutorial/inside_out.png" alt="Don't turn a sector inside-out like this.">
@@ -513,16 +513,16 @@
     <p>On top of the general <a href="editor.html#controls">editor controls</a>, and the area editor's shortcut keys, the following controls also exist:</p>
 
     <table>
-      <tr><td>Undo latest vertex, when drawing new sector</td><td>Canvas</td><td>Backspace</td></tr>
-      <tr><td>Quit out of certain panels</td><td>Any</td><td>Escape</td></tr>
-      <tr><td>Free mouse cursor from snapping</td><td>Canvas</td><td>Shift</td></tr>
-      <tr><td>Force a selection box when dragging the left mouse button</td><td>Canvas</td><td>Shift</td></tr>
-      <tr><td>Snap to the horizontal or vertical axis when dragging</td><td>Canvas</td><td>Ctrl</td></tr>
-      <tr><td>Add to existing selection, when selecting something</td><td>Any</td><td>Ctrl</td></tr>
-      <tr><td>Select all objects, vertexes, path stops, etc.</td><td>Canvas</td><td>Ctrl + A</td></tr>
-      <tr><td>Set the selected sector's height by moving the mouse cursor up or down</td><td>Canvas</td><td>H</td></tr>
-      <tr><td>Make all selected objects face mouse cursor position</td><td>Canvas</td><td>R</td></tr>
-      <tr><td>When scaling with the on-canvas transformation widget, lock the center instead</td><td>Canvas</td><td>Alt</td></tr>
+      <tr><td>Undo latest vertex, when drawing new sector</td><td>Canvas</td><td><kbd>Backspace</kbd></td></tr>
+      <tr><td>Quit out of certain panels</td><td>Any</td><td><kbd>Esc</kbd></td></tr>
+      <tr><td>Free mouse cursor from snapping</td><td>Canvas</td><td><kbd>Shift</kbd></td></tr>
+      <tr><td>Force a selection box when dragging the left mouse button</td><td>Canvas</td><td><kbd>Shift</kbd></td></tr>
+      <tr><td>Snap to the horizontal or vertical axis when dragging</td><td>Canvas</td><td><kbd>Ctrl</kbd></td></tr>
+      <tr><td>Add to existing selection, when selecting something</td><td>Any</td><td><kbd>Ctrl</kbd></td></tr>
+      <tr><td>Select all objects, vertexes, path stops, etc.</td><td>Canvas</td><td><kbd>Ctrl</kbd> + <kbd>A</kbd></td></tr>
+      <tr><td>Set the selected sector's height by moving the mouse cursor up or down</td><td>Canvas</td><td><kbd>H</kbd></td></tr>
+      <tr><td>Make all selected objects face mouse cursor position</td><td>Canvas</td><td><kbd>R</kbd></td></tr>
+      <tr><td>When scaling with the on-canvas transformation widget, lock the center instead</td><td>Canvas</td><td><kbd>Alt</kbd></td></tr>
     </table>
 
     <h2 id="tips">Tips</h2>
@@ -532,7 +532,7 @@
       <li>You can move entire sectors by clicking on them and dragging them.</li>
       <li>You can drag multiple vertexes, edges, sectors, objects, or path stops together by selecting them and dragging one.</li>
       <li>You can force the engine to only select vertexes, vertexes and edges, or everything, by setting the selection filter. Click on the filter button at the top of the "Layout" panel to toggle the current filter.</li>
-      <li>Holding Shift will free the mouse, so that you're no longer forced to do things exactly on the grid.</li>
+      <li>Holding <kbd>Shift</kbd> will free the mouse, so that you're no longer forced to do things exactly on the grid.</li>
       <li>When creating a new vertex, object, etc. via double-click, you don't need to let go of the mouse button on the second click; you can move the vertex right away if you keep it held.</li>
       <li>When drawing out a new sector, if you accidentally placed the last vertex in the wrong spot, you can click that same vertex to try again.</li>
       <li>The origin (coordinates 0,0) is the default location of the camera in the area editor, and the closer to the origin, the easier coordinates are to read. So you should try designing your area so the origin is near the center, the starting point, or somewhere else useful, instead of some place off in the distance.</li>

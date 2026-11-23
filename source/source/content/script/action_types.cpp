@@ -118,6 +118,28 @@ void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the string int addition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::addIntToString(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& baseStrArg = data.args[1];
+    const string& newContentArg = data.args[2];
+    const string& addSpaceArg = data.args[3];
+    
+    //Main logic.
+    string result = baseStrArg;
+    if(s2b(addSpaceArg)) result += " ";
+    result += i2s(s2i(newContentArg));
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the string addition script action type.
  *
  * @param data Data about the action call.
@@ -699,7 +721,7 @@ void ScriptActionRunners::getAngle(ScriptActionInstRunData& data) {
     //Main logic.
     Point center(s2f(xArg), s2f(yArg));
     Point focus(s2f(focusXArg), s2f(focusYArg));
-    float angle = getAngle(center, focus);
+    Angle angle = getAngle(center, focus);
     angle = radToDeg(angle);
     
     //Store the result.
@@ -719,8 +741,8 @@ void ScriptActionRunners::getAngleCwDiff(ScriptActionInstRunData& data) {
     const string& angle2Arg = data.args[2];
     
     //Main logic.
-    float angle1 = degToRad(s2f(angle1Arg));
-    float angle2 = degToRad(s2f(angle2Arg));
+    Angle angle1 = degToRad(s2f(angle1Arg));
+    Angle angle2 = degToRad(s2f(angle2Arg));
     float diff = ::getAngleCwDiff(angle1, angle2);
     diff = radToDeg(diff);
     
@@ -741,8 +763,8 @@ void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
     const string& angle2Arg = data.args[2];
     
     //Main logic.
-    float angle1 = degToRad(s2f(angle1Arg));
-    float angle2 = degToRad(s2f(angle2Arg));
+    Angle angle1 = degToRad(s2f(angle1Arg));
+    Angle angle2 = degToRad(s2f(angle2Arg));
     float diff = ::getAngleSmallestDiff(angle1, angle2);
     diff = radToDeg(diff);
     
@@ -809,7 +831,7 @@ void ScriptActionRunners::getCoordinatesFromAngle(
     const string& magnitudeArg = data.args[3];
     
     //Main logic.
-    float angle = s2f(angleArg);
+    Angle angle = s2f(angleArg);
     angle = degToRad(angle);
     float magnitude = s2f(magnitudeArg);
     Point p = angleToCoordinates(angle, magnitude);
@@ -960,6 +982,13 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         }
         break;
         
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE: {
+        if(data.actionDef->parentEvent == FSM_EV_DAMAGE) {
+            float damage = *((float*) data.customData2);
+            result = f2s(damage);
+        }
+        break;
+        
     }
     }
     
@@ -1005,6 +1034,38 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
     data.scriptVM->getRunnerScriptVM()->focusedMob->scriptVM.vars.getValue(
         focusVarArg, result
     );
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
+ * @brief Code for the leader activity retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getLeaderActivity(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& targetArg = data.args[1];
+    
+    //Main logic.
+    SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
+        ScriptActionUtils::getMobTargetType(data, targetArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
+    
+    if(!target) return;
+    
+    bool result = false;
+    if(!target->group) {
+        result = false;
+    } else if(target->type->category->id != MOB_CATEGORY_LEADERS) {
+        result = false;
+    } else {
+        Leader* lPtr = (Leader*) target;
+        result = lPtr->player != nullptr;
+    }
     
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
@@ -1249,12 +1310,12 @@ void ScriptActionRunners::getMissionMetric(ScriptActionInstRunData& data) {
     }
     
     MissionMetricType* metricTypePtr = game.missionMetricTypes[metric];
-    size_t indexParam = s2i(numberArg) - 1;
+    size_t idxParam = s2i(numberArg) - 1;
     
     if(s2b(getAutoTargetArg)) {
-        result = i2s(metricTypePtr->getTarget(indexParam, INVALID));
+        result = i2s(metricTypePtr->getTarget(idxParam, INVALID));
     } else {
-        result = i2s(metricTypePtr->getAmount(indexParam));
+        result = i2s(metricTypePtr->getAmount(idxParam));
     }
     
     //Store the result.
@@ -1552,6 +1613,7 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
     //Get the arguments.
     const string& bodyPartArg = data.args[0];
     const string& aboveArg = data.args[1];
+    const string& rotationArg = data.args[2];
     
     //Main logic.
     if(!data.scriptVM->getRunnerScriptVM()->focusedMob) {
@@ -1568,11 +1630,23 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
         return;
     }
     
+    bool rotationFound;
+    HOLD_ROTATION_METHOD rotationMethod =
+        enumGetValue(holdRotationMethodINames, rotationArg, &rotationFound);
+        
+    if(!rotationFound) {
+        ScriptActionUtils::reportActionError(
+            data,
+            "Unknown rotation method \"" + rotationArg + "\"!"
+        );
+        return;
+    }
+    
     data.scriptVM->getRunnerMob()->hold(
         data.scriptVM->getRunnerScriptVM()->focusedMob,
         HOLD_TYPE_PURPOSE_GENERAL,
         partIdx, 0.0f, 0.0f, 0.5f, s2b(aboveArg),
-        HOLD_ROTATION_METHOD_COPY_HOLDER
+        rotationMethod
     );
 }
 
@@ -1630,6 +1704,17 @@ void ScriptActionRunners::interpolateNumber(ScriptActionInstRunData& data) {
         
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
+ * @brief Code for the leave leader group script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::leaveLeaderGroup(ScriptActionInstRunData& data) {
+    //Main logic.
+    data.scriptVM->getRunnerMob()->leaveGroup();
 }
 
 
@@ -1934,7 +2019,7 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
     string line =
         "(" + speaker + " said:) " + textArg;
         
-    game.console.write(line, false);
+    game.console.write(LOG_LEVEL_INFO, line);
 }
 
 
@@ -1957,7 +2042,7 @@ void ScriptActionRunners::receiveStatus(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->getRunnerMob()->applyStatus(it->second, false, false);
+    data.scriptVM->getRunnerMob()->handleStatusSource(it->second, false, false);
 }
 
 
@@ -2014,7 +2099,7 @@ void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
     if(!isIdxValid(idx, items)) idx = items.size() - 1;
     
     if(isIdxValid(idx, items)) {
-        items.erase(items.begin() + idx);
+        eraseInVector(items, idx);
     }
     string newListStr = join(items, delChar);
     
@@ -2042,14 +2127,8 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
         return;
     }
     
-    forIdx(s, data.scriptVM->getRunnerMob()->statuses) {
-        if(data.scriptVM->getRunnerMob()->statuses[s].type == it->second) {
-            data.scriptVM->getRunnerMob()->statuses[s].prevState =
-                data.scriptVM->getRunnerMob()->statuses[s].state;
-            data.scriptVM->getRunnerMob()->statuses[s].state =
-                STATUS_STATE_TO_DELETE;
-        }
-    }
+    Mob* mPtr = data.scriptVM->getRunnerMob();
+    mPtr->statuses.deactivate(it->second);
 }
 
 
@@ -2611,6 +2690,23 @@ void ScriptActionRunners::setNearReach(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the Onion activity setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setOnionActivity(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+    
+    //Main logic.
+    Mob* mPtr = data.scriptVM->getRunnerMob();
+    if(mPtr->type->category->id != MOB_CATEGORY_ONIONS) return;
+    Onion* oPtr = (Onion*) mPtr;
+    oPtr->activated = s2b(valueArg);
+}
+
+
+/**
  * @brief Code for the radius setting script action type.
  *
  * @param data Data about the action call.
@@ -3120,7 +3216,8 @@ void ScriptActionRunners::storeFocusInside(ScriptActionInstRunData& data) {
     //Main logic.
     if(
         data.scriptVM->getRunnerScriptVM()->focusedMob &&
-        !data.scriptVM->getRunnerScriptVM()->focusedMob->isMobOrParentStoredInside()
+        !data.scriptVM->getRunnerScriptVM()->focusedMob->
+        isMobOrParentStoredInside()
     ) {
         data.scriptVM->getRunnerMob()->storeMobInside(
             data.scriptVM->getRunnerScriptVM()->focusedMob
@@ -3415,30 +3512,6 @@ void ScriptActionRunners::whileDo(ScriptActionInstRunData& data) {
 
 
 #pragma endregion
-#pragma region Action type param
-
-
-/**
- * @brief Constructs a new script action type parameter object.
- *
- * @param name Name of the parameter.
- * @param type Type of parameter.
- * @param flags Flags. Use SCRIPT_ACTION_PARAM_FLAG.
- * @param defValue If this is optional, specify its default value here.
- */
-ScriptActionTypeParam::ScriptActionTypeParam(
-    const string& name, const SCRIPT_ACTION_PARAM_TYPE type,
-    Bitmask8 flags, const string& defValue
-):
-    name(name),
-    type(type),
-    flags(flags),
-    defValue(defValue) {
-    
-}
-
-
-#pragma endregion
 #pragma region Action util functions
 
 
@@ -3447,7 +3520,7 @@ ScriptActionTypeParam::ScriptActionTypeParam(
  *
  * @param lhs The left-hand side comparand.
  * @param op The operator.
- * @param rhs The right-hand side value.
+ * @param rhs The right-hand side comparand.
  * @return Whether it is true.
  */
 bool ScriptActionUtils::doScriptCondition(
@@ -3490,6 +3563,29 @@ bool ScriptActionUtils::doScriptCondition(
     }
     
     return false;
+}
+
+
+/**
+ * @brief Returns the path to the data node file that an action comes from.
+ * Returns an empty string if it does not come from any data node.
+ *
+ * @param data Action data to read.
+ * @return The path, or an empty string.
+ */
+string ScriptActionUtils::getNodePath(const ScriptActionInstRunData& data) {
+    if(data.actionDef->dataFileLine != 0) {
+        if(data.scriptVM->getRunnerMob()) {
+            return
+                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
+                FILE_NAMES::MOB_TYPE_SCRIPT;
+        } else {
+            return
+                game.curArea->manifest->path + "/" +
+                FILE_NAMES::AREA_SCRIPT;
+        }
+    }
+    return "";
 }
 
 
@@ -3554,6 +3650,14 @@ Mob* ScriptActionUtils::getTargetMob(
             return data.scriptVM->getRunnerMob()->parent->m;
         }
         break;
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER: {
+        if(
+            data.scriptVM->getRunnerMob() &&
+            data.scriptVM->getRunnerMob()->followingGroup
+        ) {
+            return data.scriptVM->getRunnerMob()->followingGroup;
+        }
+        break;
     }
     }
     
@@ -3611,23 +3715,14 @@ Mob* ScriptActionUtils::getTriggerMob(ScriptActionInstRunData& data) {
 void ScriptActionUtils::reportActionError(
     const ScriptActionInstRunData& data, const string& info
 ) {
-    string filePath;
-    if(data.actionDef->dataFileLine != 0) {
-        if(data.scriptVM->getRunnerMob()) {
-            filePath =
-                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
-                FILE_NAMES::MOB_TYPE_SCRIPT;
-        } else {
-            filePath =
-                game.curArea->manifest->path + "/" +
-                FILE_NAMES::AREA_SCRIPT;
-        }
-    }
+    string filePath = getNodePath(data);
     
     if(filePath.empty()) {
-        game.errors.report(info);
+        game.log.write(LOG_LEVEL_ERROR, info);
     } else {
-        game.errors.report(info, filePath, data.actionDef->dataFileLine);
+        game.log.write(
+            LOG_LEVEL_ERROR, info, filePath, data.actionDef->dataFileLine
+        );
     }
 }
 

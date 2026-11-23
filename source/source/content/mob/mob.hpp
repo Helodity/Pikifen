@@ -41,19 +41,19 @@ namespace MOB {
 extern const float CARRIED_MOB_ACCELERATION;
 extern const float CARRY_STUCK_CIRCLING_RADIUS;
 extern const float CARRY_STUCK_SPEED_MULTIPLIER;
+extern const float CARRY_SWAY_ROTATION_AMOUNT;
 extern const float CARRY_SWAY_TIME_MULT;
 extern const float CARRY_SWAY_X_TRANSLATION_AMOUNT;
 extern const float CARRY_SWAY_Y_TRANSLATION_AMOUNT;
-extern const float CARRY_SWAY_ROTATION_AMOUNT;
-extern const float DELIVERY_SUCK_SHAKING_TIME_MULT;
+extern const float DAMAGE_SQUASH_AMOUNT;
+extern const float DAMAGE_SQUASH_DURATION;
 extern const float DELIVERY_SUCK_SHAKING_MULT;
+extern const float DELIVERY_SUCK_SHAKING_TIME_MULT;
 extern const float DELIVERY_SUCK_TIME;
 extern const float DELIVERY_TOSS_MULT;
 extern const float DELIVERY_TOSS_TIME;
 extern const float DELIVERY_TOSS_WINDUP_MULT;
 extern const float DELIVERY_TOSS_X_OFFSET;
-extern const float DAMAGE_SQUASH_DURATION;
-extern const float DAMAGE_SQUASH_AMOUNT;
 extern const float FREE_MOVE_THRESHOLD;
 extern const float GRAVITY_ADDER;
 extern const float GROUP_SHUFFLE_DIST;
@@ -65,6 +65,7 @@ extern const float KNOCKBACK_V_POWER;
 extern const float MOB_SPEED_ANIM_MAX_MULT;
 extern const float MOB_SPEED_ANIM_MIN_MULT;
 extern const float OPPONENT_HIT_REGISTER_TIMEOUT;
+extern const float PEEK_UNDERNEATH_FADE_SPEED;
 extern const float PIKMIN_NEST_CALL_INTERVAL;
 extern const float PUSH_EXTRA_AMOUNT;
 extern const float PUSH_SOFTLY_AMOUNT;
@@ -73,9 +74,9 @@ extern const float PUSH_THROTTLE_TIMEOUT;
 extern const float SHADOW_STRETCH_MULT;
 extern const float SHADOW_Y_MULT;
 extern const float SMACK_PARTICLE_DUR;
+extern const float STATUS_SHAKING_TIME_MULT;
 extern const float SWARM_MARGIN;
 extern const float SWARM_VERTICAL_SCALE;
-extern const float STATUS_SHAKING_TIME_MULT;
 };
 
 
@@ -110,7 +111,7 @@ public:
     float bottomZ = 0.0f;
     
     //Current facing angle. 0 = right, PI / 2 = up, etc.
-    float angle = 0.0f;
+    Angle angle = 0.0f;
     
     //The highest ground below the entire mob.
     Sector* groundSector = nullptr;
@@ -140,7 +141,7 @@ public:
     float pushAmount = 0.0f;
     
     //Angle that another mob is pushing it to.
-    float pushAngle = 0.0f;
+    Angle pushAngle = 0.0f;
     
     //How much the mob moved this frame, if it's walkable.
     Point walkableMoved;
@@ -186,7 +187,7 @@ public:
     ScriptVM scriptVM;
     
     //Angle the mob wants to be facing.
-    float intendedTurnAngle;
+    Angle intendedTurnAngle;
     
     //Variable that holds the position the mob wants to be facing.
     Point* intendedTurnPos = nullptr;
@@ -230,8 +231,8 @@ public:
     //How much time has passed the last time the itch event triggered?
     float itchTime = 0.0f;
     
-    //Status effects currently inflicted on the mob.
-    vector<Status> statuses;
+    //Status effect states.
+    StatusManager statuses;
     
     //Hazard of the sector the mob is currently on.
     Hazard* onHazard = nullptr;
@@ -311,6 +312,9 @@ public:
     //Data about its in-world fraction numbers, if any.
     InWorldFraction* fraction = nullptr;
     
+    //Current alpha, for peeking underneath [0 - 1].
+    float peekUnderneathAlpha = 1.0f;
+    
     //-Caches-
     
     //Cached value of the angle's cosine. Cache for performance.
@@ -337,7 +341,7 @@ public:
     
     //--- Public function declarations ---
     
-    Mob(const Point& pos, MobType* type, float angle);
+    Mob(const Point& pos, MobType* type, Angle angle);
     virtual ~Mob();
     
     void tick(float deltaT);
@@ -368,7 +372,7 @@ public:
         Mob* attacker, Hitbox* attackH, Hitbox* victimH, float damage
     );
     bool addToGroup(Mob* newMember);
-    void applyKnockback(float knockback, float knockbackAngle);
+    void applyKnockback(float knockback, Angle knockbackAngle);
     bool calculateAttackBasics(
         Mob* victim, Hitbox* attackH, const Hitbox* victimH,
         float* outOffenseMultiplier, float* outDefenseMultiplier
@@ -387,7 +391,7 @@ public:
     void calculateAttackKnockback(
         const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
         float offenseMultiplier, float defenseMultiplier,
-        bool* outKbExists, float* outKbStrength, float* outKbAngle
+        bool* outKbExists, float* outKbStrength, Angle* outKbAngle
     ) const;
     void causeSpikeDamage(Mob* victim, bool isIngestion);
     void chomp(Mob* m, const Hitbox* hitboxInfo);
@@ -398,7 +402,7 @@ public:
     ) const;
     void getHitboxHoldPoint(
         const Mob* mobToHold, const Hitbox* hPtr,
-        float* offsetDist, float* offsetAngle, float* verticalDist
+        float* offsetDist, Angle* offsetAngle, float* verticalDist
     ) const;
     size_t getLatchedPikminAmount() const;
     float getLatchedPikminWeight() const;
@@ -416,7 +420,7 @@ public:
     void leaveGroup();
     void hold(
         Mob* m, HOLD_TYPE type, size_t hitboxIdx,
-        float offsetDist, float offsetAngle,
+        float offsetDist, Angle offsetAngle,
         float verticalDist,
         bool forceAboveHolder, const HOLD_ROTATION_METHOD rotationMethod
     );
@@ -474,7 +478,7 @@ public:
     );
     void stopCircling();
     void face(
-        float newAngle, Point* newPos, bool instantly = false
+        Angle newAngle, Point* newPos, bool instantly = false
     );
     Point getChaseTarget(float* outZ = nullptr) const;
     virtual float getBaseSpeed() const;
@@ -484,15 +488,15 @@ public:
     void arachnorbPlanLogic(SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
     void arachnorbFootMoveLogic();
     
-    void applyStatus(
-        StatusType* s, bool givenByParent, bool fromHazard,
+    void handleStatusSource(
+        StatusType* type, bool givenByParent, bool fromHazard,
         Mob* fromMob = nullptr, float overrideBuildup = FLT_MAX,
         bool forceReapplyResetTime = false
     );
-    void deleteOldStatusEffects();
-    void deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
+    void applyStatusParticles(const Status* sPtr, ParticleGenerator* pg);
     ALLEGRO_BITMAP* getStatusBitmap(float* bmpScale) const;
     virtual bool canReceiveStatus(StatusType* s) const;
+    void deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
     virtual void getGroupSpotInfo(
         Point* outSpot, float* outDist
     ) const;
@@ -500,8 +504,8 @@ public:
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const;
     virtual int getMissionPoints(bool* applicableInThisMission) const;
-    virtual void handleStatusEffectGain(StatusType* staType);
-    virtual void handleStatusEffectLoss(StatusType* staType);
+    virtual void handleStatusActivation(StatusType* staType);
+    virtual void handleStatusDeactivation(StatusType* staType);
     virtual void readScriptVars(const ScriptVarManager& varsMgr);
     virtual void startDyingClassSpecifics();
     virtual void finishDyingClassSpecifics();
@@ -525,15 +529,9 @@ protected:
     
     //--- Protected function declarations ---
     
-    bool applyStatusBuildup(
-        StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
-        float overrideAmount
-    );
-    void applyStatusEffects(
-        StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
-        bool forceReapplyResetTime
-    );
-    bool applyStatusParentLogic(
+    void applyActivatedStatusEffects(Status* newStatus, Mob* fromMob);
+    void deleteDeactivatedStatusEffects();
+    bool handleStatusSourceParentLogic(
         StatusType* s, bool givenByParent, bool fromHazard,
         Mob* fromMob = nullptr
     );
@@ -549,8 +547,8 @@ protected:
         float deltaT, float moveSpeedMult, Point* moveSpeed
     );
     HORIZ_MOVE_RESULT getWallSlideAngle(
-        const Edge* ePtr, unsigned char wallSector, float moveAngle,
-        float* slideAngle
+        const Edge* ePtr, unsigned char wallSector, Angle moveAngle,
+        Angle* slideAngle
     ) const;
     void moveToPathEnd(float speed, float acceleration);
     void tickAnimation(float deltaT);

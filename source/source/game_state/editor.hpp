@@ -68,7 +68,8 @@ public:
     virtual ~Editor() = default;
     void doDrawing() override = 0;
     void doLogic() override = 0;
-    void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroInputEvent(ALLEGRO_EVENT& ev) override;
+    void handleAllegroOtherEvent(ALLEGRO_EVENT& ev) override;
     void load() override;
     void unload() override;
     virtual void updateStyle();
@@ -251,7 +252,7 @@ protected:
      */
     struct SelectionList {
     
-        public:
+    public:
         
         //--- Public function declarations ---
         
@@ -288,7 +289,7 @@ protected:
      */
     struct SelectionManager {
     
-        public:
+    public:
         
         //--- Public members ---
         
@@ -366,10 +367,10 @@ protected:
         bool startOperation();
         bool applyDragMove(const Point& cursorPos);
         bool applyDirectTransformation(
-            const Rect& newRect, float newAngle
+            const Rect& newRect, Angle newAngle
         );
         bool applySharedTransformation(
-            const Rect& newRect, float newAngle
+            const Rect& newRect, Angle newAngle
         );
         bool setHomogenized(bool homogenized);
         bool isHomogenized() const;
@@ -380,7 +381,7 @@ protected:
         bool getBBox(Rect* outRect) const;
         vector<size_t> getItemsUnderCursor(const Point& cursorPos) const;
         void getItemInfo(
-            size_t idx, Point* outCenter, Point* outSize, float* outAngle
+            size_t idx, Point* outCenter, Point* outSize, Angle* outAngle
         ) const;
         bool getItemIsEligible(size_t idx) const;
         size_t getNrTotalItems() const;
@@ -417,7 +418,7 @@ protected:
      */
     struct SelectionController {
     
-        public:
+    public:
         
         //--- Public misc. declarations ---
         
@@ -475,7 +476,7 @@ protected:
         bool startTransforming();
         bool isTransforming() const;
         bool applyTransformation(
-            const Rect& newRect, float newAngle
+            const Rect& newRect, Angle newAngle
         );
         bool stopTransforming();
         
@@ -493,7 +494,7 @@ protected:
         
         bool getTotalBBox(Rect* outRect) const;
         void getSingleRotatingItemInfo(
-            Point* outCenter, Point* outSize, float* outAngle
+            Point* outCenter, Point* outSize, Angle* outAngle
         ) const;
         size_t getSelectionTotalCount(
             bool* outCanChange = nullptr, RectCorners* outPadding = nullptr
@@ -563,7 +564,7 @@ protected:
      */
     struct TransformationWidget {
     
-        public:
+    public:
         
         //--- Public misc. declarations ---
         
@@ -608,7 +609,7 @@ protected:
             const RectCorners& padding = RectCorners()
         );
         bool handleMouseMove(
-            const Point& mouseCoords, Point* center, Point* size, float* angle,
+            const Point& mouseCoords, Point* center, Point* size, Angle* angle,
             float zoom = 1.0f, Bitmask8 flags = 0,
             const RectCorners& padding = RectCorners(),
             float minSize = -FLT_MAX,
@@ -634,7 +635,7 @@ protected:
         Point oldSize;
         
         //Old angle, before the user started dragging handles.
-        float oldAngle = 0.0f;
+        Angle oldAngle = 0.0f;
         
         //Before a transformation began, the mouse cursor was in this position.
         Point oldMouseCoords;
@@ -667,7 +668,7 @@ protected:
     /**
      * @brief Info about a dialog box.
      */
-    class Dialog {
+    struct Dialog {
     
     public:
     
@@ -676,8 +677,8 @@ protected:
         //Callback for when it's time to process the dialog's contents.
         std::function<void()> processCallback = nullptr;
         
-        //Callback for when an Allegro event happens.
-        std::function<void(ALLEGRO_EVENT*)> eventCallback = nullptr;
+        //Callback for when an Allegro event related to user input happens.
+        std::function<void(ALLEGRO_EVENT*)> inputEventCallback = nullptr;
         
         //Callback for when the user closes the dialog, if any.
         std::function<void()> closeCallback = nullptr;
@@ -705,6 +706,8 @@ protected:
      * @brief An item of a picker dialog.
      */
     struct PickerItem {
+
+    public:
     
         //--- Public members ---
         
@@ -741,7 +744,7 @@ protected:
     /**
      * @brief Info about a picker dialog.
      */
-    class Picker {
+    struct Picker {
     
     public:
     
@@ -802,7 +805,7 @@ protected:
      */
     struct ChangesManager {
     
-        public:
+    public:
         
         //--- Public function declarations ---
         
@@ -861,6 +864,8 @@ protected:
     
     //Style of the different things to draw in the canvas.
     struct CanvasStyle {
+
+    public:
     
         //Grid alpha [0 - 1].
         float gridAlpha = 1.0f;
@@ -882,7 +887,7 @@ protected:
      */
     struct Command {
     
-        public:
+    public:
         
         //--- Public function declarations ---
         
@@ -1104,7 +1109,7 @@ protected:
     bool getSelectionTransformationWidgetParams(
         const SelectionController& selCtrl,
         Point* outSelectionCenter, Point* outSelectionSize,
-        float* outSelectionAngle, bool* outUseAngle,
+        Angle* outSelectionAngle, bool* outUseAngle,
         Bitmask8* outFlags, RectCorners* outPadding
     ) const;
     bool guiFocusedText();
@@ -1176,6 +1181,13 @@ protected:
         bool useMonospace = false
     );
     void processGuiStatusBarText();
+    void processGuiWidgetsDeviation(
+        const string label, bool& minMaxMode,
+        const std::function<void()>& onBaseNumber,
+        const std::function<void()>& onDeviation,
+        const std::function<void()>& onMin,
+        const std::function<void()>& onMax
+    );
     bool processGuiWidgetsHazardManagement(string& selectedHazardIname);
     bool processGuiWidgetsMobType(
         string* customCatName, MobType** type, const string& packFilter = ""
@@ -1237,7 +1249,7 @@ protected:
     );
     void panelTitle(const char* title);
     
-    void angleVisualizer(float angle);
+    void angleVisualizer(Angle angle);
     void keyframeVisualizer(
         KeyframeInterpolator<ALLEGRO_COLOR>& interpolator,
         size_t selKeyframeIdx
@@ -1285,6 +1297,7 @@ protected:
         const ContentManifest& manifest, const string& name
     );
     void zoomWithCursor(float newZoom);
+    void zoomToSelection();
     virtual void handleKeyCharAnywhere(const ALLEGRO_EVENT& ev);
     virtual void handleKeyCharCanvas(const ALLEGRO_EVENT& ev);
     virtual void handleKeyDownAnywhere(const ALLEGRO_EVENT& ev);
@@ -1312,7 +1325,8 @@ protected:
     bool handleSelectionAndTransformationLmbDrag(
         SelectionController& selCtrl, TransformationWidget& traWid,
         bool skipTraWid, const Point& mouseCursor,
-        const std::function<void()>& onPreTransform = nullptr
+        const std::function<void()>& onPreTransform = nullptr,
+        bool forceKeepAspectRatio = false
     );
     void handleSelectionAndTransformationLmbUp(
         SelectionController& selCtrl, TransformationWidget& traWid,

@@ -45,7 +45,7 @@ const unsigned char CONTROL_POINT_RING_AMOUNT = 4;
  * @param type Ship type this mob belongs to.
  * @param angle Starting angle.
  */
-Ship::Ship(const Point& center, ShipType* type, float angle) :
+Ship::Ship(const Point& center, ShipType* type, Angle angle) :
     Mob(center, type, angle),
     shiType(type),
     controlPointFinalPos(
@@ -89,7 +89,6 @@ Ship::~Ship() {
  * @brief Draws a ship.
  */
 void Ship::drawMob() {
-
     //Draw the rings on the control point.
     for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
         float ringIdxRatio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
@@ -145,7 +144,6 @@ void Ship::drawMob() {
     //Drawing the beam rings.
     //Go in reverse to ensure the most recent rings are drawn underneath.
     for(char r = (char) beamRings.size() - 1; r > 0; r--) {
-    
         float ringAnimRatio =
             beamRings[r] / SHIP::BEAM_RING_ANIM_DUR;
             
@@ -187,7 +185,7 @@ void Ship::drawMob() {
             );
             
         float distance = controlPointToReceptacleDist * ringAnimRatio;
-        float angle = getAngle(controlPointFinalPos, receptacleFinalPos);
+        Angle angle = getAngle(controlPointFinalPos, receptacleFinalPos);
         Point ringPos(
             controlPointFinalPos.x + cos(angle) * distance,
             controlPointFinalPos.y + sin(angle) * distance
@@ -202,7 +200,26 @@ void Ship::drawMob() {
         );
     }
     
-    Mob::drawMob();
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
+    
+    BitmapEffect eff;
+    getSpriteBitmapEffects(
+        curSPtr, nextSPtr, interpolationFactor,
+        &eff,
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
+    );
+    
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
 
@@ -219,6 +236,10 @@ void Ship::healLeader(Leader* l) const {
             game.sysContentNames.parLeaderHeal, l
         );
     l->particleGenerators.push_back(pg);
+    game.audio.addNewPosSoundSource(
+        game.sysContent.sndHeal, l->center, false,
+    { .volume = 0.5f }
+    );
 }
 
 
@@ -264,15 +285,10 @@ void Ship::tickClassSpecifics(float deltaT) {
         //Delete rings that have reached the end of their animation.
         beamRings[r] += deltaT;
         if(beamRings[r] > SHIP::BEAM_RING_ANIM_DUR) {
-            beamRings.erase(
-                beamRings.begin() + r
-            );
-            beamRingColors.erase(
-                beamRingColors.begin() + r
-            );
+            eraseInVector(beamRings, r);
+            eraseInVector(beamRingColors, r);
         } else {
             r++;
         }
     }
-    
 }

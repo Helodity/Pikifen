@@ -115,6 +115,9 @@ const float MOB_SPEED_ANIM_MIN_MULT = 0.3f;
 //When an opponent is hit, it takes this long to be possible to hit it again.
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 
+//How quickly a mob's alpha changes for peeking underneath, in units per second.
+const float PEEK_UNDERNEATH_FADE_SPEED = 1.5f;
+
 //Wait these many seconds before allowing another Pikmin to be called out.
 const float PIKMIN_NEST_CALL_INTERVAL = 0.02f;
 
@@ -161,7 +164,7 @@ const float SWARM_VERTICAL_SCALE = 0.5f;
  * @param type Mob type this mob belongs to.
  * @param angle Starting angle.
  */
-Mob::Mob(const Point& center, MobType* type, float angle) :
+Mob::Mob(const Point& center, MobType* type, Angle angle) :
     type(type),
     center(center),
     angle(angle),
@@ -174,6 +177,7 @@ Mob::Mob(const Point& center, MobType* type, float angle) :
     health(type->maxHealth),
     maxHealth(type->maxHealth),
     itchTime(type->itchTime),
+    statuses(this),
     anim(type->animDb),
     physicalSpan(type->physicalSpan) {
     
@@ -199,6 +203,19 @@ Mob::Mob(const Point& center, MobType* type, float angle) :
     }
     
     updateInteractionSpan();
+    
+    ParticleGenerator waveRingPG =
+        standardParticleGenSetup(
+            game.sysContentNames.parWaveRing, this
+        );
+    adjustKeyframeInterpolatorValues<float>(
+        waveRingPG.baseParticle.size,
+    [ this ] (const float & f) { return f * radius; }
+    );
+    waveRingPG.baseParticle.priority = PARTICLE_PRIORITY_LOW;
+    waveRingPG.followZOffset = 1.0f;
+    waveRingPG.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
+    particleGenerators.push_back(waveRingPG);
 }
 
 
@@ -215,6 +232,8 @@ Mob::~Mob() {
     if(fraction) delete fraction;
     if(group) delete group;
     if(parent) delete parent;
+    
+    deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
 }
 
 
@@ -286,7 +305,7 @@ void Mob::applyAttackDamage(
         setHealth(true, false, -damage);
         
         HitboxInteraction evInfo(this, victimH, attackH);
-        scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo);
+        scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo, (void*) &damage);
         
         attacker->causeSpikeDamage(this, false);
     }
@@ -303,7 +322,7 @@ void Mob::applyAttackDamage(
  * @param knockback Total knockback value.
  * @param knockbackAngle Angle to knockback towards.
  */
-void Mob::applyKnockback(float knockback, float knockbackAngle) {
+void Mob::applyKnockback(float knockback, Angle knockbackAngle) {
     if(knockback != 0) {
         stopChasing();
         speed.x = cos(knockbackAngle) * knockback * MOB::KNOCKBACK_H_POWER;
@@ -312,21 +331,16 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
         face(getAngle(speed) + TAU / 2, nullptr, true);
         startHeightEffect();
         
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->removeOnKnockDown) {
-                statuses[s].state = STATUS_STATE_TO_DELETE;
-            }
-        }
-        deleteOldStatusEffects();
+        statuses.handleKnockdown();
     }
 }
 
 
 /**
- * @brief Applies a status effect.
+ * @brief Handles the mob having come upon a source that is trying to
+ * inflict a status effect.
  *
- * @param s Status effect to use.
+ * @param statusType Status effect type to use.
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
@@ -336,110 +350,26 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
  * @param forceReapplyResetTime If true, forces the reapply rule to
  * be reset time.
  */
-void Mob::applyStatus(
-    StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
+void Mob::handleStatusSource(
+    StatusType* statusType, bool givenByParent, bool fromHazard, Mob* fromMob,
     float overrideBuildup, bool forceReapplyResetTime
 ) {
     //Initial checks.
-    if(!givenByParent && !canReceiveStatus(s)) {
+    if(!givenByParent && !canReceiveStatus(statusType)) {
         return;
     }
     
-    //Parent and buildup logic.
-    if(applyStatusParentLogic(s, givenByParent, fromHazard)) {
-        return;
-    }
-    if(
-        !applyStatusBuildup(
-            s, givenByParent, fromHazard, fromMob, overrideBuildup
-        )
-    ) {
+    //Parent logic.
+    if(handleStatusSourceParentLogic(statusType, givenByParent, fromHazard)) {
         return;
     }
     
-    //At this point the mob must really be given the status effect's effects.
-    applyStatusEffects(
-        s, givenByParent, fromHazard, fromMob, forceReapplyResetTime
-    );
-}
-
-
-/**
- * @brief Applies buildup logic for a status effect, if applicable.
- *
- * @param statusType Status effect to use.
- * @param givenByParent If true, this status effect was given to the mob
- * by its parent mob.
- * @param fromHazard If true, this status effect was given from a hazard.
- * @param fromMob If not nullptr, this status effect was given by this mob.
- * @param overrideAmount If not FLT_MAX, override the buildup amount by this.
- * @return True if enough buildup was caused to apply the effect, or if no
- * buildup is required to apply the effect. False if buildup was applied and
- * nothing else happened.
- */
-bool Mob::applyStatusBuildup(
-    StatusType* statusType, bool givenByParent, bool fromHazard, Mob* fromMob,
-    float overrideAmount
-) {
-    if(statusType->buildup == 0.0f) {
-        //No buildup.
-        return true;
-    }
-    
-    //Add it to the list if it's not already there.
-    auto statusIt =
-        std::find_if(
-            statuses.begin(), statuses.end(),
-    [statusType] (const Status & s) {
-        return s.type == statusType;
-    }
-        );
-        
-    if(statusIt == statuses.end()) {
-        Status newStatus(statusType);
-        newStatus.state = STATUS_STATE_BUILDING;
-        newStatus.fromHazard = fromHazard;
-        statuses.push_back(newStatus);
-        statusIt = statuses.end() - 1;
-    }
-    
-    if(statusIt->buildup == 1.0f) return true;
-    
-    //Apply the buildup.
-    statusIt->buildup +=
-        overrideAmount == FLT_MAX ? statusType->buildup : overrideAmount;
-    statusIt->buildupRemovalTimeLeft = statusType->buildupRemovalDuration;
-    
-    if(statusIt->buildup >= 1.0f) {
-        statusIt->buildup = 1.0f;
-        return true;
-    }
-    
-    return false;
-}
-
-
-/**
- * @brief Applies a status effect's effects.
- *
- * @param s Status effect to use.
- * @param givenByParent If true, this status effect was given to the mob
- * by its parent mob.
- * @param fromHazard If true, this status effect was given from a hazard.
- * @param fromMob If not nullptr, this status effect was given by this mob.
- * @param forceReapplyResetTime If true, forces the reapply rule to
- * be reset time.
- */
-void Mob::applyStatusEffects(
-    StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
-    bool forceReapplyResetTime
-) {
     //Get the vulnerabilities to this status.
-    auto vulnIt = type->statusVulnerabilities.find(s);
+    auto vulnIt = type->statusVulnerabilities.find(statusType);
     if(vulnIt != type->statusVulnerabilities.end()) {
         if(vulnIt->second.statusToApply) {
-            //It must instead receive this status.
-            applyStatus(
+            //It must instead receive this other status.
+            handleStatusSource(
                 vulnIt->second.statusToApply, givenByParent, fromHazard,
                 fromMob, false, forceReapplyResetTime
             );
@@ -447,85 +377,62 @@ void Mob::applyStatusEffects(
         }
     }
     
-    //Check how this status is doing in the list, if it's there.
-    size_t listIdx = INVALID;
-    bool alreadyActive = false;
-    forIdx(ms, statuses) {
-        if(statuses[ms].type == s) {
-            listIdx = ms;
-            if(statuses[ms].state == STATUS_STATE_ACTIVE) {
-                alreadyActive = true;
-            }
-        }
-    }
-    
-    //Check if it's already active.
-    //If so, just do something to the time left and then quit out.
-    if(alreadyActive) {
-        STATUS_REAPPLY_RULE reapplyRule = s->reapplyRule;
-        if(forceReapplyResetTime) {
-            reapplyRule = STATUS_REAPPLY_RULE_RESET_TIME;
-        }
+    //Main logic.
+    Status* newStatusPtr =
+        statuses.handleStatusSource(
+            statusType, overrideBuildup, forceReapplyResetTime
+        );
         
-        switch(reapplyRule) {
-        case STATUS_REAPPLY_RULE_KEEP_TIME: {
-            break;
-        }
-        case STATUS_REAPPLY_RULE_RESET_TIME: {
-            statuses[listIdx].timeLeft = s->autoRemoveTime;
-            break;
-        }
-        case STATUS_REAPPLY_RULE_ADD_TIME: {
-            statuses[listIdx].timeLeft += s->autoRemoveTime;
-            break;
-        }
-        }
-        
+    //No new status got activated. Nothing else to do.
+    if(!newStatusPtr) {
         return;
     }
     
-    //This status is not already active. Let's activate it.
-    if(listIdx == INVALID) {
-        Status newStatus(s);
-        newStatus.fromHazard = fromHazard;
-        statuses.push_back(newStatus);
-        listIdx = statuses.size() - 1;
+    //New status activated!
+    newStatusPtr->fromHazard = fromHazard;
+    
+    applyActivatedStatusEffects(newStatusPtr, fromMob);
+}
+
+
+/**
+ * @brief Applies the effects of a newly-activated status.
+ *
+ * @param newStatus The new status.
+ * @param fromMob If not nullptr, this status effect was given by this mob.
+ */
+void Mob::applyActivatedStatusEffects(Status* newStatus, Mob* fromMob) {
+    handleStatusActivation(newStatus->type);
+    
+    if(!newStatus->type->animationChange.empty()) {
+        setAnimation(newStatus->type->animationChange);
     }
     
-    statuses[listIdx].prevState = statuses[listIdx].state;
-    statuses[listIdx].state = STATUS_STATE_ACTIVE;
-    
-    //Apply all the necessary changes.
-    handleStatusEffectGain(s);
-    
-    if(!s->animationChange.empty()) {
-        setAnimation(s->animationChange);
-    }
-    
-    if(s->turnsInvisible) {
+    if(newStatus->type->turnsInvisible) {
         hasInvisibilityStatus = true;
     }
     
-    if(s->particleGenStart) {
-        statuses[listIdx].applyParticles(this, s->particleGenStart);
+    if(newStatus->type->particleGenStart) {
+        applyStatusParticles(newStatus, newStatus->type->particleGenStart);
     }
     
-    if(s->soundStart.sample) {
+    if(newStatus->type->soundStart.sample) {
         game.audio.addNewMobSoundSource(
-            s->soundStart.sample, this, false, s->soundStart.config
+            newStatus->type->soundStart.sample, this, false,
+            newStatus->type->soundStart.config
         );
     }
     
-    if(s->particleGen) {
-        statuses[listIdx].applyParticles(this, s->particleGen);
+    if(newStatus->type->particleGen) {
+        applyStatusParticles(newStatus, newStatus->type->particleGen);
     }
     
-    if(s->freezesAnimation) {
+    if(newStatus->type->freezesAnimation) {
         getSpriteData(&forcedSprite, nullptr, nullptr);
     }
     
-    if(s->causesBetrayal) {
-        statuses[listIdx].preBetrayalTeam = team;
+    if(newStatus->type->causesBetrayal) {
+        newStatus->preBetrayalTeam = team;
         if(fromMob) {
             setTeam(fromMob->team);
         } else {
@@ -549,7 +456,7 @@ void Mob::applyStatusEffects(
             }
         }
         
-        if(team != statuses[listIdx].preBetrayalTeam) {
+        if(team != newStatus->preBetrayalTeam) {
             leaveGroup();
             if(type->category->id == MOB_CATEGORY_PIKMIN) {
                 scriptVM.fsm.setState(
@@ -564,7 +471,43 @@ void Mob::applyStatusEffects(
 
 
 /**
- * @brief Does parent-child logic when applying a status effect.
+ * @brief Applies one of a status's particle generators to the mob.
+ *
+ * @param sPtr The status effects.
+ * @param pg The particle generator.
+ */
+void Mob::applyStatusParticles(const Status* sPtr, ParticleGenerator* pg) {
+    ParticleGenerator newPg = *pg;
+    newPg.restartTimer();
+    newPg.followMob = this;
+    newPg.followAngle = &angle;
+    newPg.followPosOffset = sPtr->type->particleOffsetPos;
+    newPg.followZOffset = sPtr->type->particleOffsetZ;
+    if(sPtr->type->particleScaleReaches) {
+        newPg.emission.circleInnerDist =
+            (newPg.emission.circleInnerDist / 100.0f) * radius;
+        newPg.emission.circleOuterDist =
+            (newPg.emission.circleOuterDist / 100.0f) * radius;
+        newPg.emission.rectInnerDist =
+            (newPg.emission.rectInnerDist / 100.0f) * radius;
+        newPg.emission.rectOuterDist =
+            (newPg.emission.rectOuterDist / 100.0f) * radius;
+    }
+    if(sPtr->type->particleScaleSizes) {
+        adjustKeyframeInterpolatorValues<float>(
+            newPg.baseParticle.size,
+        [this] (const float & s) {
+            return (s / 100.0f) * radius;
+        }
+        );
+        newPg.sizeDeviation = (newPg.sizeDeviation / 100.0f) * radius;
+    }
+    particleGenerators.push_back(newPg);
+}
+
+
+/**
+ * @brief Does parent-child logic when handling a status effect source.
  *
  * @param s Status effect to use.
  * @param givenByParent If true, this status effect was given to the mob
@@ -575,20 +518,20 @@ void Mob::applyStatusEffects(
  * application logic shouldn't continue. False if the status application
  * logic should continue.
  */
-bool Mob::applyStatusParentLogic(
+bool Mob::handleStatusSourceParentLogic(
     StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob
 ) {
     //Send the status to the child mobs.
     forIdx(m, game.states.gameplay->mobs.all) {
         Mob* m2Ptr = game.states.gameplay->mobs.all[m];
         if(m2Ptr->parent && m2Ptr->parent->m == this) {
-            m2Ptr->applyStatus(s, true, fromHazard, fromMob);
+            m2Ptr->handleStatusSource(s, true, fromHazard, fromMob);
         }
     }
     
     //Relay it to the parent mob, if applicable.
     if(parent && parent->relayStatuses && !givenByParent) {
-        parent->m->applyStatus(s, false, fromHazard, fromMob);
+        parent->m->handleStatusSource(s, false, fromHazard, fromMob);
         if(!parent->handleStatuses) return true;
     }
     
@@ -614,7 +557,7 @@ void Mob::arachnorbFootMoveLogic() {
         feetNormalDist = 175;
     }
     
-    float defaultAngle =
+    Angle defaultAngle =
         getAngle(
             Point(),
             parent->m->getHitbox(
@@ -624,7 +567,7 @@ void Mob::arachnorbFootMoveLogic() {
         
     Point finalPos;
     parent->m->scriptVM.vars.getValue("_destination_pos", finalPos);
-    float finalAngle;
+    Angle finalAngle;
     parent->m->scriptVM.vars.getValue("_destination_angle", finalAngle);
     
     Point offset = Point(feetNormalDist, 0);
@@ -644,7 +587,7 @@ void Mob::arachnorbFootMoveLogic() {
 void Mob::arachnorbHeadTurnLogic() {
     if(links.empty()) return;
     
-    float angleDeviationAvg = 0;
+    Angle angleDeviationAvg = 0;
     size_t nFeet = 0;
     
     forIdx(l, links) {
@@ -664,16 +607,16 @@ void Mob::arachnorbHeadTurnLogic() {
         
         nFeet++;
         
-        float defaultAngle =
+        Angle defaultAngle =
             getAngle(
                 Point(),
                 getHitbox(
                     links[l]->parent->limbParentBodyPart
                 )->center
             );
-        float curAngle =
+        Angle curAngle =
             getAngle(center, links[l]->center) - angle;
-        float angleDeviation =
+        Angle angleDeviation =
             getAngleCwDiff(defaultAngle, curAngle);
         if(angleDeviation > M_PI) {
             angleDeviation -= TAU;
@@ -696,10 +639,10 @@ void Mob::arachnorbPlanLogic(
 ) {
     float maxStepDistance;
     scriptVM.vars.getValue("max_step_distance", maxStepDistance);
-    float maxTurnAngle;
+    Angle maxTurnAngle;
     scriptVM.vars.getValue("max_turn_angle", maxTurnAngle);
     maxTurnAngle = degToRad(maxTurnAngle);
-    float minTurnAngle;
+    Angle minTurnAngle;
     scriptVM.vars.getValue("min_turn_angle", minTurnAngle);
     minTurnAngle = degToRad(minTurnAngle);
     
@@ -746,7 +689,7 @@ void Mob::arachnorbPlanLogic(
         std::min((double) fabs(amountToTurn), (double) maxTurnAngle);
         
     Point destinationPos = center;
-    float destinationAngle = angle + amountToTurn;
+    Angle destinationAngle = angle + amountToTurn;
     normalizeAngle(destinationAngle);
     
     Point offset = Point(amountToMove, 0);
@@ -833,21 +776,21 @@ bool Mob::calculateAttackBasics(
             //The victim is immune to this hazard!
             *outDefenseMultiplier = LARGE_FLOAT;
         } else {
-            *outDefenseMultiplier = 1.0f / vulnMult;
+            *outDefenseMultiplier *= 1.0f / vulnMult;
         }
     }
     
     //Calculate the status multipliers.
-    forIdx(s, statuses) {
-        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-        *outOffenseMultiplier *= statuses[s].type->attackMultiplier;
+    forIdx(s, statuses.getList()) {
+        *outOffenseMultiplier *= statuses.getList()[s].type->attackMultiplier;
     }
-    forIdx(s, victim->statuses) {
-        if(victim->statuses[s].state != STATUS_STATE_ACTIVE) continue;
+    forIdx(s, victim->statuses.getList()) {
         float statusDefMult =
-            victim->statuses[s].type->defenseMultiplier - 1.0f;
+            victim->statuses.getList()[s].type->defenseMultiplier - 1.0f;
         auto statusVulnIt =
-            victim->type->statusVulnerabilities.find(victim->statuses[s].type);
+            victim->type->statusVulnerabilities.find(
+                victim->statuses.getList()[s].type
+            );
         if(statusVulnIt != victim->type->statusVulnerabilities.end()) {
             statusDefMult *= statusVulnIt->second.effectMult;
         }
@@ -889,7 +832,8 @@ bool Mob::calculateAttackDamage(
         //It's easier to calculate the maturity attack boost here.
         Pikmin* pikPtr = (Pikmin*) this;
         attackStrength *=
-            1 + (game.config.pikmin.maturityPowerMult * pikPtr->maturity);
+            1 +
+            (game.config.pikmin.maturityPowerMult * (float) pikPtr->maturity);
     }
     
     *outDamage =
@@ -913,7 +857,7 @@ bool Mob::calculateAttackDamage(
 void Mob::calculateAttackKnockback(
     const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
     float offenseMultiplier, float defenseMultiplier,
-    bool* outKbExists, float* outKbStrength, float* outKbAngle
+    bool* outKbExists, float* outKbStrength, Angle* outKbAngle
 ) const {
     if(attackH) {
         switch(attackH->knockbackType) {
@@ -930,6 +874,27 @@ void Mob::calculateAttackKnockback(
         } case KNOCKBACK_TYPE_OUTWARD: {
             *outKbExists = true;
             *outKbStrength = attackH->knockbackStrength;
+            *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+            *outKbAngle =
+                getAngle(
+                    attackH->getCurPos(center, bottomZ, angle, nullptr),
+                    victim->center
+                );
+            break;
+        } case KNOCKBACK_TYPE_OUTWARD_PROXIMITY: {
+            Point attackHPos =
+                attackH->getCurPos(center, bottomZ, angle, nullptr);
+            Point victimHPos =
+                victimH->getCurPos(
+                    victim->center, victim->bottomZ, victim->angle, nullptr
+                );
+            *outKbExists = true;
+            *outKbStrength =
+                interpolateNumber(
+                    Distance(attackHPos, victimHPos).toFloat(),
+                    0.0f, attackH->radius + victimH->radius,
+                    attackH->knockbackStrength, 0.0f
+                );
             *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
             *outKbAngle =
                 getAngle(
@@ -1184,7 +1149,7 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
         }
         
         if(!valid) {
-            possibleOnions.erase(possibleOnions.begin() + o);
+            eraseInVector(possibleOnions, o);
         } else {
             o++;
         }
@@ -1216,7 +1181,7 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) {
             isInContainer(oPtr->oniType->nest->pikTypes, decidedType);
             
         if(!valid) {
-            possibleOnions.erase(possibleOnions.begin() + o);
+            eraseInVector(possibleOnions, o);
         } else {
             o++;
         }
@@ -1342,8 +1307,12 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
         damage *= v->second.effectMult;
     }
     
+    if(damage == 0.0f && !v->second.statusToApply) {
+        return;
+    }
+    
     if(type->spikeDamage->statusToApply) {
-        victim->applyStatus(
+        victim->handleStatusSource(
             type->spikeDamage->statusToApply, false, false, this,
             type->spikeDamage->statusBuildupAmount
         );
@@ -1366,7 +1335,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
         v != victim->type->spikeDamageVulnerabilities.end() &&
         v->second.statusToApply
     ) {
-        victim->applyStatus(
+        victim->handleStatusSource(
             v->second.statusToApply, false, false, this
         );
     }
@@ -1493,11 +1462,13 @@ void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
     }
     
     float hOffsetDist;
-    float hOffsetAngle;
+    Angle hOffsetAngle;
     float vOffsetDist;
     getHitboxHoldPoint(
         m, hitboxInfo, &hOffsetDist, &hOffsetAngle, &vOffsetDist
     );
+    hOffsetDist = std::clamp(hOffsetDist, 0.0f, 1.0f);
+    vOffsetDist = std::clamp(vOffsetDist, 0.0f, 1.0f);
     hold(
         m, HOLD_TYPE_PURPOSE_GENERAL, hitboxInfo->bodyPartIdx,
         hOffsetDist, hOffsetAngle, vOffsetDist,
@@ -1662,70 +1633,60 @@ PikminType* Mob::decideCarryPikminType(
 
 
 /**
- * @brief Removes and deletes all status effects asking to be deleted.
+ * @brief Removes and deletes all status effects that got deactivated
+ * this frame.
  */
-void Mob::deleteOldStatusEffects() {
+void Mob::deleteDeactivatedStatusEffects() {
     vector<std::pair<StatusType*, bool> > newStatusesToApply;
     bool removedForcedSprite = false;
     
-    for(size_t s = 0; s < statuses.size(); ) {
-        Status& sRef = statuses[s];
-        if(sRef.state == STATUS_STATE_TO_DELETE) {
-            if(sRef.prevState == STATUS_STATE_ACTIVE) {
-                handleStatusEffectLoss(sRef.type);
-                
-                if(sRef.type->particleGen) {
-                    deleteParticleGenerator(sRef.type->particleGen->id);
-                }
-                
-                if(sRef.type->particleGenEnd) {
-                    sRef.applyParticles(this, sRef.type->particleGenEnd);
-                }
-                
-                if(sRef.type->soundEnd.sample) {
-                    game.audio.addNewMobSoundSource(
-                        sRef.type->soundEnd.sample,
-                        this, false, sRef.type->soundEnd.config
-                    );
-                }
-                
-                if(sRef.type->freezesAnimation) {
-                    removedForcedSprite = true;
-                }
-                
-                if(sRef.type->causesBetrayal) {
-                    setTeam(sRef.preBetrayalTeam);
-                }
-                
-                bool justBuildup =
-                    sRef.type->buildup != 0.0f && sRef.buildup < 1.0f;
-                if(
-                    !justBuildup &&
-                    sRef.type->replacementOnTimeout && sRef.timeLeft <= 0.0f
-                ) {
-                    newStatusesToApply.push_back(
-                        std::make_pair(
-                            sRef.type->replacementOnTimeout,
-                            sRef.fromHazard
-                        )
-                    );
-                    if(sRef.type->replacementOnTimeout->freezesAnimation) {
-                        //Actually, never mind, let's keep the current forced
-                        //sprite so that the next status effect can use it too.
-                        removedForcedSprite = false;
-                    }
-                }
+    const vector<Status>& deactivated = statuses.getDeactivated();
+    
+    forIdx(s, deactivated) {
+        const Status* sPtr = &deactivated[s];
+        handleStatusDeactivation(sPtr->type);
+        
+        if(sPtr->type->particleGen) {
+            deleteParticleGenerator(sPtr->type->particleGen->id);
+        }
+        
+        if(sPtr->type->particleGenEnd) {
+            applyStatusParticles(sPtr, sPtr->type->particleGenEnd);
+        }
+        
+        if(sPtr->type->soundEnd.sample) {
+            game.audio.addNewMobSoundSource(
+                sPtr->type->soundEnd.sample,
+                this, false, sPtr->type->soundEnd.config
+            );
+        }
+        
+        if(sPtr->type->freezesAnimation) {
+            removedForcedSprite = true;
+        }
+        
+        if(sPtr->type->causesBetrayal) {
+            setTeam(sPtr->preBetrayalTeam);
+        }
+        
+        if(sPtr->type->replacementOnTimeout && sPtr->timeLeft <= 0.0f) {
+            newStatusesToApply.push_back(
+                std::make_pair(
+                    sPtr->type->replacementOnTimeout,
+                    sPtr->fromHazard
+                )
+            );
+            if(sPtr->type->replacementOnTimeout->freezesAnimation) {
+                //Actually, never mind, let's keep the current forced
+                //sprite so that the next status effect can use it too.
+                removedForcedSprite = false;
             }
-            
-            statuses.erase(statuses.begin() + s);
-        } else {
-            s++;
         }
     }
     
     //Apply new status effects.
     forIdx(s, newStatusesToApply) {
-        applyStatus(
+        handleStatusSource(
             newStatusesToApply[s].first,
             false, newStatusesToApply[s].second, nullptr
         );
@@ -1735,17 +1696,17 @@ void Mob::deleteOldStatusEffects() {
         forcedSprite = nullptr;
     }
     
-    //Update some flags.
+    //Update some caches.
     hasInvisibilityStatus = false;
-    forIdx(s, statuses) {
-        if(
-            statuses[s].state == STATUS_STATE_ACTIVE &&
-            statuses[s].type->turnsInvisible
-        ) {
+    forIdx(s, statuses.getList()) {
+        if(statuses.getList()[s].type->turnsInvisible) {
             hasInvisibilityStatus = true;
             break;
         }
     }
+    
+    //Delete them proper.
+    statuses.deleteDeactivated();
 }
 
 
@@ -1757,7 +1718,7 @@ void Mob::deleteOldStatusEffects() {
 void Mob::deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id) {
     for(size_t g = 0; g < particleGenerators.size();) {
         if(particleGenerators[g].id == id) {
-            particleGenerators.erase(particleGenerators.begin() + g);
+            eraseInVector(particleGenerators, g);
         } else {
             g++;
         }
@@ -1798,7 +1759,7 @@ void Mob::doAttackEffects(
         victimH->getCurPos(center, bottomZ, angle, nullptr);
         
     float edgesD;
-    float aToVAngle;
+    Angle aToVAngle;
     coordinatesToAngle(
         victimHPos - attackHPos,
         &aToVAngle, &edgesD
@@ -1875,8 +1836,9 @@ void Mob::drawLimb() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     Point parentEnd;
@@ -1902,7 +1864,7 @@ void Mob::drawLimb() {
             )->getCurPos(center, bottomZ, angleCos, angleSin, nullptr);
     }
     
-    float p2cAngle = getAngle(parentEnd, childEnd);
+    Angle p2cAngle = getAngle(parentEnd, childEnd);
     
     if(parent->limbParentOffset) {
         parentEnd +=
@@ -1948,9 +1910,10 @@ void Mob::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        SPRITE_BMP_EFFECT_CARRY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        SPRITE_BMP_EFFECT_FLAG_CARRY |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
@@ -1966,7 +1929,7 @@ void Mob::drawMob() {
  * @param instantly If true, the mob faces that angle instantly instead
  * of rotating towards that direction over time.
  */
-void Mob::face(float newAngle, Point* newPos, bool instantly) {
+void Mob::face(Angle newAngle, Point* newPos, bool instantly) {
     if(carryInfo) return; //If it's being carried, it shouldn't rotate.
     intendedTurnAngle = newAngle;
     intendedTurnPos = newPos;
@@ -2349,7 +2312,7 @@ Hitbox* Mob::getHitbox(size_t idx) const {
  */
 void Mob::getHitboxHoldPoint(
     const Mob* mobToHold, const Hitbox* hPtr,
-    float* offsetDist, float* offsetAngle, float* verticalDist
+    float* offsetDist, Angle* offsetAngle, float* verticalDist
 ) const {
     float actualHZ;
     Point actualHPos =
@@ -2461,10 +2424,9 @@ size_t Mob::getPlayerTeamIdx() const {
  */
 float Mob::getSpeedMultiplier() const {
     float moveSpeedMult = 1.0f;
-    forIdx(s, statuses) {
-        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-        float vulnMult = statuses[s].type->speedMultiplier - 1.0f;
-        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+    forIdx(s, statuses.getList()) {
+        float vulnMult = statuses.getList()[s].type->speedMultiplier - 1.0f;
+        auto vulnIt = type->statusVulnerabilities.find(statuses.getList()[s].type);
         if(vulnIt != type->statusVulnerabilities.end()) {
             vulnMult *= vulnIt->second.effectMult;
         }
@@ -2482,18 +2444,17 @@ float Mob::getSpeedMultiplier() const {
  * @param nextSPtr Next sprite in the animation, if any.
  * @param interpolationFactor If we're meant to interpolate from the current
  * sprite to the next, specify the interpolation factor [0 - 1] here.
- * @param info Struct to fill the info with.
+ * @param info Object to fill the info with.
  * @param effects What effects to use. Use SPRITE_BMP_EFFECT_FLAG for this.
  */
 void Mob::getSpriteBitmapEffects(
     Sprite* sPtr, Sprite* nextSPtr, float interpolationFactor,
     BitmapEffect* info, Bitmask16 effects
 ) const {
-
     //Animation, position, angle, etc.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_STANDARD)) {
         Point effTrans;
-        float effAngle;
+        Angle effAngle;
         Point effScale;
         ALLEGRO_COLOR effTint;
         
@@ -2518,9 +2479,8 @@ void Mob::getSpriteBitmapEffects(
         size_t nColorizes = 0;
         ALLEGRO_COLOR colorizeSum = COLOR_EMPTY;
         
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            StatusType* t = statuses[s].type;
+        forIdx(s, statuses.getList()) {
+            StatusType* t = statuses.getList()[s].type;
             if(
                 t->tint.r == 1.0f &&
                 t->tint.g == 1.0f &&
@@ -2558,7 +2518,7 @@ void Mob::getSpriteBitmapEffects(
                 } else {
                     if(
                         t->autoRemoveTime != 0.0f &&
-                        statuses[s].timeLeft <= t->shakingEffectOnEnd
+                        statuses.getList()[s].timeLeft <= t->shakingEffectOnEnd
                     ) {
                         doShaking = true;
                     }
@@ -2672,7 +2632,7 @@ void Mob::getSpriteBitmapEffects(
     
     //Being delivered.
     if(
-        hasFlag(effects, SPRITE_BMP_EFFECT_DELIVERY) &&
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_DELIVERY) &&
         deliveryInfo && scriptVM.focusedMob
     ) {
         switch(deliveryInfo->animType) {
@@ -2809,7 +2769,7 @@ void Mob::getSpriteBitmapEffects(
     
     //Damage squash and stretch.
     if(
-        hasFlag(effects, SPRITE_BMP_EFFECT_DAMAGE) &&
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_DAMAGE) &&
         damageSquashTime > 0.0f
     ) {
         float damageSquashTimeRatio =
@@ -2841,7 +2801,7 @@ void Mob::getSpriteBitmapEffects(
     
     //Carry sway.
     if(
-        hasFlag(effects, SPRITE_BMP_EFFECT_CARRY) &&
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_CARRY) &&
         carryInfo
     ) {
         if(carryInfo->isMoving) {
@@ -2862,6 +2822,14 @@ void Mob::getSpriteBitmapEffects(
             info->tf.rot -=
                 factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
         }
+    }
+    
+    //Peeking underneath.
+    if(
+        hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH) &&
+        type->peekUnderneathAlpha != 1.0f
+    ) {
+        info->tintColor.a *= peekUnderneathAlpha;
     }
 }
 
@@ -2906,9 +2874,8 @@ void Mob::getSpriteData(
  */
 ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmpScale) const {
     *bmpScale = 0.0f;
-    forIdx(st, statuses) {
-        if(statuses[st].state != STATUS_STATE_ACTIVE) continue;
-        StatusType* t = statuses[st].type;
+    forIdx(st, statuses.getList()) {
+        StatusType* t = statuses.getList()[st].type;
         if(t->overlayAnimation.empty()) continue;
         Sprite* sp;
         t->overlayAnim.getSpriteData(&sp, nullptr, nullptr);
@@ -2925,7 +2892,7 @@ ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmpScale) const {
  *
  * @param staType Status type to check.
  */
-void Mob::handleStatusEffectGain(StatusType* staType) {
+void Mob::handleStatusActivation(StatusType* staType) {
     if(staType->stateChangeType == STATUS_STATE_CHANGE_CUSTOM) {
         size_t nr = scriptVM.fsm.getStateIdx(staType->stateChangeName);
         if(nr != INVALID) {
@@ -2940,7 +2907,7 @@ void Mob::handleStatusEffectGain(StatusType* staType) {
  *
  * @param staType Status type to check.
  */
-void Mob::handleStatusEffectLoss(StatusType* staType) {
+void Mob::handleStatusDeactivation(StatusType* staType) {
 }
 
 
@@ -3053,7 +3020,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
  */
 void Mob::hold(
     Mob* m, HOLD_TYPE type, size_t hitboxIdx,
-    float offsetDist, float offsetAngle,
+    float offsetDist, Angle offsetAngle,
     float verticalDist,
     bool forceAboveHolder, const HOLD_ROTATION_METHOD rotationMethod
 ) {
@@ -3277,7 +3244,8 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
             speed, acceleration
         );
     } else {
-        Sector* targetSector = getSector(pathInfo->settings.targetPoint, nullptr, true);
+        Sector* targetSector =
+            getSector(pathInfo->settings.targetPoint, nullptr, true);
         chase(
             pathInfo->settings.targetPoint,
             targetSector ? targetSector->floorZ : 0,
@@ -3349,7 +3317,8 @@ void Mob::readScriptVars(const ScriptVarManager& varsMgr) {
         bool found;
         setTeam(enumGetValue(mobTeamINames, teamVar, &found));
         if(!found) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown team name \"" + teamVar +
                 "\", when trying to create mob (" +
                 getErrorMessageMobInfo(this) + ")!", nullptr
@@ -3388,7 +3357,7 @@ void Mob::release(Mob* m) {
     }
     
     m->scriptVM.fsm.runEvent(FSM_EV_RELEASED, (void*) this);
-    holding.erase(holding.begin() + idx);
+    eraseInVector(holding, idx);
     m->holder.clear();
     
     if(standingOnMob) {
@@ -3464,8 +3433,9 @@ void Mob::setAnimation(
     }
     
     if(finalIdx == INVALID) {
-        game.errors.report(
-            "Mob (" + getErrorMessageMobInfo(this) +
+        game.log.write(
+            LOG_LEVEL_ERROR,
+            "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to switch from " +
             (
                 anim.curAnim ? "animation \"" + anim.curAnim->name + "\"" :
@@ -3572,7 +3542,7 @@ void Mob::setRadius(float radius) {
     physicalSpan =
         calculateMobPhysicalSpan(
             radius,
-            type->animDb->hitboxSpan,
+            type->animDb ? type->animDb->hitboxSpan : 0.0f,
             rectangularDim
         );
     updateInteractionSpan();
@@ -3642,8 +3612,9 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     }
     
     if(!typePtr) {
-        game.errors.report(
-            "Mob (" + getErrorMessageMobInfo(this) +
+        game.log.write(
+            LOG_LEVEL_ERROR,
+            "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to spawn an object of the "
             "type \"" + info->mobTypeName + "\", but there is no such "
             "object type!"
@@ -3661,7 +3632,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     
     Point newXY;
     float newZ = 0;
-    float newAngle = 0;
+    Angle newAngle = 0;
     
     if(info->relative) {
         newXY = center + rotatePoint(info->coordsXY, angle);
@@ -3724,10 +3695,9 @@ void Mob::startDying() {
     stopTurning();
     gravityMult = 1.0;
     
-    forIdx(s, statuses) {
-        statuses[s].prevState = statuses[s].state;
-        statuses[s].state = STATUS_STATE_TO_DELETE;
-    }
+    statuses.deactivateAll();
+    deleteDeactivatedStatusEffects();
+    statuses.clearBuildupsAndCooldowns();
     
     if(group) {
         while(!group->members.empty()) {
@@ -3969,7 +3939,7 @@ void Mob::swallowChompedPikmin(Mob* mPtr) {
         game.statistics.pikminEaten++;
     }
     
-    chompingMobs.erase(chompingMobs.begin() + idx);
+    eraseInVector(chompingMobs, idx);
     
 }
 
@@ -4063,10 +4033,9 @@ void Mob::tick(float deltaT) {
  */
 void Mob::tickAnimation(float deltaT) {
     float mult = 1.0f;
-    forIdx(s, statuses) {
-        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-        float vulnMult = statuses[s].type->animSpeedMultiplier - 1.0f;
-        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+    forIdx(s, statuses.getList()) {
+        float vulnMult = statuses.getList()[s].type->animSpeedMultiplier - 1.0f;
+        auto vulnIt = type->statusVulnerabilities.find(statuses.getList()[s].type);
         if(vulnIt != type->statusVulnerabilities.end()) {
             vulnMult *= vulnIt->second.effectMult;
         }
@@ -4101,7 +4070,7 @@ void Mob::tickAnimation(float deltaT) {
     for(size_t h = 0; h < hitOpponents.size();) {
         hitOpponents[h].first -= deltaT;
         if(hitOpponents[h].first <= 0.0f) {
-            hitOpponents.erase(hitOpponents.begin() + h);
+            eraseInVector(hitOpponents, h);
         } else {
             h++;
         }
@@ -4170,7 +4139,6 @@ void Mob::tickBrain(float deltaT) {
         !hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORT) &&
         (speedZ == 0 || hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR))
     ) {
-    
         //Calculate where the target is.
         Point finalTargetPos = getChaseTarget();
         Distance horizDist = Distance(center, finalTargetPos);
@@ -4223,7 +4191,6 @@ void Mob::tickBrain(float deltaT) {
                 pathInfo && !direct &&
                 pathInfo->blockReason == PATH_BLOCK_REASON_NONE
             ) {
-            
                 pathInfo->curPathStopIdx++;
                 
                 if(pathInfo->curPathStopIdx < pathInfo->path.size()) {
@@ -4288,35 +4255,47 @@ void Mob::tickMiscLogic(float deltaT) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
         scriptVM.runReadyActions();
+        FsmEventDef* readyEv = scriptVM.fsm.getEvent(FSM_EV_ON_READY);
+        if(readyEv) {
+            game.log.write(
+                LOG_LEVEL_ERROR,
+                "A mob (" + getErrorMessageMobInfo(this) + ") just used the "
+                "\"on_ready\" event. That event is deprecated "
+                "and may be removed in the future! Please use "
+                "the \"ready\" script block instead."
+            );
+        }
         scriptVM.fsm.runEvent(FSM_EV_ON_READY);
     }
     timeAlive += deltaT;
     
     invulnPeriod.tick(deltaT);
     
-    forIdx(s, statuses) {
-        statuses[s].tick(deltaT);
-        
-        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
+    //Statuses.
+    statuses.tick(deltaT);
+    
+    const vector<Status>& activeStatuses = statuses.getList();
+    forIdx(s, activeStatuses) {
+        const Status* sPtr = &activeStatuses[s];
         
         float damageMult = 1.0f;
-        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+        auto vulnIt = type->statusVulnerabilities.find(sPtr->type);
         if(vulnIt != type->statusVulnerabilities.end()) {
             damageMult = vulnIt->second.effectMult;
         }
         
         float healthBefore = health;
         
-        if(statuses[s].type->healthChange != 0.0f) {
+        if(sPtr->type->healthChange != 0.0f) {
             setHealth(
                 true, false,
-                statuses[s].type->healthChange * damageMult * deltaT
+                sPtr->type->healthChange * damageMult * deltaT
             );
         }
-        if(statuses[s].type->healthChangeRatio != 0.0f) {
+        if(sPtr->type->healthChangeRatio != 0.0f) {
             setHealth(
                 true, true,
-                statuses[s].type->healthChangeRatio * damageMult * deltaT
+                sPtr->type->healthChangeRatio * damageMult * deltaT
             );
         }
         
@@ -4327,31 +4306,60 @@ void Mob::tickMiscLogic(float deltaT) {
         if(health <= 0.0f && healthBefore > 0.0f) {
             if(
                 type->category->id == MOB_CATEGORY_PIKMIN &&
-                statuses[s].fromHazard
+                sPtr->fromHazard
             ) {
                 game.statistics.pikminHazardDeaths++;
             }
         }
     }
-    deleteOldStatusEffects();
     
+    deleteDeactivatedStatusEffects();
+    
+    //Wave ring liquid particles.
+    forIdx(p, particleGenerators) {
+        if(particleGenerators[p].id == MOB_PARTICLE_GENERATOR_ID_WAVE_RING) {
+            particleGenerators[p].canEmit = false;
+            break;
+        }
+    }
+    if(
+        groundSector &&
+        bottomZ <= groundSector->floorZ &&
+        groundSector->hazard &&
+        groundSector->hazard->associatedLiquid &&
+        chaseInfo.state == CHASE_STATE_CHASING &&
+        isGenerallyVisible()
+    ) {
+        forIdx(p, particleGenerators) {
+            if(
+                particleGenerators[p].id == MOB_PARTICLE_GENERATOR_ID_WAVE_RING
+            ) {
+                particleGenerators[p].canEmit = true;
+                break;
+            }
+        }
+    }
+    
+    //Particle generators.
     for(size_t g = 0; g < particleGenerators.size();) {
         particleGenerators[g].tick(
             deltaT, game.states.gameplay->particles
         );
         if(particleGenerators[g].emission.interval == 0) {
-            particleGenerators.erase(particleGenerators.begin() + g);
+            eraseInVector(particleGenerators, g);
         } else {
             g++;
         }
     }
     
+    //Height effect.
     if(groundSector->isBottomlessPit) {
         if(heightEffectPivot == LARGE_FLOAT) {
             heightEffectPivot = bottomZ;
         }
     }
     
+    //Path blocking.
     if(canBlockPaths && health <= 0) {
         setCanBlockPaths(false);
     }
@@ -4364,22 +4372,30 @@ void Mob::tickMiscLogic(float deltaT) {
         health > 0.0f &&
         health < maxHealth;
     bool shouldShowStatusBuildups = false;
-    forIdx(s, statuses) {
-        if(statuses[s].buildup > 0.0f) {
-            shouldShowStatusBuildups = true;
-            break;
-        }
+    if(statuses.hasBuildups() || statuses.hasCooldowns()) {
+        shouldShowStatusBuildups = true;
     }
+    
     if(
         !healthWheel &&
         hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
     ) {
+        //No health wheel before, must show a new one.
         healthWheel = new InWorldHealthWheel(this);
+        
+    } else if(
+        healthWheel && healthWheel->transition == IN_WORLD_HUD_TRANSITION_OUT &&
+        hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
+    ) {
+        //Health wheel is trying to vanish, but we need it back! Abort.
+        healthWheel->abortFadeOut();
+        
     } else if(
         healthWheel &&
         (!hasHealthWheel || (!shouldShowHealth && !shouldShowStatusBuildups))
     ) {
-        healthWheel->startFading();
+        //We have a wheel, and it needs to go away.
+        healthWheel->startFadingOut();
     }
     
     if(healthWheel) {
@@ -4415,7 +4431,7 @@ void Mob::tickMiscLogic(float deltaT) {
     if(!fraction && showFraction) {
         fraction = new InWorldFraction(this);
     } else if(fraction && !showFraction) {
-        fraction->startFading();
+        fraction->startFadingOut();
     }
     
     if(fraction) {
@@ -4433,9 +4449,48 @@ void Mob::tickMiscLogic(float deltaT) {
         }
     }
     
+    //Peek underneath effect.
+    if(type->peekUnderneathAlpha != 1.0f) {
+        float targetAlpha = 1.0f;
+        
+        forIdx(p, game.states.gameplay->players) {
+            Player& player = game.states.gameplay->players[p];
+            if(!player.leaderPtr) continue;
+            bool leaderIsBelow =
+                player.leaderPtr->bottomZ + player.leaderPtr->height <=
+                bottomZ + height;
+            if(
+                leaderIsBelow &&
+                circlesOrRectanglesIntersect(
+                    player.leaderPtr->center, player.leaderPtr->radius,
+                    player.leaderPtr->rectangularDim, player.leaderPtr->angle,
+                    center, radius, rectangularDim, angle
+                )
+            ) {
+                targetAlpha = type->peekUnderneathAlpha;
+                
+            } else if(
+                circlesOrRectanglesIntersect(
+                    player.leaderCursorWorld, 20.0f, Point(), 0.0f,
+                    center, radius, rectangularDim, angle
+                )
+            ) {
+                targetAlpha = type->peekUnderneathAlpha;
+                
+            }
+        }
+        
+        if(peekUnderneathAlpha != targetAlpha) {
+            peekUnderneathAlpha =
+                inchTowards(
+                    peekUnderneathAlpha, targetAlpha,
+                    MOB::PEEK_UNDERNEATH_FADE_SPEED * deltaT
+                );
+        }
+    }
+    
     //Group stuff.
     if(group && group->members.size()) {
-    
         Player* playerIfLeader = nullptr;
         if(type->category->id == MOB_CATEGORY_LEADERS) {
             playerIfLeader = ((Leader*) this)->player;
@@ -4583,7 +4638,7 @@ void Mob::tickScript(float deltaT) {
         FsmEventDef* forEv = scriptVM.fsm.getEvent(FSM_EV_FOCUS_OFF_REACH);
         
         if(farReach != INVALID && forEv) {
-            float angleToFocus = getAngle(center, focus->center);
+            Angle angleToFocus = getAngle(center, focus->center);
             if(
                 !isMobInReach(
                     &type->reaches[farReach],
@@ -4630,20 +4685,7 @@ void Mob::tickScript(float deltaT) {
         
         scriptVM.fsm.runEvent(FSM_EV_WHISTLED, (void*) player.leaderPtr);
         
-        bool savedByWhistle = false;
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->removeOnWhistle) {
-                statuses[s].state = STATUS_STATE_TO_DELETE;
-                if(
-                    statuses[s].type->healthChange < 0.0f ||
-                    statuses[s].type->healthChangeRatio < 0.0f
-                ) {
-                    savedByWhistle = true;
-                }
-            }
-        }
-        deleteOldStatusEffects();
+        bool savedByWhistle = statuses.handleWhistle();
         
         if(savedByWhistle && type->category->id == MOB_CATEGORY_PIKMIN) {
             game.statistics.pikminSaved++;
@@ -4743,7 +4785,7 @@ bool Mob::tickTrackRide() {
             trackInfo->curCpProgress, 0.0f, 1.0f, curCpZ, nextCpZ
         );
         
-    float destAngle = getAngle(curCpPos, nextCpPos);
+    Angle destAngle = getAngle(curCpPos, nextCpPos);
     
     chase(destXy, destZ, CHASE_FLAG_TELEPORT);
     face(destAngle, nullptr);

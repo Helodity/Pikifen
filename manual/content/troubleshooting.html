@@ -29,7 +29,7 @@
           <li>Make sure you're not running the game from inside a zip file. Remember that when you download the engine's zip file, you need to unzip everything inside of it into a folder before you're able to play.</li>
         </ul>
       </li>
-      <li>Otherwise, if you made some content for the engine and you suspect that that is the problem, please check the <code>user_data/error_log.txt</code> file, if it exists. It should tell you what went wrong, like a missing comma, or a misspelled name. Fix the problems and try again.</li>
+      <li>Otherwise, if you made some content for the engine and you suspect that that is the problem, please check the <code>user_data/log.txt</code> file, if it exists. It should tell you what went wrong, like a missing comma, or a misspelled name. Fix the problems and try again.</li>
       <li>Otherwise, read the rest of this page to see if your problem is known.</li>
       <li>Otherwise, please <a href="#reporting">report it</a>!</li>
     </ol>
@@ -47,7 +47,7 @@
       <dd>If you suspect some of the content you've made is having an impact on performance, try the <a href="maker_toolkit.html#perf-mon">performance monitor</a>.</dd>
       
       <dt><b>The game crashed, complaining about something involving shaders.</b></dt>
-      <dd>Your machine probably doesn't support <i>Pikifen</i>'s <a href="https://en.wikipedia.org/wiki/Shader">shaders</a>. You can enable the shader compatibility mode <a href="options.html">option</a>, which might fix the crashes, at the cost of making some graphical effects go missing altogether.</dd>
+      <dd>Your device probably doesn't support <i>Pikifen</i>'s <a href="https://en.wikipedia.org/wiki/Shader">shaders</a>. You can enable the shader compatibility mode <a href="options.html">option</a>, which might fix the crashes, at the cost of making some graphical effects go missing altogether.</dd>
       
       <dt><b>Some textures are black, but not HUD elements.</b></dt>
       <dd>Are you running it under Wine? If so, update Wine. That fixed the problem for a friend that had it. If not, contact me, and I'll try to see what's up.</dd>
@@ -79,7 +79,7 @@
       </dd>
 
       <dt><b>One of my textures is cutting off to black or to garbage, in a repeating pattern.</b></dt>
-      <dd>Your texture's resolution does not use power-of-two numbers (64x64, 128x128, 256x256, etc.). It doesn't happen on all machines, but that's the solution, I guess...</dd>
+      <dd>Your texture's resolution does not use power-of-two numbers (64x64, 128x128, 256x256, etc.). It doesn't happen on all devices, but that's the solution, I guess...</dd>
 
       <dt><b>I'm having a hard time understanding X.</b></dt>
       <dd>Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.</dd>
@@ -125,7 +125,7 @@
     <ul>
       <li><b>Description</b>: A description of the bug. If it's not painfully obvious, you should also explain what exactly is wrong, and what you expected to happen instead. If you have a screenshot or a video of the bug in action, that'd be very appreciated.</li>
       <li><b>Steps to reproduce</b>: I'll want to do the same things you did in order to face the bug myself, so it's important that you find and report a way to reproduce the bug. If you can't, please list off what you were doing in the moments leading up to the bug happening.</li>
-      <li><b>Error log</b>: Especially important for crashes, you should share the contents of your error log file. A screenshot may have also been created in the <code>user_data</code> folder, so share that too.</li>
+      <li><b>Log</b>: Especially important for crashes, you should share the contents of your <code>user_data/log.txt</code> file. A screenshot may have also been created in the same folder, so share that too.</li>
       <li>
         <b>Extra notes</b>: Any extra notes you feel are relevant to helping me figure out the issue. Some ideas:
         <ul>

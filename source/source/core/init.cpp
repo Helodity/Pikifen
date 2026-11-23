@@ -597,15 +597,15 @@ void initControls() {
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Console",
         "Open or close the maker toolkit's console.",
-        "mt_console", "k_70", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_console", "k_60", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_AUTO_START,
+        PLAYER_ACTION_TYPE_MT_SET_AUTO_START,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
-        "Auto-start",
+        "Set auto-start",
         "Make the game auto-start on the current state (and content).",
-        "mt_auto_start", "k_56", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_set_auto_start", "k_56", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -635,28 +635,21 @@ void initControls() {
     
     //Gameplay maker tools.
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
+        PLAYER_ACTION_TYPE_MT_CONTROL_CAM,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Area image",
-        "Save an image of the current area.",
-        "mt_area_image", "k_36", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, false, false
-    );
-    game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR,
-        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Area inspector",
-        "Toggle info about the current area.",
-        "mt_area_inspector", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "Control camera",
+        "Allows control of the camera. "
+        "Use \"modifier 1\" to fix the camera and keep playing.",
+        "mt_control_cam", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
+        PLAYER_ACTION_TYPE_MT_CREATE_REMINDER,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Change speed",
-        "Change the gameplay speed.",
-        "mt_change_speed", "k_28", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, false, false
+        "Crate reminder",
+        "Create a new area maker reminder under the mouse cursor.",
+        "mt_create_reminder", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_DELETE_MOB,
@@ -685,28 +678,11 @@ void initControls() {
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_FREE_CAM,
+        PLAYER_ACTION_TYPE_MT_HIDE_HUD,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Free camera",
-        "Allows control of the camera. "
-        "Use \"modifier 1\" to fix the camera and keep playing.",
-        "mt_free_cam", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.5f, 0.0f, false, false
-    );
-    game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
-        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Geometry info",
-        "Toggle info about the geometry under the mouse cursor.",
-        "mt_geometry_info", "k_33", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, false, false
-    );
-    game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_HUD,
-        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "HUD",
-        "Toggle the HUD.",
-        "mt_hud", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "Hide HUD",
+        "Toggle the visibility of the HUD.",
+        "mt_hide_hud", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -718,35 +694,35 @@ void initControls() {
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR,
+        PLAYER_ACTION_TYPE_MT_INSPECT_AREA,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Mob inspector",
-        "Toggle info about the mob under the mouse cursor.",
-        "mt_mob_inspector", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "Inspect area",
+        "Toggle info about the current area.",
+        "mt_inspect_area", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
+        PLAYER_ACTION_TYPE_MT_INSPECT_MOB,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "New Pikmin",
-        "Create a new Pikmin under the mouse cursor.",
-        "mt_new_pikmin", "k_31", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "Inspect mob",
+        "Toggle info about the object under the mouse cursor.",
+        "mt_inspect_mob", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_NEW_REMINDER,
+        PLAYER_ACTION_TYPE_MT_SAVE_AREA_IMAGE,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "New reminder",
-        "Create a new area maker reminder under the mouse cursor.",
-        "mt_new_reminder", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.5f, 0.0f, false, false
+        "Save area image",
+        "Save an image of the current area.",
+        "mt_save_area_image", "k_36", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_PATH_INFO,
+        PLAYER_ACTION_TYPE_MT_SET_SPEED,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Path info",
-        "Toggle info about paths the inspected mob is taking.",
-        "mt_path_info", "k_34", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "Set speed",
+        "Change the gameplay speed.",
+        "mt_set_speed", "k_28", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -758,11 +734,27 @@ void initControls() {
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_SHOW_GEOMETRY_INFO,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Show geometry info",
+        "Toggle info about the geometry under the mouse cursor.",
+        "mt_show_geometry_info", "k_33", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show hitboxes",
         "Toggle drawing each mob's hitboxes.",
         "mt_show_hitboxes", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_SHOW_PATH_INFO,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Show path info",
+        "Toggle info about paths the inspected mob is taking.",
+        "mt_show_path_info", "k_34", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -772,6 +764,14 @@ void initControls() {
         "Toggle drawing the inspected mob's reaches.",
         "mt_show_reaches", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_SPAWN_PIKMIN,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Spawn Pikmin",
+        "Create a new Pikmin under the mouse cursor.",
+        "mt_spawn_pikmin", "k_31", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_TELEPORT,
@@ -842,7 +842,8 @@ void initDearImGui() {
             [assetInternalName].path;
             
         if(!strEndsWith(strToLower(path), ".ttf")) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Could not load the editor font \"" + path + "\"! Only "
                 "TTF font files are allowed."
             );
@@ -1035,12 +1036,18 @@ void initEventThings(
             )
         );
     }
+    if(game.options.graphics.vsync) {
+        al_set_new_display_option(
+            ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST
+        );
+    }
     game.display = al_create_display(game.winW, game.winH);
     
     //It's possible that this resolution is not valid for fullscreen.
     //Detect this and try again in windowed.
     if(!game.display && game.winFullscreen) {
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "Could not create a fullscreen window with the resolution " +
             i2s(game.winW) + "x" + i2s(game.winH) + ". "
             "Setting the fullscreen option back to false. "
@@ -1353,6 +1360,363 @@ void initInventoryItems() {
 
 
 /**
+ * @brief Initializes the list of maker tool types.
+ */
+void initMakerToolTypes() {
+    game.makerTools.types.assign(N_MAKER_TOOLS, MakerToolType());
+    vector<CommandParam> params;
+    Bitmask8 contexts = 0;
+    
+    //Convenient lambdas and aliases.
+    auto queueParam =
+        [&params] (
+            const string& paramName, COMMAND_PARAM_TYPE paramType,
+            Bitmask8 paramFlags = 0, const string& paramDefValue = ""
+    ) {
+        params.push_back(
+            CommandParam(
+                paramName, paramType, paramFlags, paramDefValue
+            )
+        );
+    };
+    
+    auto commitTool =
+        [&params, &contexts] (
+            MAKER_TOOL_TYPE toolType, const string& toolName,
+            bool helpful, MakerToolTypeCode * toolRunCode,
+            const string& description
+    ) {
+        validateCommandParams(
+            params, "Maker tool type \"" + toolName + "\""
+        );
+        
+        MakerToolType* toolTypePtr;
+        toolTypePtr = &(game.makerTools.types[toolType]);
+        toolTypePtr->type = toolType;
+        toolTypePtr->name = toolName;
+        toolTypePtr->code = toolRunCode;
+        toolTypePtr->parameters = params;
+        toolTypePtr->contexts = contexts;
+        toolTypePtr->helpful = helpful;
+        toolTypePtr->description = description;
+        params.clear();
+    };
+    
+    const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
+    const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
+    const COMMAND_PARAM_TYPE ptBool = COMMAND_PARAM_TYPE_BOOL;
+    const COMMAND_PARAM_TYPE ptEnum = COMMAND_PARAM_TYPE_ENUM;
+    const COMMAND_PARAM_FLAG pfOpt = COMMAND_PARAM_FLAG_OPTIONAL;
+    
+    
+    //-Anywhere tools-
+    contexts =
+        getIdxBitmask(MAKER_TOOL_CONTEXT_OUT_OF_GAMEPLAY) |
+        getIdxBitmask(MAKER_TOOL_CONTEXT_GAMEPLAY);
+        
+    //Unknown.
+    commitTool(
+        MAKER_TOOL_TYPE_NONE,
+        "none", false,
+        nullptr, ""
+    );
+    
+    //Help.
+    commitTool(
+        MAKER_TOOL_TYPE_HELP,
+        "help", false,
+        MakerToolRunners::help,
+        "Shows some basic help and a list of maker tools."
+    );
+    
+    //Set auto-start data.
+    commitTool(
+        MAKER_TOOL_TYPE_SET_AUTO_START,
+        "set_auto_start", false,
+        MakerToolRunners::setAutoStart,
+        "Sets Pikifen to auto-start on the state and content you're "
+        "currently on."
+    );
+    
+    //Set song position near loop point.
+    queueParam("seconds", ptFloat, pfOpt, "4");
+    params.back().minValue = 0.0f;
+    params.back().description =
+        "How many seconds before the loop point.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP,
+        "set_song_pos_near_loop", false,
+        MakerToolRunners::setSongPosNearLoop,
+        "Changes the current position of all songs to be just a few seconds "
+        "before their loop point."
+    );
+    
+    
+    //-Gameplay tools-
+    contexts =
+        getIdxBitmask(MAKER_TOOL_CONTEXT_GAMEPLAY);
+        
+    //Clear terminal output.
+    commitTool(
+        MAKER_TOOL_TYPE_CLEAR,
+        "clear", false,
+        MakerToolRunners::clear,
+        "Clears the console's output."
+    );
+    
+    //Control cam.
+    queueParam("action", ptEnum, pfOpt, "control");
+    params.back().enumValues = enumGetNames(makerToolControlCamActionINames);
+    params.back().description =
+        "Action to perform. \"mode\" toggles the entire mode. "
+        "\"freeze\" toggles whether the camera is frozen "
+        "(player controls the leader) or mobile "
+        "(player controls the camera).";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_CONTROL_CAM,
+        "control_cam", true,
+        MakerToolRunners::controlCam,
+        "Allows control of the camera. Includes freezing it in place as "
+        "the player controls the leader."
+    );
+    
+    //Create reminder.
+    commitTool(
+        MAKER_TOOL_TYPE_CREATE_REMINDER,
+        "create_reminder", false,
+        MakerToolRunners::createReminder,
+        "Creates a new reminder for the area maker, using the mouse "
+        "cursor's position as its position. You are then asked to "
+        "fill in the reminder's data."
+    );
+    
+    //Delete mob.
+    commitTool(
+        MAKER_TOOL_TYPE_DELETE_MOB,
+        "delete_mob", true,
+        MakerToolRunners::deleteMob,
+        "Deletes the inspected mob."
+    );
+    
+    //Fill inventory.
+    queueParam("amount", ptInt, pfOpt, "99");
+    params.back().minValue = 0.0f;
+    params.back().description =
+        "Amount to set all inventory items to.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_FILL_INVENTORY,
+        "fill_inventory", true,
+        MakerToolRunners::fillInventory,
+        "Changes the amount of all inventory items to a given amount."
+    );
+    
+    //Frame advance.
+    queueParam("action", ptEnum, pfOpt, "advance");
+    params.back().enumValues = enumGetNames(makerToolFrameAdvanceActionINames);
+    params.back().description =
+        "Action to perform. \"advance\" pauses gameplay if unpaused, otherwise "
+        "advances one frame. \"resume\" resumes normal gameplay.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_FRAME_ADVANCE,
+        "frame_advance", true,
+        MakerToolRunners::frameAdvance,
+        "Pauses gameplay and advances only one frame at a time."
+    );
+    
+    //Hide HUD.
+    commitTool(
+        MAKER_TOOL_TYPE_HIDE_HUD,
+        "hide_hud", false,
+        MakerToolRunners::hideHud,
+        "Toggles visibility of the HUD."
+    );
+    
+    //Hurt mob.
+    queueParam("percentage", ptFloat, pfOpt, "0.5");
+    params.back().description =
+        "Ratio of damage. 0.5 means it loses 50% of its max health. "
+        "1.0 means it loses all its health, -0.2 means it regains 20% of its "
+        "max health, etc.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_HURT_MOB,
+        "hurt_mob", true,
+        MakerToolRunners::hurtMob,
+        "Hurts or heals the mob closest to the mouse cursor."
+    );
+    
+    //Inspect area.
+    commitTool(
+        MAKER_TOOL_TYPE_INSPECT_AREA,
+        "inspect_area", true,
+        MakerToolRunners::inspectArea,
+        "Toggles showing information about the current area and its script."
+    );
+    
+    //Inspect mob.
+    queueParam("action", ptEnum, pfOpt, "get_closest");
+    params.back().enumValues = enumGetNames(makerToolInspectMobActionINames);
+    params.back().description =
+        "Action to perform. \"get_closest\" makes it detect the mob closest "
+        "to the mouse cursor. \"iterate\" makes it detect mobs near the "
+        "mouse cursor or swap to the next one in that list. \"stop\" makes "
+        "it stop inspecting.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_INSPECT_MOB,
+        "inspect_mob", true,
+        MakerToolRunners::inspectMob,
+        "Toggles showing information about an object mob, "
+        "showing information about itself and its script."
+    );
+    
+    //Save area image.
+    queueParam("size", ptInt, pfOpt, "2048");
+    params.back().minValue = 1.0f;
+    params.back().description =
+        "Maximum image width or height, in pixels. "
+        "2048 is suggested for medium or large areas, 1024 otherwise.";
+    queueParam("padding", ptInt, pfOpt, "32");
+    params.back().minValue = 0.0f;
+    params.back().description =
+        "Padding around the actual area, in area pixels. "
+        "e.g. 32 means 16 area pixels above, 16 below, 16 to the left, "
+        "and 16 to the right.";
+    queueParam("shadows", ptBool, pfOpt, "true");
+    params.back().description =
+        "Whether to draw tree shadows.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_SAVE_AREA_IMAGE,
+        "save_area_image", true,
+        MakerToolRunners::saveAreaImage,
+        "Creates and saves an image of the entire area."
+    );
+    
+    //Set gameplay speed.
+    queueParam("multiplier", ptFloat, pfOpt, "2");
+    params.back().minValue = 0.001f;
+    params.back().description =
+        "Game speed multiplier. "
+        "1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_SET_SPEED,
+        "set_speed", true,
+        MakerToolRunners::setSpeed,
+        "Changes the gameplay speed."
+    );
+    
+    //Show collision.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_COLLISION,
+        "show_collision", true,
+        MakerToolRunners::showCollision,
+        "Toggles visibility of mob collision boxes and bubbles."
+    );
+    
+    //Show geometry info.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_GEOMETRY_INFO,
+        "show_geometry_info", true,
+        MakerToolRunners::showGeometryInfo,
+        "Toggles showing information about the area layout data under "
+        "the mouse cursor, as well as information about the cursor proper."
+    );
+    
+    //Show hitboxes.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_HITBOXES,
+        "show_hitboxes", true,
+        MakerToolRunners::showHitboxes,
+        "Toggles visibility of mob hitboxes."
+    );
+    
+    //Show path info.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_PATH_INFO,
+        "show_path_info", true,
+        MakerToolRunners::showPathInfo,
+        "Toggles showing information about the path that the inspected mob "
+        "is taking, if any."
+    );
+    
+    //Show reaches.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_REACHES,
+        "show_reaches", true,
+        MakerToolRunners::showReaches,
+        "Toggles visibility of mob reach circles and pie-slices for the "
+        "inspected mob."
+    );
+    
+    //Spawn mob.
+    queueParam("type", ptEnum, 0, "");
+    params.back().description =
+        "Internal name of the type of mob to spawn.";
+    queueParam("amount", ptInt, pfOpt, "1");
+    params.back().minValue = 1.0f;
+    params.back().description =
+        "Amount to spawn.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_SPAWN_MOB,
+        "spawn_mob", true,
+        MakerToolRunners::spawnMob,
+        "Spawns a new mob under the mouse cursor."
+    );
+    
+    //Spawn Pikmin.
+    queueParam("type", ptEnum, pfOpt, "next");
+    params.back().description =
+        "Type of Pikmin to spawn. A proper type's internal name, "
+        "or \"next\" to use the next type from the last spawned, "
+        "or \"next_a\" to use the next type alphabetically from "
+        "the last spawned, "
+        "or \"same\" to use the same type as the last spawned.";
+    queueParam("amount", ptInt, pfOpt, "1");
+    params.back().minValue = 1.0f;
+    params.back().description =
+        "Amount to spawn.";
+    queueParam("maturity", ptEnum, pfOpt, "flower");
+    params.back().enumValues = enumGetNames(maturityINames);
+    params.back().description =
+        "The Pikmin's maturity.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_SPAWN_PIKMIN,
+        "spawn_pikmin", true,
+        MakerToolRunners::spawnPikmin,
+        "Spawns a new idle Pikmin under the mouse cursor."
+    );
+    
+    //Teleport.
+    queueParam("use inspected mob", ptBool, pfOpt, "false");
+    params.back().description =
+        "Whether to teleport the current leader, or to instead teleport "
+        "the inspected mob.";
+    queueParam("leave group members behind", ptBool, pfOpt, "false");
+    params.back().description =
+        "Whether to teleport the target mob and its group, or to "
+        "instead leave the group members behind.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_TELEPORT,
+        "teleport", true,
+        MakerToolRunners::teleport,
+        "Teleports the current leader or inspected mob to where the mouse "
+        "cursor is."
+    );
+    
+    game.makerTools.update();
+}
+
+
+/**
  * @brief Initializes miscellaneous things and settings.
  */
 void initMisc() {
@@ -1504,17 +1868,17 @@ void initMobCategories() {
  */
 void initScriptActionTypes() {
     game.scriptActionTypes.assign(N_SCRIPT_ACTIONS, ScriptActionType());
-    vector<ScriptActionTypeParam> params;
+    vector<CommandParam> params;
     Bitmask8 contexts = 0;
     
     //Convenient lambdas and aliases.
     auto queueParam =
         [&params] (
-            const string& paramName, SCRIPT_ACTION_PARAM_TYPE paramType,
+            const string& paramName, COMMAND_PARAM_TYPE paramType,
             Bitmask8 paramFlags = 0, const string& paramDefValue = ""
     ) {
         params.push_back(
-            ScriptActionTypeParam(
+            CommandParam(
                 paramName, paramType, paramFlags, paramDefValue
             )
         );
@@ -1523,37 +1887,12 @@ void initScriptActionTypes() {
     auto commitAction =
         [&params, &contexts] (
             SCRIPT_ACTION actionType, const string& actionName,
-            ScriptActionTypeCode * actionRunCode
+            ScriptActionTypeCode * actionRunCode,
+            const string& deprecationReplacement = ""
     ) {
-        bool seenOptional = false;
-        forIdx(p, params) {
-            if(
-                hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_VECTOR) &&
-                p != params.size() - 1
-            ) {
-                engineAssert(
-                    false,
-                    "Script action type \"" + actionName +
-                    "\" has a vector parameter that is not the last parameter."
-                );
-            }
-            if(
-                !hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL) &&
-                seenOptional
-            ) {
-                engineAssert(
-                    false,
-                    "Script action type \"" + actionName +
-                    "\" has a mandatory parameter that comes after "
-                    "an optional parameter."
-                );
-            }
-            if(
-                hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL)
-            ) {
-                seenOptional = true;
-            }
-        }
+        validateCommandParams(
+            params, "Script action type \"" + actionName + "\""
+        );
         
         ScriptActionType* actionTypePtr;
         actionTypePtr = &(game.scriptActionTypes[actionType]);
@@ -1562,17 +1901,18 @@ void initScriptActionTypes() {
         actionTypePtr->code = actionRunCode;
         actionTypePtr->parameters = params;
         actionTypePtr->contexts = contexts;
+        actionTypePtr->deprecationReplacement = deprecationReplacement;
         params.clear();
     };
     
-    const SCRIPT_ACTION_PARAM_TYPE ptInt = SCRIPT_ACTION_PARAM_TYPE_INT;
-    const SCRIPT_ACTION_PARAM_TYPE ptFloat = SCRIPT_ACTION_PARAM_TYPE_FLOAT;
-    const SCRIPT_ACTION_PARAM_TYPE ptBool = SCRIPT_ACTION_PARAM_TYPE_BOOL;
-    const SCRIPT_ACTION_PARAM_TYPE ptString = SCRIPT_ACTION_PARAM_TYPE_STRING;
-    const SCRIPT_ACTION_PARAM_TYPE ptEnum = SCRIPT_ACTION_PARAM_TYPE_ENUM;
-    const SCRIPT_ACTION_PARAM_FLAG pfConst = SCRIPT_ACTION_PARAM_FLAG_CONST;
-    const SCRIPT_ACTION_PARAM_FLAG pfOpt = SCRIPT_ACTION_PARAM_FLAG_OPTIONAL;
-    const SCRIPT_ACTION_PARAM_FLAG pfVector = SCRIPT_ACTION_PARAM_FLAG_VECTOR;
+    const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
+    const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
+    const COMMAND_PARAM_TYPE ptBool = COMMAND_PARAM_TYPE_BOOL;
+    const COMMAND_PARAM_TYPE ptString = COMMAND_PARAM_TYPE_STRING;
+    const COMMAND_PARAM_TYPE ptEnum = COMMAND_PARAM_TYPE_ENUM;
+    const COMMAND_PARAM_FLAG pfConst = COMMAND_PARAM_FLAG_CONST;
+    const COMMAND_PARAM_FLAG pfOpt = COMMAND_PARAM_FLAG_OPTIONAL;
+    const COMMAND_PARAM_FLAG pfVector = COMMAND_PARAM_FLAG_VECTOR;
     
     
     //-Common actions-
@@ -1601,11 +1941,22 @@ void initScriptActionTypes() {
     queueParam("list or string", ptString);
     queueParam("new item", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_ADD_LIST_ITEM,
         "add_list_item",
         ScriptActionRunners::addListItem
+    );
+    
+    //Add int to string.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("base string", ptString);
+    queueParam("number to add", ptFloat);
+    queueParam("add a space between", ptBool, pfOpt, "false");
+    commitAction(
+        SCRIPT_ACTION_ADD_INT_TO_STRING,
+        "add_int_to_string",
+        ScriptActionRunners::addIntToString
     );
     
     //Add to string.
@@ -1683,9 +2034,9 @@ void initScriptActionTypes() {
     );
     
     //Else if.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString, pfVector);
+    queueParam("right", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_ELSE_IF,
         "else_if",
@@ -1693,9 +2044,9 @@ void initScriptActionTypes() {
     );
     
     //End do-while loop.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString);
+    queueParam("right", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_END_DO_WHILE,
         "end_do_while",
@@ -1748,8 +2099,8 @@ void initScriptActionTypes() {
     
     //Start for loop.
     queueParam("iterator var name", ptString, pfConst);
-    queueParam("target value", ptInt);
-    queueParam("starting value", ptInt, pfOpt, "1");
+    queueParam("target amount", ptInt);
+    queueParam("starting amount", ptInt, pfOpt, "1");
     queueParam("jump", ptInt, pfOpt, "1");
     commitAction(
         SCRIPT_ACTION_FOR,
@@ -1759,9 +2110,9 @@ void initScriptActionTypes() {
     
     //Start for each loop.
     queueParam("iterator var name", ptString, pfConst);
-    queueParam("item var name", ptInt);
+    queueParam("item var name", ptString, pfConst);
     queueParam("list or string", ptString);
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_FOR_EACH,
         "for_each",
@@ -1807,7 +2158,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_AREA_INFO,
         "get_area_info",
-        ScriptActionRunners::getAreaInfo
+        ScriptActionRunners::getAreaInfo,
+        "get_misc_info"
     );
     
     //Get coordinates from angle.
@@ -1851,6 +2203,15 @@ void initScriptActionTypes() {
         ScriptActionRunners::getFocusVar
     );
     
+    //Get leader activity.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("target", ptString);
+    commitAction(
+        SCRIPT_ACTION_GET_LEADER_ACTIVITY,
+        "get_leader_activity",
+        ScriptActionRunners::getLeaderActivity
+    );
+    
     //Get leader Pikmin count var.
     queueParam("destination var name", ptString, pfConst);
     queueParam("target", ptString);
@@ -1865,7 +2226,7 @@ void initScriptActionTypes() {
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM,
         "get_list_item",
@@ -1876,7 +2237,7 @@ void initScriptActionTypes() {
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
     queueParam("item to search", ptInt);
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM_NUMBER,
         "get_list_item_number",
@@ -1886,7 +2247,7 @@ void initScriptActionTypes() {
     //Get list size.
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_GET_LIST_SIZE,
         "get_list_size",
@@ -1924,8 +2285,8 @@ void initScriptActionTypes() {
     
     //Get mob IDs with var.
     queueParam("destination var name", ptString, pfConst);
-    queueParam("var", ptString);
-    queueParam("value", ptString, pfOpt, "");
+    queueParam("required var name", ptString);
+    queueParam("required value", ptString, pfOpt, "");
     commitAction(
         SCRIPT_ACTION_GET_MOB_IDS_WITH_VAR,
         "get_mob_ids_with_var",
@@ -1980,9 +2341,9 @@ void initScriptActionTypes() {
     );
     
     //If.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString);
+    queueParam("right", ptString);
     commitAction(
         SCRIPT_ACTION_IF,
         "if",
@@ -2042,7 +2403,7 @@ void initScriptActionTypes() {
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_REMOVE_LIST_ITEM,
         "remove_list_item",
@@ -2104,7 +2465,7 @@ void initScriptActionTypes() {
     queueParam("list or string", ptString);
     queueParam("new item", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_SET_LIST_ITEM,
         "set_list_item",
@@ -2159,7 +2520,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
-        ScriptActionRunners::showMessageFromVar
+        ScriptActionRunners::showMessageFromVar,
+        "show_cutscene_message"
     );
     
     //Sign number.
@@ -2285,7 +2647,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_CHOMPED,
         "get_chomped",
-        ScriptActionRunners::beChomped
+        ScriptActionRunners::beChomped,
+        "be_chomped"
     );
     
     //Get floor Z.
@@ -2301,10 +2664,18 @@ void initScriptActionTypes() {
     //Hold focused mob.
     queueParam("body part name", ptEnum);
     queueParam("hold above", ptBool, pfOpt, "false");
+    queueParam("rotation method", ptEnum, pfOpt, "copy_holder");
     commitAction(
         SCRIPT_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
         ScriptActionRunners::holdFocus
+    );
+    
+    //Leave leader's group.
+    commitAction(
+        SCRIPT_ACTION_LEAVE_LEADER_GROUP,
+        "leave_leader_group",
+        ScriptActionRunners::leaveLeaderGroup
     );
     
     //Link with focused mob.
@@ -2320,7 +2691,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
-        ScriptActionRunners::loadFocusMemory
+        ScriptActionRunners::loadFocusMemory,
+        "get_mob_info/focus_on_id"
     );
     
     //Move to absolute.
@@ -2368,7 +2740,7 @@ void initScriptActionTypes() {
     );
     
     //Receive status.
-    queueParam("status name", ptEnum);
+    queueParam("status name", ptString);
     commitAction(
         SCRIPT_ACTION_RECEIVE_STATUS,
         "receive_status",
@@ -2403,7 +2775,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
-        ScriptActionRunners::saveFocusMemory
+        ScriptActionRunners::saveFocusMemory,
+        "get_mob_info/focus_on_id"
     );
     
     //Send script message to links.
@@ -2519,6 +2892,14 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_SET_NEAR_REACH,
         "set_near_reach",
         ScriptActionRunners::setNearReach
+    );
+    
+    //Set Onion activity.
+    queueParam("activated", ptBool);
+    commitAction(
+        SCRIPT_ACTION_SET_ONION_ACTIVITY,
+        "set_onion_activity",
+        ScriptActionRunners::setOnionActivity
     );
     
     //Set radius.
@@ -2745,9 +3126,9 @@ void initScriptActionTypes() {
     );
     
     //Start while-do loop.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString);
+    queueParam("right", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_WHILE_DO,
         "while_do",

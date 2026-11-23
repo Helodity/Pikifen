@@ -61,6 +61,8 @@ public:
      * @brief Info about a mob's reach.
      */
     struct Reach {
+
+    public:
     
         //--- Public members ---
         
@@ -71,13 +73,13 @@ public:
         float radius1 = -1.0f;
         
         //Angle of possibility 1. -1 for none.
-        float angle1 = -1.0f;
+        Angle angle1 = -1.0f;
         
         //Radius of possibility 2. -1 for none.
         float radius2 = -1.0f;
         
         //Angle of possibility 2. -1 for none.
-        float angle2 = -1.0f;
+        Angle angle2 = -1.0f;
         
     };
     
@@ -85,6 +87,8 @@ public:
      * @brief Info about how a mob spawns another.
      */
     struct SpawnInfo {
+
+    public:
     
         //--- Public members ---
         
@@ -104,7 +108,7 @@ public:
         float coordsZ = 0.0f;
         
         //Angle of the spawned object. Could be relative or absolute.
-        float angle = 0.0f;
+        Angle angle = 0.0f;
         
         //String representation of the script vars to give the spawned object.
         string varsStr;
@@ -124,6 +128,8 @@ public:
      * @brief Info about how a mob can be a child of another.
      */
     struct Child {
+
+    public:
     
         //--- Public members ---
         
@@ -146,7 +152,7 @@ public:
         float holdOffsetVertDist = 0.0f;
         
         //If the parent holds, this is in what direction from the body part.
-        float holdOffsetAngle = 0.0f;
+        Angle holdOffsetAngle = 0.0f;
         
         //Method by which the parent should hold the child.
         HOLD_ROTATION_METHOD holdRotationMethod = HOLD_ROTATION_METHOD_NEVER;
@@ -197,6 +203,8 @@ public:
      * to better help users set the properties of a mob instance.
      */
     struct AreaEditorProp {
+
+    public:
     
         //--- Public members ---
         
@@ -233,6 +241,8 @@ public:
      * @brief Info on how vulnerable the object is to a certain source.
      */
     struct Vulnerability {
+
+    public:
     
         //--- Public members ---
         
@@ -256,6 +266,8 @@ public:
      * @brief Info on a sound effect this mob can emit.
      */
     struct Sound : public DataNodeSound {
+
+    public:
     
         //--- Public members ---
         
@@ -297,6 +309,10 @@ public:
     
     //List of sounds it can play.
     vector<Sound> sounds;
+
+    //If it can fade out to let the player peek underneath, this specifies
+    //the final alpha value [0 - 1]. If 1, the effect is disabled.
+    float peekUnderneathAlpha = 1.0f;
     
     //- Movement -
     

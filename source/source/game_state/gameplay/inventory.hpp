@@ -26,18 +26,20 @@ extern const float SLOT_PADDING;
 }
 
 
-struct Player;
+class Player;
 
 
 /**
  * @brief Represents an instance of an item in the inventory.
  */
-struct InventoryItemInstance {
+class InventoryItemInstance {
+
+public:
 
     //--- Public members ---
     
     //Index of the item in the database of inventory items.
-    size_t dbIndex = INVALID;
+    size_t dbIdx = INVALID;
     
     //GUI button.
     ButtonGuiItem* button = nullptr;
@@ -48,7 +50,9 @@ struct InventoryItemInstance {
 /**
  * @brief Holds information about the player's in-game inventory GUI.
  */
-struct Inventory {
+class Inventory {
+
+public:
 
     //--- Public members ---
     
@@ -79,7 +83,7 @@ struct Inventory {
     Inventory(Player* player);
     ~Inventory();
     void close();
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
     void open();
     void requestClose();

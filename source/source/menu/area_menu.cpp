@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Area selection menu struct and related functions.
+ * Area selection menu object and related functions.
  */
 
 #include <algorithm>
@@ -61,10 +61,14 @@ void AreaMenu::addNewBullet(ListGuiItem* list, const string& text) {
         new BulletGuiItem(
         text, game.sysContent.fntStandard, COLOR_WHITE
     );
-    bullet->ratioRect.center = Point(0.50f, bulletCenterY);
-    bullet->ratioRect.size = Point(0.96f, BULLET_HEIGHT);
+    bullet->setRawRatioRect(
+        Rect(
+            Point(0.50f, bulletCenterY),
+            Point(0.96f, BULLET_HEIGHT)
+        )
+    );
     list->addChild(bullet);
-    gui.addItem(bullet);
+    gui.addItemP(bullet);
 }
 
 
@@ -107,12 +111,12 @@ void AreaMenu::animateInfoAndBriefing() {
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
         forIdx(c, noteList->children) {
-            noteList->children[c]->startJuiceAnimation(
+            ((GuiItem*) noteList->children[c])->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
         forIdx(c, medalAwardList->children) {
-            medalAwardList->children[c]->startJuiceAnimation(
+            ((GuiItem*) medalAwardList->children[c])->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
@@ -231,28 +235,14 @@ void AreaMenu::changeInfo(size_t areaIdx) {
  * @brief Initializes the mission briefing page GUI items.
  */
 void AreaMenu::initGuiBriefingPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
-    gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
-    gui.registerCoords("objective_header",   50, 13, 96,  6);
-    gui.registerCoords("objective",          50, 24, 96, 12);
-    gui.registerCoords("notes_header",       50, 35, 96,  6);
-    gui.registerCoords("notes_list",         47, 52, 90, 24);
-    gui.registerCoords("notes_scroll",       96, 52,  4, 24);
-    gui.registerCoords("medal_award_header", 50, 69, 96,  6);
-    gui.registerCoords("medal_award_list",   47, 86, 90, 24);
-    gui.registerCoords("medal_award_scroll", 96, 86,  4, 24);
-    gui.readDataFile(guiFile);
-    
     if(!game.content.areas.list[areaType].empty()) {
-    
         //Name text.
         briefingNameText =
             new TextGuiItem(
             "", game.sysContent.fntAreaName, game.config.guiColors.gold
         );
         briefingBox->addChild(briefingNameText);
-        gui.addItem(briefingNameText, "briefing_area_name");
+        gui.addItemP(briefingNameText, "briefing_area_name");
         
         //Objective header text.
         TextGuiItem* objectiveHeaderText =
@@ -261,14 +251,14 @@ void AreaMenu::initGuiBriefingPage() {
             game.config.guiColors.smallHeader
         );
         briefingBox->addChild(objectiveHeaderText);
-        gui.addItem(objectiveHeaderText, "objective_header");
+        gui.addItemP(objectiveHeaderText, "objective_header");
         
         //Objective explanation text.
         objectiveText =
             new TextGuiItem("", game.sysContent.fntStandard);
         objectiveText->lineWrap = true;
         briefingBox->addChild(objectiveText);
-        gui.addItem(objectiveText, "objective");
+        gui.addItemP(objectiveText, "objective");
         
         //Notes header text.
         TextGuiItem* notesHeaderText =
@@ -277,18 +267,18 @@ void AreaMenu::initGuiBriefingPage() {
             game.config.guiColors.smallHeader
         );
         briefingBox->addChild(notesHeaderText);
-        gui.addItem(notesHeaderText, "notes_header");
+        gui.addItemP(notesHeaderText, "notes_header");
         
         //Notes list.
         noteList = new ListGuiItem();
         briefingBox->addChild(noteList);
-        gui.addItem(noteList, "notes_list");
+        gui.addItemP(noteList, "notes_list");
         
         //Notes scrollbar.
         ScrollGuiItem* notesScroll = new ScrollGuiItem();
         notesScroll->listItem = noteList;
         briefingBox->addChild(notesScroll);
-        gui.addItem(notesScroll, "notes_scroll");
+        gui.addItemP(notesScroll, "notes_scroll");
         
         //Medal award header text.
         TextGuiItem* medalAwardHeaderText =
@@ -297,19 +287,24 @@ void AreaMenu::initGuiBriefingPage() {
             game.config.guiColors.smallHeader
         );
         briefingBox->addChild(medalAwardHeaderText);
-        gui.addItem(medalAwardHeaderText, "medal_award_header");
+        gui.addItemP(medalAwardHeaderText, "medal_award_header");
         
         //Medal award explanation list.
         medalAwardList = new ListGuiItem();
         briefingBox->addChild(medalAwardList);
-        gui.addItem(medalAwardList, "medal_award_list");
+        gui.addItemP(medalAwardList, "medal_award_list");
         
         //Medal award explanation scrollbar.
         ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
         medalAwardScroll->listItem = medalAwardList;
         briefingBox->addChild(medalAwardScroll);
-        gui.addItem(medalAwardScroll, "medal_award_scroll");
+        gui.addItemP(medalAwardScroll, "medal_award_scroll");
     }
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
 }
 
 
@@ -319,41 +314,24 @@ void AreaMenu::initGuiBriefingPage() {
 void AreaMenu::initGuiInfoPage() {
     const ALLEGRO_COLOR RECORD_DATE_COLOR = al_map_rgb(128, 128, 128);
     
-    DataNode* guiFile =
-        &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
-    gui.registerCoords("name",         36,  6, 68,  8);
-    gui.registerCoords("subtitle",     36, 16, 68,  8);
-    gui.registerCoords("thumbnail",    85, 14, 26, 24);
-    gui.registerCoords("description",  50, 40, 96, 24);
-    gui.registerCoords("record_label", 16, 64, 24,  4);
-    gui.registerCoords("record_info",  50, 64, 36,  4);
-    gui.registerCoords("record_medal", 84, 64, 16, 12);
-    gui.registerCoords("record_date",  50, 68, 28,  4);
-    gui.registerCoords("difficulty",   50, 79, 96,  6);
-    gui.registerCoords("tags",         50, 87, 96,  6);
-    gui.registerCoords("maker",        28, 95, 52,  6);
-    gui.registerCoords("version",      76, 95, 44,  6);
-    gui.readDataFile(guiFile);
-    
     if(!game.content.areas.list[areaType].empty()) {
-    
         //Name text.
         infoNameText =
             new TextGuiItem(
             "", game.sysContent.fntAreaName, game.config.guiColors.gold
         );
         infoBox->addChild(infoNameText);
-        gui.addItem(infoNameText, "name");
+        gui.addItemP(infoNameText, "name");
         
         //Subtitle text.
         subtitleText = new TextGuiItem("", game.sysContent.fntAreaName);
         infoBox->addChild(subtitleText);
-        gui.addItem(subtitleText, "subtitle");
+        gui.addItemP(subtitleText, "subtitle");
         
         //Thumbnail.
         GuiItem* thumbItem = new GuiItem();
         thumbItem->forceSquare = true;
-        thumbItem->onDraw =
+        thumbItem->onDrawP =
         [this] (const DrawInfo & draw) {
             //Align it to the top-right corner.
             Point finalCenter(
@@ -371,7 +349,7 @@ void AreaMenu::initGuiInfoPage() {
             );
         };
         infoBox->addChild(thumbItem);
-        gui.addItem(thumbItem, "thumbnail");
+        gui.addItemP(thumbItem, "thumbnail");
         
         //Description text.
         descriptionText =
@@ -380,7 +358,7 @@ void AreaMenu::initGuiInfoPage() {
         );
         descriptionText->lineWrap = true;
         infoBox->addChild(descriptionText);
-        gui.addItem(descriptionText, "description");
+        gui.addItemP(descriptionText, "description");
         
         if(areaType == AREA_TYPE_MISSION) {
             //Record label.
@@ -390,26 +368,27 @@ void AreaMenu::initGuiInfoPage() {
                 game.config.guiColors.smallHeader
             );
             infoBox->addChild(recordLabelText);
-            gui.addItem(recordLabelText, "record_label");
+            gui.addItemP(recordLabelText, "record_label");
             
             //Record info.
             recordInfoText =
                 new TextGuiItem("", game.sysContent.fntStandard);
             infoBox->addChild(recordInfoText);
-            gui.addItem(recordInfoText, "record_info");
+            gui.addItemP(recordInfoText, "record_info");
             
             //Record medal.
             GuiItem* recordMedalItem = new GuiItem();
-            recordMedalItem->onDraw =
+            recordMedalItem->onDrawP =
             [this] (const DrawInfo & draw) {
                 if(curMedal) {
                     drawBitmapInBox(
-                        curMedal, draw.center, draw.size, true, 0.0f, draw.tint
+                        curMedal, draw.center, draw.size, true, true,
+                        0.0f, draw.tint
                     );
                 }
             };
             infoBox->addChild(recordMedalItem);
-            gui.addItem(recordMedalItem, "record_medal");
+            gui.addItemP(recordMedalItem, "record_medal");
             
             //Record date.
             recordDateText =
@@ -417,12 +396,12 @@ void AreaMenu::initGuiInfoPage() {
                 "", game.sysContent.fntSlim, RECORD_DATE_COLOR
             );
             infoBox->addChild(recordDateText);
-            gui.addItem(recordDateText, "record_date");
+            gui.addItemP(recordDateText, "record_date");
         }
         
         //Difficulty item.
         difficultyItem = new GuiItem();
-        difficultyItem->onDraw = [this] (const DrawInfo & draw) {
+        difficultyItem->onDrawP = [this] (const DrawInfo & draw) {
             Area* areaPtr = game.content.areas.list[areaType][curAreaIdx];
             if(areaPtr->difficulty == 0) return;
             const string difficultyText = "Difficulty: ";
@@ -454,7 +433,7 @@ void AreaMenu::initGuiInfoPage() {
             }
         };
         infoBox->addChild(difficultyItem);
-        gui.addItem(difficultyItem, "difficulty");
+        gui.addItemP(difficultyItem, "difficulty");
         
         //Tags text.
         tagsText =
@@ -462,7 +441,7 @@ void AreaMenu::initGuiInfoPage() {
             "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         infoBox->addChild(tagsText);
-        gui.addItem(tagsText, "tags");
+        gui.addItemP(tagsText, "tags");
         
         //Maker text.
         makerText =
@@ -470,7 +449,7 @@ void AreaMenu::initGuiInfoPage() {
             "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         infoBox->addChild(makerText);
-        gui.addItem(makerText, "maker");
+        gui.addItemP(makerText, "maker");
         
         //Version text.
         versionText =
@@ -478,9 +457,14 @@ void AreaMenu::initGuiInfoPage() {
             "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
         );
         infoBox->addChild(versionText);
-        gui.addItem(versionText, "version");
+        gui.addItemP(versionText, "version");
         
     }
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
 }
 
 
@@ -488,45 +472,31 @@ void AreaMenu::initGuiInfoPage() {
  * @brief Initializes the main GUI items.
  */
 void AreaMenu::initGuiMain() {
-    DataNode* guiFile = &game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME];
-    gui.registerCoords("back",          12,  5, 20,  6);
-    gui.registerCoords("back_input",     3,  7,  4,  4);
-    gui.registerCoords("list",          20, 51, 36, 82);
-    gui.registerCoords("list_scroll",   40, 51,  2, 82);
-    gui.registerCoords("view_toggle",   74,  5, 32,  6);
-    gui.registerCoords("info_box",      70, 51, 56, 82);
-    gui.registerCoords("briefing_box",  70, 51, 56, 82);
-    gui.registerCoords("random",        95,  5,  6,  6);
-    gui.registerCoords("tooltip",       50, 96, 96,  4);
-    gui.registerCoords("no_areas_text", 50, 50, 96, 10);
-    gui.readDataFile(guiFile);
-    
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leave();
     };
     gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.backItem, "back");
+    gui.addItemP(gui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&gui);
     
     if(!game.content.areas.list[areaType].empty()) {
-    
         //Area list box.
         listBox = new ListGuiItem();
-        gui.addItem(listBox, "list");
+        gui.addItemP(listBox, "list");
         
         //Area list scrollbar.
         ScrollGuiItem* listScroll = new ScrollGuiItem();
         listScroll->listItem = listBox;
-        gui.addItem(listScroll, "list_scroll");
+        gui.addItemP(listScroll, "list_scroll");
         
         //Items for the various areas.
         forIdx(a, game.content.areas.list[areaType]) {
@@ -537,18 +507,20 @@ void AreaMenu::initGuiMain() {
             //Area button.
             ButtonGuiItem* areaButton =
                 new ButtonGuiItem(areaPtr->name, game.sysContent.fntStandard);
-            areaButton->ratioRect.center =
-                Point(
-                    areaType == AREA_TYPE_MISSION ? 0.40f : 0.50f,
-                    centerY
-                );
-            areaButton->ratioRect.size =
-                Point(
-                    areaType == AREA_TYPE_MISSION ? 0.80f : 1.00f,
-                    BUTTON_HEIGHT
-                );
+            areaButton->setRawRatioRect(
+                Rect(
+                    Point(
+                        areaType == AREA_TYPE_MISSION ? 0.40f : 0.50f,
+                        centerY
+                    ),
+                    Point(
+                        areaType == AREA_TYPE_MISSION ? 0.80f : 1.00f,
+                        BUTTON_HEIGHT
+                    )
+                )
+            );
             areaButton->onActivate =
-            [this, areaPtr] (const Point&) {
+            [this, areaPtr] (float, float) {
                 game.states.gameplay->pathOfAreaToLoad =
                     areaPtr->manifest->path;
                 game.fadeMgr.startFade(false, [] () {
@@ -560,7 +532,7 @@ void AreaMenu::initGuiMain() {
             areaButton->onGetTooltip =
             [areaPtr] () { return "Play " + areaPtr->name + "."; };
             listBox->addChild(areaButton);
-            gui.addItem(areaButton);
+            gui.addItemP(areaButton);
             areaButtons.push_back(areaButton);
             if(!firstAreaButton) {
                 firstAreaButton = areaButton;
@@ -569,11 +541,13 @@ void AreaMenu::initGuiMain() {
             if(areaType == AREA_TYPE_MISSION) {
                 //Medal item.
                 GuiItem* medalItem = new GuiItem();
-                medalItem->ratioRect.center =
-                    Point(0.92f, centerY);
-                medalItem->ratioRect.size =
-                    Point(0.15f, BUTTON_HEIGHT * 0.80f);
-                medalItem->onDraw =
+                medalItem->setRawRatioRect(
+                    Rect(
+                        Point(0.92f, centerY),
+                        Point(0.15f, BUTTON_HEIGHT * 0.80f)
+                    )
+                );
+                medalItem->onDrawP =
                 [this, areaPtr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medalBmp = nullptr;
                     if(!areaRecords[a].date.empty()) {
@@ -611,32 +585,32 @@ void AreaMenu::initGuiMain() {
                     
                     if(medalBmp) {
                         drawBitmapInBox(
-                            medalBmp, draw.center, draw.size, true,
+                            medalBmp, draw.center, draw.size, true, true,
                             0.0f, draw.tint
                         );
                     }
                 };
                 listBox->addChild(medalItem);
-                gui.addItem(medalItem);
+                gui.addItemP(medalItem);
             }
         }
         
         //Info box item.
         infoBox = new GuiItem();
-        infoBox->onDraw =
+        infoBox->onDrawP =
         [] (const DrawInfo & draw) {
             drawTexturedBox(
                 draw.center, draw.size, game.sysContent.bmpFrameBox,
                 tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
             );
         };
-        gui.addItem(infoBox, "info_box");
+        gui.addItemP(infoBox, "info_box");
         
         //Random button.
         ButtonGuiItem* randomButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
         randomButton->forceSquare = true;
-        randomButton->onDraw =
+        randomButton->onDrawP =
         [randomButton] (const DrawInfo & draw) {
             drawButton(
                 draw.center, draw.size, "",
@@ -645,17 +619,17 @@ void AreaMenu::initGuiMain() {
             );
             drawBitmapInBox(
                 game.sysContent.bmpRandom,
-                draw.center, draw.size - 8, true, 0.0f, draw.tint
+                draw.center, draw.size - 8, true, true, 0.0f, draw.tint
             );
         };
         randomButton->onActivate =
-        [this] (const Point&) {
+        [this] (float, float) {
             size_t areaIdx = game.rng.i(0, (int) (areaButtons.size() - 1));
-            areaButtons[areaIdx]->onActivate(Point());
+            areaButtons[areaIdx]->onActivate(0.0f, 0.0f);
         };
         randomButton->onGetTooltip =
         [] () { return "Pick a random area."; };
-        gui.addItem(randomButton, "random");
+        gui.addItemP(randomButton, "random");
         
         if(areaType == AREA_TYPE_MISSION) {
             //View toggle button.
@@ -665,7 +639,7 @@ void AreaMenu::initGuiMain() {
                 game.sysContent.fntStandard
             );
             viewToggleButton->onActivate =
-            [this, viewToggleButton] (const Point&) {
+            [this, viewToggleButton] (float, float) {
                 GuiItem* boxToShow = nullptr;
                 GuiItem* boxToHide = nullptr;
                 if(showMissionBriefing) {
@@ -688,40 +662,43 @@ void AreaMenu::initGuiMain() {
             viewToggleButton->onGetTooltip =
             [] () {
                 return
-                    "Toggles between showing basic area info"
+                    "Toggles between showing basic area info "
                     "and mission briefing info.";
             };
-            gui.addItem(viewToggleButton, "view_toggle");
+            gui.addItemP(viewToggleButton, "view_toggle");
             
             //Briefing box item.
             briefingBox = new GuiItem();
-            briefingBox->onDraw =
+            briefingBox->onDrawP =
             [] (const DrawInfo & draw) {
                 drawTexturedBox(
                     draw.center, draw.size, game.sysContent.bmpFrameBox,
                     tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
                 );
             };
-            gui.addItem(briefingBox, "briefing_box");
+            gui.addItemP(briefingBox, "briefing_box");
             
         }
         
     } else {
-    
         //No areas found text.
         TextGuiItem* noAreasText =
             new TextGuiItem(
             "No areas found! Try making your own in the area editor!",
             game.sysContent.fntStandard
         );
-        gui.addItem(noAreasText, "no_areas_text");
+        gui.addItemP(noAreasText, "no_areas_text");
         
     }
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
 }
 
 
@@ -759,7 +736,7 @@ void AreaMenu::load() {
         briefingBox->responsive = false;
     }
     if(firstAreaButton) {
-        gui.setFocusedItem(firstAreaButton, true);
+        gui.setFocusedItemP(firstAreaButton, true);
     }
     
     //Finish the menu class setup.

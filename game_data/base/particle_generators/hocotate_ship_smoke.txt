@@ -1,19 +1,19 @@
 name=Hocotate Ship smoke
 description=Smoke coming out of the Hocotate ship.
 maker=Espyo
-version=1.0.0
-engine_version=1.0.0
+version=1.2.0
+engine_version=1.2.0
 emission{
-	number=3
-	number_deviation=1
+	number=2
+	number_deviation=0
 	interval=0.5000
-	interval_deviation=0.0000
+	interval_deviation=0.1000
 	shape=0
-	circle_outer_dist=45.0000
-	circle_inner_dist=45.0000
-	circle_arc=6.2832
-	circle_arc_rot=0.0000
-	evenly_spread=false
+	circle_outer_dist=90.0000
+	circle_inner_dist=90.0000
+	circle_arc=3.1416
+	circle_arc_rot=0.7854
+	evenly_spread=true
 }
 base{
 	bitmap=effects/smoke

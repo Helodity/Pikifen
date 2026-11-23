@@ -51,6 +51,10 @@ enum KNOCKBACK_TYPE {
     //Knocks the mob away from the hitbox center.
     KNOCKBACK_TYPE_OUTWARD,
     
+    //Knocks the mob away from the hitbox center. Full strength when the mob
+    //is at the hitbox's center, barely any if the mob is at the edge.
+    KNOCKBACK_TYPE_OUTWARD_PROXIMITY,
+    
     //Knocks the mob away in a specific direction.
     KNOCKBACK_TYPE_DIRECTIONAL,
     
@@ -76,7 +80,7 @@ enum HITBOX_SURFACE_TYPE {
 #pragma region Classes
 
 
-struct Hazard;
+class Hazard;
 
 
 /**
@@ -146,7 +150,7 @@ public:
     float knockbackStrength = 0.0f;
     
     //Knockback angle, if directional.
-    float knockbackAngle = 0.0f;
+    Angle knockbackAngle = 0.0f;
     
     //Chance of this attack withering a Pikmin's maturity [0 - 100].
     unsigned char witherChance = 0.0f;
@@ -163,7 +167,7 @@ public:
         float height = 128, float radius = 32
     );
     Point getCurPos(
-        const Point& mobPos, float mobBottomZ, float mobAngle, float* outZ
+        const Point& mobPos, float mobBottomZ, Angle mobAngle, float* outZ
     ) const;
     Point getCurPos(
         const Point& mobPos, float mobBottomZ,

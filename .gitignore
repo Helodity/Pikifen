@@ -12,7 +12,8 @@ allegro.log
 *.o
 *.d
 *.aps
-game_data/test/*
+game_data/*
+!game_data/base
 user_data/*
 easy_spat_nav_tests
 easy_analog_cleaner_tests

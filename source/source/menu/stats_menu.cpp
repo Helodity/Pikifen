@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Statistics menu struct and functions.
+ * Statistics menu object and functions.
  */
 
 #include "stats_menu.hpp"
@@ -29,7 +29,7 @@ const string GUI_FILE_NAME = "statistics_menu";
  * @param label Name of the header.
  */
 void StatsMenu::addNewHeaderItem(const string& label) {
-    float listBottomY = statsList->getChildrenSpan();
+    float listBottomY = statsList->getChildrenSpanRatio();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
@@ -41,12 +41,13 @@ void StatsMenu::addNewHeaderItem(const string& label) {
         new TextGuiItem(
         label, game.sysContent.fntAreaName, game.config.guiColors.smallHeader
     );
-    labelText->ratioRect.center =
-        Point(0.50f, statCenterY);
-    labelText->ratioRect.size =
-        Point(0.96f, HEADER_HEIGHT);
+    labelText->setRawRatioRect(
+        Rect(
+            Point(0.50f, statCenterY), Point(0.96f, HEADER_HEIGHT)
+        )
+    );
     statsList->addChild(labelText);
-    gui.addItem(labelText);
+    gui.addItemP(labelText);
 }
 
 
@@ -61,7 +62,7 @@ void StatsMenu::addNewHeaderItem(const string& label) {
 TextGuiItem* StatsMenu::addNewStatItem(
     const string& label, const string& value, const string& description
 ) {
-    float listBottomY = statsList->getChildrenSpan();
+    float listBottomY = statsList->getChildrenSpanRatio();
     const float STAT_HEIGHT = 0.08f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
@@ -73,24 +74,26 @@ TextGuiItem* StatsMenu::addNewStatItem(
         new BulletGuiItem(
         label, game.sysContent.fntStandard
     );
-    labelBullet->ratioRect.center =
-        Point(0.50f, statCenterY);
-    labelBullet->ratioRect.size =
-        Point(0.96f, STAT_HEIGHT);
+    labelBullet->setRawRatioRect(
+        Rect(
+            Point(0.50f, statCenterY), Point(0.96f, STAT_HEIGHT)
+        )
+    );
     labelBullet->onGetTooltip = [description] () { return description; };
     statsList->addChild(labelBullet);
-    gui.addItem(labelBullet);
+    gui.addItemP(labelBullet);
     
     TextGuiItem* valueText =
         new TextGuiItem(
         value, game.sysContent.fntCounter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioRect.center =
-        Point(0.75f, statCenterY);
-    valueText->ratioRect.size =
-        Point(0.44f, STAT_HEIGHT);
+    valueText->setRawRatioRect(
+        Rect(
+            Point(0.75f, statCenterY), Point(0.44f, STAT_HEIGHT)
+        )
+    );
     statsList->addChild(valueText);
-    gui.addItem(valueText);
+    gui.addItemP(valueText);
     
     return valueText;
 }
@@ -100,28 +103,19 @@ TextGuiItem* StatsMenu::addNewStatItem(
  * @brief Initializes the main GUI.
  */
 void StatsMenu::initGuiMain() {
-    //Menu items.
-    DataNode* guiFile = &game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME];
-    gui.registerCoords("back",        12,  5, 20,  6);
-    gui.registerCoords("back_input",   3,  7,  4,  4);
-    gui.registerCoords("list",        50, 51, 76, 82);
-    gui.registerCoords("list_scroll", 91, 51,  2, 82);
-    gui.registerCoords("tooltip",     50, 96, 96,  4);
-    gui.readDataFile(guiFile);
-    
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         saveStatistics();
         leave();
     };
     gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.backItem, "back");
+    gui.addItemP(gui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&gui);
@@ -129,20 +123,24 @@ void StatsMenu::initGuiMain() {
     //Statistics list.
     statsList = new ListGuiItem();
     populateStatsList();
-    gui.addItem(statsList, "list");
+    gui.addItemP(statsList, "list");
     
     //Statistics list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = statsList;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
 }
 
 

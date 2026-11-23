@@ -74,7 +74,8 @@ MobCategory* CategoryManager::getFromFolderName(
     forIdx(n, categories) {
         if(categories[n]->folderName == name) return categories[n];
     }
-    game.errors.report(
+    game.log.write(
+        LOG_LEVEL_ERROR,
         "Mob category with the folder name \"" + name + "\" not found!"
     );
     return nullptr;
@@ -200,7 +201,7 @@ void NoneCategory::clearTypes() { }
  * @return The mob.
  */
 Mob* NoneCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) { return nullptr; }
 
 

@@ -30,6 +30,7 @@ void Content::loadMetadataFromDataNode(DataNode* node) {
     mRS.set("maker", maker);
     mRS.set("version", version);
     mRS.set("engine_version", engineVersion);
+    mRS.set("license", license);
     mRS.set("maker_notes", makerNotes);
     mRS.set("notes", notes);
 }
@@ -45,6 +46,7 @@ void Content::resetMetadata() {
     maker.clear();
     version.clear();
     engineVersion.clear();
+    license.clear();
     makerNotes.clear();
     notes.clear();
 }
@@ -81,6 +83,7 @@ void Content::saveMetadataToDataNode(DataNode* node) const {
     doProp("maker", maker);
     doProp("version", version);
     doProp("engine_version", engineVersion);
+    doProp("license", license);
     doProp("maker_notes", makerNotes);
     doProp("notes", notes);
 }

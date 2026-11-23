@@ -109,7 +109,7 @@ BulletGuiItem::BulletGuiItem(
     font(font),
     color(color) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -172,7 +172,7 @@ ButtonGuiItem::ButtonGuiItem(
     font(font),
     color(color) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -217,13 +217,13 @@ CheckGuiItem::CheckGuiItem(
     font(font),
     color(color) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
     
     onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         this->defActivateCode();
     };
 }
@@ -320,7 +320,7 @@ void CustomGuiItemDef::clearBitmap() {
  * @param focusable Can the item be focused by the player?
  */
 GuiItem::GuiItem(bool focusable) :
-    focusable(focusable) {
+    DumbGui::Item(focusable) {
     
 }
 
@@ -328,16 +328,15 @@ GuiItem::GuiItem(bool focusable) :
 /**
  * @brief Activates the item.
  *
- * @param cursorPos Mouse cursor coordinates, if applicable.
+ * @param cursorPxX Mouse cursor X coordinate, if applicable.
+ * @param cursorPxY Mouse cursor Y coordinate, if applicable.
  * @return Whether it could activate it.
  */
-bool GuiItem::activate(const Point& cursorPos) {
-    if(!onActivate) return false;
-    if(!isResponsive()) return false;
-    onActivate(cursorPos);
+bool GuiItem::activate(float cursorPxX, float cursorPxY) {
+    if(!DumbGui::Item::activate(cursorPxX, cursorPxY)) return false;
     
     ALLEGRO_SAMPLE* sample =
-        this == manager->backItem ?
+        this == ((GuiManager*) manager)->backItem ?
         game.sysContent.sndMenuBack :
         playFailSound ?
         game.sysContent.sndMenuFail :
@@ -350,56 +349,39 @@ bool GuiItem::activate(const Point& cursorPos) {
 
 
 /**
- * @brief Adds an existing item to the list of children items.
+ * @brief Draws the item, by calling its onDrawP function.
  *
- * @param item Item to add as a child item.
+ * @param draw Data to draw with.
  * @return Whether it succeeded.
  */
-bool GuiItem::addChild(GuiItem* item) {
-    if(!item) return false;
-    children.push_back(item);
-    item->parent = this;
+bool GuiItem::draw(const DumbGui::DrawInfo& draw) {
+    if(!onDrawP) return false;
+    
+    GuiItem::DrawInfo drawP = fromDumbDrawInfo(draw);
+    onDrawP(drawP);
+    
     return true;
 }
 
 
 /**
- * @brief Removes and deletes all children items.
+ * @brief Converts a DumbGui DrawInfo instance to a GuiItem::DrawInfo instance.
  *
- * @return Whether all of the deletions succeeded.
+ * @param dumbDraw The DumbGui DrawInfo.
+ * @return The GuiItem DrawInfo.
  */
-bool GuiItem::deleteAllChildren() {
-    bool success = true;
-    while(!children.empty()) {
-        GuiItem* iPtr = children[0];
-        removeChild(iPtr);
-        success &= manager->removeItem(iPtr);
-        delete iPtr;
-    }
-    return success;
-}
-
-
-/**
- * @brief Returns the bottommost Y coordinate (in height ratio),
- * or the rightmost X coordinate (in width ratio),
- * of the item's children items.
- *
- * @param horizontal If true, check the horizontal reach (width). If false,
- * check the vertical reach (height).
- * @return The X or Y coordinate.
- */
-float GuiItem::getChildrenSpan(bool horizontal) const {
-    float span = 0.0f;
-    forIdx(c, children) {
-        GuiItem* cPtr = children[c];
-        float cCoord =
-            horizontal ?
-            cPtr->ratioRect.center.x + (cPtr->ratioRect.size.x / 2.0f) :
-            cPtr->ratioRect.center.y + (cPtr->ratioRect.size.y / 2.0f);
-        span = std::max(span, cCoord);
-    }
-    return span;
+DrawInfo GuiItem::fromDumbDrawInfo(const DumbGui::DrawInfo& dumbDraw) {
+    GuiItem::DrawInfo result;
+    
+    result.center = Point(dumbDraw.centerPxX, dumbDraw.centerPxY);
+    result.size = Point(dumbDraw.sizePxW, dumbDraw.sizePxH);
+    result.tint =
+        al_map_rgba(
+            dumbDraw.tint[0], dumbDraw.tint[1], dumbDraw.tint[2],
+            dumbDraw.tint[3]
+        );
+        
+    return result;
 }
 
 
@@ -467,117 +449,45 @@ float GuiItem::getJuiceValue() const {
 
 
 /**
- * @brief Returns the reference center coordinates,
- * i.e. used when not animating.
+ * @brief Returns the raw center coordinates and size, in parent ratio,
+ * as a rectangle.
  *
- * @return The center.
+ * @return The rectangle.
  */
-Point GuiItem::getReferenceCenter() const {
-    if(parent) {
-        Point parentS =
-            parent->getReferenceSize() - (parent->padding * 2.0f);
-        Point parentC =
-            parent->getReferenceCenter();
-        Point result = ratioRect.center * parentS;
-        result.x += parentC.x - parentS.x / 2.0f;
-        result.x -= parentS.x * parent->offset.x;
-        result.y += parentC.y - parentS.y / 2.0f;
-        result.y -= parentS.y * parent->offset.y;
-        return result;
-    } else {
-        return
-            Point(
-                ratioRect.center.x * game.winW, ratioRect.center.y * game.winH
-            );
-    }
-}
-
-
-/**
- * @brief Returns the reference width and height, i.e. used when not animating.
- *
- * @return The size.
- */
-Point GuiItem::getReferenceSize() const {
-    Point mult;
-    if(parent) {
-        mult = parent->getReferenceSize() - (parent->padding * 2.0f);
-    } else {
-        mult.x = game.winW;
-        mult.y = game.winH;
-    }
-    Point finalSize = ratioRect.size * mult;
-    if(forceSquare) {
-        finalSize =
-            Point(finalSize.x < finalSize.y ? finalSize.x : finalSize.y);
-    }
-    return finalSize;
-}
-
-
-/**
- * @brief Returns whether the mouse cursor is on top of it.
- *
- * @param cursorPos Position of the mouse cursor, in window coordinates.
- * @return Whether the cursor is on top.
- */
-bool GuiItem::isMouseOn(const Point& cursorPos) const {
-    if(parent && !parent->isMouseOn(cursorPos)) {
-        return false;
-    }
-    
-    Point c = getReferenceCenter();
-    Point s = getReferenceSize();
+Rect GuiItem::getRawRatioRect() const {
     return
-        (
-            cursorPos.x >= c.x - s.x * 0.5 &&
-            cursorPos.x <= c.x + s.x * 0.5 &&
-            cursorPos.y >= c.y - s.y * 0.5 &&
-            cursorPos.y <= c.y + s.y * 0.5
+        Rect(
+            Point(rawCenterRatioX, rawCenterRatioY),
+            Point(rawSizeRatioW, rawSizeRatioH)
         );
 }
 
 
 /**
- * @brief Returns whether or not it is responsive, and also checks the parents.
+ * @brief Returns the reference center coordinates and size
+ * (used when not animating), as a rectangle.
  *
- * @return Whether it is responsive.
+ * @return The coordinates.
  */
-bool GuiItem::isResponsive() const {
-    if(!responsive) return false;
-    if(parent) return parent->isResponsive();
-    return responsive;
+Rect GuiItem::getReferencePxRect() const {
+    Rect result;
+    getReferencePxCenter(&result.center.x, &result.center.y);
+    getReferencePxSize(&result.size.x, &result.size.y);
+    return result;
 }
 
 
 /**
- * @brief Returns whether or not it is visible, and also checks the parents.
+ * @brief Sets the raw center coordinates and size, in parent ratio,
+ * as a rectangle.
  *
- * @return Whether it is visible.
+ * @param rect The rectangle.
  */
-bool GuiItem::isVisible() const {
-    if(!visible) return false;
-    if(parent) return parent->isVisible();
-    return true;
-}
-
-
-/**
- * @brief Removes an item from the list of children, without deleting it.
- *
- * @param item Child item to remove.
- * @return Whether it succeeded.
- */
-bool GuiItem::removeChild(GuiItem* item) {
-    bool success = false;
-    forIdx(c, children) {
-        if(children[c] == item) {
-            children.erase(children.begin() + c);
-            item->parent = nullptr;
-            success = true;
-        }
-    }
-    return success;
+void GuiItem::setRawRatioRect(const Rect& rect) {
+    rawCenterRatioX = rect.center.x;
+    rawCenterRatioY = rect.center.y;
+    rawSizeRatioW = rect.size.x;
+    rawSizeRatioH = rect.size.y;
 }
 
 
@@ -623,6 +533,20 @@ bool GuiItem::startJuiceAnimation(JUICE_TYPE type) {
 GuiManager::GuiManager() :
     autoRepeater(&autoRepeaterSettings) {
     
+    onGetClippingRectangle =
+    [] (int* outX1, int* outY1, int* outWidth, int* outHeight) {
+        al_get_clipping_rectangle(outX1, outY1, outWidth, outHeight);
+    };
+    onSetClippingRectangle =
+    [] (int x1, int y1, int width, int height) {
+        al_set_clipping_rectangle(x1, y1, width, height);
+    };
+    onGetWindowSizePx =
+    [] (int* outWindowSizePxX, int* outWindowSizePxY) {
+        *outWindowSizePxX = game.winW;
+        *outWindowSizePxY = game.winH;
+    };
+    
     animTimer =
         Timer(
     0.0f, [this] () {
@@ -654,22 +578,27 @@ GuiManager::GuiManager() :
  * Empty string if none.
  * @return Whether it succeeded.
  */
-bool GuiManager::addItem(GuiItem* item, const string& id) {
-    if(!item) return false;
+bool GuiManager::addItemP(GuiItem* item, const string& id) {
+    if(!DumbGui::Manager::addItem(item)) return false;
     
-    auto c = registeredCenters.find(id);
-    if(c != registeredCenters.end()) {
-        item->ratioRect.center = c->second;
-    }
-    auto s = registeredSizes.find(id);
-    if(s != registeredSizes.end()) {
-        item->ratioRect.size = s->second;
-    }
-    
-    items.push_back(item);
-    item->manager = this;
+    item->name = id;
     
     return true;
+}
+
+
+/**
+ * @brief Changes the duration of the current animation, if any.
+ * Keeps the ratio of time left the same.
+ *
+ * @param newDuration The new duration.
+ */
+void GuiManager::changeCurAnimationDuration(float newDuration) {
+    if(animType == GUI_MANAGER_ANIM_NONE) return;
+    float oldRatioLeft = animTimer.getRatioLeft();
+    float newTimeLeft = newDuration * oldRatioLeft;
+    animTimer.timeLeft = newTimeLeft;
+    animTimer.duration = newDuration;
 }
 
 
@@ -689,12 +618,12 @@ void GuiManager::createAndAddCustomItems(
         infoPtr->rect.size /= 100.0f;
         
         GuiItem* guiItem = new GuiItem();
-        guiItem->ratioRect = infoPtr->rect;
+        guiItem->setRawRatioRect(infoPtr->rect);
         guiItem->drawingLayer =
             infoPtr->drawBeforeHardcoded ?
             GUI::DRAWING_LAYER_CUSTOM_BEFORE :
             GUI::DRAWING_LAYER_CUSTOM_AFTER;
-        guiItem->onDraw =
+        guiItem->onDrawP =
         [this, i] (const DrawInfo & draw) {
             const CustomGuiItemDef& infoRef = customItemDefs[i];
             const auto getDimensions =
@@ -800,7 +729,7 @@ void GuiManager::createAndAddCustomItems(
             }
         };
         if(customChildrenParent) customChildrenParent->addChild(guiItem);
-        addItem(guiItem);
+        addItemP(guiItem);
     }
 }
 
@@ -811,18 +740,14 @@ void GuiManager::createAndAddCustomItems(
  * @return Whether it succeeded.
  */
 bool GuiManager::destroy() {
-    setFocusedItem(nullptr);
+    DumbGui::Manager::destroy();
+    
     backItem = nullptr;
-    forIdx(i, items) {
-        delete items[i];
-    }
-    items.clear();
-    registeredCenters.clear();
-    registeredSizes.clear();
     forIdx(i, customItemDefs) {
         customItemDefs[i].clearBitmap();
     }
     customItemDefs.clear();
+    
     return true;
 }
 
@@ -833,58 +758,7 @@ bool GuiManager::destroy() {
  * @return Whether it succeeded.
  */
 bool GuiManager::draw() {
-    if(!visible) return false;
-    
-    int ocrX = 0;
-    int ocrY = 0;
-    int ocrW = 0;
-    int ocrH = 0;
-    
-    //Sort them by layer.
-    vector<GuiItem*> drawingSortedItems = items;
-    std::stable_sort(
-        drawingSortedItems.begin(), drawingSortedItems.end(),
-    [] (GuiItem * i1, GuiItem * i2) {
-        return i1->drawingLayer < i2->drawingLayer;
-    }
-    );
-    
-    forIdx(i, drawingSortedItems) {
-    
-        GuiItem* iPtr = drawingSortedItems[i];
-        
-        if(!iPtr->onDraw) continue;
-        
-        DrawInfo draw;
-        draw.center = iPtr->getReferenceCenter();
-        draw.size = iPtr->getReferenceSize();
-        
-        if(!getItemDrawInfo(iPtr, &draw)) continue;
-        
-        if(iPtr->parent) {
-            DrawInfo parentDraw;
-            if(!getItemDrawInfo(iPtr->parent, &parentDraw)) {
-                continue;
-            }
-            if(iPtr->parent->clipChildren) {
-                al_get_clipping_rectangle(&ocrX, &ocrY, &ocrW, &ocrH);
-                al_set_clipping_rectangle(
-                    (parentDraw.center.x - parentDraw.size.x / 2.0f) + 1,
-                    (parentDraw.center.y - parentDraw.size.y / 2.0f) + 1,
-                    parentDraw.size.x - 2,
-                    parentDraw.size.y - 2
-                );
-            }
-        }
-        
-        iPtr->onDraw(draw);
-        
-        if(iPtr->parent) {
-            if(iPtr->parent->clipChildren) {
-                al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
-            }
-        }
-    }
+    if(!DumbGui::Manager::draw()) return false;
     
     if(focusCursor.alpha > 0.0f) {
         float sizeAddition =
@@ -895,7 +769,10 @@ bool GuiManager::draw() {
         drawTexturedBox(
             focusCursor.curRect.center, focusCursor.curRect.size + sizeAddition,
             game.sysContent.bmpFocusBox,
-            mapAlpha(255 * ease(focusCursor.alpha, EASE_METHOD_OUT))
+            mapAlpha(
+                255 * ease(focusCursor.alpha, EASE_METHOD_OUT) *
+                getFadeAnimationAlpha()
+            )
         );
     }
     
@@ -925,24 +802,34 @@ bool GuiManager::draw() {
 
 
 /**
- * @brief Returns the currently focused item's tooltip, if any.
+ * @brief Returns the current animation, if any.
  *
- * @return The tooltip.
+ * @return The animation.
  */
-string GuiManager::getCurrentTooltip() const {
-    if(!focusedItem) return string();
-    if(!focusedItem->onGetTooltip) return string();
-    return focusedItem->onGetTooltip();
+GUI_MANAGER_ANIM GuiManager::getAnimation() const {
+    return animType;
 }
 
 
 /**
- * @brief Returns which item is currently focused.
+ * @brief Returns the alpha that GUI items should have, based on the
+ * current animation, if the animation controls alpha.
  *
- * @return The item, or nullptr for none.
+ * @return The alpha [0 - 1].
  */
-GuiItem* GuiManager::getFocusedItem() const {
-    return focusedItem;
+float GuiManager::getFadeAnimationAlpha() const {
+    if(animType == GUI_MANAGER_ANIM_FADE_IN) {
+        return
+            interpolateNumber(
+                animTimer.getRatioLeft(), 0.0f, 1.0f, 1.0f, 0
+            );
+    } else if(animType == GUI_MANAGER_ANIM_FADE_OUT) {
+        return
+            interpolateNumber(
+                animTimer.getRatioLeft(), 0.0f, 1.0f, 0, 1.0f
+            );
+    }
+    return 1.0f;
 }
 
 
@@ -1049,139 +936,130 @@ bool GuiManager::getItemDefsFromDataFile(
  * @brief Returns a given item's drawing information.
  *
  * @param item What item to check.
- * @param draw Information on how to draw.
+ * @param draw The information on how to draw is returned here.
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
-bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
-    if(!item->isVisible()) return false;
-    if(item->ratioRect.size.x == 0.0f) return false;
+bool GuiManager::getItemDrawInfo(
+    DumbGui::Item* item, DumbGui::DrawInfo* draw
+) const {
+    if(!DumbGui::Manager::getItemDrawInfo(item, draw)) return false;
     
-    Point finalCenter = item->getReferenceCenter();
-    Point finalSize = item->getReferenceSize();
-    float finalAlpha = 1.0f;
+    Rect finalRect = ((GuiItem*) item)->getReferencePxRect();
+    float finalAlphaMult = item->getAlphaMultiplier();
     
     if(animTimer.timeLeft > 0.0f) {
         switch(animType) {
         case GUI_MANAGER_ANIM_OUT_TO_IN: {
             Point startCenter;
-            float angle =
+            Angle angle =
                 getAngle(
                     Point(game.winW, game.winH) / 2.0f,
-                    finalCenter
+                    finalRect.center
                 );
-            startCenter.x = finalCenter.x + cos(angle) * game.winW;
-            startCenter.y = finalCenter.y + sin(angle) * game.winH;
+            startCenter.x = finalRect.center.x + cos(angle) * game.winW;
+            startCenter.y = finalRect.center.y + sin(angle) * game.winH;
             
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, startCenter.x, finalCenter.x
+                    0.0f, 1.0f, startCenter.x, finalRect.center.x
                 );
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, startCenter.y, finalCenter.y
+                    0.0f, 1.0f, startCenter.y, finalRect.center.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_IN_TO_OUT: {
             Point endCenter;
-            float angle =
+            Angle angle =
                 getAngle(
                     Point(game.winW, game.winH) / 2.0f,
-                    finalCenter
+                    finalRect.center
                 );
-            endCenter.x = finalCenter.x + cos(angle) * game.winW;
-            endCenter.y = finalCenter.y + sin(angle) * game.winH;
+            endCenter.x = finalRect.center.x + cos(angle) * game.winW;
+            endCenter.y = finalRect.center.y + sin(angle) * game.winH;
             
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_IN),
-                    0.0f, 1.0f, finalCenter.x, endCenter.x
+                    0.0f, 1.0f, finalRect.center.x, endCenter.x
                 );
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_IN),
-                    0.0f, 1.0f, finalCenter.y, endCenter.y
+                    0.0f, 1.0f, finalRect.center.y, endCenter.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y - game.winH, finalCenter.y
+                    0.0f, 1.0f, finalRect.center.y - game.winH, finalRect.center.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y, finalCenter.y - game.winH
+                    0.0f, 1.0f, finalRect.center.y, finalRect.center.y - game.winH
                 );
             break;
             
         } case GUI_MANAGER_ANIM_DOWN_TO_CENTER: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y + game.winH, finalCenter.y
+                    0.0f, 1.0f, finalRect.center.y + game.winH, finalRect.center.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_DOWN: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y, finalCenter.y + game.winH
+                    0.0f, 1.0f, finalRect.center.y, finalRect.center.y + game.winH
                 );
             break;
             
         } case GUI_MANAGER_ANIM_LEFT_TO_CENTER: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x - game.winW, finalCenter.x
+                    0.0f, 1.0f, finalRect.center.x - game.winW, finalRect.center.x
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_LEFT: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x, finalCenter.x - game.winW
+                    0.0f, 1.0f, finalRect.center.x, finalRect.center.x - game.winW
                 );
             break;
             
         } case GUI_MANAGER_ANIM_RIGHT_TO_CENTER: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x + game.winW, finalCenter.x
+                    0.0f, 1.0f, finalRect.center.x + game.winW, finalRect.center.x
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x, finalCenter.x + game.winW
+                    0.0f, 1.0f, finalRect.center.x, finalRect.center.x + game.winW
                 );
             break;
             
-        } case GUI_MANAGER_ANIM_FADE_IN: {
-            finalAlpha =
-                interpolateNumber(
-                    animTimer.getRatioLeft(), 0.0f, 1.0f, 1.0f, 0
-                );
-            break;
-            
-        } case GUI_MANAGER_ANIM_FADE_OUT: {
-            finalAlpha =
-                interpolateNumber(
-                    animTimer.getRatioLeft(), 0.0f, 1.0f, 0, 1.0f
-                );
+        } case GUI_MANAGER_ANIM_FADE_IN:
+        case GUI_MANAGER_ANIM_FADE_OUT: {
+            finalAlphaMult *= getFadeAnimationAlpha();
             break;
             
         } default: {
@@ -1191,75 +1069,97 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         }
     }
     
-    draw->center = finalCenter;
-    draw->size = finalSize;
-    draw->tint = mapAlpha(finalAlpha * 255);
+    draw->centerPxX = finalRect.center.x;
+    draw->centerPxY = finalRect.center.y;
+    draw->sizePxW = finalRect.size.x;
+    draw->sizePxH = finalRect.size.y;
+    draw->tint[0] = 255;
+    draw->tint[1] = 255;
+    draw->tint[2] = 255;
+    draw->tint[3] = finalAlphaMult * 255;
+    
     return true;
 }
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  * Controls are handled in handlePlayerAction.
  *
  * @param ev The event.
  * @return Whether it got handled.
  */
-bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool GuiManager::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!shouldHandleEvents()) return false;
     
     bool handled = false;
     bool mouseMoved = false;
     
-    //Mousing over an item and clicking.
+    //Mousing over an item.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
+        ev.type == ALLEGRO_EVENT_MOUSE_WARPED
     ) {
-        GuiItem* focusResult = nullptr;
-        forIdx(i, items) {
-            GuiItem* iPtr = items[i];
-            if(
-                iPtr->isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
-                iPtr->isResponsive() &&
-                iPtr->focusable && iPtr->focusableFromMouse
-            ) {
-                focusResult = iPtr;
-                if(iPtr->onMouseOver) {
-                    iPtr->onMouseOver(Point(ev.mouse.x, ev.mouse.y));
-                }
-                break;
+        handled = handleMouseMovement(ev.mouse.x, ev.mouse.y);
+        if(handled) mouseMoved = true;
+    }
+    
+    //Pressing down the left mouse button.
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT
+    ) {
+        handled = handleMouseClick(ev.mouse.x, ev.mouse.y);
+        if(handled) {
+            mouseMoved = true;
+            if(focusedItem) {
+                autoRepeater.start();
             }
         }
-        setFocusedItem(focusResult);
-        mouseMoved = true;
-        handled = true;
     }
     
-    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
-        if(focusedItem) {
-            focusedItem->activate(Point(ev.mouse.x, ev.mouse.y));
-            autoRepeater.start();
-        }
-        mouseMoved = true;
-        handled = true;
-    }
-    
-    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
+    //Releasing the left mouse button.
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP &&
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT
+    ) {
         autoRepeater.stop();
         mouseMoved = true;
         handled = true;
     }
     
+    //Feed the event to the items.
     forIdx(i, items) {
-        if(items[i]->isResponsive() && items[i]->onAllegroEvent) {
-            items[i]->onAllegroEvent(ev);
+        GuiItem* iPtr = (GuiItem*) items[i];
+        if(iPtr->isResponsive() && iPtr->onAllegroInputEvent) {
+            iPtr->onAllegroInputEvent(ev);
         }
     }
     
     if(mouseMoved) lastInputWasMouse = true;
     
     return handled;
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev The event.
+ * @return Whether it got handled.
+ */
+bool GuiManager::handleAllegroOtherEvent(const ALLEGRO_EVENT& ev) {
+    if(!shouldHandleEvents()) return false;
+    
+    //Feed the event to the items.
+    forIdx(i, items) {
+        GuiItem* iPtr = (GuiItem*) items[i];
+        if(iPtr->isResponsive() && iPtr->onAllegroOtherEvent) {
+            iPtr->onAllegroOtherEvent(ev);
+        }
+    }
+    
+    return true;
 }
 
 
@@ -1280,7 +1180,6 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
     case PLAYER_ACTION_TYPE_MENU_DOWN:
     case PLAYER_ACTION_TYPE_MENU_LEFT:
     case PLAYER_ACTION_TYPE_MENU_UP: {
-
         if(isDown) {
             handleSpatialNavigationAction(action);
         }
@@ -1288,7 +1187,7 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         
     } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(focusedItem && isDown) {
-            focusedItem->activate();
+            ((GuiItem*) focusedItem)->activate();
             autoRepeater.start();
         } else if(!isDown) {
             autoRepeater.stop();
@@ -1323,11 +1222,11 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
 void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     //Check if the currently-focused item wants to consume the action.
     if(
-        focusedItem && focusedItem->isResponsive() &&
-        focusedItem->onMenuSNAction
+        focusedItem && ((GuiItem*) focusedItem)->isResponsive() &&
+        ((GuiItem*) focusedItem)->onMenuSNAction
     ) {
         if(
-            focusedItem->onMenuSNAction(
+            ((GuiItem*) focusedItem)->onMenuSNAction(
                 (PLAYER_ACTION_TYPE) action.actionTypeId
             )
         ) {
@@ -1355,18 +1254,18 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     }
     
     forIdx(i, items) {
-        GuiItem* iPtr = items[i];
+        GuiItem* iPtr = (GuiItem*) items[i];
         if(!iPtr->isResponsive()) continue;
         
         bool navigable = iPtr->focusable && iPtr->focusableFromSN;
         bool hasChildren = !iPtr->children.empty();
         if(!navigable && !hasChildren) continue;
         
-        Point center = iPtr->getReferenceCenter();
-        Point size = iPtr->getReferenceSize();
+        Rect ref = ((GuiItem*) iPtr)->getReferencePxRect();
         
         esnInterface.addNewItem(
-            (EasySpatNav::ItemId) iPtr, center.x, center.y, size.x, size.y
+            (EasySpatNav::ItemId) iPtr,
+            ref.center.x, ref.center.y, ref.size.x, ref.size.y
         );
         if(iPtr->parent) {
             esnInterface.setParentItem(
@@ -1401,36 +1300,26 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         setFocusedItem(newFocusablePtr);
         if(
             focusedItem->parent &&
-            focusedItem->parent->onChildFocusedViaSN
+            ((GuiItem*) focusedItem->parent)->onChildFocusedViaSN
         ) {
-            focusedItem->parent->onChildFocusedViaSN(focusedItem);
+            ((GuiItem*) focusedItem->parent)->onChildFocusedViaSN(
+                ((GuiItem*) focusedItem)
+            );
         }
     }
 }
 
 
 /**
- * @brief Hides all items until an animation shows them again.
- *
- * @return Whether it succeeded.
- */
-bool GuiManager::hideItems() {
-    if(!visible) return false;
-    visible = false;
-    return true;
-}
-
-
-/**
- * @brief Reads item default centers and sizes, and records them.
- * Then it reads the custom item definitions and creates the items.
+ * @brief Places all hardcoded items according to their names.
+ * Then, reads the custom item definitions and creates those items.
  *
  * @param node Data file to read from.
- * @param customChildrenParent Custom items become children of this parent,
- * if not nullptr.
+ * @param customChildrenParent If not nullptr, create custom items as
+ * children of this item, and only position child items of this item.
  * @return Whether it succeeded.
  */
-bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
+bool GuiManager::readDataFile(DataNode* node, GuiItem* parent) {
     vector<HardcodedGuiItemDef> hardcodedItemDefs;
     vector<CustomGuiItemDef> newCustomItemDefs;
     bool success =
@@ -1438,42 +1327,29 @@ bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
         
     if(!success) return false;
     
-    forIdx(i, hardcodedItemDefs) {
-        registerCoords(
-            hardcodedItemDefs[i].name,
-            hardcodedItemDefs[i].rect.center.x,
-            hardcodedItemDefs[i].rect.center.y,
-            hardcodedItemDefs[i].rect.size.x,
-            hardcodedItemDefs[i].rect.size.y
-        );
+    //Position the hardcoded items.
+    vector<DumbGui::Item*> itemsToPosition = parent ? parent->children : items;
+    forIdx(id, hardcodedItemDefs) {
+        forIdx(i, itemsToPosition) {
+            GuiItem* iPtr = (GuiItem*) itemsToPosition[i];
+            if(iPtr->name != hardcodedItemDefs[id].name) continue;
+            Rect finalRect = hardcodedItemDefs[id].rect;
+            finalRect.center.x /= 100.0f;
+            finalRect.center.y /= 100.0f;
+            finalRect.size.x /= 100.0f;
+            finalRect.size.y /= 100.0f;
+            iPtr->setRawRatioRect(finalRect);
+        }
     }
     
+    //Create the custom items.
     size_t newCustomItemDefsIdx = customItemDefs.size();
     customItemDefs.insert(
         customItemDefs.end(),
         newCustomItemDefs.begin(), newCustomItemDefs.end()
     );
-    createAndAddCustomItems(newCustomItemDefsIdx, customChildrenParent);
+    createAndAddCustomItems(newCustomItemDefsIdx, parent);
     
-    return true;
-}
-
-
-/**
- * @brief Registers an item's default center and size.
- *
- * @param id String ID of the item.
- * @param cx Center X, in window percentage.
- * @param cy Center Y, in window percentage.
- * @param w Width, in window percentage.
- * @param h Height, in window percentage.
- * @return Whether it succeeded.
- */
-bool GuiManager::registerCoords(
-    const string& id, float cx, float cy, float w, float h
-) {
-    registeredCenters[id] = Point(cx / 100.0f, cy / 100.0f);
-    registeredSizes[id] = Point(w / 100.0f, h / 100.0f);
     return true;
 }
 
@@ -1484,9 +1360,8 @@ bool GuiManager::registerCoords(
  * @param item Item to remove.
  * @return Whether it succeeded.
  */
-bool GuiManager::removeItem(GuiItem* item) {
-    if(!item) return false;
-    bool success = false;
+bool GuiManager::removeItemP(GuiItem* item) {
+    if(!DumbGui::Manager::removeItem(item)) return false;
     
     if(focusedItem == item) {
         setFocusedItem(nullptr);
@@ -1495,15 +1370,18 @@ bool GuiManager::removeItem(GuiItem* item) {
         backItem = nullptr;
     }
     
-    forIdx(i, items) {
-        if(items[i] == item) {
-            items.erase(items.begin() + i);
-            item->manager = nullptr;
-            success = true;
-        }
-    }
-    
-    return success;
+    return true;
+}
+
+
+/**
+ * @brief Sets the given item as the one that is focused, or none.
+ *
+ * @param item Item to focus, or nullptr for none.
+ * @return Whether it succeeded.
+ */
+bool GuiManager::setFocusedItem(DumbGui::Item* item) {
+    return setFocusedItemP((GuiItem*) item, false);
 }
 
 
@@ -1516,25 +1394,12 @@ bool GuiManager::removeItem(GuiItem* item) {
  * but because it's the default focused item when the GUI loads.
  * @return Whether it succeeded.
  */
-bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
-    if(focusedItem == item) return false;
+bool GuiManager::setFocusedItemP(GuiItem* item, bool silent) {
+    if(!DumbGui::Manager::setFocusedItem((DumbGui::Item*) item)) {
+        return false;
+    }
     
     autoRepeater.stop();
-    
-    if(focusedItem) {
-        focusedItem->focused = false;
-    }
-    focusedItem = item;
-    if(focusedItem) {
-        focusedItem->focused = true;
-    }
-    
-    if(onFocusChanged) onFocusChanged();
-    if(focusedItem) {
-        if(focusedItem->onFocused) {
-            focusedItem->onFocused();
-        }
-    }
     
     if(focusedItem && !silent) {
         game.audio.addNewUiSoundSource(
@@ -1552,21 +1417,10 @@ bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
  *
  * @return Whether it should.
  */
-bool GuiManager::shouldHandleEvents() {
-    if(!responsive) return false;
+bool GuiManager::shouldHandleEvents() const {
+    if(!DumbGui::Manager::shouldHandleEvents()) return false;
     if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return false;
-    return true;
-}
-
-
-/**
- * @brief Shows all items, if they were hidden.
- *
- * @return Whether it succeeded.
- */
-bool GuiManager::showItems() {
-    if(visible) return false;
-    visible = true;
+    if(game.fadeMgr.isFading()) return false;
     return true;
 }
 
@@ -1595,15 +1449,14 @@ bool GuiManager::startAnimation(
  * @return Whether it succeeded.
  */
 bool GuiManager::tick(float deltaT) {
+    DumbGui::Manager::tick(deltaT);
+    
     //Tick the animation.
     animTimer.tick(deltaT);
     
-    //Tick all items.
+    //Tick all juices.
     forIdx(i, items) {
-        GuiItem* iPtr = items[i];
-        if(iPtr->onTick) {
-            iPtr->onTick(deltaT);
-        }
+        GuiItem* iPtr = (GuiItem*) items[i];
         if(iPtr->juiceTimer > 0) {
             iPtr->juiceTimer =
                 std::max(0.0f, iPtr->juiceTimer - deltaT);
@@ -1616,25 +1469,29 @@ bool GuiManager::tick(float deltaT) {
     size_t autoRepeatTriggers = autoRepeater.tick(deltaT);
     if(
         focusedItem &&
-        focusedItem->canAutoRepeat && focusedItem->onActivate
+        ((GuiItem*) focusedItem)->canAutoRepeat &&
+        ((GuiItem*) focusedItem)->onActivate
     ) {
         for(size_t r = 0; r < autoRepeatTriggers; r++) {
-            focusedItem->activate();
+            ((GuiItem*) focusedItem)->activate();
         }
     }
     
     //Tick the focus cursor.
-    DrawInfo focusedItemDraw;
+    DumbGui::DrawInfo focusedItemDraw;
     bool mustDrawFocusedItem = false;
     if(focusedItem) {
-        mustDrawFocusedItem = getItemDrawInfo(focusedItem, &focusedItemDraw);
+        mustDrawFocusedItem =
+            getItemDrawInfo(((GuiItem*) focusedItem), &focusedItemDraw);
     }
     if(
         focusedItem && mustDrawFocusedItem &&
         focusedItem->focusable
     ) {
-        focusCursor.intendedRect.center = focusedItemDraw.center;
-        focusCursor.intendedRect.size = focusedItemDraw.size;
+        focusCursor.intendedRect.center =
+            Point(focusedItemDraw.centerPxX, focusedItemDraw.centerPxY);
+        focusCursor.intendedRect.size =
+            Point(focusedItemDraw.sizePxW, focusedItemDraw.sizePxH);
         if(focusCursor.alpha == 0.0f) {
             //Teleport.
             focusCursor.curRect.center = focusCursor.intendedRect.center;
@@ -1755,8 +1612,8 @@ bool GuiManager::writeItemDefsToDataFile(
 ListGuiItem::ListGuiItem() :
     GuiItem() {
     
-    padding = 8.0f;
-    onDraw =
+    edgePaddingPx = 8.0f;
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -1764,9 +1621,9 @@ ListGuiItem::ListGuiItem() :
     [this] (float deltaT) {
         this->defTickCode(deltaT);
     };
-    onAllegroEvent =
+    onAllegroInputEvent =
     [this] (const ALLEGRO_EVENT & ev) {
-        this->defEventCode(ev);
+        this->defInputEventCode(ev);
     };
     onChildFocusedViaSN =
     [this] (const GuiItem * child) {
@@ -1782,11 +1639,13 @@ ListGuiItem::ListGuiItem() :
  */
 void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
-    float childrenSpan = getChildrenSpan(horizontal);
-    float* offsetPtr = !horizontal ? &offset.y : &offset.x;
+    float childrenSpan = getChildrenSpanRatio(horizontal);
+    float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     float coord =
-        !horizontal ? child->ratioRect.center.y : child->ratioRect.center.x;
-    
+        !horizontal ?
+        child->getRawRatioRect().center.y :
+        child->getRawRatioRect().center.x;
+        
     if(childrenSpan <= 1.0f && *offsetPtr == 0.0f) return;
     targetOffset = std::clamp(coord - 0.5f, 0.0f, childrenSpan - 1.0f);
 }
@@ -1805,7 +1664,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
     ALLEGRO_COLOR cOpaque = tintColor(mapAlpha(64), draw.tint);
     ALLEGRO_COLOR cEmpty = COLOR_EMPTY_WHITE;
     
-    if(offset.y > 0.0f && !horizontal) {
+    if(offsetRatioY > 0.0f && !horizontal) {
         //Shade effect at the top.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1841,9 +1700,9 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
-    float childrenVSpan = getChildrenSpan();
+    float childrenVSpan = getChildrenSpanRatio();
     if(
-        childrenVSpan > 1.0f && offset.y < childrenVSpan - 1.0f && !horizontal
+        childrenVSpan > 1.0f && offsetRatioY < childrenVSpan - 1.0f && !horizontal
     ) {
         //Shade effect at the bottom.
         ALLEGRO_VERTEX vertexes[8];
@@ -1881,7 +1740,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         );
     }
     
-    if(offset.x > 0.0f && horizontal) {
+    if(offsetRatioX > 0.0f && horizontal) {
         //Shade effect at the left.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1917,8 +1776,8 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
-    float childrenHSpan = getChildrenSpan(true);
-    if(childrenHSpan > 1.0f && offset.x < childrenHSpan - 1.0f && horizontal) {
+    float childrenHSpan = getChildrenSpanRatio(true);
+    if(childrenHSpan > 1.0f && offsetRatioX < childrenHSpan - 1.0f && horizontal) {
         //Shade effect at the right.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1958,18 +1817,18 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
 
 
 /**
- * @brief Default list GUI item event code.
+ * @brief Default list GUI item Allegro input event code.
  *
  * @param ev The Allegro event.
  */
-void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
+void ListGuiItem::defInputEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
-        isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
+        isMouseOn(ev.mouse.x, ev.mouse.y) &&
         ev.mouse.dz != 0.0f
     ) {
-        float childrenSpan = getChildrenSpan(horizontal);
-        if(childrenSpan <= 1.0f && offset.y == 0.0f) {
+        float childrenSpan = getChildrenSpanRatio(horizontal);
+        if(childrenSpan <= 1.0f && offsetRatioY == 0.0f) {
             return;
         }
         targetOffset =
@@ -1988,8 +1847,8 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void ListGuiItem::defTickCode(float deltaT) {
-    float childrenSpan = getChildrenSpan(horizontal);
-    float* offsetPtr = !horizontal ? &offset.y : &offset.x;
+    float childrenSpan = getChildrenSpanRatio(horizontal);
+    float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     if(childrenSpan < 1.0f) {
         targetOffset = 0.0f;
         *offsetPtr = 0.0f;
@@ -2029,14 +1888,14 @@ PickerGuiItem::PickerGuiItem(
     nrOptions(nrOptions),
     curOptionIdx(curOptionIdx) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
     
     onActivate =
-    [this] (const Point & cursorPos) {
-        this->defActivateCode(cursorPos);
+    [this] (float cursorPxX, float cursorPxY) {
+        this->defActivateCode(Point(cursorPxX, cursorPxY));
     };
     
     onMenuSNAction =
@@ -2045,8 +1904,8 @@ PickerGuiItem::PickerGuiItem(
     };
     
     onMouseOver =
-    [this] (const Point & cursorPos) {
-        this->defMouseOverCode(cursorPos);
+    [this] (float cursorPxX, float cursorPxY) {
+        this->defMouseOverCode(Point(cursorPxX, cursorPxY));
     };
 }
 
@@ -2057,7 +1916,7 @@ PickerGuiItem::PickerGuiItem(
  * @param cursorPos Mouse cursor position.
  */
 void PickerGuiItem::defActivateCode(const Point& cursorPos) {
-    if(cursorPos.x >= getReferenceCenter().x) {
+    if(cursorPos.x >= getReferencePxRect().center.x) {
         onNext();
     } else {
         onPrevious();
@@ -2095,7 +1954,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     if(
         focused &&
         manager &&
-        manager->wasLastInputMouse()
+        ((GuiManager*) manager)->wasLastInputMouse()
     ) {
         realArrowHighlight = arrowHighlight;
     }
@@ -2188,7 +2047,7 @@ bool PickerGuiItem::defMenuSNCode(PLAYER_ACTION_TYPE actionId) {
  */
 void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
     arrowHighlight =
-        cursorPos.x >= getReferenceCenter().x ? 1 : 0;
+        cursorPos.x >= getReferencePxRect().center.x ? 1 : 0;
 }
 
 
@@ -2202,13 +2061,13 @@ void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
 ScrollGuiItem::ScrollGuiItem() :
     GuiItem() {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
-    onAllegroEvent =
+    onAllegroInputEvent =
     [this] (const ALLEGRO_EVENT & ev) {
-        this->defEventCode(ev);
+        this->defInputEventCode(ev);
     };
 }
 
@@ -2222,10 +2081,10 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
     if(!horizontal) {
         float barY = 0.0f; //Top, in height ratio.
         float barH = 0.0f; //In height ratio.
-        float listBottom = listItem->getChildrenSpan();
+        float listBottom = listItem->getChildrenSpanRatio();
         float alpha = 0.20f;
         if(listBottom > 1.0f) {
-            float offset = std::min(listItem->offset.y, listBottom - 1.0f);
+            float offset = std::min(listItem->offsetRatioY, listBottom - 1.0f);
             barY = offset / listBottom;
             barH = 1.0f / listBottom;
             alpha = 0.50f;
@@ -2251,10 +2110,10 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
     } else {
         float barX = 0.0f; //Left, in width ratio.
         float barW = 0.0f; //In width ratio.
-        float listDepth = listItem->getChildrenSpan(true);
+        float listDepth = listItem->getChildrenSpanRatio(true);
         float alpha = 0.20f;
         if(listDepth > 1.0f) {
-            float offset = std::min(listItem->offset.x, listDepth - 1.0f);
+            float offset = std::min(listItem->offsetRatioX, listDepth - 1.0f);
             barX = offset / listDepth;
             barW = 1.0f / listDepth;
             alpha = 0.50f;
@@ -2282,22 +2141,22 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
 
 
 /**
- * @brief Default scroll GUI item event code.
+ * @brief Default scroll GUI item Allegro input event code.
  *
  * @param ev The Allegro event.
  */
-void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
+void ScrollGuiItem::defInputEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        ev.mouse.button == 1 &&
-        isMouseOn(Point(ev.mouse.x, ev.mouse.y))
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT &&
+        isMouseOn(ev.mouse.x, ev.mouse.y)
     ) {
         isMouseDragging = true;
         setOffsetFromMouse(ev.mouse.x, ev.mouse.y);
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP &&
-        ev.mouse.button == 1
+        ev.mouse.button == ALLEGRO_MOUSE_BUTTON_LEFT
     ) {
         isMouseDragging = false;
         
@@ -2319,36 +2178,34 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  */
 void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
     if(!horizontal) {
-        float listBottom = listItem->getChildrenSpan();
+        float listBottom = listItem->getChildrenSpanRatio();
         isMouseDragging = true;
         
         if(listBottom <= 1.0f) {
             return;
         }
         
-        Point c = getReferenceCenter();
-        Point s = getReferenceSize();
-        float barH = (1.0f / listBottom) * s.y;
-        float y1 = (c.y - s.y / 2.0f) + barH / 2.0f;
-        float y2 = (c.y + s.y / 2.0f) - barH / 2.0f;
+        Rect ref = getReferencePxRect();
+        float barH = (1.0f / listBottom) * ref.size.y;
+        float y1 = (ref.center.y - ref.size.y / 2.0f) + barH / 2.0f;
+        float y2 = (ref.center.y + ref.size.y / 2.0f) - barH / 2.0f;
         float click = (y - y1) / (y2 - y1);
         click = std::clamp(click, 0.0f, 1.0f);
         
         listItem->targetOffset = click * (listBottom - 1.0f);
         
     } else {
-        float listDepth = listItem->getChildrenSpan(true);
+        float listDepth = listItem->getChildrenSpanRatio(true);
         isMouseDragging = true;
         
         if(listDepth <= 1.0f) {
             return;
         }
         
-        Point c = getReferenceCenter();
-        Point s = getReferenceSize();
-        float barW = (1.0f / listDepth) * s.x;
-        float x1 = (c.x - s.x / 2.0f) + barW / 2.0f;
-        float x2 = (c.x + s.x / 2.0f) - barW / 2.0f;
+        Rect ref = getReferencePxRect();
+        float barW = (1.0f / listDepth) * ref.size.x;
+        float x1 = (ref.center.x - ref.size.x / 2.0f) + barW / 2.0f;
+        float x2 = (ref.center.x + ref.size.x / 2.0f) - barW / 2.0f;
         float click = (x - x1) / (x2 - x1);
         click = std::clamp(click, 0.0f, 1.0f);
         
@@ -2380,7 +2237,7 @@ TextGuiItem::TextGuiItem(
     color(color),
     flags(flags) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -2408,7 +2265,6 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
     int textY = draw.center.y;
     
     if(lineWrap) {
-    
         textY = draw.center.y - draw.size.y / 2.0f;
         int lineHeight = al_get_font_line_height(this->font);
         vector<StringToken> tokens =
@@ -2435,7 +2291,6 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         
     } else {
-    
         drawText(
             this->text, this->font, Point(textX, textY), draw.size,
             tintColor(this->color, draw.tint),
@@ -2461,7 +2316,7 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
     GuiItem(),
     gui(gui) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };

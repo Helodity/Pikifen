@@ -84,9 +84,11 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(!targetMob) {
-        game.errors.report(
-            "The bouncer (" + getErrorMessageMobInfo(bouPtr) +
-            ") has no linked mob to serve as a target!"
+        game.log.write(
+            LOG_LEVEL_ERROR,
+            "A bouncer (" + getErrorMessageMobInfo(bouPtr) +
+            ") tried to bounce something, but it has no "
+            "linked mob to serve as a target!"
         );
         return;
     }
@@ -98,7 +100,6 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
-    
         //Pikmin is about to be bounced.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
         
@@ -106,7 +107,6 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
-    
         //Leader is about to be bounced.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
         
@@ -118,9 +118,9 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
             PATH_FOLLOW_FLAG_LIGHT_LOAD
         )
     ) {
-    
         //Pikmin carrying light load is about to be bounced.
         ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
+        
     }
     
     if(!ev) return;
@@ -130,7 +130,7 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     enableFlag(toucher->flags, MOB_FLAG_WAS_THROWN);
     toucher->startHeightEffect();
     
-    float angle;
+    Angle angle;
     //The maximum height has a guaranteed minimum (useful if the destination
     //is below the bouncer), and scales up with how much higher the thrown
     //mob needs to go, to make for a nice smooth arc.

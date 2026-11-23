@@ -93,17 +93,19 @@ const float CAMERA_SMOOTHNESS_FACTOR = 4.5f;
 //Alpha of the collision bubbles in the maker tool [0 - 1].
 const float COLLISION_ALPHA = 0.75f;
 
+//Change in camera speed in control cam mode,
+//in zoom pixels per second per second.
+extern const float CONTROL_CAM_ACCELERATION = 1750.0f;
+
+//Maximum speed the camera can move in control cam mode,
+//in zoom pixels per second.
+extern const float CONTROL_CAM_MAX_SPEED = 500.0f;
+
 //If an enemy is this close to the active leader, turn on the song's enemy mix.
 const float ENEMY_MIX_DISTANCE = 150.0f;
 
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
-
-//Change in camera speed in free cam mode, in zoom pixels per second per second.
-extern const float FREE_CAM_ACCELERATION = 1750.0f;
-
-//Maximum speed the camera can move in free cam mode, in zoom pixels per second.
-extern const float FREE_CAM_MAX_SPEED = 500.0f;
 
 //When a leader lands, this is the maximum size of the particles.
 extern const float LEADER_LAND_PART_MAX_SIZE = 64.0f;
@@ -316,7 +318,6 @@ void CutsceneMessageBox::tick(float deltaT) {
     }
     
     if(!transitionIn || transitionTimer == 0.0f) {
-    
         //Animate the text.
         if(game.config.aestheticGen.cutsceneMsgChInterval == 0.0f) {
             skippedAtToken = 0;
@@ -442,12 +443,9 @@ void GameplayState::doLogic() {
     
     float regularDeltaT = game.deltaT;
     
-    if(game.makerTools.changeSpeed) {
-        game.deltaT *=
-            game.makerTools.changeSpeedSettings[
-                game.makerTools.changeSpeedSettingIdx
-            ];
-    } else if(game.makerTools.frameAdvanceMode) {
+    if(game.makerTools.changingSpeed) {
+        game.deltaT *= game.makerTools.changedSpeedMultiplier;
+    } else if(game.makerTools.inFrameAdvanceMode) {
         if(game.makerTools.mustAdvanceOneFrame) {
             game.makerTools.mustAdvanceOneFrame = false;
             game.deltaT = 1.0f / game.options.advanced.targetFps;
@@ -668,7 +666,8 @@ void GameplayState::enter() {
     
     forIdx(p, players) {
         Player& player = players[p];
-        player.hud->gui.hideItems();
+        player.hud->gui.responsive = false;
+        player.hud->gui.visible = false;
         player.inventory->close();
         player.leaderPrompt.reset();
         if(game.mouseCursor.onWindow) {
@@ -980,13 +979,12 @@ Mob* GameplayState::getClosestGroupMember(
     //Fetch the closest, for each maturity.
     size_t nMembers = player->leaderPtr->group->members.size();
     for(size_t m = 0; m < nMembers; m++) {
-    
         Mob* memberPtr = player->leaderPtr->group->members[m];
         if(memberPtr->subgroupTypePtr != type) {
             continue;
         }
         
-        unsigned char maturity = 0;
+        MATURITY maturity = MATURITY_LEAF;
         if(memberPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
             maturity = ((Pikmin*) memberPtr)->maturity;
         }
@@ -1104,31 +1102,47 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void GameplayState::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
+    //Handle the Onion menu first so events don't bleed from gameplay to it.
+    if(onionMenu) {
+        onionMenu->handleAllegroInputEvent(ev);
+    } else if(pauseMenu) {
+        pauseMenu->handleAllegroInputEvent(ev);
+    }
+    game.modal.handleAllegroInputEvent(ev);
+    
+    //Finally, let the HUD handle events.
+    forIdx(p, players) {
+        Player& player = players[p];
+        player.hud->gui.handleAllegroInputEvent(ev);
+        player.inventory->gui.handleAllegroInputEvent(ev);
+    }
+}
 
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void GameplayState::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
     if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
         if(game.options.advanced.pauseOnFocusLost) {
             tryPause();
         }
     }
     
-    //Handle the Onion menu first so events don't bleed from gameplay to it.
-    if(onionMenu) {
-        onionMenu->handleAllegroEvent(ev);
-    } else if(pauseMenu) {
-        pauseMenu->handleAllegroEvent(ev);
-    }
-    game.modal.handleAllegroEvent(ev);
+    game.modal.handleAllegroOtherEvent(ev);
     
     //Finally, let the HUD handle events.
     forIdx(p, players) {
         Player& player = players[p];
-        player.hud->gui.handleAllegroEvent(ev);
-        player.inventory->gui.handleAllegroEvent(ev);
+        player.hud->gui.handleAllegroOtherEvent(ev);
+        player.inventory->gui.handleAllegroOtherEvent(ev);
     }
     
 }
@@ -1193,7 +1207,7 @@ void GameplayState::load() {
     }
     
     loading = true;
-    game.errors.prepareAreaLoad();
+    game.log.startBundle();
     wentToResults = false;
     
     game.statistics.areaEntries++;
@@ -1218,6 +1232,7 @@ void GameplayState::load() {
     areaTimePassed = 0.0f;
     gameplayTimePassed = 0.0f;
     game.makerTools.resetForGameplay();
+    game.makerTools.update();
     
     afterHours = false;
     pikminBorn = 0;
@@ -1271,7 +1286,8 @@ void GameplayState::load() {
             game.sysContentNames.anmSparks
         );
     if(sparkAnimDbIt == game.content.globalAnimDbs.list.end()) {
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "Unknown global animation \"" + game.sysContentNames.anmSparks +
             "\" when trying to load the leader damage sparks!"
         );
@@ -1501,7 +1517,8 @@ void GameplayState::load() {
             }
         }
         if(sprayIdx == game.content.sprayTypes.list.size()) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
                 "area \"" + game.curArea->name + "\"!", nullptr
@@ -1598,14 +1615,15 @@ void GameplayState::load() {
     replayTimer.start();
     gameplayReplay.clear();*/
     
-    //Report any errors with the loading process.
-    game.errors.reportAreaLoadErrors();
+    //Report any errors or warnings with the loading process.
+    game.log.stopAndReportBundle();
     
     if(game.perfMon) {
         game.perfMon->setAreaName(game.curArea->name);
         game.perfMon->leaveState();
         game.console.write(
-            "Note: the performance monitor maker tool is running.", false
+            LOG_LEVEL_INFO,
+            "Note: the performance monitor maker tool is running."
         );
     }
     
@@ -1860,8 +1878,8 @@ void GameplayState::unload() {
         delete pauseMenu;
         pauseMenu = nullptr;
     }
-    game.console.clear();
-    game.makerDisplay.clear();
+    game.console.reset();
+    game.makerDisplay.reset();
     
     unloading = false;
 }
@@ -2103,7 +2121,7 @@ size_t MissionMobGroupStatus::getNrCleared() const {
  * @return Whether the mob is in the list.
  */
 bool MissionMobGroupStatus::remove(Mob* m) {
-    auto it = std::find(remaining.begin(), remaining.end(), m);
+    auto it = findInContainer(remaining, m);
     if(it == remaining.end()) {
         return false;
     }

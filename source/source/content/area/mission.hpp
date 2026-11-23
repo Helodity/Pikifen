@@ -123,7 +123,7 @@ enum MISSION_METRIC {
     MISSION_METRIC_ENEMY_DEFEAT_PTS,
     
     //Custom script-defined slot.
-    MISSION_METRIC_ENEMY_SCRIPT_SLOT,
+    MISSION_METRIC_SCRIPT_SLOT,
     
 };
 
@@ -143,7 +143,7 @@ buildEnumNames(missionMetricNames, MISSION_METRIC)({
     { MISSION_METRIC_TREASURE_COLLECTION_PTS, "Treasure collection points" },
     { MISSION_METRIC_ENEMY_COLLECTION_PTS, "Enemy collection points" },
     { MISSION_METRIC_ENEMY_DEFEAT_PTS, "Enemy defeat points" },
-    { MISSION_METRIC_ENEMY_SCRIPT_SLOT, "Script slot" },
+    { MISSION_METRIC_SCRIPT_SLOT, "Script slot" },
 });
 
 
@@ -162,7 +162,7 @@ buildEnumNames(missionMetricINames, MISSION_METRIC)({
     { MISSION_METRIC_TREASURE_COLLECTION_PTS, "treasure_collection_points" },
     { MISSION_METRIC_ENEMY_COLLECTION_PTS, "enemy_collection_points" },
     { MISSION_METRIC_ENEMY_DEFEAT_PTS, "enemy_defeat_points" },
-    { MISSION_METRIC_ENEMY_SCRIPT_SLOT, "script_slot" },
+    { MISSION_METRIC_SCRIPT_SLOT, "script_slot" },
 });
 
 
@@ -258,7 +258,7 @@ buildEnumNames(missionHudItemIdNames, MISSION_HUD_ITEM_ID)({
 //Possible types of ways to display something in a mission HUD item.
 enum MISSION_HUD_ITEM_DISPLAY {
 
-    //Just text.
+    //Just fixed text.
     MISSION_HUD_ITEM_DISPLAY_TEXT,
     
     //A clock that ticks down from a certain amount to 0.
@@ -288,6 +288,9 @@ enum MISSION_HUD_ITEM_DISPLAY {
     //The total amount of something.
     MISSION_HUD_ITEM_DISPLAY_TOT,
     
+    //The contents of the given area script var.
+    MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR,
+    
 };
 
 
@@ -303,6 +306,7 @@ buildEnumNames(missionHudItemDisplayTypeNames, MISSION_HUD_ITEM_DISPLAY)({
     { MISSION_HUD_ITEM_DISPLAY_CUR, "Current amount" },
     { MISSION_HUD_ITEM_DISPLAY_REM, "Remaining amount" },
     { MISSION_HUD_ITEM_DISPLAY_TOT, "Total amount" },
+    { MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR, "Script var" },
 });
 
 
@@ -449,7 +453,9 @@ enum MISSION_SCORE_CRITERIA_OLD {
 /**
  * @brief Represents an end condition definition in the mission.
  */
-struct MissionEndCond {
+class MissionEndCond {
+
+public:
 
     //--- Public members ---
     
@@ -491,7 +497,9 @@ struct MissionEndCond {
 /**
  * @brief Definition of a group of mobs that is relevant to a mission.
  */
-struct MissionMobGroup {
+class MissionMobGroup {
+
+public:
 
     //--- Public members ---
     
@@ -520,7 +528,9 @@ struct MissionMobGroup {
 /**
  * @brief One rule definition for how the score is determined.
  */
-struct MissionScoreCriterion {
+class MissionScoreCriterion {
+
+public:
 
     //--- Public members ---
     
@@ -536,13 +546,18 @@ struct MissionScoreCriterion {
     //Whether it affects the HUD score, or only the final results.
     bool affectsHud = true;
     
+    //Custom display name in the results screen, if any.
+    string customName;
+    
 };
 
 
 /**
  * @brief Represents the sort of stuff that should be in a mission HUD item.
  */
-struct MissionHudItem {
+class MissionHudItem {
+
+public:
 
     //--- Public members ---
     
@@ -578,7 +593,9 @@ struct MissionHudItem {
 /**
  * @brief Info about a given area's mission.
  */
-struct MissionData {
+class MissionData {
+
+public:
 
     //--- Public members ---
     
@@ -594,7 +611,8 @@ struct MissionData {
     //Mission medal award mode.
     MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
     
-    //Time limit in seconds, if any.
+    //Time limit in seconds, if any. Won't really do much without
+    //an end condition that makes use of it.
     size_t timeLimit = 0;
     
     //HUD items.
@@ -635,7 +653,8 @@ struct MissionData {
     
     
     //--- Public function declarations ---
-    
+    MissionData();
+
     void applyPreset(MISSION_PRESET newPreset);
     void applyPresetBattleEnemies();
     void applyPresetCollectEverything();
@@ -655,7 +674,9 @@ struct MissionData {
 /**
  * @brief Info about a given mission's best attempt record.
  */
-struct MissionRecord {
+class MissionRecord {
+
+public:
 
     //--- Public members ---
     
@@ -694,13 +715,15 @@ struct MissionRecord {
 };
 
 
-struct Area;
+class Area;
 
 
 /**
  * @brief Database of all of the player's mission records.
  */
-struct MissionRecords {
+class MissionRecords {
+
+public:
 
     //--- Public members ---
     
@@ -744,12 +767,11 @@ public:
      * @brief Static information about this type.
      */
     struct Info {
+
+    public:
     
         //Its name.
         string name;
-        
-        //Friendlier player-facing name.
-        string friendlyName;
         
         //Descriptor of the index parameter, if any.
         string idxParamName;
@@ -1137,6 +1159,8 @@ public:
      * @brief Information about the type.
      */
     struct Info {
+    
+    public:
     
         //--- Public members ---
         

@@ -74,7 +74,9 @@ extern const unsigned char DEF_DIFFICULTY;
  * a wall on the landing site part of TIS.
  * It's also used when checking sectors in a certain spot.
  */
-struct Blockmap {
+class Blockmap {
+
+public:
 
     //--- Public members ---
     
@@ -113,7 +115,9 @@ struct Blockmap {
  * but it doesn't have the data of a LIVING mob. This only holds its
  * position and type data, plus some other tiny things.
  */
-struct MobGen {
+class MobGen {
+
+public:
 
     //--- Public members ---
     
@@ -124,7 +128,7 @@ struct MobGen {
     Point center;
     
     //Angle.
-    float angle = 0.0f;
+    Angle angle = 0.0f;
     
     //String representation of the script vars.
     string varsStr;
@@ -143,7 +147,7 @@ struct MobGen {
     
     explicit MobGen(
         const Point& center = Point(),
-        MobType* type = nullptr, float angle = 0, const string& vars = ""
+        MobType* type = nullptr, Angle angle = 0, const string& vars = ""
     );
     void clone(MobGen* destination, bool includePosition = true) const;
     
@@ -154,7 +158,9 @@ struct MobGen {
  * @brief Info about the shadows cast onto the area by a tree
  * (or whatever the game maker desires).
  */
-struct TreeShadow {
+class TreeShadow {
+
+public:
 
     //--- Public members ---
     
@@ -178,7 +184,7 @@ struct TreeShadow {
     
     explicit TreeShadow(
         const Point& center = Point(), const Point& size = Point(100.0f),
-        float angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE,
+        Angle angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE,
         const string& bmpName = "", const Point& sway = Point(1.0f)
     );
     ~TreeShadow();
@@ -189,7 +195,9 @@ struct TreeShadow {
 /**
  * @brief A rectangular region within the area. Used for all sorts of purposes.
  */
-struct AreaRegion {
+class AreaRegion {
+
+public:
 
     //--- Public members ---
     
@@ -205,7 +213,9 @@ struct AreaRegion {
 /**
  * @brief A reminder that the area maker jotted down in the area.
  */
-struct AreaMakerReminder {
+class AreaMakerReminder {
+
+public:
 
     //--- Public members ---
     
@@ -224,7 +234,9 @@ struct AreaMakerReminder {
  * This structure is so that the sectors know how to communicate with
  * the edges, the edges with the vertexes, etc.
  */
-struct Area : public Content {
+class Area : public Content {
+
+public:
 
     //--- Public members ---
     
@@ -263,15 +275,18 @@ struct Area : public Content {
     
     //Internal name of the background bitmap.
     string bgBmpName;
+
+    //Background texture transformation.
+    Transform2d bgBmpTrans;
     
-    //Zoom the background by this much.
-    float bgBmpZoom = 1.0f;
+    //Tint color of the background texture.
+    ALLEGRO_COLOR bgBmpTint = COLOR_WHITE;
     
-    //How far away the background is.
-    float bgDist = 2.0f;
+    //How far away the background texture is. Used for parallax scrolling.
+    float bgBmpDist = 2.0f;
     
-    //Tint the background with this color.
-    ALLEGRO_COLOR bgColor = COLOR_BLACK;
+    //Solid color for the void in the background.
+    ALLEGRO_COLOR bgVoidColor = COLOR_BLACK;
     
     //Area subtitle, if any.
     string subtitle;

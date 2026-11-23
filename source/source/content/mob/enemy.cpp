@@ -49,7 +49,7 @@ const float SOUL_SIZE_MULT = 0.7;
  * @param type Enemy type this mob belongs to.
  * @param angle Starting angle.
  */
-Enemy::Enemy(const Point& center, EnemyType* type, float angle) :
+Enemy::Enemy(const Point& center, EnemyType* type, Angle angle) :
     Mob(center, type, angle),
     eneType(type),
     reviveTimer(type->reviveTime),
@@ -90,9 +90,10 @@ void Enemy::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0) |
-        SPRITE_BMP_EFFECT_CARRY
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0) |
+        SPRITE_BMP_EFFECT_FLAG_CARRY
     );
     drawBitmapWithEffects(curSPtr->bitmap, eff);
     drawStatusEffectBmp(this, eff);

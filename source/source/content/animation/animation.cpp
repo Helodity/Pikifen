@@ -100,7 +100,7 @@ void Animation::deleteFrame(size_t idx) {
         //Stop the loop frame from going out of bounds.
         loopFrame--;
     }
-    frames.erase(frames.begin() + idx);
+    eraseInVector(frames, idx);
 }
 
 
@@ -270,13 +270,23 @@ void AnimationDatabase::createConversions(
     
     forIdx(c, conversions) {
         size_t aPos = findAnimation(conversions[c].second);
-        preNamedConversions[conversions[c].first] = aPos;
         if(aPos == INVALID) {
-            game.errors.report(
-                "Animation \"" + conversions[c].second + "\" is required "
-                "by the engine, but does not exist!", file
+            //Use the default.
+            game.log.write(
+                LOG_LEVEL_WARNING,
+                "The engine expected an animation called "
+                "\"" + conversions[c].second + "\", but it doesn't exist. "
+                "Using the default animation "
+                "(\"" + conversions[0].second + "\") "
+                "instead as a fail-safe. If you actually want that animation "
+                "to be the same as the default one, you should create the "
+                "animation manually anyway and duplicate the data "
+                "from the default one purposely.",
+                file
             );
+            aPos = findAnimation(conversions[0].second);
         }
+        preNamedConversions[conversions[c].first] = aPos;
     }
 }
 
@@ -300,7 +310,7 @@ void AnimationDatabase::deleteSprite(size_t idx) {
     }
     
     delete sprites[idx];
-    sprites.erase(sprites.begin() + idx);
+    eraseInVector(sprites, idx);
     
     forIdx(a, animations) {
         Animation* aPtr = animations[a];
@@ -432,7 +442,6 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
     DataNode* bodyPartsNode = node->getChildByName("body_parts");
     size_t nBodyParts = bodyPartsNode->getNrOfChildren();
     for(size_t b = 0; b < nBodyParts; b++) {
-    
         DataNode* bodyPartNode = bodyPartsNode->getChild(b);
         
         BodyPart* curBodyPart = new BodyPart(bodyPartNode->name);
@@ -443,7 +452,6 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
     DataNode* spritesNode = node->getChildByName("sprites");
     size_t nSprites = spritesNode->getNrOfChildren();
     for(size_t s = 0; s < nSprites; s++) {
-    
         DataNode* spriteNode = spritesNode->getChild(s);
         ReaderSetter sRS(spriteNode);
         Sprite* newSprite = new Sprite(spriteNode->name);
@@ -480,8 +488,9 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             //DEPRECATED in 1.2.0 by "knockback_type".
             bool knockbackOutward = false;
             DataNode* knockbackOutwardNode = nullptr;
-            hRS.set(
-                "knockback_outward", knockbackOutward, &knockbackOutwardNode
+            deprecatedReaderSetter(
+                hRS, "knockback_outward", "use \"knockback_type\"",
+                knockbackOutward, &knockbackOutwardNode
             );
             if(knockbackOutwardNode) {
                 knockbackTypeInt =
@@ -492,8 +501,9 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             //DEPRECATED in 1.2.0 by "surface_type".
             bool canPikminLatch = false;
             DataNode* canPikminLatchNode = nullptr;
-            hRS.set(
-                "can_pikmin_latch", canPikminLatch, &canPikminLatchNode
+            deprecatedReaderSetter(
+                hRS, "can_pikmin_latch", "use \"surface_type\"",
+                canPikminLatch, &canPikminLatchNode
             );
             if(canPikminLatchNode) {
                 surfaceTypeInt =
@@ -524,7 +534,8 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
                 if(hazardIt != game.content.hazards.list.end()) {
                     newHitbox.hazard = &(hazardIt->second);
                 } else {
-                    game.errors.report(
+                    game.log.write(
+                        LOG_LEVEL_ERROR,
                         "Unknown hazard \"" + hazardStr + "\"!",
                         hazardNode
                     );
@@ -607,7 +618,6 @@ void AnimationDatabase::saveToDataNode(
     //Animations.
     DataNode* animationsNode = node->addNew("animations");
     forIdx(a, animations) {
-    
         //Animation.
         Animation* animPtr = animations[a];
         DataNode* animNode = animationsNode->addNew(animPtr->name);
@@ -623,7 +633,6 @@ void AnimationDatabase::saveToDataNode(
         //Frames.
         DataNode* framesNode = animNode->addNew("frames");
         forIdx(f, animPtr->frames) {
-        
             //Frame.
             Frame* framePtr = &animPtr->frames[f];
             DataNode* frameNode = framesNode->addNew(framePtr->spriteName);
@@ -645,7 +654,6 @@ void AnimationDatabase::saveToDataNode(
     //Sprites.
     DataNode* spritesNode = node->addNew("sprites");
     forIdx(s, sprites) {
-    
         //Sprite.
         Sprite* spritePtr = sprites[s];
         DataNode* spriteNode = spritesNode->addNew(sprites[s]->name);
@@ -675,11 +683,10 @@ void AnimationDatabase::saveToDataNode(
         }
         
         if(!spritePtr->hitboxes.empty()) {
-        
             //Hitboxes.
             DataNode* hitboxesNode = spriteNode->addNew("hitboxes");
-            forIdx(h, spritePtr->hitboxes) {
             
+            forIdx(h, spritePtr->hitboxes) {
                 //Hitbox.
                 Hitbox* hitboxPtr = &spritePtr->hitboxes[h];
                 DataNode* hitboxNode =
@@ -729,7 +736,6 @@ void AnimationDatabase::saveToDataNode(
     //Body parts.
     DataNode* bodyPartsNode = node->addNew("body_parts");
     forIdx(b, bodyParts) {
-    
         //Body part.
         BodyPart* bodyPartPtr = bodyParts[b];
         bodyPartsNode->addNew(bodyPartPtr->name);
@@ -1259,7 +1265,7 @@ void Sprite::setBitmap(
  * returned here.
  */
 void getSpriteBasicEffects(
-    const Point& basePos, float baseAngle,
+    const Point& basePos, Angle baseAngle,
     float baseAngleCosCache, float baseAngleSinCache,
     Sprite* curSpritePtr, Sprite* nextSpritePtr, float interpolationFactor,
     Point* outEffTrans, float* outEffAngle,
@@ -1301,7 +1307,7 @@ void getSpriteBasicEffects(
             baseAngleSinCache * nextSpritePtr->tf.trans.x +
             baseAngleCosCache * nextSpritePtr->tf.trans.y
         );
-        float nextAngle = baseAngle + nextSpritePtr->tf.rot;
+        Angle nextAngle = baseAngle + nextSpritePtr->tf.rot;
         Point nextScale = nextSpritePtr->tf.scale;
         ALLEGRO_COLOR nextTint = nextSpritePtr->tint;
         
@@ -1370,7 +1376,7 @@ void getSpriteBasicTopEffects(
     
     if(nextSpritePtr && interpolationFactor > 0.0f) {
         Point nextTrans = nextSpritePtr->topPose.pos;
-        float nextAngle = nextSpritePtr->topPose.angle;
+        Angle nextAngle = nextSpritePtr->topPose.angle;
         Point nextSize = nextSpritePtr->topPose.size;
         
         if(outEffTrans) {

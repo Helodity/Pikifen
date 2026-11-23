@@ -141,7 +141,6 @@ void ParticleEditor::drawCanvas() {
     if(emissionShapeVisible) {
         switch(loadedGen.emission.shape) {
         case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-    
             if(loadedGen.emission.circleArc == TAU) {
                 al_draw_circle(
                     generatorPosOffset.x, generatorPosOffset.y,
@@ -176,7 +175,6 @@ void ParticleEditor::drawCanvas() {
             break;
             
         } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
-    
             drawRotatedRectangle(
                 generatorPosOffset,
                 loadedGen.emission.rectOuterDist * 2.0f,

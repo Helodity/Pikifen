@@ -342,14 +342,7 @@ void Liquid::tick(float deltaT) {
         Mob* mPtr = freezeCaughtMobs[m];
         
         bool mustRemove = false;
-        const auto it =
-            std::find(
-                game.states.gameplay->mobs.all.begin(),
-                game.states.gameplay->mobs.all.end(),
-                mPtr
-            );
-            
-        if(it == game.states.gameplay->mobs.all.end()) {
+        if(!isInContainer(game.states.gameplay->mobs.all, mPtr)) {
             mustRemove = true;
         }
         if(mPtr->health <= 0.0f) {
@@ -357,12 +350,12 @@ void Liquid::tick(float deltaT) {
         }
         
         if(mustRemove) {
-            freezeCaughtMobs.erase(freezeCaughtMobs.begin() + m);
+            eraseInVector(freezeCaughtMobs, m);
             m--;
             continue;
         }
         
-        mPtr->applyStatus(
+        mPtr->handleStatusSource(
             hazard->associatedLiquid->freezeMobStatus,
             false, true, nullptr, 1.0f, true
         );
@@ -405,7 +398,7 @@ void Liquid::tick(float deltaT) {
             chillFraction = new InWorldFraction();
             chillFraction->bmpIcon = game.sysContent.bmpChill;
         } else if(!mustShowFraction && chillFraction) {
-            chillFraction->startFading();
+            chillFraction->startFadingOut();
         }
         
         if(chillFraction) {
@@ -518,7 +511,8 @@ void LiquidType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
         if(s != game.content.statusTypes.list.end()) {
             freezeMobStatus = s->second;
         } else {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + freezeMobStatusStr + "\"!",
                 freezeMobStatusNode
             );

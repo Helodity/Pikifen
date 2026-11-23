@@ -210,7 +210,7 @@ AreaEditor::AreaEditor() :
     vertexSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->vertexes[idx]->x = newCenter.x;
         game.curArea->vertexes[idx]->y = newCenter.y;
@@ -249,7 +249,7 @@ AreaEditor::AreaEditor() :
     edgeSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
     };
     edgeSelection.onGetTotal =
@@ -290,7 +290,7 @@ AreaEditor::AreaEditor() :
     sectorSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
     };
     sectorSelection.onGetTotal =
@@ -325,7 +325,7 @@ AreaEditor::AreaEditor() :
     mobSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->mobGenerators[idx]->center = newCenter;
     };
@@ -358,7 +358,7 @@ AreaEditor::AreaEditor() :
     pathStopSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->pathStops[idx]->center = newCenter;
         game.curArea->pathStops[idx]->radius = newSize.x / 2.0f;
@@ -411,7 +411,7 @@ AreaEditor::AreaEditor() :
     pathLinkSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
     };
     pathLinkSelection.onGetTotal =
@@ -445,7 +445,7 @@ AreaEditor::AreaEditor() :
     shadowSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->treeShadows[idx]->pose.pos = newCenter;
         game.curArea->treeShadows[idx]->pose.size = newSize;
@@ -476,7 +476,7 @@ AreaEditor::AreaEditor() :
     regionSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->regions[idx]->pose.pos = newCenter;
         game.curArea->regions[idx]->pose.size = newSize;
@@ -507,7 +507,7 @@ AreaEditor::AreaEditor() :
     reminderSelection.onSetInfo =
         [] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->reminders[idx].center = newCenter;
     };
@@ -1189,6 +1189,9 @@ void AreaEditor::deleteCmd(float inputValue) {
     } case EDITOR_STATE_DETAILS: {
         deleteTreeShadowCmd(1.0f);
         break;
+    } case EDITOR_STATE_REVIEW: {
+        deleteReminderCmd(1.0f);
+        break;
     }
     }
 }
@@ -1490,23 +1493,28 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
     
     if(!reminderSelection.hasAny()) {
         setStatus("You have to select a reminder to delete!", true);
-    } else {
-        registerChange("reminder deletion");
-        eraseIndexesInVector(
-            reminderSelection.getItemIdxs(), game.curArea->reminders
-        );
-        if(reminderSelection.hasOne()) {
-            setStatus(
-                "Deleted reminder #" +
-                i2s(reminderSelection.getSingleItemIdx() + 1) + "."
-            );
-        } else {
-            setStatus(
-                "Deleted " + i2s(reminderSelection.getCount()) + " reminders."
-            );
-        }
-        reminderSelection.clear();
+        return;
     }
+    
+    //Prepare everything.
+    registerChange("reminder deletion");
+    size_t singleDeletionIdx = reminderSelection.getSingleItemIdx();
+    size_t nDeletions = reminderSelection.getCount();
+    
+    //Delete!
+    eraseIdxsInVector(
+        reminderSelection.getItemIdxs(), game.curArea->reminders
+    );
+    
+    //Cleanup.
+    clearSelections();
+    
+    //Report.
+    setStatus(
+        "Deleted " +
+        getAmountOrIdxDescription(singleDeletionIdx, nDeletions, "reminder") +
+        "."
+    );
 }
 
 
@@ -1912,7 +1920,7 @@ void AreaEditor::finishLayoutMoving() {
                 mvPtr == vPtr ||
                 vertexSelection.contains(game.curArea->findVertexIdx(mvPtr))
             ) {
-                mergeVertexes.erase(mergeVertexes.begin() + mv);
+                eraseInVector(mergeVertexes, mv);
             } else {
                 mv++;
             }
@@ -2027,7 +2035,7 @@ void AreaEditor::finishLayoutMoving() {
                         intersections[i].contains(m.first->edges[e1]) &&
                         intersections[i].contains(m.second->edges[e2])
                     ) {
-                        intersections.erase(intersections.begin() + i);
+                        eraseInVector(intersections, i);
                     } else {
                         i++;
                     }
@@ -2042,7 +2050,7 @@ void AreaEditor::finishLayoutMoving() {
                     intersections[i].contains(v.first->edges[e]) &&
                     intersections[i].contains(v.second)
                 ) {
-                    intersections.erase(intersections.begin() + i);
+                    eraseInVector(intersections, i);
                 } else {
                     i++;
                 }
@@ -2065,7 +2073,6 @@ void AreaEditor::finishLayoutMoving() {
     for(auto& m : merges) {
         Vertex* crushedVertex = nullptr;
         if(m.first->is2ndDegreeNeighbor(m.second, &crushedVertex)) {
-        
             for(auto const& m2 : merges) {
                 if(m2.second == crushedVertex) {
                     cancelLayoutMoving();
@@ -2914,7 +2921,9 @@ void AreaEditor::loadReference() {
         DataNode* alphaNode = nullptr;
         
         //DEPRECATED in 1.2.0 by "tint".
-        rRS.set("alpha", alphaC);
+        deprecatedReaderSetter(
+            rRS, "alpha", "tint", alphaC
+        );
         if(alphaNode) {
             referenceTint.a = alphaC / 255.0f;
         }
@@ -3603,15 +3612,15 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
  * @brief Sets the vector of points that make up a new circle sector.
  */
 void AreaEditor::setNewCircleSectorPoints() {
-    float anchorAngle =
+    Angle anchorAngle =
         getAngle(newCircleSectorCenter, newCircleSectorAnchor);
-    float cursorAngle =
+    Angle cursorAngle =
         getAngle(newCircleSectorCenter, game.editorsView.mouseCursorWorldPos);
     float radius =
         Distance(
             newCircleSectorCenter, newCircleSectorAnchor
         ).toFloat();
-    float angleDiff =
+    Angle angleDiff =
         getAngleSmallestDiff(cursorAngle, anchorAngle);
         
     size_t nPoints = AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS;
@@ -4002,11 +4011,11 @@ void AreaEditor::traverseSectorForSplit(
     for(unsigned char s = 0; s < 2; s++) {
         Vertex* vPtr = begin;
         Vertex* prevVPtr = nullptr;
-        float prevEAngle = TAU / 2.0f;
+        Angle prevEAngle = TAU / 2.0f;
         
         while(true) {
             Edge* nextEPtr = nullptr;
-            float nextEAngle = 0.0f;
+            Angle nextEAngle = 0.0f;
             Vertex* nextVPtr = nullptr;
             
             findTraceEdge(
@@ -4112,9 +4121,7 @@ void AreaEditor::undoCmd(float inputValue) {
  */
 void AreaEditor::undoLayoutDrawingNode() {
     if(drawingNodes.empty()) return;
-    drawingNodes.erase(
-        drawingNodes.begin() + drawingNodes.size() - 1
-    );
+    eraseInVector(drawingNodes, drawingNodes.size() - 1);
     if(
         sectorSplitInfo.uselessSplitPart2Checkpoint != INVALID &&
         drawingNodes.size() < sectorSplitInfo.uselessSplitPart2Checkpoint
@@ -4347,15 +4354,13 @@ void AreaEditor::updateTextureSuggestions(const string& n) {
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
         TextureSuggestion s = textureSuggestions[pos];
-        textureSuggestions.erase(textureSuggestions.begin() + pos);
+        eraseInVector(textureSuggestions, pos);
         textureSuggestions.insert(textureSuggestions.begin(), s);
     }
     
     if(textureSuggestions.size() > AREA_EDITOR::MAX_TEXTURE_SUGGESTIONS) {
         textureSuggestions[textureSuggestions.size() - 1].destroy();
-        textureSuggestions.erase(
-            textureSuggestions.begin() + textureSuggestions.size() - 1
-        );
+        eraseInVector(textureSuggestions, textureSuggestions.size() - 1);
     }
 }
 
@@ -4486,6 +4491,18 @@ void AreaEditor::zoomOutCmd(float inputValue) {
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
+}
+
+
+/**
+ * @brief Code to run for the zoom selection command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::zoomSelectionCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    Editor::zoomToSelection();
 }
 
 

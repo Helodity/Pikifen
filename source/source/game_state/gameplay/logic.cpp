@@ -95,9 +95,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             leaderToCursorDist;
             
         if(maxDist < player->leaderPtr->swarmArrows[a]) {
-            player->leaderPtr->swarmArrows.erase(
-                player->leaderPtr->swarmArrows.begin() + a
-            );
+            eraseInVector(player->leaderPtr->swarmArrows, a);
         } else {
             a++;
         }
@@ -109,7 +107,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     
     if(leaderToCursorDist > game.config.rules.whistleMaxDist) {
         whistleDist = game.config.rules.whistleMaxDist;
-        float whistleAngle =
+        Angle whistleAngle =
             getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         whistlePos = angleToCoordinates(whistleAngle, whistleDist);
         whistlePos += player->leaderPtr->center;
@@ -127,7 +125,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     player->leaderCursorHeightDiffLight = 0;
     
     if(leaderToCursorDist > game.config.rules.throwMaxDist) {
-        float throwAngle =
+        Angle throwAngle =
             getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         player->throwDest =
             angleToCoordinates(throwAngle, game.config.rules.throwMaxDist);
@@ -274,7 +272,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     //Current leader movement.
     Point dummyCoords;
-    float dummyAngle;
+    Angle dummyAngle;
     float leaderMoveMagnitude;
     player->leaderMovement.getInfo(
         &dummyCoords, &dummyAngle, &leaderMoveMagnitude
@@ -625,7 +623,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     float oldSwarmMagnitude = player->swarmMagnitude;
     Point swarmCoords;
-    float newSwarmAngle;
+    Angle newSwarmAngle;
     player->swarmMovement.getInfo(
         &swarmCoords, &newSwarmAngle, &player->swarmMagnitude
     );
@@ -635,7 +633,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->swarmAngle = newSwarmAngle;
     }
     
-    float leaderCursorAngle =
+    Angle leaderCursorAngle =
         getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         
     if(player->swarmToLeaderCursor) {
@@ -729,7 +727,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         moveStrength = interpolateNumber(moveStrength, 0.75f, 1.0f, 0.0f, 1.0f);
         moveStrength = std::clamp(moveStrength, 0.0f, 1.0f);
         
-        float leaderToMouseCursorAngle =
+        Angle leaderToMouseCursorAngle =
             getAngle(
                 player->leaderPtr->center,
                 player->view.mouseCursorWorldPos
@@ -762,20 +760,20 @@ void GameplayState::doGameplayLogic(float deltaT) {
     forIdx(p, players) {
         Player& player = players[p];
         
-        //Free camera movement.
-        bool freeCamControl =
-            !player.leaderPtr || game.makerTools.freeCamControl;
-        bool freeCamView =
-            !player.leaderPtr || game.makerTools.freeCamView;
+        //Control camera movement.
+        bool controlCamMode =
+            !player.leaderPtr || game.makerTools.inControlCam;
+        bool controlCamControllable =
+            controlCamMode && !game.makerTools.controlCamFrozen;
             
-        if(freeCamView) {
+        if(controlCamMode) {
             player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_LINEAR;
         } else {
             player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
             player.view.cam.centerSpeed = Point(0.0f);
         }
         
-        if(freeCamControl) {
+        if(controlCamControllable) {
             //Get movement info.
             MovementInfo mov;
             mov.right =
@@ -787,7 +785,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             mov.up =
                 game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
             Point movCoords;
-            float dummyAngle;
+            Angle dummyAngle;
             float dummyMagnitude;
             mov.getInfo(
                 &movCoords, &dummyAngle, &dummyMagnitude
@@ -795,21 +793,21 @@ void GameplayState::doGameplayLogic(float deltaT) {
             
             //Figure out the movement speed.
             Point targetSpeed(
-                GAMEPLAY::FREE_CAM_MAX_SPEED*
+                GAMEPLAY::CONTROL_CAM_MAX_SPEED*
                 movCoords.x / player.view.cam.zoom,
-                GAMEPLAY::FREE_CAM_MAX_SPEED*
+                GAMEPLAY::CONTROL_CAM_MAX_SPEED*
                 movCoords.y / player.view.cam.zoom
             );
             player.view.cam.centerSpeed.x =
                 inchTowards(
                     player.view.cam.centerSpeed.x, targetSpeed.x,
-                    GAMEPLAY::FREE_CAM_ACCELERATION / player.view.cam.zoom *
+                    GAMEPLAY::CONTROL_CAM_ACCELERATION / player.view.cam.zoom *
                     deltaT
                 );
             player.view.cam.centerSpeed.y =
                 inchTowards(
                     player.view.cam.centerSpeed.y, targetSpeed.y,
-                    GAMEPLAY::FREE_CAM_ACCELERATION / player.view.cam.zoom *
+                    GAMEPLAY::CONTROL_CAM_ACCELERATION / player.view.cam.zoom *
                     deltaT
                 );
                 
@@ -841,7 +839,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
     }
     
     if(!cutsceneMsgBox) {
-    
         /************************************
         *                              .-.  *
         *   Timer things - gameplay   ( L ) *
@@ -1037,7 +1034,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     curArea.weatherCondition.
                     precipitationSpeed.getRandomNumber() * deltaT;
                 if(precipitation[p].y > scrH) {
-                    precipitation.erase(precipitation.begin() + p);
+                    eraseInVector(precipitation, p);
                 } else {
                     p++;
                 }
@@ -1052,7 +1049,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *              O  *
         *******************/
         if(game.curArea->type == AREA_TYPE_MISSION) {
-        
             //Mission end conditions.
             forIdx(c, game.curArea->mission.endConds) {
                 MissionEndCond* condPtr =
@@ -1107,7 +1103,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 
             medalGotItJuiceTimer += deltaT;
             
-            //Mission time limit.
+            //Mission time limit warnings.
             if(
                 game.curArea->mission.timeLimit != 0.0f &&
                 game.curArea->mission.timeLimit >= 120.0f &&
@@ -1179,7 +1175,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
         }
         
     } else {
-    
         //Displaying a cutscene message.
         cutsceneMsgBox->tick(deltaT);
         if(cutsceneMsgBox->toDelete) {
@@ -1318,9 +1313,8 @@ void GameplayState::doMenuLogic() {
     }
     
     //Print path info.
-    if(game.makerTools.inspectedMob && game.makerTools.pathInfo) {
+    if(game.makerTools.inspectedMob && game.makerTools.showingPathInfo) {
         if(game.makerTools.inspectedMob->pathInfo) {
-        
             Path* path = game.makerTools.inspectedMob->pathInfo;
             string resultStr = pathResultToString(path->result);
             
@@ -1377,7 +1371,6 @@ void GameplayState::doMenuLogic() {
             );
             
         } else {
-        
             game.makerDisplay.write(
                 "Inspected mob is not following any path.", 5.0f
             );
@@ -1386,7 +1379,7 @@ void GameplayState::doMenuLogic() {
     }
     
     //Geometry info.
-    if(game.makerTools.geometryInfo) {
+    if(game.makerTools.showingGeometryInfo) {
         Sector* mouseSector =
             getSector(
                 players[0].view.mouseCursorWorldPos, nullptr, true
@@ -1747,7 +1740,7 @@ void GameplayState::markAreaCellsActive(
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::processLeaderCursor(Player* player, float deltaT) {
-    if(game.makerTools.freeCamControl) return;
+    if(game.makerTools.inControlCam && !game.makerTools.controlCamFrozen) return;
     
     //Move the leader cursor freely, using the current control scheme.
     if(game.options.controls.mouseMovesLeaderCursor[player->playerNr - 1]) {
@@ -1771,7 +1764,7 @@ void GameplayState::processLeaderCursor(Player* player, float deltaT) {
     );
     
     if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
-        float leaderCursorAngle =
+        Angle leaderCursorAngle =
             getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         player->leaderCursorWorld.x =
             player->leaderPtr->center.x +
@@ -1873,14 +1866,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     sort(
         pendingInterMobEvents.begin(), pendingInterMobEvents.end(),
     [mPtr] (PendingInterMobEvent e1, PendingInterMobEvent e2) -> bool {
-        return
-        (
-            e1.d.toFloat() -
-            (mPtr->radius + e1.mobPtr->radius)
-        ) < (
-            e2.d.toFloat() -
-            (mPtr->radius + e2.mobPtr->radius)
-        );
+        return e1.d < e2.d;
     }
     );
     
@@ -2031,7 +2017,7 @@ void GameplayState::processMobReaches(
     if(!obirEv && !opirEv) return;
     
     MobType::Reach* rPtr = &mPtr->type->reaches[mPtr->nearReach];
-    float angleDiff =
+    Angle angleDiff =
         getAngleSmallestDiff(
             mPtr->angle,
             getAngle(mPtr->center, m2Ptr->center)
@@ -2119,7 +2105,7 @@ void GameplayState::processMobTouches(
         )
     ) {
         float pushAmount = 0;
-        float pushAngle = 0;
+        Angle pushAngle = 0;
         
         if(m2Ptr->type->pushesWithHitboxes) {
             //Push with the hitboxes.
@@ -2162,7 +2148,7 @@ void GameplayState::processMobTouches(
         } else {
             bool xyCollision = false;
             float tempPushAmount = 0;
-            float tempPushAngle = 0;
+            Angle tempPushAngle = 0;
             if(
                 mPtr->rectangularDim.x != 0 &&
                 m2Ptr->rectangularDim.x != 0
@@ -2262,7 +2248,6 @@ void GameplayState::processMobTouches(
     FsmEventDef* touchObEv =
         mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_OBJECT);
     if(touchOpEv || touchObEv) {
-    
         bool zTouch;
         if(
             mPtr->height == 0 ||
@@ -2277,39 +2262,14 @@ void GameplayState::processMobTouches(
                 );
         }
         
-        bool xyCollision = false;
-        if(
-            mPtr->rectangularDim.x != 0 &&
-            m2Ptr->rectangularDim.x != 0
-        ) {
-            //Rectangle vs rectangle.
-            xyCollision =
-                rectanglesIntersect(
-                    Rect(mPtr->center, mPtr->rectangularDim), mPtr->angle,
-                    Rect(m2Ptr->center, m2Ptr->rectangularDim), m2Ptr->angle
-                );
-        } else if(mPtr->rectangularDim.x != 0) {
-            //Rectangle vs circle.
-            xyCollision =
-                circleIntersectsRectangle(
-                    m2Ptr->center, m2Ptr->radius,
-                    mPtr->center, mPtr->rectangularDim,
-                    mPtr->angle
-                );
-        } else if(m2Ptr->rectangularDim.x != 0) {
-            //Circle vs rectangle.
-            xyCollision =
-                circleIntersectsRectangle(
-                    mPtr->center, mPtr->radius,
-                    m2Ptr->center, m2Ptr->rectangularDim,
-                    m2Ptr->angle
-                );
-        } else {
-            //Circle vs circle.
-            xyCollision =
-                d <= (mPtr->radius + m2Ptr->radius);
-        }
-        
+        bool xyCollision =
+            circlesOrRectanglesIntersect(
+                mPtr->center, mPtr->radius,
+                mPtr->rectangularDim, mPtr->angle,
+                m2Ptr->center, m2Ptr->radius,
+                m2Ptr->rectangularDim, m2Ptr->angle
+            );
+            
         if(
             zTouch && !hasFlag(m2Ptr->flags, MOB_FLAG_INTANGIBLE) &&
             xyCollision
@@ -2349,7 +2309,6 @@ void GameplayState::processMobTouches(
         s1Ptr && s2Ptr &&
         !s1Ptr->hitboxes.empty() && !s2Ptr->hitboxes.empty()
     ) {
-    
         bool reportedANEv = false;
         bool reportedNAEv = false;
         bool reportedNNEv = false;
@@ -2357,7 +2316,6 @@ void GameplayState::processMobTouches(
         bool reportedHazEv = false;
         
         forIdx(h1, s1Ptr->hitboxes) {
-        
             Hitbox* h1Ptr = &s1Ptr->hitboxes[h1];
             if(h1Ptr->type == HITBOX_TYPE_DISABLED) continue;
             
@@ -2497,11 +2455,8 @@ void GameplayState::processMobTouches(
                 //Check if m2 is under any status effect
                 //that disables attacks.
                 bool disableAttackStatus = false;
-                forIdx(s, m2Ptr->statuses) {
-                    if(m2Ptr->statuses[s].state != STATUS_STATE_ACTIVE) {
-                        continue;
-                    }
-                    if(m2Ptr->statuses[s].type->disablesAttack) {
+                forIdx(s, m2Ptr->statuses.getList()) {
+                    if(m2Ptr->statuses.getList()[s].type->disablesAttack) {
                         disableAttackStatus = true;
                         break;
                     }

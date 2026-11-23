@@ -78,7 +78,7 @@ GuiEditor::GuiEditor() :
     itemSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         allItems[idx]->rect.center = newCenter;
         allItems[idx]->rect.size = newSize;
@@ -367,18 +367,29 @@ void GuiEditor::deleteGuiDefCmd(float inputValue) {
  */
 void GuiEditor::deleteSelectedItems() {
     const set<size_t>& selectedItems = itemSelection.getItemIdxs();
-    set<size_t> selectedCustomIdxs;
+    vector<size_t> itemIdxsToDelete(
+        selectedItems.begin(), selectedItems.end()
+    );
     
-    for(size_t iIdx : selectedItems) {
-        size_t customIdx = iIdx - hardcodedItems.size();
-        selectedCustomIdxs.insert(customIdx);
+    while(!itemIdxsToDelete.empty()) {
+        size_t itemIdxToDelete = itemIdxsToDelete[0];
+        size_t customIdx = itemIdxToDelete - hardcodedItems.size();
         
         //Clear its bitmap.
-        ((CustomGuiItemDef*) allItems[iIdx])->clearBitmap();
+        ((CustomGuiItemDef*) allItems[itemIdxToDelete])->clearBitmap();
+        
+        //Delete it.
+        eraseInVector(customItems, customIdx);
+        eraseInVector(allItems, itemIdxToDelete);
+        
+        //Adjust the indexes of the next ones to process.
+        itemIdxsToDelete.erase(itemIdxsToDelete.begin());
+        forIdx(i, itemIdxsToDelete) {
+            adjustMisalignedIdx(
+                itemIdxsToDelete[i], itemIdxToDelete, false
+            );
+        }
     }
-    
-    //Finally, erase them from the vectors.
-    eraseIndexesInVector(selectedCustomIdxs, customItems);
 }
 
 
@@ -853,6 +864,7 @@ void GuiEditor::saveCmd(float inputValue) {
  * @return Whether it succeeded.
  */
 bool GuiEditor::saveGuiDef() {
+    contentMd.engineVersion = getEngineVersionString();
     GuiManager::writeItemDefsToDataFile(&fileNode, hardcodedItems, customItems);
     contentMd.saveMetadataToDataNode(&fileNode);
     
@@ -952,7 +964,7 @@ void GuiEditor::setupForNewGuiDef() {
     state = EDITOR_STATE_MAIN;
     
     //We could reset the camera directly, but if the player enters the editor
-    //via the auto start maker tool, processGui() won't have a chance
+    //via the auto-start maker tool, processGui() won't have a chance
     //to run before we load the file, and that function is what gives
     //us the canvas coordinates necessary for camera centering.
     //Let's flag the need for re-centering so it gets handled when possible.

@@ -127,7 +127,7 @@ Editor::Editor() :
  *
  * @param angle Angle to show.
  */
-void Editor::angleVisualizer(float angle) {
+void Editor::angleVisualizer(Angle angle) {
     //Setup.
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 drawPos = ImGui::GetCursorScreenPos();
@@ -203,7 +203,7 @@ void Editor::centerCamera(const RectCorners& corners, bool instantaneous) {
     else z = game.editorsView.windowRect.size.y / size.y;
     z -= z * 0.1;
     
-    game.editorsView.cam.zoomTarget = z;
+    game.editorsView.cam.zoomTarget = std::clamp(z, zoomMinLevel, zoomMaxLevel);
     
     if(instantaneous) {
         game.editorsView.cam.center = game.editorsView.cam.centerTarget;
@@ -428,7 +428,7 @@ void Editor::drawSelectionAndTransformationThings(
     if(!skipTraWid) {
         //Transformation widget, if possible.
         Point selectionCenter, selectionSize;
-        float selectionAngle;
+        Angle selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
         RectCorners twPadding;
@@ -733,7 +733,7 @@ ALLEGRO_COLOR Editor::getSelectionEffectReplacementColor(
 bool Editor::getSelectionTransformationWidgetParams(
     const SelectionController& selCtrl,
     Point* outSelectionCenter, Point* outSelectionSize,
-    float* outSelectionAngle, bool* outUseAngle,
+    Angle* outSelectionAngle, bool* outUseAngle,
     Bitmask8* outFlags, RectCorners* outPadding
 ) const {
     bool canChange = true;
@@ -743,7 +743,7 @@ bool Editor::getSelectionTransformationWidgetParams(
     }
     
     Point selectionCenter, selectionSize;
-    float selectionAngle = 0.0f;
+    Angle selectionAngle = 0.0f;
     bool canChangeAngle = false;
     
     if(selCtrl.shouldDoSingleRotatingItem()) {
@@ -796,11 +796,11 @@ bool Editor::guiFocusedText() {
 
 
 /**
- * @brief Handles an Allegro event for control-related things.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void Editor::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
     bool isMouseInCanvas =
@@ -844,13 +844,13 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         //Mouse button down, inside the canvas.
         
         switch(ev.mouse.button) {
-        case 1: {
+        case ALLEGRO_MOUSE_BUTTON_LEFT: {
             isM1Pressed = true;
             break;
-        } case 2: {
+        } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
             isM2Pressed = true;
             break;
-        } case 3: {
+        } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
             isM3Pressed = true;
             break;
         }
@@ -875,15 +875,14 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
                 isM1Pressed = false;
                 
             } else {
-            
                 switch(ev.mouse.button) {
-                case 1: {
+                case ALLEGRO_MOUSE_BUTTON_LEFT: {
                     handleLmbDoubleClick(ev);
                     break;
-                } case 2: {
+                } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
                     handleRmbDoubleClick(ev);
                     break;
-                } case 3: {
+                } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
                     handleMmbDoubleClick(ev);
                     break;
                 }
@@ -902,17 +901,16 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
                 isM1Pressed = false;
                 
             } else {
-            
                 lastMouseClickSubState = subState;
                 
                 switch(ev.mouse.button) {
-                case 1: {
+                case ALLEGRO_MOUSE_BUTTON_LEFT: {
                     handleLmbDown(ev);
                     break;
-                } case 2: {
+                } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
                     handleRmbDown(ev);
                     break;
-                } case 3: {
+                } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
                     handleMmbDown(ev);
                     break;
                 }
@@ -933,19 +931,19 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         //Mouse button up.
         
         switch(ev.mouse.button) {
-        case 1: {
+        case ALLEGRO_MOUSE_BUTTON_LEFT: {
             if(isM1Pressed) {
                 isM1Pressed = false;
                 handleLmbUp(ev);
             }
             break;
-        } case 2: {
+        } case ALLEGRO_MOUSE_BUTTON_RIGHT: {
             if(isM2Pressed) {
                 isM2Pressed = false;
                 handleRmbUp(ev);
             }
             break;
-        } case 3: {
+        } case ALLEGRO_MOUSE_BUTTON_MIDDLE: {
             if(isM3Pressed) {
                 isM3Pressed = false;
                 handleMmbUp(ev);
@@ -1071,10 +1069,19 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     }
     
     if(!dialogs.empty()) {
-        if(dialogs.back()->eventCallback) {
-            dialogs.back()->eventCallback(&ev);
+        if(dialogs.back()->inputEventCallback) {
+            dialogs.back()->inputEventCallback(&ev);
         }
     }
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void Editor::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 
@@ -1268,7 +1275,7 @@ bool Editor::handleSelectionAndTransformationLmbDown(
     
     if(!skipTraWid) {
         Point selectionCenter, selectionSize;
-        float selectionAngle;
+        Angle selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
         RectCorners twPadding;
@@ -1311,12 +1318,15 @@ bool Editor::handleSelectionAndTransformationLmbDown(
  * @param skipTraWid Whether to skip the transformation widget's logic.
  * @param mouseCursor Mouse cursor coordinates to use.
  * @param onPreTransform Code to run before any transformation is made, if any.
+ * @param forceKeepAspectRatio Whether to force the transformation
+ * widget to keep the aspect ratio.
  * @return Whether any important data changed.
  */
 bool Editor::handleSelectionAndTransformationLmbDrag(
     SelectionController& selCtrl, TransformationWidget& traWid,
     bool skipTraWid, const Point& mouseCursor,
-    const std::function<void()>& onPreTransform
+    const std::function<void()>& onPreTransform,
+    bool forceKeepAspectRatio
 ) {
     //Rubber band.
     if(selCtrl.isCreatingRubberBand()) {
@@ -1337,7 +1347,7 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
     //Transformation widget.
     if(!skipTraWid) {
         Point selectionCenter, selectionSize;
-        float selectionAngle;
+        Angle selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
         RectCorners twPadding;
@@ -1347,6 +1357,9 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
                 &useSelectionAngle, &twFlags, &twPadding
             )
         ) {
+            if(forceKeepAspectRatio) {
+                enableFlag(twFlags, TransformationWidget::TW_FLAG_KEEP_RATIO);
+            }
             bool twHandled =
                 traWid.handleMouseMove(
                     mouseCursor,
@@ -1433,7 +1446,6 @@ bool Editor::keyCheck(
     int pressedKey, int matchKey,
     bool needsCtrl, bool needsShift
 ) {
-
     if(pressedKey != matchKey) {
         return false;
     }
@@ -2200,7 +2212,7 @@ void Editor::openBaseContentWarningDialog(
         "Base pack warning",
         std::bind(&Editor::processGuiDialogBaseContent, this)
     );
-    dialogs.back()->customSize = Point(320, 0);
+    dialogs.back()->customSize = Point(350, 0);
     baseContentWarningDoPickCallback = doPickCallback;
 }
 
@@ -2426,7 +2438,7 @@ void Editor::processDialogs() {
                 dPtr->closeCallback();
             }
             delete dPtr;
-            dialogs.erase(dialogs.begin() + d);
+            eraseInVector(dialogs, d);
         } else {
             d++;
         }
@@ -2680,6 +2692,7 @@ void Editor::processGuiDialogNewPack() {
     static string name = "My pack!";
     static string description;
     static string maker;
+    static string license = "MIT";
     string problem;
     bool hitCreateButton = false;
     
@@ -2732,14 +2745,40 @@ void Editor::processGuiDialogNewPack() {
     }
     setTooltip("Who made the pack. So really, type your name or nickname.");
     
+    //License input.
+    if(
+        ImGui::InputText(
+            "License", &license,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip(
+        "Software license for the pack and its contents. Optional.\n"
+        "\"MIT\" is recommended, since it allows others to\n"
+        "use and change its contents at will, while still\n"
+        "keeping credit, and is what Pikifen as a whole uses.\n"
+        "If not specified, the pack will be assumed to have all\n"
+        "rights reserved by the maker, which makes it harder\n"
+        "for others to use their content!"
+    );
+    
     //File explanation text.
     string explanation =
         "These properties can be changed later by editing the "
         "pack's data file.\n"
         "There are also more properties; check the manual "
-        "for more information!\n"
-        "Pack data file path: ";
+        "for more information!";
     ImGui::TextWrapped("%s", explanation.c_str());
+    
+    //Open manual button.
+    if(ImGui::Button("Open manual")) {
+        openManual("making.html#packs");
+    }
+    
+    //File path label text.
+    ImGui::TextWrapped("%s", "Pack data file path: ");
     
     //Path text.
     string pathToShow =
@@ -2748,12 +2787,8 @@ void Editor::processGuiDialogNewPack() {
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         internalName + "/" +
         FILE_NAMES::PACK_DATA;
+    ImGui::SameLine();
     monoText("%s", pathToShow.c_str());
-    
-    //Open manual button.
-    if(ImGui::Button("Open manual")) {
-        openManual("making.html#packs");
-    }
     
     //Check if everything's ok.
     if(internalName.empty()) {
@@ -2796,7 +2831,7 @@ void Editor::processGuiDialogNewPack() {
     if(hitCreateButton) {
         if(!problem.empty()) return;
         game.content.addNewPack(
-            internalName, name, description, maker
+            internalName, name, description, maker, license
         );
         forIdx(p, game.content.packs.manifestsWithBase) {
             if(game.content.packs.manifestsWithBase[p] == internalName) {
@@ -2895,7 +2930,6 @@ void Editor::processGuiDialogUnsavedChanges() {
 void Editor::processGuiEditorStyle() {
     //Style node.
     if(saveableTreeNode("options", "Style")) {
-    
         //Use custom style checkbox.
         if(
             ImGui::Checkbox(
@@ -2983,9 +3017,7 @@ void Editor::processGuiHistory(
     const std::function<string(const string&)>& tooltipCallback
 ) {
     if(saveableTreeNode("load", "History")) {
-    
         if(!history.empty() && !history[0].first.empty()) {
-        
             size_t nFilledEntries = 0;
             forIdx(h, history) {
                 if(!history[h].first.empty()) nFilledEntries++;
@@ -3014,7 +3046,6 @@ void Editor::processGuiHistory(
             }
             
         } else {
-        
             //No history text.
             ImGui::TextDisabled("(Empty)");
             
@@ -3518,6 +3549,70 @@ void Editor::processGuiStatusBarText() {
 
 
 /**
+ * @brief Processes the Dear ImGui widgets that show a number + deviation, and
+ * a way to toggle to a minimum + maximum.
+ *
+ * @param label Base label for any widget that need one.
+ * @param minMaxMode Whether to use min-max mode.
+ * @param onBaseNumber Callback for what widget to place for the base number.
+ * @param onDeviation Callback for what widget to place for the deviation.
+ * @param onMin Callback for what widget to place for the minimum value.
+ * @param onMax Callback for what widget to place for the maximum value.
+ */
+void Editor::processGuiWidgetsDeviation(
+    const string label, bool& minMaxMode,
+    const std::function<void()>& onBaseNumber,
+    const std::function<void()>& onDeviation,
+    const std::function<void()>& onMin,
+    const std::function<void()>& onMax
+) {
+    if(!minMaxMode) {
+    
+        //Base number value.
+        onBaseNumber();
+        
+        //Deviation text.
+        ImGui::SameLine();
+        ImGui::Text(" +-");
+        
+        //Deviation value.
+        ImGui::SameLine();
+        onDeviation();
+        
+    } else {
+    
+        //Minimum value.
+        onMin();
+        
+        //Range text.
+        ImGui::SameLine();
+        ImGui::Text(" - ");
+        
+        //Maximum value.
+        ImGui::SameLine();
+        onMax();
+        
+    }
+    
+    //Mode swap button.
+    ImGui::SameLine();
+    if(
+        ImGui::Button(
+            ((minMaxMode ? "+-##" : "[]##") + label + "Swap").c_str()
+        )
+    ) {
+        minMaxMode = !minMaxMode;
+    }
+    setTooltip(
+        "Swap the widgets between showing the base number + deviation,\n"
+        "or minimum amount + maximum amount. The values are internally\n"
+        "the same, so just pick whichever one you like better."
+    );
+    
+}
+
+
+/**
  * @brief Processes the Dear ImGui widgets that let users select a hazard.
  *
  * @param selectedHazardIname Internal name of the currently selected hazard.
@@ -3677,7 +3772,6 @@ bool Editor::processGuiWidgetsMobType(
     );
     
     if(!internalCustomCatName.empty()) {
-    
         //Object type combobox.
         vector<string> typeNames;
         size_t customCatIdx = customCatNameIdxs[internalCustomCatName];
@@ -3779,7 +3873,6 @@ bool Editor::processGuiWidgetsSize(
             label, (float*) &newSize, vSpeed, minSize, FLT_MAX
         )
     ) {
-    
         bool freeResize = !keepAspectRatio && !keepArea;
         bool valuesValid =
             size.x != 0.0f && size.y != 0.0f &&
@@ -3909,7 +4002,6 @@ void Editor::setTooltip(
         )
     ) {
         if(ImGui::BeginTooltip()) {
-        
             ImGui::Text("%s", explanation.c_str());
             
             string widgetExplanationText;
@@ -4039,7 +4131,7 @@ void Editor::updateHistory(
         );
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
-        history.erase(history.begin() + pos);
+        eraseInVector(history, pos);
         history.insert(
             history.begin(),
             make_pair(manifest.path, finalName)
@@ -4047,7 +4139,7 @@ void Editor::updateHistory(
     }
     
     if(history.size() > getHistorySize()) {
-        history.erase(history.begin() + history.size() - 1);
+        eraseInVector(history, history.size() - 1);
     }
     
     //Save the history in the options.
@@ -4059,7 +4151,6 @@ void Editor::updateHistory(
  * @brief Updates the Dear ImGui style based on the player's options.
  */
 void Editor::updateStyle() {
-
     ImGuiStyle* style = &ImGui::GetStyle();
     style->FrameRounding = 3;
     style->IndentSpacing = 25;
@@ -4250,6 +4341,21 @@ void Editor::zoomWithCursor(float newZoom) {
 
 
 /**
+ * @brief Zooms onto everything that is currently selected.
+ * Does nothing if nothing is selected.
+ */
+void Editor::zoomToSelection() {
+    forIdx(c, selectionControllers) {
+        Rect selectionRect;
+        if(selectionControllers[c]->getTotalBBox(&selectionRect)) {
+            centerCamera(rectToRectCorners(selectionRect));
+            return;
+        }
+    }
+}
+
+
+/**
  * @brief Constructs a new changes manager object.
  *
  * @param ed Pointer to the editor.
@@ -4295,7 +4401,7 @@ bool Editor::ChangesManager::askIfUnsaved(
         );
         ed->dialogs.back()->customPos = game.mouseCursor.winPos;
         ed->dialogs.back()->customSize = Point(580, 0);
-        ed->dialogs.back()->eventCallback =
+        ed->dialogs.back()->inputEventCallback =
         [this] (const ALLEGRO_EVENT * ev) {
             if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
                 if(
@@ -4323,7 +4429,6 @@ bool Editor::ChangesManager::askIfUnsaved(
         return true;
         
     } else {
-    
         actionCallback();
         
         return false;
@@ -4525,7 +4630,6 @@ void Editor::Dialog::process() {
             (title + "##dialog").c_str(), &isOpen
         )
     ) {
-    
         processCallback();
         
         ImGui::EndPopup();
@@ -4726,7 +4830,6 @@ void Editor::Picker::process() {
     ImGui::BeginChild("list");
     
     forIdx(tc, finalItems) {
-    
         bool topCatOpened = true;
         if(!topCatNames[tc].empty()) {
             //Top category node.
@@ -4737,7 +4840,6 @@ void Editor::Picker::process() {
         if(!topCatOpened) continue;
         
         forIdx(sc, finalItems[tc]) {
-        
             bool secCatOpened = true;
             if(!secCatNames[tc][sc].empty()) {
                 //Secondary category node.
@@ -4761,7 +4863,6 @@ void Editor::Picker::process() {
                 Point buttonSize;
                 
                 if(iPtr->bitmap) {
-                
                     ImGui::BeginGroup();
                     
                     //Item image button.
@@ -4795,7 +4896,6 @@ void Editor::Picker::process() {
                     ImGui::EndGroup();
                     
                 } else {
-                
                     //Item button.
                     buttonSize = Point(EDITOR::PICKER_IMG_BUTTON_SIZE, 32.0f);
                     if(
@@ -4876,7 +4976,7 @@ Editor::PickerItem::PickerItem(
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionController::applyTransformation(
-    const Rect& newRect, float newAngle
+    const Rect& newRect, Angle newAngle
 ) {
     if(!enabled) return false;
     if(state != STATE_TW_TRANSFORMING) return false;
@@ -5233,7 +5333,7 @@ size_t Editor::SelectionController::getSelectionTotalCount(
  * @param outAngle The item's angle is returned here.
  */
 void Editor::SelectionController::getSingleRotatingItemInfo(
-    Point* outCenter, Point* outSize, float* outAngle
+    Point* outCenter, Point* outSize, Angle* outAngle
 ) const {
     forIdx(m, managers) {
         if(!managers[m]->itemsCanRotate) continue;
@@ -5256,11 +5356,12 @@ void Editor::SelectionController::getSingleRotatingItemInfo(
 bool Editor::SelectionController::getTotalBBox(Rect* outRect) const {
     Rect totalRect;
     bool hasFirst = false;
+    bool hasItems = false;
     
     forIdx(m, managers) {
         Rect mgrRect;
-        bool hasItems = managers[m]->getBBox(&mgrRect);
-        if(!hasItems) continue;
+        bool managerHasItems = managers[m]->getBBox(&mgrRect);
+        if(!managerHasItems) continue;
         
         if(!hasFirst) {
             totalRect = mgrRect;
@@ -5268,11 +5369,12 @@ bool Editor::SelectionController::getTotalBBox(Rect* outRect) const {
         } else {
             totalRect = combineBBoxes(totalRect, mgrRect);
         }
+        hasItems = true;
     }
     
     *outRect = totalRect;
     
-    return false;
+    return hasItems;
 }
 
 
@@ -5421,7 +5523,7 @@ bool Editor::SelectionController::startDragMove(const Point& cursorPos) {
         
         for(size_t i : list) {
             Point iCenter, iSize;
-            float iAngle;
+            Angle iAngle;
             managers[m]->getItemInfo(i, &iCenter, &iSize, &iAngle);
             Distance d(game.editorsView.mouseCursorWorldPos, iCenter);
             if(!gotClosest || d < closestDist) {
@@ -5566,7 +5668,7 @@ bool Editor::SelectionController::updateRubberBand(
         for(size_t i = 0; i < nrTotalItems; i++) {
             if(!managers[m]->getItemIsEligible(i)) continue;
             Point iCenter, iSize;
-            float iAngle;
+            Angle iAngle;
             managers[m]->getItemInfo(i, &iCenter, &iSize, &iAngle);
             RectCorners iCorners;
             
@@ -5817,7 +5919,7 @@ bool Editor::SelectionManager::addAll(size_t totalAmount) {
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applyDirectTransformation(
-    const Rect& newRect, float newAngle
+    const Rect& newRect, Angle newAngle
 ) {
     if(!enabled) return false;
     if(preOpRect.size.x <= 0.0f && preOpRect.size.y <= 0.0f) return false;
@@ -5847,7 +5949,7 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
     for(size_t i : list) {
         Point origPos = preOpItemCenters[i];
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         onGetInfo(i, &iCenter, &iSize, &iAngle);
         onSetInfo(i, origPos + offset, iSize, iAngle);
     }
@@ -5869,7 +5971,7 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applySharedTransformation(
-    const Rect& newRect, float newAngle
+    const Rect& newRect, Angle newAngle
 ) {
     //Setup.
     if(!enabled) return false;
@@ -5882,13 +5984,13 @@ bool Editor::SelectionManager::applySharedTransformation(
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         onGetInfo(i, &iCenter, &iSize, &iAngle);
         
         if(newAngle != 0.0f) {
             //Rotate the item about the center.
             Point oldRelCoords = preOpItemCenters[i] - preOpRect.center;
-            float oldAngle, oldMagnitude;
+            Angle oldAngle, oldMagnitude;
             coordinatesToAngle(oldRelCoords, &oldAngle, &oldMagnitude);
             iCenter =
                 angleToCoordinates(oldAngle + newAngle, oldMagnitude);
@@ -6062,7 +6164,7 @@ bool Editor::SelectionManager::getBBox(Rect* outRect) const {
     
     for(size_t i : list) {
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         getItemInfo(i, &iCenter, &iSize, &iAngle);
         RectCorners iCorners;
         
@@ -6126,7 +6228,7 @@ const set<size_t>& Editor::SelectionManager::getItemIdxs() const {
  * @return The info.
  */
 void Editor::SelectionManager::getItemInfo(
-    size_t idx, Point* outCenter, Point* outSize, float* outAngle
+    size_t idx, Point* outCenter, Point* outSize, Angle* outAngle
 ) const {
     if(onGetInfo) {
         onGetInfo(idx, outCenter, outSize, outAngle);
@@ -6173,7 +6275,7 @@ vector<size_t> Editor::SelectionManager::getItemsUnderCursor(
             isInside = onCheckUnderCursor(i, cursorPos);
         } else {
             Point iCenter, iSize;
-            float iAngle;
+            Angle iAngle;
             getItemInfo(i, &iCenter, &iSize, &iAngle);
             
             if(itemsAreRectangular) {
@@ -6335,7 +6437,7 @@ bool Editor::SelectionManager::startOperation() {
     const set<size_t>& list = getItemIdxs();
     for(size_t i : list) {
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         getItemInfo(i, &iCenter, &iSize, &iAngle);
         preOpItemCenters[i] = iCenter;
         preOpItemSizes[i] = iSize;
@@ -6630,7 +6732,7 @@ bool Editor::TransformationWidget::handleMouseDown(
  * @return Whether the user is dragging a handle.
  */
 bool Editor::TransformationWidget::handleMouseMove(
-    const Point& mouseCoords, Point* center, Point* size, float* angle,
+    const Point& mouseCoords, Point* center, Point* size, Angle* angle,
     float zoom, Bitmask8 flags, const RectCorners& padding, float minSize,
     const std::function<Point(const Point&)> snapFunc
 ) {
@@ -6679,8 +6781,8 @@ bool Editor::TransformationWidget::handleMouseMove(
     
     //Logic for moving the rotation handle.
     if(movingHandle == 9 && angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
-        float oldMouseAngle = getAngle(oldCenter, oldMouseCoords);
-        float newMouseAngle = getAngle(oldCenter, mouseCoords);
+        Angle oldMouseAngle = getAngle(oldCenter, oldMouseCoords);
+        Angle newMouseAngle = getAngle(oldCenter, mouseCoords);
         *angle = oldAngle + (newMouseAngle) - (oldMouseAngle);
         return true;
     }

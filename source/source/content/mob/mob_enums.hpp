@@ -221,6 +221,22 @@ enum HOLD_ROTATION_METHOD {
 };
 
 
+//Hold rotation method enum naming (internal names, for other uses only).
+buildEnumNames(holdRotationMethodINames, HOLD_ROTATION_METHOD)({
+    { HOLD_ROTATION_METHOD_NEVER, "never" },
+    { HOLD_ROTATION_METHOD_FACE_HOLDER, "face_holder" },
+    { HOLD_ROTATION_METHOD_COPY_HOLDER, "copy_holder" },
+});
+
+
+//Hold rotation method enum naming (internal names, for child-parent use only).
+buildEnumNames(holdRotationMethodParentINames, HOLD_ROTATION_METHOD)({
+    { HOLD_ROTATION_METHOD_NEVER, "never" },
+    { HOLD_ROTATION_METHOD_FACE_HOLDER, "face_parent" },
+    { HOLD_ROTATION_METHOD_COPY_HOLDER, "copy_parent" },
+});
+
+
 //Possible results for a horizontal movement operation.
 enum HORIZ_MOVE_RESULT {
 
@@ -234,14 +250,6 @@ enum HORIZ_MOVE_RESULT {
     HORIZ_MOVE_RESULT_FAIL,
     
 };
-
-
-//Hold rotation method enum naming (internal names, for child-parent use only).
-buildEnumNames(holdRotationMethodParentINames, HOLD_ROTATION_METHOD)({
-    { HOLD_ROTATION_METHOD_NEVER, "never" },
-    { HOLD_ROTATION_METHOD_FACE_HOLDER, "face_parent" },
-    { HOLD_ROTATION_METHOD_COPY_HOLDER, "copy_parent" },
-});
 
 
 //Flags that control how a mob works while inactive.
@@ -288,6 +296,29 @@ buildEnumNames(limbDrawMethodINames, LIMB_DRAW_METHOD)({
     { LIMB_DRAW_METHOD_ABOVE_PARENT, "above_parent" },
     { LIMB_DRAW_METHOD_ABOVE_CHILD, "above_child" },
     { LIMB_DRAW_METHOD_ABOVE_BOTH, "above_both" },
+});
+
+
+//Pikmin maturities.
+enum MATURITY {
+
+    //Leaf.
+    MATURITY_LEAF,
+
+    //Bud.
+    MATURITY_BUD,
+
+    //Flower.
+    MATURITY_FLOWER,
+
+};
+
+
+//Pikmin maturity enum naming (internal names).
+buildEnumNames(maturityINames, MATURITY)({
+    { MATURITY_LEAF, "leaf" },
+    { MATURITY_BUD, "bud" },
+    { MATURITY_FLOWER, "flower" },
 });
 
 
@@ -470,13 +501,16 @@ enum SPRITE_BMP_EFFECT_FLAG {
     SPRITE_BMP_EFFECT_FLAG_HEIGHT = 1 << 3,
     
     //Onion delivery shrinking, and other types of delivery too.
-    SPRITE_BMP_EFFECT_DELIVERY = 1 << 4,
+    SPRITE_BMP_EFFECT_FLAG_DELIVERY = 1 << 4,
     
     //Squash and stretch from being damaged.
-    SPRITE_BMP_EFFECT_DAMAGE = 1 << 5,
+    SPRITE_BMP_EFFECT_FLAG_DAMAGE = 1 << 5,
     
     //Sway from being carried.
-    SPRITE_BMP_EFFECT_CARRY = 1 << 6,
+    SPRITE_BMP_EFFECT_FLAG_CARRY = 1 << 6,
+    
+    //Fade from peeking underneath.
+    SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH = 1 << 7,
     
 };
 

@@ -56,6 +56,15 @@ const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //Invulnerability period after getting hit.
 const float INVULN_PERIOD = 0.7f;
 
+//If the leader's group spot is this far away, give up entirely immediately.
+const float LEADER_CHASE_MAX_DIST = 500.0f;
+
+//If the leader's group spot is this far away, tick the timeout for giving up.
+const float LEADER_CHASE_TIMER_DIST = 250.0f;
+
+//If the leader's group spot is far enough away, give up after this long.
+const float LEADER_CHASE_TIMER_DURATION = 4.0f;
+
 //How long to remember a missed incoming attack for.
 const float MISSED_ATTACK_DURATION = 1.5f;
 
@@ -78,7 +87,7 @@ const float THROW_VER_SPEED = 900.0f;
  * @param type Pikmin type this mob belongs to.
  * @param angle Starting angle.
  */
-Pikmin::Pikmin(const Point& center, PikminType* type, float angle) :
+Pikmin::Pikmin(const Point& center, PikminType* type, Angle angle) :
     Mob(center, type, angle),
     pikType(type) {
     
@@ -143,15 +152,16 @@ void Pikmin::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        SPRITE_BMP_EFFECT_FLAG_DELIVERY |
+        SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     BitmapEffect pikSpriteEff = mobEff;
     getSpriteBitmapEffects(
         curSPtr, nextSPtr, interpolationFactor,
         &pikSpriteEff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
-        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_FLAG_DAMAGE : 0)
     );
     
     drawBitmapWithEffects(curSPtr->bitmap, pikSpriteEff);
@@ -159,15 +169,14 @@ void Pikmin::drawMob() {
     //Top.
     if(curSPtr->topVisible) {
         Point topCoords;
-        float topAngle;
+        Angle topAngle;
         Point topSize;
         BitmapEffect topEff = mobEff;
         ALLEGRO_BITMAP* topBmp = pikType->bmpTop[maturity];
         
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->topReplacementBmp) {
-                topBmp = statuses[s].type->topReplacementBmp;
+        forIdx(s, statuses.getList()) {
+            if(statuses.getList()[s].type->topReplacementBmp) {
+                topBmp = statuses.getList()[s].type->topReplacementBmp;
             }
         }
         
@@ -279,7 +288,8 @@ void Pikmin::forceCarry(Mob* m) {
 float Pikmin::getBaseSpeed() const {
     float base = Mob::getBaseSpeed();
     return
-        base + (base * this->maturity * game.config.pikmin.maturitySpeedMult);
+        base +
+        (base * (float) this->maturity * game.config.pikmin.maturitySpeedMult);
 }
 
 
@@ -333,8 +343,8 @@ float Pikmin::getTaskRange() const {
  *
  * @param staType Status effect to handle.
  */
-void Pikmin::handleStatusEffectGain(StatusType* staType) {
-    Mob::handleStatusEffectGain(staType);
+void Pikmin::handleStatusActivation(StatusType* staType) {
+    Mob::handleStatusActivation(staType);
     
     switch(staType->stateChangeType) {
     case STATUS_STATE_CHANGE_FLAILING: {
@@ -376,16 +386,16 @@ void Pikmin::handleStatusEffectGain(StatusType* staType) {
  *
  * @param staType Status effect to handle.
  */
-void Pikmin::handleStatusEffectLoss(StatusType* staType) {
+void Pikmin::handleStatusDeactivation(StatusType* staType) {
     bool stillHasFlailing = false;
     bool stillHasHelplessness = false;
     bool stillHasPanic = false;
     bool stillHasWading = false;
     
-    forIdx(s, statuses) {
-        if(statuses[s].type == staType) continue;
+    forIdx(s, statuses.getList()) {
+        if(statuses.getList()[s].type == staType) continue;
         
-        switch(statuses[s].type->stateChangeType) {
+        switch(statuses.getList()[s].type->stateChangeType) {
         case STATUS_STATE_CHANGE_FLAILING: {
             stillHasFlailing = true;
             break;
@@ -493,7 +503,7 @@ bool Pikmin::increaseMaturity(int amount) {
         particleGenerators.push_back(pg);
     }
     
-    maturity = newMaturity;
+    maturity = (MATURITY) newMaturity;
     return newMaturity != oldMaturity;
 }
 
@@ -513,11 +523,13 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
     center.y += game.rng.f(-2.0f, 2.0f);
     
     float hOffsetDist;
-    float hOffsetAngle;
+    Angle hOffsetAngle;
     float vOffsetDist;
     m->getHitboxHoldPoint(
         this, h, &hOffsetDist, &hOffsetAngle, &vOffsetDist
     );
+    hOffsetDist = std::clamp(hOffsetDist, 0.0f, 1.0f);
+    vOffsetDist = std::clamp(vOffsetDist, 0.0f, 1.0f);
     m->hold(
         this, HOLD_TYPE_LATCH, h->bodyPartIdx,
         hOffsetDist, hOffsetAngle, vOffsetDist, true,
@@ -592,7 +604,8 @@ void Pikmin::readScriptVars(const ScriptVarManager& varsMgr) {
     bool followLinkVar;
     
     if(varsMgr.getValue("maturity", maturityVar)) {
-        maturity = std::clamp(maturityVar, 0, (int) (N_MATURITIES - 1));
+        maturity =
+            (MATURITY) std::clamp(maturityVar, 0, (int) (N_MATURITIES - 1));
     }
     if(varsMgr.getValue("sprout", sproutVar)) {
         if(sproutVar) {

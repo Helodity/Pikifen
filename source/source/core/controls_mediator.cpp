@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <typeinfo>
 
+#define ALLEGRO_UNSTABLE
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
@@ -116,12 +117,41 @@ void ControlsMediator::addNewActionType(
 void ControlsMediator::addNewModifier(
     Inpution::ActionTypeId id, const Inpution::InputSource& source
 ) {
-    mgr.modifiers[id] = source;
+    mgr.translator.modifiers[id] = source;
+}
+
+
+/**
+ * @brief Returns the parsed input from an Allegro key char event.
+ * This is not handled in allegroEventToInput since we don't want both a
+ * key down event and a key char event to result in an input.
+ *
+ * @param ev The Allegro event.
+ * @return The input.
+ * If this event does not pertain to any valid input, an input of type
+ * INPUT_SOURCE_TYPE_NONE is returned.
+ */
+Inpution::Input ControlsMediator::allegroCharEventToInput(
+    const ALLEGRO_EVENT& ev
+) const {
+    Inpution::Input input;
+    
+    switch(ev.type) {
+    case ALLEGRO_EVENT_KEY_CHAR: {
+        input.source.type = Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY;
+        input.source.buttonNr = ev.keyboard.keycode;
+        input.value = 1;
+        break;
+    }
+    }
+    
+    return input;
 }
 
 
 /**
  * @brief Returns the parsed input from an Allegro event.
+ * For Allegro key char events, see allegroCharEventToInput.
  *
  * @param ev The Allegro event.
  * @return The input.
@@ -212,7 +242,7 @@ Inpution::Input ControlsMediator::allegroEventToInput(
  * @return The binds.
  */
 vector<Inpution::Bind>& ControlsMediator::binds() {
-    return mgr.binds;
+    return mgr.translator.binds;
 }
 
 
@@ -226,9 +256,9 @@ vector<Inpution::Bind>& ControlsMediator::binds() {
 Inpution::Bind ControlsMediator::findBind(
     const PLAYER_ACTION_TYPE actionTypeId
 ) const {
-    forIdx(b, mgr.binds) {
-        if(mgr.binds[b].actionTypeId == actionTypeId) {
-            return mgr.binds[b];
+    forIdx(b, mgr.translator.binds) {
+        if(mgr.translator.binds[b].actionTypeId == actionTypeId) {
+            return mgr.translator.binds[b];
         }
     }
     return Inpution::Bind();
@@ -265,9 +295,9 @@ vector<Inpution::Bind> ControlsMediator::findBinds(
     const PLAYER_ACTION_TYPE actionTypeId
 ) const {
     vector<Inpution::Bind> result;
-    forIdx(b, mgr.binds) {
-        if(mgr.binds[b].actionTypeId == actionTypeId) {
-            result.push_back(mgr.binds[b]);
+    forIdx(b, mgr.translator.binds) {
+        if(mgr.translator.binds[b].actionTypeId == actionTypeId) {
+            result.push_back(mgr.translator.binds[b]);
         }
     }
     return result;
@@ -342,6 +372,29 @@ const vector<PlayerActionType>
 
 
 /**
+ * @brief Returns whether there's any bind where the given input source
+ * is bound to the given action type.
+ *
+ * @param inputSource The input source.
+ * @param actionType The action type.
+ * @return Whether a bind exists.
+ */
+bool ControlsMediator::getInputSourceIsBoundToActionType(
+    const Inpution::InputSource& inputSource, PLAYER_ACTION_TYPE actionType
+) const {
+    forIdx(b, mgr.translator.binds) {
+        if(
+            mgr.translator.binds[b].inputSource == inputSource &&
+            mgr.translator.binds[b].actionTypeId == actionType
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief Returns the current input value of a given action type.
  *
  * @param playerActionTypeId Action type to use.
@@ -368,12 +421,12 @@ float ControlsMediator::getValueOfInputSource(
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev The Allegro event.
  * @return Whether the event was handled.
  */
-bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+bool ControlsMediator::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     Inpution::Input input = allegroEventToInput(ev);
     
     if(input.source.type == Inpution::INPUT_SOURCE_TYPE_NONE) {
@@ -388,14 +441,15 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //one for each axis. We're assuming axis 0 is horizontal and 1 vertical.
         auto& rawStick =
             rawSticks[input.source.deviceNr][input.source.stickNr];
-        float stickCoords[2] = { rawStick[0], rawStick[1] };
-        
+            
         rawStick[input.source.axisNr] =
             input.source.type ==
             Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
             input.value :
             -input.value;
             
+        float stickCoords[2] = { rawStick[0], rawStick[1] };
+        
         EasyAnalogCleaner::Settings cleanupSettings;
         cleanupSettings.deadzones.radial.inner =
             game.options.advanced.joystickMinDeadzone;
@@ -443,18 +497,27 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
 
 
 /**
+ * @brief Ignores actions for one frame. Stops ignoring at the end of the frame.
+ */
+void ControlsMediator::ignoreActionsForOneFrame() {
+    mgr.ignoringActions = true;
+    stopIgnoringActionsAfterFrame = true;
+}
+
+
+/**
  * @brief Ignores actions that can close menus. This stops them from bleeding
  * from the closed menu into gameplay.
  */
 void ControlsMediator::ignoreMenuCloseActions() {
     //Ignore the actions that directly close menus, if any.
-    game.controls.startIgnoringActionInputSources(
+    startIgnoringActionInputSources(
         PLAYER_ACTION_TYPE_PAUSE, true
     );
-    game.controls.startIgnoringActionInputSources(
+    startIgnoringActionInputSources(
         PLAYER_ACTION_TYPE_MENU_OK, true
     );
-    game.controls.startIgnoringActionInputSources(
+    startIgnoringActionInputSources(
         PLAYER_ACTION_TYPE_MENU_BACK, true
     );
     
@@ -462,7 +525,7 @@ void ControlsMediator::ignoreMenuCloseActions() {
     Inpution::InputSource lmb;
     lmb.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON;
     lmb.buttonNr = 1;
-    game.controls.startIgnoringInputSource(lmb, true);
+    startIgnoringInputSource(lmb, true);
 }
 
 
@@ -552,6 +615,11 @@ void ControlsMediator::loadBindsFromDataNode(
  */
 void ControlsMediator::newFrame(float deltaT) {
     actionQueue = mgr.newFrame(deltaT);
+    if(stopIgnoringActionsAfterFrame) {
+        mgr.ignoringActions = false;
+        stopIgnoringActionsAfterFrame = false;
+        actionQueue.clear();
+    }
 }
 
 
@@ -570,6 +638,7 @@ void ControlsMediator::reinsertAction(const Inpution::Action& action) {
  * Useful for when the game state is changed, or the window is out of focus.
  */
 void ControlsMediator::releaseAll() {
+    al_clear_keyboard_state(game.display);
     mgr.releaseEverything();
 }
 
@@ -769,8 +838,8 @@ Inpution::InputSource ControlsMediator::strToInputSource(
         inputSource.axisNr = s2i(parts[3]);
         
     } else {
-        game.errors.report(
-            "Unrecognized input \"" + s + "\"!"
+        game.log.write(
+            LOG_LEVEL_ERROR, "Unrecognized input \"" + s + "\"!"
         );
     }
     

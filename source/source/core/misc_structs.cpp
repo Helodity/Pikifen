@@ -32,42 +32,6 @@
 #pragma region Constants
 
 
-namespace CONSOLE {
-
-//Background color of the console, alpha included.
-const ALLEGRO_COLOR COLOR_BG = al_map_rgba(0, 0, 0, 160);
-
-//Error text color, alpha included.
-const ALLEGRO_COLOR COLOR_ERROR = al_map_rgba(255, 128, 128, 192);
-
-//Main text color, alpha included.
-const ALLEGRO_COLOR COLOR_MAIN = al_map_rgba(255, 255, 255, 192);
-
-//Muted text color, alpha included.
-const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
-
-//Size of the control bind icon.
-const float INPUT_SIZE = 24.0f;
-
-//Padding between each line.
-const int LINE_PADDING = 2;
-
-//Maximum amount of output lines that can be visible.
-const size_t OUTPUT_MAX_VISIBLE_LINES = 10;
-
-//Maximum amount of output lines that can be in the console.
-const size_t OUTPUT_MAX_SIZE = 100;
-
-//Padding on all sides.
-const int PADDING = 8;
-
-//How much the visibility value [0 - 1] changes per second, when opening
-//or closing something from the console.
-const float VISIBILITY_CHANGE_SPEED = 3.5f;
-
-}
-
-
 namespace CUTSCENE_MSG_BOX {
 
 //How quickly the advance button icon fades, in alpha [0 - 1] per second.
@@ -372,870 +336,95 @@ void Camera::updateCoordinate(
 
 
 #pragma endregion
-#pragma region Console
+#pragma region Command param
 
 
 /**
- * @brief Constructs a new console object.
- */
-Console::Console() {
-    visibilityTimer = Timer(1.0f, [this] () { clear(); });
-}
-
-
-/**
- * @brief Adds a log entry to the log buffer.
+ * @brief Constructs a new command-like parameter object.
  *
- * @param text Text to add.
+ * @param name Name of the parameter.
+ * @param type Type of parameter.
+ * @param flags Flags. Use COMMAND_PARAM_FLAG.
+ * @param defValue If this is optional, specify its default value here.
  */
-void Console::addToLog(const string& text) {
-    log.push_back("[" + f2s(game.timePassed) + "] " + text);
-    while(log.size() > 8) {
-        log.erase(log.begin());
-    }
-}
-
-
-/**
- * @brief Clears the contents of the console instantly.
- */
-void Console::clear() {
-    text.clear();
-}
-
-
-/**
- * @brief Draws the console onto the game window.
- */
-void Console::draw() const {
-    const ALLEGRO_COLOR CONSOLE_BG_COLOR = al_map_rgba(0, 0, 0, 160);
-    if(text.empty()) return;
+CommandParam::CommandParam(
+    const string& name, const COMMAND_PARAM_TYPE type,
+    Bitmask8 flags, const string& defValue
+):
+    name(name),
+    type(type),
+    flags(flags),
+    defValue(defValue) {
     
-    float alphaMult = 1;
-    if(visibilityTimer.timeLeft < fadeDuration) {
-        alphaMult = visibilityTimer.timeLeft / fadeDuration;
-    }
-    
-    size_t nLines = split(text, "\n", true).size();
-    int fh = al_get_font_line_height(game.sysContent.fntBuiltin);
-    //We add nLines - 1 because there is a 1px gap between each line.
-    int totalHeight = (int) nLines * fh + (int) (nLines - 1);
-    
-    al_draw_filled_rectangle(
-        0, 0, game.winW, totalHeight + 16,
-        multAlpha(CONSOLE_BG_COLOR, alphaMult)
-    );
-    drawTextLines(
-        text, game.sysContent.fntBuiltin,
-        Point(8.0f), Point(LARGE_FLOAT), mapAlpha(128 * alphaMult),
-        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
-    );
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void Console::tick(float deltaT) {
-    visibilityTimer.tick(game.deltaT);
-}
-
-
-/**
- * @brief Prints some text onto the console for some seconds.
- *
- * @param text Text to print. Can use line breaks.
- * @param totalDuration Total amount of time in which the text is present.
- * @param fadeDuration When closing, fade out in the last N seconds.
- */
-void Console::write(
-    const string& text, float totalDuration, float fadeDuration
-) {
-    this->text = text;
-    this->visibilityDuration = totalDuration;
-    this->fadeDuration = fadeDuration;
-    this->visibilityTimer.start(totalDuration);
-}
-
-
-/**
- * @brief Prints the contents of the log buffer onto the console
- * for some seconds.
- *
- * @param totalDuration Total amount of time in which the text is present.
- * @param fadeDuration When closing, fade out in the last N seconds.
- */
-void Console::writeLog(float totalDuration, float fadeDuration) {
-    this->write(join(log, "\n"), totalDuration, fadeDuration);
 }
 
 
 #pragma endregion
-#pragma region Maker console
+#pragma region Log manager
 
 
 /**
- * @brief Clears everything.
- */
-void MakerConsole::clear() {
-    terminal.clear();
-    notifier.clear();
-}
-
-
-/**
- * @brief Closes the console terminal,
- * gradually hiding it unless specified otherwise.
+ * @brief Emits a log message in the maker console.
  *
- * @param instant Whether to close it instantaneously.
+ * @param level Log level.
+ * @param message Message to log.
  */
-void MakerConsole::closeTerminal(bool instant) {
-    terminal.close(instant);
+void LogManager::emitInConsole(LOG_LEVEL level, const string& text) {
+    game.console.write(level, text);
 }
 
 
 /**
- * @brief Draws the console terminal and notifier on-screen.
-
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerConsole::draw(int y) const {
-    int terminalHeight = terminal.draw(y);
-    int notifierHeight = notifier.draw(y + terminalHeight + CONSOLE::PADDING);
-    return
-        terminalHeight +
-        (notifierHeight > 0 ? CONSOLE::PADDING + notifierHeight : 0);
-}
-
-
-/**
- * @brief Opens the console terminal,
- * gradually showing it unless specified otherwise.
+ * @brief Returns the name of a log level.
  *
- * @param instant Whether to open it instantaneously.
+ * @param level The level.
+ * @return The name.
  */
-void MakerConsole::openTerminal(bool instant) {
-    terminal.open(instant);
-    notifier.close(instant);
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerConsole::tick(float deltaT) {
-    terminal.tick(deltaT);
-    notifier.tick(deltaT);
-}
-
-
-/**
- * @brief Toggles between opening and closing the console terminal,
- * gradually showing or hiding it unless specified otherwise.
- *
- * @param instant Whether to open or close it instantaneously.
- */
-void MakerConsole::toggleTerminal(bool instant) {
-    switch(terminal.getVisibilityState()) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        openTerminal();
+string LogManager::getLevelName(LOG_LEVEL level) const {
+    switch(level) {
+    case LOG_LEVEL_INFO: {
+        return "INFO";
         break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        closeTerminal();
+    } case LOG_LEVEL_WARNING: {
+        return "WARNING";
+        break;
+    } case LOG_LEVEL_ERROR: {
+        return "ERROR";
         break;
     }
     }
+    
+    return "";
 }
 
 
 /**
- * @brief Writes a line of output.
+ * @brief Logs a message to the log file.
  *
- * @param text The line of text.
- * @param error Whether it is an error output.
- * @param notifierDuration If a notification is meant to appear in the notifier,
- * specify the duration here. Otherwise, this should be 0.
+ * @param level Log level.
+ * @param text Message to log.
  */
-void MakerConsole::write(
-    const string& text, bool error, float notificationDuration
-) {
-    terminal.write(text, error);
-    
-    OPEN_CLOSE_STATE terminalVisibilityState = terminal.getVisibilityState();
-    bool isTerminalVisible =
-        terminalVisibilityState == OPEN_CLOSE_STATE_OPEN ||
-        terminalVisibilityState == OPEN_CLOSE_STATE_OPENING;
-        
-    if(notificationDuration > 0.0f && !isTerminalVisible) {
-        notifier.write(text, error, notificationDuration);
-    }
-}
-
-
-/**
- * @brief Clears the data of the notifier.
- */
-void MakerConsoleNotifier::clear() {
-    text.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-    timeLeft = 0.0f;
-}
-
-
-/**
- * @brief Closes the console notifier,
- * gradually hiding it unless specified otherwise.
- *
- * @param instant Whether to close it instantaneously.
- */
-void MakerConsoleNotifier::close(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-            visibility = 0.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_CLOSING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Draws the console notifier on-screen.
- *
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerConsoleNotifier::draw(int y) const {
-    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
-    
-    //Setup.
-    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const vector<string> lines = split(text, "\n", true);
-    const int fontHeight = al_get_font_line_height(FONT);
-    
-    int longestLineWidth = 0;
-    forIdx(l, lines) {
-        longestLineWidth =
-            std::max(
-                longestLineWidth,
-                al_get_text_width(FONT, lines[l].c_str())
-            );
-    }
-    
-    int textW = longestLineWidth;
-    int textH =
-        lines.size() * fontHeight +
-        (lines.size() - 1) * CONSOLE::LINE_PADDING;
-    int boxW =
-        CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING +
-        textW + CONSOLE::PADDING;
-    boxW = std::max(boxW, (int) (game.winW / 2.0f) - CONSOLE::PADDING * 2);
-    int boxH =
-        std::max(
-            CONSOLE::PADDING + (int) CONSOLE::INPUT_SIZE + CONSOLE::PADDING,
-            CONSOLE::PADDING + textH + CONSOLE::PADDING
-        );
-    int boxX = CONSOLE::PADDING;
-    int boxY = y;
-    int textX =
-        boxX + CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING;
-    int textY = (boxY + boxH / 2.0f) - textH / 2.0f;
-    
-    float alpha = visibility;
-    
-    const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
-    
-    //Background.
-    al_draw_filled_rectangle(
-        boxX, boxY, boxX + boxW, boxY + boxH,
-        multAlpha(CONSOLE::COLOR_BG, alpha)
-    );
-    
-    //Lines.
-    forIdx(l, lines) {
-        int lineY = getLineY(l);
-        
-        drawText(
-            lines[l], FONT,
-            Point(textX, lineY),
-            Point(textW, fontHeight),
-            multAlpha(
-                error ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
-                alpha
-            ),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-    }
-    
-    //Terminal toggle input.
-    drawPlayerActionInputSourceIcon(
-        PLAYER_ACTION_TYPE_MT_CONSOLE,
-        Point(
-            boxX + CONSOLE::PADDING + (CONSOLE::INPUT_SIZE / 2.0f),
-            boxY + (boxH / 2.0f)
-        ),
-        Point(CONSOLE::INPUT_SIZE),
-        true, game.sysContent.fntSlim, mapAlpha(alpha * 255)
-    );
-    
-    return boxH;
-}
-
-
-/**
- * @brief Opens the console notifier,
- * gradually showing it unless specified otherwise.
- *
- * @param instant Whether to open it instantaneously.
- */
-void MakerConsoleNotifier::open(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-            visibility = 1.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_OPENING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerConsoleNotifier::tick(float deltaT) {
-    if(timeLeft > 0.0f) {
-        timeLeft -= deltaT;
-        if(timeLeft <= 0.0f) {
-            timeLeft = 0.0f;
-            close();
-        }
-    }
-    
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_OPEN: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSING:
-    case OPEN_CLOSE_STATE_OPENING: {
-        visibility =
-            inchTowards(
-                visibility,
-                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
-                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
-            );
-        if(visibility >= 1.0f) {
-            visibility = 1.0f;
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-        } else if(visibility <= 0.0f) {
-            visibility = 0.0f;
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Sets the text to show on the notifier.
- *
- * @param text Text to show.
- * @param error Whether it is an error output.
- * @param duration How long to show the notification for.
- */
-void MakerConsoleNotifier::write(
-    const string& text, bool error, float duration
-) {
-    this->text = text;
-    this->error = error;
-    timeLeft = duration;
-    open();
-}
-
-
-/**
- * @brief Clears the list of output lines.
- */
-void MakerConsoleTerminal::clear() {
-    output.clear();
-    outputTimestamps.clear();
-    outputErrors.clear();
-    input.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-}
-
-
-/**
- * @brief Closes the console terminal,
- * gradually hiding it unless specified otherwise.
- *
- * @param instant Whether to close it instantaneously.
- */
-void MakerConsoleTerminal::close(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-            visibility = 0.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_CLOSING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Draws the console terminal on-screen.
- *
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerConsoleTerminal::draw(int y) const {
-    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
-    
-    //Setup.
-    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const size_t nLines =
-        CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 2; //+ line and input.
-    const int fontHeight = al_get_font_line_height(FONT);
-    
-    int textW = game.winW - CONSOLE::PADDING * 2;
-    int textH =
-        nLines * fontHeight +
-        (nLines - 1) * CONSOLE::LINE_PADDING;
-    int boxW = game.winW;
-    int boxH = CONSOLE::PADDING + textH + CONSOLE::PADDING;
-    int boxX = 0;
-    int boxY = y;
-    int textX = boxX + CONSOLE::PADDING;
-    int textY = boxY + CONSOLE::PADDING;
-    
-    int yOffset = -(boxH * (1.0f - ease(visibility, EASE_METHOD_IN_OUT)));
-    boxY += yOffset;
-    textY += yOffset;
-    
-    const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
-    
-    //Background.
-    al_draw_filled_rectangle(
-        boxX, boxY, boxX + boxW, boxY + boxH,
-        CONSOLE::COLOR_BG
-    );
-    
-    //Output lines.
-    for(size_t l = 0; l < CONSOLE::OUTPUT_MAX_VISIBLE_LINES; l++) {
-        int entryIdx = output.size() - CONSOLE::OUTPUT_MAX_VISIBLE_LINES + l;
-        if(entryIdx < 0 || entryIdx >= (int) output.size()) continue;
-        int entryY = getLineY(l);
-        
-        //Timestamp.
-        string timestamp =
-            resizeString(f2s(outputTimestamps[entryIdx]), 8, true, false);
-        timestamp =
-            resizeString(f2s(outputTimestamps[entryIdx]), 8, false, true, true);
-        timestamp = "[" + timestamp + "]";
-        int timestampWidth = al_get_text_width(FONT, timestamp.c_str());
-        drawText(
-            timestamp, FONT,
-            Point(textX, entryY),
-            Point(timestampWidth, fontHeight),
-            CONSOLE::COLOR_MUTED, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-        
-        //Text.
-        drawText(
-            output[entryIdx], FONT,
-            Point(textX + timestampWidth, entryY),
-            Point(textW - timestampWidth, fontHeight),
-            outputErrors[entryIdx] ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-    }
-    
-    //Divisor line between output and input.
-    int lineY = getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) + fontHeight / 2.0f;
-    al_draw_line(
-        textX, lineY, textX + textW, lineY,
-        CONSOLE::COLOR_MUTED, 2.0f
-    );
-    
-    //Input text.
-    drawText(
-        "> " + input, FONT,
-        Point(textX, getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 1)),
-        Point(textW, fontHeight),
-        CONSOLE::COLOR_MAIN, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-        TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-    );
-    
-    return boxH + yOffset;
-}
-
-
-/**
- * @brief Returns the current visibility state.
- *
- * @return The state.
- */
-OPEN_CLOSE_STATE MakerConsoleTerminal::getVisibilityState() const {
-    return visibilityState;
-}
-
-
-/**
- * @brief Opens the console terminal,
- * gradually showing it unless specified otherwise.
- *
- * @param instant Whether to open it instantaneously.
- */
-void MakerConsoleTerminal::open(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-            visibility = 1.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_OPENING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerConsoleTerminal::tick(float deltaT) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_OPEN: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSING:
-    case OPEN_CLOSE_STATE_OPENING: {
-        visibility =
-            inchTowards(
-                visibility,
-                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
-                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
-            );
-        if(visibility >= 1.0f) {
-            visibility = 1.0f;
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-        } else if(visibility <= 0.0f) {
-            visibility = 0.0f;
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Toggles between opening and closing the console terminal,
- * gradually showing or hiding it unless specified otherwise.
- *
- * @param instant Whether to open or close it instantaneously.
- */
-void MakerConsoleTerminal::toggle(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        open(instant);
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        close(instant);
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Adds an output line.
- *
- * @param text Text to add. It can have line breaks, in which case it's split
- * into different output lines.
- * @param error Whether it is an error output.
- */
-void MakerConsoleTerminal::write(const string& text, bool error) {
-    vector<string> lines = split(text, "\n", true);
-    forIdx(l, lines) {
-        output.push_back(lines[l]);
-        outputTimestamps.push_back(game.timePassed);
-        outputErrors.push_back(error);
-    }
-}
-
-
-#pragma endregion
-#pragma region Maker display
-
-
-/**
- * @brief Clears the data of the display.
- */
-void MakerDisplay::clear() {
-    text.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-    timeLeft = 0.0f;
-}
-
-
-/**
- * @brief Closes the display,
- * gradually hiding it unless specified otherwise.
- *
- * @param instant Whether to close it instantaneously.
- */
-void MakerDisplay::close(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        break;
-    } case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-            visibility = 0.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_CLOSING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Draws the maker display on-screen.
- *
- * @param y Y coordinate to draw at.
- * @return Its height.
- */
-int MakerDisplay::draw(int y) const {
-    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return 0;
-    
-    //Setup.
-    const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const vector<string> lines = split(text, "\n", true);
-    const int fontHeight = al_get_font_line_height(FONT);
-    
-    int textW = game.winW - CONSOLE::PADDING * 4;
-    int textH =
-        lines.size() * fontHeight +
-        (lines.size() - 1) * CONSOLE::LINE_PADDING;
-    int boxW = textW + CONSOLE::PADDING * 2;
-    int boxH = textH + CONSOLE::PADDING * 2;
-    int boxX = CONSOLE::PADDING;
-    int boxY = y;
-    int textX = boxX + CONSOLE::PADDING;
-    int textY = boxY + CONSOLE::PADDING;
-    
-    float alpha = visibility;
-    
-    const auto getLineY =
-    [textY, fontHeight] (size_t idx) {
-        return textY + (idx * (fontHeight + CONSOLE::LINE_PADDING));
-    };
-    
-    //Background.
-    al_draw_filled_rectangle(
-        boxX, boxY, boxX + boxW, boxY + boxH,
-        multAlpha(CONSOLE::COLOR_BG, alpha)
-    );
-    
-    //Lines.
-    forIdx(l, lines) {
-        int lineY = getLineY(l);
-        
-        drawText(
-            lines[l], FONT,
-            Point(textX, lineY),
-            Point(textW, fontHeight),
-            multAlpha(CONSOLE::COLOR_MAIN, alpha),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
-        );
-    }
-    
-    return boxH;
-}
-
-
-/**
- * @brief Opens the display,
- * gradually showing it unless specified otherwise.
- *
- * @param instant Whether to open it instantaneously.
- */
-void MakerDisplay::open(bool instant) {
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_OPEN:
-    case OPEN_CLOSE_STATE_OPENING: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_CLOSING: {
-        if(instant) {
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-            visibility = 1.0f;
-        } else {
-            visibilityState = OPEN_CLOSE_STATE_OPENING;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void MakerDisplay::tick(float deltaT) {
-    if(timeLeft > 0.0f) {
-        timeLeft -= deltaT;
-        if(timeLeft <= 0.0f) {
-            timeLeft = 0.0f;
-            close();
-        }
-    }
-    
-    switch(visibilityState) {
-    case OPEN_CLOSE_STATE_CLOSED:
-    case OPEN_CLOSE_STATE_OPEN: {
-        break;
-    } case OPEN_CLOSE_STATE_CLOSING:
-    case OPEN_CLOSE_STATE_OPENING: {
-        visibility =
-            inchTowards(
-                visibility,
-                visibilityState == OPEN_CLOSE_STATE_CLOSING ? 0.0f : 1.0f,
-                CONSOLE::VISIBILITY_CHANGE_SPEED * deltaT
-            );
-        if(visibility >= 1.0f) {
-            visibility = 1.0f;
-            visibilityState = OPEN_CLOSE_STATE_OPEN;
-        } else if(visibility <= 0.0f) {
-            visibility = 0.0f;
-            visibilityState = OPEN_CLOSE_STATE_CLOSED;
-        }
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Sets the text to show on the display.
- *
- * @param text Text to show.
- * @param duration How long to keep the display on after this.
- */
-void MakerDisplay::write(
-    const string& text, float duration
-) {
-    this->text = text;
-    timeLeft = duration;
-    open();
-}
-
-
-#pragma endregion
-#pragma region Error manager
-
-
-/**
- * @brief Emits an error in the maker console.
- *
- * @param s Full error description.
- */
-void ErrorManager::emitInConsole(const string& s) {
-    string infoStr =
-        s + "\n(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)";
-        
-    game.console.write(infoStr, true);
-}
-
-
-/**
- * @brief Logs an error to the log file.
- *
- * @param s Full error description.
- */
-void ErrorManager::logToFile(const string& s) {
-    string prevErrorLog;
+void LogManager::logToFile(LOG_LEVEL level, const string& text) {
+    string prevLog;
     string output = "";
     
     //Get the previous contents of the log file, if any.
     ALLEGRO_FILE* fileI =
-        al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "r");
+        al_fopen(FILE_PATHS_FROM_ROOT::LOG.c_str(), "r");
     if(fileI) {
         while(!al_feof(fileI)) {
             string line;
             getline(fileI, line);
-            prevErrorLog += line + "\n";
+            prevLog += line + "\n";
         }
-        prevErrorLog.erase(prevErrorLog.size() - 1);
+        prevLog.erase(prevLog.size() - 1);
         al_fclose(fileI);
     }
     
     //Write this session's header, if necessary.
-    if(nrSessionErrors == 0) {
+    if(nrSessionMessages == 0) {
         string header;
-        if(!prevErrorLog.empty()) {
+        if(!prevLog.empty()) {
             header += "\n\n";
         }
         header += "Pikifen version " + getEngineVersionString(true, true);
@@ -1248,118 +437,144 @@ void ErrorManager::logToFile(const string& s) {
         output += header;
     }
     
-    //Log this error.
-    vector<string> lines = split(s, "\n");
-    output += "  " + getCurrentTime(false) + ": " + lines[0] + "\n";
+    //Log this message.
+    vector<string> lines = split(text, "\n");
+    output +=
+        "  " + getCurrentTime(false) + " " +
+        getLevelName(level) + ": " + lines[0] + "\n";
     for(size_t l = 1; l < lines.size(); l++) {
         output += "  " + lines[l] + "\n";
     }
     
     //Save it.
     ALLEGRO_FILE* fileO =
-        al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "w");
+        al_fopen(FILE_PATHS_FROM_ROOT::LOG.c_str(), "w");
     if(fileO) {
-        al_fwrite(fileO, prevErrorLog + output);
+        al_fwrite(fileO, prevLog + output);
         al_fclose(fileO);
     }
 }
 
 
 /**
- * @brief Logs an error to stdout.
+ * @brief Logs a message to stdout.
  *
- * @param s Full error description.
+ * @param level Log level.
+ * @param s Message to log.
  */
-void ErrorManager::logToStdOut(const string& s) {
-    std::cout << s << std::endl;
+void LogManager::logToStdOut(LOG_LEVEL level, const string& text) {
+    std::cout << "[" << getLevelName(level) << "] " << text << std::endl;
 }
 
 
 /**
- * @brief Prepares everything for an area load.
+ * @brief Starts bundling the next messages from here on out.
+ * They will still be emitted like normal, but when the bundling stops,
+ * a message will be output with the total amount found, if any.
  */
-void ErrorManager::prepareAreaLoad() {
-    nrErrorsOnAreaLoad = nrSessionErrors;
-    firstAreaLoadError.clear();
+void LogManager::startBundle() {
+    inBundle = true;
+    nrBundleWarnings = 0;
+    nrBundleErrors = 0;
 }
 
 
 /**
- * @brief Reports an error to the user and logs it.
+ * @brief Reports a log message to the user.
  *
- * @param text Text that represents the error.
- * @param filePath If not empty, this will be reported as the data file in
- * which the error was found.
+ * @param level Log level.
+ * @param text Text that explains the situation.
+ * @param filePath If not empty, this will be reported as the data file from
+ * which the log message originated.
  * @param fileLineNr If not 0, this will be reported as the data file's
- * line number in which the error was found.
+ * line number.
  */
-void ErrorManager::report(
-    const string& text, const string& filePath, size_t fileLineNr
+void LogManager::write(
+    LOG_LEVEL level, const string& text,
+    const string& filePath, size_t fileLineNr
 ) {
-    string fullError = text;
+    switch(level) {
+    case LOG_LEVEL_INFO: {
+        return;
+        break;
+    } case LOG_LEVEL_WARNING: {
+        if(!game.options.misc.showWarnings) return;
+        if(inBundle) nrBundleWarnings++;
+        break;
+    } case LOG_LEVEL_ERROR: {
+        if(inBundle) nrBundleErrors++;
+        break;
+    }
+    }
+    
+    string fullText = text;
     if(!filePath.empty()) {
-        fullError += " (" + filePath;
-        if(fileLineNr != 0) fullError += " line " + i2s(fileLineNr);
-        fullError += ")";
+        fullText += " (" + filePath;
+        if(fileLineNr != 0) fullText += " line " + i2s(fileLineNr);
+        fullText += ")";
     }
     
-    if(firstAreaLoadError.empty()) firstAreaLoadError = fullError;
+    logToStdOut(level, fullText);
+    logToFile(level, fullText);
+    emitInConsole(level, fullText);
     
-    logToStdOut(fullError);
-    logToFile(fullError);
-    emitInConsole(fullError);
-    
-    nrSessionErrors++;
+    nrSessionMessages++;
 }
 
 
 /**
- * @brief Reports an error to the user and logs it.
+ * @brief Reports a log message to the user.
  *
- * @param text Text that represents the error.
+ * @param level Log level.
+ * @param text Text that explains the situation.
  * @param dataNode If not null, this will be used to obtain the file path
- * and line in which the error was found.
+ * and line from which the log message originated.
  */
-void ErrorManager::report(const string& text, const DataNode* dataNode) {
+void LogManager::write(
+    LOG_LEVEL level, const string& text,
+    const DataNode* dataNode
+) {
     if(!dataNode) {
-        report(text, "", 0);
+        write(level, text, "", 0);
     } else {
-        report(text, dataNode->filePath, dataNode->lineNr);
+        write(level, text, dataNode->filePath, dataNode->lineNr);
     }
 }
 
 
 /**
- * @brief Reports to the gameplay "info" window if any errors happened during
- * area load.
- * This will override whatever is in the "info" window, which is likely
- * the latest error, but that's okay since this information is more important.
+ * @brief Stops bundling messages and reports how many were in the bundle,
+ * if any.
  */
-void ErrorManager::reportAreaLoadErrors() {
-    if(nrSessionErrors <= nrErrorsOnAreaLoad) return;
+void LogManager::stopAndReportBundle() {
+    inBundle = false;
+    if(nrBundleWarnings == 0 && nrBundleErrors == 0) return;
     
-    size_t nrErrorsFound =
-        nrSessionErrors - nrErrorsOnAreaLoad;
-        
-    string infoStr =
-        firstAreaLoadError + "\n";
-    if(nrErrorsFound > 1) {
-        infoStr += "(+" + i2s(nrErrorsFound - 1) + " more) ";
+    string infoStr;
+    if(nrBundleErrors > 0) {
+        infoStr += amountStr(nrBundleErrors, "error");
+        if(nrBundleWarnings > 0) {
+            infoStr += " and ";
+        }
     }
-    infoStr +=
-        "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)";
-        
-    game.console.write(infoStr, true);
+    if(nrBundleWarnings > 0) {
+        infoStr += amountStr(nrBundleWarnings, "warning");
+    }
+    infoStr += " found! (Saved to \"" + FILE_PATHS_FROM_ROOT::LOG + "\".)";
+    
+    game.console.write(
+        nrBundleErrors > 0 ? LOG_LEVEL_ERROR : LOG_LEVEL_WARNING, infoStr
+    );
 }
 
 
 /**
- * @brief Returns whether this session has had any error reports.
+ * @brief Returns whether this session has had any log messages.
  *
- * @return Whether it had errors.
+ * @return Whether it had messages.
  */
-bool ErrorManager::sessionHasErrors() {
-    return nrSessionErrors > 0;
+bool LogManager::getSessionHasMessages() {
+    return nrSessionMessages > 0;
 }
 
 
@@ -1757,12 +972,12 @@ InventoryItem* InventoryItemDatabase::getByIName(const string& iName) {
 /**
  * @brief Returns an item, given its index.
  *
- * @param index The index.
+ * @param idx The index.
  * @return The item, or nullptr if not found.
  */
-InventoryItem* InventoryItemDatabase::getByIndex(size_t index) {
-    if(index >= items.size()) return nullptr;
-    return &items[index];
+InventoryItem* InventoryItemDatabase::getByIdx(size_t idx) {
+    if(idx >= items.size()) return nullptr;
+    return &items[idx];
 }
 
 
@@ -1986,6 +1201,8 @@ void MouseCursor::hideInOS() const {
 void MouseCursor::init() {
     hideInOS();
     reset();
+    winPos.x = game.winW / 2.0f;
+    winPos.y = game.winH / 2.0f;
     
     saveTimer.onEnd = [this] () {
         saveTimer.start();
@@ -2034,7 +1251,7 @@ void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
 
 
 /**
- * @brief Constructs a new performance monitor struct object.
+ * @brief Constructs a new performance monitor object.
  */
 PerformanceMonitor::PerformanceMonitor() :
     curState(PERF_MON_STATE_LOADING),
@@ -2870,8 +2087,8 @@ bool ScriptVarManager::fromString(const string& str) {
 
 
 /**
- * @brief Assigns an Allegro color to the value of a given variable,
- * if it exists.
+ * @brief Retrieves the value from the given var as an Allegro color,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2888,7 +2105,8 @@ bool ScriptVarManager::getValue(const string& name, ALLEGRO_COLOR& dest) const {
 
 
 /**
- * @brief Assigns a string to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a string,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2905,7 +2123,8 @@ bool ScriptVarManager::getValue(const string& name, string& dest) const {
 
 
 /**
- * @brief Assigns a size_t to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a size_t,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2922,7 +2141,8 @@ bool ScriptVarManager::getValue(const string& name, size_t& dest) const {
 
 
 /**
- * @brief Assigns an int to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as an int,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2939,8 +2159,8 @@ bool ScriptVarManager::getValue(const string& name, int& dest) const {
 
 
 /**
- * @brief Assigns an unsigned char to the value of a given variable,
- * if it exists.
+ * @brief Retrieves the value from the given var as an unsigned char,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2957,7 +2177,8 @@ bool ScriptVarManager::getValue(const string& name, unsigned char& dest) const {
 
 
 /**
- * @brief Assigns a bool to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a boolean,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2974,7 +2195,8 @@ bool ScriptVarManager::getValue(const string& name, bool& dest) const {
 
 
 /**
- * @brief Assigns a float to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a float,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2991,7 +2213,8 @@ bool ScriptVarManager::getValue(const string& name, float& dest) const {
 
 
 /**
- * @brief Assigns a point to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a point,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3008,7 +2231,7 @@ bool ScriptVarManager::getValue(const string& name, Point& dest) const {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3020,7 +2243,7 @@ void ScriptVarManager::setValue(const string& name, const string& value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3032,7 +2255,7 @@ void ScriptVarManager::setValue(const string& name, size_t value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3044,7 +2267,7 @@ void ScriptVarManager::setValue(const string& name, int value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3056,7 +2279,7 @@ void ScriptVarManager::setValue(const string& name, unsigned char value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3068,7 +2291,7 @@ void ScriptVarManager::setValue(const string& name, bool value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3080,7 +2303,7 @@ void ScriptVarManager::setValue(const string& name, float value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3094,7 +2317,7 @@ void ScriptVarManager::setValue(
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3257,9 +2480,13 @@ void SystemContentNames::load(DataNode* file) {
     ReaderSetter graRS(file->getChildByName("graphics"));
     
     //DEPRECATED in 1.1.0 by "leader_cursor".
-    graRS.set("cursor", bmpLeaderCursor);
+    deprecatedReaderSetter(
+        graRS, "cursor", "leader_cursor", bmpLeaderCursor
+    );
     //DEPRECATED in 1.1.0 by "leader_prompt".
-    graRS.set("notification", bmpLeaderPrompt);
+    deprecatedReaderSetter(
+        graRS, "notification", "leader_prompt", bmpLeaderPrompt
+    );
     
     graRS.set("arrow_down", bmpArrowDown);
     graRS.set("arrow_left", bmpArrowLeft);
@@ -3330,7 +2557,9 @@ void SystemContentNames::load(DataNode* file) {
     ReaderSetter fntRS(file->getChildByName("fonts"));
     
     //DEPRECATED in 1.1.0 by "leader_cursor_counter".
-    fntRS.set("cursor_counter", fntLeaderCursorCounter);
+    deprecatedReaderSetter(
+        fntRS, "cursor_counter", "leader_cursor_counter", fntLeaderCursorCounter
+    );
     
     fntRS.set("area_name", fntAreaName);
     fntRS.set("counter", fntCounter);
@@ -3345,9 +2574,14 @@ void SystemContentNames::load(DataNode* file) {
     ReaderSetter sndRS(file->getChildByName("sounds"));
     
     //DEPRECATED in 1.1.0 by "menu_focus".
-    sndRS.set("menu_selected", sndMenuFocus);
+    deprecatedReaderSetter(
+        sndRS, "menu_selected", "menu_focus", sndMenuFocus
+    );
     //DEPRECATED in 1.2.0 by "cutscene_message_char".
-    sndRS.set("gameplay_message_char", sndCutsceneMsgChar);
+    deprecatedReaderSetter(
+        sndRS, "gameplay_message_char", "cutscene_message_char",
+        sndCutsceneMsgChar
+    );
     
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);
@@ -3359,6 +2593,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("frozen_liquid_crack", sndFrozenLiquidCrack);
     sndRS.set("frozen_liquid_thaw", sndFrozenLiquidThaw);
     sndRS.set("go", sndGo);
+    sndRS.set("heal", sndHeal);
     sndRS.set("medal_got_it", sndMedalGotIt);
     sndRS.set("menu_activate", sndMenuActivate);
     sndRS.set("menu_back", sndMenuBack);
@@ -3531,6 +2766,151 @@ void SystemNotificationManager::tick(float deltaT) {
 
 
 #pragma endregion
+#pragma region Text input
+
+
+/**
+ * @brief Returns the current caret position.
+ *
+ * @return The position.
+ */
+size_t TextInput::getCaretPos() const {
+    return caretPos;
+}
+
+
+/**
+ * @brief Returns the current string.
+ *
+ * @return The string.
+ */
+string TextInput::getString() const {
+    return text;
+}
+
+
+/**
+ * @brief Handles an Allegro event related to user input.
+ *
+ * @param ev The event.
+ * @return Whether the event got handled.
+ */
+bool TextInput::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
+    bool handled = false;
+    
+    const auto eraseChars = [this] (size_t idx1, size_t idx2) {
+        if(idx2 < idx1) std::swap(idx1, idx2);
+        size_t amount = idx2 - idx1;
+        text.erase(idx1, amount);
+        return amount;
+    };
+    
+    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+            if(!text.empty() && caretPos > 0) {
+                size_t start = caretPos;
+                size_t end = string::npos;
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    end = getNextWordLimitPos(text, false, caretPos);
+                } else {
+                    end = caretPos - 1;
+                }
+                caretPos -= eraseChars(start, end);
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_DELETE) {
+            if(!text.empty() && caretPos != text.size()) {
+                size_t start = caretPos;
+                size_t end = string::npos;
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    end = getNextWordLimitPos(text, true, caretPos);
+                } else {
+                    end = caretPos + 1;
+                }
+                eraseChars(start, end);
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+            if(!text.empty()) {
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    caretPos = getNextWordLimitPos(text, false, caretPos);
+                } else if(caretPos > 0) {
+                    caretPos--;
+                }
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+            if(!text.empty()) {
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    caretPos = getNextWordLimitPos(text, true, caretPos);
+                } else {
+                    caretPos++;
+                }
+                caretPos = std::min(caretPos, text.size());
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
+            caretPos = 0;
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_END) {
+            caretPos = text.size();
+            handled = true;
+            
+        } else if(std::isprint(ev.keyboard.unichar)) {
+            if(text.size() < maxSize) {
+                text.insert(caretPos, 1, (char) ev.keyboard.unichar);
+                caretPos++;
+            }
+            handled = true;
+            
+        }
+    }
+    
+    return handled;
+}
+
+
+/**
+ * @brief Resets all information.
+ */
+void TextInput::reset() {
+    text.clear();
+    caretPos = 0;
+}
+
+
+/**
+ * @brief Forcefully set the caret to this new position.
+ *
+ * @param newPos The new position.
+ */
+void TextInput::setCaretPos(size_t newPos) {
+    caretPos = newPos;
+    caretPos = std::min(caretPos, text.size());
+}
+
+
+/**
+ * @brief Forcefully set the string to this new value.
+ *
+ * @param newString The new string.
+ * @param caretAtEnd Whether to place the caret at the end or the beginning.
+ */
+void TextInput::setString(const string& newString, bool caretAtEnd) {
+    reset();
+    text = newString;
+    if(caretAtEnd) {
+        caretPos = newString.size();
+    }
+}
+
+
+#pragma endregion
 #pragma region Viewport
 
 
@@ -3622,7 +3002,7 @@ void Viewport::updateWorldCorners() {
 
 
 /**
- * @brief Constructs a new whistle struct object.
+ * @brief Constructs a new whistle object.
  */
 Whistle::Whistle() {
     dotRadius[0] = -1;
@@ -3697,8 +3077,8 @@ void Whistle::tick(
         //Delete rings that go beyond the leader's cursor.
         rings[r] += WHISTLE::RING_SPEED * deltaT;
         if(leaderToCursorDist < rings[r]) {
-            rings.erase(rings.begin() + r);
-            ringColors.erase(ringColors.begin() + r);
+            eraseInVector(rings, r);
+            eraseInVector(ringColors, r);
         } else {
             r++;
         }

@@ -22,6 +22,7 @@
 #include "../../core/controls_mediator.hpp"
 #include "../../core/misc_structs.hpp"
 #include "../../lib/data_file/data_file.hpp"
+#include "../../lib/dumb_gui/dumb_gui.hpp"
 #include "../../lib/easy_spat_nav/easy_spat_nav.hpp"
 #include "../../util/drawing_utils.hpp"
 #include "../../util/general_utils.hpp"
@@ -171,7 +172,9 @@ class GuiManager;
  * @brief Definition of a GUI item. This has no data about the item's behavior,
  * just data about what it is and where.
  */
-struct GuiItemDef {
+class GuiItemDef {
+
+public:
 
     //--- Public members ---
     
@@ -192,7 +195,7 @@ struct GuiItemDef {
  * @brief Definition of a hardcoded GUI item, an item that must exist in the GUI
  * since the engine expects it.
  */
-struct HardcodedGuiItemDef : public GuiItemDef {
+class HardcodedGuiItemDef : public GuiItemDef {
 
 };
 
@@ -201,7 +204,9 @@ struct HardcodedGuiItemDef : public GuiItemDef {
  * @brief Definition of a custom GUI item, added by the user, that is not a part
  * of the items the engine expects for the GUI.
  */
-struct CustomGuiItemDef : public GuiItemDef {
+class CustomGuiItemDef : public GuiItemDef {
+
+public:
 
     //--- Public members ---
     
@@ -254,7 +259,7 @@ struct CustomGuiItemDef : public GuiItemDef {
  * @brief An item in the GUI. This can be a HUD element, a button,
  * some text, etc.
  */
-class GuiItem {
+class GuiItem : public DumbGui::Item {
 
 public:
 
@@ -291,6 +296,8 @@ public:
     
     //Information about how the item should be drawn.
     struct DrawInfo {
+
+    public:
     
         //Center pixel coordinates.
         Point center;
@@ -306,54 +313,11 @@ public:
     
     //--- Public members ---
     
-    //What GUI manager it belongs to, if any.
-    GuiManager* manager = nullptr;
-    
-    //Its raw coordinate data, in window ratio (or parent ratio).
-    Rect ratioRect;
-    
-    //Is it currently visible?
-    bool visible = true;
-    
-    //Is it currently responsive?
-    bool responsive = true;
-    
-    //Can it be focused?
-    bool focusable = false;
-    
-    //Is it currently the focused item?
-    bool focused = false;
-    
-    //If it is placed inside of another item, specify it here.
-    GuiItem* parent = nullptr;
-    
-    //List of children items, that are placed inside this one.
-    vector<GuiItem*> children;
-    
-    //Offset (width/height percentage) of the children items, if any.
-    Point offset;
-    
-    //Padding amount, if it has children items.
-    float padding = 0.0f;
-    
-    //Whether to clip the children items' drawing to the confines of the item
-    bool clipChildren = true;
-    
-    //Drawing layer. The lower the number, the sooner it'll be drawn.
-    unsigned char drawingLayer = GUI::DRAWING_LAYER_NORMAL;
-    
     //Can this item's activation be auto-repeated by holding the button down?
     bool canAutoRepeat = false;
     
-    //Is this item focusable from the mouse?
-    bool focusableFromMouse = true;
-    
     //Is this item focusable from spatial navigation?
     bool focusableFromSN = true;
-    
-    //Force its final dimensions to be square, such that they fit inside
-    //the reference dimensions.
-    bool forceSquare = false;
     
     //Type of the current juice animation.
     JUICE_TYPE juiceType = JUICE_TYPE_NONE;
@@ -362,19 +326,14 @@ public:
     float juiceTimer = 0.0f;
     
     //What to do when it's time to draw it.
-    std::function<void(const DrawInfo& draw)> onDraw = nullptr;
+    //Unlike DumbGui::Item::onDraw, this uses Points and ALLEGRO_COLORs.
+    std::function<void(const DrawInfo& draw)> onDrawP = nullptr;
     
-    //What to do when it's time to tick one frame.
-    std::function<void(float time)> onTick = nullptr;
+    //What to do when it receives an Allegro event related to player input.
+    std::function<void(const ALLEGRO_EVENT& ev)> onAllegroInputEvent = nullptr;
     
-    //What to do when it receives any Allegro event.
-    std::function<void(const ALLEGRO_EVENT& ev)> onAllegroEvent = nullptr;
-    
-    //What to do when the item is activated.
-    std::function<void(const Point& cursorPos)> onActivate = nullptr;
-    
-    //What to do when the mouse cursor is on top of it this frame.
-    std::function<void(const Point& cursorPos)> onMouseOver = nullptr;
+    //What to do when it receives an Allegro event not related to player input.
+    std::function<void(const ALLEGRO_EVENT& ev)> onAllegroOtherEvent = nullptr;
     
     //What to do when a spatial navigation action is performed
     //when the item is focused. The return value is whether the logic
@@ -382,15 +341,9 @@ public:
     std::function<bool(PLAYER_ACTION_TYPE playerActionId)> onMenuSNAction =
         nullptr;
         
-    //What to do when it gets focused.
-    std::function<void()> onFocused = nullptr;
-    
     //What to do when one of its children became the focused item via
     //spatial navigation.
     std::function<void(const GuiItem* child)> onChildFocusedViaSN = nullptr;
-    
-    //What to do when its tooltip needs to be retrieved.
-    std::function<string()> onGetTooltip = nullptr;
     
     //Play a "failure" sound on activation instead, for the next activation.
     bool playFailSound = false;
@@ -400,18 +353,18 @@ public:
     
     explicit GuiItem(bool focusable = false);
     virtual ~GuiItem() = default;
-    bool activate(const Point& cursorPos = Point());
-    bool addChild(GuiItem* item);
-    bool deleteAllChildren();
-    float getChildrenSpan(bool horizontal = false) const;
+    
+    Rect getRawRatioRect() const;
+    void setRawRatioRect(const Rect& rect);
+    Rect getReferencePxRect() const;
+    
     float getJuiceValue() const;
-    Point getReferenceCenter() const;
-    Point getReferenceSize() const;
-    bool isMouseOn(const Point& cursorPos) const;
-    bool isResponsive() const;
-    bool isVisible() const;
-    bool removeChild(GuiItem* item);
     bool startJuiceAnimation(JUICE_TYPE type);
+    
+    bool activate(float cursorPxX = 0.0f, float cursorPxY = 0.0f) override;
+    bool draw(const DumbGui::DrawInfo& draw) override;
+    
+    static DrawInfo fromDumbDrawInfo(const DumbGui::DrawInfo& dumbDraw);
     
 };
 
@@ -546,7 +499,7 @@ public:
     
     void defChildFocusedViaSNCode(const GuiItem* child);
     void defDrawCode(const DrawInfo& draw);
-    void defEventCode(const ALLEGRO_EVENT& ev);
+    void defInputEventCode(const ALLEGRO_EVENT& ev);
     void defTickCode(float deltaT);
     
 };
@@ -628,7 +581,7 @@ public:
     ScrollGuiItem();
     
     void defDrawCode(const DrawInfo& draw);
-    void defEventCode(const ALLEGRO_EVENT& ev);
+    void defInputEventCode(const ALLEGRO_EVENT& ev);
     
     
 private:
@@ -728,78 +681,63 @@ private:
  * heads-up display (HUD) during gameplay, as well as the interactable elements
  * of menus.
  */
-class GuiManager {
+class GuiManager : public DumbGui::Manager {
 
 public:
 
     //--- Public members ---
     
-    //List of items.
-    vector<GuiItem*> items;
-    
     //Item to activate when the user chooses to go back, if any.
     GuiItem* backItem = nullptr;
     
-    //Is it currently responding to input?
-    bool responsive = true;
-    
     //Should it ignore input while animating?
     bool ignoreInputOnAnimation = true;
-    
-    //What to do when the currently focused item changes.
-    std::function<void()> onFocusChanged = nullptr;
     
     
     //--- Public function declarations ---
     
     GuiManager();
-    bool addItem(GuiItem* item, const string& id = "");
-    bool draw();
-    bool tick(float deltaT);
-    string getCurrentTooltip() const;
+    
+    void changeCurAnimationDuration(float newDuration);
+    GUI_MANAGER_ANIM getAnimation() const;
+    bool startAnimation(
+        const GUI_MANAGER_ANIM type, float duration
+    );
+    
+    bool readDataFile(DataNode* node, GuiItem* customChildrenParent = nullptr);
     static bool getItemDefsFromDataFile(
         DataNode* file,
         vector<HardcodedGuiItemDef>* outHardcodedItemDefs,
         vector<CustomGuiItemDef>* outCustomItemDefs
     );
-    bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
-    GuiItem* getFocusedItem() const;
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    bool handlePlayerAction(const Inpution::Action& action);
-    bool hideItems();
-    bool readDataFile(DataNode* node, GuiItem* customChildrenParent = nullptr);
-    bool registerCoords(
-        const string& id,
-        float cx, float cy, float w, float h
-    );
-    bool removeItem(GuiItem* item);
-    bool setFocusedItem(GuiItem* item, bool silent = false);
-    bool shouldHandleEvents();
-    bool showItems();
-    bool startAnimation(
-        const GUI_MANAGER_ANIM type, float duration
-    );
-    bool wasLastInputMouse() const;
     static bool writeItemDefsToDataFile(
         DataNode* file,
         const vector<HardcodedGuiItemDef>& hardcodedItemDefs,
         const vector<CustomGuiItemDef>& customItemDefs
     );
-    bool destroy();
+    
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroOtherEvent(const ALLEGRO_EVENT& ev);
+    bool handlePlayerAction(const Inpution::Action& action);
+    bool wasLastInputMouse() const;
+    
+    bool addItemP(GuiItem* item, const string& id = "");
+    bool removeItemP(GuiItem* item);
+    bool setFocusedItemP(GuiItem* item, bool silent);
+    
+    bool draw() override;
+    bool tick(float deltaT) override;
+    bool getItemDrawInfo(
+        DumbGui::Item* item, DumbGui::DrawInfo* draw
+    ) const override;
+    bool setFocusedItem(DumbGui::Item* item) override;
+    bool shouldHandleEvents() const override;
+    bool destroy() override;
     
     
 protected:
 
     //--- Protected members ---
-    
-    //Which item is currently focused.
-    GuiItem* focusedItem = nullptr;
-    
-    //Registered default centers.
-    map<string, Point> registeredCenters;
-    
-    //Registered default sizes.
-    map<string, Point> registeredSizes;
     
     //Custom items.
     vector<CustomGuiItemDef> customItemDefs;
@@ -825,14 +763,13 @@ protected:
     //Timer for the current animation.
     Timer animTimer;
     
-    //Are the items currently visible?
-    bool visible = true;
-    
     //Easy Spatial Navigation interface.
     EasySpatNav::Interface esnInterface;
     
     //Focus cursor.
     struct FocusCursor {
+
+    public:
     
         //Current center coordinates, and base width and height.
         Rect curRect;
@@ -851,6 +788,7 @@ protected:
     void createAndAddCustomItems(
         size_t startingIdx, GuiItem* customChildrenParent = nullptr
     );
+    float getFadeAnimationAlpha() const;
     void handleSpatialNavigationAction(const Inpution::Action& action);
     
 };

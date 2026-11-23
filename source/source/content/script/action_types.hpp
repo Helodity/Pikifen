@@ -12,6 +12,7 @@
 #pragma once
 
 
+#include "../../core/misc_structs.hpp"
 #include "../../util/general_utils.hpp"
 
 
@@ -22,7 +23,7 @@ class Mob;
 class MobType;
 class ScriptActionDef;
 class ScriptVM;
-struct ScriptActionInstRunData;
+class ScriptActionInstRunData;
 
 
 //Types of script action.
@@ -39,6 +40,9 @@ enum SCRIPT_ACTION {
     
     //Add item to a list (split string).
     SCRIPT_ACTION_ADD_LIST_ITEM,
+    
+    //Add a numeric value as an int to a string.
+    SCRIPT_ACTION_ADD_INT_TO_STRING,
     
     //Add a string to another string.
     SCRIPT_ACTION_ADD_TO_STRING,
@@ -151,6 +155,9 @@ enum SCRIPT_ACTION {
     //Get a script variable's value from the focused mob.
     SCRIPT_ACTION_GET_FOCUS_VAR,
     
+    //Get whether a leader is currently active.
+    SCRIPT_ACTION_GET_LEADER_ACTIVITY,
+    
     //Get how many Pikmin a leader has, optionally of a given type.
     SCRIPT_ACTION_GET_LEADER_PIKMIN_COUNT,
     
@@ -201,6 +208,9 @@ enum SCRIPT_ACTION {
     
     //Label for use with "goto".
     SCRIPT_ACTION_LABEL,
+    
+    //Leave the leader's group.
+    SCRIPT_ACTION_LEAVE_LEADER_GROUP,
     
     //Create a link with the focused mob.
     SCRIPT_ACTION_LINK_WITH_FOCUS,
@@ -315,6 +325,9 @@ enum SCRIPT_ACTION {
     
     //Set its near reach.
     SCRIPT_ACTION_SET_NEAR_REACH,
+    
+    //Set whether an Onion is activated.
+    SCRIPT_ACTION_SET_ONION_ACTIVITY,
     
     //Set its radius.
     SCRIPT_ACTION_SET_RADIUS,
@@ -540,6 +553,9 @@ enum SCRIPT_ACTION_MOB_TARGET_TYPE {
     //Targets the parent mob, if any.
     SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT,
     
+    //Targets the mob this one is following, if any.
+    SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER,
+    
 };
 
 
@@ -550,6 +566,7 @@ buildEnumNames(scriptActionMobTargetTypeINames, SCRIPT_ACTION_MOB_TARGET_TYPE)({
     { SCRIPT_ACTION_MOB_TARGET_TYPE_TRIGGER, "trigger" },
     { SCRIPT_ACTION_MOB_TARGET_TYPE_LINK, "link" },
     { SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT, "parent" },
+    { SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER, "leader" },
 });
 
 
@@ -596,6 +613,9 @@ enum SCRIPT_ACTION_GET_EV_INFO_TYPE {
     //Get the other body part that triggered the event.
     SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
     
+    //Get the amount of damage dealt.
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE,
+    
 };
 
 
@@ -608,6 +628,7 @@ buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)(
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE, "input_value" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_SCRIPT_MESSAGE, "message" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART, "other_body_part" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE, "damage" },
 });
 
 
@@ -836,8 +857,8 @@ buildEnumNames(scriptActionStabilizeZTypeINames, SCRIPT_ACTION_STABILIZE_Z_TYPE)
 //Delimiters for lists/strings in script actions.
 enum SCRIPT_ACTION_LIST_DELIMITER {
 
-    //Colons.
-    SCRIPT_ACTION_LIST_DELIMITER_COLON,
+    //Commas.
+    SCRIPT_ACTION_LIST_DELIMITER_COMMA,
     
     //Semicolon.
     SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON,
@@ -850,90 +871,22 @@ enum SCRIPT_ACTION_LIST_DELIMITER {
 
 //Script action list delimiter enum naming (internal names).
 buildEnumNames(scriptActionListDelimiterINames, SCRIPT_ACTION_LIST_DELIMITER)({
-    { SCRIPT_ACTION_LIST_DELIMITER_COLON, "colon" },
-    { SCRIPT_ACTION_LIST_DELIMITER_SPACE, "space" },
+    { SCRIPT_ACTION_LIST_DELIMITER_COMMA, "comma" },
     { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, "semicolon" },
+    { SCRIPT_ACTION_LIST_DELIMITER_SPACE, "space" },
 });
 
 
 //Script action list delimiter character listing.
 buildEnumNames(scriptActionListDelimiterChars, SCRIPT_ACTION_LIST_DELIMITER)({
-    { SCRIPT_ACTION_LIST_DELIMITER_COLON, "," },
-    { SCRIPT_ACTION_LIST_DELIMITER_SPACE, " " },
+    { SCRIPT_ACTION_LIST_DELIMITER_COMMA, "," },
     { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, ";" },
+    { SCRIPT_ACTION_LIST_DELIMITER_SPACE, " " },
 });
-
-
-//Types of variables that a parameter can use.
-enum SCRIPT_ACTION_PARAM_TYPE {
-
-    //Signed integer.
-    SCRIPT_ACTION_PARAM_TYPE_INT,
-    
-    //Float.
-    SCRIPT_ACTION_PARAM_TYPE_FLOAT,
-    
-    //Boolean.
-    SCRIPT_ACTION_PARAM_TYPE_BOOL,
-    
-    //STL string.
-    SCRIPT_ACTION_PARAM_TYPE_STRING,
-    
-    //STL string that gets turned into an int.
-    SCRIPT_ACTION_PARAM_TYPE_ENUM,
-    
-};
-
-
-//Flags for the parameters.
-enum SCRIPT_ACTION_PARAM_FLAG {
-
-    //The argument has to be a constant, cannot be a variable.
-    SCRIPT_ACTION_PARAM_FLAG_CONST = 1 << 0,
-    
-    //If the argument is not specified, a default value will be used.
-    SCRIPT_ACTION_PARAM_FLAG_OPTIONAL = 1 << 1,
-    
-    //This argument and any other ones after are considered to belong to
-    //this parameter.
-    SCRIPT_ACTION_PARAM_FLAG_VECTOR = 1 << 2,
-    
-};
 
 
 #pragma endregion
 #pragma region Classes
-
-
-/**
- * @brief Info about a parameter that a script action type
- * can receive.
- */
-struct ScriptActionTypeParam {
-
-    //--- Public members ---
-    
-    //Name of the parameter.
-    string name;
-    
-    //Type of variable it's meant to hold.
-    SCRIPT_ACTION_PARAM_TYPE type = SCRIPT_ACTION_PARAM_TYPE_STRING;
-    
-    //Flags. Use SCRIPT_ACTION_PARAM_FLAG.
-    Bitmask8 flags = 0;
-    
-    //If this is optional, specify its default value here.
-    string defValue;
-    
-    
-    //--- Public function declarations ---
-    
-    ScriptActionTypeParam(
-        const string& name, const SCRIPT_ACTION_PARAM_TYPE type,
-        Bitmask8 flags = 0, const string& defValue = ""
-    );
-    
-};
 
 
 /**
@@ -947,7 +900,9 @@ typedef void (ScriptActionTypeCode)(ScriptActionInstRunData& data);
 /**
  * @brief Info about a type of script action.
  */
-struct ScriptActionType {
+class ScriptActionType {
+
+public:
 
     //--- Public members ---
     
@@ -961,10 +916,13 @@ struct ScriptActionType {
     ScriptActionTypeCode* code = nullptr;
     
     //Parameters that it can take.
-    vector<ScriptActionTypeParam> parameters;
+    vector<CommandParam> parameters;
     
     //Flags for the contexts in which it can be run. Use SCRIPT_CONTEXT.
     Bitmask8 contexts = 0;
+    
+    //If this action is deprecated, this is the replacement's name.
+    string deprecationReplacement;
     
 };
 
@@ -977,6 +935,7 @@ namespace ScriptActionRunners {
 void absoluteNumber(ScriptActionInstRunData& data);
 void addHealth(ScriptActionInstRunData& data);
 void addListItem(ScriptActionInstRunData& data);
+void addIntToString(ScriptActionInstRunData& data);
 void addToString(ScriptActionInstRunData& data);
 void arachnorbPlanLogic(ScriptActionInstRunData& data);
 void beChomped(ScriptActionInstRunData& data);
@@ -1006,6 +965,7 @@ void getDistance(ScriptActionInstRunData& data);
 void getEventInfo(ScriptActionInstRunData& data);
 void getFloorZ(ScriptActionInstRunData& data);
 void getFocusVar(ScriptActionInstRunData& data);
+void getLeaderActivity(ScriptActionInstRunData& data);
 void getLeaderPikminCount(ScriptActionInstRunData& data);
 void getListItem(ScriptActionInstRunData& data);
 void getListItemNumber(ScriptActionInstRunData& data);
@@ -1021,6 +981,7 @@ void getVarPresence(ScriptActionInstRunData& data);
 void holdFocus(ScriptActionInstRunData& data);
 void ifAction(ScriptActionInstRunData& data);
 void interpolateNumber(ScriptActionInstRunData& data);
+void leaveLeaderGroup(ScriptActionInstRunData& data);
 void linkWithFocus(ScriptActionInstRunData& data);
 void loadFocusMemory(ScriptActionInstRunData& data);
 void maxNumber(ScriptActionInstRunData& data);
@@ -1059,6 +1020,7 @@ void setLimbAnimation(ScriptActionInstRunData& data);
 void setListItem(ScriptActionInstRunData& data);
 void setMissionMetricScriptSlot(ScriptActionInstRunData& data);
 void setNearReach(ScriptActionInstRunData& data);
+void setOnionActivity(ScriptActionInstRunData& data);
 void setRadius(ScriptActionInstRunData& data);
 void setSectorScroll(ScriptActionInstRunData& data);
 void setShadowVisibility(ScriptActionInstRunData& data);
@@ -1107,6 +1069,7 @@ namespace ScriptActionUtils {
 bool doScriptCondition(
     const string& lhs, SCRIPT_ACTION_IF_OP op, const string& rhs
 );
+string getNodePath(const ScriptActionInstRunData& data);
 SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
     const ScriptActionInstRunData& data, const string& name
 );

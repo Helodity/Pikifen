@@ -1,0 +1,59 @@
+name = S.S. Beagle
+description = The ship pod in command of the Rescue Corps. Due to its sleek size, it can fit in cave holes and go underground.
+
+can_heal = true
+control_point_offset = 0 0
+control_point_radius = 60
+height = 90
+peek_underneath_opacity = 50
+pushable = false
+pushes = true
+radius = 38
+receptacle_offset = 0 0
+
+sounds {
+    beam {
+        sound = effects/beam
+        volume = 30
+        speed = 95
+        speed_deviation = 5
+        loop = true
+    }
+    reception {
+        sound = effects/poof
+        volume = 40
+        speed = 95
+        speed_deviation = 15
+    }
+    sci_fi {
+        sound = misc/sci_fi_loop_1
+        volume = 3
+        speed = 120
+        loop = true
+    }
+}
+
+children {
+    antenna {
+        spawn = antenna
+        parent_holds = true
+        hold_offset_vertical_distance = 1.1
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+}
+
+spawns {
+    antenna {
+        object = ss_beagle_antenna
+        relative = true
+        angle = 0
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

@@ -45,20 +45,6 @@ using std::vector;
 #pragma region Constants
 
 
-namespace CONSOLE {
-extern const ALLEGRO_COLOR COLOR_BG;
-extern const ALLEGRO_COLOR COLOR_ERROR;
-extern const ALLEGRO_COLOR COLOR_MAIN;
-extern const ALLEGRO_COLOR COLOR_MUTED;
-extern const float INPUT_SIZE;
-extern const int LINE_PADDING;
-extern const size_t OUTPUT_MAX_VISIBLE_LINES;
-extern const size_t OUTPUT_MAX_SIZE;
-extern const int PADDING;
-extern const float VISIBILITY_CHANGE_SPEED;
-}
-
-
 namespace CUTSCENE_MSG_BOX {
 extern const float ADVANCE_BUTTON_FADE_SPEED;
 extern const float BUTTON_OFFSET_MULT;
@@ -112,20 +98,52 @@ extern const float RINGS_INTERVAL;
 }
 
 
-//Types of string token.
-enum STRING_TOKEN {
+//Ways to control the speed of a camera's coordinate.
+enum CAMERA_SPEED_MODE {
 
-    //None.
-    STRING_TOKEN_NONE,
+    //Use the speed class members, linearly. Acceleration must be
+    //controlled elsewhere.
+    CAMERA_SPEED_MODE_LINEAR,
     
-    //A regular character.
-    STRING_TOKEN_CHAR,
+    //Exponentially smoothen the speed based on the distance to the target.
+    CAMERA_SPEED_MODE_EXP_SMOOTH,
     
-    //A line break.
-    STRING_TOKEN_LINE_BREAK,
+};
+
+
+//Types of variables that a command-like parameter can use.
+enum COMMAND_PARAM_TYPE {
+
+    //Signed integer.
+    COMMAND_PARAM_TYPE_INT,
     
-    //A control bind icon.
-    STRING_TOKEN_BIND_INPUT,
+    //Float.
+    COMMAND_PARAM_TYPE_FLOAT,
+    
+    //Boolean.
+    COMMAND_PARAM_TYPE_BOOL,
+    
+    //STL string.
+    COMMAND_PARAM_TYPE_STRING,
+    
+    //STL string that gets turned into an int.
+    COMMAND_PARAM_TYPE_ENUM,
+    
+};
+
+
+//Flags for any command-like parameters.
+enum COMMAND_PARAM_FLAG {
+
+    //The argument has to be a constant, cannot be a variable.
+    COMMAND_PARAM_FLAG_CONST = 1 << 0,
+    
+    //If the argument is not specified, a default value will be used.
+    COMMAND_PARAM_FLAG_OPTIONAL = 1 << 1,
+    
+    //This argument and any other ones after are considered to belong to
+    //this parameter.
+    COMMAND_PARAM_FLAG_VECTOR = 1 << 2,
     
 };
 
@@ -154,19 +172,6 @@ enum ENGINE_FONT {
 };
 
 
-//Ways to control the speed of a camera's coordinate.
-enum CAMERA_SPEED_MODE {
-
-    //Use the speed class members, linearly. Acceleration must be
-    //controlled elsewhere.
-    CAMERA_SPEED_MODE_LINEAR,
-    
-    //Exponentially smoothen the speed based on the distance to the target.
-    CAMERA_SPEED_MODE_EXP_SMOOTH,
-    
-};
-
-
 //Engine font enum naming (internal names).
 buildEnumNames(engineFontINames, ENGINE_FONT)({
     { ENGINE_FONT_AREA_NAME, "area_name" },
@@ -176,6 +181,22 @@ buildEnumNames(engineFontINames, ENGINE_FONT)({
     { ENGINE_FONT_STANDARD, "standard" },
     { ENGINE_FONT_VALUE, "value" },
 });
+
+
+//Types of severity for log messages.
+enum LOG_LEVEL {
+
+    //Something that is an unimportant and merely informational.
+    LOG_LEVEL_INFO,
+    
+    //Something that should ideally be addressed,
+    //even if everything still works.
+    LOG_LEVEL_WARNING,
+    
+    //Something that went wrong.
+    LOG_LEVEL_ERROR,
+    
+};
 
 
 //Possible states for something that opens and closes gradually.
@@ -196,6 +217,24 @@ enum OPEN_CLOSE_STATE {
 };
 
 
+//Types of string token.
+enum STRING_TOKEN {
+
+    //None.
+    STRING_TOKEN_NONE,
+    
+    //A regular character.
+    STRING_TOKEN_CHAR,
+    
+    //A line break.
+    STRING_TOKEN_LINE_BREAK,
+    
+    //A control bind icon.
+    STRING_TOKEN_BIND_INPUT,
+    
+};
+
+
 #pragma endregion
 #pragma region Classes
 
@@ -204,7 +243,9 @@ enum OPEN_CLOSE_STATE {
  * @brief Info about the game camera. Where it is, where it wants
  * to go, etc.
  */
-struct Camera {
+class Camera {
+
+public:
 
     //--- Public members ---
     
@@ -250,7 +291,9 @@ struct Camera {
  * @brief A segment of the game window that shows a view into the game world.
  * For instance, regular gameplay, the radar, the area editor's canvas, etc.
  */
-struct Viewport {
+class Viewport {
+
+public:
 
     //--- Public members ---
     
@@ -292,237 +335,98 @@ struct Viewport {
 
 
 /**
- * @brief Represents the non-interactive "console" that shows up at the
- * top of the screen, mostly in maker tool and system contexts.
+ * @brief Info about a parameter that a command-like thing
+ * can receive.
  */
-struct Console {
+class CommandParam {
+
+public:
+
+    //--- Public members ---
+    
+    //Name of the parameter.
+    string name;
+    
+    //Type of variable it's meant to hold.
+    COMMAND_PARAM_TYPE type = COMMAND_PARAM_TYPE_STRING;
+    
+    //Flags. Use COMMAND_PARAM_FLAG.
+    Bitmask8 flags = 0;
+    
+    //If this is optional, specify its default value here.
+    string defValue;
+    
+    //If it's a number, this is the minimum value, inclusive.
+    //-FLT_MAX for no limit.
+    float minValue = -FLT_MAX;
+    
+    //If it's a number, this is the maximum value, inclusive.
+    //FLT_MAX for no limit.
+    float maxValue = FLT_MAX;
+    
+    //If it's an enum, this contains the list.
+    vector<string> enumValues;
+    
+    //Description, if any.
+    string description;
+    
+    
+    //--- Public function declarations ---
+    
+    CommandParam(
+        const string& name, const COMMAND_PARAM_TYPE type,
+        Bitmask8 flags = 0, const string& defValue = ""
+    );
+    
+};
+
+
+/**
+ * @brief Manages any important log messages that occur with the engine's
+ * content or logic.
+ */
+class LogManager {
+
+public:
 
     //--- Public function declarations ---
     
-    Console();
-    void addToLog(const string& text);
-    void clear();
-    void draw() const;
-    void tick(float deltaT);
     void write(
-        const string& text,
-        float totalDuration = 5.0f, float fadeDuration = 3.0f
+        LOG_LEVEL level, const string& text,
+        const string& filePath, size_t fileLineNr
     );
-    void writeLog(
-        float totalDuration = 5.0f, float fadeDuration = 3.0f
-    );
-    
-    
-    private:
-    
-    //--- Private members ---
-    
-    //Timer that controls visibility.
-    Timer visibilityTimer;
-    
-    //If it's visible, this is how long it stays visible for.
-    float visibilityDuration = 5.0f;
-    
-    //How long its fade period lasts.
-    float fadeDuration = 3.0f;
-    
-    //Log buffer, if any.
-    vector<string> log;
-    
-    //Text it is showing, if any.
-    string text;
-    
-    //Lines of text it contains.
-    vector<string> textLines;
-    
-};
-
-
-/**
- * @brief Represents the interactive terminal portion of the maker toolkit
- * console. Users can use this to write commands and see previous outputs.
- */
-struct MakerConsoleTerminal {
-
-    //--- Public function declarations ---
-    
-    void clear();
-    int draw(int y) const;
-    void tick(float deltaT);
-    void write(const string& text, bool error);
-    void open(bool instant = false);
-    void close(bool instant = false);
-    void toggle(bool instant = false);
-    OPEN_CLOSE_STATE getVisibilityState() const;
-    
-    
-    private:
-    
-    //--- Private members ---
-    
-    //Visibility state.
-    OPEN_CLOSE_STATE visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    
-    //How much of it is visible [0 - 1].
-    //Used when scrolling it in and out of view.
-    float visibility = 0.0f;
-    
-    //Text that had been written out, in chronological order.
-    vector<string> output;
-    
-    //Timestamp for each output line.
-    vector<float> outputTimestamps;
-    
-    //Whether each output line is an error or just informational.
-    vector<bool> outputErrors;
-    
-    //Currently written input text.
-    string input;
-    
-};
-
-
-/**
- * @brief Represents a small window at the top of the screen that shows
- * any important warnings, errors, or other outputs, informing the user
- * to open the terminal for more information.
- */
-struct MakerConsoleNotifier {
-
-    //--- Public function declarations ---
-    
-    void clear();
-    int draw(int y) const;
-    void tick(float deltaT);
-    void write(const string& text, bool error, float duration);
-    void open(bool instant = false);
-    void close(bool instant = false);
-    
-    
-    private:
-    
-    //--- Private members ---
-    
-    //Visibility state.
-    OPEN_CLOSE_STATE visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    
-    //How much of it is visible [0 - 1].
-    //Used when fading it in and out of view.
-    float visibility = 0.0f;
-    
-    //Text that is currently being shown.
-    string text;
-    
-    //Whether the current text is an error or just informational.
-    bool error = false;
-    
-    //How long until the notifier is closed automatically.
-    float timeLeft = 0.0f;
-    
-};
-
-
-/**
- * @brief Represents the interactive console that shows up at the top of
- * the screen, allowing makers to debug their content.
- */
-struct MakerConsole {
-
-    //--- Public function declarations ---
-    
-    void clear();
-    int draw(int y) const;
-    void tick(float deltaT);
     void write(
-        const string& text, bool error,
-        float notificationDuration = 10.0f
+        LOG_LEVEL level, const string& text,
+        const DataNode* dataNode = nullptr
     );
-    void openTerminal(bool instant = false);
-    void closeTerminal(bool instant = false);
-    void toggleTerminal(bool instant = false);
+    void startBundle();
+    void stopAndReportBundle();
+    bool getSessionHasMessages();
     
     
     private:
     
     //--- Private members ---
     
-    //The terminal.
-    MakerConsoleTerminal terminal;
+    //How many messages have been reported this application session.
+    size_t nrSessionMessages = 0;
     
-    //The notifier.
-    MakerConsoleNotifier notifier;
+    //Number of warning messages reported in the bundle.
+    size_t nrBundleWarnings = 0;
     
-};
-
-
-/**
- * @brief Represents the non-interactive display that shows up at the top of
- * the screen, allowing makers to debug their content.
- */
-struct MakerDisplay {
-
-    //--- Public function declarations ---
+    //Number of error messages reported in the bundle.
+    size_t nrBundleErrors = 0;
     
-    void clear();
-    int draw(int y) const;
-    void tick(float deltaT);
-    void write(const string& text, float duration = 0.1f);
-    void open(bool instant = false);
-    void close(bool instant = false);
-    
-    
-    private:
-    
-    //--- Private members ---
-    
-    //Visibility state.
-    OPEN_CLOSE_STATE visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    
-    //How much of it is visible [0 - 1].
-    //Used when fading it in and out of view.
-    float visibility = 0.0f;
-    
-    //Text that is currently being shown.
-    string text;
-    
-    //How long until the display is closed automatically.
-    float timeLeft = 0.0f;
-    
-};
-
-
-/**
- * @brief Manages any errors that occur with the engine's content or logic.
- */
-struct ErrorManager {
-
-    //--- Public function declarations ---
-    
-    void report(const string& text, const string& filePath, size_t fileLineNr);
-    void report(const string& text, const DataNode* dataNode = nullptr);
-    void reportAreaLoadErrors();
-    void prepareAreaLoad();
-    bool sessionHasErrors();
-    
-    private:
-    
-    //--- Private members ---
-    
-    //How many errors have been reported this application session.
-    size_t nrSessionErrors = 0;
-    
-    //Errors reported by the time the area load started.
-    size_t nrErrorsOnAreaLoad = 0;
-    
-    //First error reported during area load.
-    string firstAreaLoadError;
+    //Are we currently in a bundle?
+    bool inBundle = false;
     
     
     //--- Private function declarations ---
     
-    void emitInConsole(const string& s);
-    void logToStdOut(const string& s);
-    void logToFile(const string& s);
+    void emitInConsole(LOG_LEVEL level, const string& message);
+    void logToFile(LOG_LEVEL level, const string& message);
+    void logToStdOut(LOG_LEVEL level, const string& message);
+    string getLevelName(LOG_LEVEL level) const;
     
 };
 
@@ -530,7 +434,9 @@ struct ErrorManager {
 /**
  * @brief Info about a token in a string.
  */
-struct StringToken {
+class StringToken {
+
+public:
 
     //--- Public members ---
     
@@ -549,7 +455,9 @@ struct StringToken {
 /**
  * @brief Info about the operative system's mouse cursor.
  */
-struct MouseCursor {
+class MouseCursor {
+
+public:
 
     //--- Public members ---
     
@@ -571,6 +479,9 @@ struct MouseCursor {
     //Timer that keeps track of how long the cursor's been stopped for.
     float stoppedTimer = MOUSE_CURSOR::HIDE_TIMER_DURATION;
     
+    //Is the cursor's alpha being purposely set to 0?
+    bool purposely0Alpha = false;
+    
     //Spots the cursor has been through, in window coordinates.
     //Used for the faint trail left behind.
     vector<Point> history;
@@ -591,13 +502,15 @@ struct MouseCursor {
 
 
 
-struct Player;
+class Player;
 
 
 /**
  * @brief Represents a possible inventory item.
  */
-struct InventoryItem {
+class InventoryItem {
+
+public:
 
     //--- Public members ---
     
@@ -627,14 +540,16 @@ struct InventoryItem {
  * @brief Holds all of the possible inventory items; their names, icons,
  * what they do when used, etc.
  */
-struct InventoryItemDatabase {
+class InventoryItemDatabase {
+
+public:
 
     //--- Public function declarations ---
     
     void init();
     void clear();
     size_t getAmount() const;
-    InventoryItem* getByIndex(size_t index);
+    InventoryItem* getByIdx(size_t idx);
     InventoryItem* getByIName(const string& iName);
     
     
@@ -651,7 +566,9 @@ struct InventoryItemDatabase {
 /**
  * @brief Manages random number generation.
  */
-struct RngManager {
+class RngManager {
+
+public:
 
     //--- Public members ---
     
@@ -681,7 +598,9 @@ struct RngManager {
  * writing them in data files much easier.
  * On the get functions, specify the name of the child and the variable.
  */
-struct GetterWriter {
+class GetterWriter {
+
+public:
 
     //--- Public members ---
     
@@ -763,7 +682,9 @@ struct GetterWriter {
  * On the set functions, specify the name of the child and the variable.
  * If the child is empty, the variable will not be set.
  */
-struct ReaderSetter {
+class ReaderSetter {
+
+public:
 
     //--- Public members ---
     
@@ -837,7 +758,9 @@ struct ReaderSetter {
 /**
  * @brief Manages a collection of script vars and their values.
  */
-struct ScriptVarManager {
+class ScriptVarManager {
+
+public:
 
     //--- Public functions ---
     
@@ -880,7 +803,9 @@ struct ScriptVarManager {
 /**
  * @brief List of content that is needed system-wide.
  */
-struct SystemContentList {
+class SystemContentList {
+
+public:
 
     //--- Public members ---
     
@@ -1144,6 +1069,9 @@ struct SystemContentList {
     //"Go!" big message.
     ALLEGRO_SAMPLE* sndGo = nullptr;
     
+    //Healing at a ship.
+    ALLEGRO_SAMPLE* sndHeal = nullptr;
+    
     //"Got it!" medal blurb.
     ALLEGRO_SAMPLE* sndMedalGotIt = nullptr;
     
@@ -1186,7 +1114,9 @@ struct SystemContentList {
 /**
  * @brief List of internal names of content that is needed by the system.
  */
-struct SystemContentNames {
+class SystemContentNames {
+
+public:
 
     //--- Public members ---
     
@@ -1451,6 +1381,9 @@ struct SystemContentNames {
     //"Go!" big message.
     string sndGo = "gui/go";
     
+    //Healing at a ship.
+    string sndHeal = "effects/heal";
+    
     //"Got it!" medal blurb.
     string sndMedalGotIt = "gui/medal_got_it";
     
@@ -1570,7 +1503,9 @@ struct SystemContentNames {
 /**
  * @brief Manages fade ins/outs for transitions.
  */
-struct FadeManager {
+class FadeManager {
+
+public:
 
     public:
     
@@ -1611,7 +1546,9 @@ struct FadeManager {
 /**
  * @brief Manages system notifications, drawing them, queuing them, etc.
  */
-struct SystemNotificationManager {
+class SystemNotificationManager {
+
+public:
 
     //--- Public function declarations ---
     
@@ -1641,6 +1578,8 @@ struct SystemNotificationManager {
     //Represents a notification.
     struct Notification {
     
+    public:
+    
         //--- Public members ---
         
         //Text.
@@ -1667,15 +1606,52 @@ struct SystemNotificationManager {
 };
 
 
+/**
+ * @brief Information about any sort of GUI text input field,
+ * with support for Allegro events.
+ */
+class TextInput {
+
+public:
+    
+    //--- Public members ---
+    
+    //Maximum size.
+    size_t maxSize = 256;
+    
+    
+    //--- Public function declarations ---
+    
+    void reset();
+    string getString() const;
+    size_t getCaretPos() const;
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
+    void setCaretPos(size_t newPos);
+    void setString(const string& newString, bool caretAtEnd = false);
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //Current text.
+    string text;
+    
+    //Position of the caret.
+    size_t caretPos = 0;
+    
+};
+
+
 
 /**
  * @brief Info about the currently visible prompt that appears above a
  * leader, telling the player what button to press to do something,
  * like plucking.
  */
-struct LeaderPrompt {
+class LeaderPrompt {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1716,7 +1692,9 @@ struct LeaderPrompt {
  * @brief Info on how a bitmap should be drawn, in regards to
  * translation, rotation, coloring, etc.
  */
-struct BitmapEffect {
+class BitmapEffect {
+
+public:
 
     //--- Public members ---
     
@@ -1748,9 +1726,9 @@ enum PERF_MON_STATE {
  * @brief Info about how long certain things took. Useful for makers
  * to monitor performance with.
  */
-struct PerformanceMonitor {
+class PerformanceMonitor {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1773,7 +1751,7 @@ struct PerformanceMonitor {
      */
     struct Page {
     
-        public:
+    public:
         
         //--- Public members ---
         
@@ -1840,16 +1818,16 @@ struct PerformanceMonitor {
 };
 
 
-struct SubgroupTypeManager;
+class SubgroupTypeManager;
 
 
 /**
  * @brief Represents a leader subgroup type;
  * a Red Pikmin, a Yellow Pikmin, a leader, etc.
  */
-struct SubgroupType {
+class SubgroupType {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1877,9 +1855,9 @@ private:
 /**
  * @brief Manages what types of subgroups exist.
  */
-struct SubgroupTypeManager {
+class SubgroupTypeManager {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1910,7 +1888,9 @@ struct SubgroupTypeManager {
 /**
  * @brief Info about the engine's lifetime statistics.
  */
-struct Statistics {
+class Statistics {
+
+public:
 
     //--- Public members ---
     
@@ -1974,7 +1954,9 @@ struct Statistics {
 /**
  * @brief Cached information about how an edge should draw its offset effects.
  */
-struct EdgeOffsetCache {
+class EdgeOffsetCache {
+
+public:
 
     //--- Public members ---
     
@@ -1982,7 +1964,7 @@ struct EdgeOffsetCache {
     float lengths[2] = {0.0f, 0.0f};
     
     //Angle of the effect's "rectangle", per end vertex.
-    float angles[2] = {0.0f, 0.0f};
+    Angle angles[2] = {0.0f, 0.0f};
     
     //Color of the effect, per end vertex.
     ALLEGRO_COLOR colors[2] = {COLOR_EMPTY, COLOR_EMPTY};
@@ -1991,7 +1973,7 @@ struct EdgeOffsetCache {
     float elbowLengths[2] = {0.0f, 0.0f};
     
     //Angle of the effect's "elbow", per end vertex.
-    float elbowAngles[2] = {0.0f, 0.0f};
+    Angle elbowAngles[2] = {0.0f, 0.0f};
     
     //Index of the vertex that should be processed first.
     unsigned char firstEndVertexIdx = 0;
@@ -2002,7 +1984,9 @@ struct EdgeOffsetCache {
 /**
  * @brief Info about the current whistle usage.
  */
-struct Whistle {
+class Whistle {
+
+public:
 
     //--- Public members ---
     
@@ -2208,6 +2192,8 @@ protected:
      * @brief Info about an asset.
      */
     struct AssetUse {
+
+    public:
     
         //--- Public members ---
         

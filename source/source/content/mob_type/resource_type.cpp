@@ -94,7 +94,8 @@ void ResourceType::loadCatProperties(DataNode* file) {
             }
         }
         if(sprayToConcoct == INVALID) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown spray type \"" + sprayToConcoctStr + "\"!",
                 sprayToConcoctNode
             );

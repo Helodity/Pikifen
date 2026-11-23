@@ -32,6 +32,9 @@ enum ONION_STATE {
     //Dead.
     ONION_STATE_DEAD,
     
+    //Finished receiving a delivery.
+    ONION_STATE_RECEIVED,
+    
     //Total amount of Onion object states.
     N_ONION_STATES,
     
@@ -49,6 +52,9 @@ enum ONION_ANIM {
     
     //Winding down since it stopped generating.
     ONION_ANIM_STOPPING_GENERATION,
+    
+    //Finished receiving a delivery.
+    ONION_ANIM_RECEIVED,
     
 };
 
@@ -93,9 +99,6 @@ public:
     
     //Radius of the area where a carried mob can be delivered.
     float deliveryAreaRadius = 0.0f;
-    
-    //Whether it can turn see-through.
-    bool canTurnSeeThrough = true;
     
     //If true, nutrients received are sent to the linked Onion and then ignored.
     bool sendNutrientsToLink = false;

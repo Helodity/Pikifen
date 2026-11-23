@@ -26,7 +26,7 @@ using std::vector;
 
 
 class Mob;
-struct Viewport;
+class Viewport;
 
 
 #pragma region Constants
@@ -119,9 +119,11 @@ enum PARTICLE_BLEND_TYPE {
  * @brief A description of how a particle
  * generator should emit particles.
  */
-struct ParticleEmission {
+class ParticleEmission {
 
     public:
+    
+    //--- Public members ---
     
     //Shape for particles to emit from.
     PARTICLE_EMISSION_SHAPE shape = PARTICLE_EMISSION_SHAPE_RECTANGLE;
@@ -176,7 +178,9 @@ struct ParticleEmission {
  * There are several different types, which
  * change the way they look, how they behave over time, etc.
  */
-struct Particle {
+class Particle {
+
+public:
 
     //--- Public members ---
     
@@ -189,7 +193,7 @@ struct Particle {
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //Angle the bitmap should be at.
-    float bmpAngle = 0.0f;
+    Angle bmpAngle = 0.0f;
     
     //Type of bitmap rotation.
     PARTICLE_ANGLE_TYPE bmpAngleType = PARTICLE_ANGLE_TYPE_FIXED;
@@ -264,7 +268,9 @@ struct Particle {
 /**
  * @brief Manages a list of particles, allows the addition of new ones, etc.
  */
-struct ParticleManager {
+class ParticleManager {
+
+public:
 
     //--- Public members ---
     
@@ -318,7 +324,9 @@ struct ParticleManager {
  * @brief Base class for the particle generator.
  * A particle generator creates particles in a steady flow and/or in a pattern.
  */
-struct ParticleGenerator : public Content {
+class ParticleGenerator : public Content {
+
+public:
 
     //--- Public members ---
     
@@ -341,13 +349,13 @@ struct ParticleGenerator : public Content {
     float followZOffset = 0.0f;
     
     //Follow the given angle. e.g. a mob's angle.
-    float* followAngle = nullptr;
+    Angle* followAngle = nullptr;
     
     //Whether it is currently allowed to emit.
     bool canEmit = true;
     
     //Maximum random deviation of the bitmap's rotation.
-    float bmpAngleDeviation = 0.0f;
+    Angle bmpAngleDeviation = 0.0f;
     
     //Maximum random deviation of duration.
     float durationDeviation = 0.0f;
@@ -367,8 +375,8 @@ struct ParticleGenerator : public Content {
     //Maximum random deviation of speed.
     Point linearSpeedDeviation = Point(0.0f);
     
-    //How many degrees linear speed can be rotated by.
-    float linearSpeedAngleDeviation = 0.0f;
+    //How much linear speed can be rotated by.
+    Angle linearSpeedAngleDeviation = 0.0f;
     
     //Are the directions and angles provided absolute, or relative (to a mob)?
     bool anglesAreAbsolute = false;

@@ -163,7 +163,6 @@ bool ImGui::Combo(
     const string& label, string* currentItem, const vector<string>& items,
     int popupMaxHeightInItems
 ) {
-
     string itemsStr;
     int itemIdx = -1;
     for(size_t i = 0; i < items.size(); i++) {

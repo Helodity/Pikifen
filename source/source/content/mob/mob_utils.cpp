@@ -29,7 +29,7 @@ using std::size_t;
 
 
 /**
- * @brief Constructs a new carrier spot struct object.
+ * @brief Constructs a new carrier spot class object.
  *
  * @param pos The spot's relative coordinates.
  */
@@ -44,7 +44,7 @@ CarrierSpot::CarrierSpot(const Point& pos) :
 
 
 /**
- * @brief Constructs a new carry info struct object.
+ * @brief Constructs a new carry info class object.
  *
  * @param m The mob this info belongs to.
  * @param destination Where to deliver the mob.
@@ -58,7 +58,7 @@ CarryInfo::CarryInfo(
     for(size_t c = 0; c < m->type->maxCarriers; c++) {
         Point p;
         if(m->type->customCarrySpots.empty()) {
-            float angle = TAU / m->type->maxCarriers * c;
+            Angle angle = TAU / m->type->maxCarriers * c;
             p =
                 Point(
                     cos(angle) *
@@ -82,6 +82,7 @@ CarryInfo::CarryInfo(
  */
 bool CarryInfo::canFly() const {
     forIdx(c, spotInfo) {
+        if(spotInfo[c].state != CARRY_SPOT_STATE_USED) continue;
         Mob* carrierPtr = spotInfo[c].pikPtr;
         if(!carrierPtr) continue;
         if(!hasFlag(spotInfo[c].pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
@@ -102,6 +103,7 @@ vector<Hazard*> CarryInfo::getCarrierInvulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<MobType*> carrierTypes;
     forIdx(c, spotInfo) {
+        if(spotInfo[c].state != CARRY_SPOT_STATE_USED) continue;
         Mob* carrierPtr = spotInfo[c].pikPtr;
         if(!carrierPtr) continue;
         carrierTypes.insert(carrierPtr->type);
@@ -205,9 +207,9 @@ bool CarryInfo::isFull() const {
  *
  * @param angle Angle to rotate to.
  */
-void CarryInfo::rotatePoints(float angle) {
+void CarryInfo::rotatePoints(Angle angle) {
     forIdx(s, spotInfo) {
-        float sAngle = angle + (TAU / m->type->maxCarriers * s);
+        Angle sAngle = angle + (TAU / m->type->maxCarriers * s);
         Point p(
             cos(sAngle) *
             (m->radius + game.config.pikmin.standardRadius),
@@ -224,9 +226,9 @@ void CarryInfo::rotatePoints(float angle) {
 
 
 /**
- * @brief Constructs a new circling info struct object.
+ * @brief Constructs a new circling info object.
  *
- * @param m Mob this circling info struct belongs to.
+ * @param m Mob this circling info belongs to.
  */
 CirclingInfo::CirclingInfo(Mob* m) :
     m(m) {
@@ -239,7 +241,7 @@ CirclingInfo::CirclingInfo(Mob* m) :
 
 
 /**
- * @brief Constructs a new delivery info struct object.
+ * @brief Constructs a new delivery info object.
  */
 DeliveryInfo::DeliveryInfo() :
     color(game.config.aestheticGen.carryingColorMove) {
@@ -251,9 +253,9 @@ DeliveryInfo::DeliveryInfo() :
 
 
 /**
- * @brief Constructs a new group info struct object.
+ * @brief Constructs a new group info object.
  *
- * @param leaderPtr Mob this group info struct belongs to.
+ * @param leaderPtr Mob this group info belongs to.
  */
 Group::Group(Mob* leaderPtr) :
     anchor(leaderPtr->center),
@@ -372,7 +374,6 @@ vector<Hazard*> Group::getGroupInvulnerabilities(
 bool Group::getNextStandbyType(
     bool moveBackwards, SubgroupType** newType
 ) {
-
     if(members.empty()) {
         *newType = nullptr;
         return true;
@@ -479,6 +480,8 @@ void Group::initSpots(Mob* affectedMobPtr) {
      * @brief Initial spot.
      */
     struct AlphaSpot {
+
+    public:
     
         //--- Public members ---
         
@@ -509,7 +512,6 @@ void Group::initSpots(Mob* affectedMobPtr) {
     alphaSpots.push_back(AlphaSpot(Point()));
     
     while(alphaSpots.size() < members.size()) {
-    
         //First, calculate how far the center
         //of these spots are from the central spot.
         float distFromCenter =
@@ -544,7 +546,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
         //Finally, we can calculate where the other spots are.
         size_t nSpotsOnWheel = floor(TAU / angularDist);
         //Get a better angle. One that can evenly distribute the spots.
-        float angle = TAU / nSpotsOnWheel;
+        Angle angle = TAU / nSpotsOnWheel;
         
         for(unsigned s = 0; s < nSpotsOnWheel; s++) {
             alphaSpots.push_back(
@@ -676,6 +678,7 @@ void Group::sort(SubgroupType* leadingType) {
     }
     
     SubgroupType* curType = leadingType;
+    MATURITY curMaturity = MATURITY_FLOWER;
     size_t curSpot = 0;
     
     while(curSpot != spots.size()) {
@@ -686,6 +689,9 @@ void Group::sort(SubgroupType* leadingType) {
         Distance closestDist;
         forIdx(m, members) {
             Mob* mPtr = members[m];
+            if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+                if(((Pikmin*) mPtr)->maturity != curMaturity) continue;
+            }
             if(mPtr->subgroupTypePtr != curType) continue;
             if(mPtr->groupSpotIdx != INVALID) continue;
             
@@ -699,10 +705,15 @@ void Group::sort(SubgroupType* leadingType) {
         }
         
         if(!closestMember) {
-            //There are no more members of the current type left!
-            //Next type.
-            curType =
-                game.states.gameplay->subgroupTypes.getNextType(curType);
+            //There are no more members of the current maturity or type left.
+            //Try the next maturity or type.
+            if(curMaturity == MATURITY_LEAF) {
+                curMaturity = MATURITY_FLOWER;
+                curType =
+                    game.states.gameplay->subgroupTypes.getNextType(curType);
+            } else {
+                curMaturity = (MATURITY) (((int) curMaturity) - 1);
+            }
         } else {
             spots[curSpot].mobPtr = closestMember;
             closestMember->groupSpotIdx = curSpot;
@@ -799,7 +810,7 @@ Point HoldInfo::getFinalPos(float* outZ) const {
 
 
 /**
- * @brief Constructs a new parent info struct object.
+ * @brief Constructs a new parent info object.
  *
  * @param m The parent mob.
  */
@@ -814,9 +825,9 @@ Parent::Parent(Mob* m) :
 
 
 /**
- * @brief Constructs a new path info struct object.
+ * @brief Constructs a new path info object.
  *
- * @param m Mob this path info struct belongs to.
+ * @param m Mob this path info belongs to.
  * @param settings Settings about how the path should be followed.
  */
 Path::Path(
@@ -880,7 +891,7 @@ bool Path::isDirect() const {
 
 
 /**
- * @brief Constructs a new Pikmin nest struct object.
+ * @brief Constructs a new Pikmin nest object.
  *
  * @param mPtr Nest mob responsible.
  * @param type Type of nest.
@@ -940,7 +951,7 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
             mPtr->getHitbox(legHoleBPIdx)->getCurPos(
                 mPtr->center, mPtr->bottomZ, mPtr->angle, &spawnZ
             );
-        float spawnAngle =
+        Angle spawnAngle =
             getAngle(mPtr->center, spawnCoords);
             
         //Create the Pikmin.
@@ -1160,27 +1171,32 @@ void PikminNestType::createColormap() {
     KeyframeInterpolator<ALLEGRO_COLOR> ki(pikTypes[0]->mainColor);
     float span = 1;
     if(pikTypes.size() > 1) {
-        span = 1.0f / (pikTypes.size() - 1);
+        span = 1.0f / pikTypes.size();
     }
     for(size_t i = 1; i < pikTypes.size(); i++) {
         ki.addNew(span * i, pikTypes[i]->mainColor, EASE_METHOD_IN_OUT);
     }
     
-    //Add a darker variant for single-type Onions.
     if(pikTypes.size() == 1) {
+        //Add a darker variant for single-type Onions.
         ALLEGRO_COLOR c =
             tintColor(pikTypes[0]->mainColor, mapGray(0.40f * 255));
-        ki.addNew(1.0, c, EASE_METHOD_IN_OUT);
+        ki.addNew(0.5, c, EASE_METHOD_IN_OUT);
     }
+    //Readd the first color at the end to allow smooth looping
+    ALLEGRO_COLOR c =
+        pikTypes[0]->mainColor;
+    ki.addNew(1.0, c, EASE_METHOD_IN_OUT);
     
     //Create the texture.
     ALLEGRO_BITMAP* oldTargetBmp = al_get_target_bitmap();
     int oldBmpFlags = al_get_new_bitmap_flags();
-    al_set_new_bitmap_flags(ALLEGRO_CONVERT_BITMAP); //Prevents automatic smoothing -- leads to gaps.
-    menuColormap = al_create_bitmap(100, 1);
+    al_set_new_bitmap_flags(0); //Prevents automatic smoothing -- leads to gaps.
+    int bitmapSize = pikTypes.size() * 50;
+    menuColormap = al_create_bitmap(bitmapSize, 1);
     al_set_target_bitmap(menuColormap);
-    for(int i = 0; i < 100; i++) {
-        al_put_pixel(i, 0, ki.get(i / 100.0f));
+    for(int i = 0; i < bitmapSize; i++) {
+        al_put_pixel(i, 0, ki.get(i / (float) bitmapSize));
     }
     al_set_target_bitmap(oldTargetBmp);
     al_set_new_bitmap_flags(oldBmpFlags);
@@ -1213,12 +1229,14 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     
     legBodyParts = semicolonListToVector(legsStr);
     if(pikTypesNode && legBodyParts.empty()) {
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "A nest-like object type needs a list of leg body parts!",
             file
         );
     } else if(legsNode && legBodyParts.size() % 2 == 1) {
-        game.errors.report(
+        game.log.write(
+            LOG_LEVEL_ERROR,
             "A nest-like object type needs an even number of leg body parts!",
             legsNode
         );
@@ -1228,7 +1246,8 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     forIdx(t, pikTypesStrs) {
         string& str = pikTypesStrs[t];
         if(!isInMap(game.content.mobTypes.list.pikmin, str)) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + str + "\"!",
                 pikTypesNode
             );
@@ -1257,9 +1276,9 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
 
 
 /**
- * @brief Constructs a new track ride info struct object.
+ * @brief Constructs a new track ride info object.
  *
- * @param m Mob this track info struct belongs to.
+ * @param m Mob this track info belongs to.
  * @param checkpoints List of checkpoints (body part indexes) to cross.
  * @param rideSpeed Speed to ride at, in ratio per second.
  */
@@ -1320,7 +1339,7 @@ float calculateMobPhysicalSpan(
  */
 Mob* createMob(
     MobCategory* category, const Point& center, MobType* type,
-    float angle, const string& varsStr,
+    Angle angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation,
     size_t firstStateOverride
 ) {
@@ -1358,7 +1377,8 @@ Mob* createMob(
             getSpawnInfoFromChildInfo(mPtr->type, &type->children[c]);
             
         if(!spawnInfo) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Object \"" + type->name + "\" tried to spawn a child with the "
                 "spawn name \"" + childInfo->spawnName + "\", but that name "
                 "does not exist in the list of spawn data!"
@@ -1394,7 +1414,8 @@ Mob* createMob(
                 pInfo->limbAnim.curAnim = animToUse;
                 pInfo->limbAnim.toStart();
             } else {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Object \"" + newMob->type->name + "\", child object of "
                     "object \"" + type->name + "\", tried to use animation \"" +
                     childInfo->limbAnimName + "\" for a limb, but that "
@@ -1506,7 +1527,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
             }
             forIdx(l, m2Ptr->links) {
                 if(m2Ptr->links[l] == mPtr) {
-                    m2Ptr->links.erase(m2Ptr->links.begin() + l);
+                    eraseInVector(m2Ptr->links, l);
                     l--;
                 }
             }
@@ -1650,7 +1671,7 @@ MobType::SpawnInfo* getSpawnInfoFromChildInfo(
  * @return Whether it's in reach.
  */
 bool isMobInReach(
-    MobType::Reach* reachTPtr, const Distance& distBetween, float angleDiff
+    MobType::Reach* reachTPtr, const Distance& distBetween, Angle angleDiff
 ) {
     bool inReach =
         (

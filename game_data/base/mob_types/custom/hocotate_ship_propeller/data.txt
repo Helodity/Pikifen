@@ -1,0 +1,16 @@
+name = Hocotate ship propeller
+description = The rotating propeller at the top of the Hocotate ship.
+
+appears_in_area_editor = false
+casts_shadow = false
+custom_category_name = Aux
+height = 8
+pushable = false
+pushes = false
+radius = 6
+target_type = none
+team = none
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

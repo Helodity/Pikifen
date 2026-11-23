@@ -26,6 +26,12 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace MAIN_MENU {
 
+//How long the main menu proper's fast fade in animation lasts for.
+const float FADE_IN_FAST_DURATION = 0.35f;
+
+//How long the main menu proper's fade in animation lasts for.
+const float FADE_IN_DURATION = 1.5f;
+
 //Name of the GUI definition file.
 const string GUI_FILE_NAME = "main_menu_top";
 
@@ -38,6 +44,21 @@ const string MAKE_GUI_FILE_NAME = "main_menu_make";
 //Name of the play page GUI definition file.
 const string PLAY_GUI_FILE_NAME = "main_menu_play";
 
+//How long the zoom effect goes on for.
+const float ZOOM_DURATION = 3.5f;
+
+}
+
+
+/**
+ * @brief Hides the main menu's GUIs.
+ */
+void MainMenu::hide() {
+    forIdx(g, guis) {
+        GuiManager* gPtr = guis[g];
+        gPtr->responsive = false;
+        gPtr->visible = false;
+    }
 }
 
 
@@ -61,23 +82,10 @@ void MainMenu::initGuiMainPage() {
     bool statsIconLeft = getIconLeft("statistics", "true");
     bool quitIconLeft = getIconLeft("quit", "false");
     
-    //Menu items.
-    mainGui.registerCoords("play",       42, 58, 44, 12);
-    mainGui.registerCoords("make",       58, 72, 44, 12);
-    mainGui.registerCoords("help",       24, 83, 24,  6);
-    mainGui.registerCoords("options",    50, 83, 24,  6);
-    mainGui.registerCoords("stats",      76, 83, 24,  6);
-    mainGui.registerCoords("discord",    74, 91,  4,  5);
-    mainGui.registerCoords("github",     80, 91,  4,  5);
-    mainGui.registerCoords("exit",       91, 91, 14,  6);
-    mainGui.registerCoords("exit_input", 97, 93,  4,  4);
-    mainGui.registerCoords("tooltip",    50, 96, 96,  4);
-    mainGui.readDataFile(guiFile);
-    
     //Play button.
     ButtonGuiItem* playButton =
         new ButtonGuiItem("Play", game.sysContent.fntAreaName);
-    playButton->onDraw =
+    playButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_PLAY, draw.center, draw.size, playIconLeft, draw.tint
@@ -90,7 +98,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     playButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         if(game.statistics.areaEntries == 0) {
             game.modal.reset();
             game.modal.title = "Tutorial";
@@ -102,7 +110,7 @@ void MainMenu::initGuiMainPage() {
             ModalGuiManager::Button {
                 .text = "No",
                 .tooltip = "Go to the standard area selection menu.",
-                .onActivate = [this] (const Point&) {
+                .onActivate = [this] (float, float) {
                     transitionGuis(
                         mainGui, playGui,
                         GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -115,7 +123,7 @@ void MainMenu::initGuiMainPage() {
             ModalGuiManager::Button {
                 .text = "Yes",
                 .tooltip = "Play Tutorial Meadow now.",
-                .onActivate = [] (const Point&) {
+                .onActivate = [] (float, float) {
                     game.states.gameplay->pathOfAreaToLoad =
                     game.content.areas.manifestToPath(
                         ContentManifest(
@@ -144,12 +152,12 @@ void MainMenu::initGuiMainPage() {
     };
     playButton->onGetTooltip =
     [] () { return "Choose an area to play in."; };
-    mainGui.addItem(playButton, "play");
+    mainGui.addItemP(playButton, "play");
     
     //Make button.
     ButtonGuiItem* makeButton =
         new ButtonGuiItem("Make", game.sysContent.fntAreaName);
-    makeButton->onDraw =
+    makeButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft, draw.tint
@@ -162,7 +170,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     makeButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             mainGui, makeGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             MAIN_MENU::HUD_MOVE_TIME
@@ -170,12 +178,12 @@ void MainMenu::initGuiMainPage() {
     };
     makeButton->onGetTooltip =
     [] () { return "Make your own content, like areas or animations."; };
-    mainGui.addItem(makeButton, "make");
+    mainGui.addItemP(makeButton, "make");
     
     //Help button.
     ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntAreaName);
-    helpButton->onDraw =
+    helpButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_HELP, draw.center, draw.size, helpIconLeft, draw.tint
@@ -188,7 +196,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     helpButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.annexScreen);
         });
@@ -199,12 +207,12 @@ void MainMenu::initGuiMainPage() {
             "Quick help and tips about how to play. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(helpButton, "help");
+    mainGui.addItemP(helpButton, "help");
     
     //Options button.
     ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntAreaName);
-    optionsButton->onDraw =
+    optionsButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft,
@@ -218,7 +226,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     optionsButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_OPTIONS;
@@ -231,12 +239,12 @@ void MainMenu::initGuiMainPage() {
             "Customize your playing experience. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(optionsButton, "options");
+    mainGui.addItemP(optionsButton, "options");
     
     //Statistics button.
     ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntAreaName);
-    statsButton->onDraw =
+    statsButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft,
@@ -250,7 +258,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     statsButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_STATS;
@@ -263,17 +271,17 @@ void MainMenu::initGuiMainPage() {
             "Check out some fun lifetime statistics. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(statsButton, "stats");
+    mainGui.addItemP(statsButton, "stats");
     
     //Discord server button.
     ButtonGuiItem* discordButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
     discordButton->forceSquare = true;
-    discordButton->onDraw =
+    discordButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
-            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f, true,
-            0.0f, draw.tint
+            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f,
+            true, true, 0.0f, draw.tint
         );
         drawButton(
             draw.center, draw.size,
@@ -283,7 +291,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     discordButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         openWebBrowser(DISCORD_SERVER_URL);
     };
     discordButton->onGetTooltip =
@@ -292,17 +300,17 @@ void MainMenu::initGuiMainPage() {
             "Open the project's Discord server! Discussions! Feedback! "
             "Questions! New content!";
     };
-    mainGui.addItem(discordButton, "discord");
+    mainGui.addItemP(discordButton, "discord");
     
     //GitHub page button.
     ButtonGuiItem* githubButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
     githubButton->forceSquare = true;
-    githubButton->onDraw =
+    githubButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
-            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f, true,
-            0.0f, draw.tint
+            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f,
+            true, true, 0.0f, draw.tint
         );
         drawButton(
             draw.center, draw.size,
@@ -312,19 +320,19 @@ void MainMenu::initGuiMainPage() {
         );
     };
     githubButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         openWebBrowser(GITHUB_PAGE_URL);
     };
     githubButton->onGetTooltip =
     [] () { return "Open the project's development page on GitHub!"; };
-    mainGui.addItem(githubButton, "github");
+    mainGui.addItemP(githubButton, "github");
     
     //Exit button.
     mainGui.backItem =
         new ButtonGuiItem(
         "Exit", game.sysContent.fntAreaName, game.config.guiColors.bad
     );
-    mainGui.backItem->onDraw =
+    mainGui.backItem->onDrawP =
     [this, quitIconLeft] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft, draw.tint
@@ -340,7 +348,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     mainGui.backItem->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         saveStatistics();
         game.isGameRunning = false;
     };
@@ -351,7 +359,7 @@ void MainMenu::initGuiMainPage() {
             "Quit Pikifen." :
             "Quit " + game.config.general.name + ".";
     };
-    mainGui.addItem(mainGui.backItem, "exit");
+    mainGui.addItemP(mainGui.backItem, "exit");
     
     //Exit input icon.
     guiCreateBackInputIcon(&mainGui, "exit_input");
@@ -359,12 +367,15 @@ void MainMenu::initGuiMainPage() {
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&mainGui);
-    mainGui.addItem(tooltipText, "tooltip");
+    mainGui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    mainGui.readDataFile(guiFile);
     
     //Finishing touches.
-    mainGui.setFocusedItem(playButton, true);
+    mainGui.setFocusedItemP(playButton, true);
     mainGui.responsive = false;
-    mainGui.hideItems();
+    mainGui.visible = false;
 }
 
 
@@ -387,21 +398,10 @@ void MainMenu::initGuiMakePage() {
     bool particleEditorIconLeft = getIconLeft("particle_editor", "true");
     bool guiEditorIconLeft = getIconLeft("gui_editor", "false");
     
-    //Menu items.
-    makeGui.registerCoords("animation_editor", 27.5, 63, 43, 12);
-    makeGui.registerCoords("area_editor",      72.5, 63, 43, 12);
-    makeGui.registerCoords("gui_editor",         69, 78, 34,  8);
-    makeGui.registerCoords("particle_editor",    31, 78, 34,  8);
-    makeGui.registerCoords("back",                9, 91, 14,  6);
-    makeGui.registerCoords("back_input",          3, 93,  4,  4);
-    makeGui.registerCoords("more",               91, 91, 14,  6);
-    makeGui.registerCoords("tooltip",            50, 96, 96,  4);
-    makeGui.readDataFile(guiFile);
-    
     //Animation editor button.
     ButtonGuiItem* animEdButton =
         new ButtonGuiItem("Animations", game.sysContent.fntAreaName);
-    animEdButton->onDraw =
+    animEdButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft,
@@ -415,19 +415,19 @@ void MainMenu::initGuiMakePage() {
         );
     };
     animEdButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.animationEd);
         });
     };
     animEdButton->onGetTooltip =
     [] () { return "Make an animation for any object in the game."; };
-    makeGui.addItem(animEdButton, "animation_editor");
+    makeGui.addItemP(animEdButton, "animation_editor");
     
     //Area editor button.
     ButtonGuiItem* areaEdButton =
         new ButtonGuiItem("Areas", game.sysContent.fntAreaName);
-    areaEdButton->onDraw =
+    areaEdButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft,
@@ -441,19 +441,19 @@ void MainMenu::initGuiMakePage() {
         );
     };
     areaEdButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.areaEd);
         });
     };
     areaEdButton->onGetTooltip =
     [] () { return "Make an area to play on."; };
-    makeGui.addItem(areaEdButton, "area_editor");
+    makeGui.addItemP(areaEdButton, "area_editor");
     
     //Particle editor button.
     ButtonGuiItem* partEdButton =
         new ButtonGuiItem("Particles", game.sysContent.fntAreaName);
-    partEdButton->onDraw =
+    partEdButton->onDrawP =
     [ = ](const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size,
@@ -467,19 +467,19 @@ void MainMenu::initGuiMakePage() {
         );
     };
     partEdButton->onActivate =
-    [](const Point&) {
+    [](float, float) {
         game.fadeMgr.startFade(false, []() {
             game.changeState(game.states.particleEd);
         });
     };
     partEdButton->onGetTooltip =
     []() { return "Make generators that create particles."; };
-    makeGui.addItem(partEdButton, "particle_editor");
+    makeGui.addItemP(partEdButton, "particle_editor");
     
     //GUI editor button.
     ButtonGuiItem* guiEdButton =
         new ButtonGuiItem("GUI", game.sysContent.fntAreaName);
-    guiEdButton->onDraw =
+    guiEdButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft,
@@ -493,14 +493,14 @@ void MainMenu::initGuiMakePage() {
         );
     };
     guiEdButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.guiEd);
         });
     };
     guiEdButton->onGetTooltip =
     [] () { return "Change the way menus and the gameplay HUD look."; };
-    makeGui.addItem(guiEdButton, "gui_editor");
+    makeGui.addItemP(guiEdButton, "gui_editor");
     
     //Back button.
     makeGui.backItem =
@@ -508,7 +508,7 @@ void MainMenu::initGuiMakePage() {
         "Back", game.sysContent.fntAreaName, game.config.guiColors.back
     );
     makeGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             makeGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             MAIN_MENU::HUD_MOVE_TIME
@@ -518,7 +518,7 @@ void MainMenu::initGuiMakePage() {
     [] () {
         return "Return to the main page.";
     };
-    makeGui.addItem(makeGui.backItem, "back");
+    makeGui.addItemP(makeGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&makeGui);
@@ -527,7 +527,7 @@ void MainMenu::initGuiMakePage() {
     ButtonGuiItem* moreButton =
         new ButtonGuiItem("Other...", game.sysContent.fntStandard);
     moreButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.modal.reset();
         game.modal.title = "Content making";
         game.modal.prompt =
@@ -539,7 +539,7 @@ void MainMenu::initGuiMakePage() {
         ModalGuiManager::Button {
             .text = "Open manual",
             .tooltip = "Open the manual in the content making page.",
-            .onActivate = [] (const Point&) {
+            .onActivate = [] (float, float) {
                 openManual("making.html");
             }
         }
@@ -548,7 +548,7 @@ void MainMenu::initGuiMakePage() {
         ModalGuiManager::Button {
             .text = "Open game folder",
             .tooltip = "Open the folder with the game's content.",
-            .onActivate = [] (const Point&) {
+            .onActivate = [] (float, float) {
                 openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
             }
         }
@@ -561,17 +561,20 @@ void MainMenu::initGuiMakePage() {
         return
             "Information on how to make other content.";
     };
-    makeGui.addItem(moreButton, "more");
+    makeGui.addItemP(moreButton, "more");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&makeGui);
-    makeGui.addItem(tooltipText, "tooltip");
+    makeGui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    makeGui.readDataFile(guiFile);
     
     //Finishing touches.
-    makeGui.setFocusedItem(animEdButton, true);
+    makeGui.setFocusedItemP(animEdButton, true);
     makeGui.responsive = false;
-    makeGui.hideItems();
+    makeGui.visible = false;
 }
 
 
@@ -592,18 +595,10 @@ void MainMenu::initGuiPlayPage() {
     bool simpleAreasIconLeft = getIconLeft("simple_areas", "true");
     bool missionsIconLeft = getIconLeft("missions", "true");
     
-    //Menu items.
-    playGui.registerCoords("simple",     42, 60, 60, 12.5);
-    playGui.registerCoords("mission",    44, 78, 60, 12.5);
-    playGui.registerCoords("back",        9, 91, 14,    6);
-    playGui.registerCoords("back_input",  3, 93,  4,    4);
-    playGui.registerCoords("tooltip",    50, 96, 96,    4);
-    playGui.readDataFile(guiFile);
-    
     //Play a simple area button.
     ButtonGuiItem* simpleButton =
         new ButtonGuiItem("Simple areas", game.sysContent.fntAreaName);
-    simpleButton->onDraw =
+    simpleButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft,
@@ -617,7 +612,7 @@ void MainMenu::initGuiPlayPage() {
         );
     };
     simpleButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
                 AREA_TYPE_SIMPLE;
@@ -628,12 +623,12 @@ void MainMenu::initGuiPlayPage() {
     };
     simpleButton->onGetTooltip =
     [] () { return "Pick a simple area with no goal, and start playing!"; };
-    playGui.addItem(simpleButton, "simple");
+    playGui.addItemP(simpleButton, "simple");
     
     //Play a mission area button.
     ButtonGuiItem* missionButton =
         new ButtonGuiItem("Missions", game.sysContent.fntAreaName);
-    missionButton->onDraw =
+    missionButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft,
@@ -647,7 +642,7 @@ void MainMenu::initGuiPlayPage() {
         );
     };
     missionButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
                 AREA_TYPE_MISSION;
@@ -662,7 +657,7 @@ void MainMenu::initGuiPlayPage() {
             "Pick a mission area with goals and limitations, "
             "and start playing!";
     };
-    playGui.addItem(missionButton, "mission");
+    playGui.addItemP(missionButton, "mission");
     
     //Back button.
     playGui.backItem =
@@ -670,7 +665,7 @@ void MainMenu::initGuiPlayPage() {
         "Back", game.sysContent.fntAreaName, game.config.guiColors.back
     );
     playGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             playGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             MAIN_MENU::HUD_MOVE_TIME
@@ -680,7 +675,7 @@ void MainMenu::initGuiPlayPage() {
     [] () {
         return "Return to the main page.";
     };
-    playGui.addItem(playGui.backItem, "back");
+    playGui.addItemP(playGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&playGui);
@@ -688,12 +683,15 @@ void MainMenu::initGuiPlayPage() {
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&playGui);
-    playGui.addItem(tooltipText, "tooltip");
+    playGui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    playGui.readDataFile(guiFile);
     
     //Finishing touches.
-    playGui.setFocusedItem(simpleButton, true);
+    playGui.setFocusedItemP(simpleButton, true);
     playGui.responsive = false;
-    playGui.hideItems();
+    playGui.visible = false;
 }
 
 
@@ -708,15 +706,15 @@ void MainMenu::load() {
     switch(pageToLoad) {
     case MAIN_MENU_PAGE_MAIN: {
         mainGui.responsive = true;
-        mainGui.showItems();
+        mainGui.visible = true;
         break;
     } case MAIN_MENU_PAGE_PLAY: {
         playGui.responsive = true;
-        playGui.showItems();
+        playGui.visible = true;
         break;
     } case MAIN_MENU_PAGE_MAKE: {
         makeGui.responsive = true;
-        makeGui.showItems();
+        makeGui.visible = true;
         break;
     }
     }
@@ -731,15 +729,36 @@ void MainMenu::load() {
 
 
 /**
+ * @brief Speeds up an ongoing fade-in.
+ */
+void MainMenu::speedUpFadeIn() {
+    if(mainGui.getAnimation() == GUI_MANAGER_ANIM_FADE_IN) {
+        mainGui.changeCurAnimationDuration(
+            MAIN_MENU::FADE_IN_FAST_DURATION
+        );
+        mainGui.responsive = true;
+    }
+}
+
+
+/**
+ * @brief Starts the menu's fade-in transition.
+ */
+void MainMenu::startFadingIn() {
+    mainGui.startAnimation(
+        GUI_MANAGER_ANIM_FADE_IN, MAIN_MENU::FADE_IN_DURATION
+    );
+    mainGui.responsive = true;
+}
+
+
+/**
  * @brief Draws the title screen.
  */
 void TitleScreen::doDrawing() {
-    Point pikSize = wordmarkPikminSize;
-    pikSize.x *= game.winW / 100.0f;
-    pikSize.y *= game.winH / 100.0f;
-    
     //To export the wordmark into its own bitmap, set this to true.
-    //One good trick is to set it to true if game.timePassed > 10.
+    //One good trick is to set it to true only if
+    //passedBy(game.timePassed, game.timePassed + game.deltaT, 10);
     const bool justWordmark = false;
     
     ALLEGRO_BITMAP* bmpJustWordmark = nullptr;
@@ -748,86 +767,45 @@ void TitleScreen::doDrawing() {
         al_set_target_bitmap(bmpJustWordmark);
     }
     
-    //Draw the background fill color.
+    //Set up the zoom level.
+    float zoomTimeRatio =
+        interpolateNumber(
+            zoomInTimer, MAIN_MENU::ZOOM_DURATION, 0.0f, 0.0f, 1.0f
+        );
+    zoomTimeRatio = std::clamp(zoomTimeRatio, 0.0f, 1.0f);
+    zoomTimeRatio = ease(zoomTimeRatio, EASE_METHOD_OUT);
+    float zoomLevel =
+        interpolateNumber(
+            zoomTimeRatio, 0.0f, 1.0f,
+            1.0f / game.config.aestheticGen.titleScreenBgFinalZoom, 1.0f
+        );
+    ALLEGRO_TRANSFORM zoomTransform;
+    al_identity_transform(&zoomTransform);
+    float halfWinW = game.winW / 2.0f;
+    float halfWinH = game.winH / 2.0f;
+    al_translate_transform(&zoomTransform, -halfWinW, -halfWinH);
+    al_scale_transform(&zoomTransform, zoomLevel, zoomLevel);
+    al_translate_transform(&zoomTransform, halfWinW, halfWinH);
+    
+    //Draw! Start with the background fill color.
     al_clear_to_color(justWordmark ? COLOR_EMPTY : COLOR_BLACK);
     
     if(game.debug.showDearImGuiDemo) return;
     
-    //Fill the wordmark Pikmin's shadow buffer.
-    ALLEGRO_BITMAP* oldTargetBmp = al_get_target_bitmap();
-    al_set_target_bitmap(bmpWordmarkShadows);
-    al_clear_to_color(COLOR_EMPTY);
-    int oldOp = 0, oldSource = 0, oldDest = 0;
-    al_get_blender(&oldOp, &oldSource, &oldDest);
-    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE); {
-        forIdx(p, wordmarkPikmin) {
-            WordmarkPikmin* pik = &wordmarkPikmin[p];
-            drawBitmapInBox(
-                game.sysContent.bmpShadow,
-                pik->center + pikSize * 0.30f, pikSize * 1.2f, true
-            );
-        }
-    } al_set_blender(oldOp, oldSource, oldDest);
-    al_set_target_bitmap(oldTargetBmp);
+    if(!justWordmark) al_use_transform(&zoomTransform);
     
-    //Draw the background.
-    if(!justWordmark) {
-        drawBitmap(
-            bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
-            Point(game.winW, game.winH)
-        );
-    }
+    drawDecorations(justWordmark);
     
-    //Draw the wordmark Pikmin shadows.
-    al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER)); {
-        //Color it just a bit green so it's more natural.
-        ALLEGRO_COLOR color = al_map_rgba(0, 255, 0, 32);
-        al_set_shader_float_vector(
-            "colorizer_color", 4, (float*) &color, 1
-        );
-        drawBitmap(
-            bmpWordmarkShadows, Point(game.winW / 2.0f, game.winH / 2.0f),
-            Point(game.winW, game.winH), 0.0f, COLOR_TRANSPARENT_WHITE
-        );
-    } al_use_shader(nullptr);
-    
-    //Draw the wordmark Pikmin proper.
-    forIdx(p, wordmarkPikmin) {
-        WordmarkPikmin* pik = &wordmarkPikmin[p];
-        drawBitmapInBox(
-            pik->top, pik->center, pikSize, true, pik->angle
-        );
-    }
+    al_use_transform(&game.identityTransform);
     
     if(justWordmark) {
-        //Do what you want with bmpJustWordmark, like using al_save_bitmap().
+        //Do what you want with bmpJustWordmark, like using
+        //al_save_bitmap("wordmark.png", bmpJustWordmark);
         al_destroy_bitmap(bmpJustWordmark);
         return;
     }
     
-    drawText(
-        "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
-        game.sysContent.fntSlim,
-        Point(8.0f),
-        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
-        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
-    );
-    string versionText;
-    if(!game.config.general.name.empty()) {
-        versionText = game.config.general.name;
-        if(!game.config.general.version.empty()) {
-            versionText += " " + game.config.general.version;
-        }
-        versionText += ", powered by ";
-    }
-    versionText +=
-        "Pikifen " + getEngineVersionString(true);
-    drawText(
-        versionText, game.sysContent.fntSlim,
-        Point(game.winW - 8, 8),
-        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
-        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
-    );
+    drawFixedText();
     
     mainMenu.draw();
     
@@ -882,6 +860,17 @@ void TitleScreen::doLogic() {
         }
     }
     
+    //Main menu logic.
+    if(guiFadeTimer > 0.0f) {
+        guiFadeTimer -= game.deltaT;
+        if(guiFadeTimer <= 0.0f) {
+            mainMenu.startFadingIn();
+            game.mouseCursor.purposely0Alpha = false;
+        }
+    }
+    if(zoomInTimer > 0.0f) {
+        zoomInTimer -= game.deltaT;
+    }
     mainMenu.tick(game.deltaT);
     
     //Fade manager needs to come last, because if
@@ -890,6 +879,96 @@ void TitleScreen::doLogic() {
     //this function, we're going to have a bad time.
     game.fadeMgr.tick(game.deltaT);
     
+}
+
+
+/**
+ * @brief Draws all of the non-interactive parts of the title screen.
+ *
+ * @param justWordmark Whether to draw just the wordmark.
+ */
+void TitleScreen::drawDecorations(bool justWordmark) const {
+    Point pikSize = wordmarkPikminSize;
+    pikSize.x *= game.winW / 100.0f;
+    pikSize.y *= game.winH / 100.0f;
+    
+    //Fill the wordmark Pikmin's shadow buffer.
+    ALLEGRO_BITMAP* prevTargetBmp = al_get_target_bitmap();
+    al_set_target_bitmap(bmpWordmarkShadows);
+    al_clear_to_color(COLOR_EMPTY);
+    AllegroBlenderState prevBlender;
+    prevBlender.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE); {
+        forIdx(p, wordmarkPikmin) {
+            const WordmarkPikmin* pik = &wordmarkPikmin[p];
+            drawBitmapInBox(
+                game.sysContent.bmpShadow,
+                pik->center + pikSize * 0.30f, pikSize * 1.2f, true, true
+            );
+        }
+    } prevBlender.load();
+    al_set_target_bitmap(prevTargetBmp);
+    
+    //Draw the background.
+    if(!justWordmark) {
+        drawBitmapInBox(
+            bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
+            Point(game.winW, game.winH) *
+            game.config.aestheticGen.titleScreenBgFinalZoom,
+            true, false
+        );
+    }
+    
+    //Draw the wordmark Pikmin shadows.
+    al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER)); {
+        //Color it just a bit green so it's more natural.
+        ALLEGRO_COLOR color = al_map_rgba(0, 255, 0, 32);
+        al_set_shader_float_vector(
+            "colorizer_color", 4, (float*) &color, 1
+        );
+        drawBitmap(
+            bmpWordmarkShadows, Point(game.winW / 2.0f, game.winH / 2.0f),
+            Point(game.winW, game.winH), 0.0f, COLOR_TRANSPARENT_WHITE
+        );
+    } al_use_shader(nullptr);
+    
+    //Draw the wordmark Pikmin proper.
+    forIdx(p, wordmarkPikmin) {
+        const WordmarkPikmin* pik = &wordmarkPikmin[p];
+        drawBitmapInBox(
+            pik->top, pik->center, pikSize, true, true, pik->angle
+        );
+    }
+}
+
+
+/**
+ * @brief Draws all of the fixed text.
+ */
+void TitleScreen::drawFixedText() const {
+    drawText(
+        "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
+        game.sysContent.fntSlim,
+        Point(8.0f),
+        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
+    );
+    string versionText;
+    if(!game.config.general.name.empty()) {
+        versionText = game.config.general.name;
+        if(!game.config.general.version.empty()) {
+            versionText += " " + game.config.general.version;
+        }
+        versionText += ", powered by ";
+    }
+    versionText +=
+        "Pikifen " + getEngineVersionString(true);
+    drawText(
+        versionText, game.sysContent.fntSlim,
+        Point(game.winW - 8, 8),
+        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
+        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
+    );
 }
 
 
@@ -904,14 +983,30 @@ string TitleScreen::getName() const {
 
 
 /**
- * @brief Handles Allegro events.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+void TitleScreen::handleAllegroInputEvent(ALLEGRO_EVENT& ev) {
+    if(guiFadeTimer > 0.0f) {
+        guiFadeTimer = 0.0f;
+        mainMenu.startFadingIn();
+        game.mouseCursor.purposely0Alpha = false;
+    }
+    mainMenu.speedUpFadeIn();
+    
     if(game.fadeMgr.isFading()) return;
     
-    mainMenu.handleAllegroEvent(ev);
+    mainMenu.handleAllegroInputEvent(ev);
+}
+
+
+/**
+ * @brief Handles an Allegro event not related to user input.
+ *
+ * @param ev Event to handle.
+ */
+void TitleScreen::handleAllegroOtherEvent(ALLEGRO_EVENT& ev) {
 }
 
 
@@ -942,7 +1037,7 @@ void TitleScreen::load() {
         
     //Wordmark pikmin.
     DataNode* wordmarkNode = settingsFile->getChildByName("logo");
-    ReaderSetter lRS(wordmarkNode);
+    ReaderSetter wRS(wordmarkNode);
     
     DataNode* pikTypesNode =
         wordmarkNode->getChildByName("pikmin_types");
@@ -962,15 +1057,15 @@ void TitleScreen::load() {
             std::max(mapTotalCols, mapNode->getChild(r)->name.size());
     }
     
-    lRS.set("min_window_limit", wordmarkMinWindowLimit);
-    lRS.set("max_window_limit", wordmarkMaxWindowLimit);
-    lRS.set("pikmin_max_speed", wordmarkPikminMaxSpeed);
-    lRS.set("pikmin_min_speed", wordmarkPikminMinSpeed);
-    lRS.set("pikmin_speed_smoothness", wordmarkPikminSpeedSmoothness);
-    lRS.set("pikmin_sway_amount", wordmarkPikminSwayAmount);
-    lRS.set("pikmin_sway_max_speed", wordmarkPikminSwayMaxSpeed);
-    lRS.set("pikmin_sway_min_speed", wordmarkPikminSwayMinSpeed);
-    lRS.set("pikmin_size", wordmarkPikminSize);
+    wRS.set("min_window_limit", wordmarkMinWindowLimit);
+    wRS.set("max_window_limit", wordmarkMaxWindowLimit);
+    wRS.set("pikmin_max_speed", wordmarkPikminMaxSpeed);
+    wRS.set("pikmin_min_speed", wordmarkPikminMinSpeed);
+    wRS.set("pikmin_speed_smoothness", wordmarkPikminSpeedSmoothness);
+    wRS.set("pikmin_sway_amount", wordmarkPikminSwayAmount);
+    wRS.set("pikmin_sway_max_speed", wordmarkPikminSwayMaxSpeed);
+    wRS.set("pikmin_sway_min_speed", wordmarkPikminSwayMinSpeed);
+    wRS.set("pikmin_size", wordmarkPikminSize);
     
     bool mapOk = true;
     
@@ -981,7 +1076,8 @@ void TitleScreen::load() {
             if(row[c] == '.') continue;
             if(!isInMap(wordmarkTypeBitmaps, row[c])) {
                 mapOk = false;
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "Title screen Pikmin logo map has an unknown character \"" +
                     string(1, row[c]) + "\" on row " + i2s(r + 1) +
                     ", column " + i2s(c + 1) + "!"
@@ -1039,6 +1135,11 @@ void TitleScreen::load() {
     //Finishing touches.
     game.audio.setCurrentSong(game.sysContentNames.sngMenus, false);
     if(game.timePassed == 0.0f) {
+        zoomInTimer = MAIN_MENU::ZOOM_DURATION;
+        guiFadeTimer =
+            std::max(0.0001f, game.config.aestheticGen.titleScreenGuiFadeDelay);
+        mainMenu.hide();
+        game.mouseCursor.purposely0Alpha = true;
         game.fadeMgr.setNextFadeDuration(GAME::FADE_SLOW_DURATION);
     }
     game.fadeMgr.startFade(true, nullptr);
@@ -1065,6 +1166,8 @@ void TitleScreen::unload() {
     wordmarkPikmin.clear();
     al_destroy_bitmap(bmpWordmarkShadows);
     bmpWordmarkShadows = nullptr;
+    guiFadeTimer = 0.0f;
+    zoomInTimer = 0.0f;
     
     //Game content.
     game.content.unloadAll(

@@ -29,6 +29,9 @@ extern const float GOTO_TIMEOUT;
 extern const float GROUNDED_ATTACK_DIST;
 extern const float IDLE_GLOW_SPIN_SPEED;
 extern const float INVULN_PERIOD;
+extern const float LEADER_CHASE_MAX_DIST;
+extern const float LEADER_CHASE_TIMER_DIST;
+extern const float LEADER_CHASE_TIMER_DURATION;
 extern const float MISSED_ATTACK_DURATION;
 extern const float PANIC_CHASE_INTERVAL;
 extern const float THROW_HOR_SPEED;
@@ -66,8 +69,8 @@ public:
     //How many hits in a row have done no damage.
     unsigned char consecutiveDings = 0;
     
-    //Maturity. 0: leaf. 1: bud. 2: flower.
-    unsigned char maturity = 2;
+    //Maturity.
+    MATURITY maturity = MATURITY_FLOWER;
     
     //Is this Pikmin currently a seed or a sprout?
     bool isSeedOrSprout = false;
@@ -81,6 +84,9 @@ public:
     
     //Leader it is meant to return to after what it is doing, if any.
     Mob* leaderToReturnTo = nullptr;
+    
+    //Time left until it gives up on following the current leader.
+    float leaderChaseTimer = 0.0f;
     
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool isToolPrimedForWhistle = false;
@@ -107,7 +113,7 @@ public:
     
     //--- Public function declarations ---
     
-    Pikmin(const Point& pos, PikminType* type, float angle);
+    Pikmin(const Point& pos, PikminType* type, Angle angle);
     void forceCarry(Mob* m);
     bool processAttackMiss(HitboxInteraction* info);
     bool increaseMaturity(int amount);
@@ -118,8 +124,8 @@ public:
     float getBaseSpeed() const override;
     void getGroupSpotInfo(Point* outSpot, float* outDist) const override;
     float getTaskRange() const;
-    void handleStatusEffectGain(StatusType* s) override;
-    void handleStatusEffectLoss(StatusType* s) override;
+    void handleStatusActivation(StatusType* s) override;
+    void handleStatusDeactivation(StatusType* s) override;
     void readScriptVars(const ScriptVarManager& varsMgr) override;
     void finishDyingClassSpecifics() override;
     void startDyingClassSpecifics() override;

@@ -105,6 +105,9 @@ enum MENU_ICON {
 };
 
 
+void drawAreaBackgroundTexture(
+    const Viewport& view, float alpha, ALLEGRO_BITMAP* bmpOutput
+);
 void drawBackgroundLogos(
     float timeSpent, size_t rows, size_t cols,
     const Point& logoSize, const ALLEGRO_COLOR& tint,
@@ -173,7 +176,7 @@ void drawStringTokens(
     const Point& scale = Point(1.0f), const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
 void drawHighlightedRectRegion(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     const ALLEGRO_COLOR& color, float timeSpent
 );
 

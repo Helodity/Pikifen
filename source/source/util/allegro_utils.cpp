@@ -27,6 +27,33 @@ using std::vector;
 
 
 /**
+ * @brief Loads from this state object into Allegro's blender.
+ */
+void AllegroBlenderState::load() const {
+    al_set_separate_blender(op, src, dst, aOp, aSrc, aDst);
+}
+
+
+/**
+ * @brief Loads from this state object into Allegro's blender, if any
+ * data was saved previously.
+ */
+void AllegroBlenderState::loadIfHasData() const {
+    if(!hasData) return;
+    load();
+}
+
+
+/**
+ * @brief Saves Allegro's blender into this state object.
+ */
+void AllegroBlenderState::save() {
+    al_get_separate_blender(&op, &src, &dst, &aOp, &aSrc, &aDst);
+    hasData = true;
+}
+
+
+/**
  * @brief Checks if two colors are the same.
  *
  * @param c1 First color.
@@ -205,7 +232,6 @@ vector<string> folderToVector(
             folders ==
             (hasFlag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
         ) {
-        
             string entryName =
                 standardizePath(al_get_fs_entry_name(entry));
                 
@@ -279,6 +305,24 @@ vector<string> folderToVectorRecursively(
     //Finish.
     if(outFolderFound) *outFolderFound = true;
     return v;
+}
+
+
+/**
+ * @brief Returns names for Allegro keyboard keycodes.
+ * Mostly calls al_keycode_to_name, but has some special cases
+ * altered to make more sense.
+ *
+ * @param keycode The Allegro keycode.
+ * @return The name.
+ */
+string getAllegroKeyName(int keycode) {
+    switch(keycode) {
+    case ALLEGRO_KEY_TILDE: {
+        return "`";
+    }
+    }
+    return al_keycode_to_name(keycode);
 }
 
 
@@ -386,8 +430,9 @@ void getShiftCtrlAltState(
 
 
 /**
- * @brief Returns the interpolation between two colors, given a number in
- * an interval.
+ * @brief Returns the linear interpolation between two colors,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,
@@ -411,6 +456,35 @@ ALLEGRO_COLOR interpolateColor(
             outputStart.b + progress * (outputEnd.b - outputStart.b),
             outputStart.a + progress * (outputEnd.a - outputStart.a)
         );
+}
+
+
+/**
+ * @brief Returns whether the given Allegro event counts as an
+ * input made by the user.
+ *
+ * @param ev The event.
+ * @return Whether it's a user input.
+ */
+bool isAllegroEventUserInput(ALLEGRO_EVENT& ev) {
+    switch(ev.type) {
+    case ALLEGRO_EVENT_JOYSTICK_AXIS:
+    case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
+    case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP:
+    case ALLEGRO_EVENT_KEY_CHAR:
+    case ALLEGRO_EVENT_KEY_DOWN:
+    case ALLEGRO_EVENT_KEY_UP:
+    case ALLEGRO_EVENT_MOUSE_AXES:
+    case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+    case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+    case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY:
+    case ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY: {
+        return true;
+        break;
+    }
+    }
+    
+    return false;
 }
 
 

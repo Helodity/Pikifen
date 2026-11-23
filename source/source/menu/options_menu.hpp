@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the options menu struct and related functions.
+ * Header for the options menu object and related functions.
  */
 
 #pragma once
@@ -236,7 +236,7 @@ public:
     
     void draw() override;
     void load() override;
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev) override;
+    void handleAllegroInputEvent(const ALLEGRO_EVENT& ev) override;
     bool handlePlayerAction(const Inpution::Action& action) override;
     void unload() override;
     void tick(float deltaT) override;
@@ -365,8 +365,8 @@ private:
         const string& name, const string& internalName, GuiItem** itemToFocus,
         const ALLEGRO_COLOR& textColor = COLOR_WHITE
     );
-    void addNewShortcutItems(unsigned char index);
-    void drawShortcutName(const GuiItem::DrawInfo& draw, unsigned char index);
+    void addNewShortcutItems(unsigned char idx);
+    void drawShortcutName(const GuiItem::DrawInfo& draw, unsigned char idx);
     void initGuiAudioPage();
     void initGuiControlsPage();
     void initGuiControlBindsPage();

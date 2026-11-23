@@ -51,7 +51,9 @@ enum ONION_TRANSFER_RESULT {
 /**
  * @brief Info about a given Pikmin type in an Onion menu.
  */
-struct OnionMenuPikminType {
+class OnionMenuPikminType {
+
+public:
 
     //--- Public members ---
     
@@ -76,11 +78,13 @@ struct OnionMenuPikminType {
  * @brief Info about the Onion menu currently being presented to
  * the player.
  */
-struct OnionMenu {
+class OnionMenu {
+
+public:
 
     //--- Public members ---
     
-    //Pointer to the struct with nest information.
+    //Pointer to the nest information.
     PikminNest* nestPtr = nullptr;
     
     //Pointer to the leader responsible.
@@ -155,7 +159,7 @@ struct OnionMenu {
     //Time left until the menu finishes closing.
     float closingTimer = 0.0f;
     
-    //Is the struct meant to be deleted?
+    //Is the object meant to be deleted?
     bool toDelete = false;
     
     
@@ -168,7 +172,7 @@ struct OnionMenu {
     ONION_TRANSFER_RESULT canAddToOnion(size_t typeIdx);
     void confirm();
     void growButtons();
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     void handlePlayerAction(const Inpution::Action& action);
     void startClosing();
     void tick(float deltaT);

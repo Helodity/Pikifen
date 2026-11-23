@@ -740,7 +740,6 @@ void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev) {
         drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
         
     } else {
-    
         checkDrawingLine(hotspot);
         
         bool needsReverse = false;
@@ -997,8 +996,8 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
             return;
         } else {
             registerChange("Object link deletion");
-            mPtr->links.erase(mPtr->links.begin() + linkI);
-            mPtr->linkIdxs.erase(mPtr->linkIdxs.begin() + linkI);
+            eraseInVector(mPtr->links, linkI);
+            eraseInVector(mPtr->linkIdxs, linkI);
         }
         
         homogenizeSelectedMobs();
@@ -1021,7 +1020,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
                     curMobGroupIdx
                 ].mobIdxs;
             registerChange("mission mob group choice change");
-            auto it = std::find(listRef.begin(), listRef.end(), clickedMobIdx);
+            auto it = findInContainer(listRef, clickedMobIdx);
             if(it == listRef.end()) {
                 listRef.push_back(clickedMobIdx);
             } else {
@@ -1208,7 +1207,6 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
     }
     
     if(!crossSectionHandled) {
-    
         handleSelectionAndTransformationLmbDown(
             reviewSelCtrl, curTransformationWidget,
             !game.options.areaEd.selTrans
@@ -1357,7 +1355,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         handleSelectionAndTransformationLmbDrag(
             detailsSelCtrl, curTransformationWidget, false,
             snapPoint(game.editorsView.mouseCursorWorldPos),
-            [this] { registerChange("tree shadow movement"); }
+            [this] { registerChange("tree shadow movement"); },
+            selectedShadowKeepAspectRatio
         );
         
         break;

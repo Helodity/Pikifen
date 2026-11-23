@@ -194,7 +194,8 @@ void MobType::loadCatScriptDataPos(DataNode* file) {
             }
         }
         if(dyingStateIdx == INVALID) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown state \"" + dyingStateName + "\" "
                 "to set as the death state!",
                 file->getChildByName("death_state")
@@ -214,7 +215,8 @@ void MobType::loadCatScriptDataPos(DataNode* file) {
             }
         }
         if(reviveStateIdx == INVALID) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown state \"" + reviveStateName + "\" "
                 "to set as the revive state!",
                 reviveStateNameNode
@@ -272,6 +274,7 @@ void MobType::loadFromDataNode(
     string hurtableTargetsStr;
     string teamStr;
     string inactiveLogicStr;
+    unsigned char peekUnderneathAlphaC = 255;
     DataNode* areaEditorTipsNode = nullptr;
     DataNode* customCarrySpotsNode = nullptr;
     DataNode* spikeDamageNode = nullptr;
@@ -280,6 +283,7 @@ void MobType::loadFromDataNode(
     DataNode* hurtableTargetsNode = nullptr;
     DataNode* teamNode = nullptr;
     DataNode* inactiveLogicNode = nullptr;
+    DataNode* peekNode = nullptr;
     
     tRS.set("acceleration", acceleration);
     tRS.set("appears_in_area_editor", appearsInAreaEditor);
@@ -320,6 +324,7 @@ void MobType::loadFromDataNode(
     tRS.set("max_carriers", maxCarriers);
     tRS.set("max_health", maxHealth);
     tRS.set("move_speed", moveSpeed);
+    tRS.set("peek_underneath_opacity", peekUnderneathAlphaC, &peekNode);
     tRS.set("pushable", pushable);
     tRS.set("pushes", pushes);
     tRS.set("pushes_softly", pushesSoftly);
@@ -346,7 +351,8 @@ void MobType::loadFromDataNode(
         vector<string> points =
             semicolonListToVector(customCarrySpotsStr);
         if(points.size() != maxCarriers) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "The number of custom carry spots (" + i2s(points.size()) +
                 ") does not match the number of max carriers (" +
                 i2s(maxCarriers) + ")!",
@@ -365,7 +371,6 @@ void MobType::loadFromDataNode(
     DataNode* vulnerabilitiesNode =
         node->getChildByName("vulnerabilities");
     for(size_t h = 0; h < vulnerabilitiesNode->getNrOfChildren(); h++) {
-    
         DataNode* vulnNode = vulnerabilitiesNode->getChild(h);
         auto hazardIt = game.content.hazards.list.find(vulnNode->name);
         vector<string> words = split(vulnNode->value);
@@ -390,7 +395,8 @@ void MobType::loadFromDataNode(
         auto statusIt = game.content.statusTypes.list.find(statusName);
         
         if(hazardIt == game.content.hazards.list.end()) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown hazard \"" + vulnNode->name + "\"!",
                 vulnNode
             );
@@ -399,7 +405,8 @@ void MobType::loadFromDataNode(
             !statusName.empty() &&
             statusIt == game.content.statusTypes.list.end()
         ) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusName + "\"!",
                 vulnNode
             );
@@ -420,7 +427,8 @@ void MobType::loadFromDataNode(
     auto sdIt = game.content.spikeDamageTypes.list.find(spikeDamageStr);
     if(spikeDamageNode) {
         if(sdIt == game.content.spikeDamageTypes.list.end()) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown spike damage type \"" + spikeDamageStr + "\"!",
                 spikeDamageNode
             );
@@ -452,7 +460,8 @@ void MobType::loadFromDataNode(
             inactiveLogic =
                 INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
         } else {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Invalid inactive logic \"" + inactiveLogicStr + "\"!",
                 inactiveLogicNode
             );
@@ -465,7 +474,6 @@ void MobType::loadFromDataNode(
     size_t nSdVuln =
         spikeDamageVulnNode->getNrOfChildren();
     for(size_t v = 0; v < nSdVuln; v++) {
-    
         DataNode* vulNode = spikeDamageVulnNode->getChild(v);
         auto sdvIt = game.content.spikeDamageTypes.list.find(vulNode->name);
         vector<string> words = split(vulNode->value);
@@ -477,19 +485,21 @@ void MobType::loadFromDataNode(
         if(words.size() >= 2) {
             statusName = words[1];
         }
-        auto statusIt = game.content.statusTypes.list.find(statusName);
+        auto statusOverrideIt = game.content.statusTypes.list.find(statusName);
         
         if(sdvIt == game.content.spikeDamageTypes.list.end()) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown spike damage type \"" + vulNode->name + "\"!",
                 vulNode
             );
             
         } else if(
             !statusName.empty() &&
-            statusIt == game.content.statusTypes.list.end()
+            statusOverrideIt == game.content.statusTypes.list.end()
         ) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusName + "\"!",
                 vulNode
             );
@@ -497,8 +507,9 @@ void MobType::loadFromDataNode(
         } else {
             auto& s = spikeDamageVulnerabilities[&(sdvIt->second)];
             s.effectMult = percentage / 100.0f;
-            s.statusToApply = statusIt->second;
-            
+            if (statusOverrideIt != game.content.statusTypes.list.end()) {
+                s.statusToApply = statusOverrideIt->second;
+            }
         }
     }
     
@@ -508,7 +519,6 @@ void MobType::loadFromDataNode(
     size_t nSVuln =
         statusVulnNode->getNrOfChildren();
     for(size_t v = 0; v < nSVuln; v++) {
-    
         DataNode* vulNode = statusVulnNode->getChild(v);
         auto svIt = game.content.statusTypes.list.find(vulNode->name);
         vector<string> words = split(vulNode->value);
@@ -524,7 +534,8 @@ void MobType::loadFromDataNode(
             game.content.statusTypes.list.find(statusOverrideName);
             
         if(svIt == game.content.statusTypes.list.end()) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + vulNode->name + "\"!",
                 vulNode
             );
@@ -533,7 +544,8 @@ void MobType::loadFromDataNode(
             !statusOverrideName.empty() &&
             statusOverrideIt == game.content.statusTypes.list.end()
         ) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusOverrideName + "\"!",
                 vulNode
             );
@@ -559,7 +571,8 @@ void MobType::loadFromDataNode(
         vector<string> rStrings = split(reachNode->value);
         
         if(rStrings.size() != 2 && rStrings.size() != 4) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "Reach \"" + newReach.name +
                 "\" isn't made up of 2 or 4 words!",
                 reachNode
@@ -580,7 +593,6 @@ void MobType::loadFromDataNode(
     DataNode* spawnsNode = node->getChildByName("spawns");
     size_t nSpawns = spawnsNode->getNrOfChildren();
     for(size_t s = 0; s < nSpawns; s++) {
-    
         DataNode* spawnNode = spawnsNode->getChild(s);
         ReaderSetter sRS(spawnNode);
         MobType::SpawnInfo newSpawn;
@@ -609,7 +621,6 @@ void MobType::loadFromDataNode(
     DataNode* childrenNode = node->getChildByName("children");
     size_t nChildren = childrenNode->getNrOfChildren();
     for(size_t c = 0; c < nChildren; c++) {
-    
         DataNode* childNode = childrenNode->getChild(c);
         ReaderSetter cRS(childNode);
         MobType::Child newChild;
@@ -681,7 +692,6 @@ void MobType::loadFromDataNode(
         node->getChildByName("area_editor_properties");
     size_t nAeProps = aePropsNode->getNrOfChildren();
     for(size_t p = 0; p < nAeProps; p++) {
-    
         DataNode* propNode = aePropsNode->getChild(p);
         ReaderSetter pRS(propNode);
         MobType::AreaEditorProp newProp;
@@ -703,7 +713,8 @@ void MobType::loadFromDataNode(
         pRS.set("tooltip", newProp.tooltip);
         
         if(newProp.var.empty()) {
-            game.errors.report(
+            game.log.write(
+                LOG_LEVEL_ERROR,
                 "You need to specify the area editor property's name!",
                 propNode
             );
@@ -725,7 +736,8 @@ void MobType::loadFromDataNode(
             newProp.type == AEMP_TYPE_NR_LIST
         ) {
             if(listStr.empty() && listInternalStr.empty()) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "For this area editor property type, you need to specify "
                     "a list of values!", propNode
                 );
@@ -747,7 +759,8 @@ void MobType::loadFromDataNode(
                 newProp.displayValueList.size() !=
                 newProp.internalValueList.size()
             ) {
-                game.errors.report(
+                game.log.write(
+                    LOG_LEVEL_ERROR,
                     "The list of display values and the list of internal "
                     "values are different sizes!", propNode
                 );
@@ -759,6 +772,7 @@ void MobType::loadFromDataNode(
         areaEditorProps.push_back(newProp);
     }
     
+    //Loose properties.
     if(targetTypeNode) {
         readEnumProp(
             mobTargetFlagINames, targetTypeStr, &targetType,
@@ -798,6 +812,10 @@ void MobType::loadFromDataNode(
         ) {
             hurtableTargets |= (Bitmask16) tt;
         }
+    }
+    
+    if(peekNode) {
+        peekUnderneathAlpha = peekUnderneathAlphaC / 255.0f;
     }
     
     //Resources.
@@ -894,6 +912,7 @@ void createSpecialMobTypes() {
     MobType* bridgeComponentType = customCategory->createType();
     bridgeComponentType->name = "Bridge component";
     bridgeComponentType->blackoutRadius = 0;
+    bridgeComponentType->peekUnderneathAlpha = 0.4f;
     bridgeComponentType->appearsInAreaEditor = false;
     bridgeComponentType->castsShadow = false;
     bridgeComponentType->customCategoryName = "Misc";

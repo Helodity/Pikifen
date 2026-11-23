@@ -44,7 +44,7 @@ const float SLOT_PADDING = 0.1f;
 
 
 /**
- * @brief Constructs a new Inventory struct object.
+ * @brief Constructs a new Inventory object.
  *
  * @param player Whose player this inventory belongs to.
  */
@@ -53,7 +53,7 @@ Inventory::Inventory(Player* player) :
     
     for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {
         InventoryItemInstance item;
-        item.dbIndex = i;
+        item.dbIdx = i;
         items.push_back(item);
     }
     
@@ -65,7 +65,7 @@ Inventory::Inventory(Player* player) :
 
 
 /**
- * @brief Destroys the Inventory struct object.
+ * @brief Destroys the Inventory object.
  */
 Inventory::~Inventory() {
 }
@@ -80,7 +80,7 @@ Inventory::~Inventory() {
 bool Inventory::canUseItem(InventoryItemInstance* iiPtr) {
     if(!player->leaderPtr) return false;
     
-    InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+    InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
     if(!iPtr->onUse) return false;
     if(iPtr->onGetAmount) {
         if(iPtr->onGetAmount(player) == 0) return false;
@@ -106,13 +106,13 @@ void Inventory::close() {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  * @return Whether it got handled.
  */
-bool Inventory::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    return gui.handleAllegroEvent(ev);
+bool Inventory::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
+    return gui.handleAllegroInputEvent(ev);
 }
 
 
@@ -128,7 +128,7 @@ bool Inventory::handlePlayerAction(const Inpution::Action& action) {
         action.value < 0.5f &&
         (game.options.controls.fastInventory || game.options.advanced.expoMode)
     ) {
-        GuiItem* focusedItem = gui.getFocusedItem();
+        GuiItem* focusedItem = (GuiItem*) gui.getFocusedItem();
         if(focusedItem) {
             focusedItem->activate();
         } else {
@@ -144,35 +144,24 @@ bool Inventory::handlePlayerAction(const Inpution::Action& action) {
  * @brief Initializes the base inventory GUI.
  */
 void Inventory::initGui() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[INVENTORY::GUI_FILE_NAME];
-        
-    gui.registerCoords("list",        50, 50, 32, 28);
-    gui.registerCoords("list_scroll", 50, 67, 32,  2);
-    gui.registerCoords("info",        57, 31, 18,  6);
-    gui.registerCoords("close",       40, 31, 12,  6);
-    gui.registerCoords("close_input", 34, 34,  4,  4);
-    gui.registerCoords("extra_info",  57, 32, 18,  4);
-    gui.readDataFile(guiFile);
-    
     //Item list box.
     itemList = new ListGuiItem();
     itemList->horizontal = true;
-    gui.addItem(itemList, "list");
+    gui.addItemP(itemList, "list");
     
     //Item list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->horizontal = true;
     listScroll->listItem = itemList;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Item info text.
     itemInfoItem = new GuiItem();
-    itemInfoItem->onDraw =
+    itemInfoItem->onDrawP =
     [this] (const DrawInfo & draw) {
         if(focusedItemIdx == INVALID) return;
         InventoryItemInstance* iiPtr = &items[focusedItemIdx];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
         string progressText;
         if(iPtr->onGetExtraInfo) {
             progressText = iPtr->onGetExtraInfo(player);
@@ -193,7 +182,7 @@ void Inventory::initGui() {
             );
         }
     };
-    gui.addItem(itemInfoItem, "info");
+    gui.addItemP(itemInfoItem, "info");
     
     //Close button.
     gui.backItem =
@@ -201,15 +190,20 @@ void Inventory::initGui() {
         "Close", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         requestClose();
     };
     gui.backItem->onGetTooltip =
     [] () { return "Close inventory"; };
-    gui.addItem(gui.backItem, "close");
+    gui.addItemP(gui.backItem, "close");
     
     //Close input icon.
     guiCreateBackInputIcon(&gui, "close_input");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[INVENTORY::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
     
     //Finishing touches.
     gui.onFocusChanged =
@@ -217,7 +211,7 @@ void Inventory::initGui() {
         focusedItemIdx = INVALID;
     };
     gui.responsive = false;
-    gui.hideItems();
+    gui.visible = false;
 }
 
 
@@ -266,17 +260,18 @@ void Inventory::populateInventoryListGui() {
     
     forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
         
         //Item button.
         ButtonGuiItem* button =
             new ButtonGuiItem(
             "", game.sysContent.fntStandard
         );
-        button->ratioRect.center = slotCenter;
-        button->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
+        button->setRawRatioRect(
+            Rect(slotCenter, Point(SLOT_WIDTH, SLOT_HEIGHT))
+        );
         button->forceSquare = true;
-        button->onDraw =
+        button->onDrawP =
         [this, button, iPtr] (const DrawInfo & draw) {
             button->defDrawCode(draw);
             ALLEGRO_COLOR bmpTint = draw.tint;
@@ -286,7 +281,7 @@ void Inventory::populateInventoryListGui() {
             if(iPtr->icon) {
                 drawBitmapInBox(
                     iPtr->icon, draw.center, draw.size * 0.8f,
-                    true, 0.0f, bmpTint
+                    true, true, 0.0f, bmpTint
                 );
             }
             if(iPtr->onGetAmount) {
@@ -300,13 +295,13 @@ void Inventory::populateInventoryListGui() {
             }
         };
         button->onActivate =
-        [this, i] (const Point&) {
+        [this, i] (float, float) {
             tryUseItem(i);
         };
         button->onGetTooltip = [iPtr] () { return iPtr->name; };
         button->onFocused = [this, i] () { focusedItemIdx = i; };
         itemList->addChild(button);
-        gui.addItem(button);
+        gui.addItemP(button);
         
         iiPtr->button = button;
         
@@ -322,10 +317,11 @@ void Inventory::populateInventoryListGui() {
     for(int p = 0; p < placeholdersNeeded; p++) {
         //Item placeholder item.
         GuiItem* placeholder = new GuiItem();
-        placeholder->ratioRect.center = slotCenter;
-        placeholder->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
+        placeholder->setRawRatioRect(
+            Rect(slotCenter, Point(SLOT_WIDTH, SLOT_HEIGHT))
+        );
         placeholder->forceSquare = true;
-        placeholder->onDraw =
+        placeholder->onDrawP =
         [this] (const DrawInfo & draw) {
             drawTexturedBox(
                 draw.center, draw.size, game.sysContent.bmpFrameBox,
@@ -333,13 +329,13 @@ void Inventory::populateInventoryListGui() {
             );
         };
         itemList->addChild(placeholder);
-        gui.addItem(placeholder);
+        gui.addItemP(placeholder);
         
         nextSlot();
     }
     
     if(!itemList->children.empty()) {
-        gui.setFocusedItem(itemList->children[0], true);
+        gui.setFocusedItemP(((GuiItem*) itemList->children[0]), true);
     }
 }
 
@@ -377,7 +373,7 @@ void Inventory::tick(float deltaT) {
  */
 bool Inventory::tryUseItem(size_t itemIdx) {
     InventoryItemInstance* iiPtr = &items[itemIdx];
-    InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+    InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
     if(canUseItem(iiPtr)) {
         iPtr->onUse(player);
         return true;
@@ -406,7 +402,7 @@ void Inventory::update() {
 bool Inventory::useShortcut(const string& itemInternalName) {
     forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
         if(iPtr->iName == itemInternalName) {
             return tryUseItem(i);
         }

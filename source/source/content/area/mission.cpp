@@ -45,6 +45,17 @@ const float EXIT_MIN_SIZE = 32.0f;
 
 
 /**
+ * @brief Constructs a new mission data object.
+ */
+MissionData::MissionData() {
+    hudItems.insert(
+        hudItems.begin(), enumGetCount(missionHudItemIdNames),
+        MissionHudItem()
+    );
+}
+
+
+/**
  * @brief Applies the given preset.
  * Provided it's not a custom preset, this overwrites what was there before.
  *
@@ -109,7 +120,7 @@ void MissionData::applyPresetBattleEnemies() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Got all enemies!",
@@ -205,7 +216,7 @@ void MissionData::applyPresetCollectEverything() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Got everything!",
@@ -379,7 +390,7 @@ void MissionData::applyPresetCollectTreasure() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Got all treasures!",
@@ -475,7 +486,7 @@ void MissionData::applyPresetDefeatBosses() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Defeated the boss!",
@@ -656,7 +667,10 @@ void MissionData::reset() {
     endConds.clear();
     mobGroups.clear();
     hudItems.clear();
-    hudItems.insert(hudItems.begin(), 4, MissionHudItem());
+    hudItems.insert(
+        hudItems.begin(), enumGetCount(missionHudItemIdNames),
+        MissionHudItem()
+    );
     scoreCriteria.clear();
 }
 
@@ -932,7 +946,8 @@ bool MissionHudItem::usesText() const {
         displayType == MISSION_HUD_ITEM_DISPLAY_REM_TOT ||
         displayType == MISSION_HUD_ITEM_DISPLAY_CUR ||
         displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
-        displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
+        displayType == MISSION_HUD_ITEM_DISPLAY_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR;
 }
 
 
@@ -1357,7 +1372,6 @@ MissionMetricType::Info MissionMetricTypeMobGroup::getInfo() const {
     return
     Info {
         .name = "Mob group cleared mobs",
-        .friendlyName = "Target objects cleared",
         .idxParamName = "Mob group number",
         .idxParamDescription = "Number of the mob group.",
         .hasAutoTarget = true
@@ -1423,7 +1437,6 @@ MissionMetricType::Info MissionMetricTypeMobGroupHealth::getInfo() const {
     return
     Info {
         .name = "Mob group health",
-        .friendlyName = "Target object health",
         .idxParamName = "Mob group number",
         .idxParamDescription = "Number of the mob group.",
         .hasAutoTarget = true
@@ -1679,7 +1692,6 @@ MissionMetricType::Info MissionMetricTypeScriptSlot::getInfo() const {
     return
     Info {
         .name = "Script slot",
-        .friendlyName = "Special metric",
         .idxParamName = "Slot number",
         .idxParamDescription = "Number of the script slot.",
         .hasAutoTarget = false
@@ -1711,6 +1723,7 @@ bool MissionMetricTypeScriptSlot::getZoomData(
  */
 int MissionMetricTypeSecsLeft::getAmount(size_t idxParam) const {
     if(game.curArea->mission.timeLimit == 0) return 0;
+    if(game.states.gameplay->afterHours) return game.curArea->mission.timeLimit;
     int secsLeft =
         game.curArea->mission.timeLimit -
         floor(game.states.gameplay->areaTimePassed);
@@ -1766,6 +1779,7 @@ bool MissionMetricTypeSecsLeft::getZoomData(
  * @return The amount.
  */
 int MissionMetricTypeSecsPassed::getAmount(size_t idxParam) const {
+    if(game.states.gameplay->afterHours) return 0;
     return game.states.gameplay->areaTimePassed;
 }
 
@@ -1908,7 +1922,8 @@ vector<size_t> MissionMobGroup::calculateList() const {
             } else if(gPtr->type->category->id == MOB_CATEGORY_PILES) {
                 PileType* pilType = (PileType*) gPtr->type;
                 if(
-                    pilType->contents->deliveryResult ==
+                    pilType->contentsResource &&
+                    pilType->contentsResource->deliveryResult ==
                     RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
                 ) {
                     return true;

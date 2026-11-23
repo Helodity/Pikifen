@@ -111,6 +111,105 @@ const ALLEGRO_COLOR UNRESPONSIVE_BUTTON_TINT = al_map_rgba(128, 128, 128, 128);
 
 
 /**
+ * @brief Draws the area background texture.
+ * This assumes an identity transformation is in place.
+ *
+ * @param view Viewport to draw to.
+ * @param alpha Alpha multiplier [0 - 1].
+ * @param bmpOutput If not nullptr, draw the background onto this.
+ */
+void drawAreaBackgroundTexture(
+    const Viewport& view, float alpha, ALLEGRO_BITMAP* bmpOutput
+) {
+    if(!game.curArea->bgBmp) return;
+    
+    //Calculate some important numbers.
+    Rect outputRect(
+        bmpOutput ?
+        (getBitmapDimensions(bmpOutput) / 2.0f) :
+        view.windowRect.center,
+        bmpOutput ?
+        getBitmapDimensions(bmpOutput) :
+        view.windowRect.size
+    );
+    RectCorners outputRectCorners = rectToRectCorners(outputRect);
+    
+    float finalDistance = game.curArea->bgBmpDist;
+    if(fabs(finalDistance) < 0.05f) {
+        //Avoid 0, or numbers really close to it.
+        finalDistance = signNonZero(finalDistance) * 0.05f;
+    }
+    float finalCamZoom = bmpOutput ? 0.5f : view.cam.zoom;
+    
+    //Figure out the UV coordinate transformations.
+    ALLEGRO_TRANSFORM textureTransform =
+        buildTransform2d(game.curArea->bgBmpTrans);
+        
+    ALLEGRO_TRANSFORM parallaxTransform;
+    al_identity_transform(&parallaxTransform);
+    al_translate_transform(
+        &parallaxTransform,
+        -(outputRectCorners.tl.x + (outputRect.size.x / 2.0f)),
+        -(outputRectCorners.tl.y + (outputRect.size.y / 2.0f))
+    );
+    al_scale_transform(
+        &parallaxTransform,
+        finalDistance / finalCamZoom,
+        finalDistance / finalCamZoom
+    );
+    al_translate_transform(
+        &parallaxTransform,
+        view.cam.center.x,
+        view.cam.center.y
+    );
+    
+    ALLEGRO_TRANSFORM finalTransform = parallaxTransform;
+    al_compose_transform(&finalTransform, &textureTransform);
+    
+    //Initialize the vertexes' position data.
+    ALLEGRO_VERTEX vertexes[4];
+    
+    vertexes[0].x = outputRectCorners.tl.x;
+    vertexes[0].y = outputRectCorners.tl.y;
+    vertexes[0].u = 0.0f;
+    vertexes[0].v = 0.0f;
+    
+    vertexes[1].x = outputRectCorners.br.x;
+    vertexes[1].y = outputRectCorners.tl.y;
+    vertexes[1].u = outputRect.size.x;
+    vertexes[1].v = 0.0f;
+    
+    vertexes[2].x = outputRectCorners.br.x;
+    vertexes[2].y = outputRectCorners.br.y;
+    vertexes[2].u = outputRect.size.x;
+    vertexes[2].v = outputRect.size.y;
+    
+    vertexes[3].x = outputRectCorners.tl.x;
+    vertexes[3].y = outputRectCorners.br.y;
+    vertexes[3].u = 0.0f;
+    vertexes[3].v = outputRect.size.y;
+    
+    //Calculate the UVs based on the positions,
+    //and add the remaining vertex data.
+    for(unsigned char v = 0; v < 4; v++) {
+        vertexes[v].u = vertexes[v].x;
+        vertexes[v].v = vertexes[v].y;
+        al_transform_coordinates(
+            &finalTransform, &vertexes[v].u, &vertexes[v].v
+        );
+        vertexes[v].color = multAlpha(game.curArea->bgBmpTint, alpha);
+        vertexes[v].z = 0;
+    }
+    
+    //Draw!
+    al_draw_prim(
+        vertexes, nullptr, game.curArea->bgBmp,
+        0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+    );
+}
+
+
+/**
  * @brief Draws a series of logos, to serve as a background.
  * They move along individually, and wrap around when they reach a window edge.
  *
@@ -324,7 +423,8 @@ void drawHealth(
         );
     }
     al_draw_filled_pieslice(
-        center.x, center.y, radius, -TAU / 4, -ratio * TAU, color
+        center.x, center.y, radius, -TAU / 4, -ratio * TAU,
+        multAlpha(color, alpha)
     );
     if(!justChart) {
         al_draw_circle(
@@ -346,7 +446,7 @@ void drawHealth(
  * @param timeSpent Total time spent. Used for animating.
  */
 void drawHighlightedRectRegion(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     const ALLEGRO_COLOR& color, float timeSpent
 ) {
     const float CORNER_RADIUS = 2.0f;
@@ -450,7 +550,7 @@ void drawInputSourceIcon(
                 (iconBmpSize + 1) * (int) bitmapSprite, 0,
                 iconBmpSize, iconBmpSize
             );
-        drawBitmapInBox(bmp, iconPos, iconSize, true, 0.0f, tint);
+        drawBitmapInBox(bmp, iconPos, iconSize, true, true, 0.0f, tint);
         al_destroy_bitmap(bmp);
         return;
     }
@@ -671,15 +771,7 @@ void drawLiquid(
             &textureSector[t]->textureInfo;
             
         //Texture transformations.
-        ALLEGRO_TRANSFORM tra;
-        al_build_transform(
-            &tra,
-            -textureInfoToUse->tf.trans.x,
-            -textureInfoToUse->tf.trans.y,
-            1.0f / textureInfoToUse->tf.scale.x,
-            1.0f / textureInfoToUse->tf.scale.y,
-            -textureInfoToUse->tf.rot
-        );
+        ALLEGRO_TRANSFORM tra = buildTransform2d(textureInfoToUse->tf);
         
         float textureOffset[2] = {
             textureInfoToUse->tf.trans.x,
@@ -691,7 +783,6 @@ void drawLiquid(
         };
         
         for(size_t v = 0; v < nVertexes; v++) {
-        
             const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
             Vertex* vPtr = tPtr->points[v % 3];
             float vx = vPtr->x;
@@ -795,10 +886,8 @@ void drawLoadingScreen(
         0, 0, game.winW, game.winH, al_map_rgba(0, 0, 0, blacknessAlpha * 255)
     );
     
-    int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
-    al_get_separate_blender(
-        &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
-    );
+    AllegroBlenderState prevBlender;
+    prevBlender.save();
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
     
     //Set up the bitmap that will hold the text if it doesn't exist.
@@ -836,9 +925,7 @@ void drawLoadingScreen(
         
     }
     
-    al_set_separate_blender(
-        oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
-    );
+    prevBlender.load();
     
     //Draw the text bitmap in its place.
     const float textX = game.winW * 0.5 - textW * 0.5;
@@ -859,7 +946,6 @@ void drawLoadingScreen(
     const float subtextX = game.winW * 0.5 - subtextW * 0.5;
     float subtextY = game.winH * 0.5 + DRAWING::LOADING_SCREEN_PADDING * 0.5;
     if(!subtext.empty()) {
-    
         al_draw_tinted_bitmap(
             game.loadingSubtextBmp,
             mapAlpha(alpha * 255),
@@ -872,7 +958,6 @@ void drawLoadingScreen(
     
     //Now, draw the polygon that will hold the reflection for the text.
     if(!text.empty()) {
-    
         ALLEGRO_VERTEX textVertexes[4];
         const float textReflectionH = textH * 0.80f;
         //Top-left vertex.
@@ -913,7 +998,6 @@ void drawLoadingScreen(
     
     //And the polygon for the subtext.
     if(!subtext.empty()) {
-    
         ALLEGRO_VERTEX subtextVertexes[4];
         const float subtextReflectionH = subtextH * 0.80f;
         //Top-left vertex.
@@ -1026,7 +1110,7 @@ void drawMenuButtonIcon(
     drawBitmapInBox(
         bmp, iconCenter,
         Point(buttonSize.y),
-        true, 0.0f, tint
+        true, true, 0.0f, tint
     );
     al_destroy_bitmap(bmp);
 }
@@ -1395,7 +1479,6 @@ void drawSectorTexture(
     }
     
     for(unsigned char t = 0; t < nTextures; t++) {
-    
         bool drawSector0 = true;
         if(!textureSector[0]) drawSector0 = false;
         else if(textureSector[0]->isBottomlessPit) {
@@ -1418,18 +1501,9 @@ void drawSectorTexture(
             &textureSector[t]->textureInfo;
             
         //Texture transformations.
-        ALLEGRO_TRANSFORM tra;
-        al_build_transform(
-            &tra,
-            -textureInfoToUse->tf.trans.x,
-            -textureInfoToUse->tf.trans.y,
-            1.0f / textureInfoToUse->tf.scale.x,
-            1.0f / textureInfoToUse->tf.scale.y,
-            -textureInfoToUse->tf.rot
-        );
+        ALLEGRO_TRANSFORM tra = buildTransform2d(textureInfoToUse->tf);
         
         for(size_t v = 0; v < nVertexes; v++) {
-        
             const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
             Vertex* vPtr = tPtr->points[v % 3];
             float vx = vPtr->x;

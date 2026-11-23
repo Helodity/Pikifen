@@ -31,6 +31,8 @@ public:
      * @brief Info about a spot.
      */
     struct GroupTaskSpot {
+
+    public:
     
         //--- Public members ---
         
@@ -68,7 +70,7 @@ public:
     
     //--- Public function declarations ---
     
-    GroupTask(const Point& pos, GroupTaskType* type, float angle);
+    GroupTask(const Point& pos, GroupTaskType* type, Angle angle);
     void addWorker(Pikmin* who);
     void finishTask();
     void freeUpSpot(Pikmin* whose);

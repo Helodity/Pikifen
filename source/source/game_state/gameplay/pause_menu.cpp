@@ -72,7 +72,7 @@ const string STATUS_GUI_FILE_NAME = "pause_menu_status";
 
 
 /**
- * @brief Constructs a new pause menu struct object.
+ * @brief Constructs a new pause menu object.
  *
  * @param startOnRadar True if the page to start on should be the radar,
  * false if it should be the system page.
@@ -149,7 +149,7 @@ PauseMenu::PauseMenu(bool startOnRadar) {
 
 
 /**
- * @brief Destroys the pause menu struct object.
+ * @brief Destroys the pause menu object.
  */
 PauseMenu::~PauseMenu() {
     gui.destroy();
@@ -214,10 +214,11 @@ void PauseMenu::addNewBullet(
         new BulletGuiItem(
         text, game.sysContent.fntStandard, color
     );
-    bullet->ratioRect.center = Point(0.50f, bulletCenterY);
-    bullet->ratioRect.size = Point(0.96f, BULLET_HEIGHT);
+    bullet->setRawRatioRect(
+        Rect(Point(0.50f, bulletCenterY), Point(0.96f, BULLET_HEIGHT))
+    );
     list->addChild(bullet);
-    missionGui.addItem(bullet);
+    missionGui.addItemP(bullet);
 }
 
 
@@ -266,7 +267,7 @@ ButtonGuiItem* PauseMenu::addNewPageItem(
         game.config.guiColors.pageChange
     );
     newButton->onActivate =
-    [this, curGui, targetPage, left] (const Point&) {
+    [this, curGui, targetPage, left] (float, float) {
         switchPage(curGui, targetPage, left);
     };
     newButton->onGetTooltip =
@@ -289,21 +290,18 @@ void PauseMenu::addNewPageItems(
     PAUSE_MENU_PAGE curPage, GuiManager* curGui
 ) {
     size_t curPageIdx =
-        std::distance(
-            pages.begin(),
-            std::find(pages.begin(), pages.end(), curPage)
-        );
+        std::distance(pages.cbegin(), findInContainer(pages, curPage));
     size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1, (int) pages.size());
     size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1, (int) pages.size());
     
     //Left page button.
     ButtonGuiItem* leftPageButton =
         addNewPageItem(pages[leftPageIdx], true, curGui);
-    curGui->addItem(leftPageButton, "left_page");
+    curGui->addItemP(leftPageButton, "left_page");
     
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
-    leftPageInput->onDraw =
+    leftPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -311,16 +309,16 @@ void PauseMenu::addNewPageItems(
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    curGui->addItem(leftPageInput, "left_page_input");
+    curGui->addItemP(leftPageInput, "left_page_input");
     
     //Right page button.
     ButtonGuiItem* rightPageButton =
         addNewPageItem(pages[rightPageIdx], false, curGui);
-    curGui->addItem(rightPageButton, "right_page");
+    curGui->addItemP(rightPageButton, "right_page");
     
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
-    rightPageInput->onDraw =
+    rightPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -328,7 +326,7 @@ void PauseMenu::addNewPageItems(
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    curGui->addItem(rightPageInput, "right_page_input");
+    curGui->addItemP(rightPageInput, "right_page_input");
     
     leftPageButtons[curGui] = leftPageButton;
     rightPageButtons[curGui] = rightPageButton;
@@ -362,7 +360,6 @@ void PauseMenu::addNewPikminStatusLine(
     const string& lostText,
     bool isSingle, bool isTotals
 ) {
-
     const float x1 = 0.00f;
     const float x2 = 1.00f;
     const float workingWidth = x2 - x1;
@@ -370,7 +367,7 @@ void PauseMenu::addNewPikminStatusLine(
     const float firstX = x1 + itemXInterval / 2.0f;
     const float itemWidth = itemXInterval - 0.02f;
     
-    const float y1 = isSingle ? 0.0f : list->getChildrenSpan();
+    const float y1 = isSingle ? 0.0f : list->getChildrenSpanRatio();
     const float itemHeight = isSingle ? 1.0f : 0.17f;
     const float numberItemHeight = isSingle ? itemHeight : itemHeight * 0.60f;
     const float itemYSpacing = isSingle ? 0.0f : 0.03f;
@@ -387,37 +384,36 @@ void PauseMenu::addNewPikminStatusLine(
     bool canFocus = pikType || isTotals;
     
     if(pikType) {
-    
         //Pikmin type.
         GuiItem* typeItem = new GuiItem();
-        typeItem->onDraw =
+        typeItem->onDrawP =
         [pikType] (const DrawInfo & draw) {
             drawBitmapInBox(
-                pikType->bmpIcon, draw.center, draw.size, true, 0.0f, draw.tint
+                pikType->bmpIcon, draw.center, draw.size, true, true,
+                0.0f, draw.tint
             );
         };
-        typeItem->ratioRect.center =
-            Point(
-                firstX + itemXInterval * 0,
-                itemY
-            );
-        typeItem->ratioRect.size = Point(itemWidth, itemHeight);
+        typeItem->setRawRatioRect(
+            Rect(
+                Point(firstX + itemXInterval * 0, itemY),
+                Point(itemWidth, itemHeight)
+            )
+        );
         list->addChild(typeItem);
-        statusGui.addItem(typeItem);
+        statusGui.addItemP(typeItem);
         
     } else if(isTotals) {
-    
         //Totals header.
         TextGuiItem* totalsHeaderItem =
             new TextGuiItem("Total", game.sysContent.fntAreaName);
-        totalsHeaderItem->ratioRect.center =
-            Point(
-                firstX + itemXInterval * 0,
-                itemY
-            );
-        totalsHeaderItem->ratioRect.size = Point(itemWidth, itemHeight);
+        totalsHeaderItem->setRawRatioRect(
+            Rect(
+                Point(firstX + itemXInterval * 0, itemY),
+                Point(itemWidth, itemHeight)
+            )
+        );
         list->addChild(totalsHeaderItem);
-        statusGui.addItem(totalsHeaderItem);
+        statusGui.addItemP(totalsHeaderItem);
         
     }
     
@@ -425,12 +421,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* groupTextItem =
         new TextGuiItem(groupText, font);
     groupTextItem->focusable = canFocus;
-    groupTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 1,
-            itemY
-        );
-    groupTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    groupTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 1, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         groupTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -441,18 +437,18 @@ void PauseMenu::addNewPikminStatusLine(
         groupTextItem->color = changeAlpha(groupTextItem->color, 64);
     }
     list->addChild(groupTextItem);
-    statusGui.addItem(groupTextItem);
+    statusGui.addItemP(groupTextItem);
     
     //Idle Pikmin.
     TextGuiItem* idleTextItem =
         new TextGuiItem(idleText, font);
     idleTextItem->focusable = canFocus;
-    idleTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 2,
-            itemY
-        );
-    idleTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    idleTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 2, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         idleTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -463,18 +459,18 @@ void PauseMenu::addNewPikminStatusLine(
         idleTextItem->color = changeAlpha(idleTextItem->color, 64);
     }
     list->addChild(idleTextItem);
-    statusGui.addItem(idleTextItem);
+    statusGui.addItemP(idleTextItem);
     
     //Field Pikmin.
     TextGuiItem* fieldTextItem =
         new TextGuiItem(fieldText, font);
     fieldTextItem->focusable = canFocus;
-    fieldTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 3,
-            itemY
-        );
-    fieldTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    fieldTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 3, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         fieldTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -485,18 +481,18 @@ void PauseMenu::addNewPikminStatusLine(
         fieldTextItem->color = changeAlpha(fieldTextItem->color, 64);
     }
     list->addChild(fieldTextItem);
-    statusGui.addItem(fieldTextItem);
+    statusGui.addItemP(fieldTextItem);
     
     //Onion Pikmin.
     TextGuiItem* onionTextItem =
         new TextGuiItem(onionText, font);
     onionTextItem->focusable = canFocus;
-    onionTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 4,
-            itemY
-        );
-    onionTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    onionTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 4, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         onionTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -507,18 +503,18 @@ void PauseMenu::addNewPikminStatusLine(
         onionTextItem->color = changeAlpha(onionTextItem->color, 64);
     }
     list->addChild(onionTextItem);
-    statusGui.addItem(onionTextItem);
+    statusGui.addItemP(onionTextItem);
     
     //Total Pikmin.
     TextGuiItem* totalTextItem =
         new TextGuiItem(totalText, font, game.config.guiColors.gold);
     totalTextItem->focusable = canFocus;
-    totalTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 5,
-            itemY
-        );
-    totalTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    totalTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 5, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         totalTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -529,14 +525,17 @@ void PauseMenu::addNewPikminStatusLine(
         totalTextItem->color = changeAlpha(totalTextItem->color, 64);
     }
     list->addChild(totalTextItem);
-    statusGui.addItem(totalTextItem);
+    statusGui.addItemP(totalTextItem);
     
     //Separator.
     GuiItem* separatorItem = new GuiItem();
-    separatorItem->ratioRect.center =
-        Point(firstX + itemXInterval * 5.5f, itemY);
-    separatorItem->ratioRect.size = Point(1.0f, itemHeight);
-    separatorItem->onDraw =
+    separatorItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 5.5f, itemY),
+            Point(1.0f, itemHeight)
+        )
+    );
+    separatorItem->onDrawP =
     [] (const DrawInfo & draw) {
         al_draw_line(
             draw.center.x, draw.center.y - draw.size.y / 2.0f,
@@ -545,7 +544,7 @@ void PauseMenu::addNewPikminStatusLine(
         );
     };
     list->addChild(separatorItem);
-    statusGui.addItem(separatorItem);
+    statusGui.addItemP(separatorItem);
     
     //New Pikmin.
     TextGuiItem* newTextItem =
@@ -553,12 +552,12 @@ void PauseMenu::addNewPikminStatusLine(
         newText, font, game.config.guiColors.good
     );
     newTextItem->focusable = canFocus;
-    newTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 6,
-            itemY
-        );
-    newTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    newTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 6, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         newTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -569,7 +568,7 @@ void PauseMenu::addNewPikminStatusLine(
         newTextItem->color = changeAlpha(newTextItem->color, 64);
     }
     list->addChild(newTextItem);
-    statusGui.addItem(newTextItem);
+    statusGui.addItemP(newTextItem);
     
     //Lost Pikmin.
     TextGuiItem* lostTextItem =
@@ -577,12 +576,12 @@ void PauseMenu::addNewPikminStatusLine(
         lostText, font, game.config.guiColors.bad
     );
     lostTextItem->focusable = canFocus;
-    lostTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 7,
-            itemY
-        );
-    lostTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    lostTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 7, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         lostTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -593,7 +592,7 @@ void PauseMenu::addNewPikminStatusLine(
         lostTextItem->color = changeAlpha(lostTextItem->color, 64);
     }
     list->addChild(lostTextItem);
-    statusGui.addItem(lostTextItem);
+    statusGui.addItemP(lostTextItem);
 }
 
 
@@ -754,7 +753,7 @@ void PauseMenu::confirmOrLeave() {
             .text = "Confirm",
             .tooltip = "Yes, I'm sure.",
             .color = game.config.guiColors.bad,
-            .onActivate = [this] (const Point&) {
+            .onActivate = [this] (float, float) {
                 startLeavingGameplay();
             }
         }
@@ -806,7 +805,7 @@ void PauseMenu::drawGoHereSegment(
     }
     int bmpH = al_get_bitmap_height(bmpRadarPath);
     float textureScale = bmpH / PATH_SEGMENT_THICKNESS / radarView.cam.zoom;
-    float angle = getAngle(start, end);
+    Angle angle = getAngle(start, end);
     float distance = Distance(start, end).toFloat() * radarView.cam.zoom;
     float textureOffset = game.timePassed * PATH_SEGMENT_TIME_MULT;
     float textureStart = *texturePoint;
@@ -872,6 +871,16 @@ void PauseMenu::drawRadar(
         center.y - size.y / 2.0f,
         size.x,
         size.y
+    );
+    
+    RectCorners limits(center - size / 2.0f, center + size / 2.0f);
+    al_transform_coordinates(
+        &radarView.windowToWorldTransform,
+        &limits.tl.x, &limits.tl.y
+    );
+    al_transform_coordinates(
+        &radarView.windowToWorldTransform,
+        &limits.br.x, &limits.br.y
     );
     
     //Background fill.
@@ -1025,36 +1034,81 @@ void PauseMenu::drawRadar(
     }
     
     //Leader icons.
+    vector<size_t> orderedLeaderIdxs;
+    size_t radarSelectedLeaderIdx = INVALID;
     forIdx(l, game.states.gameplay->mobs.leaders) {
-        Leader* lPtr = game.states.gameplay->mobs.leaders[l];
+        //Keep the same order as normal, but place the currently
+        //selected leader last, so it's drawn above others.
+        //Useful in cases where multiple leaders are on the edges of the radar.
+        if(game.states.gameplay->mobs.leaders[l] == radarSelectedLeader) {
+            radarSelectedLeaderIdx = l;
+            continue;
+        }
+        orderedLeaderIdxs.push_back(l);
+    }
+    if(radarSelectedLeaderIdx != INVALID) {
+        orderedLeaderIdxs.push_back(radarSelectedLeaderIdx);
+    }
+    
+    forIdx(l, orderedLeaderIdxs) {
+        const float iconRadius = 20.0f / radarView.cam.zoom;
+        const float bubbleRadius = 24.0f / radarView.cam.zoom;
+        const float arrowRingRadius = 24.5f / radarView.cam.zoom;
+        
+        Leader* lPtr = game.states.gameplay->mobs.leaders[orderedLeaderIdxs[l]];
+        bool offCam = false;
+        Point iconPos = lPtr->center;
+        if(iconPos.x < limits.tl.x + bubbleRadius) {
+            offCam = true;
+            iconPos.x = limits.tl.x + bubbleRadius;
+        }
+        if(iconPos.x > limits.br.x - bubbleRadius) {
+            offCam = true;
+            iconPos.x = limits.br.x - bubbleRadius;
+        }
+        if(iconPos.y < limits.tl.y + bubbleRadius) {
+            offCam = true;
+            iconPos.y = limits.tl.y + bubbleRadius;
+        }
+        if(iconPos.y > limits.br.y - bubbleRadius) {
+            offCam = true;
+            iconPos.y = limits.br.y - bubbleRadius;
+        }
         
         drawBitmap(
-            lPtr->leaType->bmpIcon, lPtr->center,
-            Point(40.0f / radarView.cam.zoom)
+            lPtr->leaType->bmpIcon, iconPos,
+            Point(iconRadius * 2.0f) * (offCam ? 0.6f : 1.0f),
+            0.0f, multAlpha(COLOR_WHITE, offCam ? 0.8f : 1.0f)
         );
         drawBitmap(
-            bmpRadarLeaderBubble, lPtr->center,
-            Point(48.0f / radarView.cam.zoom),
+            bmpRadarLeaderBubble, iconPos,
+            Point(bubbleRadius * 2.0f) * (offCam ? 0.6f : 1.0f),
             0.0f,
-            radarSelectedLeader == lPtr ?
-            SEL_LEADER_COLOR :
-            INACTIVE_LEADER_COLOR
+            multAlpha(
+                radarSelectedLeader == lPtr ?
+                SEL_LEADER_COLOR :
+                INACTIVE_LEADER_COLOR,
+                offCam ? 0.8f : 1.0f
+            )
         );
-        drawFilledEquilateralTriangle(
-            lPtr->center +
-            rotatePoint(Point(24.5f / radarView.cam.zoom, 0.0f), lPtr->angle),
-            6.0f / radarView.cam.zoom,
-            lPtr->angle,
-            radarSelectedLeader == lPtr ?
-            SEL_LEADER_COLOR :
-            lPtr->health > 0 ?
-            INACTIVE_LEADER_COLOR :
-            KO_LEADER_COLOR
-        );
+        
+        if(!offCam) {
+            drawFilledEquilateralTriangle(
+                iconPos +
+                rotatePoint(Point(arrowRingRadius, 0.0f), lPtr->angle),
+                6.0f / radarView.cam.zoom,
+                lPtr->angle,
+                radarSelectedLeader == lPtr ?
+                SEL_LEADER_COLOR :
+                lPtr->health > 0 ?
+                INACTIVE_LEADER_COLOR :
+                KO_LEADER_COLOR
+            );
+        }
         if(lPtr->health <= 0) {
             drawBitmap(
-                bmpRadarLeaderX, lPtr->center,
-                Point(36.0f / radarView.cam.zoom)
+                bmpRadarLeaderX, iconPos,
+                Point(bubbleRadius * 1.5f)
             );
         }
     }
@@ -1087,9 +1141,9 @@ void PauseMenu::drawRadar(
     forIdx(p, game.states.gameplay->mobs.piles) {
         Pile* pPtr = game.states.gameplay->mobs.piles[p];
         if(
-            !pPtr->pilType->contents ||
+            !pPtr->pilType->contentsResource ||
             pPtr->amount == 0 ||
-            pPtr->pilType->contents->deliveryResult !=
+            pPtr->pilType->contentsResource->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
@@ -1128,25 +1182,32 @@ void PauseMenu::drawRadar(
     }
     
     //Mission mob markers.
+    float missionMobMarkerAlpha =
+        (sin(game.timePassed * PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT)) +
+        0.5f;
+    missionMobMarkerAlpha = std::clamp(missionMobMarkerAlpha, 0.0f, 1.0f);
     if(game.curArea->type == AREA_TYPE_MISSION) {
         forIdx(g, game.states.gameplay->missionMobGroups) {
             MissionMobGroupStatus* gPtr =
                 &game.states.gameplay->missionMobGroups[g];
             if(!game.curArea->mission.mobGroups[g].highlightOnRadar) continue;
             for(Mob* mPtr : gPtr->remaining) {
-                float alpha =
-                    (
-                        sin(
-                            game.timePassed *
-                            PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT
-                        )
-                    ) + 0.5f;
-                alpha = std::clamp(alpha, 0.0f, 1.0f);
+                if(mPtr->type->category->id == MOB_CATEGORY_PILES) {
+                    //Exception case for piles, which may be empty.
+                    //Not very elegant, but it'll do.
+                    Pile* pilPtr = (Pile*) mPtr;
+                    if(
+                        pilPtr->amount == 0 &&
+                        pilPtr->pilType->deleteWhenFinished
+                    ) {
+                        continue;
+                    }
+                }
                 drawBitmap(
                     game.sysContent.bmpMissionMob, mPtr->center,
                     Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) /
-                    radarView.cam.zoom,
-                    0.0f, multAlpha(game.config.guiColors.gold, alpha)
+                    radarView.cam.zoom, 0.0f,
+                    multAlpha(game.config.guiColors.gold, missionMobMarkerAlpha)
                 );
             }
         };
@@ -1177,7 +1238,6 @@ void PauseMenu::drawRadar(
         } case PATH_RESULT_NORMAL_PATH:
         case PATH_RESULT_PATH_WITH_SINGLE_STOP:
         case PATH_RESULT_PATH_WITH_OBSTACLES: {
-    
             size_t firstStop = lPtr->pathInfo->curPathStopIdx;
             if(firstStop >= lPtr->pathInfo->path.size()) continue;
             
@@ -1206,8 +1266,8 @@ void PauseMenu::drawRadar(
             break;
             
         } default: {
-    
             break;
+            
         }
         }
     }
@@ -1262,8 +1322,8 @@ void PauseMenu::drawRadar(
         break;
         
     } default: {
-
         break;
+        
     }
     }
     
@@ -1409,24 +1469,24 @@ void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
 
 
 /**
- * @brief Handles an Allegro event.
+ * @brief Handles an Allegro event related to user input.
  *
  * @param ev Event to handle.
  */
-void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+void PauseMenu::handleAllegroInputEvent(const ALLEGRO_EVENT& ev) {
     if(!game.modal.isActive()) {
-    
         radarView.updateMouseCursor(game.mouseCursor.winPos);
         
-        gui.handleAllegroEvent(ev);
-        radarGui.handleAllegroEvent(ev);
-        statusGui.handleAllegroEvent(ev);
-        missionGui.handleAllegroEvent(ev);
-        if(secondaryMenu) secondaryMenu->handleAllegroEvent(ev);
+        gui.handleAllegroInputEvent(ev);
+        radarGui.handleAllegroInputEvent(ev);
+        statusGui.handleAllegroInputEvent(ev);
+        missionGui.handleAllegroInputEvent(ev);
+        if(secondaryMenu) secondaryMenu->handleAllegroInputEvent(ev);
         
         //Handle some radar logic.
-        DrawInfo radarDraw;
-        radarGui.getItemDrawInfo(radarItem, &radarDraw);
+        DumbGui::DrawInfo dumbRadarDraw;
+        radarGui.getItemDrawInfo(radarItem, &dumbRadarDraw);
+        DrawInfo radarDraw = GuiItem::fromDumbDrawInfo(dumbRadarDraw);
         bool mouseInRadar =
             radarGui.responsive &&
             isPointInRectangle(
@@ -1483,7 +1543,7 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         
     }
     
-    game.modal.handleAllegroEvent(ev);
+    game.modal.handleAllegroInputEvent(ev);
 }
 
 
@@ -1502,7 +1562,6 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
     if(closing) return;
     
     if(!game.modal.isActive()) {
-    
         bool handledByRadar = false;
         
         if(radarGui.responsive) {
@@ -1652,25 +1711,6 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
  * @brief Initializes the pause menu's main menu.
  */
 void PauseMenu::initMainPauseMenu() {
-    //Menu items.
-    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME];
-    gui.registerCoords("left_page",        12,    5, 20,  6);
-    gui.registerCoords("left_page_input",   3,    7,  4,  4);
-    gui.registerCoords("right_page",       88,    5, 20,  6);
-    gui.registerCoords("right_page_input", 97,    7,  4,  4);
-    gui.registerCoords("area_name",        50,   20, 96,  8);
-    gui.registerCoords("area_subtitle",    50, 28.5, 88,  9);
-    gui.registerCoords("continue",         13,   88, 22,  8);
-    gui.registerCoords("continue_input",    3,   91,  4,  4);
-    gui.registerCoords("retry",            28,   44, 38, 12);
-    gui.registerCoords("end",              72,   44, 38, 12);
-    gui.registerCoords("help",             19,   65, 26, 10);
-    gui.registerCoords("options",          50,   65, 26, 10);
-    gui.registerCoords("stats",            81,   65, 26, 10);
-    gui.registerCoords("quit",             87,   88, 22,  8);
-    gui.registerCoords("tooltip",          50,   96, 96,  4);
-    gui.readDataFile(guiFile);
-    
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_SYSTEM, &gui);
     
@@ -1680,7 +1720,7 @@ void PauseMenu::initMainPauseMenu() {
         game.curArea->name, game.sysContent.fntAreaName,
         changeAlpha(game.config.guiColors.gold, 192)
     );
-    gui.addItem(areaNameText, "area_name");
+    gui.addItemP(areaNameText, "area_name");
     
     //Area subtitle.
     TextGuiItem* areaSubtitleText =
@@ -1688,7 +1728,7 @@ void PauseMenu::initMainPauseMenu() {
         game.curArea->subtitle, game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)
     );
-    gui.addItem(areaSubtitleText, "area_subtitle");
+    gui.addItemP(areaSubtitleText, "area_subtitle");
     
     //Continue playing button.
     gui.backItem =
@@ -1696,12 +1736,12 @@ void PauseMenu::initMainPauseMenu() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&gui);
     };
     gui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    gui.addItem(gui.backItem, "continue");
+    gui.addItemP(gui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&gui, "continue_input");
@@ -1715,7 +1755,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     retryButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_RETRY;
         confirmOrLeave();
     };
@@ -1726,7 +1766,7 @@ void PauseMenu::initMainPauseMenu() {
             "Restart this area's exploration." :
             "Retry the mission from the start.";
     };
-    gui.addItem(retryButton, "retry");
+    gui.addItemP(retryButton, "retry");
     
     //End button.
     ButtonGuiItem* endButton =
@@ -1737,7 +1777,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     endButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_END_EARLY;
         confirmOrLeave();
     };
@@ -1752,13 +1792,13 @@ void PauseMenu::initMainPauseMenu() {
             "End the mission early. "
             "This mission doesn't let you receive a medal this way!";
     };
-    gui.addItem(endButton, "end");
+    gui.addItemP(endButton, "end");
     
     //Help button.
     ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntStandard);
     helpButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         HelpMenu* helpMenu = new HelpMenu();
         helpMenu->leaveCallback = [this, helpMenu] () {
             helpMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1781,13 +1821,13 @@ void PauseMenu::initMainPauseMenu() {
             "Quick help and tips about how to play. "
             "You can also find this in the title screen.";
     };
-    gui.addItem(helpButton, "help");
+    gui.addItemP(helpButton, "help");
     
     //Options button.
     ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntStandard);
     optionsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         OptionsMenu* optionsMenu = new OptionsMenu();
         optionsMenu->leaveCallback = [this, optionsMenu] () {
             optionsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1810,13 +1850,13 @@ void PauseMenu::initMainPauseMenu() {
             "Customize your playing experience. "
             "You can also find this in the title screen.";
     };
-    gui.addItem(optionsButton, "options");
+    gui.addItemP(optionsButton, "options");
     
     //Statistics button.
     ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntStandard);
     statsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         StatsMenu* statsMenu = new StatsMenu();
         statsMenu->leaveCallback = [this, statsMenu] () {
             statsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1839,7 +1879,7 @@ void PauseMenu::initMainPauseMenu() {
             "Check out some fun lifetime statistics. "
             "You can also find this in the title screen.";
     };
-    gui.addItem(statsButton, "stats");
+    gui.addItemP(statsButton, "stats");
     
     //Quit button.
     ButtonGuiItem* quitButton =
@@ -1850,7 +1890,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard, game.config.guiColors.bad
     );
     quitButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
         confirmOrLeave();
     };
@@ -1866,17 +1906,21 @@ void PauseMenu::initMainPauseMenu() {
                 "editor"
             ) + ".";
     };
-    gui.addItem(quitButton, "quit");
+    gui.addItemP(quitButton, "quit");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME];
+    gui.readDataFile(guiFile);
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
     gui.responsive = false;
-    gui.hideItems();
+    gui.visible = false;
 }
 
 
@@ -1884,27 +1928,6 @@ void PauseMenu::initMainPauseMenu() {
  * @brief Initializes the mission page.
  */
 void PauseMenu::initMissionPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
-        
-    //Menu items.
-    missionGui.registerCoords("left_page",          12,  5, 20,  6);
-    missionGui.registerCoords("left_page_input",     3,  7,  4,  4);
-    missionGui.registerCoords("right_page",         88,  5, 20,  6);
-    missionGui.registerCoords("right_page_input",   97,  7,  4,  4);
-    missionGui.registerCoords("continue",           10, 16, 16,  4);
-    missionGui.registerCoords("continue_input",      3, 17,  4,  4);
-    missionGui.registerCoords("objective_header",   50, 16, 60,  4);
-    missionGui.registerCoords("objective",          50, 24, 96,  8);
-    missionGui.registerCoords("notes_header",       50, 32, 96,  4);
-    missionGui.registerCoords("notes_list",         48, 48, 92, 24);
-    missionGui.registerCoords("notes_scroll",       97, 48,  2, 24);
-    missionGui.registerCoords("medal_award_header", 50, 64, 96,  4);
-    missionGui.registerCoords("medal_award_list",   48, 80, 92, 24);
-    missionGui.registerCoords("medal_award_scroll", 97, 80,  2, 24);
-    missionGui.registerCoords("tooltip",            50, 96, 96,  4);
-    missionGui.readDataFile(guiFile);
-    
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_MISSION, &missionGui);
     
@@ -1914,12 +1937,12 @@ void PauseMenu::initMissionPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     missionGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&missionGui);
     };
     missionGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    missionGui.addItem(missionGui.backItem, "continue");
+    missionGui.addItemP(missionGui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&missionGui, "continue_input");
@@ -1930,7 +1953,7 @@ void PauseMenu::initMissionPage() {
         "Objective", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(objectiveHeaderText, "objective_header");
+    missionGui.addItemP(objectiveHeaderText, "objective_header");
     
     //Objective explanation text.
     TextGuiItem* objectiveText =
@@ -1940,7 +1963,7 @@ void PauseMenu::initMissionPage() {
         game.config.guiColors.gold
     );
     objectiveText->lineWrap = true;
-    missionGui.addItem(objectiveText, "objective");
+    missionGui.addItemP(objectiveText, "objective");
     
     //Notes header text.
     TextGuiItem* notesHeaderText =
@@ -1948,17 +1971,17 @@ void PauseMenu::initMissionPage() {
         "Notes", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(notesHeaderText, "notes_header");
+    missionGui.addItemP(notesHeaderText, "notes_header");
     
     //Notes list.
     ListGuiItem* missionNoteList = new ListGuiItem();
-    missionGui.addItem(missionNoteList, "notes_list");
+    missionGui.addItemP(missionNoteList, "notes_list");
     fillMissionNotesList(missionNoteList);
     
     //Notes scrollbar.
     ScrollGuiItem* notesScroll = new ScrollGuiItem();
     notesScroll->listItem = missionNoteList;
-    missionGui.addItem(notesScroll, "notes_scroll");
+    missionGui.addItemP(notesScroll, "notes_scroll");
     
     //Medal award header text.
     TextGuiItem* medalAwardHeaderText =
@@ -1966,27 +1989,32 @@ void PauseMenu::initMissionPage() {
         "Medal award", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(medalAwardHeaderText, "medal_award_header");
+    missionGui.addItemP(medalAwardHeaderText, "medal_award_header");
     
     //Medal award explanation list.
     ListGuiItem* missionMedalAwardList = new ListGuiItem();
-    missionGui.addItem(missionMedalAwardList, "medal_award_list");
+    missionGui.addItemP(missionMedalAwardList, "medal_award_list");
     fillMissionMedalAwardList(missionMedalAwardList);
     
     //Medal award explanation scrollbar.
     ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
     medalAwardScroll->listItem = missionMedalAwardList;
-    missionGui.addItem(medalAwardScroll, "medal_award_scroll");
+    missionGui.addItemP(medalAwardScroll, "medal_award_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&missionGui);
-    missionGui.addItem(tooltipText, "tooltip");
+    missionGui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
+    missionGui.readDataFile(guiFile);
     
     //Finishing touches.
-    missionGui.setFocusedItem(missionGui.backItem, true);
+    missionGui.setFocusedItemP(missionGui.backItem, true);
     missionGui.responsive = false;
-    missionGui.hideItems();
+    missionGui.visible = false;
 }
 
 
@@ -2021,25 +2049,6 @@ void PauseMenu::initRadarPage() {
     loader(bmpRadarShip,          "ship");
     loader(bmpRadarPath,          "path");
     
-    //Menu items.
-    radarGui.registerCoords("left_page",              12,     5,   20,    6);
-    radarGui.registerCoords("left_page_input",         3,     7,    4,    4);
-    radarGui.registerCoords("right_page",             88,     5,   20,    6);
-    radarGui.registerCoords("right_page_input",       97,     7,    4,    4);
-    radarGui.registerCoords("continue",               10,    16,   16,    4);
-    radarGui.registerCoords("continue_input",          3,    17,    4,    4);
-    radarGui.registerCoords("radar",                37.5, 56.25,   70, 72.5);
-    radarGui.registerCoords("group_pikmin_label",  86.25,  47.5, 22.5,    5);
-    radarGui.registerCoords("group_pikmin_number", 86.25,    55, 22.5,    5);
-    radarGui.registerCoords("idle_pikmin_label",   86.25,  62.5, 22.5,    5);
-    radarGui.registerCoords("idle_pikmin_number",  86.25,    70, 22.5,    5);
-    radarGui.registerCoords("field_pikmin_label",  86.25,  77.5, 22.5,    5);
-    radarGui.registerCoords("field_pikmin_number", 86.25,    85, 22.5,    5);
-    radarGui.registerCoords("cursor_info",         86.25, 33.75, 22.5, 17.5);
-    radarGui.registerCoords("instructions",        58.75,    16, 77.5,    4);
-    radarGui.registerCoords("tooltip",                50,    96,   96,    4);
-    radarGui.readDataFile(guiFile);
-    
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_RADAR, &radarGui);
     
@@ -2049,23 +2058,23 @@ void PauseMenu::initRadarPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     radarGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&radarGui);
     };
     radarGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    radarGui.addItem(radarGui.backItem, "continue");
+    radarGui.addItemP(radarGui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&radarGui, "continue_input");
     
     //Radar item.
     radarItem = new GuiItem();
-    radarItem->onDraw =
+    radarItem->onDrawP =
     [this] (const DrawInfo & draw) {
         drawRadar(draw.center, draw.size);
     };
-    radarGui.addItem(radarItem, "radar");
+    radarGui.addItemP(radarItem, "radar");
     
     //Group Pikmin label text.
     TextGuiItem* groupPikLabelText =
@@ -2073,7 +2082,7 @@ void PauseMenu::initRadarPage() {
         "Group Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radarGui.addItem(groupPikLabelText, "group_pikmin_label");
+    radarGui.addItemP(groupPikLabelText, "group_pikmin_label");
     
     //Group Pikmin number text.
     TextGuiItem* groupPikNrText =
@@ -2086,7 +2095,7 @@ void PauseMenu::initRadarPage() {
         game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radarGui.addItem(groupPikNrText, "group_pikmin_number");
+    radarGui.addItemP(groupPikNrText, "group_pikmin_number");
     
     //Idle Pikmin label text.
     TextGuiItem* idlePikLabelText =
@@ -2094,7 +2103,7 @@ void PauseMenu::initRadarPage() {
         "Idle Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radarGui.addItem(idlePikLabelText, "idle_pikmin_label");
+    radarGui.addItemP(idlePikLabelText, "idle_pikmin_label");
     
     //Idle Pikmin number text.
     TextGuiItem* idlePikNrText =
@@ -2103,7 +2112,7 @@ void PauseMenu::initRadarPage() {
         game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radarGui.addItem(idlePikNrText, "idle_pikmin_number");
+    radarGui.addItemP(idlePikNrText, "idle_pikmin_number");
     
     //Field Pikmin label text.
     TextGuiItem* fieldPikLabelText =
@@ -2111,7 +2120,7 @@ void PauseMenu::initRadarPage() {
         "Field Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radarGui.addItem(fieldPikLabelText, "field_pikmin_label");
+    radarGui.addItemP(fieldPikLabelText, "field_pikmin_label");
     
     //Field Pikmin number text.
     TextGuiItem* fieldPikNrText =
@@ -2119,13 +2128,13 @@ void PauseMenu::initRadarPage() {
         i2s(game.states.gameplay->getAmountOfFieldPikmin()),
         game.sysContent.fntCounter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radarGui.addItem(fieldPikNrText, "field_pikmin_number");
+    radarGui.addItemP(fieldPikNrText, "field_pikmin_number");
     
     //Cursor info text.
     TextGuiItem* cursorInfoText =
         new TextGuiItem("", game.sysContent.fntStandard);
     cursorInfoText->lineWrap = true;
-    cursorInfoText->onDraw =
+    cursorInfoText->onDrawP =
     [this, cursorInfoText] (const DrawInfo & draw) {
         if(cursorInfoText->text.empty()) return;
         
@@ -2230,7 +2239,7 @@ void PauseMenu::initRadarPage() {
             }
         }
     };
-    radarGui.addItem(cursorInfoText, "cursor_info");
+    radarGui.addItemP(cursorInfoText, "cursor_info");
     
     //Instructions text.
     TextGuiItem* instructionsText =
@@ -2245,17 +2254,20 @@ void PauseMenu::initRadarPage() {
         COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     instructionsText->lineWrap = true;
-    radarGui.addItem(instructionsText, "instructions");
+    radarGui.addItemP(instructionsText, "instructions");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&radarGui);
-    radarGui.addItem(tooltipText, "tooltip");
+    radarGui.addItemP(tooltipText, "tooltip");
+    
+    //Add custom items and set the coordinates.
+    radarGui.readDataFile(guiFile);
     
     //Finishing touches.
     radarGui.setFocusedItem(nullptr);
     radarGui.responsive = false;
-    radarGui.hideItems();
+    radarGui.visible = false;
 }
 
 
@@ -2263,23 +2275,6 @@ void PauseMenu::initRadarPage() {
  * @brief Initializes the status page.
  */
 void PauseMenu::initStatusPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
-        
-    //Menu items.
-    statusGui.registerCoords("left_page",        12,    5, 20,  6);
-    statusGui.registerCoords("left_page_input",   3,    7,  4,  4);
-    statusGui.registerCoords("right_page",       88,    5, 20,  6);
-    statusGui.registerCoords("right_page_input", 97,    7,  4,  4);
-    statusGui.registerCoords("continue",         10,   16, 16,  4);
-    statusGui.registerCoords("continue_input",    3,   17,  4,  4);
-    statusGui.registerCoords("list_header",      50, 23.5, 88,  7);
-    statusGui.registerCoords("list",             50,   56, 88, 56);
-    statusGui.registerCoords("list_scroll",      97,   56,  2, 56);
-    statusGui.registerCoords("totals",           50,   89, 88,  8);
-    statusGui.registerCoords("tooltip",          50,   96, 96,  4);
-    statusGui.readDataFile(guiFile);
-    
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_STATUS, &statusGui);
     
@@ -2289,41 +2284,41 @@ void PauseMenu::initStatusPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     statusGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&statusGui);
     };
     statusGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    statusGui.addItem(statusGui.backItem, "continue");
+    statusGui.addItemP(statusGui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&statusGui, "continue_input");
     
     //Pikmin list header box.
     ListGuiItem* listHeader = new ListGuiItem();
-    listHeader->onDraw =
+    listHeader->onDrawP =
     [] (const DrawInfo&) {};
-    statusGui.addItem(listHeader, "list_header");
+    statusGui.addItemP(listHeader, "list_header");
     
     //Pikmin list box.
     pikminList = new ListGuiItem();
-    statusGui.addItem(pikminList, "list");
+    statusGui.addItemP(pikminList, "list");
     
     //Pikmin list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = pikminList;
-    statusGui.addItem(listScroll, "list_scroll");
+    statusGui.addItemP(listScroll, "list_scroll");
     
     //Pikmin totals box.
     ListGuiItem* totals = new ListGuiItem();
-    totals->onDraw =
+    totals->onDrawP =
     [] (const DrawInfo&) {};
-    statusGui.addItem(totals, "totals");
+    statusGui.addItemP(totals, "totals");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&statusGui);
-    statusGui.addItem(tooltipText, "tooltip");
+    statusGui.addItemP(tooltipText, "tooltip");
     
     //Setup the list header.
     addNewPikminStatusLine(
@@ -2414,10 +2409,15 @@ void PauseMenu::initStatusPage() {
         true, true
     );
     
+    //Add custom items and set the coordinates.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
+    statusGui.readDataFile(guiFile);
+    
     //Finishing touches.
-    statusGui.setFocusedItem(statusGui.backItem, true);
+    statusGui.setFocusedItemP(statusGui.backItem, true);
     statusGui.responsive = false;
-    statusGui.hideItems();
+    statusGui.visible = false;
 }
 
 
@@ -2444,7 +2444,12 @@ void PauseMenu::radarConfirm() {
     
     if(radarCursorLeader) {
         //Select a leader.
-        radarSelectedLeader = radarCursorLeader;
+        if(radarSelectedLeader != radarCursorLeader) {
+            radarSelectedLeader = radarCursorLeader;
+            game.audio.addNewUiSoundSource(
+                game.sysContent.sndMenuActivate, { .volume = 0.75f }
+            );
+        }
         
     } else if(
         goHerePathResult == PATH_RESULT_DIRECT ||
@@ -2458,6 +2463,9 @@ void PauseMenu::radarConfirm() {
             LEADER_EV_GO_HERE, (void*) &radarCursor
         );
         startClosing(&radarGui);
+        game.audio.addNewUiSoundSource(
+            game.sysContent.sndMenuActivate, { .volume = 0.75f }
+        );
         
     }
 }
@@ -2595,16 +2603,16 @@ void PauseMenu::tick(float deltaT) {
     }
     
     //Tick radar things.
-    DrawInfo radarDraw;
-    radarGui.getItemDrawInfo(radarItem, &radarDraw);
+    DumbGui::DrawInfo dumbRadarDraw;
+    radarGui.getItemDrawInfo(radarItem, &dumbRadarDraw);
+    DrawInfo radarDraw = GuiItem::fromDumbDrawInfo(dumbRadarDraw);
     radarView.windowRect.center = radarDraw.center;
     radarView.windowRect.size = radarDraw.size;
     radarView.updateTransformations();
     
     if(radarGui.responsive) {
-    
         Point radarMovCoords;
-        float dummyAngle;
+        Angle dummyAngle;
         float dummyMagnitude;
         radarPan.getInfo(&radarMovCoords, &dummyAngle, &dummyMagnitude);
         if(radarMovCoords.x != 0.0f || radarMovCoords.y != 0.0f) {

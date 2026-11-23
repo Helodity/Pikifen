@@ -25,7 +25,7 @@
  * @param type Pile type this mob belongs to.
  * @param angle Starting angle.
  */
-Pile::Pile(const Point& center, PileType* type, float angle) :
+Pile::Pile(const Point& center, PileType* type, Angle angle) :
     Mob(center, type, angle),
     pilType(type),
     amount(type->maxAmount) {
@@ -127,10 +127,11 @@ int Pile::getMissionPoints(bool* applicableInThisMission) const {
     }
     
     if(
-        pilType->contents->deliveryResult ==
+        pilType->contentsResource &&
+        pilType->contentsResource->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
     ) {
-        return pilType->contents->pointAmount * amount;
+        return pilType->contentsResource->pointAmount * amount;
     }
     return 0;
 }

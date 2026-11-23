@@ -49,6 +49,8 @@ public:
      * @brief Represents an extra button.
      */
     struct Button {
+
+    public:
     
         //--- Public members ---
         
@@ -62,7 +64,7 @@ public:
         ALLEGRO_COLOR color = COLOR_WHITE;
         
         //Code to run on activation.
-        function<void(const Point&)> onActivate = nullptr;
+        function<void(float, float)> onActivate = nullptr;
         
     };
     
@@ -75,7 +77,7 @@ public:
     string prompt;
     
     //Current text in the text input.
-    string textInput;
+    TextInput textInput;
     
     //Back button's text.
     string back;
@@ -105,12 +107,12 @@ public:
     
     ModalGuiManager();
     bool isActive() const;
-    void draw();
+    bool draw();
     void open();
     void close();
     void reset();
     void updateItems();
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroInputEvent(const ALLEGRO_EVENT& ev);
     
     
 private:
