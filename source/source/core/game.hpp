@@ -324,7 +324,7 @@ public:
     
     void changeState(
         GameState* newState,
-        bool unloadCurrent = true, bool loadNew = true
+        bool unloadCurrent = true
     );
     string getCurStateName() const;
     void unloadLoadedState(GameState* loadedState);
@@ -344,6 +344,9 @@ private:
     //Queue of Allegro events.
     ALLEGRO_EVENT_QUEUE* eventQueue = nullptr;
     
+    //Thread for loading states asynchronously
+    ALLEGRO_THREAD* loadingThread;
+
     //Timer for the main frame logic.
     ALLEGRO_TIMER* mainTimer = nullptr;
     
@@ -368,7 +371,8 @@ private:
     bool globalHandleSystemPlayerAction(const Inpution::Action& action);
     void processFrame();
     void processSystemInfo();
-    
+    bool handleStateLoading();
+    static void *loadStateThreaded(ALLEGRO_THREAD *thread, void *arg);
 };
 
 

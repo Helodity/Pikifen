@@ -1210,9 +1210,6 @@ void GameplayState::load() {
     game.log.startBundle();
     wentToResults = false;
     
-    drawLoadingScreen("", "", "", 1.0f);
-    al_flip_display();
-    
     game.statistics.areaEntries++;
     
     //Game content.
